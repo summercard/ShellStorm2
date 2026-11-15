@@ -33,5 +33,65 @@
     "04_柔和自发光_UI灯光"
   ],
   "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_2",
-  "source_library": "v004"
+  "source_library": "v004",
+  "optimization_v034": {
+    "role": "optimized",
+    "version": "v034",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t970_5m/wall_t970_5m.blend",
+    "source_sha256_before": "e8601ca975f71720949cf746cadd78244c509b70f1092e6cc82b42a504aa3381",
+    "source_sha256_after": "e8601ca975f71720949cf746cadd78244c509b70f1092e6cc82b42a504aa3381",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t970_5m/export/v034/wall_t970_5m_optimized_v034.blend",
+    "optimized_sha256": "4cd19a723f91cae1b1b884a8924d215b223eca88aad5bb7ada9fdf270ee070ff",
+    "triangles_before": 6320,
+    "triangles_after": 848,
+    "reduction_ratio": 0.8658227848101265,
+    "target_triangles": 1264,
+    "budget_source": "User authorized <= original 20%; 2026-11-15 authorized optimization and import; same component standards; self-review completed",
+    "operations": [
+      "Per-connected-part confirmed beveled box / straight rod squaring; original material and palette cells inherited",
+      "Saved independent optimized Blend reopened before GLB export; normals/UV preserved; no tangent-space normal maps, tangents omitted"
+    ],
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_t970_5m/wall_t970_5m_visual_top3d.glb",
+    "glb_sha256": "92390d0bdf4b9fd4a15990ac1b1f635e5e9ca958debbb9d4d4fbb4bb6c27d171",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t970_5m/wall_t970_5m_root_top3d.tscn",
+    "prefab_sha256": "11b783c495c71fcefe0e55975dda5ba7889b45dcbea842f7b72b7cc0cca65a3c",
+    "verified_component": {
+      "bounds_max": [
+        2.5,
+        11.8999996185303,
+        0.485000610351563
+      ],
+      "bounds_min": [
+        -2.5,
+        0.0,
+        -0.485000610351563
+      ],
+      "collision_shapes": 1,
+      "material_roles": [
+        "04_柔和自发光_UI灯光",
+        "02_细腻哑光_青绿大面"
+      ],
+      "meshes": 2,
+      "slug": "wall_t970_5m",
+      "triangles": 848,
+      "version": "v034"
+    },
+    "room_references": [
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_03_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_09_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_03\\room_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_09\\room_static_layout.tscn"
+    ],
+    "import_uid_preserved": true,
+    "whole_level_verified": false,
+    "verification_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\next9_20261115\\import\\godot_verification.json"
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t970_5m/export/v034/wall_t970_5m_optimized_v034.blend",
+  "optimized_sha256": "4cd19a723f91cae1b1b884a8924d215b223eca88aad5bb7ada9fdf270ee070ff",
+  "triangle_count": 848,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_t970_5m/wall_t970_5m_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t970_5m/wall_t970_5m_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v034",
+  "optimized_asset_version": "v034"
 }

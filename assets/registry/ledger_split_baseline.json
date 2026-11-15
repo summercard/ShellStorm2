@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "source": "assets/registry/ledgers (current runtime-truth reconciliation)",
- "captured_at": "2026-11-09",
+ "captured_at": "2026-11-15T13:12:17",
  "sheet": "资产主表",
  "columns": [
   "AssetID",
@@ -2798,22 +2798,22 @@
    "d": "scenes"
   },
   "ENV-EXPEDITION-L01-BRIDGE-ROOM": {
-   "v": "3df3a54799cd568995c23a44111ad458873a362f46048321b773d14402f76174",
+   "v": "4a074a97f09c8ba66dfacc6a0753573cc8eedcda6410bf191468e890f46af41b",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-EXPEDITION-L01-L-CORRIDOR": {
-   "v": "5b71c325856693be6a622d2eab49d9d3cc261904cb574cdbb07c96e3ac2dad4b",
+   "v": "e9e06028d4ef2fdc6cbd4e73bf1d794a162649645390a1cf8abe36468b9d3614",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-EXPEDITION-L01-OFFICE-ROOM": {
-   "v": "f2046d06d70415155264158530895e069ca5b119d69a69eaf8e80f7a3e83e5d6",
+   "v": "9f62bc21b68c24bf884717277b95b500dd1816d7665de27d7b08b9f0f9630849",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-EXPEDITION-L01-ROOM-DB-70X50": {
-   "v": "18c6daa1b3ca51c1bfe03a3f6a59ac0873c27782f926dd1f8038419092dd1cfe",
+   "v": "399f3f492eb266ee6a9d649c369e4536c948fe9ea427fa44d10b18b52fd99bcb",
    "c": "场景",
    "d": "scenes"
   },
@@ -7296,7 +7296,7 @@
   "22": "731c8d6b466955d9671048e4e8bbabe4821dd8ab3c994a87158813b39aacd479",
   "23": "4fc2796309b5c261dd45841d918fdea0f55a1e7f2e9acbac79d7ad300d4f3358",
   "24": "c67e4ec44f19d8b9fd7004d738711ea30ba19096006407f2fc0bd2f77b4c1256",
-  "25": "4fae496a516b0b67e545527c030a94cba6dd8df85fb41d6c36f601aee11a420d"
+  "25": "552a15b7fa07d6cf6c936aa8426d7481c58cceab05c9a5bc2b12e027d1bce3dd"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",

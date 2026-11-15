@@ -1,0 +1,66 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-OFFICE-SHELVING",
+  "slug": "shelving",
+  "collection": "shelving_输出包",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v009\\component_packages\\shelving\\shelving.blend",
+  "registration_note": "Legacy ID retained; runtime import traced via parent room-type ledger row; no new independent row.",
+  "optimization_v034": {
+    "role": "optimized",
+    "version": "v034",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/shelving/shelving.blend",
+    "source_sha256_before": "1ffc69028f2e358cf5c5f5fc2dec652c9c2ee198b13be0970666c948f5db5dc4",
+    "source_sha256_after": "1ffc69028f2e358cf5c5f5fc2dec652c9c2ee198b13be0970666c948f5db5dc4",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/shelving/export/v034/shelving_optimized_v034.blend",
+    "optimized_sha256": "b506780d93a83bda935cea7ae6540eff24dbf7c60b1c4b3c78ff3657766ff4a9",
+    "triangles_before": 5076,
+    "triangles_after": 564,
+    "reduction_ratio": 0.8888888888888888,
+    "target_triangles": 1015,
+    "budget_source": "User authorized <= original 20%; 2026-11-15 authorized optimization and import; same component standards; self-review completed",
+    "operations": [
+      "Per-connected-part confirmed beveled box / straight rod squaring; original material and palette cells inherited",
+      "Saved independent optimized Blend reopened before GLB export; normals/UV preserved; no tangent-space normal maps, tangents omitted"
+    ],
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/shelving/shelving_visual_top3d.glb",
+    "glb_sha256": "93c32a475451640d0a063c29e7d4345a3838575b0ca85de1f224b2df41dc685d",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/shelving/shelving_root_top3d.tscn",
+    "prefab_sha256": "4ff777abbaffa49810048ba7cdc3238bb21e677a23708f2bcb42e9c33c6597aa",
+    "verified_component": {
+      "bounds_max": [
+        0.899999618530273,
+        2.67999982833862,
+        0.299999237060547
+      ],
+      "bounds_min": [
+        -0.899999618530273,
+        0.0,
+        -0.299999237060547
+      ],
+      "collision_shapes": 1,
+      "material_roles": [
+        "02_细腻哑光_青绿大面"
+      ],
+      "meshes": 1,
+      "slug": "shelving",
+      "triangles": 564,
+      "version": "v034"
+    },
+    "room_references": [
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_03_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_09_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_03\\room_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_09\\room_static_layout.tscn"
+    ],
+    "import_uid_preserved": true,
+    "whole_level_verified": false,
+    "verification_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\next9_20261115\\import\\godot_verification.json"
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/shelving/export/v034/shelving_optimized_v034.blend",
+  "optimized_sha256": "b506780d93a83bda935cea7ae6540eff24dbf7c60b1c4b3c78ff3657766ff4a9",
+  "triangle_count": 564,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/shelving/shelving_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/shelving/shelving_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v034",
+  "optimized_asset_version": "v034"
+}

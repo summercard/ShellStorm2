@@ -465,6 +465,9 @@ var _workbench_panel: WorkbenchPanel
 var _merchant_ui: MerchantUI
 var _merchant_service: RunMerchantService
 var _merchant_stock_restore_failed := false
+## 本次商人会话是否在成交后解锁交易撤离条件。取自打开它的服务点
+## （`ServiceStation3D.unlocks_trade_extraction`，默认 true）；作者锚点可显式关掉。
+var _merchant_unlocks_trade_extraction := true
 var _trade_extraction_unlocked := false
 var _trade_extraction_room_id := ""
 var _enemy_preactivation_accumulator := 0.0
@@ -8873,6 +8876,7 @@ func _get_offscreen_enemy_positions() -> Array[Vector3]:
 func _on_service_activated(_room: DungeonRoom3D, station: ServiceStation3D) -> void:
 	match station.station_type:
 		"merchant":
+			_merchant_unlocks_trade_extraction = station.unlocks_trade_extraction
 			_open_merchant(_room.room_id if _room != null else "")
 		"upgrade":
 			_open_workbench()
@@ -8992,8 +8996,14 @@ func _on_merchant_purchase_command(
 		_merchant_ui.update_offers(_merchant_service.get_offers_snapshot())
 		_merchant_ui.show_purchase_result("购买成功：%s 已进入背包" % item.get("name", "物品"))
 	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
-	_ensure_conditional_extraction("TRADE", room, Vector3(-4.0, 0.0, 3.0))
-	status_label.text = "购入 %s · 交易撤离条件已解锁" % item.get("name", "物品")
+	# 「交易撤离」是服务点自己声明的回报，不是「买过东西」的通用后果。
+	# 默认 true（既有商人房逐字不变）；被作者锚点显式关掉的服务点（远征01 room_08
+	# 的中庭贩卖机）成交时不改撤离契约 —— 那一关只有撤离房能结算。
+	if _merchant_unlocks_trade_extraction:
+		_ensure_conditional_extraction("TRADE", room, Vector3(-4.0, 0.0, 3.0))
+		status_label.text = "购入 %s · 交易撤离条件已解锁" % item.get("name", "物品")
+	else:
+		status_label.text = "购入 %s" % item.get("name", "物品")
 
 
 func _commit_merchant_purchase_checkpoint() -> bool:

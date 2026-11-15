@@ -34,5 +34,62 @@
     "03_清漆反光_紫粉点缀"
   ],
   "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-END_POWER_-1",
-  "source_library": "v005"
+  "source_library": "v005",
+  "optimization_v034": {
+    "role": "optimized",
+    "version": "v034",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/end_power/end_power.blend",
+    "source_sha256_before": "192691c4a5a272d6954386d1467f13dd977fe8a691a95b77f6a30971c13a79ab",
+    "source_sha256_after": "192691c4a5a272d6954386d1467f13dd977fe8a691a95b77f6a30971c13a79ab",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/end_power/export/v034/end_power_optimized_v034.blend",
+    "optimized_sha256": "81be82212eaa23d4b462fe80aad83198d88cf986138a78205f19ec8684644bba",
+    "triangles_before": 4644,
+    "triangles_after": 612,
+    "reduction_ratio": 0.8682170542635659,
+    "target_triangles": 928,
+    "budget_source": "User authorized <= original 20%; 2026-11-15 authorized optimization and import; same component standards; self-review completed",
+    "operations": [
+      "Per-connected-part confirmed beveled box / straight rod squaring; original material and palette cells inherited",
+      "Saved independent optimized Blend reopened before GLB export; normals/UV preserved; no tangent-space normal maps, tangents omitted"
+    ],
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/end_power/end_power_visual_top3d.glb",
+    "glb_sha256": "ac993c8dc775c4ab2e82d39e77e8bfc682998c978f82bc955c4924138b738a52",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/end_power/end_power_root_top3d.tscn",
+    "prefab_sha256": "849a18a3c4fae6394f40f2a0181e799bcf245c37b931e2cdf9a6c9daf4b84182",
+    "verified_component": {
+      "bounds_max": [
+        1.3899998664856,
+        5.25750017166138,
+        0.767499923706055
+      ],
+      "bounds_min": [
+        -1.3899998664856,
+        0.0,
+        -0.767499923706055
+      ],
+      "collision_shapes": 1,
+      "material_roles": [
+        "02_细腻哑光_青绿大面"
+      ],
+      "meshes": 1,
+      "slug": "end_power",
+      "triangles": 612,
+      "version": "v034"
+    },
+    "room_references": [
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_05_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_05\\room_static_layout.tscn"
+    ],
+    "import_uid_preserved": true,
+    "whole_level_verified": false,
+    "verification_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\next9_20261115\\import\\godot_verification.json"
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/end_power/export/v034/end_power_optimized_v034.blend",
+  "optimized_sha256": "81be82212eaa23d4b462fe80aad83198d88cf986138a78205f19ec8684644bba",
+  "triangle_count": 612,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/end_power/end_power_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/end_power/end_power_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v034",
+  "optimized_asset_version": "v034"
 }

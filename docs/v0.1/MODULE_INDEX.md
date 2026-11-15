@@ -1,3 +1,7 @@
+- WORLD-PLAN / RUN-MERCHANT：[远征01 room_08 中庭局内自动贩卖机](development/2026-11-15_expedition01_room08_ingame_vending.md)（2026-11-15）。业主重排 room_08 结构后在中庭放一台局内贩卖机，复用远征03 的99F贩卖机视觉+RunMerchantService+MerchantUI；新增「作者锚点声明服务点」通用能力（`service_station_config`，不认关卡ID）、交互区绕实体居中、交易撤离改逐服务点声明（默认true，既有商人房逐字不变）。专项探针23项exit0、商人集成回归exit0；13房静态场景红项与改前基线同为20条（stash对比逐条一致），足迹口径债与封门期交易待裁定，整关partial不提升。
+
+- ASSET-PIPELINE / WORLD-PLAN：[远征01下一批九件v034优化与导入](development/2026-11-15_expedition01_next9_optimization_import.md)（2026-11-15）。先推送ab4152d5后筛前20未优化9件，50148→6180三角，严格UV/重开/真实OpenGL9件通过；177房间与工位运行不变。两OFFICE v009归档源精确恢复，九清单与三房型备注最小同步；新九件本地未追加推送，整关partial/旧门禁问题保留。
+
 - ASSET-PIPELINE / WORLD-PLAN：[远征01十三优化组件正式导入](development/2026-11-15_expedition01_thirteen_component_import.md)（2026-11-15）。v032/v033十三件119720→15240三角，真实OpenGL组件专项13/13通过；原始源、177房间及工位运行资源保持，十三清单与三房型总行备注最小同步。远征01当前172静态引用组件重排，十三件退出前20；工位候选未导入，整关partial不提升，旧UID及全局门禁红项保留。
 
 - ASSET-PIPELINE / WORLD-PLAN：[远征01九组件v029导入与最小同步](development/2026-11-14_expedition01_nine_component_import.md)（2026-11-14）。四个Boss房02独立组件升v029，五个旧ID组件只追加DB/BRIDGE/OFFICE房型总行追溯，房型版本语义保留；九件主代理真实OpenGL加载专项通过，177份房间TSCN哈希保护。工位v031仅候选未导入；全局既有门禁红项及整关partial不提升。

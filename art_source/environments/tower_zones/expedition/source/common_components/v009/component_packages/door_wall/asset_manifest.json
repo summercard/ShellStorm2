@@ -33,5 +33,65 @@
     "04_柔和自发光_UI灯光"
   ],
   "source_package_id": "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL",
-  "source_library": "v004"
+  "source_library": "v004",
+  "optimization_v034": {
+    "role": "optimized",
+    "version": "v034",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/door_wall/door_wall.blend",
+    "source_sha256_before": "7fbbe47ea58388300768d148335b381ddb153c1135a9cd86b48980fdad1f4653",
+    "source_sha256_after": "7fbbe47ea58388300768d148335b381ddb153c1135a9cd86b48980fdad1f4653",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/door_wall/export/v034/door_wall_optimized_v034.blend",
+    "optimized_sha256": "2b4261c9f4f7d177ffddb06d06ee2b594d4151113e508c02a9492b86acacac79",
+    "triangles_before": 6604,
+    "triangles_after": 844,
+    "reduction_ratio": 0.872198667474258,
+    "target_triangles": 1320,
+    "budget_source": "User authorized <= original 20%; 2026-11-15 authorized optimization and import; same component standards; self-review completed",
+    "operations": [
+      "Per-connected-part confirmed beveled box / straight rod squaring; original material and palette cells inherited",
+      "Saved independent optimized Blend reopened before GLB export; normals/UV preserved; no tangent-space normal maps, tangents omitted"
+    ],
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/door_wall/door_wall_visual_top3d.glb",
+    "glb_sha256": "bedb10861af5ca0022531c3155147cc92327e0cb050c8d1d63a69bc0f6ad8637",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/door_wall/door_wall_root_top3d.tscn",
+    "prefab_sha256": "fd26183469d1239ae363fd09831e6adca47269bad3549089adfb80a5c31a85e0",
+    "verified_component": {
+      "bounds_max": [
+        2.5,
+        11.8999996185303,
+        0.307498931884766
+      ],
+      "bounds_min": [
+        -2.5,
+        0.0,
+        -0.307500839233398
+      ],
+      "collision_shapes": 3,
+      "material_roles": [
+        "04_柔和自发光_UI灯光",
+        "02_细腻哑光_青绿大面"
+      ],
+      "meshes": 2,
+      "slug": "door_wall",
+      "triangles": 844,
+      "version": "v034"
+    },
+    "room_references": [
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_03_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_09_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_03\\room_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_09\\room_static_layout.tscn"
+    ],
+    "import_uid_preserved": true,
+    "whole_level_verified": false,
+    "verification_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\next9_20261115\\import\\godot_verification.json"
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/door_wall/export/v034/door_wall_optimized_v034.blend",
+  "optimized_sha256": "2b4261c9f4f7d177ffddb06d06ee2b594d4151113e508c02a9492b86acacac79",
+  "triangle_count": 844,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/door_wall/door_wall_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/door_wall/door_wall_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v034",
+  "optimized_asset_version": "v034"
 }

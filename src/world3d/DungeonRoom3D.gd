@@ -6344,6 +6344,9 @@ func _build_content() -> void:
 
 	if room_type in ["MERCHANT", "UPGRADE", "EVENT"]:
 		_create_service_station(room_type.to_lower(), dimensions)
+	# 静态布局手摆的额外服务点（如普通战斗房里的局内贩卖机）：排在房型自建之后，
+	# `get_service_station()` 已能看见自建那一个，同类不会重复建。
+	_build_authored_service_stations()
 	if room_type in ["STAIRS_DOWN", "STAIRS_UP"]:
 		_build_vertical_access_marker(room_type)
 	if room_type == "TRAP":
@@ -7283,6 +7286,31 @@ func _build_boss_arena_dressing() -> void:
 
 
 func _create_service_station(type_id: String, dimensions: Vector2) -> ServiceStation3D:
+	var station := _instantiate_service_station(type_id)
+	if station == null:
+		return null
+	# 必做目标不能贴在镜头会裁切的北墙。事件终端放到房间中部安全区，
+	# 同时避开出生点圆环和两侧家具，保证所有 30×25m 以上房型都可接近。
+	var forward_offset := minf(4.5, dimensions.y * 0.18)
+	station.position = Vector3(0, 0, -forward_offset)
+	station.set_meta("required_room_objective", type_id == "event")
+	_add_runtime_detail_child(station)
+	station.activated.connect(_on_service_activated)
+	return station
+
+
+## 只造服务点、不落位：调用方决定放在房心（房型自建）还是作者锚点（静态布局手摆）。
+##
+## `visual_scene` **必须在节点入树前**写好 —— `ServiceStation3D._ready()` 就是在这时
+## 按它建视觉并销毁基地包装根的，进树后再赋值不会重建。
+##
+## `visual_override` 供作者锚点显式指定视觉（空 = 沿用主题）。**刻意不走主题**：
+## `env_iron_frontier` 是远征02 / 99F / 塔楼 flow 共用的主题，且每张 flow 都有 1 间
+## `SHOP→MERCHANT` 房；把贩卖机写进主题会连带改掉那些关卡的表现。远征03 的
+## 「主题显式配置」先例只适用于它自己的主题文件。
+func _instantiate_service_station(
+	type_id: String, visual_override := ""
+) -> ServiceStation3D:
 	var station := SERVICE_SCENE.instantiate() as ServiceStation3D
 	if station == null:
 		push_error("DungeonRoom3D: failed to instantiate required %s station in %s" % [type_id, room_id])
@@ -7293,16 +7321,79 @@ func _create_service_station(type_id: String, dimensions: Vector2) -> ServiceSta
 		"event": "异常信号终端",
 	}.get(type_id, "废土终端"))
 	station.configure(type_id, title, theme.accent_color)
-	if type_id == "merchant" and theme.merchant_visual_scene != null:
+	if not visual_override.is_empty():
+		var packed := load(visual_override) as PackedScene
+		if packed != null:
+			station.visual_scene = packed
+		else:
+			push_warning("DungeonRoom3D: %s 的服务点视觉无法加载：%s" % [room_id, visual_override])
+	elif type_id == "merchant" and theme.merchant_visual_scene != null:
 		station.visual_scene = theme.merchant_visual_scene
-	# 必做目标不能贴在镜头会裁切的北墙。事件终端放到房间中部安全区，
-	# 同时避开出生点圆环和两侧家具，保证所有 30×25m 以上房型都可接近。
-	var forward_offset := minf(4.5, dimensions.y * 0.18)
-	station.position = Vector3(0, 0, -forward_offset)
-	station.set_meta("required_room_objective", type_id == "event")
-	_add_runtime_detail_child(station)
-	station.activated.connect(_on_service_activated)
 	return station
+
+
+## 认领静态布局里手摆的**局内服务点**锚点（`metadata/service_station_config` 的 Marker3D）。
+##
+## 与 `treasure_chest_config` 同一口径：位置与朝向是**作者事实**，写在房间 TSCN 里
+## （美术可在编辑器里拖、可旋转）；运行时只按锚点实例化服务点并接信号，不重算落位。
+##
+## 判据只看锚点与房型自建的那一套，**不认房间 ID / 关卡 ID** —— 任何房间的 TSCN
+## 摆一个锚点就多一个服务点，所以「普通战斗房里放一台局内贩卖机」不需要新增分支。
+## 同类型服务点已经存在（房型自建的 MERCHANT / UPGRADE / EVENT）时跳过，不建第二个。
+##
+## 服务点走 `RuntimeDetail`：随房间进出正常销毁重建；商人货架按房间 ID 存在
+## `RunMerchantService` 里，重建不会刷新已展示的报价。
+func _build_authored_service_stations() -> void:
+	var art := _authored_static_layout_root()
+	if art == null:
+		return
+	for value in art.find_children("*", "Marker3D", true, false):
+		var marker := value as Marker3D
+		if marker == null or not marker.has_meta("service_station_config"):
+			continue
+		var config: Variant = marker.get_meta("service_station_config")
+		if not config is Dictionary:
+			continue
+		var type_id := str((config as Dictionary).get("type", ""))
+		if type_id.is_empty():
+			push_warning("DungeonRoom3D: %s 的服务点锚点 %s 缺少 type" % [room_id, marker.name])
+			continue
+		if get_service_station(type_id) != null:
+			continue
+		var station := _instantiate_service_station(
+			type_id, str((config as Dictionary).get("visual_scene", ""))
+		)
+		if station == null:
+			continue
+		var display_name := str((config as Dictionary).get("display_name", ""))
+		if not display_name.is_empty():
+			station.display_name = display_name
+		# 锚点可以显式关掉「成交解锁交易撤离」：普通战斗房里的贩卖机不该开撤离点。
+		# 不写该键时保持服务点默认（true），既有商人房逐字不变。
+		if (config as Dictionary).has("trade_extraction"):
+			station.unlocks_trade_extraction = bool((config as Dictionary)["trade_extraction"])
+		station.name = "AuthoredServiceStation_%s" % type_id
+		station.transform = _authored_marker_pose(marker)
+		station.set_meta("authored_service_station", true)
+		_add_runtime_detail_child(station)
+		# ⚠ 必须**入树之后**再调：`InteractionShape` / `StaticBody3D` 是
+		# `ServiceStation3D._ready()` 里按 `visual_scene` 建出来的，入树前一个都没有。
+		# 交互区改成绕实体居中：作者摆位不保证「背靠墙」，来源包装的偏置会让货窗那面点不到。
+		station.center_interaction_on_body()
+		station.activated.connect(_on_service_activated)
+
+
+## 作者锚点在**房间帧**的姿态：只取平面位置与绕 Y 的朝向，落地 y 归零。
+##
+## 用「房间 global 的逆 × 锚点 global」而不是直接读 `marker.rotation.y`：静态布局根
+## 会被 `_align_static_layout_to_room()` 整体转 90° 的整数倍，锚点只有在房间帧里
+## 读数才是「朝向房间的哪一边」。
+func _authored_marker_pose(marker: Node3D) -> Transform3D:
+	var local := global_transform.affine_inverse() * marker.global_transform
+	return Transform3D(
+		Basis(Vector3.UP, local.basis.get_euler().y),
+		Vector3(local.origin.x, 0.0, local.origin.z)
+	)
 
 
 func _create_room_light(

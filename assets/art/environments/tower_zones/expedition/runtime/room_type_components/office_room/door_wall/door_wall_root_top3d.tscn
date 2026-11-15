@@ -12,7 +12,9 @@ size = Vector3(5, 9.4, 0.615)
 
 [node name="RoomTypeComponentDoorWall" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL"
-metadata/asset_version = "v009"
+metadata/glb_sha256 = "bedb10861af5ca0022531c3155147cc92327e0cb050c8d1d63a69bc0f6ad8637"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/door_wall/export/v034/door_wall_optimized_v034.blend"
+metadata/asset_version = "v034"
 metadata/room_type = "OFFICE_ROOM"
 metadata/component_slug = "door_wall"
 metadata/display_name_zh = "门洞墙件"

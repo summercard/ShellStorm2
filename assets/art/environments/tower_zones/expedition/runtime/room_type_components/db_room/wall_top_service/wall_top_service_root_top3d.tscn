@@ -9,7 +9,9 @@ size = Vector3(39.4, 0.8, 29.4)
 
 [node name="RoomTypeComponentWallTopService" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE"
-metadata/asset_version = "v014"
+metadata/glb_sha256 = "a667bbb6d4bd9de940d7af648872570fb3334cfc67be0667ff8c25d4c181467a"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/wall_top_service/export/v034/wall_top_service_optimized_v034.blend"
+metadata/asset_version = "v034"
 metadata/room_type = "DB_ROOM"
 metadata/component_slug = "wall_top_service"
 metadata/display_name_zh = "wall_top_service"

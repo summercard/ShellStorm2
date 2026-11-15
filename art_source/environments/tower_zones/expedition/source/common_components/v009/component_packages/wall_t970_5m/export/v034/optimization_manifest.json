@@ -1,0 +1,6603 @@
+{
+  "slug": "wall_t970_5m",
+  "job": {
+    "slug": "wall_t970_5m",
+    "group": "office",
+    "room_type": "office_room",
+    "name": "墙体 5.00×0.97×11.90m",
+    "asset_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T970_5M",
+    "source_path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v009\\component_packages\\wall_t970_5m\\wall_t970_5m.blend",
+    "source_sha256": "e8601ca975f71720949cf746cadd78244c509b70f1092e6cc82b42a504aa3381",
+    "collection": "wall_t970_5m_输出包",
+    "runtime_triangles": 6320,
+    "target_triangles": 1264,
+    "prefab_path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_type_components\\office_room\\wall_t970_5m\\wall_t970_5m_root_top3d.tscn",
+    "prefab_sha256": "e1d8609a380c87be8a0b158644fcc1e50ec5ba140de4f95718501de83337fba8",
+    "glb_path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\expedition\\components\\room_type_components\\office_room\\wall_t970_5m\\wall_t970_5m_visual_top3d.glb",
+    "glb_sha256": "bd1edac6405312588a663b2ffa55be8fe71451efe7ac4d548039d9810fb7bb44",
+    "optimized_path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v009\\component_packages\\wall_t970_5m\\export\\v034\\wall_t970_5m_optimized_v034.blend",
+    "archive_path": null,
+    "version": "v034"
+  },
+  "source_stats": {
+    "objects": 2,
+    "vertices": 3288,
+    "polygons": 3140,
+    "triangles": 6320,
+    "components": 64,
+    "objects_detail": [
+      {
+        "name": "south_墙体_2_输出_部件00",
+        "matrix_world": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "matrix_local": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "parent": "ROOT_wall_south_2_组件",
+        "modifiers": [],
+        "bbox": [
+          [
+            -2.5,
+            -0.4850006103515625,
+            0.0
+          ],
+          [
+            2.5,
+            0.4850006103515625,
+            11.899999618530273
+          ]
+        ],
+        "topology": {
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "degenerate_faces": 0,
+          "loose_vertices": 0
+        },
+        "materials": [
+          "02_细腻哑光_青绿大面",
+          "02_细腻哑光_青绿大面",
+          "03_清漆反光_紫粉点缀"
+        ],
+        "material_cells": {
+          "(0, [(9, 6)])": 492,
+          "(0, [(9, 5)])": 216,
+          "(0, [(0, 0)])": 486,
+          "(0, [(9, 3)])": 630,
+          "(0, [(9, 1)])": 992,
+          "(0, [(8, 8)])": 54,
+          "(0, [(8, 9)])": 54,
+          "(0, [(6, 6)])": 54,
+          "(0, [(8, 4)])": 54
+        }
+      },
+      {
+        "name": "south_墙体_2_输出_自发光",
+        "matrix_world": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "matrix_local": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "parent": "ROOT_wall_south_2_组件",
+        "modifiers": [],
+        "bbox": [
+          [
+            -2.2200002670288086,
+            -0.060001373291015625,
+            0.5799999833106995
+          ],
+          [
+            2.2200002670288086,
+            -0.0110015869140625,
+            10.6875
+          ]
+        ],
+        "topology": {
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "degenerate_faces": 0,
+          "loose_vertices": 0
+        },
+        "materials": [
+          "04_柔和自发光_UI灯光"
+        ],
+        "material_cells": {
+          "(0, [(8, 9)])": 108
+        }
+      }
+    ],
+    "bbox": [
+      [
+        -2.5,
+        -0.4850006103515625,
+        0.0
+      ],
+      [
+        2.5,
+        0.4850006103515625,
+        11.899999618530273
+      ]
+    ],
+    "collection_offset": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "source_hash": "e8601ca975f71720949cf746cadd78244c509b70f1092e6cc82b42a504aa3381",
+  "candidate_path": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\next9_20261115\\wall_t970_5m\\wall_t970_5m_candidate_v034.blend",
+  "optimized_path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v009\\component_packages\\wall_t970_5m\\export\\v034\\wall_t970_5m_optimized_v034.blend",
+  "collection": "wall_t970_5m_输出包",
+  "dependencies": [
+    {
+      "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+      "kind": "image",
+      "exists": true,
+      "sha256_before": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+      "sha256_after": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+      "unchanged": true
+    }
+  ],
+  "components": [
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 0,
+      "source_triangles": 12,
+      "optimized_triangles": 12,
+      "rule": "未识别形体保留，禁止无脑bbox",
+      "evidence": {},
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        6
+      ],
+      "optimized_cell": [
+        9,
+        6
+      ],
+      "source_bbox": [
+        [
+          -2.5,
+          -0.4850006103515625,
+          0.0
+        ],
+        [
+          2.5,
+          -0.18500137329101562,
+          11.899999618530273
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.5,
+          -0.4850006103515625,
+          0.0
+        ],
+        [
+          2.5,
+          -0.18500137329101562,
+          11.899999618530273
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 1,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.2048046886920929,
+            "coordinate": -2.3299999237060547
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.2048046886920929,
+            "coordinate": 2.3299999237060547
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 11.827197074890137,
+            "coordinate": -0.18500137329101562
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 11.827197074890137,
+            "coordinate": -0.06500244140625
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.36960840225219727,
+            "coordinate": 0.25
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.36960840225219727,
+            "coordinate": 2.8499999046325684
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        5
+      ],
+      "optimized_cell": [
+        9,
+        5
+      ],
+      "source_bbox": [
+        [
+          -2.3299999237060547,
+          -0.18500137329101562,
+          0.25
+        ],
+        [
+          2.3299999237060547,
+          -0.06500244140625,
+          2.8499999046325684
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.3299999237060547,
+          -0.18500137329101562,
+          0.25
+        ],
+        [
+          2.3299999237060547,
+          -0.06500244140625,
+          2.8499999046325684
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.014641458168625832,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 2,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.07974772900342941,
+            "coordinate": -2.3575000762939453
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.07974772900342941,
+            "coordinate": -2.282499313354492
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.1669626235961914,
+            "coordinate": -0.1100006103515625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.1669626235961914,
+            "coordinate": -0.06999969482421875
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.002144081983715296,
+            "coordinate": 0.2999999523162842
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.002144081983715296,
+            "coordinate": 2.799999952316284
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        0,
+        0
+      ],
+      "optimized_cell": [
+        0,
+        0
+      ],
+      "source_bbox": [
+        [
+          -2.3575000762939453,
+          -0.1100006103515625,
+          0.2999999523162842
+        ],
+        [
+          -2.282499313354492,
+          -0.06999969482421875,
+          2.799999952316284
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.3575000762939453,
+          -0.1100006103515625,
+          0.2999999523162842
+        ],
+        [
+          -2.282499313354492,
+          -0.06999969482421875,
+          2.799999952316284
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0029290765523910522,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 3,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.07974772900342941,
+            "coordinate": -0.03750038146972656
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.07974772900342941,
+            "coordinate": 0.03750038146972656
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.16696259379386902,
+            "coordinate": -0.1100006103515625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.16696259379386902,
+            "coordinate": -0.06999969482421875
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.002144081983715296,
+            "coordinate": 0.2999999523162842
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.002144081983715296,
+            "coordinate": 2.799999952316284
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        0,
+        0
+      ],
+      "optimized_cell": [
+        0,
+        0
+      ],
+      "source_bbox": [
+        [
+          -0.03750038146972656,
+          -0.1100006103515625,
+          0.2999999523162842
+        ],
+        [
+          0.03750038146972656,
+          -0.06999969482421875,
+          2.799999952316284
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -0.03750038146972656,
+          -0.1100006103515625,
+          0.2999999523162842
+        ],
+        [
+          0.03750038146972656,
+          -0.06999969482421875,
+          2.799999952316284
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0029290765523910522,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 4,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.07974772900342941,
+            "coordinate": 2.282499313354492
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.07974772900342941,
+            "coordinate": 2.3575000762939453
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.1669626235961914,
+            "coordinate": -0.1100006103515625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.1669626235961914,
+            "coordinate": -0.06999969482421875
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.002144081983715296,
+            "coordinate": 0.2999999523162842
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.002144081983715296,
+            "coordinate": 2.799999952316284
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        0,
+        0
+      ],
+      "optimized_cell": [
+        0,
+        0
+      ],
+      "source_bbox": [
+        [
+          2.282499313354492,
+          -0.1100006103515625,
+          0.2999999523162842
+        ],
+        [
+          2.3575000762939453,
+          -0.06999969482421875,
+          2.799999952316284
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          2.282499313354492,
+          -0.1100006103515625,
+          0.2999999523162842
+        ],
+        [
+          2.3575000762939453,
+          -0.06999969482421875,
+          2.799999952316284
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0029290765523910522,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 5,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.06437841802835464,
+            "coordinate": -2.4499998092651367
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.06437841802835464,
+            "coordinate": -2.390000343322754
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.1386556625366211,
+            "coordinate": -0.12000083923339844
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.1386556625366211,
+            "coordinate": -0.09000205993652344
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.0014560483396053314,
+            "coordinate": 0.309999942779541
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.0014560483396053314,
+            "coordinate": 2.7899999618530273
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        3
+      ],
+      "optimized_cell": [
+        9,
+        3
+      ],
+      "source_bbox": [
+        [
+          -2.4499998092651367,
+          -0.12000083923339844,
+          0.309999942779541
+        ],
+        [
+          -2.390000343322754,
+          -0.09000205993652344,
+          2.7899999618530273
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.4499998092651367,
+          -0.12000083923339844,
+          0.309999942779541
+        ],
+        [
+          -2.390000343322754,
+          -0.09000205993652344,
+          2.7899999618530273
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0014637811109423637,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 6,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.06437841802835464,
+            "coordinate": 2.390000343322754
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.06437841802835464,
+            "coordinate": 2.4499998092651367
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.1386556625366211,
+            "coordinate": -0.12000083923339844
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.1386556625366211,
+            "coordinate": -0.09000205993652344
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.0014560483396053314,
+            "coordinate": 0.309999942779541
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.0014560483396053314,
+            "coordinate": 2.7899999618530273
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        3
+      ],
+      "optimized_cell": [
+        9,
+        3
+      ],
+      "source_bbox": [
+        [
+          2.390000343322754,
+          -0.12000083923339844,
+          0.309999942779541
+        ],
+        [
+          2.4499998092651367,
+          -0.09000205993652344,
+          2.7899999618530273
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          2.390000343322754,
+          -0.12000083923339844,
+          0.309999942779541
+        ],
+        [
+          2.4499998092651367,
+          -0.09000205993652344,
+          2.7899999618530273
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0014637811109423637,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 7,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.33280760049819946,
+            "coordinate": -2.3299999237060547
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.33280760049819946,
+            "coordinate": 2.3299999237060547
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 19.219194412231445,
+            "coordinate": -0.18500137329101562
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 19.219194412231445,
+            "coordinate": -0.06500244140625
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.36960840225219727,
+            "coordinate": 3.25
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.36960840225219727,
+            "coordinate": 7.449999809265137
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        5
+      ],
+      "optimized_cell": [
+        9,
+        5
+      ],
+      "source_bbox": [
+        [
+          -2.3299999237060547,
+          -0.18500137329101562,
+          3.25
+        ],
+        [
+          2.3299999237060547,
+          -0.06500244140625,
+          7.449999809265137
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.3299999237060547,
+          -0.18500137329101562,
+          3.25
+        ],
+        [
+          2.3299999237060547,
+          -0.06500244140625,
+          7.449999809265137
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.01464138925075531,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 8,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.13095012307167053,
+            "coordinate": -2.3575000762939453
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.13095012307167053,
+            "coordinate": -2.282499313354492
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.27416229248046875,
+            "coordinate": -0.1100006103515625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.27416229248046875,
+            "coordinate": -0.06999969482421875
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.002144081983715296,
+            "coordinate": 3.299999952316284
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.002144081983715296,
+            "coordinate": 7.399999618530273
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        0,
+        0
+      ],
+      "optimized_cell": [
+        0,
+        0
+      ],
+      "source_bbox": [
+        [
+          -2.3575000762939453,
+          -0.1100006103515625,
+          3.299999952316284
+        ],
+        [
+          -2.282499313354492,
+          -0.06999969482421875,
+          7.399999618530273
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.3575000762939453,
+          -0.1100006103515625,
+          3.299999952316284
+        ],
+        [
+          -2.282499313354492,
+          -0.06999969482421875,
+          7.399999618530273
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0029290765523910522,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 9,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.13095012307167053,
+            "coordinate": -0.03750038146972656
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.13095012307167053,
+            "coordinate": 0.03750038146972656
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.274161696434021,
+            "coordinate": -0.1100006103515625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.274161696434021,
+            "coordinate": -0.06999969482421875
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.002144081983715296,
+            "coordinate": 3.299999952316284
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.002144081983715296,
+            "coordinate": 7.399999618530273
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        0,
+        0
+      ],
+      "optimized_cell": [
+        0,
+        0
+      ],
+      "source_bbox": [
+        [
+          -0.03750038146972656,
+          -0.1100006103515625,
+          3.299999952316284
+        ],
+        [
+          0.03750038146972656,
+          -0.06999969482421875,
+          7.399999618530273
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -0.03750038146972656,
+          -0.1100006103515625,
+          3.299999952316284
+        ],
+        [
+          0.03750038146972656,
+          -0.06999969482421875,
+          7.399999618530273
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0029290765523910522,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 10,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.13095012307167053,
+            "coordinate": 2.282499313354492
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.13095012307167053,
+            "coordinate": 2.3575000762939453
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.27416229248046875,
+            "coordinate": -0.1100006103515625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.27416229248046875,
+            "coordinate": -0.06999969482421875
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.002144081983715296,
+            "coordinate": 3.299999952316284
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.002144081983715296,
+            "coordinate": 7.399999618530273
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        0,
+        0
+      ],
+      "optimized_cell": [
+        0,
+        0
+      ],
+      "source_bbox": [
+        [
+          2.282499313354492,
+          -0.1100006103515625,
+          3.299999952316284
+        ],
+        [
+          2.3575000762939453,
+          -0.06999969482421875,
+          7.399999618530273
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          2.282499313354492,
+          -0.1100006103515625,
+          3.299999952316284
+        ],
+        [
+          2.3575000762939453,
+          -0.06999969482421875,
+          7.399999618530273
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0029290765523910522,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 11,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.10597997158765793,
+            "coordinate": -2.4499998092651367
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.10597997158765793,
+            "coordinate": -2.390000343322754
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.2282552719116211,
+            "coordinate": -0.12000083923339844
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.2282552719116211,
+            "coordinate": -0.09000205993652344
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.0014560483396053314,
+            "coordinate": 3.309999942779541
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.0014560483396053314,
+            "coordinate": 7.389999866485596
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        3
+      ],
+      "optimized_cell": [
+        9,
+        3
+      ],
+      "source_bbox": [
+        [
+          -2.4499998092651367,
+          -0.12000083923339844,
+          3.309999942779541
+        ],
+        [
+          -2.390000343322754,
+          -0.09000205993652344,
+          7.389999866485596
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.4499998092651367,
+          -0.12000083923339844,
+          3.309999942779541
+        ],
+        [
+          -2.390000343322754,
+          -0.09000205993652344,
+          7.389999866485596
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0014637811109423637,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 12,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.10597997158765793,
+            "coordinate": 2.390000343322754
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.10597997158765793,
+            "coordinate": 2.4499998092651367
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.2282552719116211,
+            "coordinate": -0.12000083923339844
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.2282552719116211,
+            "coordinate": -0.09000205993652344
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.0014560483396053314,
+            "coordinate": 3.309999942779541
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.0014560483396053314,
+            "coordinate": 7.389999866485596
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        3
+      ],
+      "optimized_cell": [
+        9,
+        3
+      ],
+      "source_bbox": [
+        [
+          2.390000343322754,
+          -0.12000083923339844,
+          3.309999942779541
+        ],
+        [
+          2.4499998092651367,
+          -0.09000205993652344,
+          7.389999866485596
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          2.390000343322754,
+          -0.12000083923339844,
+          3.309999942779541
+        ],
+        [
+          2.4499998092651367,
+          -0.09000205993652344,
+          7.389999866485596
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0014637811109423637,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 13,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.24480557441711426,
+            "coordinate": -2.3299999237060547
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.24480557441711426,
+            "coordinate": 2.3299999237060547
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 14.137194633483887,
+            "coordinate": -0.18500137329101562
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 14.137194633483887,
+            "coordinate": -0.06500244140625
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.36960840225219727,
+            "coordinate": 8.199999809265137
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.36960840225219727,
+            "coordinate": 11.300000190734863
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        5
+      ],
+      "optimized_cell": [
+        9,
+        5
+      ],
+      "source_bbox": [
+        [
+          -2.3299999237060547,
+          -0.18500137329101562,
+          8.199999809265137
+        ],
+        [
+          2.3299999237060547,
+          -0.06500244140625,
+          11.300000190734863
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.3299999237060547,
+          -0.18500137329101562,
+          8.199999809265137
+        ],
+        [
+          2.3299999237060547,
+          -0.06500244140625,
+          11.300000190734863
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.014641664922237396,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 14,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.09574848413467407,
+            "coordinate": -2.3575000762939453
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.09574848413467407,
+            "coordinate": -2.282499313354492
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.20046234130859375,
+            "coordinate": -0.1100006103515625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.20046234130859375,
+            "coordinate": -0.06999969482421875
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.002144081983715296,
+            "coordinate": 8.25
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.002144081983715296,
+            "coordinate": 11.25
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        0,
+        0
+      ],
+      "optimized_cell": [
+        0,
+        0
+      ],
+      "source_bbox": [
+        [
+          -2.3575000762939453,
+          -0.1100006103515625,
+          8.25
+        ],
+        [
+          -2.282499313354492,
+          -0.06999969482421875,
+          11.25
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.3575000762939453,
+          -0.1100006103515625,
+          8.25
+        ],
+        [
+          -2.282499313354492,
+          -0.06999969482421875,
+          11.25
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0029292141553014517,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 15,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.09574848413467407,
+            "coordinate": -0.03750038146972656
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.09574848413467407,
+            "coordinate": 0.03750038146972656
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.20046235620975494,
+            "coordinate": -0.1100006103515625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.20046235620975494,
+            "coordinate": -0.06999969482421875
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.002144081983715296,
+            "coordinate": 8.25
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.002144081983715296,
+            "coordinate": 11.25
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        0,
+        0
+      ],
+      "optimized_cell": [
+        0,
+        0
+      ],
+      "source_bbox": [
+        [
+          -0.03750038146972656,
+          -0.1100006103515625,
+          8.25
+        ],
+        [
+          0.03750038146972656,
+          -0.06999969482421875,
+          11.25
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -0.03750038146972656,
+          -0.1100006103515625,
+          8.25
+        ],
+        [
+          0.03750038146972656,
+          -0.06999969482421875,
+          11.25
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0029292141553014517,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 16,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.09574848413467407,
+            "coordinate": 2.282499313354492
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.09574848413467407,
+            "coordinate": 2.3575000762939453
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.20046234130859375,
+            "coordinate": -0.1100006103515625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.20046234130859375,
+            "coordinate": -0.06999969482421875
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.002144081983715296,
+            "coordinate": 8.25
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.002144081983715296,
+            "coordinate": 11.25
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        0,
+        0
+      ],
+      "optimized_cell": [
+        0,
+        0
+      ],
+      "source_bbox": [
+        [
+          2.282499313354492,
+          -0.1100006103515625,
+          8.25
+        ],
+        [
+          2.3575000762939453,
+          -0.06999969482421875,
+          11.25
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          2.282499313354492,
+          -0.1100006103515625,
+          8.25
+        ],
+        [
+          2.3575000762939453,
+          -0.06999969482421875,
+          11.25
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0029292141553014517,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 17,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.07737891376018524,
+            "coordinate": -2.4499998092651367
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.07737891376018524,
+            "coordinate": -2.390000343322754
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.1666550636291504,
+            "coordinate": -0.12000083923339844
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.1666550636291504,
+            "coordinate": -0.09000205993652344
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.0014560483396053314,
+            "coordinate": 8.260000228881836
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.0014560483396053314,
+            "coordinate": 11.239999771118164
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        3
+      ],
+      "optimized_cell": [
+        9,
+        3
+      ],
+      "source_bbox": [
+        [
+          -2.4499998092651367,
+          -0.12000083923339844,
+          8.260000228881836
+        ],
+        [
+          -2.390000343322754,
+          -0.09000205993652344,
+          11.239999771118164
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.4499998092651367,
+          -0.12000083923339844,
+          8.260000228881836
+        ],
+        [
+          -2.390000343322754,
+          -0.09000205993652344,
+          11.239999771118164
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.001463505788706243,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 18,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.07737891376018524,
+            "coordinate": 2.390000343322754
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.07737891376018524,
+            "coordinate": 2.4499998092651367
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.1666550636291504,
+            "coordinate": -0.12000083923339844
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.1666550636291504,
+            "coordinate": -0.09000205993652344
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.0014560483396053314,
+            "coordinate": 8.260000228881836
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.0014560483396053314,
+            "coordinate": 11.239999771118164
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        3
+      ],
+      "optimized_cell": [
+        9,
+        3
+      ],
+      "source_bbox": [
+        [
+          2.390000343322754,
+          -0.12000083923339844,
+          8.260000228881836
+        ],
+        [
+          2.4499998092651367,
+          -0.09000205993652344,
+          11.239999771118164
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          2.390000343322754,
+          -0.12000083923339844,
+          8.260000228881836
+        ],
+        [
+          2.4499998092651367,
+          -0.09000205993652344,
+          11.239999771118164
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.001463505788706243,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 19,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 1.3391882181167603,
+            "coordinate": -2.484999656677246
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 1.3391882181167603,
+            "coordinate": -2.3550004959106445
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 1.0044021606445312,
+            "coordinate": -0.11500167846679688
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 1.0044021606445312,
+            "coordinate": 0.0449981689453125
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.010799922049045563,
+            "coordinate": 0.0
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.010799922049045563,
+            "coordinate": 11.199999809265137
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        3
+      ],
+      "optimized_cell": [
+        9,
+        3
+      ],
+      "source_bbox": [
+        [
+          -2.484999656677246,
+          -0.11500167846679688,
+          0.0
+        ],
+        [
+          -2.3550004959106445,
+          0.0449981689453125,
+          11.199999809265137
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.484999656677246,
+          -0.11500167846679688,
+          0.0
+        ],
+        [
+          -2.3550004959106445,
+          0.0449981689453125,
+          11.199999809265137
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.014640838839113712,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 20,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 1.3391882181167603,
+            "coordinate": 2.3550004959106445
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 1.3391882181167603,
+            "coordinate": 2.484999656677246
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 1.0044021606445312,
+            "coordinate": -0.11500167846679688
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 1.0044021606445312,
+            "coordinate": 0.0449981689453125
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.010799922049045563,
+            "coordinate": 0.0
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.010799922049045563,
+            "coordinate": 11.199999809265137
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        3
+      ],
+      "optimized_cell": [
+        9,
+        3
+      ],
+      "source_bbox": [
+        [
+          2.3550004959106445,
+          -0.11500167846679688,
+          0.0
+        ],
+        [
+          2.484999656677246,
+          0.0449981689453125,
+          11.199999809265137
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          2.3550004959106445,
+          -0.11500167846679688,
+          0.0
+        ],
+        [
+          2.484999656677246,
+          0.0449981689453125,
+          11.199999809265137
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.014640838839113712,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 21,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.015600115060806274,
+            "coordinate": -2.3999996185302734
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.015600115060806274,
+            "coordinate": 2.3999996185302734
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.5735995173454285,
+            "coordinate": -0.07000160217285156
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.5735995173454285,
+            "coordinate": 0.07999992370605469
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.6214052438735962,
+            "coordinate": 3.0299999713897705
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.6214052438735962,
+            "coordinate": 3.169999837875366
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        6
+      ],
+      "optimized_cell": [
+        9,
+        6
+      ],
+      "source_bbox": [
+        [
+          -2.3999996185302734,
+          -0.07000160217285156,
+          3.0299999713897705
+        ],
+        [
+          2.3999996185302734,
+          0.07999992370605469,
+          3.169999837875366
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.3999996185302734,
+          -0.07000160217285156,
+          3.0299999713897705
+        ],
+        [
+          2.3999996185302734,
+          0.07999992370605469,
+          3.169999837875366
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.007320144213736057,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 22,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.014663845300674438,
+            "coordinate": -1.6700000762939453
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.014663845300674438,
+            "coordinate": -1.5300006866455078
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.024064093828201294,
+            "coordinate": 0.019998550415039062
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.024064093828201294,
+            "coordinate": 0.10999870300292969
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.009983907453715801,
+            "coordinate": 3.0
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.009983907453715801,
+            "coordinate": 3.1999998092651367
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          -1.6700000762939453,
+          0.019998550415039062,
+          3.0
+        ],
+        [
+          -1.5300006866455078,
+          0.10999870300292969,
+          3.1999998092651367
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -1.6700000762939453,
+          0.019998550415039062,
+          3.0
+        ],
+        [
+          -1.5300006866455078,
+          0.10999870300292969,
+          3.1999998092651367
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.004392719827592373,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 23,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.014663845300674438,
+            "coordinate": -0.06999969482421875
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.014663845300674438,
+            "coordinate": 0.06999969482421875
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.0240640752017498,
+            "coordinate": 0.019998550415039062
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.0240640752017498,
+            "coordinate": 0.10999870300292969
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.009983907453715801,
+            "coordinate": 3.0
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.009983907453715801,
+            "coordinate": 3.1999998092651367
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          -0.06999969482421875,
+          0.019998550415039062,
+          3.0
+        ],
+        [
+          0.06999969482421875,
+          0.10999870300292969,
+          3.1999998092651367
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -0.06999969482421875,
+          0.019998550415039062,
+          3.0
+        ],
+        [
+          0.06999969482421875,
+          0.10999870300292969,
+          3.1999998092651367
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.004392719827592373,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 24,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.014663845300674438,
+            "coordinate": 1.5300006866455078
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.014663845300674438,
+            "coordinate": 1.6700000762939453
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.024064093828201294,
+            "coordinate": 0.019998550415039062
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.024064093828201294,
+            "coordinate": 0.10999870300292969
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.009983907453715801,
+            "coordinate": 3.0
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.009983907453715801,
+            "coordinate": 3.1999998092651367
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          1.5300006866455078,
+          0.019998550415039062,
+          3.0
+        ],
+        [
+          1.6700000762939453,
+          0.10999870300292969,
+          3.1999998092651367
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          1.5300006866455078,
+          0.019998550415039062,
+          3.0
+        ],
+        [
+          1.6700000762939453,
+          0.10999870300292969,
+          3.1999998092651367
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.004392719827592373,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 25,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.015600085258483887,
+            "coordinate": -2.3999996185302734
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.015600085258483887,
+            "coordinate": 2.3999996185302734
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.5735995173454285,
+            "coordinate": -0.07000160217285156
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.5735995173454285,
+            "coordinate": 0.07999992370605469
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.6214052438735962,
+            "coordinate": 7.37999963760376
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.6214052438735962,
+            "coordinate": 7.519999980926514
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        6
+      ],
+      "optimized_cell": [
+        9,
+        6
+      ],
+      "source_bbox": [
+        [
+          -2.3999996185302734,
+          -0.07000160217285156,
+          7.37999963760376
+        ],
+        [
+          2.3999996185302734,
+          0.07999992370605469,
+          7.519999980926514
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.3999996185302734,
+          -0.07000160217285156,
+          7.37999963760376
+        ],
+        [
+          2.3999996185302734,
+          0.07999992370605469,
+          7.519999980926514
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.007320281583815813,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 26,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.01466381549835205,
+            "coordinate": -1.6700000762939453
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.01466381549835205,
+            "coordinate": -1.5300006866455078
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.02406400442123413,
+            "coordinate": 0.019998550415039062
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.02406400442123413,
+            "coordinate": 0.10999870300292969
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.009983907453715801,
+            "coordinate": 7.349999904632568
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.009983907453715801,
+            "coordinate": 7.549999713897705
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          -1.6700000762939453,
+          0.019998550415039062,
+          7.349999904632568
+        ],
+        [
+          -1.5300006866455078,
+          0.10999870300292969,
+          7.549999713897705
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -1.6700000762939453,
+          0.019998550415039062,
+          7.349999904632568
+        ],
+        [
+          -1.5300006866455078,
+          0.10999870300292969,
+          7.549999713897705
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.004392719827592373,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 27,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.01466381549835205,
+            "coordinate": -0.06999969482421875
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.01466381549835205,
+            "coordinate": 0.06999969482421875
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.024064013734459877,
+            "coordinate": 0.019998550415039062
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.024064013734459877,
+            "coordinate": 0.10999870300292969
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.009983907453715801,
+            "coordinate": 7.349999904632568
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.009983907453715801,
+            "coordinate": 7.549999713897705
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          -0.06999969482421875,
+          0.019998550415039062,
+          7.349999904632568
+        ],
+        [
+          0.06999969482421875,
+          0.10999870300292969,
+          7.549999713897705
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -0.06999969482421875,
+          0.019998550415039062,
+          7.349999904632568
+        ],
+        [
+          0.06999969482421875,
+          0.10999870300292969,
+          7.549999713897705
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.004392719827592373,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 28,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.01466381549835205,
+            "coordinate": 1.5300006866455078
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.01466381549835205,
+            "coordinate": 1.6700000762939453
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.02406400442123413,
+            "coordinate": 0.019998550415039062
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.02406400442123413,
+            "coordinate": 0.10999870300292969
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.009983907453715801,
+            "coordinate": 7.349999904632568
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.009983907453715801,
+            "coordinate": 7.549999713897705
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          1.5300006866455078,
+          0.019998550415039062,
+          7.349999904632568
+        ],
+        [
+          1.6700000762939453,
+          0.10999870300292969,
+          7.549999713897705
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          1.5300006866455078,
+          0.019998550415039062,
+          7.349999904632568
+        ],
+        [
+          1.6700000762939453,
+          0.10999870300292969,
+          7.549999713897705
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.004392719827592373,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 29,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.06210010126233101,
+            "coordinate": -2.4300003051757812
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.06210010126233101,
+            "coordinate": 2.4300003051757812
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 1.1108999252319336,
+            "coordinate": -0.21500015258789062
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 1.1108999252319336,
+            "coordinate": 0.08499908447265625
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 1.3041021823883057,
+            "coordinate": 0.07000000774860382
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 1.3041021823883057,
+            "coordinate": 0.32999998331069946
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        3
+      ],
+      "optimized_cell": [
+        9,
+        3
+      ],
+      "source_bbox": [
+        [
+          -2.4300003051757812,
+          -0.21500015258789062,
+          0.07000000774860382
+        ],
+        [
+          2.4300003051757812,
+          0.08499908447265625,
+          0.32999998331069946
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.4300003051757812,
+          -0.21500015258789062,
+          0.07000000774860382
+        ],
+        [
+          2.4300003051757812,
+          0.08499908447265625,
+          0.32999998331069946
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.010981084778904915,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 30,
+      "source_triangles": 28,
+      "optimized_triangles": 28,
+      "rule": "未识别形体保留，禁止无脑bbox",
+      "evidence": {},
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        3
+      ],
+      "optimized_cell": [
+        9,
+        3
+      ],
+      "source_bbox": [
+        [
+          -2.4600000381469727,
+          -1.9073486328125e-06,
+          8.9350004196167
+        ],
+        [
+          2.4600000381469727,
+          0.12999916076660156,
+          9.0649995803833
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.4600000381469727,
+          -1.9073486328125e-06,
+          8.9350004196167
+        ],
+        [
+          2.4600000381469727,
+          0.12999916076660156,
+          9.0649995803833
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 1.6763806343078613e-07,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 31,
+      "source_triangles": 28,
+      "optimized_triangles": 28,
+      "rule": "未识别形体保留，禁止无脑bbox",
+      "evidence": {},
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        3
+      ],
+      "optimized_cell": [
+        9,
+        3
+      ],
+      "source_bbox": [
+        [
+          -2.4600000381469727,
+          -1.9073486328125e-06,
+          9.205000877380371
+        ],
+        [
+          2.4600000381469727,
+          0.12999916076660156,
+          9.335000038146973
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.4600000381469727,
+          -1.9073486328125e-06,
+          9.205000877380371
+        ],
+        [
+          2.4600000381469727,
+          0.12999916076660156,
+          9.335000038146973
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 1.6763806343078613e-07,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 32,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 1.013384222984314,
+            "coordinate": -1.8924999237060547
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 1.013384222984314,
+            "coordinate": -1.8075008392333984
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.6269235610961914,
+            "coordinate": -0.1100006103515625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.6269235610961914,
+            "coordinate": 0.020000457763671875
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.008613997139036655,
+            "coordinate": 1.049999713897705
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.008613997139036655,
+            "coordinate": 9.649999618530273
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        6
+      ],
+      "optimized_cell": [
+        9,
+        6
+      ],
+      "source_bbox": [
+        [
+          -1.8924999237060547,
+          -0.1100006103515625,
+          1.049999713897705
+        ],
+        [
+          -1.8075008392333984,
+          0.020000457763671875,
+          9.649999618530273
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -1.8924999237060547,
+          -0.1100006103515625,
+          1.049999713897705
+        ],
+        [
+          -1.8075008392333984,
+          0.020000457763671875,
+          9.649999618530273
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.004392719827592373,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 33,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.021216019988059998,
+            "coordinate": -1.9300003051757812
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.021216019988059998,
+            "coordinate": -1.7700004577636719
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.029375791549682617,
+            "coordinate": 0.0049991607666015625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.029375791549682617,
+            "coordinate": 0.12499809265136719
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.014975919388234615,
+            "coordinate": 0.9399999380111694
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.014975919388234615,
+            "coordinate": 1.159999966621399
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          -1.9300003051757812,
+          0.0049991607666015625,
+          0.9399999380111694
+        ],
+        [
+          -1.7700004577636719,
+          0.12499809265136719,
+          1.159999966621399
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -1.9300003051757812,
+          0.0049991607666015625,
+          0.9399999380111694
+        ],
+        [
+          -1.7700004577636719,
+          0.12499809265136719,
+          1.159999966621399
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0058553991839289665,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 34,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.02121603488922119,
+            "coordinate": -1.9300003051757812
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.02121603488922119,
+            "coordinate": -1.7700004577636719
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.029375791549682617,
+            "coordinate": 0.0049991607666015625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.029375791549682617,
+            "coordinate": 0.12499809265136719
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.014975919388234615,
+            "coordinate": 3.440000057220459
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.014975919388234615,
+            "coordinate": 3.6599998474121094
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          -1.9300003051757812,
+          0.0049991607666015625,
+          3.440000057220459
+        ],
+        [
+          -1.7700004577636719,
+          0.12499809265136719,
+          3.6599998474121094
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -1.9300003051757812,
+          0.0049991607666015625,
+          3.440000057220459
+        ],
+        [
+          -1.7700004577636719,
+          0.12499809265136719,
+          3.6599998474121094
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.005855262279510498,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 35,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.02121591567993164,
+            "coordinate": -1.9300003051757812
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.02121591567993164,
+            "coordinate": -1.7700004577636719
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.02937576174736023,
+            "coordinate": 0.0049991607666015625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.02937576174736023,
+            "coordinate": 0.12499809265136719
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.014975919388234615,
+            "coordinate": 6.739999771118164
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.014975919388234615,
+            "coordinate": 6.960000038146973
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          -1.9300003051757812,
+          0.0049991607666015625,
+          6.739999771118164
+        ],
+        [
+          -1.7700004577636719,
+          0.12499809265136719,
+          6.960000038146973
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -1.9300003051757812,
+          0.0049991607666015625,
+          6.739999771118164
+        ],
+        [
+          -1.7700004577636719,
+          0.12499809265136719,
+          6.960000038146973
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0058553991839289665,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 36,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.021216154098510742,
+            "coordinate": -1.9300003051757812
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.021216154098510742,
+            "coordinate": -1.7700004577636719
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.02937588095664978,
+            "coordinate": 0.0049991607666015625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.02937588095664978,
+            "coordinate": 0.12499809265136719
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.014975919388234615,
+            "coordinate": 10.74000072479248
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.014975919388234615,
+            "coordinate": 10.960000038146973
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          -1.9300003051757812,
+          0.0049991607666015625,
+          10.74000072479248
+        ],
+        [
+          -1.7700004577636719,
+          0.12499809265136719,
+          10.960000038146973
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -1.9300003051757812,
+          0.0049991607666015625,
+          10.74000072479248
+        ],
+        [
+          -1.7700004577636719,
+          0.12499809265136719,
+          10.960000038146973
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.005855123978108168,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 37,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 1.013384222984314,
+            "coordinate": 1.8075008392333984
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 1.013384222984314,
+            "coordinate": 1.8924999237060547
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.6269235610961914,
+            "coordinate": -0.1100006103515625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.6269235610961914,
+            "coordinate": 0.020000457763671875
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.008613997139036655,
+            "coordinate": 1.049999713897705
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.008613997139036655,
+            "coordinate": 9.649999618530273
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        6
+      ],
+      "optimized_cell": [
+        9,
+        6
+      ],
+      "source_bbox": [
+        [
+          1.8075008392333984,
+          -0.1100006103515625,
+          1.049999713897705
+        ],
+        [
+          1.8924999237060547,
+          0.020000457763671875,
+          9.649999618530273
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          1.8075008392333984,
+          -0.1100006103515625,
+          1.049999713897705
+        ],
+        [
+          1.8924999237060547,
+          0.020000457763671875,
+          9.649999618530273
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.004392719827592373,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 38,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.021216019988059998,
+            "coordinate": 1.7700004577636719
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.021216019988059998,
+            "coordinate": 1.9300003051757812
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.029375791549682617,
+            "coordinate": 0.0049991607666015625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.029375791549682617,
+            "coordinate": 0.12499809265136719
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.014975919388234615,
+            "coordinate": 0.9399999380111694
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.014975919388234615,
+            "coordinate": 1.159999966621399
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          1.7700004577636719,
+          0.0049991607666015625,
+          0.9399999380111694
+        ],
+        [
+          1.9300003051757812,
+          0.12499809265136719,
+          1.159999966621399
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          1.7700004577636719,
+          0.0049991607666015625,
+          0.9399999380111694
+        ],
+        [
+          1.9300003051757812,
+          0.12499809265136719,
+          1.159999966621399
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0058553991839289665,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 39,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.02121603488922119,
+            "coordinate": 1.7700004577636719
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.02121603488922119,
+            "coordinate": 1.9300003051757812
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.029375791549682617,
+            "coordinate": 0.0049991607666015625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.029375791549682617,
+            "coordinate": 0.12499809265136719
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.014975919388234615,
+            "coordinate": 3.440000057220459
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.014975919388234615,
+            "coordinate": 3.6599998474121094
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          1.7700004577636719,
+          0.0049991607666015625,
+          3.440000057220459
+        ],
+        [
+          1.9300003051757812,
+          0.12499809265136719,
+          3.6599998474121094
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          1.7700004577636719,
+          0.0049991607666015625,
+          3.440000057220459
+        ],
+        [
+          1.9300003051757812,
+          0.12499809265136719,
+          3.6599998474121094
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.005855262279510498,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 40,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.02121591567993164,
+            "coordinate": 1.7700004577636719
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.02121591567993164,
+            "coordinate": 1.9300003051757812
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.02937576174736023,
+            "coordinate": 0.0049991607666015625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.02937576174736023,
+            "coordinate": 0.12499809265136719
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.014975919388234615,
+            "coordinate": 6.739999771118164
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.014975919388234615,
+            "coordinate": 6.960000038146973
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          1.7700004577636719,
+          0.0049991607666015625,
+          6.739999771118164
+        ],
+        [
+          1.9300003051757812,
+          0.12499809265136719,
+          6.960000038146973
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          1.7700004577636719,
+          0.0049991607666015625,
+          6.739999771118164
+        ],
+        [
+          1.9300003051757812,
+          0.12499809265136719,
+          6.960000038146973
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0058553991839289665,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 41,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.021216154098510742,
+            "coordinate": 1.7700004577636719
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.021216154098510742,
+            "coordinate": 1.9300003051757812
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.02937588095664978,
+            "coordinate": 0.0049991607666015625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.02937588095664978,
+            "coordinate": 0.12499809265136719
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.014975919388234615,
+            "coordinate": 10.74000072479248
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.014975919388234615,
+            "coordinate": 10.960000038146973
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          1.7700004577636719,
+          0.0049991607666015625,
+          10.74000072479248
+        ],
+        [
+          1.9300003051757812,
+          0.12499809265136719,
+          10.960000038146973
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          1.7700004577636719,
+          0.0049991607666015625,
+          10.74000072479248
+        ],
+        [
+          1.9300003051757812,
+          0.12499809265136719,
+          10.960000038146973
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.005855123978108168,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 42,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.011423945426940918,
+            "coordinate": 0.9799995422363281
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.011423945426940918,
+            "coordinate": 1.5200004577636719
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.14470380544662476,
+            "coordinate": 0.03999900817871094
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.14470380544662476,
+            "coordinate": 0.08999824523925781
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.022343885153532028,
+            "coordinate": 2.7099997997283936
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.022343885153532028,
+            "coordinate": 2.990000009536743
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        3
+      ],
+      "optimized_cell": [
+        9,
+        3
+      ],
+      "source_bbox": [
+        [
+          0.9799995422363281,
+          0.03999900817871094,
+          2.7099997997283936
+        ],
+        [
+          1.5200004577636719,
+          0.08999824523925781,
+          2.990000009536743
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          0.9799995422363281,
+          0.03999900817871094,
+          2.7099997997283936
+        ],
+        [
+          1.5200004577636719,
+          0.08999824523925781,
+          2.990000009536743
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0029279752634465694,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 43,
+      "source_triangles": 28,
+      "optimized_triangles": 28,
+      "rule": "未识别形体保留，禁止无脑bbox",
+      "evidence": {},
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          -2.3000001907348633,
+          0.022998809814453125,
+          4.917999744415283
+        ],
+        [
+          -0.3000001907348633,
+          0.08699798583984375,
+          4.98199987411499
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.3000001907348633,
+          0.022998809814453125,
+          4.917999744415283
+        ],
+        [
+          -0.3000001907348633,
+          0.08699798583984375,
+          4.98199987411499
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 8.568167686462402e-08,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 44,
+      "source_triangles": 28,
+      "optimized_triangles": 28,
+      "rule": "未识别形体保留，禁止无脑bbox",
+      "evidence": {},
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          -2.3000001907348633,
+          0.022998809814453125,
+          5.138000011444092
+        ],
+        [
+          -0.3000001907348633,
+          0.08699798583984375,
+          5.202000141143799
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.3000001907348633,
+          0.022998809814453125,
+          5.138000011444092
+        ],
+        [
+          -0.3000001907348633,
+          0.08699798583984375,
+          5.202000141143799
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 8.568167686462402e-08,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 45,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.015914440155029297,
+            "coordinate": -2.309999465942383
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.015914440155029297,
+            "coordinate": 2.309999465942383
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 1.00454580783844,
+            "coordinate": -0.13249969482421875
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 1.00454580783844,
+            "coordinate": -0.0475006103515625
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.3363925814628601,
+            "coordinate": 10.505000114440918
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.3363925814628601,
+            "coordinate": 10.734999656677246
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        6
+      ],
+      "optimized_cell": [
+        9,
+        6
+      ],
+      "source_bbox": [
+        [
+          -2.309999465942383,
+          -0.13249969482421875,
+          10.505000114440918
+        ],
+        [
+          2.309999465942383,
+          -0.0475006103515625,
+          10.734999656677246
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.309999465942383,
+          -0.13249969482421875,
+          10.505000114440918
+        ],
+        [
+          2.309999465942383,
+          -0.0475006103515625,
+          10.734999656677246
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.004391067661345005,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 46,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.008704103529453278,
+            "coordinate": -2.25
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.008704103529453278,
+            "coordinate": 2.25
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.574463963508606,
+            "coordinate": -0.1250019073486328
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.574463963508606,
+            "coordinate": -0.04500007629394531
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.30518752336502075,
+            "coordinate": 0.550000011920929
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.30518752336502075,
+            "coordinate": 0.6899999976158142
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        6
+      ],
+      "optimized_cell": [
+        9,
+        6
+      ],
+      "source_bbox": [
+        [
+          -2.25,
+          -0.1250019073486328,
+          0.550000011920929
+        ],
+        [
+          2.25,
+          -0.04500007629394531,
+          0.6899999976158142
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.25,
+          -0.1250019073486328,
+          0.550000011920929
+        ],
+        [
+          2.25,
+          -0.04500007629394531,
+          0.6899999976158142
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.004392754286527634,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 47,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.0026909708976745605,
+            "coordinate": -2.2250003814697266
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.0026909708976745605,
+            "coordinate": 2.2250003814697266
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.17331404983997345,
+            "coordinate": -0.09750175476074219
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.17331404983997345,
+            "coordinate": -0.022500991821289062
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.30663710832595825,
+            "coordinate": 4.177499771118164
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.30663710832595825,
+            "coordinate": 4.222499847412109
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        6
+      ],
+      "optimized_cell": [
+        9,
+        6
+      ],
+      "source_bbox": [
+        [
+          -2.2250003814697266,
+          -0.09750175476074219,
+          4.177499771118164
+        ],
+        [
+          2.2250003814697266,
+          -0.022500991821289062,
+          4.222499847412109
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.2250003814697266,
+          -0.09750175476074219,
+          4.177499771118164
+        ],
+        [
+          2.2250003814697266,
+          -0.022500991821289062,
+          4.222499847412109
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0021966351196169853,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 48,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.0026909708976745605,
+            "coordinate": -2.2250003814697266
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.0026909708976745605,
+            "coordinate": 2.2250003814697266
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.17331404983997345,
+            "coordinate": -0.09750175476074219
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.17331404983997345,
+            "coordinate": -0.022500991821289062
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.30663710832595825,
+            "coordinate": 6.577499866485596
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.30663710832595825,
+            "coordinate": 6.622499942779541
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        6
+      ],
+      "optimized_cell": [
+        9,
+        6
+      ],
+      "source_bbox": [
+        [
+          -2.2250003814697266,
+          -0.09750175476074219,
+          6.577499866485596
+        ],
+        [
+          2.2250003814697266,
+          -0.022500991821289062,
+          6.622499942779541
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.2250003814697266,
+          -0.09750175476074219,
+          6.577499866485596
+        ],
+        [
+          2.2250003814697266,
+          -0.022500991821289062,
+          6.622499942779541
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0021966351196169853,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 49,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.0026909708976745605,
+            "coordinate": -2.2250003814697266
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.0026909708976745605,
+            "coordinate": 2.2250003814697266
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.17331404983997345,
+            "coordinate": -0.09750175476074219
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.17331404983997345,
+            "coordinate": -0.022500991821289062
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.30663710832595825,
+            "coordinate": 10.52750015258789
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.30663710832595825,
+            "coordinate": 10.572500228881836
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        6
+      ],
+      "optimized_cell": [
+        9,
+        6
+      ],
+      "source_bbox": [
+        [
+          -2.2250003814697266,
+          -0.09750175476074219,
+          10.52750015258789
+        ],
+        [
+          2.2250003814697266,
+          -0.022500991821289062,
+          10.572500228881836
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.2250003814697266,
+          -0.09750175476074219,
+          10.52750015258789
+        ],
+        [
+          2.2250003814697266,
+          -0.022500991821289062,
+          10.572500228881836
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.002196910558268428,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 50,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.007223963737487793,
+            "coordinate": -2.190000534057617
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.007223963737487793,
+            "coordinate": -2.010000228881836
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.029584139585494995,
+            "coordinate": -0.07999992370605469
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.029584139585494995,
+            "coordinate": -0.030000686645507812
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.007224005647003651,
+            "coordinate": 2.1100001335144043
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.007224005647003651,
+            "coordinate": 2.2899999618530273
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          -2.190000534057617,
+          -0.07999992370605469,
+          2.1100001335144043
+        ],
+        [
+          -2.010000228881836,
+          -0.030000686645507812,
+          2.2899999618530273
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.190000534057617,
+          -0.07999992370605469,
+          2.1100001335144043
+        ],
+        [
+          -2.010000228881836,
+          -0.030000686645507812,
+          2.2899999618530273
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0029279752634465694,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 51,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.007223993539810181,
+            "coordinate": -2.190000534057617
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.007223993539810181,
+            "coordinate": -2.010000228881836
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.02958431839942932,
+            "coordinate": -0.07999992370605469
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.02958431839942932,
+            "coordinate": -0.030000686645507812
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.007224005647003651,
+            "coordinate": 8.710000038146973
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.007224005647003651,
+            "coordinate": 8.890000343322754
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          -2.190000534057617,
+          -0.07999992370605469,
+          8.710000038146973
+        ],
+        [
+          -2.010000228881836,
+          -0.030000686645507812,
+          8.890000343322754
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.190000534057617,
+          -0.07999992370605469,
+          8.710000038146973
+        ],
+        [
+          -2.010000228881836,
+          -0.030000686645507812,
+          8.890000343322754
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.002928112866356969,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 52,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.007223963737487793,
+            "coordinate": 2.010000228881836
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.007223963737487793,
+            "coordinate": 2.190000534057617
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.029584139585494995,
+            "coordinate": -0.07999992370605469
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.029584139585494995,
+            "coordinate": -0.030000686645507812
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.007224005647003651,
+            "coordinate": 2.1100001335144043
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.007224005647003651,
+            "coordinate": 2.2899999618530273
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          2.010000228881836,
+          -0.07999992370605469,
+          2.1100001335144043
+        ],
+        [
+          2.190000534057617,
+          -0.030000686645507812,
+          2.2899999618530273
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          2.010000228881836,
+          -0.07999992370605469,
+          2.1100001335144043
+        ],
+        [
+          2.190000534057617,
+          -0.030000686645507812,
+          2.2899999618530273
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0029279752634465694,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 53,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.007223993539810181,
+            "coordinate": 2.010000228881836
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.007223993539810181,
+            "coordinate": 2.190000534057617
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.02958431839942932,
+            "coordinate": -0.07999992370605469
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.02958431839942932,
+            "coordinate": -0.030000686645507812
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.007224005647003651,
+            "coordinate": 8.710000038146973
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.007224005647003651,
+            "coordinate": 8.890000343322754
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        1
+      ],
+      "optimized_cell": [
+        9,
+        1
+      ],
+      "source_bbox": [
+        [
+          2.010000228881836,
+          -0.07999992370605469,
+          8.710000038146973
+        ],
+        [
+          2.190000534057617,
+          -0.030000686645507812,
+          8.890000343322754
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          2.010000228881836,
+          -0.07999992370605469,
+          8.710000038146973
+        ],
+        [
+          2.190000534057617,
+          -0.030000686645507812,
+          8.890000343322754
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.002928112866356969,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 54,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.009900063276290894,
+            "coordinate": -1.0500001907348633
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.009900063276290894,
+            "coordinate": 1.0500001907348633
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.18810033798217773,
+            "coordinate": -0.095001220703125
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.18810033798217773,
+            "coordinate": 0.024997711181640625
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.2299012839794159,
+            "coordinate": 3.3500001430511475
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.2299012839794159,
+            "coordinate": 3.450000047683716
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        3
+      ],
+      "optimized_cell": [
+        9,
+        3
+      ],
+      "source_bbox": [
+        [
+          -1.0500001907348633,
+          -0.095001220703125,
+          3.3500001430511475
+        ],
+        [
+          1.0500001907348633,
+          0.024997711181640625,
+          3.450000047683716
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -1.0500001907348633,
+          -0.095001220703125,
+          3.3500001430511475
+        ],
+        [
+          1.0500001907348633,
+          0.024997711181640625,
+          3.450000047683716
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0036602786276489496,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 55,
+      "source_triangles": 20,
+      "optimized_triangles": 20,
+      "rule": "未识别形体保留，禁止无脑bbox",
+      "evidence": {},
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        3
+      ],
+      "optimized_cell": [
+        9,
+        3
+      ],
+      "source_bbox": [
+        [
+          -0.9849996566772461,
+          -0.06314468383789062,
+          2.588742733001709
+        ],
+        [
+          -0.9149999618530273,
+          0.313140869140625,
+          3.411257266998291
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -0.9849996566772461,
+          -0.06314468383789062,
+          2.588742733001709
+        ],
+        [
+          -0.9149999618530273,
+          0.313140869140625,
+          3.411257266998291
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 2.5463114639023843e-07,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 56,
+      "source_triangles": 20,
+      "optimized_triangles": 20,
+      "rule": "未识别形体保留，禁止无脑bbox",
+      "evidence": {},
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        3
+      ],
+      "optimized_cell": [
+        9,
+        3
+      ],
+      "source_bbox": [
+        [
+          0.9149999618530273,
+          -0.06314468383789062,
+          2.588742733001709
+        ],
+        [
+          0.9849996566772461,
+          0.313140869140625,
+          3.411257266998291
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          0.9149999618530273,
+          -0.06314468383789062,
+          2.588742733001709
+        ],
+        [
+          0.9849996566772461,
+          0.313140869140625,
+          3.411257266998291
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 2.5463114639023843e-07,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 57,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.01689600944519043,
+            "coordinate": -1.0500001907348633
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.01689600944519043,
+            "coordinate": 1.0500001907348633
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.09169629216194153,
+            "coordinate": 0.08499908447265625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.09169629216194153,
+            "coordinate": 0.4850006103515625
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.8002535104751587,
+            "coordinate": 3.4700000286102295
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.8002535104751587,
+            "coordinate": 3.5299999713897705
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        9,
+        5
+      ],
+      "optimized_cell": [
+        9,
+        5
+      ],
+      "source_bbox": [
+        [
+          -1.0500001907348633,
+          0.08499908447265625,
+          3.4700000286102295
+        ],
+        [
+          1.0500001907348633,
+          0.4850006103515625,
+          3.5299999713897705
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -1.0500001907348633,
+          0.08499908447265625,
+          3.4700000286102295
+        ],
+        [
+          1.0500001907348633,
+          0.4850006103515625,
+          3.5299999713897705
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.005857051350176334,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 58,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.09819555282592773,
+            "coordinate": -0.8499994277954102
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.09819555282592773,
+            "coordinate": -0.5500001907348633
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.09819623827934265,
+            "coordinate": 0.13500022888183594
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.09819623827934265,
+            "coordinate": 0.4349994659423828
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.08643580973148346,
+            "coordinate": 3.5299999713897705
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.08643580973148346,
+            "coordinate": 3.870000123977661
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        8,
+        8
+      ],
+      "optimized_cell": [
+        8,
+        8
+      ],
+      "source_bbox": [
+        [
+          -0.8499994277954102,
+          0.13500022888183594,
+          3.5299999713897705
+        ],
+        [
+          -0.5500001907348633,
+          0.4349994659423828,
+          3.870000123977661
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -0.8499994277954102,
+          0.13500022888183594,
+          3.5299999713897705
+        ],
+        [
+          -0.5500001907348633,
+          0.4349994659423828,
+          3.870000123977661
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.002196222310885787,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 59,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.12171542644500732,
+            "coordinate": -0.34999942779541016
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.12171542644500732,
+            "coordinate": -0.05000019073486328
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.12171626091003418,
+            "coordinate": 0.13500022888183594
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.12171626091003418,
+            "coordinate": 0.4349994659423828
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.08643580973148346,
+            "coordinate": 3.5299999713897705
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.08643580973148346,
+            "coordinate": 3.950000047683716
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        8,
+        9
+      ],
+      "optimized_cell": [
+        8,
+        9
+      ],
+      "source_bbox": [
+        [
+          -0.34999942779541016,
+          0.13500022888183594,
+          3.5299999713897705
+        ],
+        [
+          -0.05000019073486328,
+          0.4349994659423828,
+          3.950000047683716
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -0.34999942779541016,
+          0.13500022888183594,
+          3.5299999713897705
+        ],
+        [
+          -0.05000019073486328,
+          0.4349994659423828,
+          3.950000047683716
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.0021960847079753876,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 60,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.08055567741394043,
+            "coordinate": 0.1700000762939453
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.08055567741394043,
+            "coordinate": 0.4699993133544922
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.08055621385574341,
+            "coordinate": 0.13500022888183594
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.08055621385574341,
+            "coordinate": 0.4349994659423828
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.08643580973148346,
+            "coordinate": 3.5299999713897705
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.08643580973148346,
+            "coordinate": 3.81000018119812
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        6,
+        6
+      ],
+      "optimized_cell": [
+        6,
+        6
+      ],
+      "source_bbox": [
+        [
+          0.1700000762939453,
+          0.13500022888183594,
+          3.5299999713897705
+        ],
+        [
+          0.4699993133544922,
+          0.4349994659423828,
+          3.81000018119812
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          0.1700000762939453,
+          0.13500022888183594,
+          3.5299999713897705
+        ],
+        [
+          0.4699993133544922,
+          0.4349994659423828,
+          3.81000018119812
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.002196222310885787,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_部件00",
+      "component": 61,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.1099555492401123,
+            "coordinate": 0.630000114440918
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.1099555492401123,
+            "coordinate": 0.9299993515014648
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.10995624959468842,
+            "coordinate": 0.13500022888183594
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.10995624959468842,
+            "coordinate": 0.4349994659423828
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.08643580973148346,
+            "coordinate": 3.5299999713897705
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.08643580973148346,
+            "coordinate": 3.9100000858306885
+          }
+        ]
+      },
+      "source_material": "02_细腻哑光_青绿大面",
+      "material_index": 0,
+      "source_cell": [
+        8,
+        4
+      ],
+      "optimized_cell": [
+        8,
+        4
+      ],
+      "source_bbox": [
+        [
+          0.630000114440918,
+          0.13500022888183594,
+          3.5299999713897705
+        ],
+        [
+          0.9299993515014648,
+          0.4349994659423828,
+          3.9100000858306885
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          0.630000114440918,
+          0.13500022888183594,
+          3.5299999713897705
+        ],
+        [
+          0.9299993515014648,
+          0.4349994659423828,
+          3.9100000858306885
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.002196222310885787,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_自发光",
+      "component": 0,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.005080163478851318,
+            "coordinate": -2.2200002670288086
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.005080163478851318,
+            "coordinate": 2.2200002670288086
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.5628674626350403,
+            "coordinate": -0.059001922607421875
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.5628674626350403,
+            "coordinate": -0.0110015869140625
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.17728403210639954,
+            "coordinate": 10.552499771118164
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.17728403210639954,
+            "coordinate": 10.6875
+          }
+        ]
+      },
+      "source_material": "04_柔和自发光_UI灯光",
+      "material_index": 0,
+      "source_cell": [
+        8,
+        9
+      ],
+      "optimized_cell": [
+        8,
+        9
+      ],
+      "source_bbox": [
+        [
+          -2.2200002670288086,
+          -0.059001922607421875,
+          10.552499771118164
+        ],
+        [
+          2.2200002670288086,
+          -0.0110015869140625,
+          10.6875
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.2200002670288086,
+          -0.059001922607421875,
+          10.552499771118164
+        ],
+        [
+          2.2200002670288086,
+          -0.0110015869140625,
+          10.6875
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.002928112866356969,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    },
+    {
+      "object": "south_墙体_2_输出_自发光",
+      "component": 1,
+      "source_triangles": 108,
+      "optimized_triangles": 12,
+      "rule": "六向平面与56顶点54四边面圆角箱壳→真实局部bbox方箱",
+      "evidence": {
+        "axis_planes": [
+          {
+            "axis": 0,
+            "sign": -1,
+            "area": 0.002663947641849518,
+            "coordinate": -2.1700000762939453
+          },
+          {
+            "axis": 0,
+            "sign": 1,
+            "area": 0.002663947641849518,
+            "coordinate": 2.1700000762939453
+          },
+          {
+            "axis": 1,
+            "sign": -1,
+            "area": 0.3207159638404846,
+            "coordinate": -0.060001373291015625
+          },
+          {
+            "axis": 1,
+            "sign": 1,
+            "area": 0.3207159638404846,
+            "coordinate": -0.018001556396484375
+          },
+          {
+            "axis": 2,
+            "sign": -1,
+            "area": 0.15602093935012817,
+            "coordinate": 0.5799999833106995
+          },
+          {
+            "axis": 2,
+            "sign": 1,
+            "area": 0.15602093935012817,
+            "coordinate": 0.6600000262260437
+          }
+        ]
+      },
+      "source_material": "04_柔和自发光_UI灯光",
+      "material_index": 0,
+      "source_cell": [
+        8,
+        9
+      ],
+      "optimized_cell": [
+        8,
+        9
+      ],
+      "source_bbox": [
+        [
+          -2.1700000762939453,
+          -0.060001373291015625,
+          0.5799999833106995
+        ],
+        [
+          2.1700000762939453,
+          -0.018001556396484375,
+          0.6600000262260437
+        ]
+      ],
+      "optimized_bbox": [
+        [
+          -2.1700000762939453,
+          -0.060001373291015625,
+          0.5799999833106995
+        ],
+        [
+          2.1700000762939453,
+          -0.018001556396484375,
+          0.6600000262260437
+        ]
+      ],
+      "bbox_max_delta_m": 0.0,
+      "surface_sample_max_delta_m": 0.002196669578552246,
+      "topology_before": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      },
+      "topology_after": {
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "degenerate_faces": 0,
+        "loose_vertices": 0
+      }
+    }
+  ],
+  "strategy": "逐连通块形体识别；108三角六向箱壳局部真实bbox重建6四边面；12边直圆杆按端盖局部轴框架方截面化；逐块保留材质与全部loop一致的原色格；不使用Decimate，不删除结构块",
+  "not_verified": [
+    "未执行整关通行或角色胶囊净空验证",
+    "表面偏差为采样值，并非严格Hausdorff上界"
+  ],
+  "optimized_stats": {
+    "objects": 2,
+    "vertices": 552,
+    "polygons": 404,
+    "triangles": 848,
+    "components": 64,
+    "objects_detail": [
+      {
+        "name": "south_墙体_2_输出_部件00",
+        "matrix_world": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "matrix_local": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "parent": "ROOT_wall_south_2_组件",
+        "modifiers": [],
+        "bbox": [
+          [
+            -2.5,
+            -0.4850006103515625,
+            0.0
+          ],
+          [
+            2.5,
+            0.4850006103515625,
+            11.899999618530273
+          ]
+        ],
+        "topology": {
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "degenerate_faces": 0,
+          "loose_vertices": 0
+        },
+        "materials": [
+          "02_细腻哑光_青绿大面",
+          "02_细腻哑光_青绿大面",
+          "03_清漆反光_紫粉点缀"
+        ],
+        "material_cells": {
+          "(0, [(9, 6)])": 60,
+          "(0, [(9, 5)])": 24,
+          "(0, [(0, 0)])": 54,
+          "(0, [(9, 3)])": 102,
+          "(0, [(9, 1)])": 128,
+          "(0, [(8, 8)])": 6,
+          "(0, [(8, 9)])": 6,
+          "(0, [(6, 6)])": 6,
+          "(0, [(8, 4)])": 6
+        }
+      },
+      {
+        "name": "south_墙体_2_输出_自发光",
+        "matrix_world": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "matrix_local": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "parent": "ROOT_wall_south_2_组件",
+        "modifiers": [],
+        "bbox": [
+          [
+            -2.2200002670288086,
+            -0.060001373291015625,
+            0.5799999833106995
+          ],
+          [
+            2.2200002670288086,
+            -0.0110015869140625,
+            10.6875
+          ]
+        ],
+        "topology": {
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "degenerate_faces": 0,
+          "loose_vertices": 0
+        },
+        "materials": [
+          "04_柔和自发光_UI灯光"
+        ],
+        "material_cells": {
+          "(0, [(8, 9)])": 12
+        }
+      }
+    ],
+    "bbox": [
+      [
+        -2.5,
+        -0.4850006103515625,
+        0.0
+      ],
+      [
+        2.5,
+        0.4850006103515625,
+        11.899999618530273
+      ]
+    ],
+    "collection_offset": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "target_met": true,
+  "bbox": [
+    [
+      -2.5,
+      -0.4850006103515625,
+      0.0
+    ],
+    [
+      2.5,
+      0.4850006103515625,
+      11.899999618530273
+    ]
+  ],
+  "bbox_max_delta_m": 0.0,
+  "transforms_unchanged": true,
+  "collection_offset_unchanged": true,
+  "candidate_hash": "4cd19a723f91cae1b1b884a8924d215b223eca88aad5bb7ada9fdf270ee070ff",
+  "independent_reopen_stats": {
+    "objects": 2,
+    "vertices": 552,
+    "polygons": 404,
+    "triangles": 848,
+    "components": 64,
+    "objects_detail": [
+      {
+        "name": "south_墙体_2_输出_部件00",
+        "matrix_world": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "matrix_local": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "parent": "ROOT_wall_south_2_组件",
+        "modifiers": [],
+        "bbox": [
+          [
+            -2.5,
+            -0.4850006103515625,
+            0.0
+          ],
+          [
+            2.5,
+            0.4850006103515625,
+            11.899999618530273
+          ]
+        ],
+        "topology": {
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "degenerate_faces": 0,
+          "loose_vertices": 0
+        },
+        "materials": [
+          "02_细腻哑光_青绿大面",
+          "02_细腻哑光_青绿大面",
+          "03_清漆反光_紫粉点缀"
+        ],
+        "material_cells": {
+          "(0, [(9, 6)])": 60,
+          "(0, [(9, 5)])": 24,
+          "(0, [(0, 0)])": 54,
+          "(0, [(9, 3)])": 102,
+          "(0, [(9, 1)])": 128,
+          "(0, [(8, 8)])": 6,
+          "(0, [(8, 9)])": 6,
+          "(0, [(6, 6)])": 6,
+          "(0, [(8, 4)])": 6
+        }
+      },
+      {
+        "name": "south_墙体_2_输出_自发光",
+        "matrix_world": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "matrix_local": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "parent": "ROOT_wall_south_2_组件",
+        "modifiers": [],
+        "bbox": [
+          [
+            -2.2200002670288086,
+            -0.060001373291015625,
+            0.5799999833106995
+          ],
+          [
+            2.2200002670288086,
+            -0.0110015869140625,
+            10.6875
+          ]
+        ],
+        "topology": {
+          "boundary_edges": 0,
+          "nonmanifold_edges": 0,
+          "degenerate_faces": 0,
+          "loose_vertices": 0
+        },
+        "materials": [
+          "04_柔和自发光_UI灯光"
+        ],
+        "material_cells": {
+          "(0, [(8, 9)])": 12
+        }
+      }
+    ],
+    "bbox": [
+      [
+        -2.5,
+        -0.4850006103515625,
+        0.0
+      ],
+      [
+        2.5,
+        0.4850006103515625,
+        11.899999618530273
+      ]
+    ],
+    "collection_offset": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "independent_reopen_passed": true,
+  "source_sha256_after": "e8601ca975f71720949cf746cadd78244c509b70f1092e6cc82b42a504aa3381",
+  "source_unchanged": true,
+  "material_transform_audit": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\next9_20261115\\wall_t970_5m\\material_transform_audit.json",
+  "material_nodes_pbr_emission_unchanged": true,
+  "all_output_and_ancestor_transforms_unchanged": true,
+  "optimized_sha256": "4cd19a723f91cae1b1b884a8924d215b223eca88aad5bb7ada9fdf270ee070ff",
+  "role": "optimized",
+  "version": "v034",
+  "visual_review": {
+    "slug": "wall_t970_5m",
+    "passed": true,
+    "notes": "正背面大轮廓、背板细节、顶面彩色小件和两侧凸起保持，圆角高光减少。"
+  },
+  "persistent_validation": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\next9_20261115\\wall_t970_5m\\persistent_validation.json",
+  "persistent_independent_reopen_passed": true,
+  "runtime_import": {
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_t970_5m/wall_t970_5m_visual_top3d.glb",
+    "glb_sha256": "92390d0bdf4b9fd4a15990ac1b1f635e5e9ca958debbb9d4d4fbb4bb6c27d171",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t970_5m/wall_t970_5m_root_top3d.tscn",
+    "prefab_sha256": "11b783c495c71fcefe0e55975dda5ba7889b45dcbea842f7b72b7cc0cca65a3c",
+    "verified": {
+      "bounds_max": [
+        2.5,
+        11.8999996185303,
+        0.485000610351563
+      ],
+      "bounds_min": [
+        -2.5,
+        0.0,
+        -0.485000610351563
+      ],
+      "collision_shapes": 1,
+      "material_roles": [
+        "04_柔和自发光_UI灯光",
+        "02_细腻哑光_青绿大面"
+      ],
+      "meshes": 2,
+      "slug": "wall_t970_5m",
+      "triangles": 848,
+      "version": "v034"
+    },
+    "verification_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\next9_20261115\\import\\godot_verification.json",
+    "whole_level_verified": false
+  },
+  "triangles_before": 6320,
+  "triangles_after": 848,
+  "reduction_ratio": 0.8658227848101265,
+  "target_triangles": 1264,
+  "budget_source": "用户明确授权：每件优化后不超过冻结当前三角面数的20%",
+  "source_sha256_before": "e8601ca975f71720949cf746cadd78244c509b70f1092e6cc82b42a504aa3381",
+  "cleanup_note": "逐块拓扑检查零面积面、孤立点、边界及非流形边，重建前后匹配；不凭朝下法线删面；复杂块保留。"
+}

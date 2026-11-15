@@ -6,7 +6,9 @@
 
 [node name="RoomTypeComponentCornerGuard" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-CORNER_GUARD"
-metadata/asset_version = "v009"
+metadata/glb_sha256 = "09b483fbfdae96aa109bb01bec0c3adf941439e572d94b31446ea26fa198574e"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/corner_guard/export/v034/corner_guard_optimized_v034.blend"
+metadata/asset_version = "v034"
 metadata/room_type = "OFFICE_ROOM"
 metadata/component_slug = "corner_guard"
 metadata/display_name_zh = "转角护柱与墙裙"

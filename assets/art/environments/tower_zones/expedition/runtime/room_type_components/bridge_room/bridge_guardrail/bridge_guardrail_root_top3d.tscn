@@ -9,7 +9,9 @@ size = Vector3(0.42, 1.87, 30.32)
 
 [node name="RoomTypeComponentBridgeGuardrail" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL"
-metadata/asset_version = "v010"
+metadata/glb_sha256 = "e5e004b12a92955795be7bee8912922fa95e18d90f2a9d1489223726ef88eb02"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/bridge_guardrail/export/v034/bridge_guardrail_optimized_v034.blend"
+metadata/asset_version = "v034"
 metadata/room_type = "BRIDGE_ROOM"
 metadata/component_slug = "bridge_guardrail"
 metadata/display_name_zh = "桥面完整护栏"

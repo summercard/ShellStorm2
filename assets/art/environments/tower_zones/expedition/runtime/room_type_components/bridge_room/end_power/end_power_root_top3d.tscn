@@ -9,7 +9,9 @@ size = Vector3(2.78, 5.258, 1.535)
 
 [node name="RoomTypeComponentEndPower" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-END_POWER"
-metadata/asset_version = "v010"
+metadata/glb_sha256 = "ac993c8dc775c4ab2e82d39e77e8bfc682998c978f82bc955c4924138b738a52"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/end_power/export/v034/end_power_optimized_v034.blend"
+metadata/asset_version = "v034"
 metadata/room_type = "BRIDGE_ROOM"
 metadata/component_slug = "end_power"
 metadata/display_name_zh = "机房设备 2.78×1.53×5.26m"

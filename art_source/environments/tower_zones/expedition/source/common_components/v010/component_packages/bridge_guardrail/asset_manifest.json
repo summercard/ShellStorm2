@@ -35,5 +35,63 @@
     "04_柔和自发光_UI灯光"
   ],
   "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL_-1",
-  "source_library": "v005"
+  "source_library": "v005",
+  "optimization_v034": {
+    "role": "optimized",
+    "version": "v034",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/bridge_guardrail/bridge_guardrail.blend",
+    "source_sha256_before": "81f8ab2cbefa1506c77b4dcf95c263e0297c30ce7c9d43ebfa090cd382d1c422",
+    "source_sha256_after": "81f8ab2cbefa1506c77b4dcf95c263e0297c30ce7c9d43ebfa090cd382d1c422",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/bridge_guardrail/export/v034/bridge_guardrail_optimized_v034.blend",
+    "optimized_sha256": "c17f6765b265b290b7a7270999e849dd678227ecf50bced764db0cdef0b10846",
+    "triangles_before": 5640,
+    "triangles_after": 648,
+    "reduction_ratio": 0.8851063829787233,
+    "target_triangles": 1128,
+    "budget_source": "User authorized <= original 20%; 2026-11-15 authorized optimization and import; same component standards; self-review completed",
+    "operations": [
+      "Per-connected-part confirmed beveled box / straight rod squaring; original material and palette cells inherited",
+      "Saved independent optimized Blend reopened before GLB export; normals/UV preserved; no tangent-space normal maps, tangents omitted"
+    ],
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/bridge_guardrail/bridge_guardrail_visual_top3d.glb",
+    "glb_sha256": "e5e004b12a92955795be7bee8912922fa95e18d90f2a9d1489223726ef88eb02",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/bridge_guardrail/bridge_guardrail_root_top3d.tscn",
+    "prefab_sha256": "73f7e250cc9334c55ffc36d57d688bb0a5617b995114115034e0b2068057ec34",
+    "verified_component": {
+      "bounds_max": [
+        0.210000038146973,
+        1.87000000476837,
+        15.1599998474121
+      ],
+      "bounds_min": [
+        -0.210000038146973,
+        0.0,
+        -15.1599998474121
+      ],
+      "collision_shapes": 1,
+      "material_roles": [
+        "04_柔和自发光_UI灯光",
+        "02_细腻哑光_青绿大面"
+      ],
+      "meshes": 2,
+      "slug": "bridge_guardrail",
+      "triangles": 648,
+      "version": "v034"
+    },
+    "room_references": [
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_05_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_05\\room_static_layout.tscn"
+    ],
+    "import_uid_preserved": true,
+    "whole_level_verified": false,
+    "verification_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\next9_20261115\\import\\godot_verification.json"
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/bridge_guardrail/export/v034/bridge_guardrail_optimized_v034.blend",
+  "optimized_sha256": "c17f6765b265b290b7a7270999e849dd678227ecf50bced764db0cdef0b10846",
+  "triangle_count": 648,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/bridge_guardrail/bridge_guardrail_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/bridge_guardrail/bridge_guardrail_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v034",
+  "optimized_asset_version": "v034"
 }

@@ -8,6 +8,13 @@ signal activated(station: ServiceStation3D)
 @export var accent_color := Color(0.40, 0.82, 0.92)
 ## Base facility wrapper used only as a source of visual, body and interaction geometry.
 @export var visual_scene: PackedScene
+## 首次成交后是否解锁本房的「交易撤离」条件。
+## 默认 true（商人房的既有契约）；作者锚点可显式关掉 —— 摆在普通战斗房里的贩卖机
+## 不该顺手开一个撤离点，否则会改掉该关「只有撤离房能结算」的规则。
+@export var unlocks_trade_extraction := true
+
+## 作者锚点服务点的交互区在实体两侧各外扩多少米（见 `center_interaction_on_body()`）。
+const INTERACTION_REACH_M := 1.6
 
 var _player_in_range := false
 var _prompt: Label3D
@@ -136,6 +143,30 @@ func _build_facility_visual() -> void:
 	_prompt.visible = false
 	add_child(_prompt)
 	source.free()
+
+
+## 把交互区从「来源包装的偏置」改成「绕实体居中、两面都能进」。
+##
+## 99F 设施包装里的 `InteractionShape` 是**偏一侧**的（`z=-0.74`，深度 3.35 ⇒ 只到
+## `z=+0.93`，而实体正面在 `z=+0.77`）。那是给「机器背靠基地墙面」那个摆法算的。
+## 局内按锚点摆时机器可能**不靠墙**，且正面（货窗 +Z）朝向房间，照抄偏置就会
+## 「站在货窗前点不到、绕到背面才触发」—— 而 `visible` 由视野剔除控制，
+## 玩家根本看不到背面有东西。
+##
+## 居中后交互区覆盖实体两侧各 `INTERACTION_REACH_M`，与朝向无关，摆哪都点得到。
+func center_interaction_on_body() -> void:
+	var interaction := get_node_or_null("InteractionShape") as CollisionShape3D
+	var body := get_node_or_null("StaticBody3D/CollisionShape3D") as CollisionShape3D
+	if interaction == null or body == null:
+		return
+	var box := interaction.shape as BoxShape3D
+	if box == null:
+		return
+	var body_box := body.shape as BoxShape3D
+	var depth := body_box.size.z if body_box != null else 0.0
+	# 深度 = 实体厚度 + 两侧各留一段可站区；宽度取来源包装（它已覆盖机身全长）。
+	box.size = Vector3(box.size.x, box.size.y, maxf(box.size.z, depth + INTERACTION_REACH_M * 2.0))
+	interaction.position = Vector3(interaction.position.x, body.position.y, body.position.z)
 
 
 func get_snapshot() -> Dictionary:

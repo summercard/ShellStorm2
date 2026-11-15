@@ -9,7 +9,9 @@ size = Vector3(1.8, 2.68, 0.6)
 
 [node name="RoomTypeComponentShelving" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-SHELVING"
-metadata/asset_version = "v009"
+metadata/glb_sha256 = "93c32a475451640d0a063c29e7d4345a3838575b0ca85de1f224b2df41dc685d"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/shelving/export/v034/shelving_optimized_v034.blend"
+metadata/asset_version = "v034"
 metadata/room_type = "OFFICE_ROOM"
 metadata/component_slug = "shelving"
 metadata/display_name_zh = "置物架"

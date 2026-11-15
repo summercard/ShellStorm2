@@ -1,0 +1,66 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE",
+  "slug": "wall_top_service",
+  "collection": "wall_top_service_输出包",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v014\\component_packages\\wall_top_service\\wall_top_service.blend",
+  "registration_note": "Legacy ID retained; runtime import traced via parent room-type ledger row; no new independent row.",
+  "optimization_v034": {
+    "role": "optimized",
+    "version": "v034",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/wall_top_service/wall_top_service.blend",
+    "source_sha256_before": "37e417f28168caf6b9821001f7fb56f630bc6b4d3461332092ca1cdf445ec344",
+    "source_sha256_after": "37e417f28168caf6b9821001f7fb56f630bc6b4d3461332092ca1cdf445ec344",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/wall_top_service/export/v034/wall_top_service_optimized_v034.blend",
+    "optimized_sha256": "70214e05b581dd7fab1cf4d3e3eff0925a9be8c7c09e16bc73f5d28852448be6",
+    "triangles_before": 6048,
+    "triangles_after": 672,
+    "reduction_ratio": 0.8888888888888888,
+    "target_triangles": 1209,
+    "budget_source": "User authorized <= original 20%; 2026-11-15 authorized optimization and import; same component standards; self-review completed",
+    "operations": [
+      "Per-connected-part confirmed beveled box / straight rod squaring; original material and palette cells inherited",
+      "Saved independent optimized Blend reopened before GLB export; normals/UV preserved; no tangent-space normal maps, tangents omitted"
+    ],
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/wall_top_service/wall_top_service_visual_top3d.glb",
+    "glb_sha256": "a667bbb6d4bd9de940d7af648872570fb3334cfc67be0667ff8c25d4c181467a",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/wall_top_service/wall_top_service_root_top3d.tscn",
+    "prefab_sha256": "e434ce45acf4b834e832da0a88aac8ae933e3469465bc5d7ac5ecaa04fbd41d7",
+    "verified_component": {
+      "bounds_max": [
+        19.7000007629395,
+        0.799999237060547,
+        14.7000007629395
+      ],
+      "bounds_min": [
+        -19.7000007629395,
+        0.0,
+        -14.7000007629395
+      ],
+      "collision_shapes": 1,
+      "material_roles": [
+        "02_细腻哑光_青绿大面"
+      ],
+      "meshes": 1,
+      "slug": "wall_top_service",
+      "triangles": 672,
+      "version": "v034"
+    },
+    "room_references": [
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_02_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_02\\room_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_06\\room_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_10\\room_static_layout.tscn"
+    ],
+    "import_uid_preserved": true,
+    "whole_level_verified": false,
+    "verification_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\next9_20261115\\import\\godot_verification.json"
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/wall_top_service/export/v034/wall_top_service_optimized_v034.blend",
+  "optimized_sha256": "70214e05b581dd7fab1cf4d3e3eff0925a9be8c7c09e16bc73f5d28852448be6",
+  "triangle_count": 672,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/wall_top_service/wall_top_service_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/wall_top_service/wall_top_service_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v034",
+  "optimized_asset_version": "v034"
+}

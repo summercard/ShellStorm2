@@ -9,7 +9,9 @@ size = Vector3(2.78, 3.05, 1.067)
 
 [node name="RoomTypeComponentEquipmentRack" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK"
-metadata/asset_version = "v014"
+metadata/glb_sha256 = "5032a74248e231385c2a8df8cf9ef14ddcda97d0064c680b4ea1d75474fe108e"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/equipment_rack/export/v034/equipment_rack_optimized_v034.blend"
+metadata/asset_version = "v034"
 metadata/room_type = "DB_ROOM"
 metadata/component_slug = "equipment_rack"
 metadata/display_name_zh = "equipment_rack"

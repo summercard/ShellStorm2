@@ -5,6 +5,19 @@
 
 ## 执行历史
 
+### 2026-11-15 05:01 — **内容已上线，线上校验不通过（第十六天同一卡点：需登录门禁）**
+- 全流程一次过：导出 398.9 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档（**CHANGELOG 2 条**）→ 覆盖发布 3 files → **`verify_online` 判 302 失败，退出码 1**。4m28s，无重试。
+- 包：**418,280,976 B / 398.9 MiB**，SHA256 `9ca092eba7ee84580441920c0e110ff877f0222dad760f2f3bb75286e5b80986`，比 11-14 版 **−3,682,000 B（−3.51 MiB）**。exe mtime 05:04:49。工作区开工/收工均 3 项（`_probe_loop.txt`、`override.cfg.disabled_20261109`、`verify_main_story_boss_gate.report.json`），HEAD `bf850456`（11-15 04:03，32 项）。
+- **体积下降已归因**：提交 `3e72dc27` 远征01 九组件 v029 减面同路径替换，8 个 `visual_top3d.glb` 由 1.8~3.9 MB 降到 0.42~0.92 MB（合计约 −14.7 MB）；`git log --diff-filter=D` 零删除。包只减 3.5 MiB 是 PCK 内还有其他版本/导入产物共存，方向可解释，非缺件。
+- 线上已被本版覆盖：发布输出 `Bytes: 418,287,401` ＝ 本地三件（exe 418,280,976 + index 4,347 + md 2,078）**逐字节相等**；`server-sites` 本站仍 `398.9 MiB / 需登录 / 私有 / 2 人 2 次`，全站仍 6 个资源、Site ID 不变 ⇒ 未新建。
+- **卡点不变**：直链 / 更新页均 302 → `/oauth/feishu?rd=…&src=site`。未改策略、未删校验。闭环依据仍是「字节总和相等 + Site ID/created_at 不变」（302 下无法整包重下载比 SHA256）。
+- 2 条＝**11-15 凌晨 `bf850456` 新写入的两条**（远征01 十三组件减面候选与自检；远征01 九组件 v029 导入最小同步），昨日那轮发的是 11-13 三条，无重叠。提交 3 条（页面列 2、折叠 1），未提交 3 项。
+- 采集器缺陷**新变体**：两条 `<h3>` 都在 `· ` 处被切断，`**远征01…**` 粗体标题掉进正文首行（此前记录的是 `**…**` 内中文冒号处切开）。页面正常：`<h1>弹壳风暴2</h1>`、2 个 `<h3>`、按钮 `href="ShellStorm2.exe"`、最长行 534。
+- 合规：`config/name="弹壳风暴2"` 未动（`git diff project.godot` 空）；未 commit/push；未新建站点；`scripts/web_release.py` 不存在、未跑；发布目录仅 3 件；真实存档 `base_save.json` mtime 11-14 20:23（早于流水线）。
+- 环境：C 盘 57 G 空闲（无需外挂 TMP，仍按惯例指到 I 盘的 `_tmp`）。
+- 报告：`ShellStorm2-work\_logs\发布报告_2026-11-15.md`；日志 `_logs\daily_release_2026-11-15.log`。
+- **待业主（连续第十六天）**：请管理员把本站 `access` 改 `public`；采集器 `**…**` 标题切分待修（第五次复现）。
+
 ### 2026-11-14 05:00 — **内容已上线，线上校验不通过（第十五天同一卡点：需登录门禁）**
 - 全流程一次过：导出 402.4 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档（**CHANGELOG 3 条**）→ 覆盖发布 3 files → **`verify_online` 判 302 失败，退出码 1**。5m39s，无重试。
 - 包：**421,962,976 B / 402.4 MiB**，SHA256 `38710ffbb9e386bf3de81bb78331f711c9fb0f0180b57409beb59a6c56186fc1`，比 11-13 版 **+45,024 B（+44.0 KiB）**。exe mtime 05:05:44。工作区开工/收工均 3 项（`_probe_loop.txt`、`override.cfg.disabled_20261109`、`verify_main_story_boss_gate.report.json`），HEAD `172d32de`（11-13 17:46，1 条提交）。

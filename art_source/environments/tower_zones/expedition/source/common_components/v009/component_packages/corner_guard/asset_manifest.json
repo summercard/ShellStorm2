@@ -1,0 +1,66 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-OFFICE-CORNER_GUARD",
+  "slug": "corner_guard",
+  "collection": "corner_guard_输出包",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v009\\component_packages\\corner_guard\\corner_guard.blend",
+  "registration_note": "Legacy ID retained; runtime import traced via parent room-type ledger row; no new independent row.",
+  "optimization_v034": {
+    "role": "optimized",
+    "version": "v034",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/corner_guard/corner_guard.blend",
+    "source_sha256_before": "f1bfa5dd9adca28008699fab36a8cec3338b9448e08383c528fd2c684ce43ff5",
+    "source_sha256_after": "f1bfa5dd9adca28008699fab36a8cec3338b9448e08383c528fd2c684ce43ff5",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/corner_guard/export/v034/corner_guard_optimized_v034.blend",
+    "optimized_sha256": "44d009cbef923ae6b07667d39fe9b28e0721e60597414b28d97c6d84b2883141",
+    "triangles_before": 4752,
+    "triangles_after": 528,
+    "reduction_ratio": 0.8888888888888888,
+    "target_triangles": 950,
+    "budget_source": "User authorized <= original 20%; 2026-11-15 authorized optimization and import; same component standards; self-review completed",
+    "operations": [
+      "Per-connected-part confirmed beveled box / straight rod squaring; original material and palette cells inherited",
+      "Saved independent optimized Blend reopened before GLB export; normals/UV preserved; no tangent-space normal maps, tangents omitted"
+    ],
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/corner_guard/corner_guard_visual_top3d.glb",
+    "glb_sha256": "09b483fbfdae96aa109bb01bec0c3adf941439e572d94b31446ea26fa198574e",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/corner_guard/corner_guard_root_top3d.tscn",
+    "prefab_sha256": "ee46a951b80063c45f29a34757b890b0281ef022bc8cbfbf599c31d5a2d7bac3",
+    "verified_component": {
+      "bounds_max": [
+        14.8099994659424,
+        2.20000004768372,
+        19.8099994659424
+      ],
+      "bounds_min": [
+        -14.8099994659424,
+        0.0,
+        -19.8099994659424
+      ],
+      "collision_shapes": 0,
+      "material_roles": [
+        "02_细腻哑光_青绿大面"
+      ],
+      "meshes": 1,
+      "slug": "corner_guard",
+      "triangles": 528,
+      "version": "v034"
+    },
+    "room_references": [
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_03_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_09_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_03\\room_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_09\\room_static_layout.tscn"
+    ],
+    "import_uid_preserved": true,
+    "whole_level_verified": false,
+    "verification_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\next9_20261115\\import\\godot_verification.json"
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/corner_guard/export/v034/corner_guard_optimized_v034.blend",
+  "optimized_sha256": "44d009cbef923ae6b07667d39fe9b28e0721e60597414b28d97c6d84b2883141",
+  "triangle_count": 528,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/corner_guard/corner_guard_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/corner_guard/corner_guard_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v034",
+  "optimized_asset_version": "v034"
+}
