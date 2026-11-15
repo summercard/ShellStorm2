@@ -1,0 +1,111 @@
+{
+  "component_id": "ENV-EXP03-MANOR-RECEPTION-DESK",
+  "slug": "manor_reception_desk",
+  "name_zh": "弧形格栅接待台",
+  "component_family": "reception_desk",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "category": "furnishing",
+  "scope": "shared",
+  "serves_room_types": [
+    "COMMON_ROOM",
+    "SAFE_ROOM"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "godot_wrapper",
+  "fixed_display_attachment": false,
+  "palette_uv_layer": "PaletteUV",
+  "bounds_size_m": [
+    5.580289840698242,
+    1.3174995183944702,
+    1.2668347358703613
+  ],
+  "collection": "Component_manor_reception_desk",
+  "root_object": "ROOT_manor_reception_desk",
+  "instance_count": 1,
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_reception_desk/manor_reception_desk_source_v021.blend",
+  "component_blend_sha256": "0f2d015109d22aae698e270f0ffdb6256eec50ebbc90405105be8717e9ea5a47",
+  "geometry_fingerprint": "61ec62dec583081f216362a96da91748a1535b59ebd625a379053a1b61034bdc",
+  "vertex_count": 12488,
+  "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_reception_desk/env_manor_reception_desk_visual_top3d.glb",
+  "glb_sha256": "68d55b80f5a684f6671319027572af86638c979b3f89611276b4eaf34ee2dd12",
+  "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_reception_desk/manor_reception_desk_source_v021.blend",
+  "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_reception_desk/env_manor_reception_desk_root_top3d.tscn",
+  "collision_policy": "visual_only",
+  "collision_shape_count": 0,
+  "prefab_sha256": "1fe9afc3ceb78a1547ddb7ad83e271725747a0b2d8a395d91e975636fdceeb7e",
+  "source_bounds_size_m": [
+    5.580289363861084,
+    1.3174996376037598,
+    1.2668347358703613
+  ],
+  "asset_id": "ENV-EXP03-MANOR-RECEPTION-DESK",
+  "asset_version": "v021",
+  "block_id": "expedition",
+  "level_id": "expedition_03",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+  "source_room_type_sha256": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+  "room_owned_geometry": false,
+  "export": {
+    "asset_id": "ENV-EXP03-MANOR-RECEPTION-DESK",
+    "slug": "manor_reception_desk",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_reception_desk/manor_reception_desk_source_v021.blend",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_reception_desk/manor_reception_desk_source_v021.blend",
+    "operations": {
+      "method": "decimate_collapse",
+      "ratio": 0.20001220703125,
+      "grid": null,
+      "target_triangles": 5385,
+      "materials_preserved": true,
+      "palette_uv_preserved": true,
+      "collision_unchanged": true,
+      "origin_unchanged": true
+    },
+    "triangles_before": 26928,
+    "triangles_after": 5384,
+    "reduction_ratio": 0.8000594177064766,
+    "budget": 5385,
+    "budget_source": "主人 2026-11-15 指定：rug_lounge <2000，其余 <= 1/5",
+    "geometry_fingerprint_before": "f7630f6d27af6eb028f0b2513d3d672fce7403ed380dd0427d3ffaee1d0860fa",
+    "geometry_fingerprint_after": "61ec62dec583081f216362a96da91748a1535b59ebd625a379053a1b61034bdc",
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/common_components/manor_reception_desk/env_manor_reception_desk_visual_top3d.glb",
+    "glb_sha256": "68d55b80f5a684f6671319027572af86638c979b3f89611276b4eaf34ee2dd12",
+    "fidelity_review": {
+      "passed": true,
+      "views": [
+        "fixed_front_game"
+      ],
+      "evidence": "ShellStorm2-work/outputs/expedition03_five_optimization_20261115"
+    },
+    "glb_triangles": 5384,
+    "triangles_glb_actual": 5384,
+    "triangles_after_source": 5384
+  },
+  "exported": true,
+  "runtime_integrated": false,
+  "asset_ledger": "resolved_by_ledger_index:scenes",
+  "godot_front_axis": "+Z",
+  "coordinate_mapping": "(bx,by,bz)->(bx,bz,-by)",
+  "import_status": "validated_independent_component",
+  "validation": {
+    "blender_material_uv_passed": true,
+    "godot_load_passed": true,
+    "godot_rendered": false,
+    "formal_scene_assembled": false,
+    "godot_probe": "ShellStorm2-work/outputs/expedition03_five_optimization_20261115/godot_probe/qa.log"
+  },
+  "source_sha256_after": "0f2d015109d22aae698e270f0ffdb6256eec50ebbc90405105be8717e9ea5a47",
+  "optimized_blend_sha256": "0f2d015109d22aae698e270f0ffdb6256eec50ebbc90405105be8717e9ea5a47"
+}

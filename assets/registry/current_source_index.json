@@ -11937,13 +11937,13 @@
       "sha256": "c619c17acf150ee06f89a3a73813002a90415fa736a4ace8e905fad4a7c2c8d7"
     },
     {
-      "path": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_flower_arrangement/manor_flower_arrangement_source_v017.blend",
-      "bytes": 265391,
-      "family": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_flower_arrangement/manor_flower_arrangement_source_v017.blend",
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_flower_arrangement/manor_flower_arrangement_source_v021.blend",
+      "bytes": 800104,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_flower_arrangement/manor_flower_arrangement_source_v021.blend",
       "version": [
-        17
+        21
       ],
-      "sha256": "0442a6b81dab0adb29c86c7dd09bdce5653751e109f6b4579a3cd1fa787df743"
+      "sha256": "46c47f1c5c83362c8f09fa35e88340a0b93c0ca634f74e40afa9e3069e919555"
     },
     {
       "path": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_luggage_cart/manor_luggage_cart_source_v017.blend",
@@ -12009,40 +12009,40 @@
       "sha256": "7454b0eadfdfc8b609d7dd3a5f774cc016359e414367df66018147b46ff64abb"
     },
     {
-      "path": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_reception_desk/manor_reception_desk_source_v017.blend",
-      "bytes": 162845,
-      "family": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_reception_desk/manor_reception_desk_source_v017.blend",
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_reception_desk/manor_reception_desk_source_v021.blend",
+      "bytes": 1026447,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_reception_desk/manor_reception_desk_source_v021.blend",
       "version": [
-        17
+        21
       ],
-      "sha256": "c3bea8c745169607c0763d724927db0948e2c953aa6e392ad878ca7474511819"
+      "sha256": "0f2d015109d22aae698e270f0ffdb6256eec50ebbc90405105be8717e9ea5a47"
     },
     {
-      "path": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_bedroom/manor_rug_bedroom_source_v017.blend",
-      "bytes": 246177,
-      "family": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_bedroom/manor_rug_bedroom_source_v017.blend",
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_rug_bedroom/manor_rug_bedroom_source_v021.blend",
+      "bytes": 756469,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_rug_bedroom/manor_rug_bedroom_source_v021.blend",
       "version": [
-        17
+        21
       ],
-      "sha256": "323e66d5cd35824c847685380cb1cc977b287b827d06d0a35a2ceac3e803bfb6"
+      "sha256": "dc40b80d6b0e137f0a6e1be00afaa932d1c243293a51f0059f4505ab4662f436"
     },
     {
-      "path": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_lounge/manor_rug_lounge_source_v017.blend",
-      "bytes": 1044197,
-      "family": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_lounge/manor_rug_lounge_source_v017.blend",
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_rug_lounge/manor_rug_lounge_source_v021.blend",
+      "bytes": 722740,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_rug_lounge/manor_rug_lounge_source_v021.blend",
       "version": [
-        17
+        21
       ],
-      "sha256": "e5943fbf498909735a1f33e99c7ec60e9dfd7f659e8f7e6424b524997d6227a4"
+      "sha256": "779a95e80dbc8d30117d1821cbcabbb4fd9843ea0514aa821de2bfba2644fcc2"
     },
     {
-      "path": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_runner/manor_rug_runner_source_v017.blend",
-      "bytes": 250275,
-      "family": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_runner/manor_rug_runner_source_v017.blend",
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_rug_runner/manor_rug_runner_source_v021.blend",
+      "bytes": 762232,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_rug_runner/manor_rug_runner_source_v021.blend",
       "version": [
-        17
+        21
       ],
-      "sha256": "2ae6ae4c86d234c2c06457649f5e2d35b51be7a576fbf79356a0e954a8b3318c"
+      "sha256": "225d5f9c858c62bfbcd520985fbc298b3a783ecaecad8d28b39389b3b8abef64"
     },
     {
       "path": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_side_table/manor_side_table_source_v017.blend",

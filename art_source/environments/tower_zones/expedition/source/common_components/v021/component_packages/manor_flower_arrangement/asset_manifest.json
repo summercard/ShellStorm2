@@ -1,0 +1,111 @@
+{
+  "component_id": "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT",
+  "slug": "manor_flower_arrangement",
+  "name_zh": "红花插花摆件",
+  "component_family": "plant",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "category": "furnishing",
+  "scope": "shared",
+  "serves_room_types": [
+    "COMMON_ROOM",
+    "SAFE_ROOM"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "godot_wrapper",
+  "fixed_display_attachment": true,
+  "palette_uv_layer": "PaletteUV",
+  "bounds_size_m": [
+    0.49785488843917847,
+    0.5851287841796875,
+    1.166765570640564
+  ],
+  "collection": "Component_manor_flower_arrangement",
+  "root_object": "ROOT_manor_flower_arrangement",
+  "instance_count": 2,
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_flower_arrangement/manor_flower_arrangement_source_v021.blend",
+  "component_blend_sha256": "46c47f1c5c83362c8f09fa35e88340a0b93c0ca634f74e40afa9e3069e919555",
+  "geometry_fingerprint": "dd21d20901101d42b8867363ac5eec26429be35b8ea41864836717569ee55634",
+  "vertex_count": 6003,
+  "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_flower_arrangement/env_manor_flower_arrangement_visual_top3d.glb",
+  "glb_sha256": "9220c2cf76114d569b0ffbff78417bb225dad8d8c31fa428dc4472f034885b42",
+  "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_flower_arrangement/manor_flower_arrangement_source_v021.blend",
+  "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_flower_arrangement/env_manor_flower_arrangement_root_top3d.tscn",
+  "collision_policy": "visual_only",
+  "collision_shape_count": 0,
+  "prefab_sha256": "f375a3da6af0d64f2b966a89880e673a673f915b86ec4418bf1c8f001762734a",
+  "source_bounds_size_m": [
+    0.49785491824150085,
+    0.5851287841796875,
+    1.166765570640564
+  ],
+  "asset_id": "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT",
+  "asset_version": "v021",
+  "block_id": "expedition",
+  "level_id": "expedition_03",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+  "source_room_type_sha256": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+  "room_owned_geometry": false,
+  "export": {
+    "asset_id": "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT",
+    "slug": "manor_flower_arrangement",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_flower_arrangement/manor_flower_arrangement_source_v021.blend",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_flower_arrangement/manor_flower_arrangement_source_v021.blend",
+    "operations": {
+      "method": "decimate_collapse",
+      "ratio": 0.20013809204101562,
+      "grid": null,
+      "target_triangles": 2302,
+      "materials_preserved": true,
+      "palette_uv_preserved": true,
+      "collision_unchanged": true,
+      "origin_unchanged": true
+    },
+    "triangles_before": 11512,
+    "triangles_after": 2302,
+    "reduction_ratio": 0.8000347463516331,
+    "budget": 2302,
+    "budget_source": "主人 2026-11-15 指定：rug_lounge <2000，其余 <= 1/5",
+    "geometry_fingerprint_before": "55e5d96eb356541cc15c74342c0c3bad4ae4124b4b61fb5aea7947348910ce07",
+    "geometry_fingerprint_after": "dd21d20901101d42b8867363ac5eec26429be35b8ea41864836717569ee55634",
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/common_components/manor_flower_arrangement/env_manor_flower_arrangement_visual_top3d.glb",
+    "glb_sha256": "9220c2cf76114d569b0ffbff78417bb225dad8d8c31fa428dc4472f034885b42",
+    "fidelity_review": {
+      "passed": true,
+      "views": [
+        "fixed_front_game"
+      ],
+      "evidence": "ShellStorm2-work/outputs/expedition03_five_optimization_20261115"
+    },
+    "glb_triangles": 2280,
+    "triangles_glb_actual": 2280,
+    "triangles_after_source": 2302
+  },
+  "exported": true,
+  "runtime_integrated": false,
+  "asset_ledger": "resolved_by_ledger_index:scenes",
+  "godot_front_axis": "+Z",
+  "coordinate_mapping": "(bx,by,bz)->(bx,bz,-by)",
+  "import_status": "validated_independent_component",
+  "validation": {
+    "blender_material_uv_passed": true,
+    "godot_load_passed": true,
+    "godot_rendered": false,
+    "formal_scene_assembled": false,
+    "godot_probe": "ShellStorm2-work/outputs/expedition03_five_optimization_20261115/godot_probe/qa.log"
+  },
+  "source_sha256_after": "46c47f1c5c83362c8f09fa35e88340a0b93c0ca634f74e40afa9e3069e919555",
+  "optimized_blend_sha256": "46c47f1c5c83362c8f09fa35e88340a0b93c0ca634f74e40afa9e3069e919555"
+}

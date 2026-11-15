@@ -1,0 +1,114 @@
+{
+  "component_id": "ENV-EXP03-MANOR-RUG-RUNNER",
+  "slug": "manor_rug_runner",
+  "name_zh": "金纹走廊地毯2.4x5m",
+  "component_family": "rug",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "category": "furnishing",
+  "scope": "shared",
+  "serves_room_types": [
+    "COMMON_ROOM",
+    "SAFE_ROOM"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "godot_wrapper",
+  "fixed_display_attachment": false,
+  "palette_uv_layer": "PaletteUV",
+  "bounds_size_m": [
+    2.4000000953674316,
+    5.0,
+    0.05299999937415123
+  ],
+  "collection": "Component_manor_rug_runner",
+  "root_object": "ROOT_manor_rug_runner",
+  "instance_count": 4,
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_rug_runner/manor_rug_runner_source_v021.blend",
+  "component_blend_sha256": "225d5f9c858c62bfbcd520985fbc298b3a783ecaecad8d28b39389b3b8abef64",
+  "geometry_fingerprint": "9362990afc7934c7973e8b828c019f546747f860ece59e19bac7f1dc80046348",
+  "vertex_count": 5224,
+  "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_rug_runner/env_manor_rug_runner_visual_top3d.glb",
+  "glb_sha256": "9402a5acc4547f5360c5b3769eeb44dd57802b41fa1d43783fbf684ca3eaac81",
+  "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_rug_runner/manor_rug_runner_source_v021.blend",
+  "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_runner/env_manor_rug_runner_root_top3d.tscn",
+  "collision_policy": "visual_only",
+  "collision_shape_count": 0,
+  "prefab_sha256": "5b1e0ef13c1292c43ede00dd766160757e9f2921dd15a2651597a8bc4e46530c",
+  "source_bounds_size_m": [
+    2.4000000953674316,
+    5.0,
+    0.05299999937415123
+  ],
+  "asset_id": "ENV-EXP03-MANOR-RUG-RUNNER",
+  "asset_version": "v021",
+  "block_id": "expedition",
+  "level_id": "expedition_03",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+  "source_room_type_sha256": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+  "room_owned_geometry": false,
+  "export": {
+    "asset_id": "ENV-EXP03-MANOR-RUG-RUNNER",
+    "slug": "manor_rug_runner",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_rug_runner/manor_rug_runner_source_v021.blend",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_rug_runner/manor_rug_runner_source_v021.blend",
+    "operations": {
+      "method": "regular_grid_rebuild_with_paletteuv",
+      "ratio": null,
+      "grid": [
+        30,
+        41
+      ],
+      "target_triangles": 2808,
+      "materials_preserved": true,
+      "palette_uv_preserved": true,
+      "collision_unchanged": true,
+      "origin_unchanged": true
+    },
+    "triangles_before": 14040,
+    "triangles_after": 2746,
+    "reduction_ratio": 0.8044159544159544,
+    "budget": 2808,
+    "budget_source": "主人 2026-11-15 指定：rug_lounge <2000，其余 <= 1/5",
+    "geometry_fingerprint_before": "c8fe52e0281eacdefb3b86f97dbd9e76b9ccf34651881613f4ef918727426778",
+    "geometry_fingerprint_after": "9362990afc7934c7973e8b828c019f546747f860ece59e19bac7f1dc80046348",
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/common_components/manor_rug_runner/env_manor_rug_runner_visual_top3d.glb",
+    "glb_sha256": "9402a5acc4547f5360c5b3769eeb44dd57802b41fa1d43783fbf684ca3eaac81",
+    "fidelity_review": {
+      "passed": true,
+      "views": [
+        "fixed_front_game"
+      ],
+      "evidence": "ShellStorm2-work/outputs/expedition03_five_optimization_20261115"
+    },
+    "glb_triangles": 2746,
+    "triangles_glb_actual": 2746,
+    "triangles_after_source": 2746
+  },
+  "exported": true,
+  "runtime_integrated": false,
+  "asset_ledger": "resolved_by_ledger_index:scenes",
+  "godot_front_axis": "+Z",
+  "coordinate_mapping": "(bx,by,bz)->(bx,bz,-by)",
+  "import_status": "validated_independent_component",
+  "validation": {
+    "blender_material_uv_passed": true,
+    "godot_load_passed": true,
+    "godot_rendered": false,
+    "formal_scene_assembled": false,
+    "godot_probe": "ShellStorm2-work/outputs/expedition03_five_optimization_20261115/godot_probe/qa.log"
+  },
+  "source_sha256_after": "225d5f9c858c62bfbcd520985fbc298b3a783ecaecad8d28b39389b3b8abef64",
+  "optimized_blend_sha256": "225d5f9c858c62bfbcd520985fbc298b3a783ecaecad8d28b39389b3b8abef64"
+}

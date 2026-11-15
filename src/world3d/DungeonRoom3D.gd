@@ -505,6 +505,9 @@ var _navigation_blockers: Array[AABB] = []
 var _navigation_ports: Array = []
 var _navigation_dimensions := Vector2.ZERO
 var _furnishing_navigation_refresh_queued := false
+## RuntimeDetail 每次重建都要重新挂导航 Region，但不应在输入未变化时重复提交导航面。
+## `_furnishing_navigation_dirty` 由碰撞/细节生命周期变化置位；同输入且 Region 仍在树内时直接复用。
+var _furnishing_navigation_dirty := true
 # 区块壳体地砖格心（5m 模数格）的半宽与命中容差。非矩形房（L / U / 工字桥）的凹口在
 # 摆位阶段就被 `point_in_polygon` 剔掉了砖，「格心集合」因此就是房内可用点的真源；
 # 触发盒的盒心吸附（`snap_box_center_to_tile`）也依赖这套格心：
@@ -538,6 +541,10 @@ var _shell_built := false
 var _detail_root: Node3D
 var _building_detail := false
 var _pending_detail_runtime_state: Dictionary = {}
+## 静态布局壳体装配时一次性索引作者服务点锚点。
+## 服务点属于 RuntimeDetail，但锚点属于常驻壳体；每次进出房间只消费这份快照，
+## 不再递归扫描 AuthoredLayoutArtRoot，也不改变作者声明的姿态和配置。
+var _authored_service_station_specs: Array[Dictionary] = []
 ## 本房间的「宝箱出现」特效是否已经播过。
 ## 只挡**流送重建**：走远再回来时 `_build_treasure_chests()` 会把箱子按数据重新建一遍，
 ## 不带这个闸每过一次门就会在玩家眼前放一圈金光 —— 那不是"箱子出现了"，是"箱子还在"。
@@ -1183,6 +1190,9 @@ func ensure_detail_built(sync_light_state := true) -> void:
 		return
 	EnemyIllumination3D.begin_assembly_batch(get_tree())
 	_detail_built = true
+	# RuntimeDetail 是新的 SceneTree 子树；上一份导航 Region 已随旧 detail 释放，
+	# 即使阻挡输入完全相同，也必须在本次 detail 下重新挂接一次。
+	_furnishing_navigation_dirty = true
 	_detail_root = Node3D.new()
 	_detail_root.name = "RuntimeDetail"
 	add_child(_detail_root)
@@ -1344,6 +1354,8 @@ func _restore_treasure_chests() -> void:
 func _unload_runtime_detail() -> void:
 	# Moving furnishings must be sampled before their subtree leaves the SceneTree.
 	capture_reactive_prop_states()
+	# 下次 detail 重建时需要把导航 Region 挂回新树；输入快照本身仍可复用。
+	_furnishing_navigation_dirty = true
 	if _detail_root != null and is_instance_valid(_detail_root):
 		remove_child(_detail_root)
 		_detail_root.queue_free()
@@ -3086,6 +3098,7 @@ func _build_art_layer_only(static_layout: Node3D, art_path: String) -> void:
 		"SafeRoomArtRoot" if room_id == "start" else "AuthoredLayoutArtRoot"
 	)
 	add_child(static_layout)
+	_index_authored_service_station_specs()
 	set_meta("static_layout_scene_path", art_path)
 	var authored_navigation: Variant = _find_static_layout_meta(static_layout, "furnishing_navigation_polygons")
 	if authored_navigation != null:
@@ -3364,6 +3377,7 @@ func _build_shell() -> void:
 						"SafeRoomArtRoot" if room_id == "start" else "AuthoredLayoutArtRoot"
 					)
 					add_child(static_layout)
+					_index_authored_service_station_specs()
 					_restore_static_layout_camera_wall_contract(static_layout)
 					for child in static_layout.get_children():
 						if bool(child.get_meta("editor_preview_only", false)) and child is Node3D:
@@ -7332,18 +7346,12 @@ func _instantiate_service_station(
 	return station
 
 
-## 认领静态布局里手摆的**局内服务点**锚点（`metadata/service_station_config` 的 Marker3D）。
+## 在静态布局壳体装配完成时索引作者服务点锚点。
 ##
-## 与 `treasure_chest_config` 同一口径：位置与朝向是**作者事实**，写在房间 TSCN 里
-## （美术可在编辑器里拖、可旋转）；运行时只按锚点实例化服务点并接信号，不重算落位。
-##
-## 判据只看锚点与房型自建的那一套，**不认房间 ID / 关卡 ID** —— 任何房间的 TSCN
-## 摆一个锚点就多一个服务点，所以「普通战斗房里放一台局内贩卖机」不需要新增分支。
-## 同类型服务点已经存在（房型自建的 MERCHANT / UPGRADE / EVENT）时跳过，不建第二个。
-##
-## 服务点走 `RuntimeDetail`：随房间进出正常销毁重建；商人货架按房间 ID 存在
-## `RunMerchantService` 里，重建不会刷新已展示的报价。
-func _build_authored_service_stations() -> void:
+## Marker3D 属于常驻壳体，服务点属于 RuntimeDetail。把声明快照留在房间节点上，
+## 让每次进出房间只做实例化，不再递归扫描静态布局树，也不改变作者配置或姿态。
+func _index_authored_service_station_specs() -> void:
+	_authored_service_station_specs.clear()
 	var art := _authored_static_layout_root()
 	if art == null:
 		return
@@ -7354,26 +7362,40 @@ func _build_authored_service_stations() -> void:
 		var config: Variant = marker.get_meta("service_station_config")
 		if not config is Dictionary:
 			continue
-		var type_id := str((config as Dictionary).get("type", ""))
+		var snapshot := (config as Dictionary).duplicate(true)
+		var type_id := str(snapshot.get("type", ""))
 		if type_id.is_empty():
 			push_warning("DungeonRoom3D: %s 的服务点锚点 %s 缺少 type" % [room_id, marker.name])
 			continue
-		if get_service_station(type_id) != null:
+		_authored_service_station_specs.append({
+			"type": type_id,
+			"config": snapshot,
+			"transform": _authored_marker_pose(marker),
+		})
+	set_meta("authored_service_station_spec_count", _authored_service_station_specs.size())
+
+
+## 从已索引的作者声明实例化 RuntimeDetail 服务点。
+func _build_authored_service_stations() -> void:
+	for spec in _authored_service_station_specs:
+		var config := spec.get("config", {}) as Dictionary
+		var type_id := str(spec.get("type", config.get("type", "")))
+		if type_id.is_empty() or get_service_station(type_id) != null:
 			continue
 		var station := _instantiate_service_station(
-			type_id, str((config as Dictionary).get("visual_scene", ""))
+			type_id, str(config.get("visual_scene", ""))
 		)
 		if station == null:
 			continue
-		var display_name := str((config as Dictionary).get("display_name", ""))
+		var display_name := str(config.get("display_name", ""))
 		if not display_name.is_empty():
 			station.display_name = display_name
 		# 锚点可以显式关掉「成交解锁交易撤离」：普通战斗房里的贩卖机不该开撤离点。
 		# 不写该键时保持服务点默认（true），既有商人房逐字不变。
-		if (config as Dictionary).has("trade_extraction"):
-			station.unlocks_trade_extraction = bool((config as Dictionary)["trade_extraction"])
+		if config.has("trade_extraction"):
+			station.unlocks_trade_extraction = bool(config["trade_extraction"])
 		station.name = "AuthoredServiceStation_%s" % type_id
-		station.transform = _authored_marker_pose(marker)
+		station.transform = spec.get("transform", Transform3D.IDENTITY)
 		station.set_meta("authored_service_station", true)
 		_add_runtime_detail_child(station)
 		# ⚠ 必须**入树之后**再调：`InteractionShape` / `StaticBody3D` 是

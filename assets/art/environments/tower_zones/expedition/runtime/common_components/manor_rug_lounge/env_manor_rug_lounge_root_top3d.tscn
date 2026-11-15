@@ -4,10 +4,10 @@
 
 [node name="manor_rug_lounge" type="Node3D"]
 metadata/asset_id = "ENV-EXP03-MANOR-RUG-LOUNGE"
-metadata/asset_version = "v017"
+metadata/asset_version = "v021"
 metadata/level_id = "expedition_03"
 metadata/display_name_zh = "金边会客地毯8x10m"
-metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_lounge/manor_rug_lounge_source_v017.blend"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_rug_lounge/manor_rug_lounge_source_v021.blend"
 metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "+Z"
 metadata/up_axis = "+Y"

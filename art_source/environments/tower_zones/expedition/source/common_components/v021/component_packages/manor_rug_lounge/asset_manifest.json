@@ -1,0 +1,114 @@
+{
+  "component_id": "ENV-EXP03-MANOR-RUG-LOUNGE",
+  "slug": "manor_rug_lounge",
+  "name_zh": "金边会客地毯8x10m",
+  "component_family": "rug",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "category": "furnishing",
+  "scope": "shared",
+  "serves_room_types": [
+    "COMMON_ROOM",
+    "SAFE_ROOM"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "godot_wrapper",
+  "fixed_display_attachment": false,
+  "palette_uv_layer": "PaletteUV",
+  "bounds_size_m": [
+    8.0,
+    10.0,
+    0.05299999937415123
+  ],
+  "collection": "Component_manor_rug_lounge",
+  "root_object": "ROOT_manor_rug_lounge",
+  "instance_count": 1,
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_rug_lounge/manor_rug_lounge_source_v021.blend",
+  "component_blend_sha256": "779a95e80dbc8d30117d1821cbcabbb4fd9843ea0514aa821de2bfba2644fcc2",
+  "geometry_fingerprint": "ff6f5a37a80dd7a6783d23e278f42ba43282081052ff6327b183f3f48f5141ea",
+  "vertex_count": 3736,
+  "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_rug_lounge/env_manor_rug_lounge_visual_top3d.glb",
+  "glb_sha256": "4fbe262b5297b22697f305104763643f3577010b721a6c9d6b10917576ff0ac6",
+  "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_rug_lounge/manor_rug_lounge_source_v021.blend",
+  "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_lounge/env_manor_rug_lounge_root_top3d.tscn",
+  "collision_policy": "visual_only",
+  "collision_shape_count": 0,
+  "prefab_sha256": "b903de31ff931e7d7f022834d9d88516d5bfb7b36a19cf93be6a5757fb38bb31",
+  "source_bounds_size_m": [
+    8.0,
+    10.0,
+    0.05299999937415123
+  ],
+  "asset_id": "ENV-EXP03-MANOR-RUG-LOUNGE",
+  "asset_version": "v021",
+  "block_id": "expedition",
+  "level_id": "expedition_03",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+  "source_room_type_sha256": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+  "room_owned_geometry": false,
+  "export": {
+    "asset_id": "ENV-EXP03-MANOR-RUG-LOUNGE",
+    "slug": "manor_rug_lounge",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_rug_lounge/manor_rug_lounge_source_v021.blend",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v021/component_packages/manor_rug_lounge/manor_rug_lounge_source_v021.blend",
+    "operations": {
+      "method": "regular_grid_rebuild_with_paletteuv",
+      "ratio": null,
+      "grid": [
+        30,
+        29
+      ],
+      "target_triangles": 1999,
+      "materials_preserved": true,
+      "palette_uv_preserved": true,
+      "collision_unchanged": true,
+      "origin_unchanged": true
+    },
+    "triangles_before": 87128,
+    "triangles_after": 1978,
+    "reduction_ratio": 0.9772977687999266,
+    "budget": 1999,
+    "budget_source": "主人 2026-11-15 指定：rug_lounge <2000，其余 <= 1/5",
+    "geometry_fingerprint_before": "30580d92cba8da41a37d207b43c249e69adbd7accce65c47728e03f1bfcb91f3",
+    "geometry_fingerprint_after": "ff6f5a37a80dd7a6783d23e278f42ba43282081052ff6327b183f3f48f5141ea",
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/common_components/manor_rug_lounge/env_manor_rug_lounge_visual_top3d.glb",
+    "glb_sha256": "4fbe262b5297b22697f305104763643f3577010b721a6c9d6b10917576ff0ac6",
+    "fidelity_review": {
+      "passed": true,
+      "views": [
+        "fixed_front_game"
+      ],
+      "evidence": "ShellStorm2-work/outputs/expedition03_five_optimization_20261115"
+    },
+    "glb_triangles": 1978,
+    "triangles_glb_actual": 1978,
+    "triangles_after_source": 1978
+  },
+  "exported": true,
+  "runtime_integrated": false,
+  "asset_ledger": "resolved_by_ledger_index:scenes",
+  "godot_front_axis": "+Z",
+  "coordinate_mapping": "(bx,by,bz)->(bx,bz,-by)",
+  "import_status": "validated_independent_component",
+  "validation": {
+    "blender_material_uv_passed": true,
+    "godot_load_passed": true,
+    "godot_rendered": false,
+    "formal_scene_assembled": false,
+    "godot_probe": "ShellStorm2-work/outputs/expedition03_five_optimization_20261115/godot_probe/qa.log"
+  },
+  "source_sha256_after": "779a95e80dbc8d30117d1821cbcabbb4fd9843ea0514aa821de2bfba2644fcc2",
+  "optimized_blend_sha256": "779a95e80dbc8d30117d1821cbcabbb4fd9843ea0514aa821de2bfba2644fcc2"
+}
