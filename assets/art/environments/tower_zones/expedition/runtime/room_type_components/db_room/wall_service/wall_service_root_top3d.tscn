@@ -6,7 +6,9 @@
 
 [node name="RoomTypeComponentWallService" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-WALL_SERVICE"
-metadata/asset_version = "v014"
+metadata/glb_sha256 = "267d9ec4c4b17b128005b393a295b0d2b0dde8e204b71a96642c7458f28ac226"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/wall_service/export/v032/wall_service_optimized_v032.blend"
+metadata/asset_version = "v032"
 metadata/room_type = "DB_ROOM"
 metadata/component_slug = "wall_service"
 metadata/display_name_zh = "wall_service"

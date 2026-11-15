@@ -1,0 +1,69 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_A",
+  "slug": "workbench_a",
+  "collection": "workbench_a_输出包",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v014\\component_packages\\workbench_a\\workbench_a.blend",
+  "registration_note": "Legacy ID retained; runtime import traced via parent room-type ledger row; no new independent row.",
+  "optimization_v032": {
+    "role": "optimized",
+    "version": "v032",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/workbench_a/workbench_a.blend",
+    "source_sha256_before": "f23cc3aad8c622f8c6ed2536b334ec4fa1165a1530a9fdb46ae6c72db08a8a7f",
+    "source_sha256_after": "f23cc3aad8c622f8c6ed2536b334ec4fa1165a1530a9fdb46ae6c72db08a8a7f",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/workbench_a/export/v032/workbench_a_optimized_v032.blend",
+    "optimized_sha256": "8be24aa6c8627f25205937c639549edd0aa22e5cf5e8f564086892cf58818974",
+    "triangles_before": 12060,
+    "triangles_after": 1452,
+    "reduction_ratio": 0.8796019900497513,
+    "target_triangles": 2412,
+    "budget_source": "User authorized <= original 20%; 2026-11-15 approved comparison and import",
+    "operations": [
+      "Per-connected-part confirmed beveled box / straight rod squaring; original material and palette cells inherited",
+      "Saved independent optimized Blend reopened before GLB export; normals/UV preserved; no tangent-space normal maps, tangents omitted"
+    ],
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/workbench_a/workbench_a_visual_top3d.glb",
+    "glb_sha256": "fa79d5d558282261af3697bc2a3b27108627df6900a20dbae2f5395310d30b3e",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/workbench_a/workbench_a_root_top3d.tscn",
+    "prefab_sha256": "6cdc9084d2b0d9a8768bdf9eea34984ad05171955212730943c0c0fad7ab811a",
+    "verified_component": {
+      "bounds_max": [
+        7.04999923706055,
+        3.56499981880188,
+        3.625
+      ],
+      "bounds_min": [
+        -7.04999923706055,
+        0.0,
+        -3.625
+      ],
+      "collision_shapes": 2,
+      "material_roles": [
+        "04_柔和自发光_UI灯光",
+        "02_细腻哑光_青绿大面"
+      ],
+      "meshes": 2,
+      "slug": "workbench_a",
+      "triangles": 1452,
+      "version": "v032"
+    },
+    "room_references": [
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_02_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_06_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_10_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_02\\room_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_06\\room_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_10\\room_static_layout.tscn"
+    ],
+    "import_uid_preserved": true,
+    "whole_level_verified": false,
+    "verification_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\batch13_20261115\\import_0932\\godot_verification.json"
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/workbench_a/export/v032/workbench_a_optimized_v032.blend",
+  "optimized_sha256": "8be24aa6c8627f25205937c639549edd0aa22e5cf5e8f564086892cf58818974",
+  "triangle_count": 1452,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/workbench_a/workbench_a_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/workbench_a/workbench_a_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v032",
+  "optimized_asset_version": "v032"
+}

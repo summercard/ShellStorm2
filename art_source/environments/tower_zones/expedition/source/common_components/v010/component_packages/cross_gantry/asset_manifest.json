@@ -35,5 +35,63 @@
     "04_柔和自发光_UI灯光"
   ],
   "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-CROSS_GANTRY_-1",
-  "source_library": "v005"
+  "source_library": "v005",
+  "optimization_v032": {
+    "role": "optimized",
+    "version": "v032",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/cross_gantry/cross_gantry.blend",
+    "source_sha256_before": "7712845fa3cf6af49303b585200bf149f0ac970bbb4a360c04d3041c813ebb2c",
+    "source_sha256_after": "7712845fa3cf6af49303b585200bf149f0ac970bbb4a360c04d3041c813ebb2c",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/cross_gantry/export/v032/cross_gantry_optimized_v032.blend",
+    "optimized_sha256": "b31152cbbe421fcf64a0e30d027a07252a907b70109de00a3d775a0e4e0f8c97",
+    "triangles_before": 11848,
+    "triangles_after": 1416,
+    "reduction_ratio": 0.8804861580013504,
+    "target_triangles": 2369,
+    "budget_source": "User authorized <= original 20%; 2026-11-15 approved comparison and import",
+    "operations": [
+      "Per-connected-part confirmed beveled box / straight rod squaring; original material and palette cells inherited",
+      "Saved independent optimized Blend reopened before GLB export; normals/UV preserved; no tangent-space normal maps, tangents omitted"
+    ],
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/cross_gantry/cross_gantry_visual_top3d.glb",
+    "glb_sha256": "d0fa24e4dd038049335693fcae2e4ad03b3b745b4fd8879f61608c83e0568374",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/cross_gantry/cross_gantry_root_top3d.tscn",
+    "prefab_sha256": "30df1def5ae6895cbb50ff94ca1d2bd696a328be7e0ee3452eb36b179ab0d937",
+    "verified_component": {
+      "bounds_max": [
+        4.36499977111816,
+        7.70499992370605,
+        0.985000133514404
+      ],
+      "bounds_min": [
+        -4.36499977111816,
+        0.0,
+        -0.984999895095825
+      ],
+      "collision_shapes": 0,
+      "material_roles": [
+        "04_柔和自发光_UI灯光",
+        "02_细腻哑光_青绿大面"
+      ],
+      "meshes": 2,
+      "slug": "cross_gantry",
+      "triangles": 1416,
+      "version": "v032"
+    },
+    "room_references": [
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_05_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_05\\room_static_layout.tscn"
+    ],
+    "import_uid_preserved": true,
+    "whole_level_verified": false,
+    "verification_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\batch13_20261115\\import_0932\\godot_verification.json"
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/cross_gantry/export/v032/cross_gantry_optimized_v032.blend",
+  "optimized_sha256": "b31152cbbe421fcf64a0e30d027a07252a907b70109de00a3d775a0e4e0f8c97",
+  "triangle_count": 1416,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/cross_gantry/cross_gantry_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/cross_gantry/cross_gantry_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v032",
+  "optimized_asset_version": "v032"
 }

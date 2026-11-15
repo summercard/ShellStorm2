@@ -37,5 +37,63 @@
     "04_柔和自发光_UI灯光"
   ],
   "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_-1_0",
-  "source_library": "v005"
+  "source_library": "v005",
+  "optimization_v032": {
+    "role": "optimized",
+    "version": "v032",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/low_platform_z6005/low_platform_z6005.blend",
+    "source_sha256_before": "af7b99c8adc2a2a334f75e8a266145b63f4d2cd5a82bab78d7f51fbcb69b1868",
+    "source_sha256_after": "af7b99c8adc2a2a334f75e8a266145b63f4d2cd5a82bab78d7f51fbcb69b1868",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/low_platform_z6005/export/v032/low_platform_z6005_optimized_v032.blend",
+    "optimized_sha256": "6fa1ca116d2afaabf8f1b8fddb1d994d212f20af07b94f5e88d8619798b4ad83",
+    "triangles_before": 9688,
+    "triangles_after": 1176,
+    "reduction_ratio": 0.8786127167630058,
+    "target_triangles": 1937,
+    "budget_source": "User authorized <= original 20%; 2026-11-15 approved comparison and import",
+    "operations": [
+      "Per-connected-part confirmed beveled box / straight rod squaring; original material and palette cells inherited",
+      "Saved independent optimized Blend reopened before GLB export; normals/UV preserved; no tangent-space normal maps, tangents omitted"
+    ],
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/low_platform_z6005/low_platform_z6005_visual_top3d.glb",
+    "glb_sha256": "6a6f7df18d19daec8f8261e453ff8204ec23c7a75acf6f089e2c439943787759",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/low_platform_z6005/low_platform_z6005_root_top3d.tscn",
+    "prefab_sha256": "d08dd460ef92072273e5c23f48fdd4583c63dee982729b4d2b05ca78b32b52c0",
+    "verified_component": {
+      "bounds_max": [
+        3.01499938964844,
+        6.00499963760376,
+        2.15999984741211
+      ],
+      "bounds_min": [
+        -3.01500034332275,
+        0.0,
+        -2.15999984741211
+      ],
+      "collision_shapes": 0,
+      "material_roles": [
+        "04_柔和自发光_UI灯光",
+        "02_细腻哑光_青绿大面"
+      ],
+      "meshes": 2,
+      "slug": "low_platform_z6005",
+      "triangles": 1176,
+      "version": "v032"
+    },
+    "room_references": [
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_05_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_05\\room_static_layout.tscn"
+    ],
+    "import_uid_preserved": true,
+    "whole_level_verified": false,
+    "verification_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\batch13_20261115\\import_0932\\godot_verification.json"
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/low_platform_z6005/export/v032/low_platform_z6005_optimized_v032.blend",
+  "optimized_sha256": "6fa1ca116d2afaabf8f1b8fddb1d994d212f20af07b94f5e88d8619798b4ad83",
+  "triangle_count": 1176,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/low_platform_z6005/low_platform_z6005_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/low_platform_z6005/low_platform_z6005_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v032",
+  "optimized_asset_version": "v032"
 }

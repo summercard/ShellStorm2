@@ -6,7 +6,9 @@
 
 [node name="RoomTypeComponentLowPlatformZ4805" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_Z4805"
-metadata/asset_version = "v010"
+metadata/glb_sha256 = "a1c23590b29d654a16c38f67dbe6fd8886e8c3ed5d0f4abc2e2c2f61b841da10"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/low_platform_z4805/export/v032/low_platform_z4805_optimized_v032.blend"
+metadata/asset_version = "v032"
 metadata/room_type = "BRIDGE_ROOM"
 metadata/component_slug = "low_platform_z4805"
 metadata/display_name_zh = "错层钢格栅检修平台 6.03×4.32×4.80m"

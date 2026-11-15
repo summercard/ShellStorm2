@@ -9,7 +9,9 @@ size = Vector3(2.117, 3.944, 1.6603)
 
 [node name="RoomTypeComponentServerRackB" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_B"
-metadata/asset_version = "v014"
+metadata/glb_sha256 = "218eab42db7efc7ce423bda6c264bb663cf42dc58dc12ae8a9915a352c860081"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/server_rack_b/export/v033/server_rack_b_optimized_v033.blend"
+metadata/asset_version = "v033"
 metadata/room_type = "DB_ROOM"
 metadata/component_slug = "server_rack_b"
 metadata/display_name_zh = "服务器机柜（标准设备层）"

@@ -1,0 +1,70 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_A",
+  "slug": "server_rack_a",
+  "collection": "server_rack_a_输出包",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v014\\component_packages\\server_rack_a\\server_rack_a.blend",
+  "registration_note": "Legacy ID retained; runtime import traced via parent room-type ledger row; no new independent row.",
+  "optimization_v033": {
+    "role": "optimized",
+    "version": "v033",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/server_rack_a/server_rack_a.blend",
+    "source_sha256_before": "deeda205c1abd057d72dd45bc8a615c9839ea58a3901baaceac0e8f49c2fd4b0",
+    "source_sha256_after": "deeda205c1abd057d72dd45bc8a615c9839ea58a3901baaceac0e8f49c2fd4b0",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/server_rack_a/export/v033/server_rack_a_optimized_v033.blend",
+    "optimized_sha256": "08aa2b5b15d07967cbb00746520eb6313bb489d9acb5941c4ade7a4832fb5009",
+    "triangles_before": 6652,
+    "triangles_after": 892,
+    "reduction_ratio": 0.8659049909801564,
+    "target_triangles": 1330,
+    "budget_source": "User authorized <= original 20%; 2026-11-15 approved comparison and import",
+    "operations": [
+      "Per-connected-part confirmed beveled box / straight rod squaring; original material and palette cells inherited",
+      "Saved independent optimized Blend reopened before GLB export; normals/UV preserved; no tangent-space normal maps, tangents omitted"
+    ],
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/server_rack_a/server_rack_a_visual_top3d.glb",
+    "glb_sha256": "d3b2ed0121b81e3d279f69afc7a94151608b6ff090a4192ad81cd57542038a44",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/server_rack_a/server_rack_a_root_top3d.tscn",
+    "prefab_sha256": "5abc04293b23199b230a3c74cc07119501a658549ff05f4be1605afff4b91456",
+    "verified_component": {
+      "bounds_max": [
+        1.05850028991699,
+        3.94400024414063,
+        0.83012580871582
+      ],
+      "bounds_min": [
+        -1.05850028991699,
+        0.0,
+        -0.830124855041504
+      ],
+      "collision_shapes": 1,
+      "material_roles": [
+        "04_柔和自发光_UI灯光",
+        "02_细腻哑光_青绿大面"
+      ],
+      "meshes": 2,
+      "slug": "server_rack_a",
+      "triangles": 892,
+      "version": "v033"
+    },
+    "room_references": [
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_02_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_04_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_06_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_10_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_02\\room_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_06\\room_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_10\\room_static_layout.tscn"
+    ],
+    "import_uid_preserved": true,
+    "whole_level_verified": false,
+    "verification_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\batch13_20261115\\import_0932\\godot_verification.json"
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/server_rack_a/export/v033/server_rack_a_optimized_v033.blend",
+  "optimized_sha256": "08aa2b5b15d07967cbb00746520eb6313bb489d9acb5941c4ade7a4832fb5009",
+  "triangle_count": 892,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/server_rack_a/server_rack_a_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/server_rack_a/server_rack_a_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v033",
+  "optimized_asset_version": "v033"
+}

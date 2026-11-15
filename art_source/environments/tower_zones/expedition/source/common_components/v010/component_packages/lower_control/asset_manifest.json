@@ -39,5 +39,63 @@
     "04_柔和自发光_UI灯光"
   ],
   "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-LOWER_CONTROL_-1_0",
-  "source_library": "v005"
+  "source_library": "v005",
+  "optimization_v032": {
+    "role": "optimized",
+    "version": "v032",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/lower_control/lower_control.blend",
+    "source_sha256_before": "60b3bdb7dabe20c9cbec267292beb76a2ff42c339b5c5fe811e3b34294befd9f",
+    "source_sha256_after": "60b3bdb7dabe20c9cbec267292beb76a2ff42c339b5c5fe811e3b34294befd9f",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/lower_control/export/v032/lower_control_optimized_v032.blend",
+    "optimized_sha256": "5bb0af3a223e4d8df59e2fb70b4344804fe1d6482ab67185989f61c3dc553191",
+    "triangles_before": 7236,
+    "triangles_after": 804,
+    "reduction_ratio": 0.8888888888888888,
+    "target_triangles": 1447,
+    "budget_source": "User authorized <= original 20%; 2026-11-15 approved comparison and import",
+    "operations": [
+      "Per-connected-part confirmed beveled box / straight rod squaring; original material and palette cells inherited",
+      "Saved independent optimized Blend reopened before GLB export; normals/UV preserved; no tangent-space normal maps, tangents omitted"
+    ],
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/lower_control/lower_control_visual_top3d.glb",
+    "glb_sha256": "3d0f9a3b351bea0587a8b9264c240e4877fee9419aac526636c326f2b9cdeac6",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/lower_control/lower_control_root_top3d.tscn",
+    "prefab_sha256": "c3b79d345e6ce2b6900cca05e0754a1de362f476cf51d3136701b0f63d325084",
+    "verified_component": {
+      "bounds_max": [
+        0.664999961853027,
+        2.60000038146973,
+        0.757500648498535
+      ],
+      "bounds_min": [
+        -0.664999961853027,
+        0.0,
+        -0.757499694824219
+      ],
+      "collision_shapes": 1,
+      "material_roles": [
+        "04_柔和自发光_UI灯光",
+        "02_细腻哑光_青绿大面"
+      ],
+      "meshes": 2,
+      "slug": "lower_control",
+      "triangles": 804,
+      "version": "v032"
+    },
+    "room_references": [
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_05_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_05\\room_static_layout.tscn"
+    ],
+    "import_uid_preserved": true,
+    "whole_level_verified": false,
+    "verification_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\batch13_20261115\\import_0932\\godot_verification.json"
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/lower_control/export/v032/lower_control_optimized_v032.blend",
+  "optimized_sha256": "5bb0af3a223e4d8df59e2fb70b4344804fe1d6482ab67185989f61c3dc553191",
+  "triangle_count": 804,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/lower_control/lower_control_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/lower_control/lower_control_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v032",
+  "optimized_asset_version": "v032"
 }

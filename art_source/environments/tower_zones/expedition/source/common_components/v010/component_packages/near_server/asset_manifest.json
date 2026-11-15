@@ -35,5 +35,63 @@
     "04_柔和自发光_UI灯光"
   ],
   "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER_-1",
-  "source_library": "v005"
+  "source_library": "v005",
+  "optimization_v032": {
+    "role": "optimized",
+    "version": "v032",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/near_server/near_server.blend",
+    "source_sha256_before": "374201f6ee86d66b57c0b03356d732985cf2a24b7765b9c42c6dc394657a2dea",
+    "source_sha256_after": "374201f6ee86d66b57c0b03356d732985cf2a24b7765b9c42c6dc394657a2dea",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/near_server/export/v032/near_server_optimized_v032.blend",
+    "optimized_sha256": "5c6e32a25472f2fd0d40ae9927f562807a03166b0a29a7187ad6b446d721ba84",
+    "triangles_before": 13068,
+    "triangles_after": 1452,
+    "reduction_ratio": 0.8888888888888888,
+    "target_triangles": 2613,
+    "budget_source": "User authorized <= original 20%; 2026-11-15 approved comparison and import",
+    "operations": [
+      "Per-connected-part confirmed beveled box / straight rod squaring; original material and palette cells inherited",
+      "Saved independent optimized Blend reopened before GLB export; normals/UV preserved; no tangent-space normal maps, tangents omitted"
+    ],
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/near_server/near_server_visual_top3d.glb",
+    "glb_sha256": "b2c6db3a096c7855b302f4d3b3d678a000f9a737c66ec60e6960596f4d3fb705",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/near_server/near_server_root_top3d.tscn",
+    "prefab_sha256": "80566ded0e99c9e2f4f55be29ca1daccacfcb90b76e46c3990679bc007718a5f",
+    "verified_component": {
+      "bounds_max": [
+        0.757500648498535,
+        5.05000019073486,
+        1.34000015258789
+      ],
+      "bounds_min": [
+        -0.757499694824219,
+        0.0,
+        -1.34000015258789
+      ],
+      "collision_shapes": 1,
+      "material_roles": [
+        "04_柔和自发光_UI灯光",
+        "02_细腻哑光_青绿大面"
+      ],
+      "meshes": 2,
+      "slug": "near_server",
+      "triangles": 1452,
+      "version": "v032"
+    },
+    "room_references": [
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_05_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_05\\room_static_layout.tscn"
+    ],
+    "import_uid_preserved": true,
+    "whole_level_verified": false,
+    "verification_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\batch13_20261115\\import_0932\\godot_verification.json"
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/near_server/export/v032/near_server_optimized_v032.blend",
+  "optimized_sha256": "5c6e32a25472f2fd0d40ae9927f562807a03166b0a29a7187ad6b446d721ba84",
+  "triangle_count": 1452,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/near_server/near_server_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/near_server/near_server_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v032",
+  "optimized_asset_version": "v032"
 }

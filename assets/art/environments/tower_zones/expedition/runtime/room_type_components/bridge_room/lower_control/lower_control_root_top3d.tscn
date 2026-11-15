@@ -9,7 +9,9 @@ size = Vector3(1.33, 2.6, 1.515)
 
 [node name="RoomTypeComponentLowerControl" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-LOWER_CONTROL"
-metadata/asset_version = "v010"
+metadata/glb_sha256 = "3d0f9a3b351bea0587a8b9264c240e4877fee9419aac526636c326f2b9cdeac6"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/lower_control/export/v032/lower_control_optimized_v032.blend"
+metadata/asset_version = "v032"
 metadata/room_type = "BRIDGE_ROOM"
 metadata/component_slug = "lower_control"
 metadata/display_name_zh = "机房设备 1.33×1.51×2.60m"

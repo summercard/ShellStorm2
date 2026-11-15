@@ -9,7 +9,9 @@ size = Vector3(6.8, 2.9, 3.02)
 
 [node name="RoomTypeComponentRepairIsland" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-REPAIR_ISLAND"
-metadata/asset_version = "v014"
+metadata/glb_sha256 = "8f2ead679b8d9a34a188708de335532263d0850c46e6f4f2574da76012f53472"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/repair_island/export/v032/repair_island_optimized_v032.blend"
+metadata/asset_version = "v032"
 metadata/room_type = "DB_ROOM"
 metadata/component_slug = "repair_island"
 metadata/display_name_zh = "repair_island"

@@ -6,7 +6,9 @@
 
 [node name="RoomTypeComponentCrossGantry" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-CROSS_GANTRY"
-metadata/asset_version = "v010"
+metadata/glb_sha256 = "d0fa24e4dd038049335693fcae2e4ad03b3b745b4fd8879f61608c83e0568374"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/cross_gantry/export/v032/cross_gantry_optimized_v032.blend"
+metadata/asset_version = "v032"
 metadata/room_type = "BRIDGE_ROOM"
 metadata/component_slug = "cross_gantry"
 metadata/display_name_zh = "错层钢格栅检修平台 8.73×1.97×7.71m"

@@ -9,7 +9,9 @@ size = Vector3(1.515, 5.05, 2.68)
 
 [node name="RoomTypeComponentNearServer" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER"
-metadata/asset_version = "v010"
+metadata/glb_sha256 = "b2c6db3a096c7855b302f4d3b3d678a000f9a737c66ec60e6960596f4d3fb705"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/near_server/export/v032/near_server_optimized_v032.blend"
+metadata/asset_version = "v032"
 metadata/room_type = "BRIDGE_ROOM"
 metadata/component_slug = "near_server"
 metadata/display_name_zh = "机房设备 1.51×2.68×5.05m"

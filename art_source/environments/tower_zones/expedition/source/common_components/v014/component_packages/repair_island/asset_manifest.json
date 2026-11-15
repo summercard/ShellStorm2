@@ -1,0 +1,69 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-DB-REPAIR_ISLAND",
+  "slug": "repair_island",
+  "collection": "repair_island_输出包",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v014\\component_packages\\repair_island\\repair_island.blend",
+  "registration_note": "Legacy ID retained; runtime import traced via parent room-type ledger row; no new independent row.",
+  "optimization_v032": {
+    "role": "optimized",
+    "version": "v032",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/repair_island/repair_island.blend",
+    "source_sha256_before": "8331327f45aa084c8a784aa7146adf380056083cb967f6b89cca389c2b387133",
+    "source_sha256_after": "8331327f45aa084c8a784aa7146adf380056083cb967f6b89cca389c2b387133",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/repair_island/export/v032/repair_island_optimized_v032.blend",
+    "optimized_sha256": "38e8c62484ca90a6f09fe3a2140c2a8bddae83146907818230150339a1f54854",
+    "triangles_before": 11216,
+    "triangles_after": 1344,
+    "reduction_ratio": 0.8801711840228246,
+    "target_triangles": 2243,
+    "budget_source": "User authorized <= original 20%; 2026-11-15 approved comparison and import",
+    "operations": [
+      "Per-connected-part confirmed beveled box / straight rod squaring; original material and palette cells inherited",
+      "Saved independent optimized Blend reopened before GLB export; normals/UV preserved; no tangent-space normal maps, tangents omitted"
+    ],
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/repair_island/repair_island_visual_top3d.glb",
+    "glb_sha256": "8f2ead679b8d9a34a188708de335532263d0850c46e6f4f2574da76012f53472",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/repair_island/repair_island_root_top3d.tscn",
+    "prefab_sha256": "d6710fb8cbb80a986d8863b80516460f019ab70095e906a9a43e64c14828f388",
+    "verified_component": {
+      "bounds_max": [
+        3.40000009536743,
+        2.90000009536743,
+        1.50999999046326
+      ],
+      "bounds_min": [
+        -3.40000009536743,
+        0.0,
+        -1.50999999046326
+      ],
+      "collision_shapes": 1,
+      "material_roles": [
+        "04_柔和自发光_UI灯光",
+        "02_细腻哑光_青绿大面"
+      ],
+      "meshes": 2,
+      "slug": "repair_island",
+      "triangles": 1344,
+      "version": "v032"
+    },
+    "room_references": [
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_02_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_06_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\expedition_01\\f00_room_10_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_02\\room_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_06\\room_static_layout.tscn",
+      "assets\\art\\environments\\tower_zones\\expedition\\runtime\\room_instances\\f00_room_10\\room_static_layout.tscn"
+    ],
+    "import_uid_preserved": true,
+    "whole_level_verified": false,
+    "verification_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\expedition01_optimization\\batch13_20261115\\import_0932\\godot_verification.json"
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/repair_island/export/v032/repair_island_optimized_v032.blend",
+  "optimized_sha256": "38e8c62484ca90a6f09fe3a2140c2a8bddae83146907818230150339a1f54854",
+  "triangle_count": 1344,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/repair_island/repair_island_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/repair_island/repair_island_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v032",
+  "optimized_asset_version": "v032"
+}

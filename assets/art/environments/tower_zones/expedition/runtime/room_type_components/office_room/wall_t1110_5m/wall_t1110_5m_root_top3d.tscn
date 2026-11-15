@@ -9,7 +9,9 @@ size = Vector3(5, 11.9, 1.11)
 
 [node name="RoomTypeComponentWallT11105M" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T1110_5M"
-metadata/asset_version = "v009"
+metadata/glb_sha256 = "f436156376b586a8e27a36b7f3c218a928af096cb52e73e2a616c6c2d17afe25"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t1110_5m/export/v032/wall_t1110_5m_optimized_v032.blend"
+metadata/asset_version = "v032"
 metadata/room_type = "OFFICE_ROOM"
 metadata/component_slug = "wall_t1110_5m"
 metadata/display_name_zh = "墙体 5.00×1.11×11.90m"

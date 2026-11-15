@@ -12,7 +12,9 @@ size = Vector3(1.85, 3.565, 5.5)
 
 [node name="RoomTypeComponentWorkbenchA" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-WORKBENCH_A"
-metadata/asset_version = "v014"
+metadata/glb_sha256 = "fa79d5d558282261af3697bc2a3b27108627df6900a20dbae2f5395310d30b3e"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/workbench_a/export/v032/workbench_a_optimized_v032.blend"
+metadata/asset_version = "v032"
 metadata/room_type = "DB_ROOM"
 metadata/component_slug = "workbench_a"
 metadata/display_name_zh = "workbench_a"
