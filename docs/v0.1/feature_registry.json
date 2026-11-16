@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "version": "0.1.0",
-  "updated_at": "2026-11-11",
+  "updated_at": "2026-11-16",
   "source_index": "docs/v0.1/MODULE_INDEX.md",
   "note": "功能级机器可追溯真源；Owner 表示当前状态事实所有者，不等于完成度或人员分工。",
   "features": [
@@ -78,9 +78,45 @@
         "docs/v0.1/development/2026-10-19_bullet_module_manual_swap_lock.md",
         "docs/v0.1/development/2026-11-09_aim_ballistic_alignment.md",
         "docs/v0.1/development/2026-11-10_enemy_bullet_presentation_rollback.md",
-        "docs/v0.1/development/2026-11-10_shotgun_two_shell_mag.md"
+        "docs/v0.1/development/2026-11-10_shotgun_two_shell_mag.md",
+        "docs/v0.1/development/2026-11-16_expedition01_combat_feel.md",
+        "docs/v0.1/development/2026-11-16_weapon_hologram_ui.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_weapon_hologram_ui",
+          "suite": "manual",
+          "runner": "scripts/run_weapon_hologram_qa.py",
+          "requires": "仅经专用runner在Autoload前隔离；WEAPON_HOLOGRAM_VERIFY_ISOLATED=1；full裸扫排除；专项已实现，运行结果见独立记录"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_projectile_enchant_visuals",
+          "suite": "manual",
+          "runner": "scripts/run_weapon_hologram_qa.py",
+          "requires": "仅经专用runner在Autoload前隔离；PROJECTILE_ENCHANT_VERIFY_ISOLATED=1；实际behavior/主体模块不变/24除以属性数；full裸扫排除；运行结果见独立记录"
+        },
+        {
+          "kind": "command",
+          "path": "scripts/run_weapon_hologram_qa.py",
+          "args": [
+            "--scene",
+            "all",
+            "--resolution",
+            "1280x720",
+            "1920x1080"
+          ],
+          "suite": "manual",
+          "requires": "Autoload前隔离用户目录与缓存；Forward+/Vulkan；逻辑、渲染与冷import超时分列，不提升模块partial"
+        },
+        {
+          "kind": "command",
+          "path": "tests/verification/run_spawn_vfx_combat_integration.py",
+          "args": [],
+          "suite": "manual",
+          "requires": "Autoload前隔离；新建蓝色豌豆手枪标准弹真实弹体命中33，小僵尸3枪/胖子6枪"
+        },
         {
           "kind": "scene",
           "id": "verify_3d_melee_combat_flow"
@@ -176,10 +212,58 @@
         "docs/v0.1/development/2026-10-18_fate_elements.md",
         "docs/v0.1/development/2026-11-06_expedition01_no_key_chest_drops.md",
         "docs/v0.1/development/2026-11-08_fate_pickup_chest_closure.md",
-        "docs/v0.1/development/2026-11-11_expedition01_flow.md"
+        "docs/v0.1/development/2026-11-11_expedition01_flow.md",
+        "docs/v0.1/development/2026-11-16_weapon_hologram_ui.md",
+        "docs/v0.1/development/2026-11-16_fate_tutorial_galgame.md"
       ],
       "verification": [
-        {"kind": "scene", "id": "verify_expedition01_reward_flow", "suite": "manual", "requires": "Autoload前隔离；02普通报价/来源定价结果pending"},
+        {
+          "kind": "scene",
+          "id": "verify_fate_tutorial_dialogue",
+          "suite": "manual",
+          "runner": "scripts/run_fate_tutorial_qa.py",
+          "requires": "仅复用已成功导入的工程外副本；runner在Autoload前隔离；SHELLSTORM_FATE_TUTORIAL_ISOLATED=1；首次/重复/中断/恢复/无钱满槽、完成屏障、双侧与原输入回归；full裸扫排除；真实引擎结果待汇总，开发记录由主代理待补，UI账本占用未写入"
+        },
+        {
+          "kind": "command",
+          "path": "scripts/run_fate_tutorial_qa.py",
+          "args": ["--reuse-isolated-project", "I:/工作项目/shellstrom2/ShellStorm2-work/verification/weapon_hologram/20261116_173024_0f0e06/project", "--scene", "fate_tutorial_dialogue", "--resolution", "1280x720", "1920x1080"],
+          "suite": "manual",
+          "requires": "此命令固定复用本轮已授权既有副本，执行前须复核仍可用；父级result.json须有成功import证据及缓存/custom_user_dir匹配；Autoload前隔离，不重导全项目、不回退主工程，不是零参数通用CI；当前运行中未签通过"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_weapon_hologram_ui",
+          "suite": "manual",
+          "runner": "scripts/run_weapon_hologram_qa.py",
+          "requires": "仅经专用runner在Autoload前隔离；WEAPON_HOLOGRAM_VERIFY_ISOLATED=1；默认否/原费用与Bridge/成功落槽/取消退款/作用域；full裸扫排除；运行结果见独立记录"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_projectile_enchant_visuals",
+          "suite": "manual",
+          "runner": "scripts/run_weapon_hologram_qa.py",
+          "requires": "仅经专用runner在Autoload前隔离；PROJECTILE_ENCHANT_VERIFY_ISOLATED=1；实际behavior路由；full裸扫排除；运行结果见独立记录"
+        },
+        {
+          "kind": "command",
+          "path": "scripts/run_weapon_hologram_qa.py",
+          "args": [
+            "--scene",
+            "all",
+            "--resolution",
+            "1280x720",
+            "1920x1080"
+          ],
+          "suite": "manual",
+          "requires": "Autoload前隔离；逻辑、真实渲染与冷import超时分别记录；专项已实现，不提升模块partial"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition01_reward_flow",
+          "suite": "manual",
+          "requires": "Autoload前隔离；02普通报价/来源定价结果pending"
+        },
         {
           "kind": "scene",
           "id": "verify_tarot_fate_runtime"
@@ -243,6 +327,7 @@
         "docs/v0.1/design/远征关卡03设计.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-16_expedition01_combat_feel.md",
         "docs/v0.1/development/2026-11-02_enemy_spawn_boundary.md",
         "docs/v0.1/development/2026-09-13_world_level_blocks.md",
         "docs/v0.1/development/2026-10-14_expedition01_monster_rules.md",
@@ -255,10 +340,71 @@
         "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
-        {"kind": "command", "path": "tests/verification/verify_expedition01_spawn_ramp.py", "args": [], "suite": "manual"},
-        {"kind": "command", "path": "tests/verification/probe_expedition_spawn_safety.gd", "args": ["--headless", "--scene", "res://tests/verification/probe_expedition_spawn_safety.tscn"], "suite": "manual", "requires": "Autoload前隔离APPDATA/LOCALAPPDATA；数据检查不替代运行安全刷点"},
-        {"kind": "command", "path": "tests/verification/probe_expedition01_encounter_spawn_capacity.gd", "args": ["--headless", "--scene", "res://tests/verification/probe_expedition01_encounter_spawn_capacity.tscn"], "suite": "manual", "requires": "Autoload前隔离APPDATA/LOCALAPPDATA；安全距离与容量"},
-        {"kind": "scene", "id": "verify_expedition01_flow_integration", "suite": "manual", "requires": "run_expedition01_flow_integration.py专用外部Runner；Autoload前隔离；完整模式结果pending"},
+        {
+          "kind": "command",
+          "path": "tests/verification/verify_expedition01_room08_preplaced_positions.gd",
+          "args": [],
+          "suite": "manual",
+          "requires": "无独立scene；调用方须先用workspace_paths.work_path在工程外shellstorm-verification子目录创建各自APPDATA/LOCALAPPDATA/XDG_DATA_HOME/XDG_CONFIG_HOME并设置进程环境，再生成Node+本脚本的临时TSCN包装；设置EXP01_SEED=77001199或2026及EXP01_REPORT到同work目录，Godot启动前完成隔离；只依赖仓库GD与wp包装契约，不依赖工程外临时Runner。验两个沿路域/25只/6m/1.7m，多站位容量不代签路径连续接敌"
+        },
+        {
+          "kind": "command",
+          "path": "tests/verification/verify_expedition01_combat_geometry.gd",
+          "args": [],
+          "suite": "manual",
+          "runner": "tests/verification/run_expedition01_combat_geometry.py",
+          "requires": "无独立scene；Runner在Autoload前隔离，--seed 77001199及2026分别运行，work_path生成包装；--baseline须指定独立历史报告"
+        },
+        {
+          "kind": "command",
+          "path": "tests/verification/run_expedition01_combat_geometry.py",
+          "args": [
+            "--seed",
+            "77001199"
+          ],
+          "suite": "manual"
+        },
+        {
+          "kind": "command",
+          "path": "tests/verification/verify_expedition01_path_coverage.py",
+          "args": [],
+          "suite": "manual",
+          "requires": "必须传--baseline历史报告/--current当前geometry；真实胶囊连通、6m空档与生产足迹债分列，不以当前自比"
+        },
+        {
+          "kind": "command",
+          "path": "tests/verification/verify_expedition01_spawn_ramp.py",
+          "args": [],
+          "suite": "manual"
+        },
+        {
+          "kind": "command",
+          "path": "tests/verification/probe_expedition_spawn_safety.gd",
+          "args": [
+            "--headless",
+            "--scene",
+            "res://tests/verification/probe_expedition_spawn_safety.tscn"
+          ],
+          "suite": "manual",
+          "requires": "Autoload前隔离APPDATA/LOCALAPPDATA；数据检查不替代运行安全刷点"
+        },
+        {
+          "kind": "command",
+          "path": "tests/verification/probe_expedition01_encounter_spawn_capacity.gd",
+          "args": [
+            "--headless",
+            "--scene",
+            "res://tests/verification/probe_expedition01_encounter_spawn_capacity.tscn"
+          ],
+          "suite": "manual",
+          "requires": "Autoload前隔离APPDATA/LOCALAPPDATA；安全距离与容量"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition01_flow_integration",
+          "suite": "manual",
+          "requires": "run_expedition01_flow_integration.py专用外部Runner；Autoload前隔离；完整模式结果pending"
+        },
         {
           "kind": "scene",
           "id": "verify_enemy_spawn_boundary"
@@ -334,10 +480,30 @@
         "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
-        {"kind": "command", "path": "scripts/run_expedition_entry_qa.py", "args": [], "suite": "manual", "requires": "Autoload前隔离APPDATA/LOCALAPPDATA/XDG；真实渲染fixture六截图及正式host/test_mode=false接入；不等于基地菜单→读取页→关卡端到端通过"},
-        {"kind": "scene", "id": "verify_expedition01_flow_integration", "suite": "manual", "requires": "专用外部Runner在Autoload前隔离；真实整关仍在联调"},
-        {"kind": "scene", "id": "verify_main_story_navigation", "suite": "core"},
-        {"kind": "scene", "id": "verify_main_story_integration", "suite": "manual", "requires": "Autoload前隔离；SHELLSTORM_MAIN_STORY_ISOLATED=1；user://含main_story_integration"},
+        {
+          "kind": "command",
+          "path": "scripts/run_expedition_entry_qa.py",
+          "args": [],
+          "suite": "manual",
+          "requires": "Autoload前隔离APPDATA/LOCALAPPDATA/XDG；真实渲染fixture六截图及正式host/test_mode=false接入；不等于基地菜单→读取页→关卡端到端通过"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition01_flow_integration",
+          "suite": "manual",
+          "requires": "专用外部Runner在Autoload前隔离；真实整关仍在联调"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_main_story_navigation",
+          "suite": "core"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_main_story_integration",
+          "suite": "manual",
+          "requires": "Autoload前隔离；SHELLSTORM_MAIN_STORY_ISOLATED=1；user://含main_story_integration"
+        },
         {
           "kind": "scene",
           "id": "verify_expedition_level01_flow"
@@ -440,9 +606,22 @@
         "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
-        {"kind": "scene", "id": "verify_expedition01_flow_integration", "suite": "manual", "requires": "Autoload前隔离；分账落地/pending/恢复结果pending"},
-        {"kind": "scene", "id": "verify_main_story_progress", "suite": "core"},
-        {"kind": "scene", "id": "verify_main_story_integration", "suite": "manual"},
+        {
+          "kind": "scene",
+          "id": "verify_expedition01_flow_integration",
+          "suite": "manual",
+          "requires": "Autoload前隔离；分账落地/pending/恢复结果pending"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_main_story_progress",
+          "suite": "core"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_main_story_integration",
+          "suite": "manual"
+        },
         {
           "kind": "scene",
           "id": "verify_reward_service_flow"
@@ -495,7 +674,12 @@
         "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
-        {"kind": "scene", "id": "verify_expedition01_reward_flow", "suite": "manual", "requires": "run_expedition01_flow_integration.py专用外部Runner；Autoload前隔离；服务结果pending，不代表地面整链通过"},
+        {
+          "kind": "scene",
+          "id": "verify_expedition01_reward_flow",
+          "suite": "manual",
+          "requires": "run_expedition01_flow_integration.py专用外部Runner；Autoload前隔离；服务结果pending，不代表地面整链通过"
+        },
         {
           "kind": "scene",
           "id": "verify_reward_service_flow"
@@ -530,6 +714,10 @@
         "docs/v0.1/design/胖子僵尸03运行配置.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-16_exploder_speed30.md",
+        "docs/v0.1/development/2026-11-16_exploder_mech_animation_import.md",
+        "docs/v0.1/development/2026-11-16_police_zombie25_import.md",
+        "docs/v0.1/development/2026-11-16_expedition01_combat_feel.md",
         "docs/v0.1/development/2026-11-02_enemy_spawn_boundary.md",
         "docs/v0.1/development/2026-11-02_enemy_ai_light_motion.md",
         "docs/v0.1/development/history/06_怪物精英与Boss_历史记录.md",
@@ -559,9 +747,24 @@
         "docs/v0.1/development/2026-10-30_expedition03_blink_out_of_room.md",
         "docs/v0.1/development/2026-10-30_expedition03_enemy_body_size.md",
         "docs/v0.1/development/2026-10-30_expedition03_chest_mimic.md",
-        "docs/v0.1/development/2026-10-30_expedition03_combat_plane.md"
+        "docs/v0.1/development/2026-10-30_expedition03_combat_plane.md",
+        "docs/v0.1/development/2026-11-16_small_zombie_v006_integration.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_fat_death_warning",
+          "suite": "manual",
+          "requires": "仅经run_fat_death_warning.py在Autoload前隔离；headless/integration/render分开验，full裸扫排除"
+        },
+        {
+          "kind": "command",
+          "path": "tests/verification/run_fat_death_warning.py",
+          "args": [
+            "integration"
+          ],
+          "suite": "manual"
+        },
         {
           "kind": "scene",
           "id": "verify_enemy_spawn_boundary"
@@ -593,6 +796,14 @@
         {
           "kind": "scene",
           "id": "verify_fat_zombie03_death_visibility"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_melee_zombie_presentation"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_exploder_presentation"
         }
       ],
       "status": "partial"
@@ -685,8 +896,16 @@
         "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
-        {"kind": "scene", "id": "verify_main_story_boss_gate", "suite": "core"},
-        {"kind": "scene", "id": "verify_main_story_narrative", "suite": "manual"},
+        {
+          "kind": "scene",
+          "id": "verify_main_story_boss_gate",
+          "suite": "core"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_main_story_narrative",
+          "suite": "manual"
+        },
         {
           "kind": "scene",
           "id": "verify_expedition_monitor_boss_flow"
@@ -754,10 +973,30 @@
         "docs/v0.1/development/2026-11-10_main_story_031_033.md",
         "docs/v0.1/development/2026-11-10_key_inset_and_dialogue_advance.md",
         "docs/v0.1/development/2026-11-10_dialogue_bottom_bar.md",
-        "docs/v0.1/development/2026-11-10_rescue_dialogue_advance.md"
+        "docs/v0.1/development/2026-11-10_rescue_dialogue_advance.md",
+        "docs/v0.1/development/2026-11-16_fate_tutorial_galgame.md"
       ],
       "verification": [
-        {"kind": "scene", "id": "verify_main_story_performance", "suite": "manual", "requires": "Autoload前隔离；SHELLSTORM_MAIN_STORY_ISOLATED=1；user://含main_story_performance"},
+        {
+          "kind": "scene",
+          "id": "verify_fate_tutorial_dialogue",
+          "suite": "manual",
+          "runner": "scripts/run_fate_tutorial_qa.py",
+          "requires": "仅复用已成功导入的工程外副本；runner在Autoload前隔离；SHELLSTORM_FATE_TUTORIAL_ISOLATED=1；绿苔99F全息/普通对白会话、双侧与原输入；NPC/救援静态接线不代签全业务动态验收；full裸扫排除；运行结果与开发记录待主代理汇总，UI账本未写入"
+        },
+        {
+          "kind": "command",
+          "path": "scripts/run_fate_tutorial_qa.py",
+          "args": ["--reuse-isolated-project", "I:/工作项目/shellstrom2/ShellStorm2-work/verification/weapon_hologram/20261116_173024_0f0e06/project", "--scene", "fate_tutorial_dialogue", "--resolution", "1280x720", "1920x1080"],
+          "suite": "manual",
+          "requires": "此命令固定复用本轮已授权既有副本，执行前须复核仍可用；成功import证据/缓存/custom_user_dir匹配；Autoload前隔离，不是零参数通用CI；不回退主工程，不签本轮通过"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_main_story_performance",
+          "suite": "manual",
+          "requires": "Autoload前隔离；SHELLSTORM_MAIN_STORY_ISOLATED=1；user://含main_story_performance"
+        },
         {
           "kind": "scene",
           "id": "verify_base_npc_flow"
@@ -923,7 +1162,11 @@
         "docs/v0.1/development/2026-11-10_main_story_031_033.md"
       ],
       "verification": [
-        {"kind": "scene", "id": "verify_main_story_progress", "suite": "core"},
+        {
+          "kind": "scene",
+          "id": "verify_main_story_progress",
+          "suite": "core"
+        },
         {
           "kind": "scene",
           "id": "verify_pause_game_save_reset_flow"
@@ -943,6 +1186,7 @@
         "docs/v0.1/09_技术施工_存档结算与复活.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-16_expedition01_combat_feel.md",
         "docs/v0.1/development/2026-09-12_save_reentry_spawn_policy.md",
         "docs/v0.1/development/2026-09-23_p1_architecture_and_transaction_repair.md",
         "docs/v0.1/development/2026-09-23_new_save_handoff_and_scene_isolation.md",
@@ -950,7 +1194,21 @@
         "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
-        {"kind": "scene", "id": "verify_expedition01_flow_integration", "suite": "manual", "requires": "Autoload前隔离；准备期/间歇/奖励交付账恢复结果pending"},
+        {
+          "kind": "command",
+          "path": "tests/verification/run_fat_death_warning.py",
+          "args": [
+            "integration"
+          ],
+          "suite": "manual",
+          "requires": "Autoload前隔离；原房间快照/流送保留预警剩余时间，恢复不重置或重复击杀/清房"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition01_flow_integration",
+          "suite": "manual",
+          "requires": "Autoload前隔离；准备期/间歇/奖励交付账恢复结果pending；死亡预警剩余时间另由run_fat_death_warning.py integration验收"
+        },
         {
           "kind": "scene",
           "id": "verify_runtime_autosave_flow"
@@ -1035,18 +1293,90 @@
         "docs/v0.1/development/2026-11-10_dialogue_bottom_bar.md",
         "docs/v0.1/development/2026-11-10_rescue_dialogue_advance.md",
         "docs/v0.1/development/2026-11-11_expedition_entry_hologram_ceremonies.md",
-        "docs/v0.1/development/2026-11-11_expedition01_flow.md"
+        "docs/v0.1/development/2026-11-11_expedition01_flow.md",
+        "docs/v0.1/development/2026-11-16_fate_tutorial_galgame.md"
       ],
       "verification": [
-        {"kind": "command", "path": "scripts/run_expedition_entry_qa.py", "args": [], "suite": "manual", "requires": "Autoload前隔离；只跑两套真实fixture；已验20261112_001831 exit0（A3.15/B3.60，20Mesh）；正式host改走--official-hosts独立进程"},
-        {"kind": "command", "path": "scripts/run_expedition_entry_qa.py", "args": ["--official-hosts"], "suite": "manual", "requires": "Autoload前隔离；真实Forward+；四次完整host装配必须独立进程，否则全进程预算被吃穿（20261111_223135/20261112_001044超时）；已验20261112_002015 exit0，base_scan/tower03/base_materialize/resume全OK"},
-        {"kind": "command", "path": "scripts/run_expedition_entry_qa.py", "args": ["--base-menu-e2e"], "suite": "manual", "requires": "Autoload前隔离；真实Forward+；真实BaseWorld3D设施交互+菜单鼠标点击；2026-11-12修出发事务后点击已能接上读取页，但装配停在11/13未通过，待机器空闲复跑；不得据此签人工菜单链"},
-        {"kind": "command", "path": "scripts/run_expedition_entry_qa.py", "args": ["--loading-e2e"], "suite": "manual", "requires": "Autoload前隔离；真实Forward+；由已准备99F出发请求经真实ExpeditionLoadingScreen切正式Level01，双seed；已验20261112_024819（exit0/0 engine error/door_facing_dot=1.000/6图角色正对门洞且陈设归还/flow.end后可动），不含人工菜单点击"},
-        {"kind": "scene", "id": "verify_expedition01_flow_integration", "suite": "manual", "requires": "Autoload前隔离；flow_barks按钥匙未取得的首通前语义，结果pending"},
-        {"kind": "scene", "id": "verify_main_story_narrative", "suite": "manual", "requires": "已含真实运行；Autoload前隔离；SHELLSTORM_MAIN_STORY_ISOLATED=1；user://含main_story_performance"},
-        {"kind": "scene", "id": "verify_main_story_integration", "suite": "manual"},
-        {"kind": "scene", "id": "verify_main_story_performance", "suite": "manual"},
-        {"kind": "command", "path": "tests/verification/capture_main_story_chapter.gd", "args": ["--scene", "res://tests/verification/capture_main_story_chapter.tscn"], "suite": "manual", "requires": "隔离外部Godot runner；user://含main_story_performance；SHELLSTORM_MAIN_STORY_ISOLATED=1；真实渲染；SHELLSTORM_MAIN_STORY_CHAPTER=031或033；工程外SHELLSTORM_MAIN_STORY_CAPTURE_DIR"},
+        {
+          "kind": "scene",
+          "id": "verify_fate_tutorial_dialogue",
+          "suite": "manual",
+          "runner": "scripts/run_fate_tutorial_qa.py",
+          "requires": "仅复用已成功导入的工程外副本；runner在Autoload前隔离；SHELLSTORM_FATE_TUTORIAL_ISOLATED=1；首次/重复/中断/恢复/无钱满槽、wait完成屏障、双侧与原输入回归；full裸扫排除；不改主线key/Boss时序；运行结果与开发记录待主代理汇总"
+        },
+        {
+          "kind": "command",
+          "path": "scripts/run_fate_tutorial_qa.py",
+          "args": ["--reuse-isolated-project", "I:/工作项目/shellstrom2/ShellStorm2-work/verification/weapon_hologram/20261116_173024_0f0e06/project", "--scene", "fate_tutorial_dialogue", "--resolution", "1280x720", "1920x1080"],
+          "suite": "manual",
+          "requires": "此命令固定复用本轮已授权既有副本，执行前须复核仍可用；成功import证据/缓存/custom_user_dir匹配；Autoload前隔离，不重导全项目、不回退主工程，不是零参数通用CI；真实引擎运行中未签通过"
+        },
+        {
+          "kind": "command",
+          "path": "scripts/run_expedition_entry_qa.py",
+          "args": [],
+          "suite": "manual",
+          "requires": "Autoload前隔离；只跑两套真实fixture；已验20261112_001831 exit0（A3.15/B3.60，20Mesh）；正式host改走--official-hosts独立进程"
+        },
+        {
+          "kind": "command",
+          "path": "scripts/run_expedition_entry_qa.py",
+          "args": [
+            "--official-hosts"
+          ],
+          "suite": "manual",
+          "requires": "Autoload前隔离；真实Forward+；四次完整host装配必须独立进程，否则全进程预算被吃穿（20261111_223135/20261112_001044超时）；已验20261112_002015 exit0，base_scan/tower03/base_materialize/resume全OK"
+        },
+        {
+          "kind": "command",
+          "path": "scripts/run_expedition_entry_qa.py",
+          "args": [
+            "--base-menu-e2e"
+          ],
+          "suite": "manual",
+          "requires": "Autoload前隔离；真实Forward+；真实BaseWorld3D设施交互+菜单鼠标点击；2026-11-12修出发事务后点击已能接上读取页，但装配停在11/13未通过，待机器空闲复跑；不得据此签人工菜单链"
+        },
+        {
+          "kind": "command",
+          "path": "scripts/run_expedition_entry_qa.py",
+          "args": [
+            "--loading-e2e"
+          ],
+          "suite": "manual",
+          "requires": "Autoload前隔离；真实Forward+；由已准备99F出发请求经真实ExpeditionLoadingScreen切正式Level01，双seed；已验20261112_024819（exit0/0 engine error/door_facing_dot=1.000/6图角色正对门洞且陈设归还/flow.end后可动），不含人工菜单点击"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition01_flow_integration",
+          "suite": "manual",
+          "requires": "Autoload前隔离；flow_barks按钥匙未取得的首通前语义，结果pending"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_main_story_narrative",
+          "suite": "manual",
+          "requires": "已含真实运行；Autoload前隔离；SHELLSTORM_MAIN_STORY_ISOLATED=1；user://含main_story_performance"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_main_story_integration",
+          "suite": "manual"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_main_story_performance",
+          "suite": "manual"
+        },
+        {
+          "kind": "command",
+          "path": "tests/verification/capture_main_story_chapter.gd",
+          "args": [
+            "--scene",
+            "res://tests/verification/capture_main_story_chapter.tscn"
+          ],
+          "suite": "manual",
+          "requires": "隔离外部Godot runner；user://含main_story_performance；SHELLSTORM_MAIN_STORY_ISOLATED=1；真实渲染；SHELLSTORM_MAIN_STORY_CHAPTER=031或033；工程外SHELLSTORM_MAIN_STORY_CAPTURE_DIR"
+        },
         {
           "kind": "scene",
           "id": "verify_narrative_timeline"
@@ -1074,9 +1404,24 @@
         "docs/v0.1/development/2026-09-24_design_contract_backfill.md",
         "docs/v0.1/development/2026-11-10_key_inset_and_dialogue_advance.md",
         "docs/v0.1/development/2026-11-10_dialogue_bottom_bar.md",
-        "docs/v0.1/development/2026-11-10_rescue_dialogue_advance.md"
+        "docs/v0.1/development/2026-11-10_rescue_dialogue_advance.md",
+        "docs/v0.1/development/2026-11-16_fate_tutorial_galgame.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_fate_tutorial_dialogue",
+          "suite": "manual",
+          "runner": "scripts/run_fate_tutorial_qa.py",
+          "requires": "仅复用已成功导入的工程外副本；runner在Autoload前隔离；SHELLSTORM_FATE_TUTORIAL_ISOLATED=1；首次/重复/中断/恢复/无钱满槽、完成屏障、双侧会话与原Space/左键/Enter/暂停/防开火输入回归；full裸扫排除；运行结果与开发记录待主代理汇总，UI账本占用未写入"
+        },
+        {
+          "kind": "command",
+          "path": "scripts/run_fate_tutorial_qa.py",
+          "args": ["--reuse-isolated-project", "I:/工作项目/shellstrom2/ShellStorm2-work/verification/weapon_hologram/20261116_173024_0f0e06/project", "--scene", "fate_tutorial_dialogue", "--resolution", "1280x720", "1920x1080"],
+          "suite": "manual",
+          "requires": "此命令固定复用本轮已授权既有副本，执行前须复核仍可用；成功import证据/缓存/custom_user_dir匹配；Autoload前隔离，不重导全项目、不回退主工程，不是零参数通用CI；逻辑不代签真实渲染，当前未签通过"
+        },
         {
           "kind": "scene",
           "id": "verify_dialogue_ui_flow"
@@ -1182,14 +1527,37 @@
       "owner": "HUDPresenter3D",
       "design_docs": [
         "docs/v0.1/design/对话与战斗信息呈现设计.md",
-        "docs/v0.1/04_技术施工_战斗与局内成长.md"
+        "docs/v0.1/04_技术施工_战斗与局内成长.md",
+        "docs/v0.1/design/UI与UX全局设计及全界面清单.md",
+        "docs/v0.1/design/UI风格规范_棱镜线框.md"
       ],
       "development_records": [
         "docs/v0.1/development/history/04_战斗与局内成长_历史记录.md",
         "docs/v0.1/development/2026-09-23_p2_media_and_traceability_repair.md",
-        "docs/v0.1/development/2026-09-24_design_contract_backfill.md"
+        "docs/v0.1/development/2026-09-24_design_contract_backfill.md",
+        "docs/v0.1/development/2026-11-16_weapon_hologram_ui.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_weapon_hologram_ui",
+          "suite": "manual",
+          "runner": "scripts/run_weapon_hologram_qa.py",
+          "requires": "仅经专用runner在Autoload前隔离；WEAPON_HOLOGRAM_VERIFY_ISOLATED=1；共享board/超8槽/逆位/shared_unmapped/默认否；full裸扫排除；运行结果见独立记录"
+        },
+        {
+          "kind": "command",
+          "path": "scripts/run_weapon_hologram_qa.py",
+          "args": [
+            "--scene",
+            "weapon_hologram_ui",
+            "--resolution",
+            "1280x720",
+            "1920x1080"
+          ],
+          "suite": "manual",
+          "requires": "Autoload前隔离；局部全息许可不改全站HUD；专项已实现，逻辑与真实渲染分别记录，不提升模块partial"
+        },
         {
           "kind": "scene",
           "id": "verify_hud_presenter_3d"
@@ -1213,15 +1581,56 @@
         "docs/v0.1/design/outdoor_cloud_sea.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-16_expedition01_combat_feel.md",
         "docs/v0.1/development/history/14.6_特效系统与制作规范_历史记录.md",
         "docs/v0.1/development/2026-09-30_outdoor_cloud_sea.md",
         "docs/v0.1/development/2026-09-30_outdoor_cloud_sea_v002.md",
         "docs/v0.1/development/2026-09-30_outdoor_cloud_placement_fix.md",
         "docs/v0.1/development/2026-10-13_bullet_vfx_production.md",
         "docs/v0.1/development/2026-10-18_fate_elements.md",
-        "docs/v0.1/development/2026-11-07_arms_taker_contract_ledger_sync.md"
+        "docs/v0.1/development/2026-11-07_arms_taker_contract_ledger_sync.md",
+        "docs/v0.1/development/2026-11-16_weapon_hologram_ui.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_projectile_enchant_visuals",
+          "suite": "manual",
+          "runner": "scripts/run_weapon_hologram_qa.py",
+          "requires": "仅经专用runner在Autoload前隔离；PROJECTILE_ENCHANT_VERIFY_ISOLATED=1；七独立GPUParticles贴图Prefab/24除以属性数/无碰撞灯影/Projectile3D持有不进双池；full裸扫排除；运行结果见独立记录"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_weapon_hologram_ui",
+          "suite": "manual",
+          "runner": "scripts/run_weapon_hologram_qa.py",
+          "requires": "仅经专用runner在Autoload前隔离；WEAPON_HOLOGRAM_VERIFY_ISOLATED=1；落巢Control是2D例外；full裸扫排除；运行结果见独立记录"
+        },
+        {
+          "kind": "command",
+          "path": "scripts/run_weapon_hologram_qa.py",
+          "args": [
+            "--scene",
+            "all",
+            "--resolution",
+            "1280x720",
+            "1920x1080"
+          ],
+          "suite": "manual",
+          "requires": "Autoload前隔离；逻辑、Forward+/Vulkan表现与冷import超时分列；专项已实现，不提升模块partial"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_fat_entry_breach_vfx",
+          "suite": "manual",
+          "requires": "仅经run_fat_entry_breach_vfx.py；Autoload前隔离，逻辑与--render真实Vulkan分别验收，full裸扫排除"
+        },
+        {
+          "kind": "command",
+          "path": "tests/verification/run_fat_entry_breach_vfx.py",
+          "args": [],
+          "suite": "manual"
+        },
         {
           "kind": "scene",
           "id": "verify_vfx_pool_lifecycle"
@@ -1385,6 +1794,9 @@
         "docs/v0.1/design/远征03复古公馆组件制作规范.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-16_exploder_speed30.md",
+        "docs/v0.1/development/2026-11-16_exploder_mech_animation_import.md",
+        "docs/v0.1/development/2026-11-16_police_zombie25_import.md",
         "docs/v0.1/development/2026-09-30_rooftop_cross_tower_route.md",
         "docs/v0.1/development/2026-10-03_cross_tower_landscape_foundation.md",
         "docs/v0.1/development/2026-09-17_3D资产正式制成链路总表.md",
@@ -1408,7 +1820,8 @@
         "docs/v0.1/development/2026-10-18_rooftop_formal_interactive_assets.md",
         "docs/v0.1/development/2026-10-19_rooftop_ivy_low_wall.md",
         "docs/v0.1/development/2026-10-20_rooftop_generator.md",
-        "docs/v0.1/development/2026-11-06_expedition03_workshop_layouts.md"
+        "docs/v0.1/development/2026-11-06_expedition03_workshop_layouts.md",
+        "docs/v0.1/development/2026-11-16_small_zombie_v006_integration.md"
       ],
       "verification": [
         {
@@ -1465,6 +1878,14 @@
         {
           "kind": "scene",
           "id": "verify_expedition03_special_room_relayout"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_melee_zombie_presentation"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_exploder_presentation"
         }
       ],
       "status": "partial"
@@ -1510,11 +1931,40 @@
         "docs/v0.1/09_技术施工_存档结算与复活.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-16_expedition01_combat_feel.md",
         "docs/v0.1/development/2026-10-15_encounter_event_mechanism.md",
         "docs/v0.1/development/CHANGELOG.md",
         "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
+        {
+          "kind": "command",
+          "path": "tests/verification/verify_spawn_vfx_clearance.gd",
+          "args": [],
+          "suite": "manual",
+          "runner": "tests/verification/run_spawn_vfx_clearance.py",
+          "requires": "无独立scene；持久Runner在Autoload前隔离四个用户目录并用work_path生成包装；默认双seed五房，--render真实Forward+Vulkan；必须实际radial/safe_fan逐家具运动且净空有效，无VFX fallback只算交付不算表演通过；safe_fan运动版10/10逻辑及70图历史通过不代签最新共享工作区"
+        },
+        {
+          "kind": "command",
+          "path": "tests/verification/run_spawn_vfx_clearance.py",
+          "args": [],
+          "suite": "manual"
+        },
+        {
+          "kind": "command",
+          "path": "tests/verification/verify_spawn_vfx_combat_integration.gd",
+          "args": [],
+          "suite": "manual",
+          "runner": "tests/verification/run_spawn_vfx_combat_integration.py",
+          "requires": "无独立scene；Runner在Autoload前隔离并生成work_path包装，验Validator/Director白名单、Dungeon编译、Host整批成功后play、失败重试/恢复不补播及33实际命中"
+        },
+        {
+          "kind": "command",
+          "path": "tests/verification/run_spawn_vfx_combat_integration.py",
+          "args": [],
+          "suite": "manual"
+        },
         {
           "kind": "scene",
           "id": "verify_encounter_event_flow"
@@ -1525,7 +1975,12 @@
           "suite": "core",
           "requires": "Autoload前隔离（APPDATA 须含 shellstorm-verification.）；不生成关卡，只验事件快照到倒计时环/警报浮层的窄接口"
         },
-        {"kind": "scene", "id": "verify_expedition01_flow_integration", "suite": "manual", "requires": "Autoload前隔离；有限clear/间歇/pending/封门结果pending"}
+        {
+          "kind": "scene",
+          "id": "verify_expedition01_flow_integration",
+          "suite": "manual",
+          "requires": "Autoload前隔离；有限clear/间歇/pending/封门结果pending"
+        }
       ],
       "status": "partial"
     },

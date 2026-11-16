@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/ui/weapon_build/VfxCardSocketImpact.gd" id="1_impact"]
+
+[node name="VfxCardSocketImpact" type="Control"]
+layout_mode = 0
+mouse_filter = 2
+script = ExtResource("1_impact")

@@ -1,12 +1,18 @@
 # 小僵尸 · 首只标准普通怪资产包
 
-## 当前版本 v005：800 三角面 / 16 骨
+## 当前版本 v006：256贴图 / 800三角面 / 16骨
 
-2026-10-30 按用户要求从 1790 减至 **800 三角面、402 个制作顶点**，20 减至 **16 根骨骼**。移除 `L_Hand/R_Hand/L_Foot/R_Foot`，无任何手指、手、脚或脚趾骨；每腿仅 `Thigh/Calf`，手与脚的权重分别合并至前臂、小腿。手腕与脚踝不再独立运动。
+当前正式资产为 `ENM-MELEE-FUNGBOAR01 / melee_chaser`：**800三角面、402制作顶点**（GLB UV拆点743）、16骨，每点最多4骨影响。每腿仅 `Thigh/Calf`，手与脚分别随前臂、小腿，无独立手、脚、指或脚趾骨。
 
-当前可编辑双母版在 `art_source/enemies/normal_enemy_3d/melee_chaser/source/`：模型 `model/enm_melee_fungboar01_model_v004.blend`，动作 `animation/enm_melee_fungboar01_animation_v005.blend`，共用 `SKEL-MELEE-ZOMBIE01-004`。512 贴图保持并打包，GLB、包装场景使用原稳定路径。旧双母版与运行资产备份在工程外 `ShellStorm2-backup/2026-10-30_melee_800/`。
+可编辑双母版在 `art_source/enemies/normal_enemy_3d/melee_chaser/source/`：`model/enm_melee_fungboar01_model_v006.blend` 与 `animation/enm_melee_fungboar01_animation_v006.blend`，均 packed **256×256** basecolor。共用 `SKEL-MELEE-ZOMBIE01-005`，静止骨架签名 `77a08b65bebd0e35bbda1c8c5095e3875b174297589900b78037efe08bd46622`。
 
-删骨时以原 idle 姿势固定手/脚绑定，保持轮廓；六段动作重新检查贴地，补偿仅写视觉 Hip，Root、碰撞与玩法仍由原消费者拥有。静止绑定的脚底为 Z=0、包围盒高 1.893537m；该绑定尺寸和动作中弯腰姿势的显示高度是两个口径，运行时倍率仍为 0.70。800 面会简化近景轮廓。详细契约、独立重开与 Godot 验收见 [本次开发记录](../../../../../docs/v0.1/development/2026-10-30_melee_zombie_800.md) 和 `runtime/character_transfer_ledger.json`。
+正式路径仍为 `components/enm_melee_fungboar01_visual_top3d.glb` 与 `runtime/enm_melee_fungboar01_root_top3d.tscn`；GLB外链 `assets/art/shared/textures/enemies/tex_color_85eaa809e59fa600fe6c.png`，Godot按120fps导入，贴图无损/上限256/有Mipmap。旧双源及原纹理已按哈希归档至工程外 `ShellStorm2-backup/2026-11-16_small_zombie_v006_256/original_tree/`，桌面原始zip及旧共享512图未动；历史目录示例不再代表当前母版位置。
+
+六剪辑为 `idle 3.2s / walking 1.6s / running 0.8s` 循环，`attack 1.7s / hurt 0.8s / dead 2.4s` 单次；现有14态消费，攻击48%采样不变。实际死亡沿用goo即时隐藏、帧末回收，不延长为2.4秒尸体展示。仅表现替换，碰撞、AI、HP、伤害、掉落、存档和普通0.70展示倍率不改；引用此共享表现的强化怪同样使用新版。
+
+保留限制：walking腿幅85%、running腿幅40%、attack臂幅50%、dead臂幅50%/腿幅75%；关节形变不为0，待机右鞋底创作尺度离地约1.05–2.58cm、左脚支撑，256近景软化。不得宣称原动作逐帧保真、双脚完全贴地或连续时间零自交；实玩步速/攻击距离匹配待评审。
+
+专项证据：双源重开、Blend/GLB各5046姿态局部蒙皮；Godot4.7.2正式导入、14态、120Hz CPU skin 1266采样、18姿态OpenGL画廊与真实Enemy3D死亡最终均exit0/无errors，CPU最低世界Y为+0.001822765m；贴图256→2048、三角800→801两负测均预期exit1。全关卡/移动端/完整存档/人工游玩未跑，UID警告保留，非全局全绿。详见[本次开发记录](../../../../../docs/v0.1/development/2026-11-16_small_zombie_v006_integration.md)、[当前设计](../../../../../docs/v0.1/design/怪物设计.md#小僵尸当前表现契约v006)及 `runtime/character_transfer_ledger.json`。
 
 以下为历史制作记录，版本和“当前”描述仅适用于原记录日期。
 

@@ -10,5 +10,12 @@ metadata/content_id = "ranged_caster"
 metadata/presentation_only = true
 metadata/collision_owner = "Enemy3D"
 metadata/godot_forward = "-Z"
+metadata/asset_version = "v004"
+metadata/source_asset = "police_zombie25"
+metadata/texture_size = Vector2i(256, 256)
+metadata/weapon_mode = "embedded_skin"
+metadata/source_blend = "art_source/enemies/normal_enemy_3d/police_zombie25/source/animation/police_zombie_25_animation_v002.blend"
 
 [node name="VisualGLB" parent="." instance=ExtResource("2_glb")]
+rotation = Vector3(0, 3.14159265, 0)
+scale = Vector3(1.85804992, 1.85804992, 1.85804992)

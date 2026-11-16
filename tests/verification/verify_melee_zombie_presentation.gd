@@ -34,25 +34,56 @@ func _ready() -> void:
 			triangles += mesh_instance.mesh.surface_get_array_index_len(surface) / 3
 	if OS.get_cmdline_user_args().has("--negative-budget"):
 		triangles = 801
-	check(triangles > 0 and triangles <= 800, "small zombie triangle budget at most 800")
+	check(triangles == 800, "small zombie geometry must have exactly 800 triangles")
 	var expected = {"idle":3.2,"walking":1.6,"running":0.8,"attack":1.7,"hurt":0.8,"dead":2.4}
 	for clip in expected:
 		check(visual._player.has_animation(clip), "missing clip " + clip)
 		if visual._player.has_animation(clip):
-			check(absf(visual._player.get_animation(clip).length-expected[clip])<0.04, "duration " + clip)
+			check(absf(visual._player.get_animation(clip).length-expected[clip])<0.0001, "duration " + clip)
 			check(visual._player.get_animation(clip).loop_mode == (Animation.LOOP_LINEAR if clip in ["idle", "walking", "running"] else Animation.LOOP_NONE), "loop " + clip)
-	var walking_states: Array[String] = []
+	check(visual.get_meta("asset_version", "") == "v006", "formal asset version must be v006")
+	check(visual.get_meta("skeleton_id", "") == "SKEL-MELEE-ZOMBIE01-005", "formal skeleton id")
+	check(visual.get_presentation_snapshot().source == "blender_v006", "snapshot source version")
+	var expected_texture := "res://assets/art/shared/textures/enemies/tex_color_85eaa809e59fa600fe6c.png"
+	var texture_count := 0
+	for material in visual._materials:
+		var texture: Texture2D = material.albedo_texture
+		check(texture != null, "albedo texture missing: white model")
+		if texture != null:
+			texture_count += 1
+			var actual_size := texture.get_size()
+			if OS.get_cmdline_user_args().has("--negative-texture"):
+				actual_size = Vector2(2048, 2048)
+			check(actual_size == Vector2(256, 256), "albedo texture must load at 256x256")
+			check(texture.resource_path == expected_texture, "albedo must use content-hash shared PNG")
+	check(texture_count > 0, "no textured materials")
+	var root_bone := skeleton.find_bone("Root") if skeleton != null else -1
+	for clip in expected:
+		for phase in [0.0, 0.48, 1.0]:
+			visual._player.play(clip)
+			visual._player.seek(float(expected[clip]) * phase, true)
+			if root_bone >= 0:
+				# Godot骨姿势含静止轴向；静止矩阵不是单位矩阵，必须与绑定静止矩阵比较。
+				check(skeleton.get_bone_pose(root_bone).is_equal_approx(skeleton.get_bone_rest(root_bone)), "Root rest matrix drift " + clip)
+	var expected_states := {"dormant":"idle", "idle":"running", "patrol":"running",
+		"alert":"idle", "chase":"running", "search":"running", "return":"running",
+		"telegraph":"attack", "attack":"attack", "recovery":"attack", "stagger":"hurt",
+		"dead":"dead", "defeated":"idle", "death_warning":"idle"}
 	for state in Enemy3D.VALID_STATES:
 		e.avatar.sync_presentation(state, 0.1, 2.0, 0.38, 0.34)
 		check(visual.get_presentation_snapshot().state == state, "state " + state)
-		if str(visual.get_presentation_snapshot().clip) == "walking":
-			walking_states.append(state)
-	check(walking_states == ["patrol"], "walking clip used outside patrol: " + str(walking_states))
-	# 反向对照：接近玩家时不再按速度切档，低速追击也必须是跑步；巡逻高速也必须是走路。
-	e.avatar.sync_presentation("chase", 0.1, 0.2, 0.38, 0.34)
-	check(str(visual.get_presentation_snapshot().clip) == "running", "low-speed chase is not running")
-	e.avatar.sync_presentation("patrol", 0.1, 9.0, 0.38, 0.34)
-	check(str(visual.get_presentation_snapshot().clip) == "walking", "high-speed patrol is not walking")
+		check(expected_states.has(state), "unmapped state " + state)
+		check(str(visual.get_presentation_snapshot().clip) == str(expected_states.get(state, "missing")), "explicit state output " + state)
+	# 满速固定2m/s，明确检验0.62进入/0.50退出及中间迟滞，不放宽为任意移动段。
+	visual.sync_state("idle", 0.0, 0.0, 0.38, 0.34, 2.0)
+	for row in [[0.60, "walking"], [0.619, "walking"], [0.62, "running"],
+		[0.60, "running"], [0.50, "running"], [0.499, "walking"], [0.60, "walking"]]:
+		visual.sync_state("patrol", 0.1, float(row[0]) * 2.0, 0.38, 0.34, 2.0)
+		check(str(visual.get_presentation_snapshot().clip) == str(row[1]), "patrol speed hysteresis " + str(row))
+	visual.sync_state("chase", 0.1, 0.2, 0.38, 0.34, 2.0)
+	check(str(visual.get_presentation_snapshot().clip) == "running", "low-speed chase remains running")
+	visual.sync_state("patrol", 0.1, 9.0, 0.38, 0.34, 2.0)
+	check(str(visual.get_presentation_snapshot().clip) == "running", "high-speed patrol must run")
 	e.avatar.sync_presentation("telegraph", 0.38, 0.0, 0.38, 0.34)
 	var before: float = visual.get_presentation_snapshot().sample_time
 	e.avatar.sync_presentation("attack", 0.0, 0.0, 0.38, 0.34)
@@ -71,6 +102,7 @@ func _ready() -> void:
 	)
 	e.avatar.sync_presentation("idle", 0.0, 0.0, 0.38, 0.34)
 	check(visual.get_presentation_snapshot().clip == "hurt", "non-stagger hurt overlay missing")
+	check(absf(before - 1.7 * 0.48) < 0.0001, "attack must sample 48 percent")
 	var scale_before: Vector3 = e.scale
 	e._die()
 	check(not e.is_in_group("enemy_3d"), "dead still in enemy group")
@@ -90,7 +122,7 @@ func _ready() -> void:
 	elite.free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("MELEE_ZOMBIE_PRESENTATION_OK states=12 clips=6 bones=16 triangles=%d death=goo_immediate collision_unchanged=true" % triangles)
+		print("MELEE_ZOMBIE_PRESENTATION_OK states=%d clips=6 bones=16 triangles=%d texture=256 version=v006 death=goo_immediate collision_unchanged=true" % [Enemy3D.VALID_STATES.size(), triangles])
 	else:
 		for failure in failures: push_error(failure)
 	get_tree().quit(0 if failures.is_empty() else 1)

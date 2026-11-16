@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/enemies/enemy_3d/enm_melee_stone_giant01/components/enm_melee_stone_giant01/enm_melee_stone_giant01_visual_top3d.glb" id="1_visual"]
+
+[node name="StoneGiant01Visual" type="Node3D"]
+metadata/asset_id = "ENM-MELEE-STONE-GIANT01"
+metadata/content_id = "stone_giant01"
+metadata/skeleton_id = "SKEL-STONEGIANT01-001"
+metadata/asset_version = "v002"
+metadata/presentation_only = true
+metadata/collision_owner = "Enemy3D"
+metadata/godot_forward = "-Z"
+metadata/source_height_m = 2.857142857142857
+metadata/game_height_m = 2.0
+metadata/base_display_multiplier = 0.7
+metadata/animation_scope = "walking_only_incremental_not_gameplay_wired"
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]

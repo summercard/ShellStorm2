@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-06",
+  "date": "2026-11-16",
   "sources": [
     {
       "path": "art_source/legacy_design/卧室/左墙区域深化_v4.blend",
@@ -9782,22 +9782,22 @@
       "sha256": "7f5c0fe228e8743ce99228c8478309bd957ecbca06b7df4983c635773e7b1119"
     },
     {
-      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v004.blend",
-      "bytes": 863061,
+      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v006.blend",
+      "bytes": 629396,
       "family": "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_VERSION.blend",
       "version": [
-        4
+        6
       ],
-      "sha256": "0988c1f7fc011d56606b812f80f08010713bb4e2299cc221efbb1f595396e09b"
+      "sha256": "82affb03ed5add595938c0274bca0753f38d420f0664a245678d9736f1c5fe14"
     },
     {
-      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v005.blend",
-      "bytes": 2470367,
+      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v006.blend",
+      "bytes": 6897562,
       "family": "art_source/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_VERSION.blend",
       "version": [
-        5
+        6
       ],
-      "sha256": "879a6d315edfb43246f2c8f519af3b37acf68b6057f9f12c3442f0a6b2d368a0"
+      "sha256": "05ff5bd1606b6aacc8498684b18e4f881e2adb8e3f4c73874c559ccf683f9f6e"
     },
     {
       "path": "art_source/enemies/normal_enemy_3d/fat_zombie03/source/model/enm_normal_fat_zombie03_model_v004.blend",
@@ -12360,6 +12360,94 @@
         1
       ],
       "sha256": "cf4fdd53b6d9a533ab6e40cad02ae038f6f5f5e636e6631c9af2f3863b9b0ac1"
+    },
+    {
+      "path": "art_source/vfx/projectile_enchant/generate_projectile_enchant.py",
+      "bytes": 10411,
+      "family": "art_source/vfx/projectile_enchant/generate_projectile_enchant.py",
+      "version": [],
+      "sha256": "309adc098dc47793db560c248139d53c927ee33c33255c286e9176bb68a96dd5"
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/fat_zombie21/source/model/enm_normal_fat_zombie21_model_v002.blend",
+      "bytes": 859656,
+      "family": "art_source/enemies/normal_enemy_3d/fat_zombie21/source/model/enm_normal_fat_zombie21_model_VERSION.blend",
+      "version": [
+        2
+      ],
+      "sha256": "89d98a65976a93410d8bde1b935a8630ea24352406039fe663414cf6a2d94174"
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/fat_zombie21/source/animation/enm_normal_fat_zombie21_animation_v002.blend",
+      "bytes": 4978647,
+      "family": "art_source/enemies/normal_enemy_3d/fat_zombie21/source/animation/enm_normal_fat_zombie21_animation_VERSION.blend",
+      "version": [
+        2
+      ],
+      "sha256": "285c932f9ac36da94362035d289aef6ab4115e69dec0ac790619602e5c8cd072"
+    },
+    {
+      "path": "art_source/enemies/enemy_3d/enm_melee_stone_giant01/source/model/enm_melee_stone_giant01_model_v001.blend",
+      "bytes": 718664,
+      "family": "art_source/enemies/enemy_3d/enm_melee_stone_giant01/source/model/enm_melee_stone_giant01_model_VERSION.blend",
+      "version": [
+        1
+      ],
+      "sha256": "9512fd5234fbc98bbdfa304e037ef846698364ea4e50677aec312418797e0287"
+    },
+    {
+      "path": "art_source/enemies/enemy_3d/enm_melee_stone_giant01/source/animation/enm_melee_stone_giant01_animation_v002.blend",
+      "bytes": 1502995,
+      "family": "art_source/enemies/enemy_3d/enm_melee_stone_giant01/source/animation/enm_melee_stone_giant01_animation_VERSION.blend",
+      "version": [
+        2
+      ],
+      "sha256": "f8a33cec296655281d2142d206865e5648cec1724874059537f232a77427cf1c"
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/police_zombie25/source/model/police_zombie_25_model_v002.blend",
+      "bytes": 1065704,
+      "family": "art_source/enemies/normal_enemy_3d/police_zombie25/source/model/police_zombie_25_model_VERSION.blend",
+      "version": [
+        2
+      ],
+      "sha256": "e1eaa17e77bc1e52a17363d078a9da4793625fce65fdf45da201045bffb8e9c6"
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/police_zombie25/source/animation/police_zombie_25_animation_v002.blend",
+      "bytes": 5597471,
+      "family": "art_source/enemies/normal_enemy_3d/police_zombie25/source/animation/police_zombie_25_animation_VERSION.blend",
+      "version": [
+        2
+      ],
+      "sha256": "b05d58cd54b7ddcfb0598629e2be1d42c491be393657ef8891c8284ff5a4c3ea"
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/exploder/source/model/enm_bomber_fruit01_model_v002.blend",
+      "bytes": 931284,
+      "family": "art_source/enemies/normal_enemy_3d/exploder/source/model/enm_bomber_fruit01_model_VERSION.blend",
+      "version": [
+        2
+      ],
+      "sha256": "383831caf152019cde2310c1aeca5b477ce8d752e7130f948fde6da0048a068a"
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/exploder/source/animation/enm_bomber_fruit01_animation_v002.blend",
+      "bytes": 1802195,
+      "family": "art_source/enemies/normal_enemy_3d/exploder/source/animation/enm_bomber_fruit01_animation_VERSION.blend",
+      "version": [
+        2
+      ],
+      "sha256": "edd65ca2b29563256873eaf170be113a3f2d0833f4327b5f57d083ba647bdf0a"
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/exploder/export/v002/enm_bomber_fruit01_optimized_v002.blend",
+      "bytes": 1441317,
+      "family": "art_source/enemies/normal_enemy_3d/exploder/export/v002/enm_bomber_fruit01_optimized_VERSION.blend",
+      "version": [
+        2
+      ],
+      "sha256": "9439ad8b9b2ac04d4fb7dd79dacf5651a49cdd68e4392e6d5e667d9f359306a1"
     }
   ],
   "authoring_root": "art_source",

@@ -224,7 +224,8 @@
     "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_ear_r_v021_Normal.jpg": "assets/art/shared/textures/player/tex_normal_ede311db25d948e31a75.jpg",
     "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_l_top3d_v007_Normal.jpg": "assets/art/shared/textures/player/tex_normal_448086ed1e4dc20860a1.jpg",
     "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_r_top3d_v007_Normal.jpg": "assets/art/shared/textures/player/tex_normal_448086ed1e4dc20860a1.jpg",
-    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_foot_r_v021_Normal.jpg": "assets/art/shared/textures/player/tex_normal_448086ed1e4dc20860a1.jpg"
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_foot_r_v021_Normal.jpg": "assets/art/shared/textures/player/tex_normal_448086ed1e4dc20860a1.jpg",
+    "art_source/enemies/normal_enemy_3d/police_zombie25/source/model/soldier_character_3d_model_basecolor.jpg": "assets/art/shared/textures/enemies/tex_color_ec827f2a2c65836f15cc.png"
   },
   "textures": [
     {
@@ -1562,6 +1563,26 @@
         "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_r_top3d_v007_Normal.jpg",
         "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_foot_r_v021_Normal.jpg"
       ]
+    },
+    {
+      "path": "assets/art/shared/textures/enemies/tex_color_ec827f2a2c65836f15cc.png",
+      "size": [
+        256,
+        256
+      ],
+      "limit": 256,
+      "sources": [
+        "art_source/enemies/normal_enemy_3d/police_zombie25/source/model/soldier_character_3d_model_basecolor.jpg"
+      ],
+      "asset_id": "ENM-RANGED-SPORESHOOTER01",
+      "user_override": "2026-11-16 exact 256x256",
+      "source_size": [
+        2048,
+        2048
+      ],
+      "resize_filter": "Lanczos",
+      "source_sha256": "ab230fa0d1daebc99f11c6e37777abf4b11f7d9e1f909e761573199912cc20fd",
+      "sha256": "10fc9bccdaa4df76bf5aef380f18048c05f1e136c89e5d2087b7bb109c15d3e6"
     }
   ],
   "source_dependencies": [

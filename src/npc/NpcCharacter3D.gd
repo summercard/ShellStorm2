@@ -164,6 +164,9 @@ var _bark: CharacterBark3D
 ## 文字的唯一载体是 `DialogueUI`（业主 2026-11-10），头顶气泡只出示意；
 ## 所以"这句说完了没"要问底栏，而不是问气泡。
 var _dialogue_run := ""
+var _dialogue_sessions: Dictionary = {}
+var _dialogue_session_seq := 0
+var _story_line_completed := false
 var _prompt_label: Label3D
 var _interaction_area: Area3D
 var _collision_shape: CollisionShape3D
@@ -332,6 +335,9 @@ func is_story_standby() -> bool:
 ## 调用即停巡；`end_scripted_appearance()` 之前不会自己走开，也不会被
 ## `refresh_story_state()` 拽去迎宾点位。
 func begin_scripted_appearance(point: Vector3, look_point: Vector3) -> void:
+	_end_dialogue_session("beat", true)
+	_end_dialogue_session("talk", true)
+	_begin_dialogue_session("scripted")
 	_scripted_active = true
 	_scripted_point = point
 	_scripted_look = look_point
@@ -357,6 +363,7 @@ func end_scripted_appearance() -> void:
 	_scripted_gesture = ""
 	_scripted_facing_active = false
 	hide_dialogue()
+	_end_dialogue_session("scripted")
 	# 演出结束后才重新求值节拍：装备好锚点、玩家已能操作，这时站过去才看得见。
 	refresh_story_state()
 
@@ -395,13 +402,13 @@ func clear_scripted_facing() -> void:
 
 
 ## 演出用：直接说一句（不推进循环台词、不写节拍历史）。
-func say_scripted_line(text: String, hold := 3.2) -> bool:
+func say_scripted_line(text: String, hold := 3.2, metadata: Dictionary = {}) -> bool:
 	var clean := text.strip_edges()
 	if clean.is_empty() or _bark == null:
 		return false
 	_dialogue_visible = true
 	# 底栏没收下（例如 autoload 不在或文字为空）就当这句没说，别回假成功。
-	if not _present_dialogue(clean, maxf(0.6, hold)):
+	if not _present_dialogue(clean, maxf(0.6, hold), metadata):
 		_dialogue_visible = false
 		return false
 	_refresh_prompt_visibility()
@@ -421,7 +428,34 @@ func say_scripted_line(text: String, hold := 3.2) -> bool:
 ## 为什么收口在 NPC 而不是 Adapter：节拍、自由交谈、救援三条路径都在本文件内部
 ## 直接调，只在 Adapter 接会漏掉两条。**自言自语（`say_bark`）不走这里** ——
 ## 业主明确「开灯这类自言自语要保留」原来的头顶文字气泡。
-func _present_dialogue(text: String, auto_sec := -1.0) -> bool:
+func get_dialogue_metadata() -> Dictionary:
+	var metadata := {"speaker_id": npc_id, "display_name": _display_name, "source_path": PLAYER_SCENE_PATH, "source_node": "Avatar3D/VisualRoot"}
+	if NpcCatalog.has_npc(npc_id):
+		metadata["skin_color"] = NpcCatalog.get_skin_albedo(npc_id)
+	return metadata
+
+
+## 只拥有自己新建的会话；主线/救援已开会话时借用，不登记结束权。
+func _begin_dialogue_session(kind: String) -> bool:
+	var snapshot := DialogueUI.get_presentation_snapshot()
+	var current := str(snapshot.get("session_id", ""))
+	if not current.is_empty() and not current.begins_with("auto_") and not bool(snapshot.get("exit_running", false)):
+		return true
+	_dialogue_session_seq += 1
+	var session := "npc_%d_%s_%d" % [get_instance_id(), kind, _dialogue_session_seq]
+	if DialogueUI.begin_presentation(session, [get_dialogue_metadata()]) != session:
+		return false
+	_dialogue_sessions[kind] = session
+	return true
+
+
+func _end_dialogue_session(kind: String, immediate := false) -> void:
+	var session := str(_dialogue_sessions.get(kind, ""))
+	_dialogue_sessions.erase(kind)
+	DialogueUI.end_presentation(session, immediate)
+
+
+func _present_dialogue(text: String, auto_sec := -1.0, extra_metadata: Dictionary = {}) -> bool:
 	var clean := text.strip_edges()
 	if clean.is_empty() or _bark == null:
 		return false
@@ -430,15 +464,26 @@ func _present_dialogue(text: String, auto_sec := -1.0) -> bool:
 	# 至少会在预计结束时间自行收起，不会永久挂在头上。
 	var typing := float(clean.length()) / DialogueUI.DEFAULT_CHARS_PER_SEC
 	_bark.say_indicator(typing + auto + 0.5, DIALOGUE_INDICATOR_HEIGHT)
-	_dialogue_run = DialogueUI.show_dialogue_line(clean, _display_name, auto)
-	return not _dialogue_run.is_empty()
+	var metadata := get_dialogue_metadata()
+	metadata.merge(extra_metadata, true)
+	metadata["speaker_id"] = npc_id
+	metadata["display_name"] = _display_name
+	if NpcCatalog.has_npc(npc_id):
+		metadata["skin_color"] = NpcCatalog.get_skin_albedo(npc_id)
+	_story_line_completed = false
+	_dialogue_run = DialogueUI.show_dialogue_line(clean, _display_name, auto, metadata)
+	var accepted := not _dialogue_run.is_empty() and DialogueUI.is_active() and DialogueUI.current_run_id() == _dialogue_run
+	if not accepted:
+		_bark.hide_now()
+	return accepted
 
 
 ## 底栏这句播完了（自然结束 / 被收起）→ 收掉头顶示意框。
 ## 只认自己这条 run：底栏是全局单例，别的系统也可能在上面说话。
-func _on_dialogue_finished(run_id: String, _outcome: String) -> void:
+func _on_dialogue_finished(run_id: String, outcome: String) -> void:
 	if run_id.is_empty() or run_id != _dialogue_run:
 		return
+	_story_line_completed = outcome == "completed"
 	_dialogue_run = ""
 	if _bark != null:
 		_bark.hide_now()
@@ -809,6 +854,10 @@ func _tick_story_beat() -> void:
 		# 逐句轮播：上一句气泡放完就接下一句；全部放完才收工回巡逻线。
 		if is_speaking() or _talk_engaged:
 			return
+		if not _story_line_completed:
+			_pending_beat = {}
+			_exit_story_standby()
+			return
 		if _story_line_index + 1 < _story_lines.size():
 			_story_line_index += 1
 			_say_story_line(true)
@@ -862,13 +911,15 @@ func speak_pending_story_beat() -> bool:
 		_pending_beat = {}
 		_exit_story_standby()
 		return false
+	if not _begin_dialogue_session("beat"):
+		return false
 	_story_beat_delivered = true
 	_story_line_index = 0
 	_moving = false
 	_dwelling = false
 	_dwell_left = 0.0
 	_say_story_line(true)
-	return true
+	return _story_beat_delivered and is_speaking()
 
 
 ## 播出当前句。`announce` 只在第一句为真（`story_beat_started` 每条节拍只发一次）。
@@ -884,7 +935,11 @@ func _say_story_line(announce: bool) -> void:
 			_yaw_target = atan2(-to_player.x, -to_player.z)
 	_dialogue_visible = true
 	# 对话：头顶只出示意框，文字进底栏（业主 2026-11-10）。
-	_present_dialogue(text)
+	if not _present_dialogue(text):
+		_pending_beat = {}
+		_dialogue_visible = false
+		_exit_story_standby()
+		return
 	_refresh_prompt_visibility()
 	interaction_changed.emit(true, text)
 	if announce:
@@ -913,6 +968,7 @@ func _finish_story_beat() -> void:
 
 ## 结束站定并回到巡逻线。从当前位置重新选**最近**的巡逻点，不倒着走回起点。
 func _exit_story_standby() -> void:
+	_end_dialogue_session("beat", not _story_line_completed)
 	if not _story_standby:
 		_story_beat_delivered = false
 		_refresh_prompt_visibility()
@@ -1146,6 +1202,12 @@ func advance_free_bark() -> bool:
 func _engage_talk() -> void:
 	if _talk_engaged:
 		return
+	# 自由交谈打断节拍但不消耗历史；整段另开自己的结束边界。
+	if _story_beat_delivered:
+		_pending_beat = {}
+		_exit_story_standby()
+	if not _begin_dialogue_session("talk"):
+		return
 	_talk_engaged = true
 	_moving = false
 	_dwelling = false
@@ -1173,7 +1235,10 @@ func advance_dialogue() -> Dictionary:
 	_dialogue_visible = true
 	# 说话即收起黄色提示（不只看 `_talk_engaged`，见 `_refresh_prompt_visibility` 的注释）。
 	_refresh_prompt_visibility()
-	_present_dialogue(text)
+	if not _talk_engaged and not _begin_dialogue_session("talk"):
+		return {"spoken": false, "reason": "presentation_rejected"}
+	if not _present_dialogue(text):
+		return {"spoken": false, "reason": "dialogue_rejected"}
 	interaction_changed.emit(true, text)
 	npc_spoke.emit(npc_id, _line_index, text, finished_cycle)
 	return {
@@ -1185,6 +1250,8 @@ func advance_dialogue() -> Dictionary:
 
 
 func hide_dialogue() -> void:
+	_end_dialogue_session("talk")
+	_end_dialogue_session("beat", true)
 	if _bark != null:
 		_bark.hide_now()
 	# 只关自己那条：底栏可能已经换成了别人的消息。
@@ -1230,9 +1297,23 @@ func _on_body_exited(body: Node3D) -> void:
 	_interaction_focused = false
 	_player = null
 	# 人走了才解除"搭话定住"，NPC 回到巡逻线上继续走。
+	_disengage_talk()
+	_refresh_prompt_visibility()
+
+
+func _disengage_talk() -> void:
 	_talk_engaged = false
 	hide_dialogue()
-	_refresh_prompt_visibility()
+	_end_dialogue_session("talk")
+	if _story_beat_delivered:
+		_pending_beat = {}
+		_exit_story_standby()
+
+
+func _exit_tree() -> void:
+	hide_dialogue()
+	for kind: String in _dialogue_sessions.keys():
+		_end_dialogue_session(kind, true)
 
 
 # —— 快照（验收与调试）——

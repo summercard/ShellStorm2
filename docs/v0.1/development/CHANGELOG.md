@@ -1,3 +1,21 @@
+- 2026-11-16 · NARRATIVE-TRIGGER / DIALOGUE-UI / FATE-RULES · [命运卡首次教程、双侧立绘与卡牌可读性](2026-11-16_fate_tutorial_galgame.md)：首掉/首开绿苔holo教程、同源双侧立绘整段留场、44条作用摘要与星/月/日图标；本次专项passed。账本PermissionError待解除占用，救援与时间轴回归通过；不代签人工全主线及设备。
+
+- 2026-11-16 · ASSET-PIPELINE / ENEMY-AI · **警察僵尸2.5正式替换与256贴图**：[独立记录](2026-11-16_police_zombie25_import.md)。ranged_caster/ENM-RANGED-SPORESHOOTER01同稳定路径替换v004，65骨/4剪辑/RightHand融合枪；256PNG外置且S3TC/ETC2实测256²，原2048双源不动。12态/Forward+258图12类/明暗移动/攻击站定与恢复3278检查/双瞳目标16检查通过；账本34格、日志v0.1.49/50及目标基线最小同步。全库红眼启动超时、文档11旧断链、敌人row55状态与split24旧债保留，全关/Android未验，不提升全局partial。
+
+- 2026-11-16 · WORLD-PLAN / ENCOUNTER-EVENT / ENEMY-AI / VFX-POOL / SAVE-RUN · [远征01战斗手感、room08沿路域与出场净空](2026-11-16_expedition01_combat_feel.md)：29普通盒＋Boss4，08横/纵两个沿路域25只、6m/1.7m保持；预爆E_added=0.35*p²；safe_fan运动版10/10逻辑与Forward+70图已有证据，395项集成旧记录不代签最新共享树，初始化超时124/Forward+0xCFFFFFFF未形成最后完整通过，partial不提升。
+
+- 2026-11-16 21:53 · ENEMY-AI / ASSET-PIPELINE · [炸弹果移速与步频同步+30%](2026-11-16_exploder_speed30.md)：Profile4.03、Injector91，标定分母不改，实测位移与步频约1.3而非1.69；351项通过，蓄爆0.9/碰撞/伤害/碎片不变，源美术和GLB不改，其它怪不变。隔离正式档，不提交推送。
+
+- 2026-11-16 · ENEMY-AI / ASSET-PIPELINE · [炸弹果四足机甲两段动画与正式导入](2026-11-16_exploder_mech_animation_import.md)：14骨/546三角，move0.5s循环与explode0.9s/60fps，原高度等比标定0.6279m；最终正式导入与贴图断言、152项表现、真实主动爆炸/8碎片/碰撞重力复验及Forward+86帧通过。早先白模已修，不代签历史图；账本active/v0.1.52及双源/优化源/清单同步，7代理不换、玩法不变。既有账本/文档红项保留，全关人工/设备/corefull未验，不提升整体partial、不提交推送。
+
+- 2026-11-16 · WEAPON-COMBAT / WEAPON-OWNERSHIP / FATE-RULES / UI-HUD / VFX-POOL · [枪械全息卡巢与弹体附魔表现](2026-11-16_weapon_hologram_ui.md)：共享K/购卡板，星星确认后成功才飞卡；7贴图粒子24/N、10项账本；新专项运行结果见记录，整体partial。
+
+- 2026-11-16 · ENEMY-AI / ASSET-PIPELINE · **小僵尸v006正式接入、256贴图与账本同步**：[独立记录](2026-11-16_small_zombie_v006_integration.md)。双母版packed256、16骨/800三角/402制作顶点，稳定路径替换且48%攻击/玩法不改；最终14态、120Hz CPU skin1266采样、18姿态画廊及真实Enemy3D死亡exit0/errors空，两负测预期exit1。账本仅41格/v0.1.47；structure17/full2/split24旧红保留，naming通过；幅度限制、待机右脚离地、未跑全关/设备/全档/人工明确，整体partial不提升。
+
+- 2026-11-16 · ASSET-PIPELINE / ENEMY-AI · **石甲巨人骨架与重型走路增量**：[独立记录](2026-11-16_stone_giant01_rig_walk.md)。新增普通怪 ENM-MELEE-STONE-GIANT01；双源v001、41骨/22deform、553顶点/1102三角，walking 30fps/2.4秒；最小Godot正式规则raw与双负测有证据，不代签全运动范围。玩法未接、其他动作未做，状态非 active；账本及产物最终同步由主agent补记。
+
+- 2026-11-16 · ASSET-PIPELINE / ENEMY-AI · **胖子僵尸2.1蒙皮还原，仅原版待机**：[当前修订§0](2026-11-16_fat_zombie21_rig_and_locomotion.md#0-当前有效修订v002-原始蒙皮仅待机)。用户否决v001完全扭曲，撤销7段移动与蒙皮视觉验收；v002恢复最初41骨/29组原权重/597顶点/绑定，四项指纹一致；只做idle 60fps/3.2秒，193帧首尾闭合0、触地点漂移0.071mm，GLB回导差<0.0005mm。原尺寸/朝向保留，不做重绑；双视角连续三轮预览已输出，待用户动态确认与Godot验收。失败版工程外归档，账本r57/v0.1.44更正，旧胖子僵尸03及玩法未替换。
+
 - 2026-11-15 · ASSET-PIPELINE / WORLD-PLAN · **远征03五组件面数优化**：[独立记录](2026-11-15_expedition03_five_component_optimization.md)。金边会客地毯 87128→1978（目标<2000），弧形格栅接待台 26928→5384，金纹走廊地毯 14040→2746，卧室地毯 13648→2634，红花插花 11512→GLB实测2280；五件均保留尺寸/材质/PaletteUV，固定镜头前后对比无明显破面。Blender源侧与最小隔离Godot工程5/5通过；主工程Godot专项被既有UID duplicate导致Scan thread aborted阻断，非本批几何失败；场景账本五行版本/备注同步，整关状态不提升。
 
 - 2026-11-15 · WORLD-PLAN / RUN-MERCHANT · **远征01 room_08 中庭局内自动贩卖机**：[独立记录](2026-11-15_expedition01_room08_ingame_vending.md)。业主重排本房结构后要求「中间的自动贩卖机，参考远征03」。新增通用能力「作者锚点声明服务点」（`DungeonRoom3D._build_authored_service_stations()` 认领 TSCN 里带 `service_station_config` 的 Marker3D，**不认房间/关卡 ID**）；视觉由锚点 `visual_scene` 声明、**不写共用主题**（`env_iron_frontier` 还供 02/99F/塔楼 flow，每张 flow 都有 1 间 SHOP→MERCHANT 房，第一版写主题已回退）；交互区改绕实体居中（99F 包装偏 −Z，照抄会站在货窗前点不到）；交易撤离改逐服务点声明（默认 true，既有商人房逐字不变；曾写成按房型分支，被 `verify_run_merchant_integration` 抓到后改回声明式）。专项探针 `tools/_exp01_room08_vending_probe` 23 项 exit 0（唯一性/中部/地板射线/视觉/碰撞/交互盒覆盖/门→机器洪泛连通/交互开页/撤离契约/出怪点）；商人集成回归 exit 0；13 房静态场景红项与改前**同为 20 条**（git stash 对比逐条一致，room_08 那 3 条是业主改结构后生成器清单 42/实际 51 的既有债）。真实渲染 `I:/ss2_shots/room08_vending/` 四张确认货窗朝来路。账本仅 Y242 备注 + 域日志 v0.1.91，基线只刷本行与第 25 列，并行会话漂移不吸收。足迹口径债（中庭 9 块地砖不在生成器清单）与封门期交易待裁定，整关 partial 不提升。

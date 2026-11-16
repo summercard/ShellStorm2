@@ -425,6 +425,7 @@ core_scenes=(
   verify_main_entry_realtime_sun_flow
   verify_main_entry_stage_light
   verify_melee_zombie_presentation
+  verify_exploder_presentation
   verify_fat_zombie03
   verify_fat_zombie03_death_visibility
   verify_melee_zombie_death_visibility
@@ -526,6 +527,16 @@ visual_scenes=(
 
 # 必须由人工操控/观察才能得出可靠结论；登记但不进入自动套件。
 manual_scenes=(
+  # 仅经 scripts/run_fate_tutorial_qa.py 复用已导入的工程外副本，Autoload前隔离。
+  # 要求 SHELLSTORM_FATE_TUTORIAL_ISOLATED=1；登记不代表通过，不作零参数通用CI。
+  verify_fate_tutorial_dialogue
+  # 仅经 run_weapon_hologram_qa.py 在Autoload前隔离；分别要求
+  # WEAPON_HOLOGRAM_VERIFY_ISOLATED=1 / PROJECTILE_ENCHANT_VERIFY_ISOLATED=1。
+  verify_weapon_hologram_ui
+  verify_projectile_enchant_visuals
+  # 2026-11-16：只能经各自持久外部Runner在Autoload前隔离，登记不等于验收。
+  verify_fat_death_warning
+  verify_fat_entry_breach_vfx
   # Autoload前隔离APPDATA；专用runner包含真实renderer双套截图与回滚专项。
   verify_expedition_entry_hologram_ceremonies
   # 2026-11-11：须由 run_expedition01_flow_integration.py 在 Autoload 前隔离；登记不代表通过。
@@ -554,6 +565,14 @@ retired_scenes=(
 )
 
 renderer_scenes=(
+  # 命运教程专用隔离runner：排除full及aggregate full目录裸扫。
+  verify_fate_tutorial_dialogue
+  # 专用全息/附魔runner负责真实渲染与隔离，禁止full/aggregate full裸扫。
+  verify_weapon_hologram_ui
+  verify_projectile_enchant_visuals
+  # 专用外部Runner场景：full及aggregate full目录裸扫均排除。
+  verify_fat_death_warning
+  verify_fat_entry_breach_vfx
   verify_expedition_entry_hologram_ceremonies
   "${visual_scenes[@]}"
   # 专用隔离Runner专项仅登记，禁止full目录扫描误收进普通无头批跑。

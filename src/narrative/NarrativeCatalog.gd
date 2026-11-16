@@ -15,6 +15,8 @@ const ROOT := "res://data/narrative/"
 ## id → 相对 res:// 的剧本路径。新增剧本必须同时登记在本表，
 ## 否则 `has_id()` 为假、加载器直接拒绝（不静默兜底）。
 const ENTRIES := {
+	"nar_tutorial_fate_drop_01": ROOT + "nar_tutorial_fate_drop_01.json",
+	"nar_tutorial_fate_open_01": ROOT + "nar_tutorial_fate_open_01.json",
 	# 开场第一段：新游戏在 98F 主人的办公室（区块00 最深房间）醒来。
 	"nar_tower_opening_01_wake": ROOT + "nar_tower_opening_01_wake.json",
 	# 开场第二段：走进会议室（区块00 的下一间）时触发。

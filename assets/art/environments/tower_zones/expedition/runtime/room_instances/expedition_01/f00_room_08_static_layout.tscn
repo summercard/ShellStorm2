@@ -37,8 +37,8 @@ metadata/authored_layout_asset_id = "ENV-EXPEDITION-L01-CORRIDOR-ROOM-TYPE-LAYOU
 metadata/authored_layout_version = "v012"
 metadata/authored_layout_room_id = "room_08"
 metadata/authored_layout_corner_count = 0
-metadata/authored_layout_solid_wall_count = 32
-metadata/authored_layout_door_wall_count = 1
+metadata/authored_layout_solid_wall_count = 30
+metadata/authored_layout_door_wall_count = 3
 metadata/authored_layout_floor_tile_count = 42
 metadata/authored_layout_exclusive_count = 0
 metadata/authored_layout_multi_level_count = 0
@@ -672,13 +672,17 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_35_REAR" parent="." unique_id=582867961 instance=ExtResource("24_thibr")]
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_35_REAR" type="Node3D" parent="." unique_id=582867961]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.24785995, 0, -14.999999)
 metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
 metadata/shadow_policy = "cast_and_receive"
+metadata/internal_passage = true
+
+; 房内固定门洞不参与外部门墙重定位；原实例身份、原点与长轴保持不变。
+[node name="PassagePortal" parent="ENV-EXPEDITION-L-CORRIDOR-WALL_X_35_REAR" instance=ExtResource("25_xu41d")]
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_35_SOUTH" parent="." unique_id=1277711377 instance=ExtResource("25_xu41d")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20.1055, 0, -15.000001)
@@ -801,13 +805,18 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_30_45" parent="." unique_id=164629824 instance=ExtResource("26_fmjl6")]
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_30_45" type="Node3D" parent="." unique_id=164629824]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.500001, 0, -2.5875607)
 metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C"
 metadata/shadow_policy = "cast_and_receive"
+metadata/internal_passage = true
+
+; 原墙沿局部 Z 延展，门洞组件沿局部 X 延展，仅在包装内转正长轴。
+[node name="PassagePortal" parent="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_30_45" instance=ExtResource("25_xu41d")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, 0)
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_35_00" parent="." unique_id=172891202 instance=ExtResource("27_jeafy")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -17.5, 0, 22.5)

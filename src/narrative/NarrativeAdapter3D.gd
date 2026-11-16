@@ -85,6 +85,16 @@ var _expedition_entry_feedback_suspended := false
 ## 剧情最近一次经 `ui.subtitle` / `ui.hint` / `ui.dialogue` 摆上去的 run_id。
 ## 收口时据此判断「底栏现在这条还是不是我摆的」⇒ 是才关，不是就不动（见 `_restore_dialogue`）。
 var _narrative_dialogue_run := ""
+var _dialogue_presentation_id := ""
+var _dialogue_presentation_seq := 0
+var _dialogue_narrative_id := ""
+var _dialogue_wait_run := ""
+var _dialogue_wait_outcome := ""
+var _dialogue_requesting := false
+var _actor_dialogue_bark: Object = null
+var _actor_dialogue_bark_run := ""
+var _actor_dialogue_bark_sentence := -1
+var _dialogue_request_outcomes: Dictionary = {}
 var _carrier_handle: Dictionary = {}
 var _shake_camera: Camera3D = null
 var _shake_rest := Vector2.ZERO
@@ -95,6 +105,76 @@ var _shake_amplitude := 0.0
 
 func bind(tree: SceneTree) -> void:
 	_tree = tree
+	if not DialogueUI.dialogue_finished.is_connected(_on_dialogue_finished):
+		DialogueUI.dialogue_finished.connect(_on_dialogue_finished)
+
+
+func begin_dialogue_presentation(narrative_id: String, config: Dictionary = {}) -> bool:
+	_dialogue_narrative_id = narrative_id
+	_dialogue_wait_run = ""
+	_dialogue_wait_outcome = ""
+	_dialogue_presentation_seq += 1
+	var session := str(config.get("presentation_id", "")).strip_edges()
+	if session.is_empty():
+		session = "narrative_%d_%d" % [get_instance_id(), _dialogue_presentation_seq]
+	elif session == str(DialogueUI.get_presentation_snapshot().get("session_id", "")):
+		_dialogue_narrative_id = ""
+		return false
+	var accepted := DialogueUI.begin_presentation(session, config.get("participants", []), config.get("presentation_options", config.get("options", {})))
+	if accepted != session:
+		_dialogue_narrative_id = ""
+		return false
+	_dialogue_presentation_id = session
+	return true
+
+
+func end_dialogue_presentation(immediate := false) -> void:
+	var session := _dialogue_presentation_id
+	_dialogue_presentation_id = ""
+	_dialogue_narrative_id = ""
+	DialogueUI.end_presentation(session, immediate)
+
+
+func _on_dialogue_finished(run_id: String, outcome: String) -> void:
+	if not run_id.is_empty() and run_id == _actor_dialogue_bark_run:
+		if is_instance_valid(_actor_dialogue_bark) and _actor_dialogue_bark.has_method("hide_now") and (_actor_dialogue_bark_sentence < 0 or (_actor_dialogue_bark.has_method("current_sentence_id") and int(_actor_dialogue_bark.call("current_sentence_id")) == _actor_dialogue_bark_sentence)):
+			_actor_dialogue_bark.call("hide_now")
+		_actor_dialogue_bark = null
+		_actor_dialogue_bark_run = ""
+	if _dialogue_requesting:
+		_dialogue_request_outcomes[run_id] = outcome
+	if not run_id.is_empty() and run_id == _dialogue_wait_run:
+		_dialogue_wait_outcome = outcome
+
+
+## 唯一 run 的最终回执；被替换但 UI 没发回执也按中止处理。
+func dialogue_wait_state() -> String:
+	if _dialogue_wait_run.is_empty():
+		return "aborted"
+	if _dialogue_wait_outcome == "completed":
+		return "completed"
+	if not _dialogue_wait_outcome.is_empty():
+		return "aborted"
+	if DialogueUI.is_active() and DialogueUI.current_run_id() == _dialogue_wait_run:
+		if not _dialogue_presentation_id.is_empty() and str(DialogueUI.get_presentation_snapshot().get("session_id", "")) != _dialogue_presentation_id:
+			return "aborted"
+		return "playing"
+	return "aborted"
+
+
+func _accept_dialogue_run(run_id: String, waiting := false) -> bool:
+	_dialogue_requesting = false
+	var outcome := str(_dialogue_request_outcomes.get(run_id, ""))
+	_dialogue_request_outcomes.clear()
+	if run_id.is_empty() or (not outcome.is_empty() and outcome != "completed"):
+		return false
+	if outcome.is_empty() and (not DialogueUI.is_active() or DialogueUI.current_run_id() != run_id):
+		return false
+	_narrative_dialogue_run = run_id
+	if waiting:
+		_dialogue_wait_run = run_id
+		_dialogue_wait_outcome = outcome
+	return true
 
 
 ## 导演每帧调用：推进相机与朝向的过渡并落到场景上。
@@ -957,7 +1037,7 @@ func _bind_dialogue_carrier(carrier: Object, kind: String, text: String, run_id 
 ##
 ## 返回底栏 run_id（空 = 拒绝/未接管）。示意框自带兜底停留，底栏被顶掉时不会
 ## 永久挂在头上；正常路径由底栏 `dialogue_finished` 收。
-func _say_dialogue_on_actor(actor: Node3D, who: String, text: String, hold: float) -> String:
+func _say_dialogue_on_actor(actor: Node3D, who: String, text: String, hold: float, metadata: Dictionary = {}) -> String:
 	var speaker := DialogueUI.SPEAKER_PLAYER
 	if actor.has_method("get_display_name"):
 		var named := str(actor.call("get_display_name")).strip_edges()
@@ -965,7 +1045,7 @@ func _say_dialogue_on_actor(actor: Node3D, who: String, text: String, hold: floa
 			speaker = named
 	if actor.has_method("get_dialogue_run_id") and actor.has_method("say_scripted_line"):
 		# 正规 NPC：示意、文字、署名都由它自己收口（节拍/自由交谈/救援同一条路）。
-		if not bool(actor.call("say_scripted_line", text, maxf(0.6, hold))):
+		if not bool(actor.call("say_scripted_line", text, maxf(0.6, hold), metadata)):
 			return ""
 		return str(actor.call("get_dialogue_run_id"))
 	# 非玩家 actor 且没有脚本台词接口 ⇒ 不许落到主角 bark 上（那会把 NPC 的话
@@ -983,10 +1063,21 @@ func _say_dialogue_on_actor(actor: Node3D, who: String, text: String, hold: floa
 	var auto := hold if hold > 0.0 else DialogueUI.line_hold_for_text(text)
 	var typing := float(text.length()) / DialogueUI.DEFAULT_CHARS_PER_SEC
 	(bark as Object).call("say_indicator", typing + auto + 0.5, -1.0)
-	return DialogueUI.show_dialogue_line(text, speaker, auto)
+	var player_metadata := metadata.duplicate(true)
+	player_metadata["speaker_id"] = "player"
+	var run_id := DialogueUI.show_dialogue_line(text, speaker, auto, player_metadata)
+	if not run_id.is_empty() and DialogueUI.current_run_id() == run_id:
+		_actor_dialogue_bark = bark
+		_actor_dialogue_bark_run = run_id
+		_actor_dialogue_bark_sentence = int(bark.call("current_sentence_id")) if bark.has_method("current_sentence_id") else -1
+	elif bark.has_method("hide_now"):
+		(bark as Object).call("hide_now")
+	return run_id
 
 
 func _actor_say(params: Dictionary) -> Dictionary:
+	if not _dialogue_presentation_is_current():
+		return _failed("actor.say：剧情对白会话已被替换。")
 	_carrier_handle = {}
 	var actor := _resolve_actor(params)
 	if actor == null:
@@ -996,11 +1087,15 @@ func _actor_say(params: Dictionary) -> Dictionary:
 		return _failed("actor.say 缺少 text。")
 	var hold := float(params.get("hold", -1.0))
 	var who := str(params.get("who", "player"))
-	var run_id := _say_dialogue_on_actor(actor, who, text, hold)
-	if run_id.is_empty():
+	_dialogue_requesting = true
+	var metadata := params.duplicate(true)
+	if not _dialogue_presentation_id.is_empty():
+		metadata["presentation_id"] = _dialogue_presentation_id
+	var run_id := _say_dialogue_on_actor(actor, who, text, hold, metadata)
+	if not _accept_dialogue_run(run_id):
 		return _failed("actor.say：演员『%s』拒绝脚本台词或底栏未接管。" % who)
 	_bind_dialogue_carrier(DialogueUI, "subtitle", text, run_id)
-	return _ok()
+	return _done(Callable(self, "_restore_dialogue"))
 
 
 ## 解析 `actor.face` 的目标点：给了就返回世界坐标 `Vector3`，没给返回 `null`
@@ -1320,7 +1415,13 @@ func _fx_vfx(params: Dictionary) -> Dictionary:
 	return _ok()
 
 
+static func is_fate_tutorial(narrative_id: String) -> bool:
+	return narrative_id in ["nar_tutorial_fate_drop_01", "nar_tutorial_fate_open_01"]
+
+
 func can_commit_narrative(narrative_id: String, reason: String) -> bool:
+	if is_fate_tutorial(narrative_id):
+		return narrative_id == _dialogue_narrative_id and reason in ["duration", "flow.end"] and dialogue_wait_state() == "completed"
 	if not narrative_id.begins_with("nar_main_"):
 		return true
 	var controller := _main_story_controller()
@@ -1418,17 +1519,29 @@ func _fx_music_restore() -> Dictionary:
 # ui
 # -------------------------------------------------------------------------
 
+func _dialogue_presentation_is_current() -> bool:
+	if _dialogue_presentation_id.is_empty():
+		return true
+	var snapshot := DialogueUI.get_presentation_snapshot()
+	return str(snapshot.get("session_id", "")) == _dialogue_presentation_id and not bool(snapshot.get("exit_running", false))
+
+
 func _ui_instruction(action: String, params: Dictionary) -> Dictionary:
+	if not _dialogue_presentation_is_current():
+		return _failed("ui.%s：剧情对白会话已被替换。" % action)
 	match action:
 		"subtitle":
 			var text := str(params.get("text", ""))
 			if text.strip_edges().is_empty():
 				return _failed("ui.subtitle 缺少 text。")
-			_narrative_dialogue_run = DialogueUI.show_message(
+			_dialogue_requesting = true
+			var run_id := DialogueUI.show_message(
 				text,
 				str(params.get("speaker", DialogueUI.SPEAKER_SYSTEM)),
-				float(params.get("auto", 3.0))
+				float(params.get("auto", 3.0)), "", params
 			)
+			if not _accept_dialogue_run(run_id):
+				return _failed("ui.subtitle：底栏拒绝或被同步替换。")
 			_bind_dialogue_carrier(DialogueUI, "subtitle", text)
 			return _done(Callable(self, "_restore_dialogue"))
 		"hint":
@@ -1438,17 +1551,33 @@ func _ui_instruction(action: String, params: Dictionary) -> Dictionary:
 			# `auto = 0` 是**保持型**提示（等玩家动作），它不会自己消失 ——
 			# 必须由收口收掉，否则「按 F 之后那句提示还挂在屏幕上」（08 文档 §5.2 已写明
 			# 「保持到显式交互或剧情收口」，这里补上后半句的实现）。
-			_narrative_dialogue_run = DialogueUI.announce(hint, float(params.get("auto", 3.0)))
+			_dialogue_requesting = true
+			var run_id := DialogueUI.announce(hint, float(params.get("auto", 3.0)))
+			if not _accept_dialogue_run(run_id):
+				return _failed("ui.hint：底栏拒绝或被同步替换。")
 			_bind_dialogue_carrier(DialogueUI, "hint", hint)
 			return _done(Callable(self, "_restore_dialogue"))
 		"dialogue":
 			var lines: Variant = params.get("lines", null)
 			if not (lines is Array) or (lines as Array).is_empty():
 				return _failed("ui.dialogue 缺少 lines。")
-			_narrative_dialogue_run = DialogueUI.show_lines({
+			for line: Variant in lines:
+				if not (line is Dictionary) or str((line as Dictionary).get("text", "")).strip_edges().is_empty():
+					return _failed("ui.dialogue：lines 含无效或空台词。")
+			var request := {
 				"lines": lines,
 				"interrupt": bool(params.get("interrupt", true)),
-			})
+				"presentation_id": str(params.get("presentation_id", _dialogue_presentation_id)),
+				"participants": params.get("participants", []),
+				"presentation_options": params.get("presentation_options", params.get("options", {})),
+			}
+			# 剧情会话由导演持有；cue 不能替换成一个无人归还的外部会话。
+			if not _dialogue_presentation_id.is_empty() and str(request["presentation_id"]) != _dialogue_presentation_id:
+				return _failed("ui.dialogue：presentation_id 不属于当前剧情。")
+			_dialogue_requesting = true
+			var run_id := DialogueUI.show_lines(request)
+			if not _accept_dialogue_run(run_id, bool(params.get("wait", false))):
+				return _failed("ui.dialogue：底栏拒绝或被同步替换。")
 			_bind_dialogue_carrier(DialogueUI, "dialogue", str((lines as Array)[0].get("text", "")))
 			return _done(Callable(self, "_restore_dialogue"))
 	return _degraded("ui.%s 尚未接通（见 08 文档 §5.2 指令表）。" % action)
@@ -1459,6 +1588,10 @@ func _ui_instruction(action: String, params: Dictionary) -> Dictionary:
 ## 的播报），剧情不该去关别人的东西。本方法读的是**最近一次** ui cue 记下的 run_id，
 ## 因此同一场里连写多条 ui 提示也只有最后一条会在收口被关。
 func _restore_dialogue() -> void:
+	if is_instance_valid(_actor_dialogue_bark) and _actor_dialogue_bark.has_method("hide_now") and (_actor_dialogue_bark_sentence < 0 or (_actor_dialogue_bark.has_method("current_sentence_id") and int(_actor_dialogue_bark.call("current_sentence_id")) == _actor_dialogue_bark_sentence)):
+		_actor_dialogue_bark.call("hide_now")
+	_actor_dialogue_bark = null
+	_actor_dialogue_bark_run = ""
 	if _narrative_dialogue_run.is_empty():
 		return
 	var still_showing := DialogueUI.current_run_id() == _narrative_dialogue_run

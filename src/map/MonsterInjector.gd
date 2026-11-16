@@ -15,7 +15,8 @@ const BASE_ENEMY_TYPES := {
 	"melee_chaser": { "name": "小僵尸", "hp_base": 25, "damage_base": 5, "speed": 80 },
 	"ranged_caster": { "name": "孢子射手", "hp_base": 15, "damage_base": 8, "speed": 50 },
 	"summoner": { "name": "蜂巢怪", "hp_base": 30, "damage_base": 0, "speed": 40 },
-	"exploder": { "name": "炸弹果", "hp_base": 10, "damage_base": 15, "speed": 70 },
+	# 与 Enemy3D 独立Profile入口同步 +30%：70 × 1.30；此值不会再乘Profile速度。
+	"exploder": { "name": "炸弹果", "hp_base": 10, "damage_base": 15, "speed": 91 },
 	"ambusher": { "name": "地刺虫", "hp_base": 18, "damage_base": 7, "speed": 90 },
 	"boss": { "name": "准首领", "hp_base": 100, "damage_base": 12, "speed": 42 },
 	"melee_chaser_strong": { "name": "小僵尸-强化怪", "hp_base": 25, "damage_base": 5, "speed": 80 },
@@ -364,6 +365,7 @@ func _death_explosion_for(kind: String) -> Dictionary:
 		"damage": damage,
 		"radius_m": maxf(0.5, float(src.get("radius_m", 5.0)) * radius_mult),
 		"sfx_radius_m": maxf(0.0, float(src.get("sfx_radius_m", 20.0))),
+		"warning_sec": maxf(0.0, float(src.get("warning_sec", 0.0))),
 	}
 	# ⚠ 2026-10-16 修：此处原先**丢弃了 zone 段**，而 `Enemy3D._spawn_ground_blast_zone()`
 	# 正是靠它才会生成地面持续伤害场 ⇒ 关卡配置里写的 zone 从来没有生效过（静默失效）。

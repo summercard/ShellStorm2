@@ -331,7 +331,7 @@ func get_presentation_snapshot() -> Dictionary:
 	return {"state": _state, "clip": _clip, "sample_time": _sample,
 		"visual_height": VISUAL_HEIGHT, "death_duration": DEATH_DURATION,
 		"animations": Array(_player.get_animation_list()) if _player != null else [],
-		"source": "blender_v005", "collision_owned": false, "procedural_pose": false,
+		"source": "blender_v006", "collision_owned": false, "procedural_pose": false,
 		# 受击姿态的三条闸门逐条暴露，验收才能断言"跑动中不播 hurt"而不是只看 clip 名。
 		"hurt_pose_allowed": _hurt_pose_allowed,
 		"hurt_pose": _clip == "hurt",

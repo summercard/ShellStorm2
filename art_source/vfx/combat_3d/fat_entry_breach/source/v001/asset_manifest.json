@@ -1,0 +1,317 @@
+{
+  "asset_id": "VFX-FAT-ENTRY-BREACH-3D",
+  "version": "v001",
+  "prefab": "assets/art/vfx/combat_3d/vfx_fat_entry_breach_root_top3d.tscn",
+  "script": "src/vfx/VfxFatEntryBreach3D.gd",
+  "generation_source": {
+    "provided_original": "Create_a_technical_VFX_sprite__2026-11-16T05-03-01.png",
+    "generator": "用户上游图片能力生成；本子任务没有生成新美术",
+    "original_mode": "RGB，无真实alpha",
+    "matting_operation": "buddy-image-processing matting 白底去除",
+    "matting_task_id": "1439661065-ProcessImageAsync-73b922078fe47fa418f73681027fddedt",
+    "original": "generated_sprite_sheet_original.png",
+    "matted": "sprite_sheet_matted.png",
+    "matting_note": "整图抠图漏掉烟尘，分别裁切原图下两格后单独抠图并合并，未生成新图",
+    "smoke_matting_task_id": "1439661065-ProcessImageAsync-62e348b57685186b16e3bf8d6203bb64t",
+    "dust_matting_task_id": "1439661065-ProcessImageAsync-0d1d680aaaedb29b71340645ab77abf0t"
+  },
+  "textures": [
+    {
+      "path": "assets/art/vfx/textures/vfx_fat_entry_breach_flame_a.png",
+      "source": "flame_round_matted.png",
+      "cell": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "crop": [
+        47,
+        115,
+        750,
+        829
+      ],
+      "content_limit_px": 320,
+      "size": [
+        384,
+        384
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "sha256": "c3865303799f2efaedc74a9e4526073934529f39509e699d415b2d8096c6a5b9",
+      "silhouette": "centered_isotropic_billowing_fire_puff",
+      "alpha_axis_ratio": 1.012324,
+      "source_final": "flame_round_a.png"
+    },
+    {
+      "path": "assets/art/vfx/textures/vfx_fat_entry_breach_flame_b.png",
+      "source": "flame_round_matted.png",
+      "cell": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "crop": [
+        31,
+        117,
+        717,
+        828
+      ],
+      "content_limit_px": 320,
+      "size": [
+        384,
+        384
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "sha256": "a46da2b18c136ff1d7050f798fa9cca7f95375ce7a9f49a5a49b5d4cb0f0be2f",
+      "silhouette": "centered_isotropic_billowing_fire_puff",
+      "alpha_axis_ratio": 1.01651,
+      "source_final": "flame_round_b.png"
+    },
+    {
+      "path": "assets/art/vfx/textures/vfx_fat_entry_breach_smoke.png",
+      "crop": [
+        109,
+        124,
+        399,
+        382
+      ],
+      "size": [
+        384,
+        384
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "sha256": "69782c3f50f661144b164ace560f33829b6b09414cc52d5ac2de0ae3c74b1a4b"
+    },
+    {
+      "path": "assets/art/vfx/textures/vfx_fat_entry_breach_dust.png",
+      "crop": [
+        18,
+        110,
+        498,
+        380
+      ],
+      "size": [
+        384,
+        384
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "sha256": "baedb16b1ab484e5639ca864dfb50ebced04a63c6d0103f17c4d42438eb349f6"
+    }
+  ],
+  "visual_glbs": [
+    "assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/chair/chair_visual_top3d.glb",
+    "assets/art/environments/rooftop_courtyard_3d/components/side_table/prp_side_table_visual_top3d.glb",
+    "assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/locker_bank/locker_bank_visual_top3d.glb"
+  ],
+  "visual_scales": [
+    0.68,
+    1,
+    0.68,
+    0.68,
+    1
+  ],
+  "piece_count": 5,
+  "triangle_count": 3996,
+  "particle_budget": 92,
+  "lifetime_sec": 3.65,
+  "stages_sec": {
+    "push": [
+      0,
+      0.4
+    ],
+    "burst": [
+      0.4,
+      1.05
+    ],
+    "flight": [
+      0.4,
+      1.91
+    ],
+    "impact_and_settle": [
+      1.52,
+      2.21
+    ],
+    "tail_dust": [
+      2.21,
+      3.3
+    ],
+    "retire": 3.65
+  },
+  "context": {
+    "seed": 20261116,
+    "floor_y": "世界高度，缺省出生点Y",
+    "forward": "XZ方向，局部-Z对齐",
+    "landing_distance_m": "缺省4m；径向布局表示可用整圆落距，safe_fan布局记录真实整圆净空而非伪造3.5m",
+    "piece_paths": "可选五条世界轴偏移路径，每条start/push/end/direction/yaw；Host验证连续扫掠，Prefab只消费统一时间线",
+    "layout": "radial或safe_fan；snapshot逐家具记录实际位移、方向、起推终点与爆后距离"
+  },
+  "safety": {
+    "visual_only": true,
+    "collision": false,
+    "damage": false,
+    "drops": false,
+    "real_furniture_mutation": false,
+    "light_count": 1,
+    "shadows": false
+  },
+  "verification": {
+    "followup_status": "last_clearance_motion_10_of_10_passed_final_snapshot_render_rerun_timeout",
+    "last_clearance_logic": {
+      "passed": true,
+      "deliveries": 10,
+      "samples_per_delivery": 221,
+      "result": "sessions/2026-11-16_exp01_combat/last_clearance/1794824967705607400/result.json"
+    },
+    "last_clearance_render_motion": {
+      "passed": true,
+      "deliveries": 10,
+      "renderer": "Forward+ Vulkan",
+      "screenshots": 70,
+      "result": "sessions/2026-11-16_exp01_combat/last_clearance/1794825253164102900/result.json",
+      "scope": "实际轨迹与几何通过；随后仅修正safe_fan真实净空/布局snapshot记录"
+    },
+    "last_clearance_integration": {
+      "passed": true,
+      "checks": 395,
+      "result": "sessions/2026-11-16_exp01_combat/last_clearance/2026-11-16_exp01_combat/integration/1794825624785117900/result.json"
+    },
+    "last_clearance_final_render_rerun": {
+      "passed": false,
+      "exit_code": 124,
+      "engine_errors": 0,
+      "result": "sessions/2026-11-16_exp01_combat/last_clearance/1794826976139713000/result.json",
+      "reason": "正式场景初始化超时；不能冒充最终版完整通过"
+    },
+    "followup_logic": {
+      "passed": true,
+      "checks": 2291,
+      "engine_errors": 0,
+      "result": "sessions/2026-11-16_exp01_combat/vfx_followup/logic_20261116_180708/result.json"
+    },
+    "production_clearance_logic": {
+      "passed": false,
+      "completed": true,
+      "geometry_passed_deliveries": 8,
+      "expected_deliveries": 10,
+      "result": "sessions/2026-11-16_exp01_combat/vfx_followup/1794823008895405900/result.json"
+    },
+    "production_clearance_render": {
+      "passed": false,
+      "completed": true,
+      "renderer": "Forward+ Vulkan",
+      "geometry_passed_deliveries": 8,
+      "expected_deliveries": 10,
+      "initial_overlap_pairs": 0,
+      "sample_count_per_delivery": 221,
+      "minimum_horizontal_travel_m": 1.6899893283844,
+      "screenshots": 56,
+      "result": "sessions/2026-11-16_exp01_combat/vfx_followup/1794823358586869200/result.json"
+    },
+    "remaining_blocker": {
+      "room": "room_10",
+      "seed_77001199_best_distance_m": 2.88486547470093,
+      "seed_2026_best_distance_m": 3.16654224395752,
+      "required_distance_m": 3.5,
+      "reason": "正式Host保持严格门槛，未交付第三波SF或VFX；未放宽玩家6m/反入口候选半区"
+    },
+    "logic": {
+      "passed": true,
+      "checks": 131,
+      "engine_errors": 0,
+      "result": "sessions/2026-11-16_exp01_combat/vfx/logic_20261116_132115/result.json"
+    },
+    "render": {
+      "passed": true,
+      "checks": 137,
+      "engine_errors": 0,
+      "renderer": "Forward+ Vulkan",
+      "result": "sessions/2026-11-16_exp01_combat/vfx/render_20261116_132018/result.json"
+    },
+    "screenshots": "sessions/2026-11-16_exp01_combat/vfx/render_20261116_132018/fat_entry_{push,burst,flight,landing,tail_dust}.png",
+    "output_root": "ShellStorm2-work",
+    "appdata_isolated_before_autoload": true,
+    "known_warnings": "既有GLB共享色盘旧UID失效警告，成功按文本路径加载；未修改源GLB或公共色盘",
+    "flame_revision_2": {
+      "passed": true,
+      "checks": 89,
+      "renderer": "Forward+ Vulkan",
+      "engine": "Godot 4.6.3",
+      "import_exit_code": 0,
+      "render_exit_code": 0,
+      "engine_errors": 0,
+      "result": "sessions/2026-11-16_fat_flame_round/qa/result.json",
+      "scope": "最小隔离工程局部贴图/粒子实渲，不启动主工程/整关"
+    }
+  },
+  "geometry_contract": {
+    "initial_layout": "固定72度五角布局，中心半径1.56m，桌柜长轴径向；不随seed扰动初始角度",
+    "start_radius_m": 1.56,
+    "push_distance_m": 0.16,
+    "push_radius_max_m": 1.72,
+    "landing_radius_formula": "min(landing_distance_m * lerp(0.92, 1.0, seed_hash), 3.25 * size)",
+    "host_min_landing_distance_m": 3.5,
+    "host_envelope_m": 1.25,
+    "host_max_height_m": 5.7,
+    "minimum_post_push_travel_m": 1.5,
+    "minimum_travel_formula": "min(3.5 * 0.92, 3.25) - 1.72 = 1.50；Host门槛无需修改",
+    "actual_sampled_travel_m": "约1.690m（从初始点）；约1.530m（从推挤终点）",
+    "followup_scope": "last_clearance修改Host与本件VFX/测试；不改Room、Director、编成、cap、HP、玩家距离或账本",
+    "safe_fan": "原候选无3.5m整圆时0.5m同域细化；仍不足则搜索16组初始五角旋转和每家具32方向，水平1.86m、推0.16m；1.35m包络连续扫掠和可达域检查",
+    "fixed_spawn_fallback": "视觉规划全失败仍走原合法怪位交付并warning跳过视觉；不因视觉门槛无限扣住固定SF"
+  },
+  "dependencies_sha256": {
+    "src/vfx/VfxFatEntryBreach3D.gd": "4bd83aa0b759b0e4a7db8f463f4b353016ba738cae803ba97dff7a985e533aa2",
+    "assets/art/vfx/combat_3d/vfx_fat_entry_breach_root_top3d.tscn": "bf15a99b13ed2a2e128c385e590948978e12bae02a4f3e9afa5c19295983a66c",
+    "assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/chair/chair_visual_top3d.glb": "c28b8305c29b0dd1b3f93986d5cb64b23c2053a6b866195f20f50d3a0c0e4181",
+    "assets/art/environments/rooftop_courtyard_3d/components/side_table/prp_side_table_visual_top3d.glb": "32958351724afb02d52d17a5ec554ecb75319a6a031dd741636c585dc8905615",
+    "assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/locker_bank/locker_bank_visual_top3d.glb": "4438a06bab754673e486494d6a1066b5806d16f305dd686e357857d08438798d",
+    "assets/art/vfx/textures/vfx_fat_entry_breach_flame_a.png": "c3865303799f2efaedc74a9e4526073934529f39509e699d415b2d8096c6a5b9",
+    "assets/art/vfx/textures/vfx_fat_entry_breach_flame_b.png": "a46da2b18c136ff1d7050f798fa9cca7f95375ce7a9f49a5a49b5d4cb0f0be2f",
+    "assets/art/vfx/textures/vfx_fat_entry_breach_smoke.png": "69782c3f50f661144b164ace560f33829b6b09414cc52d5ac2de0ae3c74b1a4b",
+    "assets/art/vfx/textures/vfx_fat_entry_breach_dust.png": "baedb16b1ab484e5639ca864dfb50ebced04a63c6d0103f17c4d42438eb349f6",
+    "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+    "art_source/vfx/combat_3d/fat_entry_breach/source/v001/build_prefab.py": "f72c5d5ab329b04d9840fc366b4682887530d4aed79f320a3c7c22b8a8808db8"
+  },
+  "host_integration": "last_clearance已取得五房双seed共10组真实第三波交付和Forward+运动几何通过；room10使用细采样safe_fan。最终snapshot真实净空标记版395项集成通过，但完整Forward+重跑初始化超时124，保留待复验状态。旧production_clearance_*为修复前历史证据。",
+  "rebuild": "python art_source/vfx/combat_3d/fat_entry_breach/source/v001/build_prefab.py",
+  "ledger": {
+    "path": "assets/registry/ledgers/ShellStorm2_特效账本_v001.xlsx",
+    "asset_sheet": "资产主表",
+    "asset_row": 65,
+    "prefab_sheet": "3D-特效",
+    "prefab_row": 260,
+    "internal_id": "FX01-42",
+    "asset_id": "VFX-FAT-ENTRY-BREACH-3D",
+    "version": "v001",
+    "registered_at": "2026-11-16"
+  },
+  "flame_texture_revision": 2,
+  "flame_texture_design": "方形384x384画幅，等宽等高团状火焰，近圆形无主朝向，无长条/火舌/方向尾；烟尘保持不变",
+  "flame_generation_source": {
+    "original": "flame_round_original.png",
+    "matted": "flame_round_matted.png",
+    "original_provider": "ImageGen",
+    "original_size": [
+      1536,
+      1024
+    ],
+    "original_mode": "RGB",
+    "matting_operation": "buddy-image-processing matting",
+    "matting_task_id": "1439661065-ProcessImageAsync-d18b13af67dbf79078e8e41520c781e9t",
+    "fringe_processing": "半透明白底去污染；仅椭圆归一化半径0.65以上的外缘衰减中性白晕，保护填实火团中心；等比320px主体置中384px",
+    "requested_at": "2026-11-16T21:21:45+08:00"
+  }
+}

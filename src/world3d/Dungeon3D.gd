@@ -335,6 +335,7 @@ const PLAYER_BARK_HEIGHT_M := 2.55
 @export var visual_theme: DungeonTheme3D
 @export var run_seed_override := -1
 @export var test_mode := false
+@export var enable_fate_tutorial_in_test := false
 @export_file("*.tscn") var return_scene_path := GameDesignConfig.BASE_SCENE_3D
 
 @onready var player: Player3D = $Player3D
@@ -486,6 +487,14 @@ var _fate_offer_source := "door"
 var _fate_offer_pickup_id := ""
 var _fate_overlay: Control
 var _fate_overlay_closing := false
+var _fate_purchase_busy := false
+var _fate_tutorial_locked := false
+var _fate_tutorial_focus: WeakRef
+var _fate_tutorial: Node
+var _fate_confirm: Control
+var _fate_presentation: Control
+var _fate_board: Control
+var _fate_coin_restore: Dictionary = {}
 var _fate_choice_buttons: Array[Button] = []
 var _fate_feedback_label: Label = null
 var _fate_feedback_tweens: Dictionary = {}
@@ -791,6 +800,7 @@ func release_loading_scene() -> void:
 
 
 func _ready() -> void:
+	_install_fate_tutorial()
 	_begin_expedition_loading_if_active()
 	if not _hud_presenter.weapon_hud_command_ready.is_connected(_apply_weapon_hud_command):
 		_hud_presenter.weapon_hud_command_ready.connect(_apply_weapon_hud_command)
@@ -1379,6 +1389,8 @@ func _restore_pending_door_fate_overlay() -> void:
 			_flip_fate_card_to_back(button, index)
 	_refresh_door_fate_prices()
 	_sync_player_input_lock()
+	if is_instance_valid(_fate_tutorial):
+		_fate_tutorial.call("notify_offer_open", _fate_offer_pickup_id, _fate_door_offer_id)
 
 
 func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) -> void:
@@ -1723,12 +1735,15 @@ func _unhandled_input(event: InputEvent) -> void:
 	# 命运卡弹窗的「放弃」走 InputMap action：键盘 ESC 与手柄 B 都能放弃。
 	# 硬比 KEY_ESCAPE 只有键盘能触发，手柄的 ui_cancel（B 键）到不了这里
 	# —— 与 0808 记录里把 M/1/2/3/4 从硬比 keycode 改成 action 是同一类修正。
-	if _door_fate_active and event.is_action_pressed("ui_cancel"):
+	if _door_fate_active and not _fate_tutorial_locked and event.is_action_pressed("ui_cancel"):
 		_cancel_door_fate_selection()
 		get_viewport().set_input_as_handled()
 		return
 	var key_event := event as InputEventKey
 	if key_event != null and key_event.pressed and not key_event.echo and (key_event.keycode == KEY_K or key_event.physical_keycode == KEY_K):
+		var k_visible := is_instance_valid(_weapon_panel) and _weapon_panel.visible
+		if not k_visible and (_has_exclusive_modal() or (_inventory_ui != null and _inventory_ui.is_inventory_open())):
+			return
 		var presentation_panel := _ensure_weapon_presentation_panel()
 		if presentation_panel != null:
 			presentation_panel.toggle()
@@ -2352,18 +2367,24 @@ func _ensure_weapon_presentation_panel() -> WeaponAssemblyTreePanel:
 		# 独立管理页居中覆盖战场，与背包/基地设施的模态信息架构一致。
 		# Godot 4 中 Control.position 当锐点都是 0.5 时会直接成为全局位置（不是相对父容器中心偏移），
 		# 所以需要从 viewport size 计算使面板中心 = 屏幕中心。
-		_weapon_panel.set_anchors_preset(Control.PRESET_CENTER)
-		var _vp_size: Vector2i = get_viewport().get_visible_rect().size
-		var _panel_size := Vector2(520.0, 620.0)
-		_weapon_panel.size = _panel_size
-		_weapon_panel.position = Vector2(
-			(_vp_size.x - _panel_size.x) * 0.5,
-			(_vp_size.y - _panel_size.y) * 0.5
-		)
+		_weapon_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		_layout_weapon_presentation_panel()
+		if not get_viewport().size_changed.is_connected(_layout_weapon_presentation_panel):
+			get_viewport().size_changed.connect(_layout_weapon_presentation_panel)
+		_weapon_panel.panel_shown.connect(_sync_player_input_lock)
+		_weapon_panel.panel_hidden.connect(_sync_player_input_lock)
 		_weapon_panel.z_index = 420
 		_weapon_panel.set_weapon_tree(player.get_weapon_tree())
 		_weapon_panel.set_weapon_owner(player)
 	return _weapon_panel
+
+
+func _layout_weapon_presentation_panel() -> void:
+	if not is_instance_valid(_weapon_panel):
+		return
+	var canvas_size := get_viewport().get_visible_rect().size
+	_weapon_panel.size = Vector2(minf(1120, canvas_size.x - 48), minf(500, canvas_size.y - 48))
+	_weapon_panel.position = (canvas_size - _weapon_panel.size) * 0.5
 
 
 func _accepts_pending_insurance_return_at_spawn() -> bool:
@@ -3073,6 +3094,7 @@ func _has_exclusive_modal() -> bool:
 	return (
 		_completed
 		or _door_fate_active
+		or (is_instance_valid(_weapon_panel) and _weapon_panel.visible)
 		or (_full_map_overlay != null and is_instance_valid(_full_map_overlay))
 		or (_workbench_panel != null and is_instance_valid(_workbench_panel))
 		or (_merchant_ui != null and is_instance_valid(_merchant_ui) and _merchant_ui.visible)
@@ -3146,7 +3168,51 @@ func _close_inventory_for_modal() -> void:
 		_inventory_ui.set_inventory_panel_open(false)
 
 
+func _install_fate_tutorial() -> void:
+	if is_instance_valid(_fate_tutorial) or (test_mode and not enable_fate_tutorial_in_test):
+		return
+	_fate_tutorial = preload("res://src/narrative/FateTutorial3D.gd").new()
+	_fate_tutorial.name = "FateTutorial3D"
+	_fate_tutorial.call("configure", self)
+	add_child(_fate_tutorial)
+
+
+func set_fate_tutorial_locked(locked: bool) -> void:
+	if _fate_tutorial_locked == locked:
+		return
+	if locked:
+		var focus := get_viewport().gui_get_focus_owner()
+		_fate_tutorial_focus = weakref(focus) if is_instance_valid(focus) and is_instance_valid(_fate_overlay) and _fate_overlay.is_ancestor_of(focus) else null
+		if _fate_tutorial_focus != null:
+			focus.release_focus()
+	_fate_tutorial_locked = locked
+	if is_instance_valid(_fate_presentation):
+		_fate_presentation.call("set_dialogue_reserved", locked)
+	_refresh_door_fate_prices()
+	_sync_player_input_lock()
+	if not locked and _door_fate_active and not _fate_overlay_closing:
+		var previous := _fate_tutorial_focus.get_ref() as Control if _fate_tutorial_focus != null else null
+		_fate_tutorial_focus = null
+		if is_instance_valid(previous) and previous.is_visible_in_tree() and _fate_overlay.is_ancestor_of(previous) and UiMenuFocus.is_focusable(previous):
+			previous.grab_focus()
+		else:
+			for button in _fate_choice_buttons:
+				if is_instance_valid(button) and not button.disabled:
+					_maybe_focus_fate_card(button)
+					break
+
+
 func try_close_modal_for_pause() -> bool:
+	if _fate_tutorial_locked:
+		return false
+	if is_instance_valid(_fate_confirm):
+		_fate_confirm.call("cancel")
+		return true
+	if _fate_purchase_busy:
+		return true
+	if is_instance_valid(_weapon_panel) and _weapon_panel.visible:
+		_weapon_panel.hide_panel()
+		return true
 	if _full_map_overlay != null and is_instance_valid(_full_map_overlay):
 		_close_full_map()
 		return true
@@ -4875,7 +4941,7 @@ func _resolve_encounter_stage_monsters(
 			continue
 		if type_id != "strong_random":
 			var resolved := {"type": type_id, "count": count}
-			for key in ["min_player_distance_m", "content_id"]:
+			for key in ["min_player_distance_m", "content_id", "spawn_vfx_asset_id"]:
 				if entry.has(key):
 					resolved[key] = entry[key]
 			monsters.append(resolved)
@@ -4887,8 +4953,9 @@ func _resolve_encounter_stage_monsters(
 			tally[picked] = int(tally.get(picked, 0)) + 1
 		for picked_value in tally.keys():
 			var resolved := {"type": str(picked_value), "count": int(tally[picked_value])}
-			if entry.has("min_player_distance_m"):
-				resolved["min_player_distance_m"] = entry["min_player_distance_m"]
+			for key in ["min_player_distance_m", "content_id", "spawn_vfx_asset_id"]:
+				if entry.has(key):
+					resolved[key] = entry[key]
 			monsters.append(resolved)
 	return monsters
 
@@ -8431,6 +8498,8 @@ func _on_fate_pickup_interacted(pickup: GroundLootPickup3D) -> bool:
 	_fate_pickup_claimed[pickup_id] = true
 	pickup.accept_pickup(player)
 	_queue_runtime_autosave("fate_pickup_offer_opened")
+	if is_instance_valid(_fate_tutorial):
+		_fate_tutorial.call("notify_offer_open", pickup_id, _fate_door_offer_id)
 	return true
 
 
@@ -8512,6 +8581,8 @@ func _spawn_loot_items(
 			# 怪物掉落、搜索产出和主动落地都先经过“抛高→落地→两次弹跳”；
 			# 存档恢复不走这里，避免读档时把已经稳定的物品再次弹起。
 			pickup.begin_spawn_animation()
+		if is_instance_valid(_fate_tutorial):
+			_fate_tutorial.call("register_pickup", pickup)
 		spawned += 1
 	return spawned
 
@@ -9931,15 +10002,24 @@ func _show_door_fate_choices(source := "", pickup_id := "", metadata: Dictionary
 
 
 func _build_door_fate_overlay() -> void:
+	if _fate_purchase_busy:
+		return
+	if is_instance_valid(_fate_overlay):
+		_reset_fate_feedback(true)
+		_fate_overlay_closing = false
+		_fate_overlay.get_parent().remove_child(_fate_overlay)
+		_fate_overlay.queue_free()
 	_fate_overlay = Control.new()
 	_fate_overlay.name = "DoorFateOverlay3D"
 	_fate_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_fate_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	_fate_overlay.set_meta("ui_prism_exempt", true)
 	_fate_overlay.process_mode = Node.PROCESS_MODE_ALWAYS
 	_fate_overlay.z_index = FATE_OVERLAY_Z_INDEX
 	$HUD.add_child(_fate_overlay)
 	var dim := ColorRect.new()
-	dim.color = Color(0.002, 0.008, 0.016, 0.62)
+	dim.name = "FateBackdrop"
+	dim.color = Color(0.002, 0.008, 0.016, 0.82)
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_fate_overlay.add_child(dim)
 
@@ -9948,7 +10028,20 @@ func _build_door_fate_overlay() -> void:
 	# 「还要攒多少」现在完全靠自己对照价格与余额，读数被压暗就等于把唯一依据抹掉。
 	# 复原在 `_close_door_fate_overlay()`，与弹窗生命周期同进同出。
 	if loot_label != null and is_instance_valid(loot_label):
+		if _fate_coin_restore.is_empty():
+			_fate_coin_restore = {
+				"z": loot_label.z_index,
+				"font_size": loot_label.get_theme_font_size("font_size"),
+				"font": loot_label.get_theme_font("font"),
+				"size_override": loot_label.has_theme_font_size_override("font_size"),
+				"font_override": loot_label.has_theme_font_override("font"),
+			}
 		loot_label.z_index = FATE_COIN_READOUT_Z_ABOVE_VEIL
+		loot_label.add_theme_font_size_override("font_size", maxi(30, loot_label.get_theme_font_size("font_size")))
+		var bold := FontVariation.new()
+		bold.base_font = loot_label.get_theme_font("font")
+		bold.variation_embolden = 0.8
+		loot_label.add_theme_font_override("font", bold)
 
 	# 顶部标题已按主人 2026-10-14 要求移除；顶部「本局金币」余额行也按主人
 	# 2026-10-15 要求整体移除 —— 金币的唯一读数是右下角的 `RunLootReadout`，
@@ -9956,29 +10049,23 @@ func _build_door_fate_overlay() -> void:
 	# 顶部留白由暗化层吸收，不重排卡片。
 
 	# 三张卡是本弹窗的主体，占据余额行与退出按钮之间的全部纵向空间。
-	var row := HBoxContainer.new()
-	row.alignment = BoxContainer.ALIGNMENT_CENTER
-	row.add_theme_constant_override("separation", _hud_int(56))
-	# 卡列由 `106` 上提到 `74`：头部只剩一行了，若还留在 106，余额行与卡顶之间会空出
-	# 40 px（改前那 10 px 的 4 倍），看着像掉了一行东西。74 让这个间距回到 14 px 的原有节奏。
-	# 下沿给到 800（而不是等比例上移的 774）：卡列自身只有 694 高、且顶部对齐，多出的余量
-	# 只是容器的空余，换来卡底与退出按钮之间约 29 px 的间距，与改前的 24 px 同一档。
-	_anchor_control(row, 0.5, 0.0, 0.5, 0.0, -570, 74, 570, 800)
-	_fate_overlay.add_child(row)
+	_fate_presentation = load("res://src/ui/weapon_build/FateHologramPresentation.gd").new() as Control
+	_fate_presentation.name = "FateHologramPresentation"
+	_fate_overlay.add_child(_fate_presentation)
+	_fate_presentation.call("set_player", player)
+	var row := _fate_presentation.get("row") as HBoxContainer
+	_fate_board = _fate_presentation.get("board") as Control
 	_fate_choice_buttons.clear()
 	var card_buttons: Array[Button] = []
 	for choice_index in range(_door_fate_choices.size()):
 		var card := _door_fate_choices[choice_index]
 		var card_view := _create_reference_fate_card_view(card, choice_index)
 		row.add_child(card_view)
-		# 设计契约：三张卡持续做轻微错相漂浮与透视感旋转。
-		# 作用于列容器，和卡面翻牌、悬停缩放分层，避免相互覆盖。
-		_start_fate_card_idle_motion(card_view, choice_index)
+		# 列交给紧凑布局，避免漂浮 tween 抢写容器坐标。
 		var card_button := card_view.get_meta("tarot_button") as Button
 		if card_button != null:
 			card_buttons.append(card_button)
 			_fate_choice_buttons.append(card_button)
-			_play_reference_tarot_flip(card_button, card, choice_index)
 	# 屏幕下方正中的退出按钮：买与不买都由它收尾，ESC / 手柄 B 是同一入口。
 	# **必须在 `_configure_fate_card_focus_navigation` 之前建**：焦点链要把三张卡的「下」
 	# 接到它身上，建晚了这一步拿到的就是 null，手柄会走不到退出按钮。
@@ -9987,15 +10074,19 @@ func _build_door_fate_overlay() -> void:
 	_fate_exit_button.text = "退 出"
 	_fate_exit_button.tooltip_text = "退出命运卡购买（对应 ESC）· 已购买的卡继续生效"
 	_fate_exit_button.focus_mode = Control.FOCUS_ALL
-	_fate_exit_button.custom_minimum_size = _hud_size(Vector2(220, 44))
-	_fate_exit_button.add_theme_font_size_override("font_size", _hud_int(24))
+	_fate_exit_button.custom_minimum_size = Vector2(180, 40)
+	_fate_exit_button.add_theme_font_size_override("font_size", 20)
 	var exit_styles := UIStyleFactory.make_button_style(
 		UIStyleFactory.make_panel_bg(2).bg_color,
 		Color(0.62, 0.90, 0.96)
 	)
 	UIStyleFactory.apply_button_style(_fate_exit_button, exit_styles)
 	_fate_exit_button.pressed.connect(_cancel_door_fate_selection)
-	_anchor_control(_fate_exit_button, 0.5, 1.0, 0.5, 1.0, -110, -64, 110, -20)
+	_fate_exit_button.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	_fate_exit_button.offset_left = -90
+	_fate_exit_button.offset_right = 90
+	_fate_exit_button.offset_top = -48
+	_fate_exit_button.offset_bottom = -8
 	_fate_overlay.add_child(_fate_exit_button)
 
 	_configure_fate_card_focus_navigation(card_buttons)
@@ -10007,11 +10098,18 @@ func _build_door_fate_overlay() -> void:
 	# 入场淡入（后置过渡）。**必须放在最后**：先把卡片、价格、焦点链都填好再整体淡入，
 	# 否则会看到"空弹窗先亮、卡再一张张冒出来"。
 	# `TWEEN_PAUSE_PROCESS`：暂停时弹窗自身照常淡入完，不会停在半透明。
-	_fate_overlay.modulate.a = 0.0
-	var intro := _fate_overlay.create_tween()
-	intro.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	intro.tween_property(_fate_overlay, "modulate:a", 1.0, FATE_OVERLAY_INTRO_DURATION)
-	_fate_overlay.set_meta("fate_intro_tween", intro)
+	var current_overlay := _fate_overlay
+	_fate_presentation.call("play_intro", func() -> void:
+		if current_overlay != _fate_overlay or _fate_overlay_closing:
+			return
+		for index in range(_fate_choice_buttons.size()):
+			var button := _fate_choice_buttons[index]
+			if bool(button.get_meta("tarot_purchased", false)):
+				button.set_meta("tarot_face_ready", true)
+				_style_purchased_fate_card(button, index)
+			else:
+				_play_reference_tarot_flip(button, _door_fate_choices[index], index)
+		_refresh_door_fate_prices())
 
 
 ## 门后购卡层的单张命运卡：**塔罗图卡**（卡面贴图 + 卡下功能文字 + 卡下购买价）。
@@ -10024,16 +10122,16 @@ func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Cont
 	var accent := FateCard.scope_color(card.scope)
 	var column := VBoxContainer.new()
 	column.name = "FateChoiceColumn_%d" % choice_index
-	# 三列必须使用同一高度并从同一条顶线开始；否则枪械卡多一行文字时，
-	# VBoxContainer 的居中布局会把整张卡向上顶，造成截图中的卡片错位。
-	# 高度 = 卡面 546 + 说明 92 + 价格行 32 + 两条 12px 间距 = 694，与外层 row 完全等高。
-	column.custom_minimum_size = _hud_size(Vector2(346, 694))
+	# 卡画面不变，给三行完整短说明单独留宽。
+	column.custom_minimum_size = Vector2(230, 336)
+	column.set_meta("ui_prism_exempt", true)
 	column.alignment = BoxContainer.ALIGNMENT_BEGIN
-	column.add_theme_constant_override("separation", _hud_int(12))
+	column.add_theme_constant_override("separation", 6)
 
 	var button := Button.new()
 	button.name = "FateChoiceCard_%d" % choice_index
-	button.custom_minimum_size = _hud_size(Vector2(346, 546))
+	button.custom_minimum_size = Vector2(135, 210)
+	button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	button.text = ""
 	button.clip_contents = false
 	button.focus_mode = Control.FOCUS_ALL
@@ -10070,6 +10168,7 @@ func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Cont
 		face_node = _build_programmatic_fate_face(button, card, accent)
 		back_node = _build_programmatic_fate_back(button, accent)
 
+	FateCardView.build_scope_badge(button, card.scope, face_node)
 	button.set_meta("tarot_face_node", face_node)
 	button.set_meta("tarot_back_node", back_node)
 	button.set_meta("fate_feedback_view", column)
@@ -10099,41 +10198,48 @@ func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Cont
 	button.focus_exited.connect(_on_reference_fate_card_focus.bind(button, false))
 	button.pressed.connect(_on_reference_fate_card_pressed.bind(button, choice_index))
 
-	var target_detail := ""
-	if card.scope == FateCard.Scope.WEAPON:
-		var target := FateCardGameBridge.get_target_summary(card)
-		var weapon_name := str(target.get("display_name", "当前枪械"))
-		var used := int(target.get("fate_slot_used", 0))
-		var capacity := int(target.get("fate_slot_capacity", 0))
-		if capacity > 0:
-			target_detail = "%s  %d/%d" % [weapon_name, used, capacity]
-		else:
-			target_detail = weapon_name
-	var caption := FateCardView.build_caption(card, _hud_int(22), _hud_size(Vector2(346, 0)).x, target_detail)
-	# 说明区也统一预留高度：先保证三张卡面和文字基线整齐，再容纳枪械卡的第二行信息。
-	caption.custom_minimum_size = _hud_size(Vector2(346, 92))
+	var caption := FateCardView.build_caption(card, 18, 230, "", false)
+	caption.custom_minimum_size = Vector2(230, 70)
+	caption.clip_text = true
+	caption.max_lines_visible = 3
+	caption.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	caption.tooltip_text = card.description
 	caption.add_theme_color_override(
 		"font_color", UIStyleFactory.prism_normalize_color(accent)
 	)
-	var caption_font := UIStyleFactory.make_prism_font(2)
+	var caption_font := UIStyleFactory.make_prism_font(1)
 	if caption_font != null:
 		caption.add_theme_font_override("font", caption_font)
 	caption.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.88))
 	caption.add_theme_constant_override("outline_size", _hud_int(3))
-	caption.add_theme_constant_override("line_spacing", _hud_int(3))
+	caption.add_theme_constant_override("line_spacing", 0)
 	column.add_child(caption)
 	# 卡下说明与价格行都要能被「买下后整体去色」重新着色，故各挂一份 meta。
 	button.set_meta("tarot_caption_label", caption)
 	# 卡下价格行：这是「购买制」对玩家的唯一价格口径，只读 `FATE_PRICE_BY_RARITY`。
 	# 状态（可买 / 金币不足 / 命运槽已满 / 已购买）也由这一行承载，卡片本体不额外加角标。
-	var price_label := _make_hud_label("", 22, accent)
+	var purchase := Button.new()
+	purchase.name = "FatePurchase_%d" % choice_index
+	purchase.custom_minimum_size = Vector2(230, 44)
+	purchase.text = ""
+	purchase.disabled = true
+	UIStyleFactory.apply_prism_button(purchase, "primary", 0, 24, 1, "none")
+	purchase.pressed.connect(_on_reference_fate_card_pressed.bind(button, choice_index))
+	column.add_child(purchase)
+	var price_label := Label.new()
 	price_label.name = "FateChoicePrice_%d" % choice_index
+	price_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	price_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	price_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	price_label.custom_minimum_size = _hud_size(Vector2(346, 32))
-	price_label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.90))
-	price_label.add_theme_constant_override("outline_size", _hud_int(3))
-	column.add_child(price_label)
+	price_label.add_theme_font_size_override("font_size", 24)
+	var bold := FontVariation.new()
+	bold.base_font = ThemeDB.fallback_font
+	bold.variation_embolden = 0.8
+	price_label.add_theme_font_override("font", bold)
+	price_label.add_theme_color_override("font_color", UIPalette.PRISM_INK)
+	purchase.add_child(price_label)
+	button.set_meta("tarot_purchase_button", purchase)
 	button.set_meta("tarot_price", _fate_price(card))
 	button.set_meta("tarot_price_bounds", _fate_price_bounds(card))
 	button.set_meta("tarot_price_label", price_label)
@@ -10146,8 +10252,12 @@ func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Cont
 ## 缺图回退：程序绘制的卡面（作用域 + 卡名 + 方位 + 功能）。
 ## 塔罗美术补齐后这一支不再被走到。
 func _build_programmatic_fate_face(host: Control, card: FateCard, accent: Color) -> Control:
-	var margin := _make_margin(22, 20, 22, 20)
+	var margin := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 6)
 	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.clip_contents = true
 	margin.name = "TarotFaceText"
 	margin.visible = false
 	host.add_child(margin)
@@ -10155,10 +10265,11 @@ func _build_programmatic_fate_face(host: Control, card: FateCard, accent: Color)
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	vbox.add_theme_constant_override("separation", _hud_int(8))
 	margin.add_child(vbox)
-	var scope_label := _make_hud_label(FateCard.scope_display_name(card.scope), 20, accent)
+	var scope_label := _make_hud_label(FateCard.scope_display_name(card.scope), 11, accent)
 	scope_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(scope_label)
-	var card_name := _make_hud_label(card.card_name, 28, Color(0.94, 0.96, 1.0))
+	var card_name := _make_hud_label(card.card_name, 15, UIPalette.PRISM_TEXT)
+	card_name.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	card_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(card_name)
 	var orientation_label := _make_hud_label(
@@ -10170,8 +10281,10 @@ func _build_programmatic_fate_face(host: Control, card: FateCard, accent: Color)
 	orientation_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(orientation_label)
 	var effect_text := card.short_description if not card.short_description.is_empty() else card.description
-	var effect := _make_hud_label(effect_text, 19, Color(0.91, 0.93, 0.96))
-	effect.custom_minimum_size = _hud_size(Vector2(280, 120))
+	var effect := _make_hud_label(effect_text, 11, UIPalette.PRISM_LABEL)
+	effect.custom_minimum_size = Vector2(100, 64)
+	effect.max_lines_visible = 5
+	effect.clip_text = true
 	effect.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	effect.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	effect.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -10228,14 +10341,15 @@ func _play_reference_tarot_flip(button: Button, card: FateCard, choice_index: in
 
 func _reveal_reference_tarot_face(button: Control, face: Control, back: Control, is_reversed: bool) -> void:
 	# 图卡模式：只把**卡面图案**绕中心倒置，按钮与卡下功能文字层都不旋转。
-	# 程序卡面回退：沿用「卡框倒置 + 文字层反向补偿」的旧规则。
+	# 缺图回退保持文字与宿主正向，独立作用域图标不参与倒置。
 	if button != null and is_instance_valid(button) and face != null:
 		if bool(button.get_meta("tarot_art_mode", false)):
 			face.pivot_offset = face.size * 0.5
 			face.rotation = PI if is_reversed else 0.0
 		else:
-			var ornament := face.find_child("TarotOrientationOrnament", true, false) as Control
-			UIStyleFactory.apply_tarot_orientation(button as Button, face, is_reversed, ornament)
+			# 缺图文字层保持正向，宿主不旋转，左上作用域图标也不倒置。
+			button.rotation = 0.0
+			face.rotation = 0.0
 	if back != null and is_instance_valid(back):
 		back.visible = false
 	if face != null and is_instance_valid(face):
@@ -10245,13 +10359,14 @@ func _reveal_reference_tarot_face(button: Control, face: Control, back: Control,
 func _finish_reference_tarot_flip(button: Button, card: FateCard) -> void:
 	if button == null or not is_instance_valid(button):
 		return
-	button.disabled = false
+	button.disabled = _fate_tutorial_locked or _fate_purchase_busy or _fate_overlay_closing
 	button.set_meta("tarot_face_ready", true)
 	button.set_meta("tarot_face_side", "front")
 	button.set_meta("tarot_orientation", card.orientation_name())
 	button.set_meta("tarot_face_rotation", button.rotation)
 	if bool(button.get_meta("tarot_purchased", false)):
-		_show_fate_card_back(button)
+		_style_purchased_fate_card(button, _fate_choice_buttons.find(button))
+	_refresh_door_fate_prices()
 	_maybe_focus_fate_card(button)
 
 
@@ -10267,24 +10382,7 @@ func _finish_reference_tarot_flip(button: Button, card: FateCard) -> void:
 func _flip_fate_card_to_back(button: Button, choice_index: int) -> void:
 	if button == null or not is_instance_valid(button):
 		return
-	var back := (button.get_meta("tarot_back_node") if button.has_meta("tarot_back_node") else null) as Control
-	# 没有卡背层（图卡缺背图）就保持正面：翻过去会变成一张空白卡，比不翻更糟。
-	# 但**去色 / 压暗 / 缩小照样做** —— 那三样不依赖有没有背图。
 	_style_purchased_fate_card(button, choice_index)
-	if back == null or not is_instance_valid(back):
-		return
-	button.pivot_offset = button.size * 0.5
-	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
-		_show_fate_card_back(button)
-		return
-	var tween := button.create_tween()
-	button.set_meta("fate_flip_tween", tween)
-	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	# stagger 比首次翻牌短：这是玩家刚点完的卡，反馈要跟手，不能等三张卡的错峰节奏。
-	tween.tween_interval(0.04 + float(choice_index) * 0.04)
-	tween.tween_property(button, "scale:x", 0.04, 0.14).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.tween_callback(_show_fate_card_back.bind(button))
-	tween.tween_property(button, "scale:x", 1.0, 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 
 ## 翻回背面的换面动作：藏卡面、露卡背，并把 `tarot_face_side` 翻到 `back`。
@@ -10323,29 +10421,21 @@ func _ensure_fate_greyscale_material() -> ShaderMaterial:
 func _style_purchased_fate_card(button: Button, choice_index: int) -> void:
 	if button == null or not is_instance_valid(button):
 		return
-	var back := (button.get_meta("tarot_back_node") if button.has_meta("tarot_back_node") else null) as CanvasItem
-	if back != null and is_instance_valid(back):
-		back.material = _ensure_fate_greyscale_material()
-		# 半透明：只淡**卡牌本身**（主人 2026-10-15 要求），不淡卡下文字 ——
-		# 见 `FATE_PURCHASED_CARD_ALPHA` 的注释，整列半透明会把「已购买」读没。
-		back.modulate = Color(1.0, 1.0, 1.0, FATE_PURCHASED_CARD_ALPHA)
-	# 文字也去色：作用域色（紫/金/浅蓝）与「已购买」的绿都不是灰阶，留着会和卡面打架。
-	var caption := (button.get_meta("tarot_caption_label") if button.has_meta("tarot_caption_label") else null) as Label
-	if caption != null and is_instance_valid(caption):
-		caption.add_theme_color_override("font_color", FATE_PURCHASED_TEXT_COLOR)
-	var price_label := (button.get_meta("tarot_price_label") if button.has_meta("tarot_price_label") else null) as Label
-	if price_label != null and is_instance_valid(price_label):
-		price_label.add_theme_color_override("font_color", FATE_PURCHASED_TEXT_COLOR)
-	# 整列压暗走 modulate（乘性），与灰阶材质分工：材质管去色，modulate 管变暗。
+	_kill_fate_feedback_tween(button)
 	var view := button.get_meta("fate_feedback_view") as Control
-	if view != null and is_instance_valid(view):
-		view.modulate = FATE_PURCHASED_DIM_COLOR
-	# 缩到 70%：走 `_tween_fate_card_scale`，它会乘上 `_fate_card_base_scale()`，
-	# 所以后续任何悬停复位 / 重排都不会把这张卡弹回 100%。
-	_tween_fate_card_scale(
-		button, 1.0,
-		0.0 if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)) else 0.32
-	)
+	view.scale = Vector2.ONE
+	view.modulate = Color.WHITE
+	# 卡面飞行由共享 board 承接；原位保留同尺寸可聚焦占位，不再展示灰背。
+	for key in ["tarot_face_node", "tarot_back_node", "fate_feedback_node"]:
+		var visual := button.get_meta(key) as CanvasItem if button.has_meta(key) else null
+		if is_instance_valid(visual):
+			visual.hide()
+	button.text = "已购买\n%02d" % (choice_index + 1)
+	button.add_theme_font_size_override("font_size", 18)
+	button.add_theme_color_override("font_color", UIPalette.PRISM_LABEL)
+	button.scale = Vector2.ONE
+	button.disabled = _fate_tutorial_locked
+	button.set_meta("tarot_face_side", "purchased")
 
 
 ## 命运卡三选一是**代码构造**的覆盖层（不是场景菜单），因此不在
@@ -10358,7 +10448,7 @@ func _style_purchased_fate_card(button: Button, choice_index: int) -> void:
 ##
 ## 只在当前没有焦点持有者时抓：玩家若已用鼠标/手柄选中了某张卡，不抢回来。
 func _maybe_focus_fate_card(button: Button) -> void:
-	if not _door_fate_active:
+	if _fate_tutorial_locked or not _door_fate_active:
 		return
 	if _fate_overlay == null or not is_instance_valid(_fate_overlay):
 		return
@@ -10406,7 +10496,13 @@ func _configure_fate_card_focus_navigation(buttons: Array[Button]) -> void:
 		button.focus_neighbor_left = previous_path
 		button.focus_neighbor_right = following_path
 		button.focus_neighbor_top = previous_path
-		button.focus_neighbor_bottom = _safe_fate_focus_neighbor_path(button, _fate_exit_button)
+		var purchase := button.get_meta("tarot_purchase_button") as Button if button.has_meta("tarot_purchase_button") else null
+		button.focus_neighbor_bottom = _safe_fate_focus_neighbor_path(button, purchase if is_instance_valid(purchase) else _fate_exit_button)
+		if is_instance_valid(purchase):
+			purchase.focus_neighbor_top = _safe_fate_focus_neighbor_path(purchase, button)
+			purchase.focus_neighbor_bottom = _safe_fate_focus_neighbor_path(purchase, _fate_exit_button)
+			purchase.focus_neighbor_left = _safe_fate_focus_neighbor_path(purchase, previous)
+			purchase.focus_neighbor_right = _safe_fate_focus_neighbor_path(purchase, following)
 	if _fate_exit_button == null or not is_instance_valid(_fate_exit_button):
 		return
 	# 退出按钮留在同一组里：左右环绕整排卡，向上回第一张卡，再按上/下回到自己。
@@ -10522,7 +10618,7 @@ func _kill_fate_feedback_tween(button: Control) -> void:
 func _fate_card_base_scale(button: Control) -> float:
 	if button == null or not is_instance_valid(button):
 		return 1.0
-	return FATE_PURCHASED_CARD_SCALE if bool(button.get_meta("tarot_purchased", false)) else 1.0
+	return 1.0
 
 
 func _tween_fate_card_scale(button: Button, target: float, duration: float) -> void:
@@ -10545,52 +10641,21 @@ func _tween_fate_card_scale(button: Button, target: float, duration: float) -> v
 
 
 func _on_reference_fate_card_pressed(button: Button, choice_index: int) -> void:
-	if button == null or not is_instance_valid(button) or _fate_feedback_locked:
+	if _fate_tutorial_locked or button == null or not is_instance_valid(button) or _fate_feedback_locked or _fate_purchase_busy:
 		return
 	if not bool(button.get_meta("tarot_face_ready", false)):
 		return
-	# 购买制的前置校验必须在播放「选中」动画之前：不能对一张买不起的卡
-	# 播完放大/闪光再告诉玩家扣不了钱，那是一次假的选中反馈。
-	var block_reason := _fate_card_block_reason(choice_index)
-	if not block_reason.is_empty():
-		_report_fate_block(choice_index, block_reason)
-		return
-	_fate_feedback_locked = true
-	_fate_feedback_selected_index = choice_index
-	_set_fate_feedback_buttons_disabled(true)
-	for other_button in _fate_choice_buttons:
-		if other_button == null or not is_instance_valid(other_button):
-			continue
-		var target := 1.10 if other_button == button else 0.92
-		if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
-			target = 1.0
-		_tween_fate_card_scale(other_button, target, 0.25)
-	var feedback := (button.get_meta("fate_feedback_node") if button.has_meta("fate_feedback_node") else null) as Control
-	if feedback != null and is_instance_valid(feedback):
-		feedback.call("trigger_flash")
-	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
-		_apply_fate_choice_after_feedback(choice_index)
-		return
-	# 短促的按下回弹先于选中放大，所有 tween 都由共享表统一 kill，快进快出不会竞态。
-	_kill_fate_feedback_tween(button)
-	var view: Control = button.get_meta("fate_feedback_view") as Control
-	var impact := view.create_tween()
-	impact.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	impact.tween_property(view, "scale", Vector2.ONE * 0.965, 0.055).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	impact.tween_property(view, "scale", Vector2.ONE * 1.055, 0.09).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	impact.tween_property(view, "scale", Vector2.ONE * 1.10, 0.17).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	_fate_feedback_tweens[button.get_instance_id()] = impact
-	_fate_feedback_dispatch = _fate_overlay.create_tween()
-	_fate_feedback_dispatch.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	_fate_feedback_dispatch.tween_interval(0.36)
-	_fate_feedback_dispatch.tween_callback(_apply_fate_choice_after_feedback.bind(choice_index))
+	await _purchase_fate_card(choice_index)
 
 
 func _set_fate_feedback_buttons_disabled(disabled: bool) -> void:
 	for button in _fate_choice_buttons:
 		if button == null or not is_instance_valid(button):
 			continue
-		button.disabled = disabled if disabled else not bool(button.get_meta("tarot_face_ready", false))
+		button.disabled = _fate_tutorial_locked or (disabled if disabled else not bool(button.get_meta("tarot_face_ready", false)))
+		var purchase := button.get_meta("tarot_purchase_button") as Button if button.has_meta("tarot_purchase_button") else null
+		if is_instance_valid(purchase):
+			purchase.disabled = button.disabled
 
 
 func _reset_fate_feedback(immediate := false) -> void:
@@ -10658,6 +10723,8 @@ func _get_fate_choice_text(card: FateCard) -> String:
 ## 兼容入口：直接购买指定卡位（不走按钮动画反馈）。门后流程与验收用例共用。
 ## 真正的购买事务在 `_purchase_fate_card`；本函数只做参数裁剪。
 func _on_door_fate_selected(choice_index: int) -> void:
+	if _fate_tutorial_locked:
+		return
 	await _purchase_fate_card(choice_index)
 
 
@@ -10669,42 +10736,89 @@ func _on_door_fate_selected(choice_index: int) -> void:
 ##
 ## 弹窗保持打开：三张卡可以全买，也可以一张不买，退出按钮才收尾。
 func _purchase_fate_card(choice_index: int) -> void:
-	if not _door_fate_active or _fate_overlay_closing or choice_index < 0 or choice_index >= _door_fate_choices.size():
+	if _fate_tutorial_locked or _fate_purchase_busy or not _door_fate_active or _fate_overlay_closing or choice_index < 0 or choice_index >= _door_fate_choices.size():
 		return
 	var block_reason := _fate_card_block_reason(choice_index)
 	if not block_reason.is_empty():
 		_report_fate_block(choice_index, block_reason)
 		return
+	_fate_purchase_busy = true
+	_fate_feedback_selected_index = choice_index
+	_set_fate_feedback_buttons_disabled(true)
+	var overlay := _fate_overlay
+	var board := _fate_board
 	var card := _door_fate_choices[choice_index]
+	var target_id := str(FateCardGameBridge.get_target_summary(card).get("weapon_instance_id", ""))
+	if card.scope == FateCard.Scope.WEAPON:
+		var confirm: Control = load("res://src/ui/weapon_build/FateIrreversibleConfirm.gd").new()
+		confirm.set("weapon_instance_id", target_id)
+		_fate_confirm = confirm
+		overlay.add_child(confirm)
+		var accepted: bool = await Signal(confirm, "completed")
+		_fate_confirm = null
+		if not accepted or overlay != _fate_overlay or not _door_fate_active:
+			_finish_fate_purchase_ui(overlay)
+			return
+		if target_id != str(FateCardGameBridge.get_target_summary(card).get("weapon_instance_id", "")):
+			status_label.text = "目标枪已改变，请重新确认；未扣款"
+			_finish_fate_purchase_ui(overlay)
+			return
+	block_reason = _fate_card_block_reason(choice_index)
+	if not block_reason.is_empty():
+		_report_fate_block(choice_index, block_reason)
+		_finish_fate_purchase_ui(overlay)
+		return
 	var price := _fate_price(card)
 	if not GameManager.spend_currency(price):
 		_report_fate_block(choice_index, "insufficient")
-		_refresh_door_fate_prices()
+		_finish_fate_purchase_ui(overlay)
 		return
-	var result := await FateCardGameBridge.apply_card_with_source_selection(card, _fate_overlay)
-	if not is_inside_tree() or not _door_fate_active:
-		return
-	if not bool(result.get("success", false)):
-		# 付了金币但牌没生效 ⇒ 必须原额退金币，不能出现「钱花了、卡没刻上」的静默损失。
-		GameManager.add_currency(price)
-		var failure := str(result.get("message", result.get("reason", "当前目标无法承载该命运")))
-		status_label.text = "购买失败 · %s：%s · 已退还 %d 金币" % [card.card_name, failure, price]
-		_refresh_door_fate_prices()
-		return
-	if choice_index < _door_fate_purchased.size():
-		_door_fate_purchased[choice_index] = true
 	var button := _fate_choice_button(choice_index)
-	if button != null:
+	var from_rect := button.get_global_rect() if is_instance_valid(button) else Rect2()
+	if card.occupies_weapon_slot() and is_instance_valid(board):
+		board.call("refresh_from_owner")
+		var target := FateCardGameBridge.get_target_summary(card)
+		board.call("set_pending_install", int(target.get("fate_slot_used", 0)) + 1)
+	var result := await FateCardGameBridge.apply_card_with_source_selection(card, overlay)
+	# 退款不依赖视图仍存在：来源取消和异常退场都必须先归还金币。
+	if not bool(result.get("success", false)):
+		GameManager.add_currency(price)
+		if is_instance_valid(board):
+			board.call("clear_pending_install")
+		if is_inside_tree() and overlay == _fate_overlay and _door_fate_active:
+			var failure := str(result.get("message", result.get("reason", "当前目标无法承载该命运")))
+			status_label.text = "购买失败 · %s：%s · 已退还 %d 金币" % [card.card_name, failure, price]
+		_finish_fate_purchase_ui(overlay)
+		return
+	if overlay != _fate_overlay or not _door_fate_active:
+		_queue_runtime_autosave("fate_card_purchased")
+		return
+	_door_fate_purchased[choice_index] = true
+	if is_instance_valid(button):
 		button.set_meta("tarot_purchased", true)
-		# 买下的卡翻回背面：卡位已经用掉了，露着牌面会让玩家以为还能再买一次。
-		_flip_fate_card_to_back(button, choice_index)
+		_style_purchased_fate_card(button, choice_index)
+	# 提交先落状态和存档，动画绝不是事务提交点。
+	_queue_runtime_autosave("fate_card_purchased")
 	if AudioManager != null:
 		AudioManager.play_fate_card_sfx()
 	status_label.text = "命运生效：%s · 花费 %d 金币 · 剩余 %d 金币" % [card.card_name, price, GameManager.currency]
 	_refresh_door_fate_prices()
-	_queue_runtime_autosave("fate_card_purchased")
-	# 扣款反馈必须晚于刷新：刷新会把余额文本换成新值，飘字是对「这次变化」的注解。
 	_play_fate_balance_spend_feedback(price)
+	if is_instance_valid(board):
+		if card.occupies_weapon_slot():
+			await board.call("play_card_install", card, int(result.get("slot_index", 0)), from_rect)
+		else:
+			await board.call("play_scope_feedback", card)
+	_finish_fate_purchase_ui(overlay)
+
+
+func _finish_fate_purchase_ui(overlay: Control) -> void:
+	if overlay != _fate_overlay:
+		return
+	_fate_purchase_busy = false
+	if _door_fate_active and not _fate_overlay_closing:
+		_reset_fate_feedback()
+		_refresh_door_fate_prices()
 
 
 func _is_weapon_fate_target_full(card: FateCard) -> bool:
@@ -11046,10 +11160,13 @@ func _spawn_fate_spend_popup(amount: int) -> void:
 ## 刷新三张卡的卡下价格行与置灰状态。扣金币/购买/打开弹窗后必须调用。
 ## （顶部余额行已移除：金币读数由 `loot_label` 经 `currency_changed` 信号链自行刷新。）
 func _refresh_door_fate_prices() -> void:
+	if is_instance_valid(_fate_exit_button):
+		_fate_exit_button.disabled = _fate_tutorial_locked or _fate_purchase_busy or _fate_overlay_closing
 	for choice_index in range(_door_fate_choices.size()):
 		var button := _fate_choice_button(choice_index)
 		if button == null:
 			continue
+		button.disabled = _fate_tutorial_locked or _fate_purchase_busy or _fate_overlay_closing or _fate_feedback_locked or not bool(button.get_meta("tarot_face_ready", false))
 		var card := _door_fate_choices[choice_index]
 		var purchased := bool(button.get_meta("tarot_purchased", false))
 		var block_reason := (
@@ -11074,24 +11191,31 @@ func _refresh_door_fate_prices() -> void:
 					# 同样只留价格：远征动态报价的「区间 a–b」也不再上屏（主人 2026-10-19）。
 					label.text = "◈ %d 金币" % _fate_price(card)
 					label.add_theme_color_override("font_color", _rarity_color(card.card_rarity))
-		# 三种不可买状态的压暗强度刻意分两档：
-		# · 已购买 ⇒ **灰阶 + 压暗 + 缩到 70%**（卡位用掉了，退到背景）
-		# · 买不起 / 槽满 ⇒ 只做轻度压暗。它们是「暂时/本枪买不了」，不是「已经没了」，
-		#   压成灰阶会让玩家以为这张卡已经消失，其实是攒够金币就能买。
+		if is_instance_valid(label):
+			label.text = "已购买" if purchased else ("命运槽已满" if block_reason == "slot_full" else "购买  %d" % _fate_price(card))
+			label.add_theme_color_override("font_color", UIPalette.PRISM_INK)
+		var purchase := button.get_meta("tarot_purchase_button") as Button if button.has_meta("tarot_purchase_button") else null
+		if is_instance_valid(purchase):
+			purchase.disabled = _fate_tutorial_locked or _fate_purchase_busy or _fate_overlay_closing or not bool(button.get_meta("tarot_face_ready", false))
+			purchase.tooltip_text = "已购买，不可重复交易" if purchased else ("金币不足" if block_reason == "insufficient" else "%d 金币" % _fate_price(card))
 		var view := button.get_meta("fate_feedback_view") as Control
-		if view != null and is_instance_valid(view):
-			if purchased:
-				view.modulate = FATE_PURCHASED_DIM_COLOR
-			elif block_reason.is_empty():
-				view.modulate = Color.WHITE
-			else:
-				view.modulate = Color(0.56, 0.59, 0.64)
+		if is_instance_valid(view):
+			view.modulate = Color.WHITE
 
 
 ## 退出命运卡购买时的统一退场：三张卡同时「翻回背面 + 缩小 + 淡出」，
 ## 动画结束后才清理覆盖层。这里不直接把 `_door_fate_active` 置 false，
 ## 否则 ESC/手柄 B 在动画期间会让玩家输入穿透到战斗层。
 func _animate_fate_overlay_exit(bought: int) -> void:
+	if is_instance_valid(_fate_presentation):
+		var current_overlay := _fate_overlay
+		_fate_feedback_locked = true
+		_set_fate_feedback_buttons_disabled(true)
+		if is_instance_valid(_fate_exit_button):
+			_fate_exit_button.disabled = true
+		await _fate_presentation.call("play_close")
+		_finish_fate_overlay_exit(current_overlay, bought)
+		return
 	var overlay := _fate_overlay
 	if overlay == null or not is_instance_valid(overlay):
 		_finish_fate_overlay_exit(overlay, bought)
@@ -11180,6 +11304,18 @@ func _finish_fate_overlay_exit(overlay: Control, bought: int) -> void:
 
 
 func _close_door_fate_overlay() -> void:
+	if is_instance_valid(_fate_tutorial):
+		_fate_tutorial.call("abort_for_overlay_close")
+	if _fate_purchase_busy:
+		if is_instance_valid(_fate_confirm):
+			_fate_confirm.call("cancel")
+		return
+	if is_instance_valid(_fate_confirm):
+		_fate_confirm.call("cancel")
+	_fate_confirm = null
+	_fate_purchase_busy = false
+	_fate_presentation = null
+	_fate_board = null
 	# 这是最终清理口。用户点击退出时会先走 `_animate_fate_overlay_exit()`；
 	# 其他流程（房间切换、测试收尾、异常中止）仍可直接调用这里硬清理。
 	_fate_overlay_closing = false
@@ -11191,8 +11327,17 @@ func _close_door_fate_overlay() -> void:
 	_fate_exit_button = null
 	# 金币读数的层级随弹窗一起复原：弹窗开着时它被提到暗化层之上，
 	# 关掉后必须回到普通 HUD 层，否则后续弹层（背包/暂停）再也压不住它。
-	if loot_label != null and is_instance_valid(loot_label):
-		loot_label.z_index = 0
+	if is_instance_valid(loot_label) and not _fate_coin_restore.is_empty():
+		loot_label.z_index = int(_fate_coin_restore["z"])
+		if bool(_fate_coin_restore["size_override"]):
+			loot_label.add_theme_font_size_override("font_size", int(_fate_coin_restore["font_size"]))
+		else:
+			loot_label.remove_theme_font_size_override("font_size")
+		if bool(_fate_coin_restore["font_override"]):
+			loot_label.add_theme_font_override("font", _fate_coin_restore["font"] as Font)
+		else:
+			loot_label.remove_theme_font_override("font")
+	_fate_coin_restore.clear()
 	if _fate_overlay != null and is_instance_valid(_fate_overlay):
 		# 先摘除再回收：queue_free() 要等到帧末才真正释放节点。若同一帧内再次
 		# 打开弹窗（连续两次命运卡流程/验收用例），新节点会与仍挂在树上的旧节点
@@ -11226,6 +11371,13 @@ func _commit_pending_fate_door_streaming() -> void:
 ## 退出按钮 / ESC / 手柄 B 三条路共用：已买下的卡保持生效，未买的直接放弃。
 ## 点击退出不会硬切：三张卡先同步翻回背面并缩小淡出，动画完成后才关闭弹窗。
 func _cancel_door_fate_selection() -> void:
+	if _fate_tutorial_locked:
+		return
+	if is_instance_valid(_fate_confirm):
+		_fate_confirm.call("cancel")
+		return
+	if _fate_purchase_busy:
+		return
 	if not _door_fate_active or _fate_overlay_closing:
 		return
 	_fate_overlay_closing = true
@@ -11712,6 +11864,8 @@ func _restore_room_runtime_state(room_id: String) -> void:
 					float((saved_position as Array)[1]),
 					float((saved_position as Array)[2])
 				)
+			if is_instance_valid(_fate_tutorial):
+				_fate_tutorial.call("register_pickup", pickup)
 	_resume_pending_chest_grants(room)
 	var has_live_room_key := false
 	if not _room_produces_room_key(room):

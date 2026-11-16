@@ -1,0 +1,169 @@
+{
+  "schema": "shellstorm2.enemy_asset_manifest.v1",
+  "asset_id": "ENM-MELEE-FUNGBOAR01",
+  "content_id": "melee_chaser",
+  "display_name": "小僵尸",
+  "asset_version": "v006",
+  "runtime_integrated": true,
+  "runtime_prefab": "assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/enm_melee_fungboar01_root_top3d.tscn",
+  "visual_glb": "assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d.glb",
+  "model_source": {
+    "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v006.blend",
+    "sha256": "82affb03ed5add595938c0274bca0753f38d420f0664a245678d9736f1c5fe14",
+    "bytes": 629396
+  },
+  "animation_source": {
+    "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v006.blend",
+    "sha256": "05ff5bd1606b6aacc8498684b18e4f881e2adb8e3f4c73874c559ccf683f9f6e",
+    "bytes": 6897562
+  },
+  "skeleton_id": "SKEL-MELEE-ZOMBIE01-005",
+  "skeleton_signature": "77a08b65bebd0e35bbda1c8c5095e3875b174297589900b78037efe08bd46622",
+  "runtime_texture": {
+    "path": "assets/art/shared/textures/enemies/tex_color_85eaa809e59fa600fe6c.png",
+    "sha256": "85eaa809e59fa600fe6cbf8ffe374e0f419080797cfa420571b7bd6b197e8626",
+    "size": [
+      256,
+      256
+    ],
+    "reused": false,
+    "source_blends_packed": true
+  },
+  "geometry": {
+    "triangles": 800,
+    "vertices": 402,
+    "exported_vertices": 743,
+    "bones": 16,
+    "bone_names": [
+      "Root",
+      "Hip",
+      "Waist",
+      "Spine02",
+      "Neck",
+      "Head",
+      "L_Clavicle",
+      "L_Upperarm",
+      "L_Forearm",
+      "R_Clavicle",
+      "R_Upperarm",
+      "R_Forearm",
+      "L_Thigh",
+      "L_Calf",
+      "R_Thigh",
+      "R_Calf"
+    ],
+    "removed_bones_policy": "No Hand/Foot/Toe/Finger; merge Twist into corresponding limb segment; hand into Forearm, foot into Calf; Spine01 into Waist."
+  },
+  "clips": [
+    {
+      "id": "idle",
+      "action": "idle",
+      "frames": 96,
+      "duration": 3.2,
+      "loop": true,
+      "exported_channel_count": 48
+    },
+    {
+      "id": "walking",
+      "action": "walking",
+      "frames": 48,
+      "duration": 1.6,
+      "loop": true,
+      "exported_channel_count": 48
+    },
+    {
+      "id": "running",
+      "action": "running",
+      "frames": 24,
+      "duration": 0.8,
+      "loop": true,
+      "exported_channel_count": 48
+    },
+    {
+      "id": "attack",
+      "action": "attack",
+      "frames": 51,
+      "duration": 1.7,
+      "loop": false,
+      "exported_channel_count": 48
+    },
+    {
+      "id": "hurt",
+      "action": "hurt",
+      "frames": 24,
+      "duration": 0.8,
+      "loop": false,
+      "exported_channel_count": 48
+    },
+    {
+      "id": "dead",
+      "action": "dead",
+      "frames": 72,
+      "duration": 2.4,
+      "loop": false,
+      "exported_channel_count": 48
+    }
+  ],
+  "optimization": {
+    "baseline_triangles": 832,
+    "triangles_after": 800,
+    "reduction_ratio": 0.038461538461538464,
+    "baseline_bones": 41,
+    "bones_after": 16,
+    "max_vertex_influences": 4,
+    "animation_reference": "old idle frame1 world-rotation deltas; new joint positions and rest axes; calibrated leg IK; fixed per-clip amplitude repairs preserved",
+    "candidate_artifacts_preserved": true,
+    "candidate_geometry_weights_signature": "d6d1a820902ba55a26c79f8a05bb8d300daa337c60b7d56964c1fb2e92788563",
+    "texture_resize": {
+      "from": [
+        2048,
+        2048
+      ],
+      "to": [
+        256,
+        256
+      ],
+      "encoding": "PNG",
+      "runtime_compress_mode": 0,
+      "runtime_mipmaps": true
+    }
+  },
+  "validation_status": "passed_targeted_runtime_global_partial",
+  "validation_record": "assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/character_transfer_ledger.json",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_敌人账本_v001.xlsx#3D-敌人",
+  "development_record": "docs/v0.1/development/2026-11-16_small_zombie_v006_integration.md",
+  "limitations": [
+    "待机右鞋底约1.05—2.58厘米创作尺度离地，左脚支撑；整体视觉与阴影可显悬浮，不宣称双脚完全贴地。",
+    "walking腿幅85%、running腿幅40%、attack臂幅50%、dead臂幅50%腿幅75%；最终修复保留，动作可读性/步速与打击距离匹配仍需实际游玩评审。",
+    "仅16骨，不含独立手/脚/指骨；关节形变非零，采样与目检不构成零自交的连续时间数学证明。",
+    "256纹理在近景中明显软化，牙齿/眼缘不及2k清晰。",
+    "正式工程仍有原共享色盘UID警告；新纹理因不修改全局uid_cache.bin，GLB首次加载也提示新纹理UID未入全局表并按正确稳定路径加载；材质尺寸/路径专项及真实渲染通过，非缺图。",
+    "首次引擎隔离初始化与工程Autoload启动多次超时124，最终相关专项均exit0；中间失败原样保留。"
+  ],
+  "source_archive": [
+    {
+      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v004.blend",
+      "archive": "I:\\工作项目\\shellstrom2\\ShellStorm2-backup\\2026-11-16_small_zombie_v006_256\\original_tree\\art_source\\enemies\\normal_enemy_3d\\melee_chaser\\source\\model\\enm_melee_fungboar01_model_v004.blend",
+      "sha256": "0988c1f7fc011d56606b812f80f08010713bb4e2299cc221efbb1f595396e09b"
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v005.blend",
+      "archive": "I:\\工作项目\\shellstrom2\\ShellStorm2-backup\\2026-11-16_small_zombie_v006_256\\original_tree\\art_source\\enemies\\normal_enemy_3d\\melee_chaser\\source\\animation\\enm_melee_fungboar01_animation_v005.blend",
+      "sha256": "879a6d315edfb43246f2c8f519af3b37acf68b6057f9f12c3442f0a6b2d368a0"
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/textures/enm_melee_fungboar01_basecolor_v001.jpg",
+      "archive": "I:\\工作项目\\shellstrom2\\ShellStorm2-backup\\2026-11-16_small_zombie_v006_256\\original_tree\\art_source\\enemies\\normal_enemy_3d\\melee_chaser\\source\\model\\textures\\enm_melee_fungboar01_basecolor_v001.jpg",
+      "sha256": "533756e40627d1d9c43f1ff3a711af15391b43c71d5e2624d7653ffd47a7a276"
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/textures/enm_melee_fungboar01_basecolor_v002.png",
+      "archive": "I:\\工作项目\\shellstrom2\\ShellStorm2-backup\\2026-11-16_small_zombie_v006_256\\original_tree\\art_source\\enemies\\normal_enemy_3d\\melee_chaser\\source\\model\\textures\\enm_melee_fungboar01_basecolor_v002.png",
+      "sha256": "068b6ab85d834a203ef371976ae83197e4c352a70a5b7758245a24814305d49c"
+    }
+  ],
+  "stable_runtime_path_preserved": true,
+  "gameplay_rules_changed": false,
+  "glb_sha256": "9be6ccc0e6f29042570c1f2107ce8da06a16bb832d73c4db2dccf6116121c8a3",
+  "prefab_sha256": "098412505dab7b0d61fa7ef3f5d80e1cdc294af6d40200cb093bda7e05fef69f"
+}

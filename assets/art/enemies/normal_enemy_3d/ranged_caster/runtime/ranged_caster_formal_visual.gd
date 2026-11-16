@@ -1,5 +1,5 @@
 extends Node3D
-## 保安僵尸表现层：复用 ranged_caster 玩法状态，枪械仅为视觉附件。
+## 警察僵尸2.5表现层：复用 ranged_caster 玩法，枪已融合在 RightHand 蒙皮网格中。
 ## 用 `preload` 而非裸类名，理由见 `melee_chaser_formal_visual.gd` 头注。
 const HitFlash := preload("res://src/enemy3d/HitFlashMaterial3D.gd")
 ## 管线缓存挂在使用中的材质上：不留一份长命引用，这只怪一回收，
@@ -13,7 +13,16 @@ const CLIP_BY_STATE := {
 	"telegraph": "shoot", "attack": "shoot", "recovery": "shoot",
 	"stagger": "hurt", "dead": "dead",
 }
+const SOURCE := "police_zombie25_animation_v002"
+const ASSET_VERSION := "v004"
+const SOURCE_CLIPS := ["armed_idle", "walking_armed", "running_armed", "shoot"]
 var _player: AnimationPlayer
+var _skeleton: Skeleton3D
+var _right_hand_bone := ""
+var _head_bone := ""
+var _embedded_gun_meshes: Array[String] = []
+var _requested_clip := "armed_idle"
+var _missing_clip := ""
 var _state := "idle"
 var _clip := "armed_idle"
 var _sample := 0.0
@@ -62,21 +71,23 @@ const PLAYBACK_RATE_MAX := 2.0
 ## `melee_chaser_formal_visual.gd` 的 `CLIP_BLEND_SEC`。
 const CLIP_BLEND_SEC := 0.16
 ## 参与交叉淡化的段。攻击（`shoot`）有判定帧，不参与。
-const BLENDABLE_CLIPS := [
-	"idle", "armed_idle", "walking", "walking_armed", "running", "running_armed",
-]
+const BLENDABLE_CLIPS := ["armed_idle", "walking_armed", "running_armed"]
 
 func _ready() -> void:
 	_player = find_child("AnimationPlayer", true, false) as AnimationPlayer
 	assert(_player != null, "Security zombie AnimationPlayer missing")
 	_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
-	# ⚠ 这只怪的 GLB **没有 post-import 脚本**（`import_script/path=""`），
-	# 导入后全部 10 段 `loop_mode = LOOP_NONE`。表现层现在是手动 `seek()` 驱动相位，
-	# 一旦 `_looping` 判成 false 就完全不推进 —— 画面表现为"定格在某一帧"。
-	# 循环语义必须在运行时钉死，不能依赖导入配置（小僵尸那边靠导入脚本才有）。
-	for clip_name in _player.get_animation_list():
-		if str(clip_name) in BLENDABLE_CLIPS:
-			_player.get_animation(clip_name).loop_mode = Animation.LOOP_LINEAR
+	# 手动相位驱动必须明确循环语义；shoot 的 48% 采样不循环。
+	for clip_name in SOURCE_CLIPS:
+		assert(_player.has_animation(clip_name), "警察僵尸缺少正式动画：%s" % clip_name)
+		if _player.has_animation(clip_name):
+			_player.get_animation(clip_name).loop_mode = Animation.LOOP_NONE if clip_name == "shoot" else Animation.LOOP_LINEAR
+	_skeleton = find_child("Skeleton3D", true, false) as Skeleton3D
+	assert(_skeleton != null, "警察僵尸缺少骨架")
+	_right_hand_bone = _find_bone_suffix("RightHand")
+	_head_bone = _find_bone_suffix("Head")
+	assert(not _right_hand_bone.is_empty() and _skeleton.find_bone(_right_hand_bone) >= 0, "警察僵尸缺少实际 RightHand 骨")
+	assert(not _head_bone.is_empty() and _skeleton.find_bone(_head_bone) >= 0, "警察僵尸缺少实际 Head 骨")
 	for node in find_children("*", "MeshInstance3D", true, false):
 		var mesh := node as MeshInstance3D
 		if mesh.mesh == null:
@@ -89,26 +100,49 @@ func _ready() -> void:
 				_materials.append(material)
 				Keeper.pin(material)
 	_flash_baseline = HitFlash.prepare(_materials)
-	_attach_shotgun()
+	# 源中的枪与身体共用网格，记录真实蒙皮节点，不创建第二把枪或绑点。
+	for node in find_children("*", "MeshInstance3D", true, false):
+		var mesh := node as MeshInstance3D
+		if mesh.skin == null or mesh.get_node_or_null(mesh.skeleton) != _skeleton:
+			continue
+		if _has_right_hand_geometry(mesh):
+			_embedded_gun_meshes.append(str(get_path_to(mesh)))
+	assert(not _embedded_gun_meshes.is_empty(), "警察僵尸缺少 RightHand 融合枪蒙皮节点")
 	sync_state("idle", 0.0, 0.0, 0.38, 0.34)
 
-func _attach_shotgun() -> void:
-	var skeleton := find_child("Skeleton3D", true, false) as Skeleton3D
-	if skeleton == null:
-		push_error("Security zombie Skeleton3D missing")
-		return
-	var gun_scene := load("res://assets/art/weapons/weapon_3d/runtime/double_barrel_cannon/wpn_double_barrel_cannon_root_top3d_v001.tscn") as PackedScene
-	if gun_scene == null:
-		push_error("Security zombie shotgun visual missing")
-		return
-	var socket := BoneAttachment3D.new()
-	socket.name = "SecurityShotgunAttachment"
-	socket.bone_name = "L_Hand"
-	skeleton.add_child(socket)
-	var gun := gun_scene.instantiate() as Node3D
-	gun.name = "ShotgunVisual"
-	gun.position = Vector3(0.0, 0.0, 0.0)
-	socket.add_child(gun)
+func _has_right_hand_geometry(mesh: MeshInstance3D) -> bool:
+	if mesh.mesh == null:
+		return false
+	var hand_binds: Array[int] = []
+	for bind in range(mesh.skin.get_bind_count()):
+		var bone_name := str(mesh.skin.get_bind_name(bind))
+		if bone_name == _right_hand_bone or (bone_name.is_empty() and mesh.skin.get_bind_bone(bind) == _skeleton.find_bone(_right_hand_bone)):
+			hand_binds.append(bind)
+	for surface in range(mesh.mesh.get_surface_count()):
+		var arrays := mesh.mesh.surface_get_arrays(surface)
+		var bones: PackedInt32Array = arrays[Mesh.ARRAY_BONES]
+		var weights: PackedFloat32Array = arrays[Mesh.ARRAY_WEIGHTS]
+		for index in range(bones.size()):
+			if bones[index] in hand_binds and weights[index] > 0.99:
+				return true
+	return false
+
+func _find_bone_suffix(suffix: String) -> String:
+	if _skeleton != null:
+		for index in range(_skeleton.get_bone_count()):
+			var bone_name := str(_skeleton.get_bone_name(index))
+			if bone_name.ends_with(suffix):
+				return bone_name
+	return ""
+
+## 原贴图黄色双瞳射线标定→正式导入mixamorig_Head静止骨空间；不复用旧脸配方。
+func get_eye_socket_spec() -> Dictionary:
+	return {
+		"bone_name": _head_bone,
+		"bone_offsets": [Vector3(0.192476571, 0.085421562, 0.064594924), Vector3(0.156983733, 0.086167336, -0.135981619)],
+		"radius": 0.02152794,
+		"calibration": "police_zombie25_texture_pupil_raycast_v004",
+	}
 
 func _process(delta: float) -> void:
 	_clock += delta
@@ -137,8 +171,26 @@ func sync_state(
 	_locomotion_speed = absf(speed)
 	_smooth_base_speed(base_speed)
 	var previous_clip := _clip
-	_clip = _locomotion_clip(str(CLIP_BY_STATE.get(state, "armed_idle")), previous_clip)
-	if _player == null or not _player.has_animation(_clip):
+	_requested_clip = _locomotion_clip(str(CLIP_BY_STATE.get(state, "armed_idle")), previous_clip)
+	# 受击仍闪白；只有源中真实存在的 hurt 才能插姿态。
+	if (
+		_hurt_pose_allowed
+		and _hurt_time < HURT_POSE_DURATION
+		and _locomotion_speed <= HURT_POSE_MAX_SPEED
+		and state in HURT_POSE_STATES
+	):
+		_requested_clip = "hurt"
+	_missing_clip = ""
+	_clip = _requested_clip
+	if _player == null:
+		return
+	if not _player.has_animation(_clip):
+		_missing_clip = _clip
+		_clip = "armed_idle"
+	# 最终取动画前也检查兜底段；损坏资源不得空取动画。
+	if not _player.has_animation(_clip):
+		_looping = false
+		_blend_left = 0.0
 		return
 	var anim := _player.get_animation(_clip)
 	var length := maxf(anim.length, 0.001)
@@ -161,24 +213,22 @@ func sync_state(
 			"dead": sample = minf(state_time, length)
 			_: sample = 0.0
 		_phase = clampf(sample / length, 0.0, 1.0)
-	# 三条闸门同小僵尸：允许播 + 姿态计时内 + **速度低于阈值** + 站定型状态。
-	if (
-		_hurt_pose_allowed
-		and _hurt_time < HURT_POSE_DURATION
-		and _locomotion_speed <= HURT_POSE_MAX_SPEED
-		and state in HURT_POSE_STATES
-	):
-		_clip = "hurt"
-		anim = _player.get_animation(_clip)
-		length = maxf(anim.length, 0.001)
+	if _clip == "hurt" and state in HURT_POSE_STATES:
 		_looping = false
-		sample = _hurt_time
+		sample = minf(_hurt_time, length)
 		_phase = clampf(sample / length, 0.0, 1.0)
+	# 缺少 hurt/dead 时只钉住真实 armed_idle 的第 0 帧，不伪造受击或倒地。
+	if not _missing_clip.is_empty():
+		_looping = false
+		sample = 0.0
+		_phase = 0.0
+		_blend_left = 0.0
+		_player.stop()
 	_sample = sample
 	_clip_length = length
 	# 交叉淡化，同小僵尸：`play(name, blend)` 把当前姿势淡入新段，
 	# 实测把换段当帧的骨骼跳变从 35~60° 压到 0.0°。
-	var blend := _clip != previous_clip and previous_clip in BLENDABLE_CLIPS and _clip in BLENDABLE_CLIPS
+	var blend := _missing_clip.is_empty() and _clip != previous_clip and previous_clip in BLENDABLE_CLIPS and _clip in BLENDABLE_CLIPS
 	if blend:
 		_blend_left = CLIP_BLEND_SEC
 		_phase = 0.0
@@ -260,11 +310,34 @@ func flash_hit(play_hit_pose := true) -> void:
 		_hurt_pose_allowed = false
 
 func get_presentation_snapshot() -> Dictionary:
+	var clips := {}
+	if _player != null:
+		for clip_name in _player.get_animation_list():
+			var animation := _player.get_animation(clip_name)
+			clips[str(clip_name)] = {"length": animation.length, "loop_mode": animation.loop_mode}
+	var textures: Array = []
+	for material in _materials:
+		if material.albedo_texture != null:
+			textures.append({"path": material.albedo_texture.resource_path,
+				"size": material.albedo_texture.get_size()})
+	var model := get_node_or_null("VisualGLB")
 	return {"state": _state, "clip": _clip, "sample_time": _sample,
 		"visual_height": VISUAL_HEIGHT, "death_duration": DEATH_DURATION,
 		"animations": Array(_player.get_animation_list()) if _player != null else [],
-		"source": "blender_v002", "collision_owned": false, "procedural_pose": false,
-		"shotgun_visual": true, "shotgun_bone": "L_Hand",
+		"source": SOURCE, "asset_version": ASSET_VERSION,
+		"model_scene": model.scene_file_path if model != null else "",
+		"clip_specs": clips, "albedo_textures": textures,
+		"collision_owned": false, "procedural_pose": false,
+		"shotgun_visual": not _embedded_gun_meshes.is_empty(),
+		"shotgun_embedded": not _embedded_gun_meshes.is_empty(),
+		"shotgun_mesh_paths": _embedded_gun_meshes.duplicate(),
+		"shotgun_bone": _right_hand_bone, "head_bone": _head_bone,
+		"bone_count": _skeleton.get_bone_count() if _skeleton != null else 0,
+		"requested_clip": _requested_clip, "missing_clip": _missing_clip,
+		"missing_clip_fallback": "armed_idle@0" if not _missing_clip.is_empty() else "",
+		"missing_clips": ["hurt", "dead"].filter(func(clip_name): return _player == null or not _player.has_animation(clip_name)),
+		"looping": _looping, "blend_left": _blend_left,
+		"flash_time": _flash_time,
 		"hurt_pose_allowed": _hurt_pose_allowed,
 		"hurt_pose": _clip == "hurt",
 		"hurt_time": _hurt_time,

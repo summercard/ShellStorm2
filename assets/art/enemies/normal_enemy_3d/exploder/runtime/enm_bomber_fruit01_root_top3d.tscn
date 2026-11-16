@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://assets/art/enemies/normal_enemy_3d/exploder/runtime/exploder_formal_visual.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/art/enemies/normal_enemy_3d/exploder/components/enm_bomber_fruit01_visual_top3d.glb" id="2_glb"]
+
+[node name="ExploderFormalVisual" type="Node3D"]
+script = ExtResource("1_script")
+metadata/asset_id = "ENM-BOMBER-FRUIT01"
+metadata/content_id = "exploder"
+metadata/presentation_only = true
+metadata/collision_owner = "Enemy3D"
+metadata/godot_forward = "-Z"
+metadata/asset_version = "v002"
+metadata/source_height_m = 1.15
+metadata/world_scale_owned_by = "Enemy3D"
+metadata/animation_count = 2
+
+[node name="VisualGLB" parent="." instance=ExtResource("2_glb")]

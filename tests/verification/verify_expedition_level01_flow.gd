@@ -217,10 +217,10 @@ func _verify_monster_drop_table_plan_contract(failures: Array[String]) -> void:
 	if not bool(table.get("variant_legacy_fallback", false)):
 		failures.append("远征01怪物掉落表应 variant_legacy_fallback=true（强化怪仍走通用公式）")
 	var strong_rule := (first.get("monster_rules", {}) as Dictionary).get("strong_variant", {}) as Dictionary
-	if not is_equal_approx(float(strong_rule.get("chance", 0.0)), 0.075):
-		failures.append("远征01强化怪概率应为 0.075（原 0.15 的一半），实际 %s" % str(strong_rule.get("chance")))
-	if (strong_rule.get("suppressed_rooms", []) as Array) != ["room_01", "room_02"]:
-		failures.append("远征01强化怪应在 room_01 / room_02 禁用，实际 %s" % str(strong_rule.get("suppressed_rooms")))
+	if not is_equal_approx(float(strong_rule.get("chance", 0.0)), 0.03):
+		failures.append("远征01强化怪概率应为 0.03，实际 %s" % str(strong_rule.get("chance")))
+	if (strong_rule.get("suppressed_rooms", []) as Array) != ["room_03", "room_04", "room_06", "room_09", "room_10"]:
+		failures.append("远征01强化怪应仅在五间倒计时房 room_03 / room_04 / room_06 / room_09 / room_10 禁用，实际 %s" % str(strong_rule.get("suppressed_rooms")))
 	if table != second.get("monster_drop_table", {}):
 		failures.append("怪物掉落表不应随版图种子变化")
 	# 掉落表是内容，不是几何：反向读生成器的 layout_id 函数段，防止后续误把字段

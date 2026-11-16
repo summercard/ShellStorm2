@@ -1,0 +1,651 @@
+{
+  "asset_candidate_key": "police_zombie25",
+  "display_name": "保安僵尸",
+  "version": "v002",
+  "status": "runtime_integrated",
+  "runtime_status": "active",
+  "source_model": "art_source/enemies/normal_enemy_3d/police_zombie25/source/model/police_zombie_25_model_v002.blend",
+  "source_animation": "art_source/enemies/normal_enemy_3d/police_zombie25/source/animation/police_zombie_25_animation_v002.blend",
+  "source_model_sha256": "e1eaa17e77bc1e52a17363d078a9da4793625fce65fdf45da201045bffb8e9c6",
+  "source_animation_sha256": "b05d58cd54b7ddcfb0598629e2be1d42c491be393657ef8891c8284ff5a4c3ea",
+  "source_geometry_skin_rest_signature": "6218d2e45ba85c29b24c828cad78fd006f3e4ec79e5a2e2805322f92fba2b629",
+  "source_forward": "Blender -Y retained",
+  "fps": 30,
+  "skeleton_bones": 65,
+  "vertices": 474,
+  "triangles": 918,
+  "clips": {
+    "armed_idle": {
+      "seconds": 3.2,
+      "loop": true,
+      "frames": [
+        0,
+        96
+      ]
+    },
+    "walking_armed": {
+      "seconds": 1.6,
+      "loop": true,
+      "frames": [
+        0,
+        48
+      ]
+    },
+    "running_armed": {
+      "seconds": 0.8,
+      "loop": true,
+      "frames": [
+        0,
+        24
+      ]
+    },
+    "shoot": {
+      "seconds": 0.8,
+      "loop": false,
+      "frames": [
+        0,
+        24
+      ]
+    }
+  },
+  "fire_timing": {
+    "seconds": 0.384,
+    "source_frame": 11.52,
+    "normalized": 0.48,
+    "authority": "gameplay; animation marker is visual only"
+  },
+  "source_preservation": {
+    "geometry_uv_materials_skin_rest_unchanged": true,
+    "original_model_file_unchanged": true,
+    "original_animation_file_unchanged": true
+  },
+  "animation_ready_pose_adjustment": {
+    "shared_gun_forward_offset_m": 0.105,
+    "shared_gun_vertical_offset_m": -0.015,
+    "shared_gun_pitch_degrees": -9,
+    "method": "Pose rotations and fixed-length two-bone arm solving only. No edit bone, geometry or weight changes."
+  },
+  "validation": {
+    "source_independent_reopen": true,
+    "quarter_frame_sample_count": 772,
+    "all_loop_seams_zero": true,
+    "all_weapon_body_head_triangle_intersections_zero": true,
+    "fbx_reimport_pass": true,
+    "glb_reimport_pass": true,
+    "runtime_naming_exit_code": 0,
+    "documentation_contract_exit_code": 1,
+    "documentation_limit": "Existing broken document links, missing verification registrations, UI ledger row-count mismatch; not modified in this asset task.",
+    "scope": "仅继承源制作阶段检查；不是 v004 Godot 最终验收",
+    "godot_final_status": "passed",
+    "runtime_asset_version": "v004",
+    "godot_final_checks": {
+      "security": {
+        "exit_code": 0,
+        "passed": true,
+        "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\security_qa_result.json"
+      },
+      "visual": {
+        "exit_code": 0,
+        "passed": true,
+        "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\visual_qa_result.json"
+      },
+      "light": {
+        "exit_code": 0,
+        "passed": true,
+        "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\light_qa_result.json"
+      },
+      "stance": {
+        "exit_code": 0,
+        "passed": true,
+        "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\stance_qa_result.json"
+      },
+      "recovery": {
+        "exit_code": 0,
+        "passed": true,
+        "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\recovery_qa_result.json"
+      },
+      "target": {
+        "exit_code": 0,
+        "passed": true,
+        "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\target_qa_result.json"
+      }
+    },
+    "acceptance_level": "L1_source_and_formal_presentation_plus_L2_forward_plus_rendering",
+    "full_game_or_device_accepted": false
+  },
+  "ledger_state": {
+    "registered": true,
+    "asset_id": "ENM-RANGED-SPORESHOOTER01",
+    "main_row": 7,
+    "prefab_sheet_row": 8,
+    "animation_sheet_row": 22,
+    "log_versions": [
+      "v0.1.49",
+      "v0.1.50"
+    ],
+    "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\ledger_update_report.json"
+  },
+  "not_done": [
+    "Full-level manual gameplay and Android device acceptance not executed.",
+    "Global eye-glow suite timed out; this police normal/strong target contract passed separately.",
+    "Global documentation/ledger/texture historical and parallel issues retained; no whole-project pass claimed.",
+    "No authored hurt/dead/reload clips; explicit fallback retained."
+  ],
+  "evidence_output_directory": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-16_police_zombie_animation\\FINAL_v002",
+  "gif_playback": {
+    "armed_idle_preview.gif": {
+      "frames": 48,
+      "duration_ms": 3200
+    },
+    "walking_armed_preview.gif": {
+      "frames": 24,
+      "duration_ms": 1600
+    },
+    "running_armed_preview.gif": {
+      "frames": 24,
+      "duration_ms": 800
+    },
+    "shoot_preview.gif": {
+      "frames": 24,
+      "duration_ms": 800
+    },
+    "警察僵尸_四动作动态总览.gif": {
+      "frames": 96,
+      "duration_ms": 3200
+    }
+  },
+  "production_record": {
+    "date": "2026-11-16",
+    "scope": "用户授权 ranged_caster v004 视觉替换；stable GLB 与256贴图已安装，非账本文本追溯待最终 Godot 验收",
+    "source_version": "v002 保持不变",
+    "runtime_asset_version": "v004",
+    "candidate_report": "I:/工作项目/shellstrom2/ShellStorm2-work/sessions/2026-11-16_police_zombie_import/candidate_report.json",
+    "source_production_record_location": "historical[].record.production_record",
+    "godot_final_validation": "pending"
+  },
+  "files": [
+    {
+      "path": "animation_spec.json",
+      "bytes": 1555,
+      "sha256": "a247932f84a27e5d58220905768d7d4aa9e535fd9385f57f61772c1cf08429be"
+    },
+    {
+      "path": "armed_idle.fbx",
+      "bytes": 1360108,
+      "sha256": "c6b531444a646397aecfcf15e6ace10785e36e3cbe45c6182ebb2e7fd5293c49"
+    },
+    {
+      "path": "armed_idle_keyposes.png",
+      "bytes": 633072,
+      "sha256": "b6eb3e54f82ebbb87e7f173553749f55278712de3d2c2dc4414ac57e02023e6c"
+    },
+    {
+      "path": "armed_idle_preview.gif",
+      "bytes": 12984385,
+      "sha256": "1ee1778cd7c2fe8d38d4a23152d28bf2d13140bd47ea0a24f09690376205bd1c"
+    },
+    {
+      "path": "author_report.json",
+      "bytes": 2538,
+      "sha256": "3ae74ab02a315da45e54076f67a8854b09f79e0e8f37c4defd9cc39f6a2a2bad"
+    },
+    {
+      "path": "contact_export_validation.json",
+      "bytes": 3437,
+      "sha256": "935298e79e662bebcda93586ac06f3814cc1a06a0c9b707ba4b64f1f9c2e087d"
+    },
+    {
+      "path": "glb_playback_validation.json",
+      "bytes": 1035,
+      "sha256": "5f9768450d98cb5129fa9f33064a6e8c6bab9f529f16520c5863cc4b7cb7366a"
+    },
+    {
+      "path": "police_zombie_25_animated.glb",
+      "bytes": 2236944,
+      "sha256": "04da888f7f36c354c884516985d6107abb75da459a88b124fbb699b0c14dba8a"
+    },
+    {
+      "path": "police_zombie_25_animation_v002.blend",
+      "bytes": 5597471,
+      "sha256": "b05d58cd54b7ddcfb0598629e2be1d42c491be393657ef8891c8284ff5a4c3ea"
+    },
+    {
+      "path": "running_armed.fbx",
+      "bytes": 1076796,
+      "sha256": "8bf9ccb90e42158034ac3d2a27d58854f67ba3625163c338e1f9996c1bf1b4d7"
+    },
+    {
+      "path": "running_armed_keyposes.png",
+      "bytes": 659327,
+      "sha256": "98dad5f2200a87b7afcef2ba0debdd5fd3de6e2800a85e5b7b59d6ec8597d3a3"
+    },
+    {
+      "path": "running_armed_preview.gif",
+      "bytes": 6453945,
+      "sha256": "1292a7321ab5586d07e08819b31e183d088a875d3843fc4c07d2acc94e782c39"
+    },
+    {
+      "path": "shoot.fbx",
+      "bytes": 3121036,
+      "sha256": "e2a54e3cf5e66e3f0561c423cb61233894718250304f5a86dcab95ad8c075d02"
+    },
+    {
+      "path": "shoot_keyposes.png",
+      "bytes": 636500,
+      "sha256": "f84307ab687b482c7caf1a5a385ddb40441ae5f6eaae31d4c60261e91f0f1f92"
+    },
+    {
+      "path": "shoot_preview.gif",
+      "bytes": 6480705,
+      "sha256": "81b834cfb7afdcbe4fe5bff489fca4c1828b31481c33a14125d668934d21876a"
+    },
+    {
+      "path": "soldier_character_3d_model_basecolor.jpg",
+      "bytes": 434690,
+      "sha256": "ab230fa0d1daebc99f11c6e37777abf4b11f7d9e1f909e761573199912cc20fd"
+    },
+    {
+      "path": "validation.json",
+      "bytes": 4378,
+      "sha256": "66f475bbf40e885f78aad4eb6a07861896f0c7ee8477496b7e017dad03f2083e"
+    },
+    {
+      "path": "walking_armed.fbx",
+      "bytes": 1168492,
+      "sha256": "6065f88fd9731dbcea51afcca44127b6ba68a0be0f17d366842543ffb581f303"
+    },
+    {
+      "path": "walking_armed_keyposes.png",
+      "bytes": 660538,
+      "sha256": "a1d2fc9055056acf224151c6a41cf67fca5cf4c152447e435f830a01fcc74edd"
+    },
+    {
+      "path": "walking_armed_preview.gif",
+      "bytes": 6464885,
+      "sha256": "35f4b88200bac5ceada9438cec44de40aa1f7a67248735558015b4b94400ad45"
+    },
+    {
+      "path": "警察僵尸_四动作动态总览.gif",
+      "bytes": 49096496,
+      "sha256": "5d64bd19587c779ab45a66cdf41c59f63dab06559ef904708533426c31c22219"
+    },
+    {
+      "path": "警察僵尸_四动作动态总览.mp4",
+      "bytes": 1562512,
+      "sha256": "8aee361b942365c72875efca560035b848bfbac97467d371cb3415517e40146d"
+    }
+  ],
+  "source_display_name": "警察僵尸2.5",
+  "asset_id": "ENM-RANGED-SPORESHOOTER01",
+  "logic_id": "ranged_caster",
+  "asset_version": "v004",
+  "validation_status": "passed",
+  "component_glb": "assets/art/enemies/normal_enemy_3d/ranged_caster/components/enm_ranged_sporeshooter01_visual_top3d.glb",
+  "texture": "assets/art/shared/textures/enemies/tex_color_ec827f2a2c65836f15cc.png",
+  "texture_sha256": "10fc9bccdaa4df76bf5aef380f18048c05f1e136c89e5d2087b7bb109c15d3e6",
+  "texture_pixel_sha256": "ec827f2a2c65836f15cc43d0b4820853a5d96a8a722201dda7f80bd906a6acfa",
+  "texture_size": [
+    256,
+    256
+  ],
+  "forward_contract": {
+    "blender": "-Y",
+    "godot": "-Z",
+    "additional_yaw_degrees": 180,
+    "conversion_owner": "VisualGLB wrapper",
+    "source_axis_unchanged": true
+  },
+  "visual_wrapper": {
+    "node": "VisualGLB",
+    "yaw_degrees": 180,
+    "uniform_scale": 1.85804992,
+    "presentation_root_scale": [
+      1,
+      1,
+      1
+    ],
+    "raw_source_rest_height_m": 0.9995118975639343,
+    "visual_rest_height_m": 1.857143,
+    "gameplay_scale": 0.7,
+    "runtime_display_height_m": 1.3,
+    "collision_changed": false,
+    "evidence": "I:/工作项目/shellstrom2/ShellStorm2-work/sessions/2026-11-16_police_zombie_import/candidate_report.json",
+    "measurement_status": "Godot 最终尺寸验收待主 agent 确认"
+  },
+  "authoring_height_m": 1.857143,
+  "authoring_height_scope": "VisualGLB wrapper 归一化后的视觉 rest 高，不是未缩放源高",
+  "runtime_display_height_m": 1.3,
+  "runtime_base_scale": 0.7,
+  "presentation_only": true,
+  "collision_owner": "Enemy3D",
+  "skeleton_signature_status": "independent model/animation master reopen; exact rest/parent/tail/deform signature match",
+  "weapon_visual": {
+    "scene": "",
+    "attachment_bone": "mixamorig_RightHand",
+    "purpose": "presentation_only",
+    "projectile_owner": "Enemy3D",
+    "mode": "embedded_skin",
+    "source_bone": "mixamorig:RightHand",
+    "legacy_attachment_removed": true,
+    "legacy_attachment_bone": "L_Hand",
+    "external_weapon_instantiated": false
+  },
+  "missing_clips": [
+    "hurt",
+    "dead"
+  ],
+  "missing_clip_fallback": {
+    "clip": "armed_idle",
+    "sample_seconds": 0,
+    "loop": false,
+    "crossfade_seconds": 0,
+    "hit_flash": true
+  },
+  "death_policy": {
+    "owner": "Enemy3D",
+    "corpse": false,
+    "death_clip_available": false,
+    "interface_duration_seconds": 2.4
+  },
+  "runtime_prefab": "assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/enm_ranged_sporeshooter01_root_top3d.tscn",
+  "presentation_script": "assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/ranged_caster_formal_visual.gd",
+  "runtime_files": [
+    {
+      "path": "art_source/enemies/normal_enemy_3d/police_zombie25/source/model/police_zombie_25_model_v002.blend",
+      "sha256": "e1eaa17e77bc1e52a17363d078a9da4793625fce65fdf45da201045bffb8e9c6",
+      "bytes": 1065704,
+      "role": "model"
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/police_zombie25/source/animation/police_zombie_25_animation_v002.blend",
+      "sha256": "b05d58cd54b7ddcfb0598629e2be1d42c491be393657ef8891c8284ff5a4c3ea",
+      "bytes": 5597471,
+      "role": "animation"
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/ranged_caster/components/enm_ranged_sporeshooter01_visual_top3d.glb",
+      "sha256": "fa2b7fd396d2d2244ecb9ca90b058790b5925e5f5e4b78b5e1600d7433813604",
+      "bytes": 1802304,
+      "role": "component_glb"
+    },
+    {
+      "path": "assets/art/shared/textures/enemies/tex_color_ec827f2a2c65836f15cc.png",
+      "sha256": "10fc9bccdaa4df76bf5aef380f18048c05f1e136c89e5d2087b7bb109c15d3e6",
+      "bytes": 77135,
+      "role": "runtime_texture"
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/enm_ranged_sporeshooter01_root_top3d.tscn",
+      "sha256": "a569572389c6821a873907548b698942db5706f11810efa171908e52437db40f",
+      "bytes": 1085,
+      "role": "runtime_prefab"
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/ranged_caster_formal_visual.gd",
+      "sha256": "bfc34b99e50f4d08bee232289dcc52553b5d134b95c71394be195a143f3f9ea7",
+      "bytes": 15725,
+      "role": "presentation_script"
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/police_zombie25/source/model/soldier_character_3d_model_basecolor.jpg",
+      "sha256": "ab230fa0d1daebc99f11c6e37777abf4b11f7d9e1f909e761573199912cc20fd",
+      "bytes": 434690,
+      "role": "source_texture"
+    }
+  ],
+  "files_base_directory": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-16_police_zombie_animation\\FINAL_v002",
+  "files_scope": "源制作阶段证据文件，路径相对 files_base_directory；不是当前 runtime stable GLB 清单，当前文件见 runtime_files",
+  "limitations": [
+    "仅有 armed_idle / walking_armed / running_armed / shoot 四段真实动画，缺少 hurt、dead、reload，不伪造片段。",
+    "请求缺失 hurt/dead 时固定 armed_idle@0，停止循环相位及交叉淡化；受击仍闪白，不宣称有真实受击姿态。",
+    "正式死亡沿用 Enemy3D 无尸体路径；dead 接口兜底不等于倒地动画，保留 2.4s 接口时长不代表产生尸体。",
+    "枪与身体为一体蒙皮，跟随真实 RightHand；取消旧 L_Hand 外挂，不接入玩家武器、弹药或换弹。",
+    "手指融合几何保留，无独立手指开合。",
+    "Only L1 formal/source checks and L2 Forward+/Vulkan renders accepted; full level/device not claimed."
+  ],
+  "historical": [
+    {
+      "status": "historical",
+      "superseded_on": "2026-11-16",
+      "original_file_sha256": "73166652f3c22bf6be16683d00bdd8c690c9389d9d42f7694872744661769721",
+      "backup_path": "I:/工作项目/shellstrom2/ShellStorm2-backup/2026-11-16_police_zombie_import/before_edits/art_source/enemies/normal_enemy_3d/police_zombie25/asset_manifest.json",
+      "record": {
+        "asset_candidate_key": "police_zombie25",
+        "display_name": "警察僵尸2.5",
+        "version": "v002",
+        "status": "source_validated_pending_user_motion_review",
+        "runtime_status": "not_imported_not_active",
+        "source_model": "art_source/enemies/normal_enemy_3d/police_zombie25/source/model/police_zombie_25_model_v002.blend",
+        "source_animation": "art_source/enemies/normal_enemy_3d/police_zombie25/source/animation/police_zombie_25_animation_v002.blend",
+        "source_model_sha256": "e1eaa17e77bc1e52a17363d078a9da4793625fce65fdf45da201045bffb8e9c6",
+        "source_animation_sha256": "b05d58cd54b7ddcfb0598629e2be1d42c491be393657ef8891c8284ff5a4c3ea",
+        "source_geometry_skin_rest_signature": "6218d2e45ba85c29b24c828cad78fd006f3e4ec79e5a2e2805322f92fba2b629",
+        "source_forward": "Blender -Y retained",
+        "fps": 30,
+        "skeleton_bones": 65,
+        "vertices": 474,
+        "triangles": 918,
+        "clips": {
+          "armed_idle": {
+            "seconds": 3.2,
+            "loop": true,
+            "frames": [
+              0,
+              96
+            ]
+          },
+          "walking_armed": {
+            "seconds": 1.6,
+            "loop": true,
+            "frames": [
+              0,
+              48
+            ]
+          },
+          "running_armed": {
+            "seconds": 0.8,
+            "loop": true,
+            "frames": [
+              0,
+              24
+            ]
+          },
+          "shoot": {
+            "seconds": 0.8,
+            "loop": false,
+            "frames": [
+              0,
+              24
+            ]
+          }
+        },
+        "fire_timing": {
+          "seconds": 0.384,
+          "source_frame": 11.52,
+          "normalized": 0.48,
+          "authority": "gameplay; animation marker is visual only"
+        },
+        "source_preservation": {
+          "geometry_uv_materials_skin_rest_unchanged": true,
+          "original_model_file_unchanged": true
+        },
+        "animation_ready_pose_adjustment": {
+          "shared_gun_forward_offset_m": 0.105,
+          "shared_gun_vertical_offset_m": -0.015,
+          "shared_gun_pitch_degrees": -9,
+          "method": "Pose rotations and fixed-length two-bone arm solving only. No edit bone, geometry or weight changes."
+        },
+        "validation": {
+          "source_independent_reopen": true,
+          "quarter_frame_sample_count": 772,
+          "all_loop_seams_zero": true,
+          "all_weapon_body_head_triangle_intersections_zero": true,
+          "fbx_reimport_pass": true,
+          "glb_reimport_pass": true,
+          "runtime_naming_exit_code": 0,
+          "documentation_contract_exit_code": 1,
+          "documentation_limit": "Existing broken document links, missing verification registrations, UI ledger row-count mismatch; not modified in this asset task."
+        },
+        "ledger_state": {
+          "registered": false,
+          "reason": "New user supplied candidate has different skeleton, orientation, gun hand and name from active 36-bone ranged_caster. No automatic identity merge or runtime replacement. Existing ledger rows, source index and runtime mappings retained."
+        },
+        "not_done": [
+          "Godot runtime import/integration",
+          "user continuous-motion approval",
+          "runtime identity/AssetID mapping and ledger promotion",
+          "independent fused finger articulation",
+          "hurt/death/reload animations not requested"
+        ],
+        "evidence_output_directory": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-16_police_zombie_animation\\FINAL_v002",
+        "gif_playback": {
+          "armed_idle_preview.gif": {
+            "frames": 48,
+            "duration_ms": 3200
+          },
+          "walking_armed_preview.gif": {
+            "frames": 24,
+            "duration_ms": 1600
+          },
+          "running_armed_preview.gif": {
+            "frames": 24,
+            "duration_ms": 800
+          },
+          "shoot_preview.gif": {
+            "frames": 24,
+            "duration_ms": 800
+          },
+          "警察僵尸_四动作动态总览.gif": {
+            "frames": 96,
+            "duration_ms": 3200
+          }
+        },
+        "production_record": {
+          "date": "2026-11-16",
+          "scope": "ASSET-PIPELINE source-only new candidate",
+          "baseline": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-16_police_zombie_hand_fix\\FINAL_v002\\police_zombie_2_5_handfix_v002.blend",
+          "work_scripts": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_animation",
+          "author_exit_code": 0,
+          "source_verifier_exit_code": 0,
+          "contact_fbx_verifier_exit_code": 0,
+          "glb_verifier_exit_code": 0,
+          "earlier_rejected_revisions": "Initial ready pose inherited chin/body intersections; v002 pose clearance corrected. Initial integer-only export missed rapid recoil; dense export corrected. No failed revision included."
+        },
+        "files": [
+          {
+            "path": "animation_spec.json",
+            "bytes": 1555,
+            "sha256": "a247932f84a27e5d58220905768d7d4aa9e535fd9385f57f61772c1cf08429be"
+          },
+          {
+            "path": "armed_idle.fbx",
+            "bytes": 1360108,
+            "sha256": "c6b531444a646397aecfcf15e6ace10785e36e3cbe45c6182ebb2e7fd5293c49"
+          },
+          {
+            "path": "armed_idle_keyposes.png",
+            "bytes": 633072,
+            "sha256": "b6eb3e54f82ebbb87e7f173553749f55278712de3d2c2dc4414ac57e02023e6c"
+          },
+          {
+            "path": "armed_idle_preview.gif",
+            "bytes": 12984385,
+            "sha256": "1ee1778cd7c2fe8d38d4a23152d28bf2d13140bd47ea0a24f09690376205bd1c"
+          },
+          {
+            "path": "author_report.json",
+            "bytes": 2538,
+            "sha256": "3ae74ab02a315da45e54076f67a8854b09f79e0e8f37c4defd9cc39f6a2a2bad"
+          },
+          {
+            "path": "contact_export_validation.json",
+            "bytes": 3437,
+            "sha256": "935298e79e662bebcda93586ac06f3814cc1a06a0c9b707ba4b64f1f9c2e087d"
+          },
+          {
+            "path": "glb_playback_validation.json",
+            "bytes": 1035,
+            "sha256": "5f9768450d98cb5129fa9f33064a6e8c6bab9f529f16520c5863cc4b7cb7366a"
+          },
+          {
+            "path": "police_zombie_25_animated.glb",
+            "bytes": 2236944,
+            "sha256": "04da888f7f36c354c884516985d6107abb75da459a88b124fbb699b0c14dba8a"
+          },
+          {
+            "path": "police_zombie_25_animation_v002.blend",
+            "bytes": 5597471,
+            "sha256": "b05d58cd54b7ddcfb0598629e2be1d42c491be393657ef8891c8284ff5a4c3ea"
+          },
+          {
+            "path": "running_armed.fbx",
+            "bytes": 1076796,
+            "sha256": "8bf9ccb90e42158034ac3d2a27d58854f67ba3625163c338e1f9996c1bf1b4d7"
+          },
+          {
+            "path": "running_armed_keyposes.png",
+            "bytes": 659327,
+            "sha256": "98dad5f2200a87b7afcef2ba0debdd5fd3de6e2800a85e5b7b59d6ec8597d3a3"
+          },
+          {
+            "path": "running_armed_preview.gif",
+            "bytes": 6453945,
+            "sha256": "1292a7321ab5586d07e08819b31e183d088a875d3843fc4c07d2acc94e782c39"
+          },
+          {
+            "path": "shoot.fbx",
+            "bytes": 3121036,
+            "sha256": "e2a54e3cf5e66e3f0561c423cb61233894718250304f5a86dcab95ad8c075d02"
+          },
+          {
+            "path": "shoot_keyposes.png",
+            "bytes": 636500,
+            "sha256": "f84307ab687b482c7caf1a5a385ddb40441ae5f6eaae31d4c60261e91f0f1f92"
+          },
+          {
+            "path": "shoot_preview.gif",
+            "bytes": 6480705,
+            "sha256": "81b834cfb7afdcbe4fe5bff489fca4c1828b31481c33a14125d668934d21876a"
+          },
+          {
+            "path": "soldier_character_3d_model_basecolor.jpg",
+            "bytes": 434690,
+            "sha256": "ab230fa0d1daebc99f11c6e37777abf4b11f7d9e1f909e761573199912cc20fd"
+          },
+          {
+            "path": "validation.json",
+            "bytes": 4378,
+            "sha256": "66f475bbf40e885f78aad4eb6a07861896f0c7ee8477496b7e017dad03f2083e"
+          },
+          {
+            "path": "walking_armed.fbx",
+            "bytes": 1168492,
+            "sha256": "6065f88fd9731dbcea51afcca44127b6ba68a0be0f17d366842543ffb581f303"
+          },
+          {
+            "path": "walking_armed_keyposes.png",
+            "bytes": 660538,
+            "sha256": "a1d2fc9055056acf224151c6a41cf67fca5cf4c152447e435f830a01fcc74edd"
+          },
+          {
+            "path": "walking_armed_preview.gif",
+            "bytes": 6464885,
+            "sha256": "35f4b88200bac5ceada9438cec44de40aa1f7a67248735558015b4b94400ad45"
+          },
+          {
+            "path": "警察僵尸_四动作动态总览.gif",
+            "bytes": 49096496,
+            "sha256": "5d64bd19587c779ab45a66cdf41c59f63dab06559ef904708533426c31c22219"
+          },
+          {
+            "path": "警察僵尸_四动作动态总览.mp4",
+            "bytes": 1562512,
+            "sha256": "8aee361b942365c72875efca560035b848bfbac97467d371cb3415517e40146d"
+          }
+        ]
+      }
+    }
+  ],
+  "skeleton_signature": "b3feb75b3488678b7611e93b72eb56be711db629f0ba8c8f84098968d7cf2345",
+  "runtime_integrated": true
+}

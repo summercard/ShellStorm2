@@ -89,7 +89,7 @@ const GOO_DEATH_EFFECT_SIZE := 1.0
 const FAT_DEATH_EFFECT_SIZE := 2.0
 const VALID_STATES := [
 	"dormant", "idle", "patrol", "alert", "chase", "search", "return",
-	"telegraph", "attack", "recovery", "stagger", "defeated", "dead",
+	"telegraph", "attack", "recovery", "stagger", "defeated", "death_warning", "dead",
 ]
 const NORMAL_HP_MULTIPLIER := 3.0
 const BOSS_HP_MULTIPLIER := 10.0
@@ -291,7 +291,8 @@ const PROFILES := {
 	"ranged_caster": {"hp": 46, "speed": 2.25, "damage": 10, "range": 8.8, "cooldown": 1.8},
 	"summoner": {"hp": 72, "speed": 1.65, "damage": 8, "range": 7.2, "cooldown": 4.8},
 	"shielded": {"hp": 112, "speed": 2.0, "damage": 17, "range": 2.05, "cooldown": 1.55},
-	"exploder": {"hp": 42, "speed": 3.1, "damage": 30, "range": 2.85, "cooldown": 3.0},
+	# 2026-11-16 用户：本体移动/实际速度驱动步频同步 +30%；不改代理怪或蓄爆时长。
+	"exploder": {"hp": 42, "speed": 4.03, "damage": 30, "range": 2.85, "cooldown": 3.0},
 	"ambusher": {"hp": 50, "speed": 4.65, "damage": 18, "range": 2.15, "cooldown": 1.9},
 	# Boss 基础生命 = hp × BOSS_HP_MULTIPLIER(10) = 5200 × 10 = 52000（第1层实测值）；
 	# 更高楼层由 MonsterInjector 的 FLOOR_SCALING.hp_mult 与 boss_scale 通过
@@ -1029,6 +1030,8 @@ var _active_explosion_committed := false
 ## 关卡级死亡自爆规格（远征01 `monster_rules.death_explosion.<kind>`）。
 ## 空字典 = 本怪不自爆（缺省，塔楼与其余关卡恒为空）。
 var _death_explosion: Dictionary = {}
+var _death_warning_remaining_sec := 0.0
+var _death_warning_duration_sec := 0.0
 ## 当前生效的分离推力速度，以及重算相位（-1 = 尚未初始化）。
 var _separation_push := Vector3.ZERO
 var _separation_phase := -1
@@ -1743,6 +1746,8 @@ func export_runtime_state() -> Dictionary:
 		"rotation_y": rotation.y,
 		"ai_state": ai_state,
 		"state_time": _state_time,
+		"death_warning_remaining_sec": _death_warning_remaining_sec,
+		"death_warning_duration_sec": _death_warning_duration_sec,
 		"state_reason": _last_state_reason,
 		"last_known_target_position": [
 			_last_known_target_position.x,
@@ -1790,8 +1795,11 @@ func export_runtime_state() -> Dictionary:
 
 
 func import_runtime_state(state: Dictionary) -> bool:
-	if str(state.get("persistent_id", "")) != get_persistent_id():
+	if str(state.get("persistent_id", "")) != get_persistent_id() or ai_state == "dead":
 		return false
+	if ai_state == "death_warning":
+		# 同一实例重复应用旧快照不得重置预爆；终态也不能被读档复活。
+		return str(state.get("ai_state", "")) == "death_warning"
 	max_hp = maxi(1, int(state.get("max_hp", max_hp)))
 	current_hp = clampi(int(state.get("hp", current_hp)), 0, max_hp)
 	contact_damage = maxi(0, int(state.get("contact_damage", contact_damage)))
@@ -1873,7 +1881,11 @@ func import_runtime_state(state: Dictionary) -> bool:
 	# 生效帧不能跨卸载边界继续伤害；重新进房时退回可读的警戒状态。
 	if saved_ai_state in ["telegraph", "attack", "recovery", "stagger"]:
 		saved_ai_state = "alert"
-	if saved_ai_state in VALID_STATES and saved_ai_state != "dead":
+	if saved_ai_state == "death_warning" and _death_warning_seconds() > 0.0:
+		var duration := maxf(0.001, float(state.get("death_warning_duration_sec", _death_warning_seconds())))
+		var remaining := clampf(float(state.get("death_warning_remaining_sec", 0.0)), 0.0, duration)
+		_begin_death_warning(remaining, duration)
+	elif saved_ai_state in VALID_STATES and saved_ai_state not in ["dead", "death_warning"]:
 		transition_to(saved_ai_state, "runtime_restore")
 		_state_time = maxf(0.0, float(state.get("state_time", 0.0)))
 	_last_state_reason = str(state.get("state_reason", _last_state_reason))
@@ -1884,7 +1896,7 @@ func import_runtime_state(state: Dictionary) -> bool:
 
 
 func set_runtime_active(active: bool, presentation_ready_when_inactive := false) -> void:
-	if ai_state == "dead":
+	if ai_state in ["dead", "death_warning"]:
 		# 房间AI休眠不得暂停倒地或回收；尸体显隐仍由PlayerVision3D管理。
 		_runtime_ai_active = false
 		process_mode = Node.PROCESS_MODE_INHERIT
@@ -1921,6 +1933,14 @@ func is_concealed_in_world() -> bool:
 
 
 func _process(delta: float) -> void:
+	if ai_state == "death_warning":
+		_death_warning_remaining_sec = maxf(0.0, _death_warning_remaining_sec - delta)
+		_state_time = _death_warning_duration_sec - _death_warning_remaining_sec
+		if avatar != null:
+			avatar.sync_death_warning(_state_time, _death_warning_duration_sec)
+		if _death_warning_remaining_sec <= 0.0:
+			_commit_death()
+		return
 	if ai_state == "dead":
 		# 死亡进度不依赖已经退出战斗的物理AI。
 		_state_time += delta
@@ -2091,7 +2111,11 @@ func _can_tick_elite_equipment() -> bool:
 
 
 func _physics_process(delta: float) -> void:
+	if ai_state == "death_warning":
+		return
 	_tick_fate_statuses(delta)
+	if ai_state == "death_warning":
+		return
 	_sync_fate_visuals()
 	if _fate_freeze_remaining > 0.0 and ai_state != "dead":
 		_fate_freeze_remaining = maxf(0.0, _fate_freeze_remaining - delta)
@@ -2100,6 +2124,8 @@ func _physics_process(delta: float) -> void:
 	if illumination_sensor != null:
 		illumination_sensor.tick(delta)
 	_tick_illumination_effects(delta)
+	if ai_state == "death_warning":
+		return
 	_position_overhead_health_bar()
 	if not _home_initialized:
 		_home_position = global_position
@@ -2140,7 +2166,7 @@ func _physics_process(delta: float) -> void:
 	_elite_healing_cooldown = maxf(0.0, _elite_healing_cooldown - delta)
 	if _slow_timer <= 0.0:
 		_slow_factor = 1.0
-	if ai_state in ["dead", "defeated"]:
+	if ai_state in ["dead", "defeated", "death_warning"]:
 		velocity = Vector3.ZERO
 		return
 	if _elite_defeat_active:
@@ -4290,7 +4316,7 @@ func _vanish() -> void:
 
 
 func receive_healing(amount: int) -> void:
-	if ai_state == "dead" or current_hp >= max_hp:
+	if ai_state in ["dead", "death_warning"] or current_hp >= max_hp:
 		return
 	var requested_healing := maxi(0, amount)
 	var hp_before := current_hp
@@ -4424,7 +4450,7 @@ func _spawn_ground_blast_zone(radius: float) -> void:
 
 
 func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, hit_knockback := 0.0, interrupt_movement := true) -> void:
-	if ai_state == "dead" or _elite_defeat_active or (arms_taker_combat != null and arms_taker_combat.phase_intangible):
+	if ai_state in ["dead", "death_warning"] or _elite_defeat_active or (arms_taker_combat != null and arms_taker_combat.phase_intangible):
 		return
 	if monitor_combat != null and monitor_combat.is_story_damage_protected():
 		return
@@ -4494,7 +4520,7 @@ func take_projectile_damage(
 	attacker: Node3D = null,
 	hit_knockback := 0.0
 ) -> void:
-	if ai_state == "dead" or _elite_defeat_active or amount <= 0 or (arms_taker_combat != null and arms_taker_combat.phase_intangible):
+	if ai_state in ["dead", "death_warning"] or _elite_defeat_active or amount <= 0 or (arms_taker_combat != null and arms_taker_combat.phase_intangible):
 		return
 	if monitor_combat != null and monitor_combat.is_story_damage_protected():
 		return
@@ -4523,12 +4549,12 @@ func take_projectile_damage(
 	_damage_element = ""
 	_bypass_shield_once = false
 	var source: Variant = behavior.get("source_weapon_tree")
-	if ai_state == "dead" and is_instance_valid(source):
+	if ai_state in ["dead", "death_warning"] and is_instance_valid(source):
 		source.record_projectile_kill(critical)
 
 
 func notify_attacked_by(attacker: Node3D) -> void:
-	if bool(enemy_data.get("narrative_stationary", false)):
+	if ai_state == "death_warning" or bool(enemy_data.get("narrative_stationary", false)):
 		return
 	if is_instance_valid(attacker):
 		_last_damage_source = attacker
@@ -4671,6 +4697,8 @@ func _tick_damage_over_time(delta: float) -> void:
 
 
 func transition_to(state_id: String, reason := "") -> bool:
+	if ai_state == "death_warning" and state_id not in ["death_warning", "dead"]:
+		return false
 	if not VALID_STATES.has(state_id) or ai_state == "dead" and state_id != "dead":
 		return false
 	if monitor_combat != null and not monitor_combat.activation_completed and state_id not in ["dead","dormant","idle","alert"]:
@@ -4693,7 +4721,7 @@ func transition_to(state_id: String, reason := "") -> bool:
 	# 它们由 `_tick_pending_volleys()` 按延迟无条件开火，不看状态 ——
 	# 不清就会看到「已经被打死的怪在半空中继续打三连发」。
 	# 只清这三种：`recovery → chase` 期间连发本来就要打完，那条不能动。
-	if state_id in ["stagger", "dormant", "dead"]:
+	if state_id in ["stagger", "dormant", "death_warning", "dead"]:
 		if monitor_combat != null and state_id in ["dormant", "dead"]:
 			monitor_combat.cancel_story_activation()
 		_pending_volleys.clear()
@@ -5581,7 +5609,49 @@ func _egt_recovery_seconds() -> float:
 			return 0.12
 
 
+func _death_warning_seconds() -> float:
+	var base := MonsterVariants.base_of(enemy_kind)
+	if enemy_kind != "fat_zombie03" and base != "fat_zombie03":
+		return 0.0
+	if _death_explosion.is_empty() or not bool(_death_explosion.get("enabled", true)) or int(_death_explosion.get("damage", 0)) <= 0:
+		return 0.0
+	return maxf(0.0, float(_death_explosion.get("warning_sec", 0.0)))
+
+
+func _begin_death_warning(remaining: float, duration: float) -> void:
+	_death_warning_remaining_sec = remaining
+	_death_warning_duration_sec = duration
+	current_hp = 0
+	_clear_fate_visuals()
+	transition_to("death_warning", "lethal_death_explosion_warning")
+	velocity = Vector3.ZERO
+	_external_velocity = Vector3.ZERO
+	_external_timer = 0.0
+	_pending_volleys.clear()
+	_pending_eggs.clear()
+	collision_layer = 0
+	collision_mask = 0
+	_runtime_ai_active = false
+	process_mode = Node.PROCESS_MODE_INHERIT
+	set_physics_process(false)
+	set_process(true)
+	if _overhead_health_root != null:
+		_overhead_health_root.visible = false
+	if avatar != null:
+		avatar.sync_death_warning(duration - remaining, duration)
+
+
 func _die() -> void:
+	if ai_state in ["dead", "defeated", "death_warning"] or _elite_defeat_active:
+		return
+	var warning := _death_warning_seconds()
+	if warning > 0.0 and not _vanish_requested:
+		_begin_death_warning(warning, warning)
+		return
+	_commit_death()
+
+
+func _commit_death() -> void:
 	if ai_state in ["dead", "defeated"] or _elite_defeat_active:
 		return
 	# —— 「消失」不是「死亡」（逃跑超时的钥匙小子 / 运气小子）——

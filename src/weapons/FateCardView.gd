@@ -15,6 +15,7 @@ class_name FateCardView
 const ART_DIR := "res://assets/art/ui/fate_cards"
 const ART_FMT := ART_DIR + "/ui_fate_card_%s_v001.png"
 const BACK_PATH := ART_DIR + "/ui_fate_card_back_v001.png"
+const SCOPE_GLYPH := preload("res://src/ui/weapon_build/FateScopeGlyph.gd")
 const FACE_SCAN_SHADER_CODE := """
 shader_type canvas_item;
 
@@ -80,13 +81,13 @@ static func has_art(card: FateCard) -> bool:
 
 
 ## 卡下文字：作用域图标 + 功能短说明；武器卡可追加当前枪械命运槽信息。
-static func caption_text(card: FateCard, target_detail := "") -> String:
+static func caption_text(card: FateCard, target_detail := "", include_scope := true) -> String:
 	if card == null:
 		return ""
 	var effect_text := card.short_description
 	if effect_text.is_empty():
 		effect_text = card.description
-	var lines := ["%s  %s" % [FateCard.scope_symbol(card.scope), effect_text]]
+	var lines := ["%s  %s" % [FateCard.scope_symbol(card.scope), effect_text] if include_scope else effect_text]
 	if not target_detail.is_empty():
 		lines.append(target_detail)
 	return "\n".join(lines)
@@ -146,11 +147,47 @@ static func reveal(face: Control, back: Control, is_reversed: bool) -> void:
 		back.visible = false
 
 
+## 返回居中等比贴图的实际绘制矩形，坐标相对于未旋转的宿主。
+static func contained_texture_rect(box: Vector2, texture: Texture2D) -> Rect2:
+	if texture == null:
+		return Rect2(Vector2.ZERO, box)
+	var texture_size := texture.get_size()
+	if texture_size.x <= 0 or texture_size.y <= 0:
+		return Rect2(Vector2.ZERO, box)
+	var contained := texture_size * minf(box.x / texture_size.x, box.y / texture_size.y)
+	return Rect2((box - contained) * 0.5, contained)
+
+
+## 图标是牌面层的兄弟节点；显隐跟随牌面，但不继承逆位旋转。
+static func build_scope_badge(host: Control, scope: int, face: Control) -> Control:
+	var badge: Control = SCOPE_GLYPH.new()
+	badge.name = "FateScopeBadge"
+	badge.call("configure", scope)
+	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge.z_index = 1
+	host.add_child(badge)
+	var sync := func() -> void:
+		if not is_instance_valid(badge) or not is_instance_valid(host):
+			return
+		var texture: Texture2D = face.texture if is_instance_valid(face) and face is TextureRect else null
+		var actual := contained_texture_rect(host.size, texture)
+		var edge := clampf(actual.size.x * 0.30, 20.0, 30.0)
+		badge.size = Vector2.ONE * edge
+		badge.position = actual.position + Vector2(2, 2)
+		badge.visible = is_instance_valid(face) and face.visible
+	sync.call()
+	host.resized.connect(sync)
+	if is_instance_valid(face):
+		face.resized.connect(sync)
+		face.visibility_changed.connect(sync)
+	return badge
+
+
 ## 卡下功能文字（统一排版：居中、可换行、不参与卡面旋转）
-static func build_caption(card: FateCard, font_size: int, min_width: float, target_detail := "") -> Label:
+static func build_caption(card: FateCard, font_size: int, min_width: float, target_detail := "", include_scope := true) -> Label:
 	var label := Label.new()
 	label.name = "FateFunctionCaption"
-	label.text = caption_text(card, target_detail)
+	label.text = caption_text(card, target_detail, include_scope)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

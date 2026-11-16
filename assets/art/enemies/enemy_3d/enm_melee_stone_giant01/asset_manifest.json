@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "asset_id": "ENM-MELEE-STONE-GIANT01",
+  "asset_name": "石甲巨人",
+  "logical_id": "stone_giant01",
+  "asset_version": "v002",
+  "status": "exported_pending_godot_validation",
+  "delivery_scope": "model_and_walking_incremental",
+  "classification": "version_increment",
+  "parent_asset_id": "ENM-ECOSYSTEM-KIT-3D",
+  "source_kind": "user_supplied_tripo_model_repaired",
+  "skeleton_id": "SKEL-STONEGIANT01-001",
+  "skeleton_signature": "bb1858d59da8f3f0242ab967d9b5bc6eb251e59f8d7058100a7b91a922a0e4cc",
+  "signature_schema": "bone-parent-restmatrix7-deform-v1",
+  "bone_count": 41,
+  "deform_bone_count": 22,
+  "source_files": [
+    {
+      "path": "art_source/enemies/enemy_3d/enm_melee_stone_giant01/source/model/enm_melee_stone_giant01_model_v001.blend",
+      "bytes": 718664,
+      "sha256": "9512fd5234fbc98bbdfa304e037ef846698364ea4e50677aec312418797e0287"
+    },
+    {
+      "path": "art_source/enemies/enemy_3d/enm_melee_stone_giant01/source/animation/enm_melee_stone_giant01_animation_v002.blend",
+      "bytes": 1502995,
+      "sha256": "f8a33cec296655281d2142d206865e5648cec1724874059537f232a77427cf1c"
+    }
+  ],
+  "runtime_files": [
+    {
+      "path": "assets/art/enemies/enemy_3d/enm_melee_stone_giant01/components/enm_melee_stone_giant01/enm_melee_stone_giant01_visual_top3d.glb",
+      "bytes": 178628,
+      "sha256": "7dbd4829775c7e56fba54b661b2cb202faafc815f1b684317a85366c4b7282ed"
+    },
+    {
+      "path": "assets/art/enemies/enemy_3d/enm_melee_stone_giant01/runtime/enm_melee_stone_giant01/enm_melee_stone_giant01_root_top3d.tscn",
+      "bytes": 805,
+      "sha256": "58c55bf1d628de64496d2db23bf1864f774990e0e0da5a4b8df175adfbc23d5f"
+    },
+    {
+      "path": "assets/art/enemies/enemy_3d/enm_melee_stone_giant01/components/enm_melee_stone_giant01/enm_melee_stone_giant01_visual_top3d.glb.import",
+      "bytes": 70797,
+      "sha256": "2263c7b972dead52442cc13f25de642284566bafb6d5da32f10da39c389079da"
+    }
+  ],
+  "dimensions": {
+    "source_height_m": 2.857142857142857,
+    "game_bind_height_m": 2,
+    "outer_display_multiplier": 0.7,
+    "object_scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "coordinates": {
+    "blender_forward": "+Y",
+    "blender_up": "+Z",
+    "godot_forward": "-Z",
+    "godot_up": "+Y",
+    "object_scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "clips": [
+    {
+      "name": "walking",
+      "fps": 30,
+      "frame_range": [
+        0,
+        72
+      ],
+      "playback_frames": [
+        0,
+        71
+      ],
+      "duration_seconds": 2.4,
+      "loop": true,
+      "root_motion": "in_place_root_fixed",
+      "tracks": 123,
+      "claw_motion": "front_held_alternating_vertical"
+    }
+  ],
+  "missing_clips": [
+    "idle",
+    "running",
+    "attack",
+    "hurt",
+    "dead"
+  ],
+  "runtime_consumer": {
+    "target_owner": "Enemy3D / EnemyAvatar3D",
+    "wired": false,
+    "collision_changed": false,
+    "gameplay_catalog_entry_created": false
+  },
+  "validation": {
+    "blender": {
+      "passed": true,
+      "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_1844_stone_giant_vertical_claws\\validation_blender.json"
+    },
+    "godot": {
+      "passed": false,
+      "status": "blocked_or_error",
+      "summary": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_1844_stone_giant_vertical_claws\\godot_minimal\\runs\\20261116_191556_e858655d\\summary.json",
+      "exit_code": 2,
+      "scope": "Current v002 isolated import only; no reuse of v001 pass",
+      "not_executed": [
+        "Gameplay integration",
+        "Godot rendering",
+        "Dynamic CPU skin"
+      ]
+    },
+    "not_executed": [
+      "Gameplay integration",
+      "AI state mapping",
+      "Combat clips",
+      "Collision authoring"
+    ],
+    "scope": "Blender source and pincer direction pass; engine result recorded for current revision",
+    "claw_direction": {
+      "passed": true,
+      "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_1844_stone_giant_vertical_claws\\claw_direction_validation.json",
+      "metrics": {
+        "L": {
+          "pincer_centroid_xyz_game_m": [
+            0.0029151737689971924,
+            0.0010436773300170898,
+            0.2094930112361908
+          ],
+          "wrist_xyz_game_m": [
+            3.504753112792969e-05,
+            8.052587509155273e-05,
+            0.20998036861419678
+          ],
+          "pincer_vertices": 86
+        },
+        "R": {
+          "pincer_centroid_xyz_game_m": [
+            0.0029363930225372314,
+            0.000989079475402832,
+            0.20946286618709564
+          ],
+          "wrist_xyz_game_m": [
+            3.4809112548828125e-05,
+            8.028745651245117e-05,
+            0.20998060703277588
+          ],
+          "pincer_vertices": 86
+        }
+      }
+    }
+  },
+  "preview": {
+    "directory": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_1844_stone_giant_vertical_claws",
+    "description": "User reference: flexed elbows, pincers in front/down, alternating vertical bob instead of fore-aft swing"
+  },
+  "rollback": {
+    "original_unsaved_source": "I:\\工作项目\\shellstrom2\\ShellStorm2-backup\\2026-11-16_stone_giant01\\original_tree\\unsaved_blender_before_rig_fix.blend",
+    "existing_game_assets_replaced": false,
+    "previous_asset_backup": "I:\\工作项目\\shellstrom2\\ShellStorm2-backup\\2026-11-16_1844_stone_giant_vertical_claws\\before_edits"
+  },
+  "generated_at": "2026-11-16T19:17:28.409680+08:00",
+  "status_reason": "Current upper-arm revision; complete gameplay wiring and full clip set remain pending"
+}

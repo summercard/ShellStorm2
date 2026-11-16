@@ -1,0 +1,34 @@
+{
+  "narrative_id": "nar_tutorial_fate_open_01",
+  "schema_version": 1,
+  "priority": 20,
+  "trigger": { "kind": "manual", "once": "run" },
+  "duration": 0.4,
+  "presentation": {
+    "dialogue": {
+      "participants": [
+        { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram" },
+        { "speaker_id": "player", "speaker": "主角" }
+      ],
+      "presentation_options": { "left_mode": "hologram", "portrait_scale": 0.8 }
+    }
+  },
+  "cues": [
+    { "at": 0.0, "do": "player.lock_input", "locked": true },
+    { "at": 0.0, "do": "player.combat", "enabled": false },
+    { "at": 0.2, "do": "ui.dialogue", "wait": true, "lines": [
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "happy", "text": "啧啧，先看钱包。我光顾着看牌，穷得只剩看灯的本事。", "auto_advance_sec": 3.4, "focus_target": "run_coin_readout" },
+      { "speaker_id": "player", "speaker": "主角", "expression": "question", "text": "上面三张，只能挑一张？", "auto_advance_sec": 2.4, "focus_target": "fate_candidates" },
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "neutral", "text": "用本局金币买。钱够可以多买，也能一张不买。", "auto_advance_sec": 3.2, "focus_target": "fate_candidates" },
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "alert", "text": "退出就放弃没买的候选；买下的继续生效，可别手快。", "auto_advance_sec": 3.4, "focus_target": "fate_exit" },
+      { "speaker_id": "player", "speaker": "主角", "expression": "question", "text": "星、月、太阳……还分管谁的命运？", "auto_advance_sec": 2.8, "focus_target": "fate_scope_icons" },
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "neutral", "text": "星改当前这把枪，月改本局角色，日改世界。先认图标。", "auto_advance_sec": 3.4, "focus_target": "fate_scope_icons" },
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "neutral", "text": "下面是原枪的卡巢；卡下那五个字，简说这张的作用。", "auto_advance_sec": 3.4, "focus_target": "weapon_build_board" },
+      { "speaker_id": "player", "speaker": "主角", "expression": "question", "text": "刻进去不合适，再换一张行吗？", "auto_advance_sec": 2.6 },
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "alert", "text": "枪上的刻印不可逆，也不能换。看清作用和价格，再下手。", "auto_advance_sec": 3.4, "focus_target": "weapon_build_board" },
+      { "speaker_id": "player", "speaker": "主角", "expression": "neutral", "text": "明白，先算钱包，再决定这把枪怎么长。", "auto_advance_sec": 2.8 }
+    ] },
+    { "at": 0.3, "do": "player.lock_input", "locked": false },
+    { "at": 0.4, "do": "flow.end" }
+  ]
+}

@@ -39,6 +39,12 @@ const OUTCOME_COMPLETED := "completed"
 const OUTCOME_SKIPPED := "skipped"
 const OUTCOME_ABORTED := "aborted"
 
+const PORTRAIT_STAGE = preload("res://assets/art/ui/dialogue/dialogue_portrait_stage.tscn")
+
+var _portrait_stage: DialoguePortraitStage
+var _explicit_presentation := false
+var _run_presentation_id := ""
+var _run_auto_presentation := false
 var _panel: PanelContainer
 var _speaker_label: Label
 var _text_label: Label
@@ -72,6 +78,8 @@ var _paused := false
 ## 剧情系统的暂停同步入口。冻结打字进度与自动推进计时，不关闭、不清行。
 func set_paused(paused: bool) -> void:
 	_paused = paused
+	if _portrait_stage != null:
+		_portrait_stage.set_paused(paused or get_tree().paused)
 
 
 func is_paused() -> bool:
@@ -87,6 +95,8 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_sync_mouse_release()
+	if _portrait_stage != null:
+		_portrait_stage.set_paused(_paused or get_tree().paused)
 	if _paused or get_tree().paused:
 		return
 	if not _active:
@@ -223,6 +233,29 @@ func is_dialogue_mouse_fire_blocked() -> bool:
 	return not _mouse_window_focused or _mouse_dialogue_hold or _mouse_consumed_frame == Engine.get_process_frames() or _mouse_consumed_physics_frame == Engine.get_physics_frames()
 
 
+## 临时整段表现会话，不持有文字 run 或剧情完成状态。
+func begin_presentation(session_id: String, participants: Array = [], options: Dictionary = {}) -> String:
+	if _portrait_stage == null:
+		return ""
+	_explicit_presentation = true
+	# 新显式会话接管表现；旧自动 run 的结束不能再关闭它。
+	_run_auto_presentation = false
+	return _portrait_stage.begin_presentation(session_id, participants, options)
+
+
+func end_presentation(session_id: String, immediate: bool = false) -> void:
+	if _portrait_stage == null or session_id.is_empty() or session_id != _portrait_stage.session_id:
+		return
+	_explicit_presentation = false
+	_portrait_stage.end_presentation(session_id, immediate)
+
+
+func get_presentation_snapshot() -> Dictionary:
+	if _portrait_stage != null:
+		return _portrait_stage.get_presentation_snapshot()
+	return {"session_id": "", "left": {}, "right": {}, "active_speaker": "", "exit_running": false, "viewport_count": 0}
+
+
 ## 播放一组台词。返回 run_id；lines 为空时返回空串。
 func show_lines(request: Dictionary) -> String:
 	var raw: Array = request.get("lines", [])
@@ -233,6 +266,16 @@ func show_lines(request: Dictionary) -> String:
 		return ""
 	_run_seq += 1
 	_run_id = "dlg_%d" % _run_seq
+	var requested_presentation := str(request.get("presentation_id", ""))
+	var participants: Array = request.get("participants", [])
+	var options: Dictionary = request.get("presentation_options", request.get("options", {}))
+	if not requested_presentation.is_empty() and requested_presentation != _portrait_stage.session_id:
+		begin_presentation(requested_presentation, participants, options)
+	if not _explicit_presentation or _portrait_stage.session_id.is_empty() or _portrait_stage.exit_running:
+		_explicit_presentation = false
+		_portrait_stage.begin_presentation("auto_%s" % _run_id, participants, options)
+	_run_presentation_id = _portrait_stage.session_id
+	_run_auto_presentation = not _explicit_presentation
 	_lines.clear()
 	for entry in raw:
 		_lines.append(_normalize_line(entry))
@@ -248,20 +291,24 @@ func show_message(
 	text: String,
 	speaker := SPEAKER_SYSTEM,
 	auto_advance_sec := DEFAULT_AUTO_ADVANCE_S,
-	line_id := ""
+	line_id := "",
+	metadata: Dictionary = {}
 ) -> String:
 	var clean := text.strip_edges()
 	if clean.is_empty():
 		return ""
+	var line := metadata.duplicate(true)
+	line.merge({
+		"line_id": line_id if not line_id.is_empty() else "inline",
+		"speaker": speaker, "text": clean,
+		"chars_per_sec": DEFAULT_CHARS_PER_SEC,
+		"auto_advance_sec": auto_advance_sec,
+	}, true)
 	return show_lines({
-		"lines": [{
-			"line_id": line_id if not line_id.is_empty() else "inline",
-			"speaker": speaker,
-			"text": clean,
-			"chars_per_sec": DEFAULT_CHARS_PER_SEC,
-			"auto_advance_sec": auto_advance_sec,
-		}],
-		"interrupt": true,
+		"lines": [line], "interrupt": true,
+		"participants": metadata.get("participants", []),
+		"presentation_id": metadata.get("presentation_id", ""),
+		"presentation_options": metadata.get("presentation_options", {}),
 	})
 
 
@@ -275,21 +322,12 @@ func announce(text: String, auto_advance_sec := DEFAULT_AUTO_ADVANCE_S) -> Strin
 ##
 ## `auto_advance_sec < 0` 时按字数估算停留，保证“读完再收”；
 ## 传具体秒数时按调用方的节奏（剧情时间轴就是这么用的）。
-func show_dialogue_line(text: String, speaker: String, auto_advance_sec := -1.0) -> String:
+func show_dialogue_line(text: String, speaker: String, auto_advance_sec := -1.0, metadata: Dictionary = {}) -> String:
 	var clean := text.strip_edges()
 	if clean.is_empty():
 		return ""
 	var hold := auto_advance_sec if auto_advance_sec > 0.0 else line_hold_for_text(clean)
-	return show_lines({
-		"lines": [{
-			"line_id": "inline",
-			"speaker": speaker,
-			"text": clean,
-			"chars_per_sec": DEFAULT_CHARS_PER_SEC,
-			"auto_advance_sec": hold,
-		}],
-		"interrupt": true,
-	})
+	return show_message(clean, speaker, hold, "inline", metadata)
 
 
 ## 打完字后该停多久（秒）。
@@ -382,14 +420,16 @@ func _current_line() -> Dictionary:
 
 
 func _normalize_line(entry: Dictionary) -> Dictionary:
-	var text := str(entry.get("text", "")).strip_edges()
-	return {
+	# 保留 speaker_id、portrait_mode、expression、focus_target 等纯表现元数据。
+	var line := entry.duplicate(true)
+	line.merge({
 		"line_id": str(entry.get("line_id", "inline")),
 		"speaker": str(entry.get("speaker", SPEAKER_SYSTEM)),
-		"text": text,
+		"text": str(entry.get("text", "")).strip_edges(),
 		"chars_per_sec": float(entry.get("chars_per_sec", DEFAULT_CHARS_PER_SEC)),
 		"auto_advance_sec": float(entry.get("auto_advance_sec", 0.0)),
-	}
+	}, true)
+	return line
 
 
 func _present_current() -> void:
@@ -397,6 +437,8 @@ func _present_current() -> void:
 	if line.is_empty():
 		_finish(OUTCOME_COMPLETED)
 		return
+	if _portrait_stage != null and _run_presentation_id == _portrait_stage.session_id:
+		_portrait_stage.present_line(line)
 	_speaker_label.text = str(line["speaker"])
 	_speaker_label.visible = not _speaker_label.text.is_empty()
 	_text_label.text = str(line["text"])
@@ -449,12 +491,19 @@ func _step_next() -> void:
 
 func _finish(outcome: String) -> void:
 	var finished_run := _run_id
+	var finished_presentation := _run_presentation_id
+	var auto_presentation := _run_auto_presentation
+	_run_presentation_id = ""
+	_run_auto_presentation = false
 	_active = false
 	_typing = false
 	_lines.clear()
 	_index = 0
 	_run_id = ""
 	_set_shown(false)
+	if auto_presentation:
+		end_presentation(finished_presentation)
+	# 不等待立绘退场；回执后不再改任何可被同步重入替换的状态。
 	dialogue_finished.emit(finished_run, outcome)
 
 
@@ -474,6 +523,9 @@ func _build() -> void:
 	root.set_anchors_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
+
+	_portrait_stage = PORTRAIT_STAGE.instantiate() as DialoguePortraitStage
+	root.add_child(_portrait_stage)
 
 	_panel = PanelContainer.new()
 	_panel.name = "Panel"

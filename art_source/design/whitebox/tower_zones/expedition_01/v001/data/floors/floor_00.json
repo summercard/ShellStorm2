@@ -137,7 +137,7 @@
         {
           "box": "box_corner_ambush",
           "center_m": [
-            5.0,
+            0.0,
             -12.5
           ]
         },
@@ -145,7 +145,25 @@
           "box": "box_corner_ambush",
           "center_m": [
             15.0,
-            2.5
+            -2.5
+          ]
+        },
+        {
+          "box": "box_corner_ambush",
+          "center_m": [
+            15.0,
+            12.5
+          ],
+          "spawn_overrides": [
+            {
+              "type": "melee_chaser",
+              "count": 2,
+              "delay_sec": 0.0
+            }
+          ],
+          "size_m": [
+            4.0,
+            4.0
           ]
         }
       ],
@@ -155,7 +173,8 @@
             "boxes": [
               0,
               1,
-              2
+              2,
+              3
             ]
           }
         ],
@@ -231,6 +250,24 @@
             2.5
           ],
           "delay_sec": 1.0
+        },
+        {
+          "box": "box_corner_ambush",
+          "center_m": [
+            -2.5,
+            -2.5
+          ],
+          "spawn_overrides": [
+            {
+              "type": "melee_chaser",
+              "count": 2,
+              "delay_sec": 0.0
+            }
+          ],
+          "size_m": [
+            4.0,
+            4.0
+          ]
         }
       ],
       "encounter": {
@@ -239,7 +276,8 @@
             "boxes": [
               0,
               1,
-              2
+              2,
+              3
             ]
           }
         ],
@@ -307,7 +345,7 @@
           "inset_m": 2.0,
           "depth_m": 3.0
         },
-        "duration_sec": 60.0,
+        "duration_sec": 40.0,
         "start_delay_sec": 2.0,
         "preparation_sec": 0.0,
         "freeze_player_sec": 1.0,
@@ -346,6 +384,27 @@
                 "type": "fat_zombie03",
                 "count": 1,
                 "min_player_distance_m": 8.0
+              },
+              {
+                "type": "ranged_caster",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser",
+                "count": 4
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "fat_zombie03_strong",
+                "count": 1,
+                "spawn_vfx_asset_id": "VFX-FAT-ENTRY-BREACH-3D"
+              },
+              {
+                "type": "fat_zombie03",
+                "count": 2
               },
               {
                 "type": "ranged_caster",
@@ -464,7 +523,7 @@
           "inset_m": 2.0,
           "depth_m": 3.0
         },
-        "duration_sec": 60.0,
+        "duration_sec": 40.0,
         "start_delay_sec": 2.0,
         "preparation_sec": 0.0,
         "freeze_player_sec": 1.0,
@@ -485,6 +544,39 @@
         "stages": [
           {
             "monsters": [
+              {
+                "type": "ranged_caster",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser",
+                "count": 4
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "ranged_caster",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser",
+                "count": 4
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "fat_zombie03_strong",
+                "count": 1,
+                "spawn_vfx_asset_id": "VFX-FAT-ENTRY-BREACH-3D"
+              },
+              {
+                "type": "fat_zombie03",
+                "count": 2
+              },
               {
                 "type": "ranged_caster",
                 "count": 2
@@ -587,7 +679,7 @@
               "delay_sec": 0.5
             },
             {
-              "type": "melee_chaser_strong",
+              "type": "melee_chaser",
               "count": 1,
               "delay_sec": 0.0
             }
@@ -605,24 +697,184 @@
           "box": "box_bridge_center",
           "center_m": [
             2.5,
+            -17.5
+          ],
+          "spawn_overrides": [
+            {
+              "type": "melee_chaser",
+              "count": 2,
+              "delay_sec": 0.0
+            },
+            {
+              "type": "fat_zombie03",
+              "count": 1,
+              "delay_sec": 0.0
+            }
+          ],
+          "size_m": [
+            4.0,
+            4.0
+          ]
+        },
+        {
+          "box": "box_bridge_center",
+          "center_m": [
+            2.5,
+            -12.5
+          ],
+          "spawn_overrides": [
+            {
+              "type": "melee_chaser",
+              "count": 2,
+              "delay_sec": 0.0
+            },
+            {
+              "type": "ranged_caster",
+              "count": 1,
+              "delay_sec": 0.0
+            }
+          ],
+          "size_m": [
+            4.0,
+            4.0
+          ]
+        },
+        {
+          "box": "box_bridge_center",
+          "center_m": [
+            2.5,
+            -7.5
+          ],
+          "spawn_overrides": [
+            {
+              "type": "melee_chaser",
+              "count": 2,
+              "delay_sec": 0.0
+            },
+            {
+              "type": "fat_zombie03",
+              "count": 1,
+              "delay_sec": 0.0
+            }
+          ],
+          "size_m": [
+            4.0,
+            4.0
+          ]
+        },
+        {
+          "box": "box_bridge_center",
+          "center_m": [
+            2.5,
+            -2.5
+          ],
+          "spawn_overrides": [
+            {
+              "type": "melee_chaser",
+              "count": 2,
+              "delay_sec": 0.0
+            },
+            {
+              "type": "ranged_caster",
+              "count": 1,
+              "delay_sec": 0.0
+            }
+          ],
+          "size_m": [
+            4.0,
+            4.0
+          ]
+        },
+        {
+          "box": "box_bridge_center",
+          "center_m": [
+            2.5,
             2.5
           ],
           "spawn_overrides": [
             {
               "type": "melee_chaser",
-              "count": 8,
+              "count": 2,
               "delay_sec": 0.0
             },
             {
               "type": "fat_zombie03",
-              "count": 4,
-              "delay_sec": 1.0
+              "count": 1,
+              "delay_sec": 0.0
+            }
+          ],
+          "size_m": [
+            4.0,
+            4.0
+          ]
+        },
+        {
+          "box": "box_bridge_center",
+          "center_m": [
+            2.5,
+            7.5
+          ],
+          "spawn_overrides": [
+            {
+              "type": "melee_chaser",
+              "count": 2,
+              "delay_sec": 0.0
             },
             {
               "type": "ranged_caster",
-              "count": 4,
-              "delay_sec": 1.0
+              "count": 1,
+              "delay_sec": 0.0
             }
+          ],
+          "size_m": [
+            4.0,
+            4.0
+          ]
+        },
+        {
+          "box": "box_bridge_center",
+          "center_m": [
+            2.5,
+            12.5
+          ],
+          "spawn_overrides": [
+            {
+              "type": "melee_chaser",
+              "count": 2,
+              "delay_sec": 0.0
+            },
+            {
+              "type": "fat_zombie03",
+              "count": 1,
+              "delay_sec": 0.0
+            }
+          ],
+          "size_m": [
+            4.0,
+            4.0
+          ]
+        },
+        {
+          "box": "box_bridge_center",
+          "center_m": [
+            2.5,
+            17.5
+          ],
+          "spawn_overrides": [
+            {
+              "type": "melee_chaser",
+              "count": 2,
+              "delay_sec": 0.0
+            },
+            {
+              "type": "ranged_caster",
+              "count": 1,
+              "delay_sec": 0.0
+            }
+          ],
+          "size_m": [
+            4.0,
+            4.0
           ]
         }
       ],
@@ -634,7 +886,14 @@
               1,
               2,
               3,
-              4
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11
             ]
           }
         ],
@@ -699,7 +958,7 @@
           "inset_m": 2.0,
           "depth_m": 3.0
         },
-        "duration_sec": 60.0,
+        "duration_sec": 40.0,
         "start_delay_sec": 2.0,
         "preparation_sec": 0.0,
         "freeze_player_sec": 1.0,
@@ -751,6 +1010,35 @@
               {
                 "type": "melee_chaser",
                 "count": 7
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "fat_zombie03_strong",
+                "count": 1,
+                "spawn_vfx_asset_id": "VFX-FAT-ENTRY-BREACH-3D"
+              },
+              {
+                "type": "fat_zombie03",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser_strong",
+                "count": 1
+              },
+              {
+                "type": "ranged_caster_strong",
+                "count": 1
+              },
+              {
+                "type": "ranged_caster",
+                "count": 3
+              },
+              {
+                "type": "melee_chaser",
+                "count": 8
               }
             ]
           },
@@ -838,23 +1126,21 @@
       ],
       "spawn_placements": [
         {
-          "box": "box_center_elite",
+          "box": "box_corner_ambush",
           "center_m": [
             0.0,
             0.0
           ],
-          "count_bonus": 4,
           "spawn_overrides": [
             {
               "type": "melee_chaser",
-              "count": 1,
-              "delay_sec": 0.5
-            },
-            {
-              "type": "melee_chaser_strong",
-              "count": 1,
+              "count": 2,
               "delay_sec": 0.0
             }
+          ],
+          "size_m": [
+            4.0,
+            4.0
           ]
         },
         {
@@ -863,7 +1149,17 @@
             -5.0,
             -5.0
           ],
-          "count_bonus": 3
+          "spawn_overrides": [
+            {
+              "type": "melee_chaser",
+              "count": 3,
+              "delay_sec": 0.0
+            }
+          ],
+          "size_m": [
+            4.0,
+            4.0
+          ]
         },
         {
           "box": "box_corner_ambush",
@@ -871,7 +1167,89 @@
             5.0,
             5.0
           ],
-          "count_bonus": 3
+          "spawn_overrides": [
+            {
+              "type": "melee_chaser",
+              "count": 3,
+              "delay_sec": 0.0
+            }
+          ],
+          "size_m": [
+            4.0,
+            4.0
+          ]
+        },
+        {
+          "box": "box_corner_ambush",
+          "center_m": [
+            -5.0,
+            5.0
+          ],
+          "spawn_overrides": [
+            {
+              "type": "melee_chaser",
+              "count": 3,
+              "delay_sec": 0.0
+            }
+          ],
+          "size_m": [
+            4.0,
+            4.0
+          ]
+        },
+        {
+          "box": "box_corner_ambush",
+          "center_m": [
+            5.0,
+            -5.0
+          ],
+          "spawn_overrides": [
+            {
+              "type": "melee_chaser",
+              "count": 3,
+              "delay_sec": 0.0
+            }
+          ],
+          "size_m": [
+            4.0,
+            4.0
+          ]
+        },
+        {
+          "box": "box_corner_ambush",
+          "center_m": [
+            0.0,
+            -5.0
+          ],
+          "spawn_overrides": [
+            {
+              "type": "melee_chaser",
+              "count": 3,
+              "delay_sec": 0.0
+            }
+          ],
+          "size_m": [
+            4.0,
+            4.0
+          ]
+        },
+        {
+          "box": "box_corner_ambush",
+          "center_m": [
+            0.0,
+            5.0
+          ],
+          "spawn_overrides": [
+            {
+              "type": "melee_chaser",
+              "count": 3,
+              "delay_sec": 0.0
+            }
+          ],
+          "size_m": [
+            4.0,
+            4.0
+          ]
         }
       ],
       "encounter": {
@@ -880,7 +1258,11 @@
             "boxes": [
               0,
               1,
-              2
+              2,
+              3,
+              4,
+              5,
+              6
             ]
           }
         ],
@@ -968,56 +1350,55 @@
       ],
       "spawn_placements": [
         {
-          "box": "box_room_spread",
-          "center_m": [
-            -15.0,
-            -12.5
-          ],
-          "count_bonus": 2
-        },
-        {
           "box": "box_corner_ambush",
           "center_m": [
             0.0,
             -12.5
           ],
-          "count_bonus": 2
-        },
-        {
-          "box": "box_wall_arc",
-          "center_m": [
-            15.0,
-            -2.5
+          "size_m": [
+            35.0,
+            5.0
           ],
-          "rotation_deg": 90.0
-        },
-        {
-          "box": "box_center_elite",
-          "center_m": [
-            15.0,
-            7.5
-          ],
-          "count_bonus": 2,
           "spawn_overrides": [
             {
               "type": "melee_chaser",
-              "count": 1,
-              "delay_sec": 0.5
+              "count": 10,
+              "delay_sec": 0.0
             },
             {
-              "type": "ranged_caster_strong",
-              "count": 1,
+              "type": "exploder",
+              "count": 2,
               "delay_sec": 0.0
             }
           ]
         },
         {
-          "box": "box_room_spread",
+          "box": "box_corner_ambush",
           "center_m": [
-            -5.0,
-            12.5
+            15.0,
+            2.5
           ],
-          "count_bonus": 2
+          "size_m": [
+            5.0,
+            25.0
+          ],
+          "spawn_overrides": [
+            {
+              "type": "melee_chaser",
+              "count": 10,
+              "delay_sec": 0.0
+            },
+            {
+              "type": "ranged_caster",
+              "count": 2,
+              "delay_sec": 0.0
+            },
+            {
+              "type": "exploder",
+              "count": 1,
+              "delay_sec": 0.0
+            }
+          ]
         }
       ],
       "encounter": {
@@ -1025,10 +1406,7 @@
           {
             "boxes": [
               0,
-              1,
-              2,
-              3,
-              4
+              1
             ]
           }
         ],
@@ -1093,7 +1471,7 @@
           "inset_m": 2.0,
           "depth_m": 3.0
         },
-        "duration_sec": 60.0,
+        "duration_sec": 40.0,
         "start_delay_sec": 2.0,
         "preparation_sec": 0.0,
         "freeze_player_sec": 1.0,
@@ -1150,6 +1528,11 @@
           },
           {
             "monsters": [
+              {
+                "type": "fat_zombie03_strong",
+                "count": 1,
+                "spawn_vfx_asset_id": "VFX-FAT-ENTRY-BREACH-3D"
+              },
               {
                 "type": "fat_zombie03",
                 "count": 2
@@ -1257,7 +1640,7 @@
           "inset_m": 2.0,
           "depth_m": 3.0
         },
-        "duration_sec": 60.0,
+        "duration_sec": 40.0,
         "start_delay_sec": 2.0,
         "preparation_sec": 0.0,
         "freeze_player_sec": 1.0,
@@ -1285,6 +1668,47 @@
               {
                 "type": "melee_chaser",
                 "count": 11
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "ranged_caster",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser_strong",
+                "count": 1
+              },
+              {
+                "type": "melee_chaser",
+                "count": 12
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "fat_zombie03_strong",
+                "count": 1,
+                "spawn_vfx_asset_id": "VFX-FAT-ENTRY-BREACH-3D"
+              },
+              {
+                "type": "fat_zombie03",
+                "count": 2
+              },
+              {
+                "type": "ranged_caster",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser_strong",
+                "count": 1
+              },
+              {
+                "type": "melee_chaser",
+                "count": 12
               }
             ]
           },

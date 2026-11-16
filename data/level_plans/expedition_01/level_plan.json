@@ -95,12 +95,12 @@
     "stats": {
       "per_kind": {
         "melee_chaser": {
-          "hp": 180,
+          "hp": 99,
           "damage": 18,
           "speed": 2.45
         },
         "fat_zombie03": {
-          "hp": 500,
+          "hp": 198,
           "damage": 35,
           "speed": 1.5
         },
@@ -125,16 +125,15 @@
     },
     "strong_variant": {
       "enabled": true,
-      "chance": 0.075,
+      "chance": 0.03,
       "suppressed_rooms": [
-        "room_01",
-        "room_02",
         "room_03",
         "room_04",
-        "room_05",
+        "room_06",
+        "room_09",
         "room_10"
       ],
-      "note": "概率强化保持7.5%；suppressed_rooms中的01—05及10只关闭概率升级，不抑制显式指定强化。05末波通过实例spawn_overrides以1只melee_chaser_strong替换失效精英作强化预告，06系统扩展SM/SR教学，07以SM、08以SR、Boss以SM+SR替换原E占位，不扩唯一名册、不加总数，不再使用本关strong_random摆位。"
+      "note": "2026-11-16：适用普通怪独立3%概率强化；仅五个倒计时房抑制随机升级，显式编成仍生效。普通房取消显式强化，Boss及秘密子图原编成保持。"
     },
     "death_explosion": {
       "fat_zombie03": {
@@ -147,7 +146,8 @@
           "duration_sec": 3.0,
           "damage_per_tick": 24,
           "tick_interval_sec": 0.5
-        }
+        },
+        "warning_sec": 1.0
       }
     },
     "projectile": {

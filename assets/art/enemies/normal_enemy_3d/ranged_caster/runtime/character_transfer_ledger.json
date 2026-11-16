@@ -5,123 +5,407 @@
   "logic_id": "ranged_caster",
   "status": "active",
   "validation_status": "passed",
-  "asset_version": "v003",
+  "asset_version": "v004",
   "presentation_only": true,
   "collision_owner": "Enemy3D",
   "forward_contract": {
-    "blender": "+Y",
+    "blender": "-Y",
     "godot": "-Z",
-    "additional_yaw_degrees": 0
+    "additional_yaw_degrees": 180,
+    "conversion_owner": "VisualGLB wrapper",
+    "source_axis_unchanged": true
   },
-  "skeleton_id": "SKEL-MELEE-FUNGBOAR01-002",
-  "skeleton_bones": 36,
+  "skeleton_id": "mixamorig",
+  "skeleton_bones": 65,
   "authoring_height_m": 1.857143,
   "runtime_display_height_m": 1.3,
   "runtime_base_scale": 0.7,
   "runtime_prefab": "assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/enm_ranged_sporeshooter01_root_top3d.tscn",
   "presentation_script": "assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/ranged_caster_formal_visual.gd",
-  "model_source": "art_source/enemies/normal_enemy_3d/ranged_caster/source/model/enm_ranged_sporeshooter01_model_v002.blend",
-  "animation_source": "art_source/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v003.blend",
+  "model_source": "art_source/enemies/normal_enemy_3d/police_zombie25/source/model/police_zombie_25_model_v002.blend",
+  "animation_source": "art_source/enemies/normal_enemy_3d/police_zombie25/source/animation/police_zombie_25_animation_v002.blend",
   "component_glb": "assets/art/enemies/normal_enemy_3d/ranged_caster/components/enm_ranged_sporeshooter01_visual_top3d.glb",
   "clips": {
-    "idle": {
-      "seconds": 3.2,
-      "loop": true
-    },
-    "walking": {
-      "seconds": 1.6,
-      "loop": true
-    },
-    "running": {
-      "seconds": 0.8,
-      "loop": true
-    },
-    "attack": {
-      "seconds": 1.7,
-      "loop": false
-    },
-    "hurt": {
-      "seconds": 0.8,
-      "loop": false
-    },
-    "dead": {
-      "seconds": 2.4,
-      "loop": false
-    },
     "armed_idle": {
       "seconds": 3.2,
-      "loop": true
+      "loop": true,
+      "frames": [
+        0,
+        96
+      ]
     },
     "walking_armed": {
       "seconds": 1.6,
-      "loop": true
+      "loop": true,
+      "frames": [
+        0,
+        48
+      ]
     },
     "running_armed": {
       "seconds": 0.8,
-      "loop": true
+      "loop": true,
+      "frames": [
+        0,
+        24
+      ]
     },
     "shoot": {
       "seconds": 0.8,
-      "loop": false
+      "loop": false,
+      "frames": [
+        0,
+        24
+      ]
     }
   },
   "weapon_visual": {
-    "scene": "assets/art/weapons/weapon_3d/runtime/double_barrel_cannon/wpn_double_barrel_cannon_root_top3d_v001.tscn",
-    "attachment_bone": "L_Hand",
+    "scene": "",
+    "attachment_bone": "mixamorig_RightHand",
     "purpose": "presentation_only",
-    "projectile_owner": "Enemy3D"
+    "projectile_owner": "Enemy3D",
+    "mode": "embedded_skin",
+    "source_bone": "mixamorig:RightHand",
+    "legacy_attachment_removed": true,
+    "legacy_attachment_bone": "L_Hand",
+    "external_weapon_instantiated": false
   },
   "validation": [
     {
-      "name": "godot_presentation",
+      "name": "security",
       "status": "passed",
-      "marker": "SECURITY_ZOMBIE_PRESENTATION_OK animations=10 shotgun=true bone=L_Hand ranged_logic_preserved=true"
+      "exit_code": 0,
+      "engine_errors": 0,
+      "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\security_qa_result.json"
     },
     {
-      "name": "source_fit_and_weight_transfer",
+      "name": "visual",
       "status": "passed",
-      "evidence": "_scratch/security_zombie/build_model.log; model_v002; +Y front; unbound=0; weight_sum_error=0"
+      "exit_code": 0,
+      "engine_errors": 0,
+      "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\visual_qa_result.json"
     },
     {
-      "name": "skeleton_match",
+      "name": "light",
       "status": "passed",
-      "evidence": "36 bones; signature 459a27c055654436c506eb8287bf1b300d1c78a81a89e8fe81c9b80c63de3678"
+      "exit_code": 0,
+      "engine_errors": 0,
+      "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\light_qa_result.json"
+    },
+    {
+      "name": "stance",
+      "status": "passed",
+      "exit_code": 0,
+      "engine_errors": 0,
+      "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\stance_qa_result.json"
+    },
+    {
+      "name": "recovery",
+      "status": "passed",
+      "exit_code": 0,
+      "engine_errors": 0,
+      "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\recovery_qa_result.json"
+    },
+    {
+      "name": "target",
+      "status": "passed",
+      "exit_code": 0,
+      "engine_errors": 0,
+      "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\target_qa_result.json"
+    },
+    {
+      "name": "source_skeleton_match",
+      "status": "passed",
+      "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\source_skeleton_validation.json"
+    },
+    {
+      "name": "texture_source_and_both_platform_imports",
+      "status": "passed",
+      "size": [
+        256,
+        256
+      ],
+      "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\runtime_file_validation.json"
+    },
+    {
+      "name": "ledger_scoped_update",
+      "status": "passed",
+      "domain_log_versions": [
+        "v0.1.49",
+        "v0.1.50"
+      ],
+      "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\ledger_update_report.json"
     }
   ],
   "remaining_work": [
-    "full ranged projectile regression retains existing 7 floating-number baseline red"
+    "Full-level manual gameplay and Android device acceptance not executed.",
+    "Global eye-glow suite timed out; this police normal/strong target contract passed separately.",
+    "Global documentation/ledger/texture historical and parallel issues retained; no whole-project pass claimed.",
+    "No authored hurt/dead/reload clips; explicit fallback retained."
   ],
   "duplicate_gate": {
-    "classification": "child_variant",
+    "classification": "replacement",
     "passed": true,
-    "report": "outputs\\asset_guard\\ENM-RANGED-SPORESHOOTER01_ranged_caster.json",
+    "report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\asset_guard\\ENM-RANGED-SPORESHOOTER01_ranged_caster.json",
     "same_asset_id_count": 0,
-    "identical_registered_file_count": 0
+    "identical_registered_file_count": 0,
+    "execution_note": "asset_guard computed and saved passing report; its final text write raised Windows truncate-open OSError22. This scoped synchronization applies the same verified gate record without changing asset_guard."
   },
   "files": [
     {
-      "path": "art_source/enemies/normal_enemy_3d/ranged_caster/source/model/enm_ranged_sporeshooter01_model_v002.blend",
-      "sha256": "f3cfee9626df557dc32fe58ce40f698daa2c6a1abb9f9378b39b6f9f66cb5e7e",
-      "bytes": 1910010,
+      "path": "art_source/enemies/normal_enemy_3d/police_zombie25/source/model/police_zombie_25_model_v002.blend",
+      "sha256": "e1eaa17e77bc1e52a17363d078a9da4793625fce65fdf45da201045bffb8e9c6",
+      "bytes": 1065704,
       "role": "model"
     },
     {
-      "path": "art_source/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v003.blend",
-      "sha256": "5ceda79ebcef191c081011a048d8f2d4f4a5cd3543eefc7de3afb1f32738f15e",
-      "bytes": 8367802,
+      "path": "art_source/enemies/normal_enemy_3d/police_zombie25/source/animation/police_zombie_25_animation_v002.blend",
+      "sha256": "b05d58cd54b7ddcfb0598629e2be1d42c491be393657ef8891c8284ff5a4c3ea",
+      "bytes": 5597471,
       "role": "animation"
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/ranged_caster/components/enm_ranged_sporeshooter01_visual_top3d.glb",
-      "sha256": "f3b37c3e1ff58d5372408534de51e62bd66160135aa20df9593253b222dd7be2",
-      "bytes": 475004,
+      "sha256": "fa2b7fd396d2d2244ecb9ca90b058790b5925e5f5e4b78b5e1600d7433813604",
+      "bytes": 1802304,
       "role": "component_glb"
     },
     {
+      "path": "assets/art/shared/textures/enemies/tex_color_ec827f2a2c65836f15cc.png",
+      "sha256": "10fc9bccdaa4df76bf5aef380f18048c05f1e136c89e5d2087b7bb109c15d3e6",
+      "bytes": 77135,
+      "role": "runtime_texture"
+    },
+    {
       "path": "assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/enm_ranged_sporeshooter01_root_top3d.tscn",
-      "sha256": "09eca9c05e4c83e2994f0e2a888cf1f685e511f882b6005f8a3d282bdeb7365b",
-      "bytes": 701,
+      "sha256": "a569572389c6821a873907548b698942db5706f11810efa171908e52437db40f",
+      "bytes": 1085,
       "role": "runtime_prefab"
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/ranged_caster_formal_visual.gd",
+      "sha256": "bfc34b99e50f4d08bee232289dcc52553b5d134b95c71394be195a143f3f9ea7",
+      "bytes": 15725,
+      "role": "presentation_script"
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/police_zombie25/source/model/soldier_character_3d_model_basecolor.jpg",
+      "sha256": "ab230fa0d1daebc99f11c6e37777abf4b11f7d9e1f909e761573199912cc20fd",
+      "bytes": 434690,
+      "role": "source_texture"
     }
-  ]
+  ],
+  "skeleton_id_scope": "命名族；未登记新 SKEL ID，不复用旧 36 骨骨架标识",
+  "source_geometry_skin_rest_signature": "6218d2e45ba85c29b24c828cad78fd006f3e4ec79e5a2e2805322f92fba2b629",
+  "skeleton_signature_status": "independent model/animation master reopen; exact rest/parent/tail/deform signature match",
+  "raw_source_rest_height_m": 0.9995118975639343,
+  "authoring_height_scope": "VisualGLB wrapper 归一化后的视觉 rest 高，不是未缩放源高",
+  "visual_wrapper": {
+    "node": "VisualGLB",
+    "yaw_degrees": 180,
+    "uniform_scale": 1.85804992,
+    "presentation_root_scale": [
+      1,
+      1,
+      1
+    ],
+    "raw_source_rest_height_m": 0.9995118975639343,
+    "visual_rest_height_m": 1.857143,
+    "gameplay_scale": 0.7,
+    "runtime_display_height_m": 1.3,
+    "collision_changed": false,
+    "evidence": "I:/工作项目/shellstrom2/ShellStorm2-work/sessions/2026-11-16_police_zombie_import/candidate_report.json",
+    "measurement_status": "Godot 最终尺寸验收待主 agent 确认"
+  },
+  "texture": "assets/art/shared/textures/enemies/tex_color_ec827f2a2c65836f15cc.png",
+  "texture_size": [
+    256,
+    256
+  ],
+  "fps": 30,
+  "fire_timing": {
+    "seconds": 0.384,
+    "source_frame": 11.52,
+    "normalized": 0.48,
+    "authority": "gameplay; animation marker is visual only"
+  },
+  "missing_clips": [
+    "hurt",
+    "dead"
+  ],
+  "missing_clip_fallback": {
+    "clip": "armed_idle",
+    "sample_seconds": 0,
+    "loop": false,
+    "crossfade_seconds": 0,
+    "hit_flash": true
+  },
+  "death_policy": {
+    "owner": "Enemy3D",
+    "corpse": false,
+    "death_clip_available": false,
+    "interface_duration_seconds": 2.4
+  },
+  "limitations": [
+    "仅有 armed_idle / walking_armed / running_armed / shoot 四段真实动画，缺少 hurt、dead、reload，不伪造片段。",
+    "请求缺失 hurt/dead 时固定 armed_idle@0，停止循环相位及交叉淡化；受击仍闪白，不宣称有真实受击姿态。",
+    "正式死亡沿用 Enemy3D 无尸体路径；dead 接口兜底不等于倒地动画，保留 2.4s 接口时长不代表产生尸体。",
+    "枪与身体为一体蒙皮，跟随真实 RightHand；取消旧 L_Hand 外挂，不接入玩家武器、弹药或换弹。",
+    "手指融合几何保留，无独立手指开合。",
+    "最终 Godot 表现、尺寸、碰撞与远程玩法回归由主 agent 验收；当前不能标记 passed/active。"
+  ],
+  "source_preservation": {
+    "model_file_unchanged": true,
+    "animation_file_unchanged": true,
+    "source_texture_unchanged": true
+  },
+  "ledger_state": {
+    "updated_in_this_operation": false,
+    "baseline_updated": false,
+    "reason": "本次仅更新四份非账本文本追溯"
+  },
+  "historical": [
+    {
+      "status": "historical",
+      "superseded_on": "2026-11-16",
+      "original_file_sha256": "45a89ead12a4e32393dbc5d60a02843655248d9d4e3d4cce5257b28e4312208d",
+      "backup_path": "I:/工作项目/shellstrom2/ShellStorm2-backup/2026-11-16_police_zombie_import/before_edits/assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/character_transfer_ledger.json",
+      "record": {
+        "schema_version": 2,
+        "asset_id": "ENM-RANGED-SPORESHOOTER01",
+        "display_name": "保安僵尸",
+        "logic_id": "ranged_caster",
+        "status": "active",
+        "validation_status": "passed",
+        "asset_version": "v003",
+        "presentation_only": true,
+        "collision_owner": "Enemy3D",
+        "forward_contract": {
+          "blender": "+Y",
+          "godot": "-Z",
+          "additional_yaw_degrees": 0
+        },
+        "skeleton_id": "SKEL-MELEE-FUNGBOAR01-002",
+        "skeleton_bones": 36,
+        "authoring_height_m": 1.857143,
+        "runtime_display_height_m": 1.3,
+        "runtime_base_scale": 0.7,
+        "runtime_prefab": "assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/enm_ranged_sporeshooter01_root_top3d.tscn",
+        "presentation_script": "assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/ranged_caster_formal_visual.gd",
+        "model_source": "art_source/enemies/normal_enemy_3d/ranged_caster/source/model/enm_ranged_sporeshooter01_model_v002.blend",
+        "animation_source": "art_source/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v003.blend",
+        "component_glb": "assets/art/enemies/normal_enemy_3d/ranged_caster/components/enm_ranged_sporeshooter01_visual_top3d.glb",
+        "clips": {
+          "idle": {
+            "seconds": 3.2,
+            "loop": true
+          },
+          "walking": {
+            "seconds": 1.6,
+            "loop": true
+          },
+          "running": {
+            "seconds": 0.8,
+            "loop": true
+          },
+          "attack": {
+            "seconds": 1.7,
+            "loop": false
+          },
+          "hurt": {
+            "seconds": 0.8,
+            "loop": false
+          },
+          "dead": {
+            "seconds": 2.4,
+            "loop": false
+          },
+          "armed_idle": {
+            "seconds": 3.2,
+            "loop": true
+          },
+          "walking_armed": {
+            "seconds": 1.6,
+            "loop": true
+          },
+          "running_armed": {
+            "seconds": 0.8,
+            "loop": true
+          },
+          "shoot": {
+            "seconds": 0.8,
+            "loop": false
+          }
+        },
+        "weapon_visual": {
+          "scene": "assets/art/weapons/weapon_3d/runtime/double_barrel_cannon/wpn_double_barrel_cannon_root_top3d_v001.tscn",
+          "attachment_bone": "L_Hand",
+          "purpose": "presentation_only",
+          "projectile_owner": "Enemy3D"
+        },
+        "validation": [
+          {
+            "name": "godot_presentation",
+            "status": "passed",
+            "marker": "SECURITY_ZOMBIE_PRESENTATION_OK animations=10 shotgun=true bone=L_Hand ranged_logic_preserved=true"
+          },
+          {
+            "name": "source_fit_and_weight_transfer",
+            "status": "passed",
+            "evidence": "_scratch/security_zombie/build_model.log; model_v002; +Y front; unbound=0; weight_sum_error=0"
+          },
+          {
+            "name": "skeleton_match",
+            "status": "passed",
+            "evidence": "36 bones; signature 459a27c055654436c506eb8287bf1b300d1c78a81a89e8fe81c9b80c63de3678"
+          }
+        ],
+        "remaining_work": [
+          "full ranged projectile regression retains existing 7 floating-number baseline red"
+        ],
+        "duplicate_gate": {
+          "classification": "child_variant",
+          "passed": true,
+          "report": "outputs\\asset_guard\\ENM-RANGED-SPORESHOOTER01_ranged_caster.json",
+          "same_asset_id_count": 0,
+          "identical_registered_file_count": 0
+        },
+        "files": [
+          {
+            "path": "art_source/enemies/normal_enemy_3d/ranged_caster/source/model/enm_ranged_sporeshooter01_model_v002.blend",
+            "sha256": "f3cfee9626df557dc32fe58ce40f698daa2c6a1abb9f9378b39b6f9f66cb5e7e",
+            "bytes": 1910010,
+            "role": "model"
+          },
+          {
+            "path": "art_source/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v003.blend",
+            "sha256": "5ceda79ebcef191c081011a048d8f2d4f4a5cd3543eefc7de3afb1f32738f15e",
+            "bytes": 8367802,
+            "role": "animation"
+          },
+          {
+            "path": "assets/art/enemies/normal_enemy_3d/ranged_caster/components/enm_ranged_sporeshooter01_visual_top3d.glb",
+            "sha256": "f3b37c3e1ff58d5372408534de51e62bd66160135aa20df9593253b222dd7be2",
+            "bytes": 475004,
+            "role": "component_glb"
+          },
+          {
+            "path": "assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/enm_ranged_sporeshooter01_root_top3d.tscn",
+            "sha256": "09eca9c05e4c83e2994f0e2a888cf1f685e511f882b6005f8a3d282bdeb7365b",
+            "bytes": 701,
+            "role": "runtime_prefab"
+          }
+        ]
+      }
+    }
+  ],
+  "skeleton_signature": "b3feb75b3488678b7611e93b72eb56be711db629f0ba8c8f84098968d7cf2345",
+  "acceptance_level": "L1_source_and_formal_presentation_plus_L2_forward_plus_rendering",
+  "runtime_evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-16_police_zombie_import\\runtime_visual_result.json",
+  "eye_calibration": {
+    "bone": "mixamorig_Head",
+    "source": "texture pupil raycast",
+    "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\eye_calibration.json",
+    "target_follow_evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_police_zombie_import\\target_contract_result.json"
+  }
 }

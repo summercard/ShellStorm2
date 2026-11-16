@@ -33,7 +33,7 @@
 ### 1.2 三条不可违反的铁律
 
 1. **不画实心卡片。** 任何区域都不得以"实色大矩形 + 四边完整边框"的形式出现。区域靠 **1px 白线** 或 **四角括号（L 形折角）** 界定，必要时叠一层 **alpha ≤ 0.50** 的极淡底衬。
-2. **零辉光、零渐变、零投影堆叠。** 所有 `StyleBoxFlat` 的 `shadow_size` 一律为 `0`；禁止 `corner_radius > 2`；禁止线性/径向渐变。
+2. **零辉光、零渐变、零投影堆叠。** 所有 `StyleBoxFlat` 的 `shadow_size` 一律为 `0`；禁止 `corner_radius > 2`；禁止线性/径向渐变。§6.1另记本次用户授权的枪械构建页窄范围例外，不改变全站总则。
 3. **两级排印。** 同一屏内，信息只能是两类之一 —— **钢蓝小号弱标签**（大写 + 宽字距）或 **近白大字号强数值**。中间态（中灰、中等字号、无字距）视为违规。
 
 ---
@@ -351,6 +351,17 @@ ESC 暂停页的「复位游戏存档二次确认」是 `ConfirmationDialog`（`
 
 ---
 
+### 6.1 枪械构建页全息表现的局部授权（2026-11-16）
+
+**来源与范围**：本次用户明确授权，沿用 `UI-HUD / FATE-RULES / WEAPON-COMBAT / VFX-POOL`，工程 `0.1.0`。只覆盖K页 `WeaponAssemblyTreePanel` 和正式命运pickup购卡复用的 `WeaponBuildBoard / FateHologramPresentation`；不是全站换皮，不改变§0/§1.2的无光晕总则、其他HUD或既有设施豁免。
+
+- **基础不变**：棱镜近白细线、冷色、方角与正向可读文字；塔罗卡面是内容贴图，不作为恢复大块发光面板的理由。
+- **唯一新增许可**：枪身位置全息展开/收起、已占永久槽连线的局部流光，以及提交成功后一次短暂整板发光/扫描脉冲和方块散射。空槽/未购候选不得常驻成功色；不增加全屏霓虹边框、常驻整板光晕或投影堆叠。
+- **布局许可**：本专页是明确授权的布局重构，不套用“只换皮不挪内容”的§7.3旧批次约束。K页左枪械3D+名字+弹种配件、右交错塔罗卡巢；按真实容量绘制，超8槽横拖。购卡页复用同一board，枪身展开后board下移，再翻上方三张候选。旧中央放射环/独占全屏大卡布局仅为历史，不与本版并列。包裹/装备/仓库不受此许可影响。
+- **事务与输入边界**：UI只读领域事实；星星正式购买先显示原文“购买后该枪械命运卡不可更换！”，默认“否”，取消不支付。确认后仍走原费用与Bridge事务；成功才飞入永久slot并反馈，失败/取消退款，月亮太阳不占枪槽。`DivinationMenu`仍预选不付款不装配，训练全量免费。
+- **可访问性与生命周期**：支持减少动效，跳过长位移/散射但保留最终槽位与短成功反馈；关闭/切枪/重开不留旧投影，不重复提交事务。卡巢键鼠/手柄焦点可达，逆位只倒图案、说明正向；旧数据同类挂枪来源标 `shared_unmapped`，不伪造逐槽映射或改schema。
+- **资产与验收**：UI账本r27 `UI-WEAPON-BUILD-BOARD`、r28 `UI-FATE-HOLOGRAM-PRESENTATION`；特效账本r66 `VFX-WEAPON-CARD-SOCKET-IMPACT-2D` 是Control/2D例外，不记3D、不进VfxPool。专项已实现，运行结果见[独立记录](../development/2026-11-16_weapon_hologram_ui.md)，不在此签已验收；`verify_weapon_hologram_ui`仅经 `python scripts/run_weapon_hologram_qa.py --scene weapon_hologram_ui --resolution 1280x720 1920x1080` 在Autoload前隔离（`WEAPON_HOLOGRAM_VERIFY_ISOLATED=1`），manual登记且排除full裸扫。
+
 ## 7. 布局规范
 
 ### 7.1 屏幕构图（参考图三段式）
@@ -465,7 +476,7 @@ ESC 暂停页的「复位游戏存档二次确认」是 `ConfirmationDialog`（`
 | **开始游戏主界面** | `MainEntryScreen3D.gd`、`EntryNeonButton.gd`、`EntryBrand.gd`、`scenes/ui/MainEntryScreen3D.tscn` | 六边斜切 + 呼吸霓虹光晕 + 流光扫线 → **棱镜双型自绘按钮**：`StartButton` = 实心近白主行动（深墨字），`SettingsButton` = 透明底 + 八段 L 形角括号的次行动。品牌标题改近白字标 + 天蓝「2」+ 贯穿细线 + 左侧 2px 竖线。**节点路径与 `pressed` 契约不变** |
 | **99F 基地设施菜单** | `BaseRecoveryMenu`、`BaseMenu`、`DivinationMenu`、`FateCardCollectionMenu`、`MonsterArchiveMenu`、`MerchantUI`、`WorkshopMenu`、`wardrobe/WardrobeMenu3D` | 整棵树皮 + 模态外框挂一处四角括号；精英档案行按状态给 `PRISM_DANGER` / `PRISM_ACCENT` / 白线 |
 | **受约束界面（只改样式）** | `InventoryUI`、`ItemSlot`、`VaultMenu`、`BaseVendingMenu` | `prism_reskin_styleboxes` + `prism_normalize_label_colors`；`ItemSlot` 的拖拽浮层单独上棱镜。**格子 / 布局 / 拖拽 / 交易逻辑一行未动**（§7.3.1） |
-| **武器构建** | `WorkbenchPanel`、`WeaponAssemblyTreePanel` | 树皮 + 运行时新建行（树行、统计行）在重建后补窄口径收口；行高亮由"3px 圆角框 + 色带"改 1px 白线 + 归一化淡色带 |
+| **武器构建（第二批历史）** | `WorkbenchPanel`、`WeaponAssemblyTreePanel` | 2026-10-17曾做树皮与运行时树行收口；K页已由2026-11-16共享全息构建板取代，现行布局及局部动效许可见§6.1，不继续要求旧树行布局 |
 | **局内弹窗与全屏层** | `Dungeon3D`（HUD 弹层 / 模态关闭钮 / 全屏地图 / 塔罗卡背 / 卡反馈）、`TowerDescent3D._open_elevator_panel()` | `_make_hud_style` 保持 `a <= 0.50`；删掉两处 `_add_neon_frame` 调用并**删除该函数与 `NEON_FRAME_SCRIPT` 常量**；塔罗卡背单开一块不透明棱镜板（不受 HUD 半透契约约束）；`FateCardFeedback` 由"三层粗描边叠加"改**单线 1px**（闪的瞬间 2px） |
 | **启动流与对话** | `StartupLoadingScreen`、`OpeningMovieScreen3D`、`ExpeditionLoadingScreen`、`dialogue/DialogueUI` | 启动壳/读取页：深墨底 + 白线 + 棱镜进度槽；读取页波浪 `LOADING` 改用**同一个字体对象**量宽（否则棱镜字距会让字母挤在一起）；开场影片保留描边（压在活动画面上）；叙事底栏面板 + 三级排印。`StartupLoadingScreen` 于 2026-10-17 按主人指定收敛为**纯黑底 + 撑满画幅的斜置名字 + 同角度斜进度条**，并在棱镜骨架之上叠一层**粉/青赛博色散**（唯一授权例外，仅此一屏、仅作用于字与条，不做画面边框特效，见 UI 清单 UI-01） |
 | **开发者层** | `PerformanceOverlay`、`player3d/FlashlightColorTweaker` | FPS 三档语义色改 `PRISM_OK/WARN/DANGER`；撤掉文字投影（改由面板底衬保可读性）；**滑条纳入 `apply_prism_tree`** |

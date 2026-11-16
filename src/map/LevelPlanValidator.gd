@@ -1536,6 +1536,12 @@ static func _validate_triggered_encounter(encounter: Dictionary, key: String, ro
 				errors.append("encounter_stage_monster_not_object:%s:%d" % [key, stage_index])
 				continue
 			var monster := monster_value as Dictionary
+			for field in monster.keys():
+				if str(field) not in EncounterEventDirector3D.MONSTER_KEYS:
+					errors.append("encounter_stage_monster_unknown_field:%s:%d:%s" % [key, stage_index, str(field)])
+			var vfx_validation := EncounterEventDirector3D.validate_spawn_vfx(monster)
+			if not bool(vfx_validation.get("ok", false)):
+				errors.append("encounter_%s:%s:%d" % [str(vfx_validation["error"]), key, stage_index])
 			var type_id := str(monster.get("type", ""))
 			var monster_distance: Variant = monster.get("min_player_distance_m", default_distance)
 			if not _finite_number(monster_distance) or float(monster_distance) < 0.0:

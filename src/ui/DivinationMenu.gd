@@ -9,6 +9,96 @@ var card_options_container: HBoxContainer
 var instruction_label: Label
 var skip_button: Button
 var selected_card_label: Label
+var _player: Node
+var _board: Control
+var _page: Control
+var _upper: ScrollContainer
+var _preselection_column: VBoxContainer
+var _board_wrapper: Control
+var _opening := true
+var _closing := false
+var _busy := false
+const HOLOGRAM := preload("res://src/ui/weapon_build/WeaponHologramTransition.gd")
+
+func set_player(player: Node) -> void:
+	_player = player
+	if is_instance_valid(_board):
+		_board.call("set_weapon_owner", player)
+
+func _install_build_board() -> void:
+	if not is_instance_valid(_player):
+		_player = get_tree().get_first_node_in_group("player_3d")
+	_page = Control.new()
+	_page.name = "FatePreselectionPage"
+	_page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(_page)
+	var old_panel := get_node("Panel") as Control
+	_preselection_column = old_panel.get_node("VBox") as VBoxContainer
+	_preselection_column.reparent(_page)
+	old_panel.hide()
+	_upper = ScrollContainer.new()
+	_upper.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_upper.follow_focus = true
+	_page.add_child(_upper)
+	_preselection_column.reparent(_upper)
+	_preselection_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card_options_container.custom_minimum_size = Vector2.ZERO
+	skip_button.custom_minimum_size = Vector2(0, 40)
+	if instruction_label:
+		instruction_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_board = (load("res://assets/art/ui/weapon_build/weapon_build_board.tscn") as PackedScene).instantiate() as Control
+	_board.name = "WeaponBuildBoard"
+	_board_wrapper = Control.new()
+	_board_wrapper.name = "WeaponBoardWrapper"
+	_board_wrapper.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_page.add_child(_board_wrapper)
+	_board_wrapper.add_child(_board)
+	_board.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	_board.call("set_compact", true)
+	_board.call("set_weapon_owner", _player)
+	_page.resized.connect(_layout_preselection)
+	_layout_preselection()
+
+func _layout_preselection() -> void:
+	var canvas := get_viewport().get_visible_rect().size
+	_upper.position = Vector2(32, 12)
+	_upper.size = Vector2(canvas.x - 64, maxf(80, canvas.y - 328))
+	_board_wrapper.position = Vector2(32, canvas.y - 308)
+	_board_wrapper.size = Vector2(canvas.x - 64, 296)
+	_board.size = _board_wrapper.size
+	if not _opening and not _closing:
+		_board.position = Vector2.ZERO
+
+
+func _center_board_position() -> Vector2:
+	return get_viewport().get_visible_rect().get_center() - _board_wrapper.global_position - _board.size * 0.5
+
+
+func _move_board(target: Vector2) -> void:
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+		_board.position = target
+		return
+	var tween := _board.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.tween_property(_board, "position", target, 0.18).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	await tween.finished
+
+
+func _play_intro() -> void:
+	_upper.hide()
+	_board.hide()
+	await get_tree().process_frame
+	_board.position = _center_board_position()
+	await HOLOGRAM.open(_board, _player).finished
+	await _move_board(Vector2.ZERO)
+	_opening = false
+	if _closing:
+		return
+	_upper.show()
+	for index in card_options_container.get_child_count():
+		var button := card_options_container.get_child(index).get_meta("tarot_button") as Button
+		if button != null:
+			_play_card_flip(button, button.get_meta("card") as FateCard, index)
+	UiMenuFocus.ensure_focus(self)
 
 ## 暂存的下一局命运卡片
 var pending_card: FateCard = null
@@ -18,17 +108,21 @@ const FREE_DRAWS_PER_RUN := 1
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	set_meta("ui_prism_exempt", true)
 	card_options_container = get_node_or_null("Panel/VBox/CardOptions")
 	instruction_label = get_node_or_null("Panel/VBox/InstructionLabel")
 	skip_button = get_node_or_null("Panel/VBox/SkipButton")
 	selected_card_label = get_node_or_null("Panel/VBox/SelectedCardLabel")
 	if skip_button:
 		skip_button.pressed.connect(_on_skip_pressed)
+	_install_build_board()
 	_selected_card_label_reset()
 	_draw_cards()
-	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
+	if skip_button:
+		UIStyleFactory.apply_prism_button(skip_button, "ghost", 0, 18, 1, "none")
 	# 默认焦点落在「跳过」上：打开即按 A 不该直接定下命运卡。
-	UiMenuFocus.ensure_focus(self)
+	_play_intro()
 
 
 func _draw_cards() -> void:
@@ -49,12 +143,13 @@ func _draw_cards() -> void:
 		card_options_container.add_child(card_view)
 		var btn := card_view.get_meta("tarot_button") as Button
 		if btn != null:
-			_play_card_flip(btn, card, choice_index)
+			btn.disabled = true
+			if not _opening:
+				_play_card_flip(btn, card, choice_index)
 
 	# 更新说明
 	if instruction_label:
 		instruction_label.text = "选择一张命运预兆，它会保留到下一局首次开门选择"
-	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
 
 
 ## 创建一张命运卡视图：塔罗卡面贴图 + 卡下功能文字。
@@ -65,7 +160,10 @@ func _create_card_view(card: FateCard) -> Control:
 	column.add_theme_constant_override("separation", 10)
 
 	var btn := Button.new()
-	btn.custom_minimum_size = Vector2(232, 362)
+	column.set_meta("ui_prism_exempt", true)
+	column.custom_minimum_size = Vector2(230, 0)
+	btn.custom_minimum_size = Vector2(135, 210)
+	btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	btn.text = ""
 	btn.clip_contents = true
 	btn.focus_mode = Control.FOCUS_ALL
@@ -98,6 +196,7 @@ func _create_card_view(card: FateCard) -> Control:
 		var face := FateCardView.build_art_layer(btn, art, card.is_reversed(), "TarotArtFace")
 		if face != null:
 			face.visible = false
+		FateCardView.build_scope_badge(btn, card.scope, face)
 		btn.set_meta("tarot_face_node", face)
 		btn.set_meta("tarot_back_node", back_node)
 	else:
@@ -121,7 +220,12 @@ func _create_card_view(card: FateCard) -> Control:
 		fallback_bg.border_color = UIStyleFactory.prism_normalize_color(FateCard.rarity_color(card.card_rarity))
 		btn.add_theme_stylebox_override("normal", fallback_bg)
 
-	column.add_child(FateCardView.build_caption(card, 13, 232))
+	var caption := FateCardView.build_caption(card, 18, 230, "", false)
+	caption.custom_minimum_size.y = 70
+	caption.tooltip_text = card.description
+	caption.max_lines_visible = 3
+	caption.clip_text = true
+	column.add_child(caption)
 	# 调用方拿到的是「列」而不是按钮，故在列上也挂一份，避免从列上取不到按钮。
 	column.set_meta("tarot_button", btn)
 	return column
@@ -134,6 +238,7 @@ func _play_card_flip(button: Button, card: FateCard, choice_index: int) -> void:
 	var back: Control = (button.get_meta("tarot_back_node") if button.has_meta("tarot_back_node") else null) as Control
 	if not art_mode:
 		face = UIStyleFactory.make_tarot_button_text(button)
+		FateCardView.build_scope_badge(button, card.scope, face)
 		button.set_meta("tarot_face_node", face)
 	button.disabled = true
 	if not art_mode:
@@ -146,7 +251,8 @@ func _play_card_flip(button: Button, card: FateCard, choice_index: int) -> void:
 		if not art_mode:
 			button.text = ""
 			face.visible = true
-			UIStyleFactory.apply_tarot_orientation(button, face, card.is_reversed())
+			button.rotation = 0.0
+			face.rotation = 0.0
 		else:
 			FateCardView.reveal(face, back, card.is_reversed())
 		tween.tween_property(button, "modulate:a", 1.0, 0.15)
@@ -157,7 +263,8 @@ func _play_card_flip(button: Button, card: FateCard, choice_index: int) -> void:
 			if not art_mode:
 				button.text = ""
 				face.visible = true
-				UIStyleFactory.apply_tarot_orientation(button, face, card.is_reversed())
+				button.rotation = 0.0
+				face.rotation = 0.0
 			else:
 				FateCardView.reveal(face, back, card.is_reversed())
 		)
@@ -171,6 +278,8 @@ func _play_card_flip(button: Button, card: FateCard, choice_index: int) -> void:
 
 ## 选中了一张卡片
 func _on_card_button_pressed(card: FateCard) -> void:
+	if _opening or _closing or _busy:
+		return
 	pending_card = card
 	_update_selected_label(card)
 
@@ -226,15 +335,27 @@ func _pending_card_reset() -> void:
 
 ## 跳过（不选）
 func _on_skip_pressed() -> void:
+	if _opening or _closing or _busy:
+		return
+	_busy = true
 	_pending_card_reset()
 	if instruction_label:
 		instruction_label.text = "已跳过抽卡。祝你好运。"
 	await get_tree().create_timer(1.0).timeout
-	_close()
+	_busy = false
+	await _close()
 
 
 ## 关闭界面（返回基地）
 func _close() -> void:
+	if _closing or _busy:
+		return
+	_closing = true
+	while _opening:
+		await get_tree().process_frame
+	_upper.hide()
+	await _move_board(_center_board_position())
+	await HOLOGRAM.close(_board, _player).finished
 	queue_free()
 
 

@@ -26,28 +26,48 @@ var _grid: GridContainer = null
 var _status_label: Label = null
 var _loadout_label: Label = null
 var _busy := false
+var _board: Control
+var _confirm: Control
+var _panel: PanelContainer
+var _board_wrapper: Control
+var _opening := true
+var _closing := false
+var _input_was_locked := false
+const HOLOGRAM := preload("res://src/ui/weapon_build/WeaponHologramTransition.gd")
 
 
 func set_player(player: Player3D) -> void:
 	_player = player
+	if is_instance_valid(_board):
+		_board.call("set_weapon_owner", player)
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	set_meta("ui_prism_exempt", true)
 	layer = 60
 	_build_ui()
 	if _player != null and is_instance_valid(_player):
+		_input_was_locked = _player.input_locked
 		_player.set_input_locked(true)
+		FateCardGameBridge.set_player(_player)
 	if Global != null:
 		Global.acquire_pause(PAUSE_REASON)
 	_refresh()
+	_play_intro()
 
 
 func _exit_tree() -> void:
 	if Global != null:
 		Global.release_pause(PAUSE_REASON)
 	if _player != null and is_instance_valid(_player):
-		_player.set_input_locked(false)
+		var host := _player.get_parent()
+		while host != null:
+			if host.has_method("refresh_player_input_lock"):
+				host.call_deferred("refresh_player_input_lock")
+				return
+			host = host.get_parent()
+		_player.set_input_locked(_input_was_locked or (Global != null and Global.is_paused))
 
 
 func _input(event: InputEvent) -> void:
@@ -63,15 +83,13 @@ func _build_ui() -> void:
 	background.color = Color(0.04, 0.05, 0.07, 0.94)
 	add_child(background)
 	var panel := PanelContainer.new()
+	_panel = panel
 	panel.name = "Panel"
-	panel.anchor_left = 0.5
-	panel.anchor_top = 0.5
-	panel.anchor_right = 0.5
-	panel.anchor_bottom = 0.5
-	panel.offset_left = -566.0
-	panel.offset_top = -340.0
-	panel.offset_right = 566.0
-	panel.offset_bottom = 340.0
+	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	panel.offset_left = 24
+	panel.offset_top = 12
+	panel.offset_right = -24
+	panel.offset_bottom = -12
 	add_child(panel)
 	var column := VBoxContainer.new()
 	column.name = "VBox"
@@ -111,6 +129,19 @@ func _build_ui() -> void:
 	_grid.add_theme_constant_override("h_separation", 12)
 	_grid.add_theme_constant_override("v_separation", 12)
 	scroll.add_child(_grid)
+	_board = (load("res://assets/art/ui/weapon_build/weapon_build_board.tscn") as PackedScene).instantiate() as Control
+	_board.name = "WeaponBuildBoard"
+	_board_wrapper = Control.new()
+	_board_wrapper.name = "WeaponBoardWrapper"
+	_board_wrapper.custom_minimum_size = Vector2(0, 300)
+	_board_wrapper.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	column.add_child(_board_wrapper)
+	_board_wrapper.add_child(_board)
+	_board_wrapper.resized.connect(_layout_board)
+	_board.call("set_compact", true)
+	_board.call("set_weapon_owner", _player)
+	get_viewport().size_changed.connect(_layout_bench)
+	_layout_bench()
 	_status_label = Label.new()
 	_status_label.name = "StatusLabel"
 	_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -124,6 +155,45 @@ func _build_ui() -> void:
 	close_button.custom_minimum_size = Vector2(0, 42)
 	close_button.pressed.connect(_close)
 	column.add_child(close_button)
+
+
+func _layout_board() -> void:
+	_board.size = _board_wrapper.size
+	if not _opening and not _closing:
+		_board.position = Vector2.ZERO
+
+
+func _center_board_position() -> Vector2:
+	return get_viewport().get_visible_rect().get_center() - _board_wrapper.global_position - _board.size * 0.5
+
+
+func _move_board(target: Vector2) -> void:
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+		_board.position = target
+		return
+	var tween := _board.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.tween_property(_board, "position", target, 0.18).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	await tween.finished
+
+
+func _play_intro() -> void:
+	_grid.hide()
+	_board.hide()
+	await get_tree().process_frame
+	_layout_board()
+	_board.position = _center_board_position()
+	await HOLOGRAM.open(_board, _player).finished
+	await _move_board(Vector2.ZERO)
+	_opening = false
+	if not _closing:
+		_grid.show()
+
+
+func _layout_bench() -> void:
+	if not is_instance_valid(_grid):
+		return
+	var width := get_viewport().get_visible_rect().size.x - 72
+	_grid.columns = maxi(1, mini(CARDS_PER_ROW, int(width / (CARD_WIDTH + 12))))
 
 
 func _refresh() -> void:
@@ -145,11 +215,12 @@ func _create_card_entry(card: FateCard) -> Control:
 		FateCard.scope_target_text(card.scope),
 		card.description,
 	]
-	button.pressed.connect(_on_card_pressed.bind(card))
+	button.pressed.connect(_on_card_pressed.bind(card, button))
 	column.add_child(button)
 	var art := FateCardView.art_for(card)
+	var face: Control
 	if art != null:
-		FateCardView.build_art_layer(button, art, card.is_reversed(), "TarotArtFace")
+		face = FateCardView.build_art_layer(button, art, card.is_reversed(), "TarotArtFace")
 	else:
 		# 缺图回退：不依赖任何美术资源也要能用，否则新卡一进来面板就空一格。
 		var fallback := ColorRect.new()
@@ -157,6 +228,7 @@ func _create_card_entry(card: FateCard) -> Control:
 		fallback.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		fallback.color = FateCard.rarity_color(card.card_rarity).darkened(0.62)
 		button.add_child(fallback)
+		face = fallback
 		var fallback_label := Label.new()
 		fallback_label.set_anchors_preset(Control.PRESET_FULL_RECT)
 		fallback_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -166,6 +238,7 @@ func _create_card_entry(card: FateCard) -> Control:
 		fallback_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		fallback_label.add_theme_font_size_override("font_size", 16)
 		button.add_child(fallback_label)
+	FateCardView.build_scope_badge(button, card.scope, face)
 	var name_label := Label.new()
 	name_label.text = card.card_name
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -174,21 +247,51 @@ func _create_card_entry(card: FateCard) -> Control:
 	name_label.add_theme_font_size_override("font_size", 13)
 	name_label.add_theme_color_override("font_color", FateCard.rarity_color(card.card_rarity))
 	column.add_child(name_label)
-	column.add_child(FateCardView.build_caption(card, 11, CARD_WIDTH - 6))
+	column.add_child(FateCardView.build_caption(card, 11, CARD_WIDTH - 6, "", false))
 	return column
 
 
-func _on_card_pressed(card: FateCard) -> void:
-	if _busy:
+func _on_card_pressed(card: FateCard, button: Button = null) -> void:
+	if _busy or _opening or _closing:
 		return
 	_busy = true
+	var target_id := str(FateCardGameBridge.get_target_summary(card).get("weapon_instance_id", ""))
+	if card.scope == FateCard.Scope.WEAPON:
+		_confirm = load("res://src/ui/weapon_build/FateIrreversibleConfirm.gd").new() as Control
+		_confirm.set("message", "装配后该枪械命运卡不可更换！")
+		_confirm.set("weapon_instance_id", target_id)
+		_panel.add_child(_confirm)
+		var accepted: bool = await Signal(_confirm, "completed")
+		_confirm = null
+		if not accepted:
+			_busy = false
+			return
+		if target_id != str(FateCardGameBridge.get_target_summary(card).get("weapon_instance_id", "")):
+			_status_label.text = "目标枪已改变，请重新选择；未装配"
+			_busy = false
+			return
 	_status_label.text = "正在装配 %s ……" % card.card_name
+	var from_rect := button.get_global_rect() if is_instance_valid(button) else Rect2()
+	if card.occupies_weapon_slot():
+		_board.call("refresh_from_owner")
+		_board.call("set_pending_install", int(FateCardGameBridge.get_target_summary(card).get("fate_slot_used", 0)) + 1)
 	var result: Dictionary = await FateCardGameBridge.apply_card_with_source_selection(card, self)
 	if not is_inside_tree():
 		return
-	_busy = false
 	_status_label.text = str(result.get("message", "已完成"))
 	_refresh_loadout()
+	if bool(result.get("success", false)):
+		if is_instance_valid(button):
+			button.modulate.a = 0.0
+		if card.occupies_weapon_slot():
+			await _board.call("play_card_install", card, int(result.get("slot_index", 0)), from_rect)
+		else:
+			await _board.call("play_scope_feedback", card)
+		if is_instance_valid(button):
+			button.modulate.a = 1.0
+	else:
+		_board.call("clear_pending_install")
+	_busy = false
 
 
 func _refresh_loadout() -> void:
@@ -210,5 +313,16 @@ func _refresh_loadout() -> void:
 
 
 func _close() -> void:
+	if is_instance_valid(_confirm):
+		_confirm.call("cancel")
+		return
+	if _busy or _closing:
+		return
+	_closing = true
+	while _opening:
+		await get_tree().process_frame
+	_grid.hide()
+	await _move_board(_center_board_position())
+	await HOLOGRAM.close(_board, _player).finished
 	closed.emit()
 	queue_free()

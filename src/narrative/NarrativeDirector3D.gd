@@ -49,6 +49,12 @@ var _dialogue_cue: Dictionary = {}
 var _dialogue_carrier: Dictionary = {}
 var _advance_target := -1
 var _pending_entry: Dictionary = {}
+var _play_transition := false
+var _finishing := false
+var _dispatching := false
+var _advancing_dialogue := false
+var _play_generation := 0
+var _dialogue_waiting := false
 
 
 func _ready() -> void:
@@ -374,6 +380,16 @@ func _try_fire(narrative_id: String, entry: Dictionary, context: Dictionary) -> 
 
 ## 请求播放。返回 false = 没播（校验不过 / 被互斥裁决丢弃 / 被更高优先级抢占后仍失败）。
 func play(narrative_id: String, context: Dictionary = {}) -> bool:
+	# 同步回执中的重入直接拒绝，不排队；调用方可在后续帧重试。
+	if _play_transition or _finishing or _dispatching or _advancing_dialogue:
+		return false
+	_play_transition = true
+	var accepted := _play_internal(narrative_id, context)
+	_play_transition = false
+	return accepted
+
+
+func _play_internal(narrative_id: String, context: Dictionary) -> bool:
 	var entry_ceremony := narrative_id.begins_with("nar_expedition_entry_hologram_")
 	if entry_ceremony and (str(_pending_entry.get("id", "")) != narrative_id or str(_pending_entry.get("departure", "")) != _expedition_departure_id()):
 		_cancel_pending_entry()
@@ -398,6 +414,19 @@ func play(narrative_id: String, context: Dictionary = {}) -> bool:
 			)
 			return false
 		_finish("interrupted")
+	var has_dialogue := false
+	var dialogue_config: Dictionary = {}
+	for cue: Dictionary in script.cues:
+		if _is_dialogue_cue(cue):
+			has_dialogue = true
+		if str(cue.get("do", "")) == "ui.dialogue" and dialogue_config.is_empty():
+			dialogue_config = {"presentation_id": cue.get("presentation_id", ""), "participants": cue.get("participants", []), "options": cue.get("presentation_options", cue.get("options", {}))}
+	dialogue_config.merge(script.presentation.get("dialogue", {}), true)
+	if has_dialogue and not _adapter.begin_dialogue_presentation(narrative_id, dialogue_config):
+		_warn("剧情『%s』对白会话被拒绝。" % narrative_id)
+		return false
+	_play_generation += 1
+	_dialogue_waiting = false
 	_active = {
 		"id": narrative_id,
 		"script": script,
@@ -412,8 +441,9 @@ func play(narrative_id: String, context: Dictionary = {}) -> bool:
 		_occupy("presentation.entry", Callable(_adapter, "restore_expedition_entry"))
 	_dispatch_log.clear()
 	_dispatch_log.append("start:%s" % narrative_id)
+	var generation := _play_generation
 	narrative_started.emit(narrative_id)
-	return true
+	return not _active.is_empty() and generation == _play_generation
 
 
 func _expedition_departure_id() -> String:
@@ -530,6 +560,15 @@ func advance_mouse_dialogue() -> bool:
 
 
 func advance_dialogue() -> bool:
+	if _advancing_dialogue:
+		return true
+	_advancing_dialogue = true
+	var consumed := _advance_dialogue_internal()
+	_advancing_dialogue = false
+	return consumed
+
+
+func _advance_dialogue_internal() -> bool:
 	if _active.is_empty() or get_tree().paused:
 		return false
 	_sync_dialogue_pause(false)
@@ -689,7 +728,7 @@ func _process(delta: float) -> void:
 		_tick_triggers(delta)
 		return
 	_adapter.tick(delta)
-	if _active.is_empty() or _main_story_barrier_blocks(delta):
+	if _active.is_empty() or _dialogue_barrier_blocks() or _main_story_barrier_blocks(delta):
 		return
 	var script := _active.get("script") as NarrativeScript3D
 	if script == null:
@@ -706,9 +745,12 @@ func _process(delta: float) -> void:
 	while index < script.cues.size() and float(script.cues[index]["at"]) <= now + 0.0001:
 		var cue := script.cues[index]
 		index += 1
+		var generation := _play_generation
+		_dispatching = true
 		var finished_early := _dispatch_cue(cue)
-		# 关键指令失败会在派发内部收口，不能向空字典写 index 制造假 active。
-		if _active.is_empty():
+		_dispatching = false
+		# 同步回执可能中止当前段，绝不向新段或空字典写回旧游标。
+		if _active.is_empty() or generation != _play_generation:
 			return
 		_active["index"] = index
 		if _advance_target >= 0:
@@ -719,7 +761,7 @@ func _process(delta: float) -> void:
 		var target_reached := _advance_target >= 0 and index > _advance_target
 		if target_reached:
 			_advance_target = -1
-		if _main_story_barrier_blocks(0.0):
+		if _dialogue_barrier_blocks() or _main_story_barrier_blocks(0.0):
 			if not _active.is_empty():
 				_active["t"] = float(cue["at"])
 			return
@@ -732,6 +774,20 @@ func _process(delta: float) -> void:
 		else:
 			_diagnose("剧情『%s』关键业务条件未完成，已中止而非写入历史。" % script.narrative_id)
 			_finish("abort:main_story_contract")
+
+
+## 仅新 wait=true cue 冻结时间游标；打字和阅读进度仍只归 DialogueUI。
+func _dialogue_barrier_blocks() -> bool:
+	if not _dialogue_waiting:
+		return false
+	match _adapter.dialogue_wait_state():
+		"playing":
+			return true
+		"completed":
+			_dialogue_waiting = false
+			return false
+	abort("dialogue_incomplete")
+	return true
 
 
 func _main_story_barrier_blocks(delta: float) -> bool:
@@ -790,7 +846,14 @@ func _dispatch_cue(cue: Dictionary) -> bool:
 		return false
 
 	var result := _adapter.call_instruction(verb, params)
+	if _active.is_empty():
+		# 请求期间同步 abort，尚未来得及登记的对白也要归还。
+		if _is_dialogue_cue(cue):
+			_adapter._restore_dialogue()
+		return true
 	if bool(result.get("ok", false)):
+		if verb == "ui.dialogue" and bool(params.get("wait", false)):
+			_dialogue_waiting = true
 		if _is_dialogue_cue(cue):
 			_dialogue_cue = cue.duplicate(true)
 			_dialogue_carrier = _adapter.current_dialogue_carrier()
@@ -802,6 +865,10 @@ func _dispatch_cue(cue: Dictionary) -> bool:
 		if verb == "player.lock_input" and bool(params.get("locked", true)):
 			_apply_auto_invulnerability()
 		return false
+	if verb == "ui.dialogue" and bool(params.get("wait", false)):
+		_warn("等待型对白拒收：%s" % str(result.get("reason", "")))
+		_finish("abort:dialogue_rejected")
+		return true
 	if verb == "presentation.start":
 		_finish("abort:presentation_failed")
 		return true
@@ -866,9 +933,18 @@ func _apply_auto_invulnerability() -> void:
 
 ## 正常 / flow.end / 被打断 / abort 全部走这里 —— 一个都不能漏（08 文档 §6.1）。
 func _finish(reason: String) -> void:
+	if _finishing:
+		return
 	if _active.is_empty():
 		_cancel_pending_entry()
 		return
+	_finishing = true
+	_play_generation += 1
+	_dialogue_waiting = false
+	# 清掉导演的显式冻结；树仍暂停时 UI 自己继续遵守树暂停。
+	if _paused_dialogue_synced:
+		DialogueUI.set_paused(false)
+	_paused_dialogue_synced = false
 	_waiting_for_flashlight = false
 	_dialogue_cue = {}
 	_dialogue_carrier = {}
@@ -881,15 +957,22 @@ func _finish(reason: String) -> void:
 		var retry_entry: Dictionary = _armed[narrative_id]
 		retry_entry.erase("last_departure_id")
 		_armed[narrative_id] = retry_entry
-	if narrative_id.begins_with("nar_main_") and not _history_has(narrative_id):
+	if (narrative_id.begins_with("nar_main_") or NarrativeAdapter3D.is_fate_tutorial(narrative_id)) and not _history_has(narrative_id):
 		var entry: Dictionary = _armed.get(narrative_id, {})
 		entry["fired_count"] = 0
 		entry["last_fired_msec"] = -10_000_000
 		if _armed.has(narrative_id):
 			_armed[narrative_id] = entry
 	_release_all(reason)
+	_adapter.end_dialogue_presentation(reason not in ["duration", "flow.end"])
 	_active = {}
 	_dispatch_log.append("finish:%s" % reason)
+	# 完成事件延后到旧调用栈退出，避免推进/抢占调用栈误写新会话。
+	_finishing = false
+	_emit_narrative_finished.call_deferred(narrative_id, reason)
+
+
+func _emit_narrative_finished(narrative_id: String, reason: String) -> void:
 	narrative_finished.emit(narrative_id, reason)
 
 

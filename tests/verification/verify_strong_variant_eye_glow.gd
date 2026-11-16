@@ -2,7 +2,7 @@ extends Node
 ## 强化怪（-强化怪）**红色发光眼**专项验收。
 ##
 ## 外部真源：
-##   - 眼位配方 src/enemy3d/MonsterVariants.gd → `EYE_SOCKETS`
+##   - 旧工具配方 src/enemy3d/MonsterVariants.gd → `EYE_SOCKETS`；新警察优先正式模型校准
 ##   - 表现实现 src/enemy3d/StrongVariantEyeGlow3D.gd
 ##   - 挂载 src/enemy3d/EnemyAvatar3D.gd（`Head` 骨的 `BoneAttachment3D`）
 ##   - 业主口径 docs/v0.1/design/怪物设计.md「红色发光眼」
@@ -11,7 +11,7 @@ extends Node
 ##   ① 三个变种各长**一对**红眼；普通僵尸同样各有一对（回归钉：曾因回退分支放行而全怪长眼）；
 ##   ② 挂在 `Head` 骨的 `BoneAttachment3D` 上 —— 不是固定坐标节点，否则转头穿帮；
 ##   ③ 材质**真发红光**（emission 开、色相偏红、强度 > 0），不是普通红材质；
-##   ④ 左右对称（|L.x+R.x|≈0、等高）—— 不对称说明眼位换算写歪；
+##   ④ 旧根空间配方检查左右对称；新警察斜轴头骨检查绝对瞳孔骨空间锚点；
 ##   ⑤ 眼位与配方一致（按怪**自身局部坐标**量，避免被位移污染）；
 ##   ⑥ 头部动画播放下绑点**跟着头走**（否则「绑点」二字无意义）；
 ##   ⑦ 纯表现：零碰撞体、不影响玩法状态；
@@ -48,6 +48,17 @@ const DOC_EYE_SOCKETS := {
 ## 头部带判定与横向上限也必须钉住：改动它们会整体平移所有眼位。
 const DOC_HEAD_BAND_FROM_TOP := 0.45
 const DOC_HEAD_HALF_X_LIMIT := 0.45
+
+## 新警察模型按原贴图瞳孔独立标定，头骨斜轴不能套用旧根空间镜像配方。
+const POLICE_EYE_OFFSETS := [
+	Vector3(0.192476571, 0.085421562, 0.064594924),
+	Vector3(0.156983733, 0.086167336, -0.135981619),
+]
+const POLICE_EYE_CALIBRATION := "police_zombie25_texture_pupil_raycast_v004"
+const POLICE_EYE_RADIUS := 0.02152794
+const POLICE_CALIBRATION_TOLERANCE := 0.000001
+## 不放宽旧锚点误差阈值；动画采样也逐眼换回实际头骨空间验证。
+const POLICE_ANCHOR_TOLERANCE := 0.001
 
 var _failures: Array[String] = []
 var _samples := 0
@@ -159,9 +170,11 @@ func _check_normal_monsters_have_glow() -> void:
 		enemy.free()
 
 
-## ③ 挂点必须是 `BoneAttachment3D` 且绑在 `Head` 骨上。
+## ③ 挂点必须是 BoneAttachment3D；新警察匹配实际 mixamorig 头骨，其它仍为 Head。
 func _check_socket_is_bone_attachment() -> void:
-	for variant_id in MonsterVariants.all_variant_ids():
+	var kinds := MonsterVariants.all_variant_ids().duplicate()
+	kinds.append("ranged_caster")
+	for variant_id in kinds:
 		var enemy := await _spawn(variant_id)
 		var socket := enemy.avatar.find_child(
 			EnemyAvatar3D.EYE_SOCKET_NODE_NAME, true, false
@@ -174,10 +187,13 @@ func _check_socket_is_bone_attachment() -> void:
 				% [variant_id, socket.get_class()]
 			)
 			if socket is BoneAttachment3D:
+				var expected_bone := EnemyAvatar3D.EYE_BONE_NAME
+				if MonsterVariants.base_of(variant_id) == "ranged_caster" or variant_id == "ranged_caster":
+					expected_bone = _police_head_name(enemy)
 				_expect(
-					(socket as BoneAttachment3D).bone_name == EnemyAvatar3D.EYE_BONE_NAME,
+					(socket as BoneAttachment3D).bone_name == expected_bone,
 					"%s 的绑点应挂在 %s 骨上，实为 %s"
-					% [variant_id, EnemyAvatar3D.EYE_BONE_NAME, (socket as BoneAttachment3D).bone_name]
+					% [variant_id, expected_bone, (socket as BoneAttachment3D).bone_name]
 				)
 		# 眼睛必须是绑点的后代 —— 也就是真的走了「骨骼绑点」这条链。
 		var eyes := _eyes_of(enemy)
@@ -226,8 +242,10 @@ func _check_material_really_glows() -> void:
 
 ## ⑤ 眼位：左右对称 + 与配方比例一致。**按怪自身局部坐标量**。
 func _check_eye_positions_match_socket() -> void:
-	for variant_id in MonsterVariants.all_variant_ids():
-		var base_kind := MonsterVariants.base_of(variant_id)
+	var kinds := MonsterVariants.all_variant_ids().duplicate()
+	kinds.append("ranged_caster")
+	for variant_id in kinds:
+		var base_kind := "ranged_caster" if variant_id == "ranged_caster" else MonsterVariants.base_of(variant_id)
 		var socket := MonsterVariants.eye_socket_for_base(base_kind)
 		_expect(not socket.is_empty(), "%s 没有眼位配方" % variant_id)
 		if socket.is_empty():
@@ -236,6 +254,11 @@ func _check_eye_positions_match_socket() -> void:
 		var eyes := _eyes_of(enemy)
 		if eyes.size() != 2:
 			_fail("%s 的眼数不是 2，跳过眼位检查" % variant_id)
+			enemy.free()
+			continue
+		if base_kind == "ranged_caster":
+			_check_police_calibration(enemy, variant_id, eyes)
+			_samples += 1
 			enemy.free()
 			continue
 		if base_kind == "melee_chaser":
@@ -296,8 +319,15 @@ func _check_eye_positions_match_socket() -> void:
 ## 同一帧内 seek 完立刻读，拿到的是上一帧的旧值 —— 实测会得出「骨动 0.27m、
 ## 绑点动 0.000m」的假故障，把正确的实现判成红的。
 func _check_follows_head_animation() -> void:
-	for variant_id in MonsterVariants.all_variant_ids():
+	var kinds := MonsterVariants.all_variant_ids().duplicate()
+	kinds.append("ranged_caster")
+	for variant_id in kinds:
 		var enemy := await _spawn(variant_id)
+		if variant_id == "ranged_caster" or MonsterVariants.base_of(variant_id) == "ranged_caster":
+			await _check_police_head_animation(enemy, variant_id)
+			_samples += 1
+			enemy.free()
+			continue
 		var skeleton: Skeleton3D = null
 		for node in enemy.find_children("*", "Skeleton3D", true, false):
 			skeleton = node as Skeleton3D
@@ -448,6 +478,133 @@ func _check_dismiss() -> void:
 	_samples += 1
 	enemy.free()
 
+
+func _police_head_name(enemy: Enemy3D) -> String:
+	var visual := enemy.avatar.get("_formal_normal_root") as Node3D
+	_expect(visual != null, "新警察缺少正式模型根")
+	if visual == null:
+		return ""
+	var skeleton := visual.find_child("Skeleton3D", true, false) as Skeleton3D
+	_expect(skeleton != null, "新警察缺少实际骨架")
+	if skeleton == null:
+		return ""
+	for index in range(skeleton.get_bone_count()):
+		var bone_name := str(skeleton.get_bone_name(index))
+		if bone_name.begins_with("mixamorig") and bone_name.ends_with("Head"):
+			return bone_name
+	_fail("新警察缺少实际 mixamorig 头骨")
+	return ""
+
+func _check_police_calibration(enemy: Enemy3D, kind: String, eyes: Array[Node3D]) -> void:
+	var visual := enemy.avatar.get("_formal_normal_root") as Node3D
+	var head_name := _police_head_name(enemy)
+	if visual == null or head_name.is_empty():
+		return
+	_expect(visual.has_method("get_eye_socket_spec"), "%s 缺少模型眼位校准接口" % kind)
+	if not visual.has_method("get_eye_socket_spec"):
+		return
+	var authored: Dictionary = visual.call("get_eye_socket_spec")
+	var effective: Dictionary = enemy.avatar.call("_formal_eye_socket_spec")
+	_expect(effective == authored, "%s 未优先使用正式模型校准，仍在用旧配方" % kind)
+	_expect(str(authored.get("bone_name", "")) == head_name, "%s 校准未匹配实际头骨" % kind)
+	_expect(authored.get("calibration", "") == POLICE_EYE_CALIBRATION, "%s 校准标识错误" % kind)
+	var offsets: Array = authored.get("bone_offsets", [])
+	_expect(offsets.size() == 2, "%s 校准必须有两个瞳孔锚点" % kind)
+	if offsets.size() == 2:
+		for index in range(2):
+			var offset: Vector3 = offsets[index]
+			_expect(offset.distance_to(POLICE_EYE_OFFSETS[index]) < POLICE_CALIBRATION_TOLERANCE, "%s 瞳孔%d绝对校准偏移错误" % [kind, index])
+	var wrapper := visual.get_node_or_null("VisualGLB") as Node3D
+	_expect(wrapper != null, "%s 缺少实际缩放包装" % kind)
+	if wrapper == null:
+		return
+	var wrapper_scale := wrapper.transform.basis.get_scale().abs()
+	_expect(wrapper_scale.x > 0.0 and wrapper_scale.is_equal_approx(Vector3.ONE * wrapper_scale.x), "%s 包装缩放必须为有效等比缩放" % kind)
+	if wrapper_scale.x <= 0.0:
+		return
+	var expected_radius := float(DOC_EYE_SOCKETS["ranged_caster"]["radius"]) / wrapper_scale.x
+	_expect(absf(float(authored.get("radius", -1.0)) - POLICE_EYE_RADIUS) < POLICE_CALIBRATION_TOLERANCE, "%s 骨空间半径绝对标定错误" % kind)
+	_expect(absf(float(authored.get("radius", -1.0)) - expected_radius) < POLICE_CALIBRATION_TOLERANCE, "%s 眼球半径未按实际包装缩放换算" % kind)
+	var socket := visual.find_child(EnemyAvatar3D.EYE_SOCKET_NODE_NAME, true, false) as BoneAttachment3D
+	_expect(socket != null and str(socket.bone_name) == head_name, "%s 实际眼位绑点头骨错误" % kind)
+	var skeleton := visual.find_child("Skeleton3D", true, false) as Skeleton3D
+	_check_police_bone_anchors(kind, skeleton, head_name, eyes)
+	for eye in eyes:
+		var sphere := (eye as MeshInstance3D).mesh as SphereMesh
+		_expect(sphere != null, "%s 眼球必须是实际球网格" % kind)
+		if sphere == null:
+			continue
+		_expect(absf(sphere.radius - expected_radius) < POLICE_CALIBRATION_TOLERANCE, "%s 实际眼球半径与缩放换算不一致" % kind)
+		var eye_scale := (enemy.global_transform.affine_inverse() * eye.global_transform).basis.get_scale().abs()
+		for axis in range(3):
+			_expect(absf(sphere.radius * eye_scale[axis] - float(DOC_EYE_SOCKETS["ranged_caster"]["radius"])) < POLICE_ANCHOR_TOLERANCE, "%s 实际模型空间眼球半径不是0.04米" % kind)
+
+func _check_police_bone_anchors(kind: String, skeleton: Skeleton3D, head_name: String, eyes: Array[Node3D]) -> void:
+	_expect(skeleton != null and eyes.size() == 2, "%s 骨空间检查缺少骨架或双眼" % kind)
+	if skeleton == null or eyes.size() != 2:
+		return
+	var head_index := skeleton.find_bone(head_name)
+	_expect(head_index >= 0, "%s 实际头骨索引不存在" % kind)
+	if head_index < 0:
+		return
+	# 独立用实际头骨世界矩阵反解，不以绑点自身逆矩阵作自洽证明。
+	var bone_world := skeleton.global_transform * skeleton.get_bone_global_pose(head_index)
+	var bone_inverse := bone_world.affine_inverse()
+	for index in range(2):
+		_expect(str(eyes[index].name) == ("EyeGlowL" if index == 0 else "EyeGlowR"), "%s 左右眼标定顺序错误" % kind)
+		var actual := bone_inverse * eyes[index].global_position
+		var error := actual.distance_to(POLICE_EYE_OFFSETS[index])
+		_expect(error < POLICE_ANCHOR_TOLERANCE, "%s 眼%d世界位置反解骨空间误差%.6f，必须小于0.001" % [kind, index, error])
+
+func _check_police_head_animation(enemy: Enemy3D, kind: String) -> void:
+	var visual := enemy.avatar.get("_formal_normal_root") as Node3D
+	var head_name := _police_head_name(enemy)
+	if visual == null or head_name.is_empty():
+		return
+	var skeleton := visual.find_child("Skeleton3D", true, false) as Skeleton3D
+	var player := visual.find_child("AnimationPlayer", true, false) as AnimationPlayer
+	var socket := visual.find_child(EnemyAvatar3D.EYE_SOCKET_NODE_NAME, true, false) as BoneAttachment3D
+	var eyes := _eyes_of(enemy)
+	_expect(player != null and socket != null and eyes.size() == 2, "%s 动画跟随夹具不完整" % kind)
+	if player == null or socket == null or eyes.size() != 2:
+		return
+	# 不让表现层的自动相位覆盖手动采样；其它模型的旧测试路径保持不变。
+	enemy.set_process(false)
+	enemy.avatar.set_process(false)
+	visual.set_process(false)
+	player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
+	var head_index := skeleton.find_bone(head_name)
+	for clip in ["armed_idle", "shoot"]:
+		_expect(player.has_animation(clip), "%s 缺少实际片段%s，不能跳过跟随测试" % [kind, clip])
+		if not player.has_animation(clip):
+			continue
+		var length := player.get_animation(clip).length
+		var first_bone := Vector3.ZERO
+		var first_eyes: Array[Vector3] = []
+		var bone_travel := 0.0
+		var eye_travel := 0.0
+		for step in range(21):
+			player.stop()
+			player.play(clip)
+			player.seek(length * float(step) / 20.0, true)
+			player.advance(0.0)
+			skeleton.force_update_all_bone_transforms()
+			await get_tree().process_frame
+			await get_tree().process_frame
+			var bone_world := skeleton.global_transform * skeleton.get_bone_global_pose(head_index)
+			_expect(socket.global_position.distance_to(bone_world.origin) < 0.0005, "%s %s实际绑点未与头骨同步" % [kind, clip])
+			_check_police_bone_anchors("%s/%s/%d" % [kind, clip, step], skeleton, head_name, eyes)
+			if step == 0:
+				first_bone = bone_world.origin
+				for eye in eyes:
+					first_eyes.append(eye.global_position)
+			else:
+				bone_travel = maxf(bone_travel, bone_world.origin.distance_to(first_bone))
+				for index in range(2):
+					eye_travel = maxf(eye_travel, eyes[index].global_position.distance_to(first_eyes[index]))
+		_expect(bone_travel > 0.0005, "%s %s未驱动实际头骨，跟随测试无信号" % [kind, clip])
+		_expect(eye_travel > 0.0005, "%s %s眼球未随头部动画移动" % [kind, clip])
+		print("[eye-glow] %s %s 骨位移=%.6f 眼位移=%.6f 骨空间误差阈值=0.001" % [kind, clip, bone_travel, eye_travel])
 
 func _expect(condition: bool, message: String) -> void:
 	if not condition:

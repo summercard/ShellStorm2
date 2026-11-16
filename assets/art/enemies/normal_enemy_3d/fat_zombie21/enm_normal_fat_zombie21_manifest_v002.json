@@ -1,0 +1,196 @@
+{
+  "manifest_kind": "asset_manifest",
+  "schema_version": 1,
+  "asset_id": "ENM-NORMAL-FAT-ZOMBIE21",
+  "slug": "enm_normal_fat_zombie21",
+  "asset_version": "v002",
+  "domain": "enemies",
+  "family": "normal_enemy_3d",
+  "display_name": "胖子僵尸2.1（原始蒙皮待机）",
+  "status": "exported_pending_godot_validation",
+  "visual_review": "pending_user_visual_review",
+  "rejected_previous_revision": {
+    "version": "v001",
+    "reason": "User reported severe mesh twisting; reconstructed rig/skin and all seven locomotion clips rejected. Previous acceptance withdrawn.",
+    "archive": "I:\\工作项目\\shellstrom2\\ShellStorm2-backup\\2026-11-16_1732_fatzombie_original_idle"
+  },
+  "original_source": {
+    "path": "C:\\Users\\zhuangmenghong\\Desktop\\新怪物模型\\胖子僵尸\\胖子僵尸2.1\\胖子僵尸2.1.blend",
+    "sha256": "4d3ec3423eea7641a0da67b33403016a4c97ff666832e9e80f6211d45165cab9"
+  },
+  "runtime_visual_glb": {
+    "res_path": "res://assets/art/enemies/normal_enemy_3d/fat_zombie21/components/enm_normal_fat_zombie21/enm_normal_fat_zombie21_visual_top3d.glb",
+    "bytes": 562372,
+    "sha256": "71af6e0a627c4b5aa68d602ef5968d15c76e415845317234227bd65d0367594a"
+  },
+  "source_files": {
+    "model": {
+      "res_path": "res://art_source/enemies/normal_enemy_3d/fat_zombie21/source/model/enm_normal_fat_zombie21_model_v002.blend",
+      "bytes": 859656,
+      "sha256": "89d98a65976a93410d8bde1b935a8630ea24352406039fe663414cf6a2d94174"
+    },
+    "animation": {
+      "res_path": "res://art_source/enemies/normal_enemy_3d/fat_zombie21/source/animation/enm_normal_fat_zombie21_animation_v002.blend",
+      "bytes": 4978647,
+      "sha256": "285c932f9ac36da94362035d289aef6ab4115e69dec0ac790619602e5c8cd072"
+    }
+  },
+  "skeleton": {
+    "id": "SKEL-FATZOMBIE21-ORIGINAL-001",
+    "bone_count": 41,
+    "vertex_groups": 29,
+    "root_bone": "Root",
+    "original_fingerprints": {
+      "geometry": "cd653422baa5d05854c2ba97fee9621e74e112fdb65cd93e8b990641e49e76a4",
+      "skeleton": "4931ec7ec3e7a2b0978d3cd69aafa99f511656b6c21d68bfb637de53ff29fc65",
+      "weights": "969213b937d2776b3d82a6a02603cc92eda419aaf711f4b9cd4804c1b97466a7",
+      "binding": "a78d08e8da12d0585e9714c1b5b8a00026699b97b735b665cbf4eaaad19d5f52"
+    },
+    "note": "Original bind matrices, bone geometry/hierarchy, weights, mesh, UV, object transforms, parent inverse and Armature modifier preserved exactly; no rebind, renormalization, scaling or rotation."
+  },
+  "specs": {
+    "verts": 597,
+    "tris": 1180,
+    "source_height_m": 0.79834,
+    "forward": "original Blender +X / glTF +X; project forward conversion intentionally not applied",
+    "source_scale": 1.0,
+    "display_scale": null,
+    "game_standing_height_m": null,
+    "target_game_height_m": 2.2,
+    "note": "Native source dimensions restored. Future project-size/forward wrapper is not part of this idle revision."
+  },
+  "fps": 60,
+  "clip_count": 1,
+  "clips": {
+    "idle": {
+      "name": "idle",
+      "fps": 60,
+      "start": 0,
+      "closure": 192,
+      "playback_end": 191,
+      "seconds": 3.2
+    }
+  },
+  "validation": {
+    "original_data_match": {
+      "model": {
+        "original_match": {
+          "geometry": true,
+          "skeleton": true,
+          "weights": true,
+          "binding": true
+        },
+        "actions": [],
+        "packed_images": true
+      },
+      "animation": {
+        "original_match": {
+          "geometry": true,
+          "skeleton": true,
+          "weights": true,
+          "binding": true
+        },
+        "actions": [
+          "idle"
+        ],
+        "packed_images": true
+      }
+    },
+    "metrics": {
+      "frames_sampled": 193,
+      "fps": 60,
+      "seconds": 3.2,
+      "closure_max_vertex_m": 0.0,
+      "frame0_vs_original_rest_m": 8.462232866585662e-08,
+      "peak_vertex_movement_m": 0.017679597630486515,
+      "edge_length_ratio_min": 0.9421884060558277,
+      "edge_length_ratio_max": 1.076490490564557,
+      "minimum_triangle_area_ratio": 0.9368704255745328,
+      "ground_zmin_m": -0.00018339265079703182,
+      "original_contact_count": 26,
+      "contact_horizontal_drift_m": 7.061299778740779e-05,
+      "peak_per_frame_displacement_m": 0.0005349686118615699,
+      "root_fixed": true,
+      "bone_scale_one": true
+    },
+    "checks": {
+      "neutral_matches_original": true,
+      "loop_closed": true,
+      "no_edge_stretch_collapse": true,
+      "no_triangle_collapse": true,
+      "ground_within_0_5mm_tolerance": true,
+      "contact_drift_under_1mm": true,
+      "root_fixed": true,
+      "scale_one": true
+    },
+    "glb_roundtrip": {
+      "animations": [
+        "idle"
+      ],
+      "joint_count": 41,
+      "roundtrip_max_error_m": 4.892626748187467e-07,
+      "samples": [
+        {
+          "frame": 0,
+          "error": 4.864473339694086e-07
+        },
+        {
+          "frame": 24,
+          "error": 4.864473339694086e-07
+        },
+        {
+          "frame": 48,
+          "error": 4.864473339694086e-07
+        },
+        {
+          "frame": 72,
+          "error": 4.864473339694086e-07
+        },
+        {
+          "frame": 96,
+          "error": 4.864473339694086e-07
+        },
+        {
+          "frame": 120,
+          "error": 4.864473339694086e-07
+        },
+        {
+          "frame": 144,
+          "error": 4.892626748187467e-07
+        },
+        {
+          "frame": 168,
+          "error": 4.864473339694086e-07
+        },
+        {
+          "frame": 192,
+          "error": 4.864473339694086e-07
+        }
+      ],
+      "bone_count": 41
+    }
+  },
+  "previews": {
+    "front": {
+      "res_path": "res://assets/art/enemies/normal_enemy_3d/fat_zombie21/previews/enm_normal_fat_zombie21_front_v002.png",
+      "bytes": 437897,
+      "sha256": "4458dc2c0f0ace55624b1c253b75ad62d9559f0cd13b20ce2349481aac670a4f"
+    },
+    "side": {
+      "res_path": "res://assets/art/enemies/normal_enemy_3d/fat_zombie21/previews/enm_normal_fat_zombie21_side_v002.png",
+      "bytes": 457696,
+      "sha256": "e86f7593535b0e706096f634f2225c0b4330ca94e439d57941ab15a616302223"
+    },
+    "overview": {
+      "res_path": "res://assets/art/enemies/normal_enemy_3d/fat_zombie21/previews/enm_normal_fat_zombie21_overview_v002.png",
+      "bytes": 437897,
+      "sha256": "4458dc2c0f0ace55624b1c253b75ad62d9559f0cd13b20ce2349481aac670a4f"
+    }
+  },
+  "pending": [
+    "User continuous visual review",
+    "Godot wrapper/import/playback and scale/forward alignment",
+    "Locomotion re-authoring not in this task",
+    "Replacement of existing fat zombie not performed"
+  ]
+}

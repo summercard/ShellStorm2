@@ -40,7 +40,16 @@ const CONFIG_KEYS := [
 	"alert_style", "alert_text", "alert_beep_interval_sec", "alert_pulse",
 ]
 const STAGE_KEYS := ["at_sec", "at_ratio", "monsters"]
-const MONSTER_KEYS := ["type", "count", "content_id", "min_player_distance_m"]
+const MONSTER_KEYS := ["type", "count", "content_id", "min_player_distance_m", "spawn_vfx_asset_id"]
+const SPAWN_VFX_ASSET_IDS := ["VFX-FAT-ENTRY-BREACH-3D"]
+
+static func validate_spawn_vfx(monster: Dictionary) -> Dictionary:
+	if monster.has("spawn_vfx_asset_id") and (
+		not monster["spawn_vfx_asset_id"] is String
+		or monster["spawn_vfx_asset_id"] not in SPAWN_VFX_ASSET_IDS
+	):
+		return _reject("monster_spawn_vfx_asset_id_invalid")
+	return {"ok": true}
 
 var _host: Object
 var _instances: Dictionary = {}
@@ -944,6 +953,9 @@ static func _validate_stage(value: Variant) -> Dictionary:
 		var unknown_monster := _unknown_keys(monster, MONSTER_KEYS)
 		if not unknown_monster.is_empty():
 			return _reject("unknown_monster_field:%s" % ",".join(unknown_monster))
+		var vfx_validation := validate_spawn_vfx(monster)
+		if not bool(vfx_validation.get("ok", false)):
+			return vfx_validation
 		var type_id := str(monster.get("type", ""))
 		if type_id.is_empty() or (type_id != "elite" and type_id != "boss" and not MonsterInjector.is_authorable_enemy_type(type_id)):
 			return _reject("enemy_type_not_authorable:%s" % type_id)
@@ -979,6 +991,12 @@ static func _compile_convenience(config: Dictionary) -> Dictionary:
 		if not value is Dictionary:
 			return _reject("monster_invalid")
 		var source := (value as Dictionary).duplicate(true)
+		var unknown := _unknown_keys(source, MONSTER_KEYS)
+		if not unknown.is_empty():
+			return _reject("unknown_monster_field:%s" % ",".join(unknown))
+		var vfx_validation := validate_spawn_vfx(source)
+		if not bool(vfx_validation.get("ok", false)):
+			return vfx_validation
 		var type_id := str(source.get("type", ""))
 		if type_id == "boss":
 			return _reject("boss_requires_dedicated_flow")
@@ -998,6 +1016,8 @@ static func _compile_convenience(config: Dictionary) -> Dictionary:
 		}
 		if source_distance != null:
 			raw_spec["min_player_distance_m"] = float(source_distance)
+		if source.has("spawn_vfx_asset_id"):
+			raw_spec["spawn_vfx_asset_id"] = source["spawn_vfx_asset_id"]
 		raw_specs.append(raw_spec)
 	var total := available_total if requested_total <= 0 else requested_total
 	if total <= 0 or total > available_total:
@@ -1014,8 +1034,9 @@ static func _compile_convenience(config: Dictionary) -> Dictionary:
 			"count": amount,
 			"content_id": source["content_id"],
 		}
-		if source.has("min_player_distance_m"):
-			compiled_spec["min_player_distance_m"] = source["min_player_distance_m"]
+		for key in ["min_player_distance_m", "spawn_vfx_asset_id"]:
+			if source.has(key):
+				compiled_spec[key] = source[key]
 		specs.append(compiled_spec)
 		remaining -= amount
 	if remaining > 0:
@@ -1027,13 +1048,11 @@ static func _compile_convenience(config: Dictionary) -> Dictionary:
 	for spec_value in specs:
 		var spec := spec_value as Dictionary
 		for _unit in int(spec["count"]):
+			var unit_spec := spec.duplicate(true)
+			unit_spec["count"] = 1
 			stages.append({
 				"at_sec": float(serial) * interval,
-				"monsters": [{
-					"type": spec["type"],
-					"count": 1,
-					"content_id": spec["content_id"],
-				}],
+				"monsters": [unit_spec],
 			})
 			serial += 1
 	return {"ok": true, "stages": stages}

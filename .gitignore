@@ -2,6 +2,11 @@
 .godot/
 *.import
 !assets/art/enemies/normal_enemy_3d/melee_chaser/components/*.glb.import
+!assets/art/enemies/normal_enemy_3d/exploder/components/*.glb.import
+!assets/art/enemies/normal_enemy_3d/exploder/components/*.jpg.import
+!assets/art/shared/textures/enemies/tex_color_85eaa809e59fa600fe6c.png.import
+!assets/art/enemies/normal_enemy_3d/ranged_caster/components/*.glb.import
+!assets/art/shared/textures/enemies/tex_color_ec827f2a2c65836f15cc.png.import
 !assets/art/enemies/elite_3d/enm_elite_arms_taker/components/enm_elite_arms_taker/enm_elite_arms_taker_visual_top3d.glb.import
 # Scene/facility GLB import contracts carry the shared-palette post-import hook.
 # 规则族：**每个组件库分区各一条**（<zone>/components/**/*.glb.import）。新增分区

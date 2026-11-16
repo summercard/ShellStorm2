@@ -94,12 +94,12 @@
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json",
       "runtime": "data/level_plans/expedition_01/floors/floor_00.json",
-      "sha256": "ba87c00792e2f6f8c6cd0459a37fee91539b387f71c216970e9ba443533df541"
+      "sha256": "5ffbf70e2e1db972e6566fd1a6f1e8ffdc121696797aa9796c4ff420ea56b0a7"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/level_plan.json",
       "runtime": "data/level_plans/expedition_01/level_plan.json",
-      "sha256": "143f6a437bb0764769cbcb00d29e7f792b33cd4013cef2c00861c71792d678cd"
+      "sha256": "27ca004bc0539a990353089862d432fcffa045caa832e14c3d16f37a198d2ec6"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/boss_50x40.json",

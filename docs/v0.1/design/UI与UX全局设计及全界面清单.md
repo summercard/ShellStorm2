@@ -1,7 +1,7 @@
 # UI 与 UX 全局设计及全界面盘点评估
 
-- 关联 FeatureID：`UI-SYSTEM`、`DIALOGUE-SYSTEM`、`COMBAT-HUD`、`INVENTORY-GRID`、`BASE-FACILITY`、`MAIN-ENTRY`、`WARDROBE-3D`、`FATE-TAROT`
-- 关联资产账本：`assets/registry/ledgers/ShellStorm2_UI账本_v001.xlsx`（单一真源，当前登记 18 项 `UI-*` 资产）
+- 关联既有 FeatureID（本次登记）：`UI-HUD`、`WEAPON-COMBAT`、`FATE-RULES`、`VFX-POOL`；沿用领域功能，不新增FeatureID。原文 `UI-SYSTEM` 等分类名称仅为历史界面分组，不作新的机器登记ID。
+- 关联资产账本：`assets/registry/ledgers/ShellStorm2_UI账本_v001.xlsx`（单一真源）；本次UI主表r27 `UI-WEAPON-BUILD-BOARD`、r28 `UI-FATE-HOLOGRAM-PRESENTATION`已登记，旧“18项”统计只代表历史盘点。
 - 关联专项设计：[对话与战斗信息呈现](对话与战斗信息呈现设计.md)、[装备与棋盘式包裹](装备与棋盘式包裹设计.md)、[基地经济与存档结算](基地经济与存档结算设计.md)、[武器构建链路文本本地化](武器构建链路文本本地化设计.md)
 - **关联风格规范（现行生效）**：[UI风格规范_棱镜线框](UI风格规范_棱镜线框.md)（`PRISM-WIREFRAME`）；素材参考：[逃离鸭科夫UI风格对标参考与关键词库](逃离鸭科夫UI风格对标参考与关键词库.md)（第 6 章已废弃）
 - 施工对照：[18_技术施工_UI与对话系统](../18_技术施工_UI与对话系统.md)、[16_技术施工_主页面与角色换装](../16_技术施工_主页面与角色换装.md)、[04_技术施工_战斗与局内成长](../04_技术施工_战斗与局内成长.md)、[07_技术施工_基地设施](../07_技术施工_基地设施.md)
@@ -46,7 +46,7 @@
 
 #### 现存短板与优化建议
 1. **字体层级与排版韵律单一**：目前全局依赖 Godot 默认回退字体，缺乏专属的数字等宽字体（Tabular Nums，用于倒计时、金币、弹药数跳动防抖）与具有废土机械感的标题字体。
-2. **UI 资产账本登记存在漏项**：`ShellStorm2_UI账本_v001.xlsx` 目前登记了 18 项核心资产，但近期新增的 `BaseVendingMenu`（自动售货机）、`WardrobeMenu3D`（角色衣柜）、`OpeningMovieScreen3D`（开场影片层）、`ExpeditionLoadingScreen`（远征剪影加载页）、`FateSourceSelectionPanel`（命运来源选择）及 `Dungeon3D` 内嵌的 8 个模态弹窗尚未补录进 UI 账本。
+2. **UI 资产账本登记的历史盘点**：下述“18项”与漏项清单是旧盘点，不作为当前总量；本次共享构建板与全息购卡已登记r27/r28，其他项须逐条核验，不能因补两项就宣称全清。原盘点所列的 `BaseVendingMenu`（自动售货机）、`WardrobeMenu3D`（角色衣柜）、`OpeningMovieScreen3D`（开场影片层）、`ExpeditionLoadingScreen`（远征剪影加载页）、`FateSourceSelectionPanel`（命运来源选择）及 `Dungeon3D` 内嵌的 8 个模态弹窗尚未补录进 UI 账本。
 
 ---
 
@@ -60,7 +60,7 @@
    - 针对覆盖式菜单（选关、工坊、图鉴、售货机等），`UiMenuFocus.grab_default()` 会递归搜寻可用按钮，并**强制优先聚焦 `CloseButton` / `SkipButton` / `CancelButton`**，避免玩家在用手柄跑图交互时连按 `A` 键在菜单弹出的第一帧误触“购买”、“合成”或“传送出发”。
 3. **严密的模态互斥与 ESC 栈序**
    - `PauseMenu3D.try_consume_pause_input()` 与 `Dungeon3D._unhandled_input()` 建立了清晰的消费优先级：
-     `棋盘拖拽中按 ESC（取消拖拽还原物品）` > `命运来源三选一弹窗` > `门后塔罗购卡层` > `M键全屏大地图` > `电梯选层/98F撤退确认/隔离间警告/远征退出警告` > `工作台/局内商人/武器K键页/衣柜/基地设施菜单` > `I键背包` > `ESC 暂停主菜单`。
+     `棋盘拖拽中按 ESC（取消拖拽还原物品）` > `星星不可逆确认/命运来源选择子弹窗（先取消最上层）` > `命运pickup全息购卡层` > `M键全屏大地图` > `电梯选层/98F撤退确认/隔离间警告/远征退出警告` > `工作台/局内商人/武器K键页/衣柜/基地设施菜单` > `I键背包` > `ESC 暂停主菜单`。
 4. **“幽灵穿透”防挡设计**
    - 3D 实景聊天气泡（`SpeechBubble3D`）显式设置 `mouse_filter = IGNORE`，绝不拦截玩家的鼠标瞄准射线与地面物品点击；屏幕外怪物箭头（`OffscreenEnemyIndicator3D`）严格遵循“未激活不报、隔层（|Δy|>4.5m）不报、伏击隐藏不报”的公平性原则。
 
@@ -103,17 +103,16 @@
 #### 风格统一性诊断（“三代同堂”问题）
 - **已收敛**：上一轮曾短暂存在的"深蓝圆角胶囊风"（`DUCKOV_*` Token、45° 斜纹标题条、`TRANS_BACK` 回弹）已被**整体否决并全部回退**；第二轨"柔和深蓝仓储风"的外观层也已并入棱镜线框（见上文第 2 条）。
 - **割裂点已消除（2026-10-17）**：在同一趟 99F 体验流程中，此前会依次看到"深蓝仓储风 → 霓虹青切角战术风 → 早期原生方框"三种语言；现在全部收敛到同一套**白线 + 白字 + 两级排印**。
-- **运维要求**：后续新增界面一律按规范 §10.3 的七条标准动作改造；**禁止新增 `apply_tactical_tree` 调用**，也禁止再引入任何圆角卡片 / 辉光 / 投影 / 回弹（规范 §11 反面清单）。
+- **运维要求**：后续新增界面一律按规范 §10.3 的七条标准动作改造；**禁止新增 `apply_tactical_tree` 调用**，也禁止再引入圆角卡片 / 辉光 / 投影 / 回弹（规范 §11 反面清单）。仅2026-11-16枪械构建页的局部全息、已占槽流光与短成功反馈按规范§6.1用户授权执行，不外推全站。
 
 ---
 
 ### 2.4 动态效果维度评估（Motion & Dynamic Effects）
 
 #### 核心亮点
-1. **命运塔罗牌组全链路动效（`DoorFateOverlay3D` + `FateCardView` + `FateCardFeedback`）**
-   - **入场翻牌**：三张卡按 `choice_index * 0.06s` 错峰执行横轴 `scale.x: 1.0 → 0.0 → 1.0` 翻牌，中点揭晓卡面并配合正位/逆位旋转。
-   - **常驻呼吸与 Shader 扫光**：`FateCardView` 内置自定义 `canvas_item` 扫光 Shader（斜向流光带 + 边缘辉光脉冲），同时外层容器以 `0.85 rad/s` 做错相正弦上下漂浮（振幅 4.5px）与微倾角摆动（`0.012 rad`）。
-   - **悬停与购买反馈**：鼠标/手柄聚焦时 `TRANS_BACK` 弹性放大至 `1.07x`；点击购买时触发 `1.095x → 0.96x → 1.0x` 脉冲，并在屏幕上方展开 `FateCardFeedback` 橫幅（双层辉光描边 + 浮动光尘粒子）。
+1. **命运塔罗全息构建动效（2026-11-16现行口径）**
+   - 枪身全息展开→board下移→三卡翻面；星星经默认否确认和原事务成功后才飞入永久slot；已用连线局部流光、落巢一次短整板脉冲/方块，详见UI-20/UI-23。
+   - 逆位卡图案180°，效果文字正向；减少动效仍保留准确的最终槽位和安全焦点。旧大卡独占全屏、70%灰背及 `TRANS_BACK` / 双层辉光横幅描述是历史观察，不作现行目标；不借本页局部许可恢复全站光晕。
 2. **电影感场景转场体系（`IrisTransition` + `ExpeditionLoadingScreen`）**
    - **光圈噪声遮罩**：全屏 Shader 驱动圆形光圈收缩/展开（`0.42s`），边缘带有双频正弦噪声扰动（`edge_wobble`），彻底消除了生硬黑屏切场。
    - **程序化剪影读取页**：远征加载页无需外部序列帧贴图，通过 `_draw()` 实时驱动兔子剪影骨骼奔跑、耳朵随步伐滞后摆动、地面碎石视差掠过与呼吸省略号，视觉风格独特且零资源加载阻塞。
@@ -162,7 +161,7 @@
 | **350** | `InventoryUI` | 棋盘式包裹与装备主界面 | 按 `I` / `Tab` / `B` 切换 |
 | **420** | `WeaponPresentationPage3D` | K 键武器表现与构建树页 | 按 `K` 键切换（含 `WeaponAssemblyTreePanel`） |
 | **850** | `ExploredFloorMapOverlay` | M 键全屏已探索战术大地图 | 含 84% 暗化遮罩与 `940×600` 矢量房间拓扑图 |
-| **900** | `DoorFateOverlay3D` | 门后命运塔罗三选一购卡层 | 开启未清房门或命运交互时弹出 |
+| **900** | `DoorFateOverlay3D`（历史节点名保留） | 命运pickup主动交互的三候选购卡全息层 | 不由开门/开箱自动弹出；三卡上、共享board下，星星确认默认否 |
 | **930** | `InitialLoopRetreatWarning` / `ExpeditionExitWarning` | 98F 撤退确认 / 远征退出确认框 | 破坏性结算操作的二次确认模态框 |
 | **950** | `DeathConfirmationDialog` | 玩家阵亡结算确认弹窗 | 死亡动画播完后弹出，确认后返回 99F 基地 |
 | **960** | `SegmentAirlockWarning` | 跨区段隔离间锁定确认框 | 向下进入新五层区段前的不可逆警告 |
@@ -368,15 +367,14 @@
 - **账本 ID**：*待补录（建议 `UI-COMP-ITEM-MODEL-ICON-3D`）*
 - **核心契约**：全项目所有物品格（背包、保险库、售货机、工坊、商人、命运来源）共用的底层 3D 渲染组件。支持 `DISPLAY_MODE_STATIC_ICON`（正交斜俯视定格快照，占满格子 88%）与 `DISPLAY_MODE_ROTATING_PREVIEW`（详情区持续自转展示），内置全局网格缓存 `_mesh_ metrics_cache` 避免重复解析 GLB。
 
-#### UI-20 K 键武器表现与构建树全屏页（`WeaponPresentationPage3D` / `WeaponAssemblyTreePanel`）
-- **场景与脚本**：`src/world3d/Dungeon3D.gd` (`_toggle_weapon_presentation_page`) + `src/ui/WeaponAssemblyTreePanel.gd`
-- **账本 ID**：*待补录（建议 `UI-SCREEN-WEAPON-ASSEMBLY-3D`）*
-- **层级**：`Dungeon3D/$HUD (z_index = 420)`
-- **快捷键**：`K` 键切换打开/关闭；顶部配备中/英双语切换按钮（绑定 `GameText`）。
-- **布局与交互**：
-  - **顶部工具栏**：主武器 / 副武器切换 Tab + 语言切换（`中文 / EN`）+ 关闭按钮。
-  - **中央 3D 检视与放射状槽位环**：中央大图实时旋转展示当前武器 3D 模型，四周环绕 **6 大配件槽位节点** 与 **命运赋能槽位**，用动态折线连接至枪身对应部位，直观呈现“枪械母体 + 6 配件 + 命运卡”的完整构建树。
-  - **右侧属性对比与词条面**：展示伤害、射速、换弹、散布、射程等核心六维数值及当前生效的全部命运塔罗正/逆位修正。
+#### UI-20 K 键枪械全息构建页（`WeaponPresentationPage3D` / `WeaponAssemblyTreePanel`）
+- **FeatureID / 状态**：沿用 `UI-HUD / WEAPON-COMBAT / FATE-RULES`，工程0.1.0，用户2026-11-16冻结。专项已实现，运行结果见[独立记录](../development/2026-11-16_weapon_hologram_ui.md)；不等于全模块已验收。
+- **场景与脚本**：`src/ui/WeaponAssemblyTreePanel.gd`管理显示生命周期；`src/ui/weapon_build/WeaponBuild{Board,Socket,Track,Preview3D}.gd`及`WeaponHologramTransition.gd`分管只读构建板、卡巢、连线、3D预览和全息开闭；宿主仍管K/Esc、输入锁与当前枪。
+- **账本 ID**：`UI-WEAPON-BUILD-BOARD`（UI主表r27），Prefab `assets/art/ui/weapon_build/weapon_build_board.tscn`。
+- **层级与输入**：保留宿主 `Dungeon3D/$HUD (z_index = 420)`；K切换、Esc安全关闭；拖枪身旋转、滚轮缩放预览，轨道横拖/滚轮/方向键聚焦。打开默认焦点为安全收起按钮，不把旧语言/Tab工具栏当成本版必须存在的组件。
+- **现行布局**：左侧真实装配枪械3D、名字/实例身份、弹种及支持的配件，右侧依真实永久容量交错排列塔罗卡巢；超8槽可横拖，不截断、不擅加容量上限。空巢卡背、已占巢真实卡面；逆位图案180°、文字正向。已用连线才有局部流光。
+- **只读与来源**：读取 `assembly_snapshot / fate_upgrades / slot_index`，不写盘、不改schema。挂枪显示同类来源区域，旧记录无逐槽关联，统一保守标 `shared_unmapped`，不把某个来源编配给某张卡。
+- **替代说明**：旧“中央3D+六配件放射环+右六维属性面”及旧树行仅为历史，被本版左枪/右卡巢替代，不作为并存目标。棱镜白线冷色方角基础保留，局部全息/流光/成功发光按[风格规范§6.1](UI风格规范_棱镜线框.md#61-枪械构建页全息表现的局部授权2026-11-16)，不改其他HUD。
 
 #### UI-21 武器改造台 · 5×5 炼金盘（`WorkbenchPanel`）
 - **场景与脚本**：`src/ui/WorkbenchPanel.gd`（功能本体）+ `src/ui/WorkbenchMenu.gd` + `scenes/WorkbenchMenu.tscn`（设施入口包装）+ `src/weapons/WeaponForge.gd` + `src/weapons/SynthesisCatalog.gd` + `src/ui/SynthesisGateVeil.gd`（合成表现）
@@ -418,14 +416,15 @@
 
 ### 4.4 域四：命运塔罗牌组与局内战术弹窗（10 项）
 
-#### UI-23 门后命运塔罗三选一购卡层（`DoorFateOverlay3D`）
-- **场景与脚本**：`src/world3d/Dungeon3D.gd` (`_build_door_fate_overlay` / `_create_reference_fate_card_view`) + `src/weapons/FateCardView.gd`
-- **账本 ID**：`UI-MODAL-FATE-DRAW`（卡面图集：`UI-ATLAS-FATE-CARD`）
-- **层级**：`Dungeon3D/$HUD (z_index = 900)`
-- **布局与视觉**：
-  - 全屏 62% 暗化遮罩，移除冗余顶栏，金币读数直接复用右下角 HUD。
-  - 中央横排 **3 列等高塔罗卡列**（每列 `346×694`，间距 `56px`）：上部为 `346×546` 塔罗图卡（正位正常显示，逆位 `180°` 倒置渲染，叠加 `FateCardView` 斜向扫光 Shader 与错相漂浮动画），中部为 92px 规则说明文案，底部为灵魂金购买价格行。
-  - 底部正中为 `220×44`【退 出】按钮（支持买完1~3张后手动退出，或一张不买直接按 `ESC` / 手柄 `B` 离开）。
+#### UI-23 命运pickup三候选全息购卡层（`DoorFateOverlay3D`，历史节点名保留）
+- **FeatureID / 状态**：`FATE-RULES / UI-HUD`；专项已实现，运行结果见[独立记录](../development/2026-11-16_weapon_hologram_ui.md)，不在设计页填写最终通过数。
+- **场景与脚本**：`Dungeon3D`保留候选/冻结报价/Bridge购买事务；`src/ui/weapon_build/FateHologramPresentation.gd`只管布局时序，共用UI-20的board，`FateIrreversibleConfirm.gd`管理星星不可逆确认。
+- **账本 ID**：既有 `UI-MODAL-FATE-DRAW / UI-ATLAS-FATE-CARD`保留；新增 `UI-FATE-HOLOGRAM-PRESENTATION`（UI主表r28）、共享 `UI-WEAPON-BUILD-BOARD`（r27）。
+- **入口与层级**：`Dungeon3D/$HUD (z_index = 900)`；只有命运卡专用掉落物主动点击/按键后进入正式购卡。门、开箱和普通奖励不直接弹此层。
+- **现行布局与时序**：从枪身位置全息展开board→board下移→上方三候选翻牌；稳定态“三卡上、board下”，在1280×720和1920×1080下均须可读且不重叠。旧每列346×694、卡面346×546的独占全屏大卡规格已被替代，不保留为并列约束。逆位只倒图案、效果文字正向；冻结价格及本局金币仍可读，退出不触发购买。
+- **星星购买**：先提示原文“购买后该枪械命运卡不可更换！”，是/否两钮且默认“否”；否/Esc/关闭不扣款不装配。是后重验目标实例、容量、已购状态及报价，保持原费用与 `FateCardGameBridge`事务；来源取消/应用失败原额退款。只有成功才飞入返回的永久slot并播短整板脉冲/方块。月亮太阳只播作用域反馈，不占枪槽；已购候选不可重复提交。
+- **视觉/生命周期**：`VFX-WEAPON-CARD-SOCKET-IMPACT-2D`（特效主表r66）是 `Control` 2D例外，不进VfxPool；只在成功瞬间反馈，减少动效取消长位移/散射，关闭/切枪清理在途投影。旧70%灰背已购态已被“成功落巢卡面”口径替代，全站无光晕总则与别的HUD不动。
+- **独立入口**：`verify_weapon_hologram_ui`归manual，必须由 `python scripts/run_weapon_hologram_qa.py --scene weapon_hologram_ui --resolution 1280x720 1920x1080`在Autoload前隔离并设置 `WEAPON_HOLOGRAM_VERIFY_ISOLATED=1`；排除full裸扫。逻辑、真实渲染、冷import超时分别留证据。
 
 #### UI-24 命运卡赋能目标选择弹窗（`FateSourceSelectionPanel`）
 - **场景与脚本**：`src/ui/FateSourceSelectionPanel.gd`
@@ -437,7 +436,7 @@
 - **场景与脚本**：`src/ui/FateCardFeedback.gd`
 - **账本 ID**：归属 `UI-MODAL-FATE-DRAW` 反馈组件
 - **层级**：`Dungeon3D/$HUD` 顶层非阻断浮层（`mouse_filter = IGNORE`）
-- **动效表现**：购买或触发命运卡瞬间，在屏幕中上方展开霓虹紫/金双层发光横幅，伴随向上漂浮的微光粒子，展示【卡名 · 正/逆位】与核心增益摘要，`1.8s` 后平滑淡出。
+- **动效表现**：沿棱镜单线短反馈显示【卡名 · 正/逆位】与摘要；旧霓虹紫/金双层发光横幅为历史口径。正式全息购卡成功落巢及整板脉冲/方块由UI-23独立组件负责，不把该局部许可扩展给此通用横幅或其他HUD。
 
 #### UI-26 M 键全屏已探索战术大地图（`ExploredFloorMapOverlay`）
 - **场景与脚本**：`src/world3d/Dungeon3D.gd` (`_toggle_full_map`) + `src/ui/DungeonMinimap3D.gd` (`set_full_map_mode(true)`)
@@ -558,7 +557,7 @@
 - **场景与脚本**：`scenes/DivinationMenu.tscn` + `src/ui/DivinationMenu.gd`
 - **账本 ID**：`UI-MODAL-DIVINATION`
 - **层级**：`CanvasLayer (layer = 100)`
-- **功能**：下潜出发前消耗金币进行每日/每局塔罗占卜，为下一局行动预埋起始命运增益或特殊房间倾向。
+- **现行功能**：局前候选预选，不付款、不装配、不占当前枪槽；不得因为复用候选表现就接入正式购卡支付或落槽事务。旧“下潜前消耗金币占卜”的描述为历史口径，已被2026-11-16规则明确替代。
 
 *(注：另保留 `scenes/BaseMenu.tscn` + `src/ui/BaseMenu.gd` 作为基地早期汇总菜单兼容入口，账本 ID `UI-SCREEN-BASE-HUB`)*
 
@@ -625,7 +624,7 @@
 
 | 编号 | 界面名称 | 脚本路径 | 层级 / 快捷键 | 职责说明 |
 |---|---|---|---|---|
-| **DEV-01** | 独立训练场命运卡组装台 (`TrainingFateBenchPanel`) | `src/training3d/TrainingFateBenchPanel.gd` | `CanvasLayer (60)` / 训练场常驻 | 提供全量命运塔罗牌自由点选、正逆位切换、一键注入主/副武器或配件的沙盒测试面板 |
+| **DEV-01** | 独立训练场命运卡组装台 (`TrainingFateBenchPanel`) | `src/training3d/TrainingFateBenchPanel.gd` | `CanvasLayer (60)` / 训练场常驻 | 全量免费点选、正逆位切换与沙盒装配；复用构建板只读投影，不收正式金币，不把训练能力移入正式购买池 |
 | **DEV-02** | 实时性能与热管理监控器 (`PerformanceOverlay`) | `src/ui/PerformanceOverlay.gd` | `$HUD (z=2100)` / 按键 `0` | 实时显示 FPS、Frame Time、Draw Calls、VRAM、活动敌人数与房间流送状态 |
 | **DEV-03** | 手电/雾气/后处理实时调参台 (`FlashlightColorTweaker`) | `src/player3d/FlashlightColorTweaker.gd` | `$HUD (z=2100)` / 按键 `P` | 实时拖动滑块调节手电色温、环境光、雾浓度、胶片颗粒并支持一键写盘保存预设 |
 
@@ -654,10 +653,10 @@
 | 17 | `RunOutcomePanel` | 战局撤离/失败结算板 | `src/world3d/Dungeon3D.gd` | `L:1 / z:0` | 棱镜线框 | 已接入 | `UI-MODAL-EXTRACTION-RESULT` |
 | 18 | `InventoryUI` | 棋盘式包裹与装备主界面 | `src/ui/InventoryUI.gd` | `L:1 / z:350` | 棱镜线框(**仅样式**) | 已接入 | `UI-SCREEN-INVENTORY-3D` |
 | 19 | `ItemModelIcon3D` | 3D 物品实时正交图标组件 | `src/ui/ItemModelIcon3D.gd` | 子视口组件 | 3D 实物同源 | 组件级 | 待补录 |
-| 20 | `WeaponPresentationPage3D` | K 键武器表现与构建树页 | `src/ui/WeaponAssemblyTreePanel.gd` | `L:1 / z:420` | 棱镜线框(双语) | 已接入 | 待补录 |
+| 20 | `WeaponPresentationPage3D` | K 键枪械全息构建页 | `src/ui/WeaponAssemblyTreePanel.gd` | `L:1 / z:420` | 棱镜基础+局部全息许可 | 安全收起/卡巢焦点 | `UI-WEAPON-BUILD-BOARD` r27 |
 | 21 | `WorkbenchPanel` | 局内武器改造台（5×5 炼金盘） | `src/ui/WorkbenchPanel.gd` | `L:1 / 模态` | 棱镜线框(双语) | 已接入 | 待补录 |
 | 22 | `MerchantUI` | 局内流浪拾荒商界面 | `src/ui/MerchantUI.gd` | `L:1 / 模态` | 棱镜线框 | 已接入 | `UI-MODAL-MERCHANT` |
-| 23 | `DoorFateOverlay3D` | 门后命运塔罗三选一购卡 | `src/world3d/Dungeon3D.gd` | `L:1 / z:900` | 棱镜线框+塔罗贴图 | 完整焦点链 | `UI-MODAL-FATE-DRAW` |
+| 23 | `DoorFateOverlay3D` | 命运pickup全息购卡（三卡上/board下） | `Dungeon3D.gd` + `FateHologramPresentation.gd` | `L:1 / z:900` | 棱镜基础+局部全息许可 | 星星默认否/安全退出 | `UI-FATE-HOLOGRAM-PRESENTATION` r28；既有FATE-DRAW保留 |
 | 24 | `FateSourceSelectionPanel` | 命运卡赋能目标选择框 | `src/ui/FateSourceSelectionPanel.gd` | `L:1 / z:910` | 棱镜线框+3D图标 | 数字键/焦点 | 待补录 |
 | 25 | `FateCardFeedback` | 命运卡生效顶栏横幅 | `src/ui/FateCardFeedback.gd` | `L:1 / 浮层` | 棱镜线框(单线闪) | 纯展示 | 归属命运卡 |
 | 26 | `ExploredFloorMapOverlay` | M 键全屏战术大地图 | `src/world3d/Dungeon3D.gd` | `L:1 / z:850` | 棱镜线框(矢量) | ESC/关闭钮 | 待补录 |
@@ -703,7 +702,7 @@
      现状：`UIFX.pop_in_modal` 已是统一口径（**刻意去回弹**，见规范 §6），各基地菜单已在接入。
    - 为金币与结算读数增加 `0.25s` 数字插值滚动反馈。**（待做）**
 4. **P2 · UI 资产账本（`ShellStorm2_UI账本_v001.xlsx`）同步扩编**：
-   - 按 `06-character-ledger` / `shellstorm2-asset-ledger-row-authoring` 规范，将上表中标注“待补录”的正式玩家可见界面（如 `BaseVendingMenu`、`WardrobeMenu3D`、`WeaponPresentationPage3D`、`ExpeditionLoadingScreen` 等）分批登记入库。**（待做）**
+   - 按 `06-character-ledger` / `shellstorm2-asset-ledger-row-authoring` 规范，将上表中标注“待补录”的正式玩家可见界面（如 `BaseVendingMenu`、`WardrobeMenu3D`、`ExpeditionLoadingScreen` 等）分批登记入库。**（其他条目待做；2026-11-16共享构建板与购卡全息表现已分别登记r27/r28，不再沿用K页待补录建议ID）**
 5. **P2 · 待清理死代码（本批遗留）**：
    - `src/ui/NeonFrameControl.gd` 已无调用者（`Dungeon3D` 侧 `_add_neon_frame` 与其常量均已删除）；
    - `UIStyleFactory.apply_tactical_tree()` 已无调用者，保留作历史对照。

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "asset_id": "ENM-NORMAL-FAT-ZOMBIE21",
+  "version": "v002",
+  "status": "exported_pending_godot_validation",
+  "visual_review": "pending_user_visual_review",
+  "validation_scope": "original_data_restoration + idle_only + Blender_roundtrip; NOT locomotion/engine acceptance",
+  "model_source": "res://art_source/enemies/normal_enemy_3d/fat_zombie21/source/model/enm_normal_fat_zombie21_model_v002.blend",
+  "animation_source": "res://art_source/enemies/normal_enemy_3d/fat_zombie21/source/animation/enm_normal_fat_zombie21_animation_v002.blend",
+  "skel_id": "SKEL-FATZOMBIE21-ORIGINAL-001",
+  "skeleton_signature": "4931ec7ec3e7a2b0978d3cd69aafa99f511656b6c21d68bfb637de53ff29fc65",
+  "runtime_glb": {
+    "res_path": "res://assets/art/enemies/normal_enemy_3d/fat_zombie21/components/enm_normal_fat_zombie21/enm_normal_fat_zombie21_visual_top3d.glb",
+    "bytes": 562372,
+    "sha256": "71af6e0a627c4b5aa68d602ef5968d15c76e415845317234227bd65d0367594a"
+  },
+  "manifest": {
+    "res_path": "res://assets/art/enemies/normal_enemy_3d/fat_zombie21/enm_normal_fat_zombie21_manifest_v002.json",
+    "bytes": 6778,
+    "sha256": "79f3bae57f7e07b25915634b6d88babb0521321e73b3f081a82985b094b97671"
+  },
+  "clips": [
+    {
+      "name": "idle",
+      "fps": 60,
+      "start": 0,
+      "closure": 192,
+      "playback_end": 191,
+      "seconds": 3.2
+    }
+  ],
+  "previous_acceptance_withdrawn": true,
+  "backup": "I:\\工作项目\\shellstrom2\\ShellStorm2-backup\\2026-11-16_1732_fatzombie_original_idle",
+  "pending": [
+    "User continuous visual review",
+    "Godot wrapper/import/playback and scale/forward alignment",
+    "Locomotion re-authoring not in this task",
+    "Replacement of existing fat zombie not performed"
+  ]
+}

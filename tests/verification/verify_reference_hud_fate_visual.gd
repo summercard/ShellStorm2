@@ -361,8 +361,7 @@ func _ready() -> void:
 			var flip_card := card_node as Button
 			_check(flip_card.disabled, "Tarot card is clickable before flip completes", failures)
 			_check(flip_card.find_child("TarotCardBack", true, false) != null, "Tarot card back is missing", failures)
-	for _frame in 48:
-		await get_tree().process_frame
+	await _wait_fate_cards_ready(dungeon, failures)
 	if overlay != null:
 		var cards := overlay.find_children("FateChoiceCard_*", "Button", true, false)
 		var all_text := _collect_label_text(overlay)
@@ -406,7 +405,9 @@ func _ready() -> void:
 			_check(bool(card_control.get_meta("tarot_face_ready", false)), "Tarot face did not finish flipping", failures)
 			# 卡下价格行是购买制的唯一价格口径，必须存在且带上金币价。
 			var price_label := (card_button.get_meta("tarot_price_label") if card_button.has_meta("tarot_price_label") else null) as Label
-			_check(price_label != null and price_label.text.begins_with("◈ "), "Fate card is missing its price line under the card", failures)
+			_check(price_label != null and price_label.text == "购买  %d" % int(card_button.get_meta("tarot_price", -1)), "购买按钮未显示精确报价", failures)
+			var purchase := card_button.get_meta("tarot_purchase_button") as Button
+			_check(purchase != null and purchase.is_ancestor_of(price_label) and purchase.is_visible_in_tree(), "真实购买按钮或报价缺失", failures)
 			_check(int(card_button.get_meta("tarot_price", -1)) > 0, "Fate card has no positive purchase price", failures)
 			_check(not card_button.disabled, "Tarot card stayed disabled after flip", failures)
 			_check(card_control.size.y > card_control.size.x, "Fate choice is not a vertical card", failures)
@@ -441,8 +442,9 @@ func _ready() -> void:
 			dungeon.call("_on_reference_fate_card_hover", card_button, false)
 			var hover_recovered := await _wait_card_scale(card_view, 1.0, "equal", 1.2)
 			_check(hover_recovered, "Fate card hover tween did not recover after rapid enter/exit", failures)
-			_check(card_control.size.x >= 250.0 and card_control.size.y >= 420.0, "Fate cards are too small to dominate the choice screen", failures)
-			_check(card_control.size.x <= 300.0 and card_control.size.y <= 500.0, "Fate card exceeds its 80%-scaled layout budget", failures)
+			_check(card_control.size.is_equal_approx(Vector2(135, 210)), "候选卡偏离已批准的135×210紧凑卡面", failures)
+			var board := dungeon.get("_fate_board") as Control
+			_check(board != null and board.is_visible_in_tree() and card_control.get_global_rect().end.y < board.get_global_rect().position.y, "候选卡侵入下半区构建板", failures)
 			_check_fate_card_art(card as Button, failures)
 		var reversed_cards := cards.filter(func(value: Node) -> bool: return str(value.get_meta("tarot_orientation", "")) == "逆位")
 		_check(reversed_cards.size() == 1, "Deterministic visual offer does not contain exactly one reversed card", failures)
@@ -469,29 +471,36 @@ func _ready() -> void:
 		var reversed_description := FateCardPresets.fate_reinforce()
 		reversed_description.set_orientation(FateCard.Orientation.REVERSED, 0.8)
 		_check(reversed_description.short_description in all_text, "Reversed effect text was replaced by upright text", failures)
-		# 点击反馈锁住整组三列：第二张直调也不能穿透；关闭来源/弹窗后必须恢复。
+		# 默认否的不可逆确认期间锁住整组；第二张不能穿透，取消不交易。
 		var locked_first := cards[0] as Button
 		var locked_second := cards[1] as Button
+		var money_before_confirm := GameManager.currency
+		var item_before_confirm := dungeon.player.get_equipped_weapon_item().duplicate(true)
 		dungeon.call("_on_reference_fate_card_pressed", locked_first, 0)
-		_check(bool(dungeon.get("_fate_feedback_locked")), "Fate card feedback did not lock after click", failures)
-		_check(locked_first.disabled and locked_second.disabled, "Click feedback did not disable all fate cards", failures)
+		_check(bool(dungeon.get("_fate_purchase_busy")), "确认期间未持有购买忙锁", failures)
+		var confirm := dungeon.get("_fate_confirm") as Control
+		var default_focus := get_viewport().gui_get_focus_owner() as Button
+		_check(confirm != null and default_focus != null and default_focus.text == "否", "确认默认焦点不是否", failures)
+		_check(locked_first.disabled and locked_second.disabled, "确认未禁用整组三卡", failures)
 		dungeon.call("_on_reference_fate_card_pressed", locked_second, 1)
-		_check(int(dungeon.get("_fate_feedback_selected_index")) == 0, "Second card changed the locked selection", failures)
-		await get_tree().create_timer(0.08).timeout
+		_check(int(dungeon.get("_fate_feedback_selected_index")) == 0, "第二卡穿透确认锁", failures)
+		_check(GameManager.currency == money_before_confirm and dungeon.player.get_equipped_weapon_item() == item_before_confirm, "确认前已扣款或刻槽", failures)
 		await RenderingServer.frame_post_draw
-		_check(_capture("fate_feedback_impact.png"), "Could not capture fate feedback impact", failures)
+		_check(_capture("fate_irreversible_confirm.png"), "无法截取正式确认层", failures)
+		_answer_fate_confirm(dungeon, false, failures)
+		await _wait_fate_purchase_idle(dungeon, failures)
+		_check(GameManager.currency == money_before_confirm and dungeon.player.get_equipped_weapon_item() == item_before_confirm, "否取消仍改变金币或枪", failures)
 		dungeon.call("_close_door_fate_overlay")
-		_check(not bool(dungeon.get("_fate_feedback_locked")), "Fate card feedback lock was not cleared on close", failures)
+		_check(not bool(dungeon.get("_fate_feedback_locked")) and not bool(dungeon.get("_fate_purchase_busy")), "关闭未清理事务锁", failures)
 		_check(dungeon.get_node_or_null("HUD/DoorFateOverlay3D") == null, "Fate overlay was not cleaned up after close", failures)
 		_check(dungeon.show_reference_fate_overlay_for_test(), "Could not reopen fate overlay after feedback close", failures)
-		await get_tree().create_timer(0.5).timeout
+		await _wait_fate_cards_ready(dungeon, failures)
 	_check(_capture("reference_fate_three_choice.png"), "Could not capture reference tarot overlay", failures)
 
-	# —— 买下之后翻回背面 + 悬停不再放大（2026-10-14 主人要求）——
-	# 这是本轮唯一的视觉变更，必须有图可看：真买一张并截出「背面朝上」的形态。
+	# 已购位保留同尺寸占位；实际牌面由共享board完成pending→永久刻印。
 	dungeon.call("_close_door_fate_overlay")
 	_check(dungeon.show_reference_fate_overlay_for_test(), "Could not reopen the offer for the purchased-card screenshot", failures)
-	await get_tree().create_timer(0.7).timeout
+	await _wait_fate_cards_ready(dungeon, failures)
 	var purchase_overlay := dungeon.get_node_or_null("HUD/DoorFateOverlay3D") as Control
 	if purchase_overlay != null:
 		GameManager.add_currency(99999)
@@ -500,70 +509,37 @@ func _ready() -> void:
 		if purchase_button == null:
 			_check(false, "Purchased-card screenshot could not find the first fate card", failures)
 		else:
-			await dungeon.call("_on_door_fate_selected", 0)
-			await get_tree().create_timer(0.7).timeout
-			var purchase_face := (purchase_button.get_meta("tarot_face_node") if purchase_button.has_meta("tarot_face_node") else null) as Control
-			var purchase_back := (purchase_button.get_meta("tarot_back_node") if purchase_button.has_meta("tarot_back_node") else null) as Control
-			_check(purchase_face != null and not purchase_face.visible, "Purchased card kept showing its face", failures)
-			_check(purchase_back != null and purchase_back.visible, "Purchased card did not flip to its back", failures)
-			_check(not purchase_button.disabled, "Purchased card became unfocusable after flipping back", failures)
-			# 已购卡三件套：灰阶材质 + 压暗 + 缩到 70%（业主 2026-10-14 要求）。
-			_check(
-				purchase_back != null and (purchase_back as CanvasItem).material is ShaderMaterial,
-				"Purchased card back has no greyscale material",
-				failures
-			)
+			var before_purchase := GameManager.currency
+			var original_size := purchase_button.size
+			dungeon.call("_on_door_fate_selected", 0)
+			_answer_fate_confirm(dungeon, true, failures)
+			var build_board := dungeon.get("_fate_board") as Control
+			var pending := build_board.call("get_presentation_snapshot") as Dictionary
+			_check(int(pending.get("pending_slot", -1)) > 0, "真实飞卡未进入pending", failures)
+			await RenderingServer.frame_post_draw
+			_check(_capture("fate_install_pending.png"), "无法截取真实飞卡", failures)
+			await _wait_fate_purchase_idle(dungeon, failures)
+			_check(before_purchase - GameManager.currency == int(purchase_button.get_meta("tarot_price", -1)), "购买未精确扣报价", failures)
+			var purchase_face := purchase_button.get_meta("tarot_face_node") as Control
+			var purchase_back := purchase_button.get_meta("tarot_back_node") as Control
+			_check(purchase_face != null and not purchase_face.visible and purchase_back != null and not purchase_back.visible, "已购占位仍露出候选卡图或旧灰背", failures)
+			_check(not purchase_button.disabled and purchase_button.text == "已购买\n01" and str(purchase_button.get_meta("tarot_face_side", "")) == "purchased", "已购占位失去身份或焦点", failures)
 			var purchase_view := purchase_button.get_meta("fate_feedback_view") as Control
-			_check(
-				purchase_view != null and purchase_view.modulate.r < 0.75,
-				"Purchased card column is not dimmed",
-				failures
-			)
-			# 绝对上限：主人连提两次要更暗（0.62 → 0.40），只跟常量比拦不住把常量改回亮档。
-			_check(
-				purchase_view != null and purchase_view.modulate.r <= 0.50,
-				"Purchased card column is not dark enough (modulate %.2f, ceiling 0.50)"
-				% [purchase_view.modulate.r if purchase_view != null else 1.0],
-				failures
-			)
-			_check(
-				purchase_view != null
-				and is_equal_approx(purchase_view.scale.x, Dungeon3D.FATE_PURCHASED_CARD_SCALE),
-				"Purchased card is not scaled to %.2f" % Dungeon3D.FATE_PURCHASED_CARD_SCALE,
-				failures
-			)
-			# 卡背**半透明**、卡下文字**不跟着淡**（业主 2026-10-15：翻过去的卡做半透明，更淡一些）。
-			# 两条一起钉：只淡卡牌本身，文字仍是这张卡唯一被读到的事实。
-			var purchase_back_canvas := purchase_back as CanvasItem
-			_check(
-				purchase_back_canvas != null
-				and purchase_back_canvas.modulate.a < 1.0
-				and is_equal_approx(purchase_back_canvas.modulate.a, Dungeon3D.FATE_PURCHASED_CARD_ALPHA),
-				"Purchased card back is not translucent (alpha %s)"
-				% [purchase_back_canvas.modulate.a if purchase_back_canvas != null else 1.0],
-				failures
-			)
-			var purchase_caption := (
-				purchase_button.get_meta("tarot_caption_label")
-				if purchase_button.has_meta("tarot_caption_label")
-				else null
-			) as Label
-			_check(
-				purchase_caption != null and is_equal_approx(purchase_caption.modulate.a, 1.0),
-				"Purchased card caption went translucent together with the card",
-				failures
-			)
-			# 悬停在一张已购买的卡上：不得离开它的 70% 基准缩放。
+			_check(purchase_view != null and purchase_view.scale.is_equal_approx(Vector2.ONE) and purchase_view.modulate.is_equal_approx(Color.WHITE) and purchase_button.size.is_equal_approx(original_size), "已购占位不再同尺寸中性显示", failures)
+			var settled := build_board.call("get_presentation_snapshot") as Dictionary
+			_check(int(settled.get("used", 0)) == 1 and int(settled.get("pending_slot", 0)) == -1, "实际卡面没有完成永久落巢", failures)
+			for entry: Dictionary in settled.get("cards", []):
+				_check(bool(entry.get("occupied", false)) == (int(entry.get("slot_index", 0)) == 1) and bool(entry.get("shows_back", false)) == not bool(entry.get("occupied", false)) and not bool(entry.get("pending", true)), "构建板牌面/空巢状态错误", failures)
+			var purchase_caption := purchase_button.get_meta("tarot_caption_label") as Label
+			_check(purchase_caption != null and is_equal_approx(purchase_caption.modulate.a, 1.0), "已购功能文字被淡化", failures)
 			dungeon.call("_on_reference_fate_card_hover", purchase_button, true)
 			await get_tree().create_timer(0.28).timeout
-			_check(
-				purchase_view != null
-				and is_equal_approx(purchase_view.scale.x, Dungeon3D.FATE_PURCHASED_CARD_SCALE),
-				"Purchased card zoomed away from its 70% base scale when hovered",
-				failures
-			)
+			_check(purchase_view.scale.is_equal_approx(Vector2.ONE), "已购占位悬停仍放大", failures)
+			var before_repeat := GameManager.currency
+			await dungeon.call("_on_door_fate_selected", 0)
+			_check(GameManager.currency == before_repeat and dungeon.get("_fate_confirm") == null, "已购位重复交易", failures)
 			await RenderingServer.frame_post_draw
-			_check(_capture("fate_purchased_card_back.png"), "Could not capture the flipped-back purchased card", failures)
+			_check(_capture("fate_purchased_board.png"), "无法截取已购占位与永久卡巢", failures)
 			# 金币不足时的完整表现证据：余额行闪红 + 卡片抖动 + 卡下价格行（2026-10-19 起只写价格，
 			# 不再写「还差 M」）+ 右下金币读数保持常色不被暗化层压暗。
 			# 四件事在同一帧里拍到，评审一眼就能看出反馈落在哪几个位置。
@@ -597,7 +573,7 @@ func _ready() -> void:
 	ProjectSettings.set_setting("accessibility/reduce_motion", true)
 	dungeon.call("_close_door_fate_overlay")
 	_check(dungeon.show_reference_fate_overlay_for_test(), "Could not reopen reduced-motion offer", failures)
-	await get_tree().create_timer(0.3).timeout
+	await _wait_fate_cards_ready(dungeon, failures)
 	var reduced_overlay := dungeon.get_node_or_null("HUD/DoorFateOverlay3D") as Control
 	if reduced_overlay != null:
 		for card in reduced_overlay.find_children("FateChoiceCard_*", "Button", true, false):
@@ -788,47 +764,77 @@ func _card_scale_matches(view: Control, target: float, mode: String) -> bool:
 	return is_equal_approx(view.scale.x, target) and is_equal_approx(view.scale.y, target)
 
 
-## 暂停同一条真实退场 tween 并逐段推进，保证截图不会错过 0.42 秒动画的中间态。
-## 图片来自游戏 viewport，不是示意图；结束仍由 tween 的 finished 时间轴回收弹窗。
+## 暂停真实全息板退场tween逐段采样；候选收起，模态锁持续到宿主清理。
 func _check_fate_exit_visual(dungeon: Dungeon3D, failures: Array[String]) -> void:
 	var overlay := dungeon.get_node_or_null("HUD/DoorFateOverlay3D") as Control
 	if overlay == null:
 		_check(false, "Exit animation visual overlay is missing", failures)
 		return
+	var board := dungeon.get("_fate_board") as Control
+	var presentation := dungeon.get("_fate_presentation") as Control
 	var cards := overlay.find_children("FateChoiceCard_*", "Button", true, false)
 	await RenderingServer.frame_post_draw
 	_check(_capture("fate_exit_before.png"), "Could not capture fate exit before", failures)
 	var exit_button := overlay.find_child("FateExitButton", true, false) as Button
 	exit_button.pressed.emit()
-	_check(bool(dungeon.get("_door_fate_active")) and bool(dungeon.get("_fate_overlay_closing")), "Exit hard-cut the overlay instead of retaining its modal lock", failures)
-	var exit_tween := overlay.get_meta("fate_exit_tween") as Tween
+	_check(bool(dungeon.get("_door_fate_active")) and bool(dungeon.get("_fate_overlay_closing")) and dungeon.player.input_locked, "退场提前释放模态输入锁", failures)
+	var exit_tween := board.get_meta("weapon_hologram_tween") as Tween
 	exit_tween.pause()
-	exit_tween.custom_step(Dungeon3D.FATE_OVERLAY_EXIT_DURATION * 0.30)
-	for card_node in cards:
-		var button := card_node as Button
-		var view := button.get_meta("fate_feedback_view") as Control
-		_check(button.disabled and button.scale.x < 0.6 and view.modulate.a < 1.0, "A card did not fold and fade in the first exit phase", failures)
+	exit_tween.custom_step(0.07)
+	for node in cards:
+		_check((node as Button).disabled, "退场候选仍可交互", failures)
+	_check(not (presentation.get("row") as Control).visible and board.visible and board.scale.x < 1.0 and board.modulate.a < 1.0, "候选未收起或全息板未缩小淡出", failures)
 	await RenderingServer.frame_post_draw
-	_check(_capture("fate_exit_fold.png"), "Could not capture fate exit folding", failures)
-	exit_tween.custom_step(Dungeon3D.FATE_OVERLAY_EXIT_DURATION * 0.25)
-	for card_node in cards:
-		var button := card_node as Button
-		_check(str(button.get_meta("tarot_face_side", "")) == "back", "A card did not turn to the back on exit", failures)
-	await RenderingServer.frame_post_draw
-	_check(_capture("fate_exit_back_shrink.png"), "Could not capture fate exit back shrink", failures)
-	exit_tween.custom_step(Dungeon3D.FATE_OVERLAY_EXIT_DURATION * 0.25)
+	_check(_capture("fate_exit_hologram_shrink.png"), "无法截取全息收起中间态", failures)
+	exit_tween.custom_step(0.07)
 	await RenderingServer.frame_post_draw
 	_check(_capture("fate_exit_fade.png"), "Could not capture fate exit fade", failures)
-	exit_tween.custom_step(Dungeon3D.FATE_OVERLAY_EXIT_DURATION)
+	exit_tween.custom_step(1.0)
 	_check(not bool(dungeon.get("_door_fate_active")) and dungeon.get_node_or_null("HUD/DoorFateOverlay3D") == null, "Exit animation finished without cleaning up its overlay", failures)
 	await RenderingServer.frame_post_draw
 	_check(_capture("fate_exit_after.png"), "Could not capture fate exit after", failures)
-	# 减少动效分支仍能退出，不留下 locked/closing 或旧节点。
 	ProjectSettings.set_setting("accessibility/reduce_motion", true)
 	_check(dungeon.show_reference_fate_overlay_for_test(), "Cannot reopen reduced-motion exit offer", failures)
 	dungeon.call("_cancel_door_fate_selection")
+	var deadline := Time.get_ticks_msec() + 6000
+	while bool(dungeon.get("_door_fate_active")) and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
 	_check(not bool(dungeon.get("_fate_overlay_closing")) and dungeon.get_node_or_null("HUD/DoorFateOverlay3D") == null, "Reduced-motion exit left an overlay behind", failures)
 	ProjectSettings.set_setting("accessibility/reduce_motion", false)
+
+
+func _wait_fate_cards_ready(dungeon: Dungeon3D, failures: Array[String]) -> void:
+	var deadline := Time.get_ticks_msec() + 6000
+	while Time.get_ticks_msec() < deadline:
+		var buttons := dungeon.get("_fate_choice_buttons") as Array
+		var ready := buttons.size() == 3
+		for button: Button in buttons:
+			if button.disabled or not bool(button.get_meta("tarot_face_ready", false)) or not button.is_visible_in_tree():
+				ready = false
+		if ready:
+			return
+		await get_tree().process_frame
+	_check(false, "三卡未在6000ms内完成全息入场及翻面", failures)
+
+
+func _answer_fate_confirm(dungeon: Dungeon3D, accepted: bool, failures: Array[String]) -> void:
+	var confirm := dungeon.get("_fate_confirm") as Control
+	_check(confirm != null, "真实不可逆确认缺失", failures)
+	if confirm == null:
+		return
+	for node in confirm.find_children("*", "Button", true, false):
+		var button := node as Button
+		if button.text == ("是" if accepted else "否"):
+			button.pressed.emit()
+			return
+	_check(false, "确认按钮缺失", failures)
+
+
+func _wait_fate_purchase_idle(dungeon: Dungeon3D, failures: Array[String]) -> void:
+	var deadline := Time.get_ticks_msec() + 6000
+	while bool(dungeon.get("_fate_purchase_busy")) and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	_check(not bool(dungeon.get("_fate_purchase_busy")) and not bool(dungeon.get("_fate_feedback_locked")), "购卡事务未在6000ms内解锁", failures)
 
 
 func _capture(file_name: String) -> bool:

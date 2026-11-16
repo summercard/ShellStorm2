@@ -7,6 +7,7 @@ signal retired(projectile: Projectile3D)
 
 const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d.tscn")
 const BULLET_VISUAL_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_bullet_visual_root_top3d.tscn")
+const PROJECTILE_ENCHANT_VISUALS = preload("res://src/vfx/projectile_enchant/ProjectileEnchantmentVisuals3D.gd")
 ## 敌人本体 / 受击体积所在的碰撞层（第 3 层，值 4）。与玩家子弹的 `mask = 5` 同口径。
 ## 只用于「敌弹敌我通吃」（`hits_allies`）时把敌人层并进 mask，不改任何层的分配。
 const COLLISION_LAYER_ENEMY := 4
@@ -112,6 +113,7 @@ var _built := false
 var _active := true
 var _collision_shape: CollisionShape3D
 var _visual: VfxEffectBase3D
+var _enchantment_visuals: PROJECTILE_ENCHANT_VISUALS
 var _returning := false
 var _turret_active := false
 var _turret_remaining := 0.0
@@ -201,6 +203,7 @@ func configure(config: Dictionary) -> void:
 		_rebuild_carried_weapon()
 		_apply_visual_configuration()
 		_sync_visual_orientation()
+	_configure_enchantment_visuals()
 
 
 func activate(config: Dictionary, world_position: Vector3) -> void:
@@ -225,6 +228,8 @@ func activate(config: Dictionary, world_position: Vector3) -> void:
 	_sync_visual_orientation()
 	if _visual != null:
 		_visual.activate(global_position, bullet_color, _visual_scale_factor(), _bullet_visual_context())
+	if _enchantment_visuals != null:
+		_enchantment_visuals.set_emitting(true)
 	if _collision_shape != null:
 		_collision_shape.set_deferred("disabled", false)
 
@@ -239,6 +244,9 @@ func _ready() -> void:
 	_rebuild_carried_weapon()
 	_apply_visual_configuration()
 	_sync_visual_orientation()
+	_configure_enchantment_visuals()
+	if _enchantment_visuals != null:
+		_enchantment_visuals.set_emitting(_active)
 
 
 func _physics_process(delta: float) -> void:
@@ -1189,6 +1197,22 @@ func _sync_visual_orientation() -> void:
 	look_at(global_position + forward, Vector3.UP)
 
 
+func _configure_enchantment_visuals() -> void:
+	if _enchantment_visuals == null:
+		_enchantment_visuals = PROJECTILE_ENCHANT_VISUALS.new()
+		_enchantment_visuals.name = "ProjectileEnchantments"
+		add_child(_enchantment_visuals)
+	_enchantment_visuals.configure(fate_behavior, _visual_scale_factor(), _bullet_visual_context())
+
+
+func get_enchantment_snapshot() -> Dictionary:
+	var snapshot := {"attributes": [], "attribute_count": 0, "attachments": [], "cached_attachments": [], "total_amount": 0, "emitting": false, "cached_count": 0}
+	if _enchantment_visuals != null:
+		snapshot = _enchantment_visuals.get_enchantment_snapshot()
+	snapshot["visual_id"] = _visual_id
+	return snapshot
+
+
 func get_orientation_snapshot() -> Dictionary:
 	var snapshot := {
 		"direction": direction,
@@ -1225,6 +1249,8 @@ func get_orientation_snapshot() -> Dictionary:
 
 
 func _retire() -> void:
+	if _enchantment_visuals != null:
+		_enchantment_visuals.reset()
 	if is_instance_valid(_carried_weapon):
 		_carried_weapon.queue_free()
 		_carried_weapon.set_process(false)

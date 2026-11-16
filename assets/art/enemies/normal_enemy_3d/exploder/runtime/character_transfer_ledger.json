@@ -1,0 +1,365 @@
+{
+  "schema_version": 2,
+  "asset_id": "ENM-BOMBER-FRUIT01",
+  "display_name": "炸弹果",
+  "logic_id": "exploder",
+  "subtype": "normal_bomber",
+  "asset_version": "v002",
+  "status": "active",
+  "runtime_status": "active",
+  "validation_status": "passed",
+  "runtime_integrated": true,
+  "presentation_only": true,
+  "collision_owner": "Enemy3D",
+  "model_source": "art_source/enemies/normal_enemy_3d/exploder/source/model/enm_bomber_fruit01_model_v002.blend",
+  "animation_source": "art_source/enemies/normal_enemy_3d/exploder/source/animation/enm_bomber_fruit01_animation_v002.blend",
+  "optimized_source": "art_source/enemies/normal_enemy_3d/exploder/export/v002/enm_bomber_fruit01_optimized_v002.blend",
+  "component_glb": "assets/art/enemies/normal_enemy_3d/exploder/components/enm_bomber_fruit01_visual_top3d.glb",
+  "runtime_prefab": "assets/art/enemies/normal_enemy_3d/exploder/runtime/enm_bomber_fruit01_root_top3d.tscn",
+  "presentation_script": "assets/art/enemies/normal_enemy_3d/exploder/runtime/exploder_formal_visual.gd",
+  "skeleton_bones": 14,
+  "deform_bones": 13,
+  "skeleton_signature": "07013e5702abd438b33a67b382334a63451b5e1b639ee098dd80ac0569673a68",
+  "vertices": 275,
+  "triangles": 546,
+  "materials": 1,
+  "textures": 1,
+  "clips": {
+    "move": {
+      "seconds": 0.5,
+      "fps": 60,
+      "intervals": 30,
+      "loop": true
+    },
+    "explode": {
+      "seconds": 0.9,
+      "fps": 60,
+      "intervals": 54,
+      "loop": false
+    }
+  },
+  "authoring_height_m": 1.15,
+  "local_static_dimensions_m": {
+    "width": 1.2419471740722656,
+    "depth": 1.0895774364471436,
+    "height": 1.1499999837570822
+  },
+  "runtime_base_scale": 0.546,
+  "runtime_display_height_m": 0.6279,
+  "sizing_policy": "保持形体等比缩放，不拉宽；外层缩放一次；不是逐帧高度承诺",
+  "previous_baseline_dimensions_m": {
+    "height": 1.15,
+    "width": 1.62,
+    "depth": 1.41873
+  },
+  "forward_contract": {
+    "blender": "+Y",
+    "godot": "-Z",
+    "additional_yaw_degrees": 0
+  },
+  "proxy_scope": {
+    "count": 7,
+    "new_model_used": false,
+    "representation": "既有程序壳"
+  },
+  "gameplay_changed": true,
+  "runtime_tuning": {
+    "authorized_at": "2026-11-16T21:53:00",
+    "scope": "仅炸弹果运行移动与实际速度驱动步频同比+30%；不另乘步频倍率",
+    "source_move_seconds": 0.5,
+    "actual_speed_multiplier": 1.3,
+    "baseline_reference": 1.8445,
+    "baseline_reference_frozen": true,
+    "profile_before": 3.1,
+    "profile_after": 4.03,
+    "injector_before": 70,
+    "injector_after": 91,
+    "actual_profile_speed": 2.39785,
+    "actual_injector_speed": 2.256041666666667,
+    "profile_calibrated_cycle_seconds": 0.3846153846153846,
+    "charge_unchanged": 0.9,
+    "damage_unchanged": true,
+    "collision_unchanged": true,
+    "presentation_script_unchanged": true,
+    "glb_and_dual_sources_unchanged": true,
+    "asset_version_unchanged": "v002",
+    "measured_ratios": {
+      "profile_displacement": 1.30007446016381,
+      "profile_gait": 1.30007441492373,
+      "injector_displacement": 1.29992086520707,
+      "injector_gait": 1.29992095450306
+    },
+    "evidence": {
+      "path": "I:/工作项目/shellstrom2/ShellStorm2-work/sessions/2026-11-16_2153_exploder_speed30/test/final.result.json",
+      "sha256": "c03ed8a8df0a302037345ebb82fdf9111b08d237293d3acfe741bd99d3b46da7",
+      "exit_code": 0,
+      "logcheck_exit": 0,
+      "checks_added": 199,
+      "checks_total": 351,
+      "script_errors": [],
+      "engine_errors": [],
+      "warning_count": 55
+    },
+    "domain_log_version": "v0.1.53",
+    "domain_log_row": 95
+  },
+  "collision_changed": false,
+  "files": [
+    {
+      "path": "art_source/enemies/normal_enemy_3d/exploder/source/model/enm_bomber_fruit01_model_v002.blend",
+      "role": "model",
+      "sha256": "383831caf152019cde2310c1aeca5b477ce8d752e7130f948fde6da0048a068a",
+      "bytes": 931284
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/exploder/source/animation/enm_bomber_fruit01_animation_v002.blend",
+      "role": "animation",
+      "sha256": "edd65ca2b29563256873eaf170be113a3f2d0833f4327b5f57d083ba647bdf0a",
+      "bytes": 1802195
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/exploder/export/v002/enm_bomber_fruit01_optimized_v002.blend",
+      "role": "optimized",
+      "sha256": "9439ad8b9b2ac04d4fb7dd79dacf5651a49cdd68e4392e6d5e667d9f359306a1",
+      "bytes": 1441317
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/exploder/components/enm_bomber_fruit01_visual_top3d.glb",
+      "role": "component_glb",
+      "sha256": "55f410b3780b94916005b9152d5ae14741163223824a6cd963894df965159eaa",
+      "bytes": 495900
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/exploder/runtime/enm_bomber_fruit01_root_top3d.tscn",
+      "role": "runtime_prefab",
+      "sha256": "cbb59e78c17d0bd25b0ad5d7c316cee7035d2b121fceeaa8dfa7ce9bc366a239",
+      "bytes": 776
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/exploder/runtime/exploder_formal_visual.gd",
+      "role": "presentation_script",
+      "sha256": "237fbd5134c6d2d4261ccd0d24804fd52dda86f26a82c74c51bef359a2fce772",
+      "bytes": 6958
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/exploder/runtime/exploder_post_import.gd",
+      "role": "post_import",
+      "sha256": "d6a6397ace1c0b3b05ef95adbbac1391e6fc96f185b8d8188f6a1851d4a768ca",
+      "bytes": 441
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/exploder/components/enm_bomber_fruit01_visual_top3d.glb.import",
+      "role": "glb_import",
+      "sha256": "6815f37fedad8dba4676087e57ca6837023bf96e5174b6f9a94b9b26f95b9879",
+      "bytes": 1344
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/exploder/components/enm_bomber_fruit01_visual_top3d_red_orb_robot_3d_model_basecolor.jpg",
+      "role": "runtime_texture",
+      "sha256": "7f72f099a78e3c31e0ba130cb6bf441d7e124d6916c42a8cb26697aa4a4f44c0",
+      "bytes": 423310
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/exploder/components/enm_bomber_fruit01_visual_top3d_red_orb_robot_3d_model_basecolor.jpg.import",
+      "role": "texture_import",
+      "sha256": "79e8208d89eacfd5282170cf2e2a36a88a4f68d848fa720c883d8a49ea51caed",
+      "bytes": 1216
+    }
+  ],
+  "validation": {
+    "blender": {
+      "passed": true,
+      "report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_1904_exploder_mech\\validation_blender.json",
+      "sha256": "3f25bc50789228ef7d073e10a707bd3df77fac21615120b19dbdde9b639e6b0c"
+    },
+    "godot_final": {
+      "status": "passed",
+      "accepted_by_main_agent": true,
+      "acceptance_basis": "用户本轮明确授权最终验收转正；仅指定证据范围",
+      "evidence": {
+        "blender": {
+          "path": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_1904_exploder_mech\\validation_blender.json",
+          "sha256": "3f25bc50789228ef7d073e10a707bd3df77fac21615120b19dbdde9b639e6b0c"
+        },
+        "positive": {
+          "path": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_1904_exploder_mech\\live_integration\\runs\\20261116_201614_negative_291232\\test.run.json",
+          "sha256": "54b2286bf1a4a5aae3aeebc112973ba9ca04c49c31301c595879141e6c76b539"
+        },
+        "negative": {
+          "path": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_1904_exploder_mech\\live_integration\\runs\\20261116_201614_negative_291232\\negative_result.json",
+          "sha256": "1c867afcfb2cb0963cdf2f9caebfa8a0074348744d52148e4fc7a008f7a22b20"
+        },
+        "regression": {
+          "path": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_1904_exploder_mech\\game_regression\\regression_summary.json",
+          "sha256": "b1c4553bf8da76cfe9214fc2e2e9b24191b605d1476efbbfa039a2ef7b8b8159"
+        },
+        "final_texture": {
+          "path": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_1904_exploder_mech\\game_regression\\final_texture\\final_texture_result.json",
+          "sha256": "eb883c4d66494d88ae3a90ce3e31420ed4ec2f93976c4394b3a1ccc0177a1574"
+        },
+        "final_texture_detail": {
+          "path": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_1904_exploder_mech\\game_regression\\final_texture\\final_texture_summary.json",
+          "sha256": "9bffca6c8a38b2f5b237f107192182375ea07ed9466857458b3acb2fde437078"
+        },
+        "render": {
+          "path": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_1904_exploder_mech\\live_integration\\runs\\20261116_212335_render_290220\\render.run.json",
+          "sha256": "4e8d331ca2e221cacdc565b9bfc253da562f0c1d59f8b5d34349fcf64adc8b63"
+        },
+        "render_result": {
+          "path": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_1904_exploder_mech\\live_integration\\runs\\20261116_212335_render_290220\\render_result.json",
+          "sha256": "8aa946b7efc1898f44d471a616e58422777cbdf34cabf0125f094cfe06b4e7e4"
+        },
+        "render_input": {
+          "path": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_1904_exploder_mech\\live_integration\\runs\\20261116_212335_render_290220\\source_manifest.json",
+          "sha256": "99431174560f934e27532f97c975b8cb4953f57c0e856a7de74c321901d85bd8"
+        },
+        "frames": {
+          "path": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-16_1904_exploder_mech\\live_integration\\runs\\20261116_212335_render_290220\\frames.json",
+          "sha256": "3f51e7c9decd4d26217c1de8d93ae46bac10271d52c67aafeddf24a7aa4439af"
+        }
+      },
+      "positive_exit_code": 0,
+      "negative_cases": [
+        {
+          "clip": "move",
+          "passed": true,
+          "exit_code": 0,
+          "assertion_seen": true
+        },
+        {
+          "clip": "explode",
+          "passed": true,
+          "exit_code": 0,
+          "assertion_seen": true
+        }
+      ],
+      "official_batch_exit_code": 0,
+      "official_batch_scope": "材质修复前五项行为回归；最终修复后未重跑",
+      "final_texture_exit_codes": {
+        "formal_import": 0,
+        "formal_import_logcheck": 0,
+        "presentation": 0,
+        "presentation_logcheck": 0,
+        "presentation_preflight": 0,
+        "presentation_preflight_logcheck": 0,
+        "real_exploder": 0,
+        "real_exploder_logcheck": 0,
+        "real_exploder_preflight": 0,
+        "real_exploder_preflight_logcheck": 0,
+        "texture_probe": 0,
+        "texture_probe_logcheck": 0,
+        "texture_probe_preflight": 0,
+        "texture_probe_preflight_logcheck": 0
+      },
+      "render_exit_code": 0,
+      "render_errors": [],
+      "render_png_count": 86,
+      "human_frame_review": "主agent进行中；本登记不代签人工目检",
+      "documentation_exit_code": 1,
+      "documentation_scope": "既有断链失败，不是本包运行验收失败",
+      "unexpected_errors_final": 0,
+      "autoplay_warnings_final": 0,
+      "existing_warning_counts": {
+        "formal_import": 592,
+        "formal_import_logcheck": 0,
+        "presentation": 19,
+        "presentation_logcheck": 0,
+        "presentation_preflight": 19,
+        "presentation_preflight_logcheck": 0,
+        "real_exploder": 55,
+        "real_exploder_logcheck": 0,
+        "real_exploder_preflight": 55,
+        "real_exploder_preflight_logcheck": 0,
+        "texture_probe": 19,
+        "texture_probe_logcheck": 0,
+        "texture_probe_preflight": 19,
+        "texture_probe_preflight_logcheck": 0
+      }
+    }
+  },
+  "ledger_state": {
+    "registered": true,
+    "asset_row": 10,
+    "animation_summary_row": 25,
+    "animation_clip_rows": [
+      67,
+      68
+    ],
+    "prefab_row": 13,
+    "baseline_target_only": true,
+    "final_promoted": true,
+    "domain_log_version": "v0.1.52",
+    "domain_log_row": 94
+  },
+  "limitations": [
+    "仅move/explode两段，无独立idle/hurt/dead；受击仅闪白",
+    "7个proxy仍程序壳，不使用此新模型",
+    "未执行人工整关实玩、目标设备/APK及core/full/aggregate套件",
+    "CPU采样仅指定两剪辑/状态与离散姿态，不证明任意动作全域零穿透或零自交",
+    "源输入许可待确认",
+    "人工图片审查仍由主agent进行，本登记不代签结果",
+    "最终材质修复后未重跑官方batch五项；已有行为证据与最终材质/真实Enemy专项分层记录",
+    "仍有既有UID等warning；0ERROR与0autoplay不等于0warning"
+  ],
+  "provenance": {
+    "source": "用户提供机甲源；Blender骨架与动画重制",
+    "license": "原始许可待确认"
+  },
+  "note": "【2026-11-16 v002最终验收转正】active；runtime_integrated=true；validation=passed。仅exploder正式表现，7个proxy继续程序壳，不宣称使用新模型。14骨/13deform，275源顶点/546三角；单材质/2048×2048 JPG；仅move 0.5s循环与explode 0.9s单次，均60fps；无独立idle/hurt/dead。源高1.15m、静态宽1.241947m/深1.089577m；外层一次0.546、基准世界高0.6279m；保持形体不拉宽。14态现行输出：dormant采move@0；idle/patrol/alert/chase/search/return按实际速度推进move；telegraph按原前摇进度采explode；attack/recovery保持explode末帧；stagger/death_warning保持当前姿态；defeated默认move@0（不宣称普通怪战败玩法）；dead冻结最后姿态，主动炸立即隐藏、普通击杀沿原0.34s窗口。受击仅闪白。E25历史ENEMY_AI_12_STATES所有者标识保留，不改状态机。玩法/碰撞仍归Enemy3D：radius0.88/height1.28、gravity24，主动自爆伤害30仅一次且不产碎片，普通击杀8碎片；本视觉包无碰撞。Blender源采样passed；独立positive exit0/errors[]；两项错误时长负测均子进程exit0、passed=true且assertion_seen=true（不是exit1）。官方batch五项exit0及真实Enemy补测0为材质修复前行为证据；最终材质修复后正式导入/152项presentation/真实主动炸与碎片/碰撞重力/贴图读回均exit0，0非预期ERROR、0autoplay警告。旧白模已修：glb.import embedded_image_handling=1，外置JPG与GLB原嵌入JPEG同哈希；三路实际材质均有2048贴图，生产cache_materials带贴图assert。最终Forward+录帧exit0/errors[]，86PNG；人工图片审查由主agent进行中，不代签其结论。未执行人工整关实玩/目标设备/APK/corefull；CPU采样仅指定两剪辑与采样姿态，不是任意动作全域零穿透/零自交证明；源输入许可待确认；既有UID等warning不冒称清零。证据：../ShellStorm2-work/sessions/2026-11-16_1904_exploder_mech/game_regression/final_texture/final_texture_summary.json；live_integration/runs/20261116_212335_render_290220/render.run.json。",
+  "texture": "assets/art/enemies/normal_enemy_3d/exploder/components/enm_bomber_fruit01_visual_top3d_red_orb_robot_3d_model_basecolor.jpg",
+  "texture_size": [
+    2048,
+    2048
+  ],
+  "texture_sha256": "7f72f099a78e3c31e0ba130cb6bf441d7e124d6916c42a8cb26697aa4a4f44c0",
+  "state_mapping": {
+    "dormant": "move@0",
+    "idle/patrol/alert/chase/search/return": "move相位按实际速度推进；静止时保持",
+    "telegraph": "explode按原前摇进度采样",
+    "attack/recovery": "explode末帧",
+    "stagger/death_warning": "保持当前姿态",
+    "defeated": "默认move@0；不宣称普通怪战败玩法",
+    "dead": "冻结最后姿态；主动炸隐藏，普通击杀原0.34s窗口"
+  },
+  "current_state_count": 14,
+  "historical_state_machine_owner": "ENEMY_AI_12_STATES（保留历史所有者字段，不是当前态数量）",
+  "texture_import_contract": {
+    "embedded_image_handling": 1,
+    "external_jpeg_matches_glb_embedded": true,
+    "raw_scn_glb_remap_enemy_override_albedo_verified": true,
+    "raw_autoplay": "",
+    "white_model_issue": "历史旧导入缓存缺图已修复；GLB字节不变不是单独充分证据",
+    "formal_cache_evidence": {
+      "glb_sha256": "55f410b3780b94916005b9152d5ae14741163223824a6cd963894df965159eaa",
+      "import_text": "[remap]\n\nimporter=\"scene\"\nimporter_version=1\ntype=\"PackedScene\"\nuid=\"uid://ctlr1iry76cix\"\npath=\"res://.godot/imported/enm_bomber_fruit01_visual_top3d.glb-e4f39d5a8a4460c8b08028d638fc1a55.scn\"\n\n[deps]\n\nsource_file=\"res://assets/art/enemies/normal_enemy_3d/exploder/components/enm_bomber_fruit01_visual_top3d.glb\"\ndest_files=[\"res://.godot/imported/enm_bomber_fruit01_visual_top3d.glb-e4f39d5a8a4460c8b08028d638fc1a55.scn\"]\n\n[params]\n\nnodes/root_type=\"\"\nnodes/root_name=\"\"\nnodes/root_script=null\nmesh_library/use_node_names_as_mesh_names=false\narray_mesh/deduplicate_surfaces=true\nnodes/apply_root_scale=true\nnodes/root_scale=1.0\nnodes/import_as_skeleton_bones=false\nnodes/use_name_suffixes=true\nnodes/use_node_type_suffixes=true\nmeshes/ensure_tangents=true\nmeshes/generate_lods=true\nmeshes/create_shadow_meshes=true\nmeshes/light_baking=1\nmeshes/lightmap_texel_size=0.2\nmeshes/force_disable_compression=false\nskins/use_named_skins=true\nanimation/import=true\nanimation/fps=60\nanimation/trimming=false\nanimation/remove_immutable_tracks=true\nanimation/import_rest_as_RESET=false\nimport_script/path=\"res://assets/art/enemies/normal_enemy_3d/exploder/runtime/exploder_post_import.gd\"\nmaterials/extract=0\nmaterials/extract_format=0\nmaterials/extract_path=\"\"\n_subresources={}\ngltf/naming_version=2\ngltf/embedded_image_handling=1\ngltf/texture_map_mode=1\n",
+      "scn_path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\.godot\\imported\\enm_bomber_fruit01_visual_top3d.glb-e4f39d5a8a4460c8b08028d638fc1a55.scn",
+      "scn_exists": true,
+      "scn_sha256": "cf9e87f3d3dee425afeaad03204f1e1cd965c5554d594f0f2ef6e0fd086edd8c",
+      "scn_bytes": 40788,
+      "md5_text": "source_md5=\"87453a2ae7a193845671aac32cf6ff3d\"\ndest_md5=\"5d0d09a8508b0549fc731af3135f35ac\"\n\n",
+      "source_md5_actual": "87453a2ae7a193845671aac32cf6ff3d",
+      "source_md5_matches": true,
+      "component_files": [
+        "assets/art/enemies/normal_enemy_3d/exploder/components/enm_bomber_fruit01_visual_top3d.glb",
+        "assets/art/enemies/normal_enemy_3d/exploder/components/enm_bomber_fruit01_visual_top3d.glb.import",
+        "assets/art/enemies/normal_enemy_3d/exploder/components/enm_bomber_fruit01_visual_top3d_red_orb_robot_3d_model_basecolor.jpg",
+        "assets/art/enemies/normal_enemy_3d/exploder/components/enm_bomber_fruit01_visual_top3d_red_orb_robot_3d_model_basecolor.jpg.import"
+      ],
+      "versioned_texture_paths": []
+    }
+  },
+  "promotion_history": [
+    {
+      "previous": {
+        "status": "exported_pending_godot_validation",
+        "runtime_integrated": false,
+        "validation_status": "pending_godot_validation",
+        "record_sha256": "33c4272871fb869f2427b6c8286f41241fb719951f376ef7ef618fbb82003c0f",
+        "backup": "I:\\工作项目\\shellstrom2\\ShellStorm2-backup\\2026-11-16_1904_exploder_mech\\final_promotion\\before_edits\\assets\\art\\enemies\\normal_enemy_3d\\exploder\\runtime\\character_transfer_ledger.json"
+      },
+      "promoted_at": "2026-11-16T21:34:57.522409",
+      "asset_version": "v002",
+      "source_and_glb_unchanged": true
+    }
+  ]
+}

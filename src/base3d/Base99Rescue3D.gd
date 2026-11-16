@@ -95,6 +95,8 @@ var _streak := 0
 var _script_lines: Array[String] = []
 ## 演出期间玩家的钉点（世界坐标）。见 `_enforce_hold()`。
 var _pinned_world := Vector3.INF
+var _dialogue_session := ""
+var _rescue_dialogue_run := ""
 
 
 func _ready() -> void:
@@ -177,7 +179,32 @@ func _should_play_cutscene() -> bool:
 	return str(context.get("reason", "")) == GameEntryFlow.REASON_DEATH_RETURN_99F
 
 
+func _begin_dialogue_session() -> bool:
+	var snapshot := DialogueUI.get_presentation_snapshot()
+	if NarrativeDirector.is_playing() and not str(snapshot.get("session_id", "")).is_empty() and not bool(snapshot.get("exit_running", false)):
+		return true
+	var session := "rescue_%d" % get_instance_id()
+	var participants: Array = [_npc.get_dialogue_metadata()] if is_instance_valid(_npc) else []
+	if DialogueUI.begin_presentation(session, participants) != session:
+		return false
+	_dialogue_session = session
+	return true
+
+
+func _end_dialogue_session(immediate := false) -> void:
+	var session := _dialogue_session
+	_dialogue_session = ""
+	if immediate and not _rescue_dialogue_run.is_empty() and DialogueUI.current_run_id() == _rescue_dialogue_run:
+		DialogueUI.close()
+	_rescue_dialogue_run = ""
+	if immediate and is_instance_valid(_npc):
+		_npc.set_bubble_wrap_width(0)
+		_npc.end_scripted_appearance()
+	DialogueUI.end_presentation(session, immediate)
+
+
 func _play_cutscene() -> void:
+	var dialogue_ready := _begin_dialogue_session()
 	_place_player_prone()
 	_place_npc()
 	# 台词**整段随机**：命中连败档就是专属段，否则从候选池随机挑一段
@@ -197,19 +224,25 @@ func _play_cutscene() -> void:
 			if not _is_alive():
 				# 玩家被释放但本节点还活着（换场景的中间帧）⇒ 必须自己交还两个锁：
 				# 这时不会走 `_exit_tree()`，锁一旦留着，下一个场景的玩家会动不了。
+				_end_dialogue_session(true)
 				_release_player_input()
 				return
-			if _npc != null:
-				_npc.say_scripted_line(line, LINE_HOLD_SECONDS)
+			if dialogue_ready and is_instance_valid(_npc):
+				if not _npc.say_scripted_line(line, LINE_HOLD_SECONDS):
+					push_warning("[Base99Rescue3D] 救援对白被拒绝，停止余下对白。")
+					break
+				_rescue_dialogue_run = _npc.get_dialogue_run_id()
 			await _wait_until_line_done()
 	if _npc != null:
 		_npc.set_bubble_wrap_width(0)
 	if not _is_alive():
+		_end_dialogue_session(true)
 		_release_player_input()
 		return
 	await _rise_player()
-	if _npc != null:
+	if is_instance_valid(_npc):
 		_npc.end_scripted_appearance()
+	_end_dialogue_session()
 	_phase = Phase.CHEST_WAITING
 	cutscene_finished.emit()
 
@@ -446,6 +479,7 @@ func _is_alive() -> bool:
 ## 中途退出（切场景/玩家放弃）时把输入独占还回去 —— 这是唯一会把人永久钉住的路径：
 ## 演出协程被 `queue_free()` 打断，`_release_player_input()` 永远不会再被调用。
 func _exit_tree() -> void:
+	_end_dialogue_session(true)
 	_release_player_input()
 	if _npc != null and is_instance_valid(_npc):
 		_npc.set_bubble_wrap_width(0)

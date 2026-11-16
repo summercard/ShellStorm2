@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "source": "assets/registry/ledgers (current runtime-truth reconciliation)",
- "captured_at": "2026-11-15T13:12:17",
+ "captured_at": "2026-11-16",
  "sheet": "资产主表",
  "columns": [
   "AssetID",
@@ -35,7 +35,7 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 1447,
+ "asset_count": 1460,
  "assets": {
   "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
    "v": "d5d9272d4ba1a59a238bf2f8f28c4efc75f51501d66286a245b49362563ee4d1",
@@ -1718,7 +1718,7 @@
    "d": "enemies"
   },
   "ENM-BOMBER-FRUIT01": {
-   "v": "88d32a459dcc18086bf2ed73561922f08a680e3c865efcf2e829e848240775ff",
+   "v": "0bf81757882d73daa598602f4d1db5e447a21074f7367d2b397a380df0376bca",
    "c": "敌人",
    "d": "enemies"
   },
@@ -1823,12 +1823,17 @@
    "d": "enemies"
   },
   "ENM-MELEE-FUNGBOAR01": {
-   "v": "0769aa8b4e838321005b66e1488da4ba58a808a199520c33880234c3f2a2b827",
+   "v": "1e4ddd89193414a76238c284417fa88818c4106e8a78e99e92a2a36d61ebb26f",
    "c": "敌人",
    "d": "enemies"
   },
   "ENM-MELEE-KEYBULLET01": {
    "v": "178421eda101b54584dc4aa9a9f4a124cace48698b515b7faf6c48a712f3598e",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-MELEE-STONE-GIANT01": {
+   "v": "268155ff764b4af2680a9038d88303657896a931cb53b473466cd268c34f2b6e",
    "c": "敌人",
    "d": "enemies"
   },
@@ -1838,7 +1843,12 @@
    "d": "enemies"
   },
   "ENM-NORMAL-FAT-ZOMBIE03": {
-   "v": "b1efc7b4f1a9ba5c0d3b2e584e5686dba62d2c79f701cc836cba0b69b1c315cc",
+   "v": "6f27b30dba72df14dab1846331f0c8bbfae24adac8a44af6ca836657053e0b0d",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-NORMAL-FAT-ZOMBIE21": {
+   "v": "bfa5b02597cdf92b96182863512c23b0bbe28999d8a19dc29d52321727cabce5",
    "c": "敌人",
    "d": "enemies"
   },
@@ -1893,7 +1903,7 @@
    "d": "enemies"
   },
   "ENM-RANGED-SPORESHOOTER01": {
-   "v": "9f49af443ca1a000af527dd4589f8180900ffb8c61264908efcce10d86d5d935",
+   "v": "bc74e7efe5498f6b04a0301d8eb3f307c4cf71b91a2ec8f620c3711c83523751",
    "c": "敌人",
    "d": "enemies"
   },
@@ -2803,7 +2813,7 @@
    "d": "scenes"
   },
   "ENV-EXPEDITION-L01-L-CORRIDOR": {
-   "v": "e9e06028d4ef2fdc6cbd4e73bf1d794a162649645390a1cf8abe36468b9d3614",
+   "v": "c9561ff7128032874b4fa8c42df01187fa6a098effaa7e8dc341ed78882a35d2",
    "c": "场景",
    "d": "scenes"
   },
@@ -6697,6 +6707,11 @@
    "c": "UI",
    "d": "ui"
   },
+  "UI-FATE-HOLOGRAM-PRESENTATION": {
+   "v": "a9910b541a9cda0feb7e0f012a1d5c1db8163014c7d7aee6d26f17c4e170a9f9",
+   "c": "UI",
+   "d": "ui"
+  },
   "UI-ICON-ITEM-MODEL-3D": {
    "v": "ec010f58ebab5526e3957831eb9ec1148c009556de9ffdd08e7bbe2ef540a835",
    "c": "UI",
@@ -6773,7 +6788,7 @@
    "d": "ui"
   },
   "UI-SCREEN-WEAPON-TREE": {
-   "v": "45e7a3488c08fc67a61164fdacbdcf72dacc67c0b164f6b61f085c3a6cd97ea6",
+   "v": "33c64544e12e7cc8822f7157a25fead7a867ea882bad39c84eb4db210963601b",
    "c": "UI",
    "d": "ui"
   },
@@ -6794,6 +6809,11 @@
   },
   "UI-SPECIAL-ITEM-HUD": {
    "v": "47aa2d307dc15dc5af4a9633f899bc3cc77661c9c3c279b643bba1cb2c4e6dc3",
+   "c": "UI",
+   "d": "ui"
+  },
+  "UI-WEAPON-BUILD-BOARD": {
+   "v": "6b9cae8a7a51f8cc6eb95d0045d9dd32ecd5010f9f6bf0bae326ec962e1be055",
    "c": "UI",
    "d": "ui"
   },
@@ -6917,6 +6937,11 @@
    "c": "特效",
    "d": "vfx"
   },
+  "VFX-FAT-ENTRY-BREACH-3D": {
+   "v": "6e2ea2a9af7df5564c1b3efef1d0e648235dad55c689edb6789f87fcc74fc0d8",
+   "c": "特效",
+   "d": "vfx"
+  },
   "VFX-FATE-FIRE-3D": {
    "v": "bd31253b2b2a31986ddcd2055680ad52beea891a6fc68fd0b6e77eec1bf28baf",
    "c": "特效",
@@ -7032,6 +7057,41 @@
    "c": "特效",
    "d": "vfx"
   },
+  "VFX-PROJECTILE-ENCHANT-BOUNCE-3D": {
+   "v": "6ab59e42c46e0bf568feb47b66e09b2e80ef86b61592fe847f490ae4361f7928",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "VFX-PROJECTILE-ENCHANT-FIRE-3D": {
+   "v": "bfa9fffca1b678e340326ce514a1a5426d5896f4dba8239196680848409a0483",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "VFX-PROJECTILE-ENCHANT-HOMING-3D": {
+   "v": "25e527da5ef14aff366af413f933368a2f9044987ae79da06f7e7f1632df171d",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "VFX-PROJECTILE-ENCHANT-ICE-3D": {
+   "v": "bcca0a7e0e993d347312c2aa9f76142e0e0b8ceab276484a174500184b611cc2",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "VFX-PROJECTILE-ENCHANT-LIGHTNING-3D": {
+   "v": "d39f4e6f7c84bfdaed10d68455b9008761d0486a137da8f7ed74cd59619483f2",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "VFX-PROJECTILE-ENCHANT-POISON-3D": {
+   "v": "ca9b24e8b7d5cfb7b22bf0c94a62ce8c94cd6d793714fa0b05cb3ed2193a585b",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "VFX-PROJECTILE-ENCHANT-RETURN-3D": {
+   "v": "2c83a01efb9c9870627d83e83cab1bb0a829c320bcfa5d8af84f70a7b9d6b816",
+   "c": "特效",
+   "d": "vfx"
+  },
   "VFX-RADIO-MUSIC-NOTES-3D": {
    "v": "b0173a74c78587df41937e04204a67b022683cf7ed2e3bb2de426e961cbb6c5a",
    "c": "特效",
@@ -7084,6 +7144,11 @@
   },
   "VFX-VISIBILITY-LIGHT": {
    "v": "b2e9c56f72ab1b9d240d36cb3829d0abc8cdf1eac8188b9bae49da713545192c",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "VFX-WEAPON-CARD-SOCKET-IMPACT-2D": {
+   "v": "c696a81931959f34f0220d16e3ab4564a9f5628ed23743f277db4f33825c4bce",
    "c": "特效",
    "d": "vfx"
   },
@@ -7274,29 +7339,29 @@
   }
  },
  "column_digests": {
-  "1": "dcd2efe75a5201ec43d63c6f4f2ba352befdbe47124dec9c2bd0a3b49f508a53",
-  "2": "c639c860f750648850af80ab802b4b2c8aa70f2aec8c5b394d2c6b50d9a6fcd6",
-  "3": "09071aeb3f2c8918360eb9411d1746a81d5e609ce0dec3d7510cc4b60609b93c",
-  "4": "4fbbc7dc74d33cf742c8dad5b341fea51d111b6a172cfc086acd10da95898882",
-  "5": "9ac56899aa5791466138a77db2efaa34e99086c8da3144852c7a7390d30d6807",
-  "6": "4be67b4897dd2d45b1b8239ea636c36be8bd32df3e9b928e2eeb152371bafca2",
-  "7": "3e034582ba59ba2d2b74faafb823497a23562e7c437594f3f18de6ae67668082",
-  "8": "a93a9cf032f79607ec269e4eceb059a3b88af59e7b71be05c04a1b3e2d88d910",
-  "9": "f40b58c2a0c755b98d49d50d9412eba7ba59e2a039b202540ffe79c33b7f8723",
-  "10": "2d562e54f7023d3e1c60e296114f56a23e57211b50702dda6796d650484a8561",
-  "11": "648211ab4f5211404a01ce9eddcbe07a3d2f0b0d8906fb761afa4f36271129f1",
-  "12": "104a2306d719bab192da96122c328b7d43ac539c9701aecfe00b9c948059a188",
-  "13": "9b62dfb412d0181bede29a0f410756380ce77f2709d44449959fd902b152e640",
-  "14": "892eefe9056d4d7b444c07300418ec7fe9ea1a050de4ad86cf2fb8e47e19cba5",
-  "15": "8da765c5b63c757bad54ca27725b8bab1bc8a5968c21e1f4bb0ba01af16ac09f",
-  "16": "5d15ee993ce314422d94ede914e3e184e48cc5d8654fe145a563e496733e6bc8",
-  "17": "4599e072b5a26350d3c3af14a2ca10c7003809a96f3b10e6752d85036c77ac1b",
-  "20": "98a2d447bb109448e12c5273e50e3d3a7b5fab311ef058886bcefa2e9083cfc3",
-  "21": "619b85b0b753dafeedc2c1b2cb6617de5380d2658f381fcb0d5c4c0acbf2ce2f",
-  "22": "731c8d6b466955d9671048e4e8bbabe4821dd8ab3c994a87158813b39aacd479",
-  "23": "4fc2796309b5c261dd45841d918fdea0f55a1e7f2e9acbac79d7ad300d4f3358",
-  "24": "c67e4ec44f19d8b9fd7004d738711ea30ba19096006407f2fc0bd2f77b4c1256",
-  "25": "552a15b7fa07d6cf6c936aa8426d7481c58cceab05c9a5bc2b12e027d1bce3dd"
+  "1": "4e73584b7654fd20938e185e1e37d40a60f7232dd3d12aa422cb8c079943367d",
+  "2": "b13ae1fad2ee809d111def706e575a2e0bd08d08f3dc5a31c208acbcf1b6824b",
+  "3": "458cf09e2c0786524aed46dbd3c8cd8190091f35fa65065670ec31144ca08e58",
+  "4": "d02932c01ef1fe30b91f452678965e73752078873ddae0a0d72362ba4b3b35c1",
+  "5": "b164d05368a0b93d2dedc1a4c86f49398b567cb2354d1f9f8d103016bcdd97b1",
+  "6": "496da6e6f6723b9fe83d1ac32617413ae03b0c9d40799d0fdc570a940c631e17",
+  "7": "33077e6f1f9a99c4912268270ce1803f22e71cc70ae8c407fca0335a38dcda9a",
+  "8": "7f5ac64ba9a77c925b4e3a3dd80cf7dbe62b51533d52ff8181dd54ddcc48f17e",
+  "9": "ef3d3a5fd269b1308038cb2875ec19b0f647068e291733122b675867e4cef9f2",
+  "10": "9f3b0ac6c7a62359fd9d75aa26c514170cf78b171bbcdf239a25e3fc3f6e487a",
+  "11": "f40e32f9dd20aaf22715b736fe2ea5fa0d537254275805bdd08921deb2e1e43b",
+  "12": "144094aff4d51b0a9c86356da65756e0efd7b8142a95660f780d523ce4def6aa",
+  "13": "6cd54299fab15f7aeed72633cbe46e59ecc87e1f262844708a9227cca474fa50",
+  "14": "e5c308f70d9c6c4dbcd13172d1874e2d7256f781f5eac8f58ea3943e1134f0e6",
+  "15": "f99f990d65e5ee388721624426c8f2e9c5afde2a294e6c94ded2fe0bd1f70b63",
+  "16": "d03ea65ee9f9b65a30bd6076ed7cd1663907dd346014ee04d5a0fcba08678e5c",
+  "17": "e8b04a88d35f6d83cbf84fa520260646f97ae62112f4a3d637844c4bb12bc782",
+  "20": "32d64a2a90123d1a9a71f9fa32ed43bf3ebff1fa087c90efbea6f698d055417c",
+  "21": "9ada57e02818c1b688739c74fc6467a84cd14d3f68279be7b6658c298660379e",
+  "22": "51e616114b72207fba3f928b369d344585bdf706250f8c24a43e30500ced5942",
+  "23": "562b9327479c83c6d4486b755eb80e5437b6f171f07c187df974717d29505b19",
+  "24": "64d116b38430bd96166b29fcd4b442621a7b783a5ef9b92eae2956beb3a3430c",
+  "25": "f9d85485ab3ca0d81f860038a113965bc478684057245b8d7e8b3650fd07f37f"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -7304,8 +7369,8 @@
   "原型角色": "9aa866ffb00159e580b4ba2da9c9856da9d1941a965035ebf07eaa77ea62c132",
   "角色中转记录": "4554d93d33461dcb875297c9145ff8d42800ad47c57d20f6ee6734bb54f9be85",
   "3D-角色": "3f2ee8eb49eab5f4986a636dce574020c47599ec49bd6e5525a914f334cb9411",
-  "敌人动画与状态": "90f97cdc38de06161b3d737f3289b2e199f592ec8ef8ab991e6676a501e7ebcf",
-  "3D-敌人": "3d542b37469db52159a67c3c7d24315841e412e8f50b76e5c4b963c44a2b4cd6",
+  "敌人动画与状态": "63c6038391d932f0e19d9944061460217e844b5eec5536404f10bd222773aa97",
+  "3D-敌人": "88fedfcd0603cd92aca2574df6e88ca7a7243ac03df105e42dd678a939dd1814",
   "3D-场景通用": "a328c5481bc915d993e0f28a431659a93eee1a386420c704be7d3dd922fe2711",
   "3D-设施": "676b365b792e9df64ede922284aabcf0d05be70cca0f8bfb66961d3946f050a7",
   "3D-其他": "dcfaaf667850374ed3c56a3cce0fc337734c84a50b9e8502a9170ce020e07743",
@@ -7313,19 +7378,24 @@
   "3D-物品": "b9d3f610d2a77d8d7b4d55872eb3d0e2d57caa9840c144a672c76e6fe599ba4b",
   "3D-武器": "507f387042335d14fc4782386a2c083e509e0f530ba4997293cebf0b925c19f2",
   "背包物品调用索引": "586212c8949d6e45d26a9e7f00c1e9150e7575df4606bfa545bbf86327f0162e",
-  "3D-特效": "c36971c7b6e9100a473ba17bbae8866ca7c9dfecdaf4e81b17b41e881ada72c7",
+  "3D-特效": "7a6d7809f9e7d3425d88287fe60e9178e0a45ae734d41813ba196ccf1e139817",
   "房间运行登记": "b6e02091f7abe53725d848874241cd51e5eacd5411b402de446e6b41a89bf854",
   "关卡名称对照": "1590dd70f6a2890baf8cd327daa25e97670e2baa18e04071894ff8995d1452e5"
  },
  "category_counts": {
-  "UI": 21,
-  "场景": 854,
+  "UI": 23,
+  "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_flower_arrangement/env_manor_flower_arrangement_root_top3d.tscn": 1,
+  "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_reception_desk/env_manor_reception_desk_root_top3d.tscn": 1,
+  "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_bedroom/env_manor_rug_bedroom_root_top3d.tscn": 1,
+  "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_lounge/env_manor_rug_lounge_root_top3d.tscn": 1,
+  "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_runner/env_manor_rug_runner_root_top3d.tscn": 1,
+  "场景": 849,
   "场景道具": 51,
   "基地资产包": 114,
   "子弹特效": 11,
-  "敌人": 50,
+  "敌人": 52,
   "武器": 36,
-  "特效": 48,
+  "特效": 57,
   "角色": 26,
   "道具": 45,
   "音乐": 9,
@@ -7577,6 +7647,41 @@
    "actual_before_sheet_digest": "0142ec6de79120de566bac3d899c25729dbe7f0c10e89f6f5af869e7b29895df",
    "after_sheet_digest": "6b001c8be20c6a105ad17b04ba0e11d1de3a128f8e966a94e5ec6a170bd7ddc4",
    "record": "docs/v0.1/development/2026-11-11_expedition_entry_hologram_ceremonies.md"
+  },
+  {
+   "date": "2026-11-16",
+   "asset_id": [
+    "VFX-FAT-ENTRY-BREACH-3D",
+    "ENM-NORMAL-FAT-ZOMBIE03"
+   ],
+   "operation": "仅补新VFX行与胖子Y19备注指纹、3D-特效追加行摘要；保留全部既有column_digests与无关资产/专表摘要，不接受历史漂移",
+   "previous_recorded_sheet_digest": "c36971c7b6e9100a473ba17bbae8866ca7c9dfecdaf4e81b17b41e881ada72c7",
+   "after_sheet_digest": "390d8691d29c16ad2d45690df32b22c38ea74619144369cf915d4978b2bf72ce",
+   "evidence": "sessions/2026-11-16_exp01_combat/ledger/registration_result.json"
+  },
+  {
+   "date": "2026-11-16",
+   "asset_id": "ENV-EXPEDITION-L01-L-CORRIDOR",
+   "operation": "room_08批准两段门洞修复，仅Y242本房实例哈希/备注及域日志；共享母版v012和T列SHA不变；无专表内容变化，不刷新任何sheet/column摘要",
+   "runtime_room_path": "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_room_08_static_layout.tscn",
+   "runtime_sha_before": "f9074a764942f3969c73dae7f1d6b87c4020eb59a1a4bc8373ad4ed737480002",
+   "runtime_sha_after": "c8083148c8736c50c67e2e8d7ef3727a952b12b586d75eaae86f628ca033a05a",
+   "evidence": "sessions/2026-11-16_exp01_combat/ledger/room08/transaction_result.json"
+  },
+  {
+   "date": "2026-11-16",
+   "asset_id": [
+    "VFX-FAT-ENTRY-BREACH-3D",
+    "ENM-NORMAL-FAT-ZOMBIE03"
+   ],
+   "operation": "最终radial/safe_fan、预爆0.35*p²与未全验边界，仅批准描述格及3D-特效digest；保留所有列摘要、无关行/专表digest。",
+   "evidence": "sessions/2026-11-16_exp01_combat/ledger/followup_final_ledger/transaction_result.json"
+  },
+  {
+   "date": "2026-11-16",
+   "asset_id": "VFX-FAT-ENTRY-BREACH-3D",
+   "operation": "texture revision2方形无方向火焰：仅本行规格/备注和3D-特效对应格；保留列摘要与无关行/专页digest；manifest不改。",
+   "evidence": "sessions/2026-11-16_fat_flame_round/ledger/transaction_result.json"
   }
  ],
  "controlled_updates": [

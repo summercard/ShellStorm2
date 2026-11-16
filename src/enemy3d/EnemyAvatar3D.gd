@@ -193,8 +193,9 @@ const FORMAL_NORMAL_SCENES := {
 	"fat_zombie03": "res://assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/enm_normal_fat_zombie03_root_top3d.tscn",
 	"melee_chaser": "res://assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/enm_melee_fungboar01_root_top3d.tscn",
 	"ranged_caster": "res://assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/enm_ranged_sporeshooter01_root_top3d.tscn",
+	"exploder": "res://assets/art/enemies/normal_enemy_3d/exploder/runtime/enm_bomber_fruit01_root_top3d.tscn",
 }
-const FORMAL_NORMAL_HEIGHTS := {"fat_zombie03": 3.142857, "melee_chaser": 1.857143, "ranged_caster": 1.857143}
+const FORMAL_NORMAL_HEIGHTS := {"fat_zombie03": 3.142857, "melee_chaser": 1.857143, "ranged_caster": 1.857143, "exploder": 1.15}
 const FORMAL_MELEE_KIND := "melee_chaser"
 const FORMAL_MELEE_SCENE_PATH := FORMAL_NORMAL_SCENES[FORMAL_MELEE_KIND]
 const FORMAL_MELEE_VISUAL_HEIGHT := FORMAL_NORMAL_HEIGHTS[FORMAL_MELEE_KIND]
@@ -345,6 +346,12 @@ func configure_elite_content(content_id: String, asset_id: String, scene_path: S
 
 func set_ai_state(state_id: String) -> void:
 	ai_state = state_id
+	if enemy_kind == "exploder" and has_formal_normal() and state_id == "dead":
+		# 只读玩法已提交标志；通知发生在死亡当帧，不等下一次 _process。
+		var enemy := get_parent()
+		var exploded: bool = enemy != null and enemy.get("_active_explosion_committed") == true
+		_formal_normal_root.call("on_state_changed", state_id, exploded)
+		_tell_ring.hide()
 
 
 func set_ambush_revealed(revealed: bool) -> void:
@@ -540,7 +547,7 @@ func _rebuild() -> void:
 	_root.add_child(_tell_ring)
 	# 正式普通怪分支：非精英 melee_chaser 在程序化外壳之后挂载独立小僵尸包装，
 	# 隐藏壳/核/附肢、保留 tell ring；动画由包装自驱动，避免旧 bob/appendage 程序姿势叠加。
-	if FORMAL_NORMAL_SCENES.has(_base_kind) and _root != null:
+	if _uses_formal_normal_model() and _root != null:
 		_load_formal_normal_model()
 		# 按配方为普通与强化僵尸挂接红眼。
 		if monster_has_eye_glow():
@@ -564,8 +571,17 @@ func monster_has_eye_glow() -> bool:
 ## GLB 是**本帧内刚实例化**的，骨架位姿与挂点世界矩阵在同一帧里还没解析完。
 ## 此刻读 `_eye_socket.global_transform` 会拿到未解析的值，反解出的偏移把眼睛送到脚底
 ## （实测 ratio=0.057，应为 0.535）。所以：本帧只建挂点，`_process` 下一帧再算偏移。
+func _formal_eye_socket_spec() -> Dictionary:
+	# 模型提供自己的头骨/瞳孔校准；其它模型继续使用既有变种配方。
+	if _formal_normal_root != null and _formal_normal_root.has_method("get_eye_socket_spec"):
+		var authored: Dictionary = _formal_normal_root.call("get_eye_socket_spec")
+		if not authored.is_empty():
+			return authored
+	return MonsterVariants.eye_socket_for(enemy_kind)
+
+
 func _setup_eye_socket() -> void:
-	var socket := MonsterVariants.eye_socket_for(enemy_kind)
+	var socket := _formal_eye_socket_spec()
 	if socket.is_empty() or _formal_normal_root == null:
 		return
 	var skeleton := _find_formal_normal_skeleton()
@@ -574,14 +590,15 @@ func _setup_eye_socket() -> void:
 		# 后者会在转头时穿帮，且没人会发现。
 		push_warning("强化怪 %s 找不到 Skeleton3D，发光眼未挂载" % enemy_kind)
 		return
-	if skeleton.find_bone(EYE_BONE_NAME) < 0:
-		push_warning("强化怪 %s 的骨架里没有 %s 骨，发光眼未挂载" % [enemy_kind, EYE_BONE_NAME])
+	var eye_bone := str(socket.get("bone_name", EYE_BONE_NAME))
+	if skeleton.find_bone(eye_bone) < 0:
+		push_warning("强化怪 %s 的骨架里没有 %s 骨，发光眼未挂载" % [enemy_kind, eye_bone])
 		return
 	if _eye_socket != null and is_instance_valid(_eye_socket):
 		_eye_socket.queue_free()
 	_eye_socket = BoneAttachment3D.new()
 	_eye_socket.name = EYE_SOCKET_NODE_NAME
-	_eye_socket.bone_name = EYE_BONE_NAME
+	_eye_socket.bone_name = eye_bone
 	skeleton.add_child(_eye_socket)
 	_eye_pending = true
 
@@ -602,7 +619,7 @@ func _finalize_eye_glow() -> void:
 	_eye_pending = false
 	if _eye_socket == null or not is_instance_valid(_eye_socket) or _formal_normal_root == null:
 		return
-	var socket_spec := MonsterVariants.eye_socket_for(enemy_kind)
+	var socket_spec := _formal_eye_socket_spec()
 	if socket_spec.is_empty():
 		return
 	var local_offsets: Array = socket_spec.get("bone_offsets", []).duplicate()
@@ -727,7 +744,14 @@ func _find_formal_normal_skeleton() -> Skeleton3D:
 	return null
 
 
+func _uses_formal_normal_model() -> bool:
+	# 七个借 exploder 的代理怪仍走旧程序壳；其它已正式化家族保留原路由。
+	return FORMAL_NORMAL_SCENES.has(_base_kind) and (_base_kind != "exploder" or enemy_kind == "exploder")
+
+
 func _load_formal_normal_model() -> void:
+	if not _uses_formal_normal_model():
+		return
 	var scene_path := str(FORMAL_NORMAL_SCENES.get(_base_kind, ""))
 	var scene := _cached_scene(scene_path)
 	assert(scene != null, "Formal normal scene missing for %s" % enemy_kind)
@@ -820,6 +844,11 @@ func has_animated_boss() -> bool:
 
 func has_animated_elite() -> bool:
 	return is_instance_valid(_formal_elite_root) and _formal_elite_root.has_method("sync_context")
+
+
+func sync_death_warning(elapsed: float, duration: float) -> void:
+	if has_formal_normal() and _formal_normal_root.has_method("sync_death_warning"):
+		_formal_normal_root.call("sync_death_warning", elapsed, duration)
 
 
 func sync_elite_presentation(context: Dictionary) -> void:

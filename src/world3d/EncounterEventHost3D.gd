@@ -6,6 +6,11 @@ extends RefCounted
 var dungeon: Dungeon3D
 var _elite_spawn_serial := 0
 
+# 当前白名单家具最大旋转半径1.159m，留0.091m几何余量。
+const SPAWN_VFX_ENVELOPE_M := 1.25
+const SPAWN_VFX_MIN_DISTANCE_M := 3.5
+const SPAWN_VFX_MAX_HEIGHT_M := 5.7
+
 func _init(owner: Dungeon3D = null) -> void:
 	dungeon = owner
 
@@ -44,6 +49,11 @@ func encounter_event_context(room_id: String, _instance_id: String) -> Dictionar
 func encounter_event_spawn(instance_id: String, room_id: String, monster_spec: Dictionary, count: int) -> Dictionary:
 	if not _valid():
 		return {"ok": false, "reason": "host_unavailable"}
+	var vfx_validation := EncounterEventDirector3D.validate_spawn_vfx(monster_spec)
+	if not bool(vfx_validation.get("ok", false)):
+		return {"ok": false, "spawned": 0, "reason": vfx_validation["error"]}
+	if count <= 0:
+		return {"ok": false, "spawned": 0, "reason": "monster_count_invalid"}
 	# 只查询同一实例的Owner事实；不另存一份关闭状态，也不封禁同event_id的新实例。
 	if dungeon._encounter_event_director != null and bool(dungeon._encounter_event_director.get_snapshot(instance_id).get("dispatch_closed", false)):
 		return {"ok": false, "spawned": 0, "reason": "dispatch_closed"}
@@ -76,9 +86,18 @@ func encounter_event_spawn(instance_id: String, room_id: String, monster_spec: D
 	if restricted:
 		candidates = room.get_encounter_spawn_candidates(str(monster_spec.get("trigger_port_id", "")), origin_port_id, remote_policy)
 	var positions: Array = []
+	var needs_vfx_space := monster_spec.has("spawn_vfx_asset_id")
 	# 远端域可用子批逐步涌入，旧事件保持原整批事务语义。
 	for _index in count:
-		var selection := room.choose_safe_spawn_position(player_world, min_distance, occupied, candidates)
+		var selection := _choose_spawn_vfx_position(room, player_world, min_distance, occupied, candidates) if needs_vfx_space else room.choose_safe_spawn_position(player_world, min_distance, occupied, candidates)
+		if needs_vfx_space and not bool(selection.get("ok", false)):
+			var refined := _refined_spawn_vfx_candidates(room, monster_spec, candidates)
+			selection = _choose_spawn_vfx_position(room, player_world, min_distance, occupied, refined)
+			if not bool(selection.get("ok", false)):
+				selection = _choose_spawn_vfx_paths(room, player_world, min_distance, occupied, refined)
+			if not bool(selection.get("ok", false)):
+				# 视觉净空不能扣住固定编成；只有原怪位也无解才走既有重试/失败。
+				selection = room.choose_safe_spawn_position(player_world, min_distance, occupied, candidates)
 		if not bool(selection.get("ok", false)):
 			if restricted:
 				if positions.is_empty():
@@ -124,19 +143,20 @@ func encounter_event_spawn(instance_id: String, room_id: String, monster_spec: D
 		var persistent_base := str(monster_spec.get("_persistent_id_base", ""))
 		if not persistent_base.is_empty():
 			generated["persistent_id"] = "%s:%d" % [persistent_base, index]
-		if monster_spec.has("content_id"):
-			generated["content_id"] = monster_spec["content_id"]
+		for key in ["content_id", "spawn_vfx_asset_id"]:
+			if monster_spec.has(key):
+				generated[key] = monster_spec[key]
 		configs.append(generated)
 	var had_nodes := dungeon._enemy_nodes_by_room.has(room_id)
 	var before_nodes: Array = (dungeon._enemy_nodes_by_room.get(room_id, []) as Array).duplicate()
 	var had_alive := dungeon._alive_by_room.has(room_id)
 	var before_alive := int(dungeon._alive_by_room.get(room_id, 0))
 	var spawned := dungeon._spawn_enemy_batch(room, configs, true, false, positions)
-	var delivered := 0
+	var delivered: Array[Enemy3D] = []
 	for value in dungeon._enemy_nodes_by_room.get(room_id, []) as Array:
-		if value not in before_nodes and is_instance_valid(value) and not value.is_queued_for_deletion():
-			delivered += 1
-	if spawned != count or delivered != count:
+		if value not in before_nodes and is_instance_valid(value) and not value.is_queued_for_deletion() and value is Enemy3D:
+			delivered.append(value)
+	if spawned != count or delivered.size() != count:
 		# 与现有原子刷怪事务一致：撤回本次新增实体及存活账，不撤掉该事件此前成功的批次。
 		for value in dungeon._enemy_nodes_by_room.get(room_id, []) as Array:
 			if value not in before_nodes and is_instance_valid(value):
@@ -157,7 +177,189 @@ func encounter_event_spawn(instance_id: String, room_id: String, monster_spec: D
 			"ok": false, "spawned": 0, "failed": true,
 			"reason": "spawn_position_failed" if spawned < 0 else "spawn_partial",
 		}
+	# 整批实到确认之后才允许表现；恢复实体不经过此交付出口。
+	var asset_id := StringName(monster_spec.get("spawn_vfx_asset_id", ""))
+	if not asset_id.is_empty():
+		for enemy in delivered:
+			_play_spawn_vfx(asset_id, room, enemy)
 	return {"ok": true, "spawned": spawned}
+
+
+func _refined_spawn_vfx_candidates(room: DungeonRoom3D, spec: Dictionary, original: Variant) -> Array[Vector3]:
+	var result: Array[Vector3] = []
+	if original != null:
+		result.assign(original)
+	var policy := str(spec.get("remote_spawn_policy", ""))
+	var origin_id := str(spec.get("spawn_origin_port_id", ""))
+	var entry := room.get_connection_port_by_id(str(spec.get("trigger_port_id", "")))
+	var origin := room.get_connection_port_by_id(origin_id)
+	if (policy == "opposite_entry" and entry.is_empty()) or (not origin_id.is_empty() and origin.is_empty()):
+		return result
+	var inward := -room._placement_vec2(entry.get("outward", [0.0, 0.0])).normalized()
+	var origin_inward := -room._placement_vec2(origin.get("outward", [0.0, 0.0])).normalized()
+	var origin_position := room._placement_vec2(origin.get("position_m", [0.0, 0.0]))
+	var dimensions := room.get_dimensions()
+	var origin_depth := maxf(5.0, (absf(origin_inward.x) * dimensions.x + absf(origin_inward.y) * dimensions.y) * 0.35)
+	# 只细化采样，不改原半区/端口带、支持面、可达性或碰撞判定。
+	for x in range(ceili(-dimensions.x), floori(dimensions.x) + 1):
+		for z in range(ceili(-dimensions.y), floori(dimensions.y) + 1):
+			var planar := Vector2(x * 0.5, z * 0.5)
+			if policy == "opposite_entry" and (inward.is_zero_approx() or planar.dot(inward) < 0.0):
+				continue
+			if not origin.is_empty():
+				var depth := (planar - origin_position).dot(origin_inward)
+				if origin_inward.is_zero_approx() or depth < 0.0 or depth > origin_depth:
+					continue
+			result.append(room.to_global(Vector3(planar.x, 0.0, planar.y)))
+	return result
+
+
+func _choose_spawn_vfx_position(room: DungeonRoom3D, player_world: Vector3, min_distance: float, occupied: Array[Vector3], candidates: Variant) -> Dictionary:
+	room._prepare_safe_spawn_selection()
+	var pool: Array[Vector3] = []
+	if candidates == null:
+		for point in room._spawn_candidates:
+			pool.append(room.to_global(point))
+	else:
+		pool.assign(candidates)
+	var selected := Vector3.INF
+	var best_distance := -1.0
+	for point in pool:
+		if not room._safe_spawn_geometry_valid(point) or not room._safe_spawn_distances_valid(point, player_world, min_distance, occupied):
+			continue
+		var distance := _spawn_vfx_landing_distance(room, point)
+		if distance >= SPAWN_VFX_MIN_DISTANCE_M and distance > best_distance:
+			best_distance = distance
+			selected = point
+	if not selected.is_finite():
+		return {"ok": false, "retryable": true, "reason": "spawn_vfx_space_occupied"}
+	return {"ok": true, "position": selected, "landing_distance_m": best_distance}
+
+
+func _choose_spawn_vfx_paths(room: DungeonRoom3D, player_world: Vector3, min_distance: float, occupied: Array[Vector3], candidates: Array[Vector3]) -> Dictionary:
+	var ranked: Array[Dictionary] = []
+	for point in candidates:
+		if room._safe_spawn_geometry_valid(point) and room._safe_spawn_distances_valid(point, player_world, min_distance, occupied):
+			ranked.append({"point":point,"clearance":_spawn_vfx_landing_distance(room,point)})
+	ranked.sort_custom(func(a: Dictionary,b: Dictionary): return a.clearance > b.clearance)
+	for row in ranked:
+		var plan := _plan_spawn_vfx_paths(room, row.point)
+		if not plan.is_empty():
+			return {"ok":true, "position":row.point}
+	return {"ok":false}
+
+
+func _plan_spawn_vfx_paths(room: DungeonRoom3D, world_point: Vector3) -> Dictionary:
+	var center := room.to_local(world_point)
+	for rotation in 16:
+		var yaw := rotation * TAU / 16.0
+		var starts: Array[Vector3] = []
+		var initial_ok := true
+		for index in 5:
+			var angle := TAU * index / 5.0 + yaw
+			var start := Vector3(sin(angle),0,-cos(angle)) * 1.56
+			if not _spawn_vfx_path_clear(room, center + start, center + start):
+				initial_ok = false
+				break
+			starts.append(start)
+		if not initial_ok:
+			continue
+		var paths: Array[Dictionary] = []
+		for index in 5:
+			var start := starts[index]
+			for direction_index in 32:
+				var angle := TAU * index / 5.0 + yaw + direction_index * TAU / 32.0
+				var direction := Vector3(sin(angle),0,-cos(angle))
+				var end := start + direction * 1.86
+				if not _spawn_vfx_path_clear(room, center + start, center + end):
+					continue
+				var world_start := room.global_basis * start
+				paths.append({"start":world_start,"push":world_start + room.global_basis * direction * 0.16,
+					"end":room.global_basis * end,"direction":room.global_basis * direction,
+					"yaw":(-TAU * index / 5.0 if index == 0 or index == 3 else PI * 0.5 - TAU * index / 5.0) - yaw})
+				break
+			if paths.size() != index + 1:
+				break
+		if paths.size() == 5:
+			return {"piece_paths":paths,"forward":Vector3.FORWARD,"layout":"safe_fan"}
+	return {}
+
+
+func _spawn_vfx_path_clear(room: DungeonRoom3D, start: Vector3, end: Vector3) -> bool:
+	# 0.2m步长加半步膨胀覆盖连续线段，任意翻滚包络不依赖采样姿态。
+	const RADIUS := 1.35
+	var sweep := AABB(Vector3(minf(start.x,end.x)-RADIUS,start.y+0.01,minf(start.z,end.z)-RADIUS),
+		Vector3(absf(end.x-start.x)+RADIUS*2.0,SPAWN_VFX_MAX_HEIGHT_M,absf(end.z-start.z)+RADIUS*2.0))
+	for blocker: AABB in room._spawn_blockers:
+		if sweep.intersects(blocker):
+			return false
+	var steps := maxi(1, ceili(start.distance_to(end) / 0.2))
+	for step in steps + 1:
+		var point := start.lerp(end,float(step)/steps)
+		if not room._spawn_floor_contains(point, RADIUS):
+			return false
+		# 可达性网格不是连续地砖判定；不能只验包络中心而漏掉角点落入隔离域。
+		for x in range(-3,4):
+			for z in range(-3,4):
+				if not room._spawn_reach_contains(point + Vector3(x * RADIUS / 3.0,0,z * RADIUS / 3.0)):
+					return false
+	return true
+
+
+func _spawn_vfx_pool() -> Node:
+	return VfxPool
+
+
+func _play_spawn_vfx(asset_id: StringName, room: DungeonRoom3D, enemy: Enemy3D) -> void:
+	var pool: Variant = _spawn_vfx_pool()
+	if pool == null or not pool.has_effect(asset_id):
+		push_warning("EncounterEventHost3D: 入场效果不可用 %s；怪物已交付" % asset_id)
+		return
+	var point := enemy.global_position
+	var forward := dungeon.player.global_position - point if is_instance_valid(dungeon.player) else room.global_position - point
+	forward.y = 0.0
+	if forward.length_squared() < 0.0001:
+		forward = -room.global_basis.z
+	var landing_distance := _spawn_vfx_landing_distance(room, point)
+	var paths: Dictionary = {}
+	if landing_distance < SPAWN_VFX_MIN_DISTANCE_M:
+		paths = _plan_spawn_vfx_paths(room, point)
+		if paths.is_empty():
+			push_warning("EncounterEventHost3D: 无安全表演轨迹，跳过入场效果；固定怪物已交付")
+			return
+	var context := {
+		"seed": enemy.get_persistent_id().hash(),
+		"floor_y": point.y,
+		"forward": forward.normalized(),
+		"landing_distance_m": landing_distance,
+	}
+	context.merge(paths, true)
+	if pool.acquire(asset_id, point, Color.WHITE, 1.0, context) == null:
+		push_warning("EncounterEventHost3D: 入场效果借出失败 %s；怪物已交付" % asset_id)
+
+
+func _spawn_vfx_landing_distance(room: DungeonRoom3D, world_point: Vector3) -> float:
+	var point := room.to_local(world_point)
+	if not room._spawn_floor_contains(point, SPAWN_VFX_ENVELOPE_M):
+		return 0.0
+	var low := 0.0
+	var high := 4.0
+	for _step in 10:
+		var distance := (low + high) * 0.5
+		if room._spawn_floor_contains(point, distance + SPAWN_VFX_ENVELOPE_M):
+			low = distance
+		else:
+			high = distance
+	# 覆盖从初始摆位到落地的整圆扫掠；地板/高于最高家具的顶层不伪装成XZ障碍。
+	for bounds: AABB in room._spawn_blockers:
+		if bounds.end.y <= point.y + 0.01 or bounds.position.y >= point.y + SPAWN_VFX_MAX_HEIGHT_M:
+			continue
+		var nearest := Vector2(
+			clampf(point.x, bounds.position.x, bounds.end.x),
+			clampf(point.z, bounds.position.z, bounds.end.z)
+		)
+		low = minf(low, maxf(0.0, Vector2(point.x, point.z).distance_to(nearest) - SPAWN_VFX_ENVELOPE_M - 0.05))
+	return low
 
 ## 截止只撤回尚未实到的配置；实体、休眠敌人及事件终态仍由各自Owner持有。
 func encounter_event_close_dispatch(instance_id: String) -> Dictionary:

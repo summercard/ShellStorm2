@@ -50,6 +50,9 @@ var _meshes: Array[MeshInstance3D] = []
 ## 每翻一次要重建管线（实测 +80~100ms/次），闪白恰好每次受击翻两次 ⇒ 每打中一下卡一下。
 var _flash_baseline: Array = []
 const FLASH_DURATION := 0.12
+const WARNING_PEAK_ENERGY := 0.35
+const WARNING_EMISSION_COLOR := Color(0.32, 0.55, 0.10)
+var _warning_progress := 0.0
 
 func _ready() -> void:
 	_player = find_child("AnimationPlayer", true, false) as AnimationPlayer
@@ -71,7 +74,7 @@ func _ready() -> void:
 	sync_state("idle", 0.0, 0.0, 1.2, 1.3)
 
 func _process(delta: float) -> void:
-	if _state == "dormant":
+	if _state in ["dormant", "death_warning"]:
 		return
 	_clock += delta
 	_light_time += delta
@@ -81,6 +84,37 @@ func _process(delta: float) -> void:
 	_flash_time = maxf(0.0, _flash_time - delta)
 	# 只推能量，不碰 `emission_enabled`。
 	HitFlash.apply(_materials, _flash_baseline, _flash_time / FLASH_DURATION)
+
+func sync_death_warning(elapsed: float, duration: float) -> void:
+	if _player == null:
+		return
+	_state = "death_warning"
+	_clip = "idle"
+	_sample = 0.0
+	_speed = 0.0
+	_event = ""
+	_flash_time = 0.0
+	_light_time = 1.0
+	_warning_progress = clampf(elapsed / maxf(0.001, duration), 0.0, 1.0)
+	# 采样站姿后只抖表现根，物理根与伤害原点不动。
+	_player.play("idle")
+	_player.seek(0.0, true)
+	for mesh in _meshes:
+		var key := mesh.find_blend_shape_by_name("BellyGroundCompression")
+		if key >= 0:
+			mesh.set_blend_shape_value(key, 0.0)
+	position = Vector3(sin(elapsed * 93.0) * 0.035, 0.0, sin(elapsed * 117.0) * 0.025)
+	rotation.z = sin(elapsed * 105.0) * 0.018
+	# 复用闪白准备好的实例材质和基线，只推uniform，不换材质/管线。
+	for entry in _flash_baseline:
+		var record := entry as Dictionary
+		var material := record["material"] as StandardMaterial3D
+		material.emission = WARNING_EMISSION_COLOR
+		# 前段保留体积明暗，后段再提亮；与1秒玩法时钟单向解耦。
+		var energy := float(record["energy"]) + WARNING_PEAK_ENERGY * _warning_progress * _warning_progress
+		material.emission_energy_multiplier = energy
+		record["written"] = energy
+
 
 func sync_state(
 	state: String, state_time: float, speed: float,

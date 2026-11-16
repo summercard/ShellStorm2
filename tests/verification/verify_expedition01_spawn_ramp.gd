@@ -5,41 +5,46 @@ const SCENE: PackedScene = preload("res://scenes/ExpeditionLevel01_3D.tscn")
 const SEED_VALUE := 77001199
 const BOX_ROOMS := ["room_01", "room_02", "room_05", "room_07", "room_08", "boss"]
 const EXPECTED_BONUS := {
-	"room_01": [0, 0, 0], "room_02": [0, 0, 0],
-	"room_05": [1, 0, 2, 2, 0], "room_07": [2, 2, 2],
-	"room_08": [1, 1, 1, 2, 0], "boss": [0, 0, 0, 0],
+	"room_01": [0, 0, 0, 0], "room_02": [0, 0, 0, 0],
+	"room_05": [1, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0], "room_07": [0, 0, 0, 0, 0, 0, 0],
+	"room_08": [0, 0], "boss": [0, 0, 0, 0],
 }
 const EXPECTED_MULTIPLIER := {
-	"room_01": [1, 1, 1], "room_02": [1, 1, 1],
-	"room_05": [1, 1, 1, 1, 1], "room_07": [1, 1, 1],
-	"room_08": [1, 1, 1, 1, 1], "boss": [1, 1, 1, 1],
+	"room_01": [1, 1, 1, 1], "room_02": [1, 1, 1, 1],
+	"room_05": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], "room_07": [1, 1, 1, 1, 1, 1, 1],
+	"room_08": [1, 1], "boss": [1, 1, 1, 1],
 }
 const WAVE_BOUNDS := {
-	"room_01": [[6, 6]], "room_02": [[7, 8]],
-	"room_05": [[31, 31]], "room_07": [[12, 12]],
-	"room_08": [[16, 17]], "boss": [[4, 4], [5, 5], [1, 2]],
+	"room_01": [[8, 8]], "room_02": [[9, 10]],
+	"room_05": [[39, 39]], "room_07": [[20, 20]],
+	"room_08": [[25, 25]], "boss": [[4, 4], [5, 5], [1, 2]],
 }
 # 历史证据：跨高度整体AABB误封平台时的旧测量，不要求修复后继续偏移。
 const LEGACY_DRIFT_EVIDENCE := {"room_08": {4: 20.0}, "boss": {0: 11.07, 3: 4.81}}
 # 仅08#4保留已登记20m例外；Boss#1允许现有生产就近足量策略在一格内落地。
-const PINNED_DRIFT := {"room_08": {4: 20.0}}
+const PINNED_DRIFT := {}
 const BOSS_LOCAL_SHIFT_LIMIT_M := 5.0
 const TRIGGER_EXPECTED := {
 	"room_03": {"shape": "door_entries", "cap": 8, "waves": [
-		{"ranged_caster": 1, "melee_chaser": 4}, {"fat_zombie03": 1, "ranged_caster": 2, "melee_chaser": 4}, {"fat_zombie03": 2, "ranged_caster": 2, "melee_chaser": 4}]},
+		{"ranged_caster": 1, "melee_chaser": 4}, {"fat_zombie03": 1, "ranged_caster": 2, "melee_chaser": 4},
+		{"fat_zombie03_strong": 1, "fat_zombie03": 2, "ranged_caster": 2, "melee_chaser": 4}, {"fat_zombie03": 2, "ranged_caster": 2, "melee_chaser": 4}]},
 	"room_04": {"shape": "door_entries", "cap": 6, "waves": [
-		{"ranged_caster": 2, "melee_chaser": 4}, {"ranged_caster": 2, "melee_chaser": 4}]},
-	"room_06": {"shape": "door_entries", "cap": 10, "waves": [
-		{"fat_zombie03": 1, "ranged_caster": 2, "melee_chaser": 5},
-		{"fat_zombie03": 1, "melee_chaser_strong": 1, "ranged_caster": 2, "melee_chaser": 5},
-		{"fat_zombie03": 2, "melee_chaser_strong": 1, "ranged_caster_strong": 1, "ranged_caster": 3, "melee_chaser": 6}]},
-	"room_09": {"shape": "door_entries", "cap": 16, "waves": [
-		{"fat_zombie03": 1, "ranged_caster": 3, "melee_chaser": 8},
-		{"fat_zombie03": 2, "melee_chaser_strong": 1, "ranged_caster": 4, "melee_chaser": 9},
-		{"fat_zombie03": 2, "melee_chaser_strong": 2, "ranged_caster_strong": 1, "ranged_caster": 5, "melee_chaser": 10},
-		{"fat_zombie03": 3, "melee_chaser_strong": 3, "ranged_caster_strong": 2, "ranged_caster": 6, "melee_chaser": 10}]},
-	"room_10": {"shape": "door_entries", "cap": 10, "waves": [
-		{"ranged_caster": 2, "melee_chaser": 8}, {"ranged_caster": 2, "melee_chaser_strong": 1, "melee_chaser": 9}]},
+		{"ranged_caster": 2, "melee_chaser": 4}, {"ranged_caster": 2, "melee_chaser": 4},
+		{"fat_zombie03_strong": 1, "fat_zombie03": 2, "ranged_caster": 2, "melee_chaser": 4}, {"ranged_caster": 2, "melee_chaser": 4}]},
+	"room_06": {"shape": "door_entries", "cap": 13, "waves": [
+		{"fat_zombie03": 1, "ranged_caster": 2, "melee_chaser": 7},
+		{"fat_zombie03": 1, "melee_chaser_strong": 1, "ranged_caster": 2, "melee_chaser": 7},
+		{"fat_zombie03_strong": 1, "fat_zombie03": 2, "melee_chaser_strong": 1, "ranged_caster_strong": 1, "ranged_caster": 3, "melee_chaser": 8},
+		{"fat_zombie03": 2, "melee_chaser_strong": 1, "ranged_caster_strong": 1, "ranged_caster": 3, "melee_chaser": 8}]},
+	"room_09": {"shape": "door_entries", "cap": 21, "waves": [
+		{"fat_zombie03": 1, "ranged_caster": 3, "melee_chaser": 11},
+		{"fat_zombie03": 2, "melee_chaser_strong": 1, "ranged_caster": 4, "melee_chaser": 12},
+		{"fat_zombie03_strong": 1, "fat_zombie03": 2, "melee_chaser_strong": 2, "ranged_caster_strong": 1, "ranged_caster": 5, "melee_chaser": 13},
+		{"fat_zombie03": 3, "melee_chaser_strong": 3, "ranged_caster_strong": 2, "ranged_caster": 6, "melee_chaser": 13}]},
+	"room_10": {"shape": "door_entries", "cap": 13, "waves": [
+		{"ranged_caster": 2, "melee_chaser": 11}, {"ranged_caster": 2, "melee_chaser_strong": 1, "melee_chaser": 12},
+		{"fat_zombie03_strong": 1, "fat_zombie03": 2, "ranged_caster": 2, "melee_chaser_strong": 1, "melee_chaser": 12},
+		{"ranged_caster": 2, "melee_chaser_strong": 1, "melee_chaser": 12}]},
 }
 
 class CompilerProbe extends Dungeon3D:
@@ -57,6 +62,26 @@ class CompilerProbe extends Dungeon3D:
 		return out
 	func _make_box_enemy(type_id: String, _floor: int, _level: int, _room: DungeonRoom3D, _encounter: String = "") -> Dictionary:
 		return {"type": type_id}
+
+class TimedHost extends RefCounted:
+	var room_id := ""
+	var live := 0
+	var roster := {}
+	var refused := false
+	func encounter_event_context(_room: String, _instance: String) -> Dictionary:
+		return {"player_alive": true, "run_active": true, "current_room_id": room_id}
+	func encounter_event_live_count(_instance: String) -> int:
+		return live
+	func encounter_event_spawn(_instance: String, _room: String, spec: Dictionary, count: int) -> Dictionary:
+		if refused:
+			return {"ok": false, "retryable": true, "spawned": 0}
+		live += count
+		roster[spec.type] = int(roster.get(spec.type, 0)) + count
+		return {"ok": true, "spawned": count}
+	func encounter_event_close_dispatch(_instance: String) -> Dictionary:
+		return {"ok": true, "dropped": 0}
+	func encounter_event_apply_result(_action: Dictionary) -> Dictionary:
+		return {"ok": true}
 
 var failures: Array[String] = []
 var tower: TowerDescent3D
@@ -398,48 +423,22 @@ func _replay_room(room: DungeonRoom3D, key: String) -> void:
 	print("SPAWN_RAMP_PRODUCTION room=%s waves=%s" % [key, counts])
 
 func _verify_strong_squad_overrides() -> void:
-	var cases := [
-		["room_05", 2, {"melee_chaser": 3, "melee_chaser_strong": 1}],
-		["room_07", 0, {"melee_chaser": 3, "melee_chaser_strong": 1}],
-		["room_08", 3, {"melee_chaser": 3, "ranged_caster_strong": 1}],
-		["boss", 0, {"boss": 1, "melee_chaser_strong": 1, "ranged_caster_strong": 1, "summoner": 1}],
-	]
-	var overrides := 0
 	for key in BOX_ROOMS:
 		var room := tower._room_by_id[key] as DungeonRoom3D
 		for raw: Dictionary in room.spawn_placements:
-			if raw.has("spawn_overrides"):
-				overrides += 1
 			for spawn: Dictionary in _expected_box(raw)["spawns"]:
 				_check(spawn["type"] != "elite", "%s仍声明失效唯一精英槽" % key)
-	_check(overrides == 5, "四个强化替换加05桥心延迟覆盖共五个实例")
-	var bridge := tower._room_by_id["room_05"] as DungeonRoom3D
-	var bridge_entries: Array[Dictionary] = []
-	tower._collect_box_stage_entries(bridge, bridge.spawn_placements, 4, 1, 0, RandomNumberGenerator.new(), bridge_entries)
-	_check(bridge_entries.size() == 16, "桥心延迟覆盖不得改变16只编成")
-	for item: Array in cases:
-		var room := tower._room_by_id[item[0]] as DungeonRoom3D
-		var index := int(item[1])
-		var raw: Dictionary = room.spawn_placements[index]
-		_check(raw.has("spawn_overrides"), "%s#%d实例替换丢失" % [item[0], index])
-		var entries: Array[Dictionary] = []
-		tower._collect_box_stage_entries(room, room.spawn_placements, index, maxi(1, tower.visual_theme.difficulty_rank), _floor_level(room), RandomNumberGenerator.new(), entries)
-		var actual := {}
-		for entry in entries:
-			_check(not bool(entry.get("is_elite", false)) and str(entry.get("type", "")) != "elite", "%s正式编译仍产唯一精英" % item[0])
-			var kind := str(entry.get("enemy_type", entry.get("type", "")))
-			actual[kind] = int(actual.get(kind, 0)) + 1
-		# 概率升级可以升级普通M；明确指定SM/SR必须至少各有声明数量。
-		var required: Dictionary = item[2]
-		_check(entries.size() == 4, "%s#%d强化小队正式编译不是4只：%s" % [item[0], index, actual])
-		for kind: String in required:
-			if kind.ends_with("_strong"):
-				_check(int(actual.get(kind, 0)) >= int(required[kind]), "%s#%d显式强化%s未生效：%s" % [item[0], index, kind, actual])
-		if item[0] == "room_05":
-			_check(actual == required, "05抑制随机升级但指定SM应保留：%s" % actual)
-		if item[0] == "boss":
-			_check(int(actual.get("boss", 0)) == 1 and int(actual.get("summoner", 0)) == 1, "Boss本体/召唤者丢失：%s" % actual)
-		print("SPAWN_RAMP_STRONG_SQUAD room=%s box=%d actual=%s" % [item[0], index, actual])
+				if key != "boss":
+					_check(not str(spawn["type"]).ends_with("_strong"), "%s普通房不得显式指定强化" % key)
+	var boss := tower._room_by_id["boss"] as DungeonRoom3D
+	var entries: Array[Dictionary] = []
+	tower._collect_box_stage_entries(boss, boss.spawn_placements, 0, 1, 0, RandomNumberGenerator.new(), entries)
+	var actual := {}
+	for entry in entries:
+		var kind := str(entry.get("enemy_type", entry.get("type", "")))
+		actual[kind] = int(actual.get(kind, 0)) + 1
+	_check(actual == {"boss": 1, "melee_chaser_strong": 1, "ranged_caster_strong": 1, "summoner": 1}, "Boss显式编成必须保持：%s" % actual)
+	print("SPAWN_RAMP_STRONG_SQUAD ordinary_explicit=0 boss=" + str(actual))
 
 # E/F：旧快照只作历史说明；修复后的契约按真实需求、足量、承重和有限授权域验收。
 func _verify_drift() -> void:
@@ -617,6 +616,7 @@ func _verify_negative_bonus_only() -> void:
 	var room := tower._room_by_id["room_07"] as DungeonRoom3D
 	var probe := CompilerProbe.new()
 	var raw: Dictionary = room.spawn_placements[0].duplicate(true)
+	raw["count_bonus"] = 2
 	var normal: Array[Dictionary] = []
 	probe._collect_box_stage_entries(room, [raw], 0, 1, 0, RandomNumberGenerator.new(), normal)
 	_check(normal.size() == 4, "负向前提：继承正式编译正对照不是4只")
@@ -647,6 +647,7 @@ func _verify_endpoints_and_negative_controls() -> void:
 				endpoint_boxes += 1
 	var room := tower._room_by_id["room_07"] as DungeonRoom3D
 	var raw: Dictionary = room.spawn_placements[0].duplicate(true)
+	raw["count_bonus"] = 2
 	var bad := probe._box_placement_at([raw], 0)
 	_check(int(bad.get("box_count_bonus", -1)) == 2, "端点替身继承生产映射正对照失败")
 	probe.drop_bonus = true
@@ -700,13 +701,13 @@ func _verify_trigger_encounters() -> void:
 		_check(room.spawn_placements.is_empty(), "%s触发房残留盒子" % key)
 		_verify_trigger_shape(key, room, e.get("trigger", {}), expected)
 		var compiled := tower._build_room_encounter_config(room)
-		_check(float(e.get("duration_sec", -1)) == 60.0 and compiled.get("duration_sec", -1) == 60.0, "%s60秒总时长透传失败" % key)
+		_check(float(e.get("duration_sec", -1)) == 40.0 and compiled.get("duration_sec", -1) == 40.0, "%s40秒总时长透传失败" % key)
 		_check(compiled.get("deadline_behavior") == "close_dispatch_and_clear" and compiled.get("repeat_last_stage") == true, "%s截止/重复末批契约漂移" % key)
 		for field in ["completion", "stage_advance"]:
 			_check(e.get(field) == "clear" and compiled.get(field) == "clear", "%s:%s不是clear" % [key, field])
 		_check(bool(e.get("seal_room", false)) and bool(e.get("light_on_finish", false)) and bool(e.get("hunt_player", false)), "%s封门/开灯/猎杀开关漂移" % key)
 		_check(bool(e.get("hud_countdown", false)) and bool(compiled.get("hud_countdown", false)), "%s准备HUD开关未透传" % key)
-		_check(compiled.get("preparation_sec") == 0.0 and compiled.get("freeze_player_sec") == 0.0, "%s触发后应立即计时并保留玩家输入" % key)
+		_check(compiled.get("preparation_sec") == 0.0 and compiled.get("freeze_player_sec") == 1.0, "%s须先独立冻结1秒再开始40秒窗口" % key)
 		_check(compiled.get("remote_spawn_policy") == "opposite_entry" and str(e.get("spawn_origin_port_id", "")).is_empty(), "%s远端必须按实际入口决定" % key)
 		for field in ["alert_style", "alert_text", "alert_beep_interval_sec", "alert_pulse"]:
 			_check(compiled.has(field) and compiled[field] == e[field], "%s:%s告警键未透传" % [key, field])
@@ -720,8 +721,51 @@ func _verify_trigger_encounters() -> void:
 				actual[monster["type"]] = int(actual.get(monster["type"], 0)) + int(monster["count"])
 			_check(actual == expected["waves"][i], "%s波%d生产编成%s!=%s" % [key, i, actual, expected["waves"][i]])
 		_check(float(stages[0].get("at_sec", -1)) == 2.0, "%s首波延时应为2秒" % key)
+		_check(stages[2]["monsters"][0].get("spawn_vfx_asset_id", "") == "VFX-FAT-ENTRY-BREACH-3D", "%s第三波表现字段生产透传缺失（由主线程补齐）" % key)
+		_verify_timed_schedule(key, compiled)
 		if key == "room_03":
 			_check(stages[1]["monsters"][0].get("min_player_distance_m") == 8.0, "第二批首胖8米丢失")
+
+func _verify_timed_schedule(key: String, config: Dictionary) -> void:
+	var host := TimedHost.new()
+	host.room_id = key
+	var director := EncounterEventDirector3D.new(host)
+	var started := director.start(config)
+	_check(bool(started.get("ok", false)), "%s正式Director拒绝编成：%s" % [key, started])
+	if not bool(started.get("ok", false)):
+		return
+	var id := str(started.instance_id)
+	director.tick(1.0)
+	_check(host.live == 0 and director.get_snapshot(id).elapsed == 0.0, "%s独立冻结不计入battle" % key)
+	director.tick(1.99)
+	_check(host.live == 0, "%s第2秒前不得派发" % key)
+	director.tick(0.02)
+	for _index in 10:
+		director.tick(0.01)
+	_check(host.live > 0 and int(host.roster.get("fat_zombie03_strong", 0)) == 0, "%s未清首批不得进入第三波" % key)
+	for _index in 180:
+		host.live = 0
+		director.tick(0.05)
+	_check(int(host.roster.get("fat_zombie03_strong", 0)) == 1, "%s快速清批后第三波强化胖子只能一次" % key)
+	_check(int(director.get_snapshot(id).get("repeat_stage_sequence", 0)) > 1, "%s普通末模板必须重复" % key)
+	director.tick(40.0)
+	var count_before := host.roster.duplicate(true)
+	for _index in 5:
+		host.live = 0
+		director.tick(1.0)
+	_check(host.roster == count_before and bool(director.get_snapshot(id).dispatch_closed), "%s40秒截止后不得补发" % key)
+	var slow_host := TimedHost.new()
+	slow_host.room_id = key
+	var slow := EncounterEventDirector3D.new(slow_host)
+	var slow_start := slow.start(config)
+	if bool(slow_start.get("ok", false)):
+		slow.tick(1.0)
+		slow.tick(2.1)
+		slow.tick(40.0)
+		slow_host.live = 0
+		slow.tick(1.0)
+		_check(int(slow_host.roster.get("fat_zombie03_strong", 0)) == 0, "%s未清前批到截止不补第三波" % key)
+	print("SPAWN_RAMP_TIMED room=%s third_once=%d repeat=%d deadline_closed=%s" % [key, host.roster.get("fat_zombie03_strong", 0), director.get_snapshot(id).get("repeat_stage_sequence", 0), director.get_snapshot(id).dispatch_closed])
 
 func _verify_legacy_trigger_compatibility() -> void:
 	var room := tower._room_by_id["room_03"] as DungeonRoom3D

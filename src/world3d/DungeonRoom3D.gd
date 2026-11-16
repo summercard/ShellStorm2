@@ -6707,6 +6707,7 @@ func _restore_reactive_props() -> void:
 
 
 func _request_furnishing_navigation_refresh() -> void:
+	_furnishing_navigation_dirty = true
 	if _furnishing_navigation_refresh_queued:
 		return
 	_furnishing_navigation_refresh_queued = true
@@ -6737,7 +6738,7 @@ func _refresh_furnishing_navigation() -> void:
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	_furnishing_navigation_refresh_queued = false
-	if not is_inside_tree() or not _detail_built:
+	if not is_inside_tree() or not _detail_built or not _furnishing_navigation_dirty:
 		return
 	_collect_spawn_blockers()
 	var build_started_usec := Time.get_ticks_usec()
@@ -6754,7 +6755,10 @@ func _refresh_furnishing_navigation() -> void:
 		_navigation_ports = connection_ports.duplicate(true)
 		_spawn_reach_evaluated = false
 		_spawn_reach_probe_frame = -1
-	_build_runtime_navigation_surface(get_dimensions())
+	# 输入未变化时仍需为新 RuntimeDetail 挂一次 Region；但同一 detail 的重复请求
+	# 不再重复收集、重建或提交导航面。
+	_build_runtime_navigation_surface(dimensions)
+	_furnishing_navigation_dirty = false
 	set_meta("furnishing_navigation_refresh_count", int(get_meta("furnishing_navigation_refresh_count", 0)) + 1)
 	# 单次重建耗时（毫秒）。detail 是流送时逐房重建的，这个数是**进房卡顿**的直接成本，
 	# 留给探针与验收读，避免以后再靠"感觉有点卡"来判断。

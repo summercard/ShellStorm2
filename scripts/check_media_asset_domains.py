@@ -17,7 +17,9 @@ EXPECTED = {
         "file": "ShellStorm2_UI账本_v001.xlsx",
         "category": "UI",
         "skill": "ui-asset-pipeline",
-        "count": 21,
+        # 2026-11-16 approved additions: shared weapon board + fate hologram host.
+        "count": 23,
+        "required_additions": {"UI-WEAPON-BUILD-BOARD", "UI-FATE-HOLOGRAM-PRESENTATION"},
         "initial_count": 16,
         "tests": ["verify_hud_presenter_3d", "verify_pause_game_save_reset_flow", "verify_gamepad_input_flow"],
     },
@@ -98,6 +100,9 @@ def main() -> int:
             if values[0] not in (None, ""):
                 rows.append(values)
         totals[key] = len(rows)
+        present_ids = {str(values[0]).strip() for values in rows}
+        for required_id in sorted(expected.get("required_additions", set()) - present_ids):
+            issues.append(f"{key}: approved asset missing: {required_id}")
         if len(rows) != expected["count"]:
             issues.append(f"{key} row count: expected {expected['count']}, got {len(rows)}")
         for values in rows:

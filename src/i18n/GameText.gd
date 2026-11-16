@@ -88,6 +88,13 @@ static func text(key: String, args: Array = []) -> String:
 	return _format(_lookup("ui", key), args)
 
 
+## 已装武器命运卡的作用摘要；缺项显示本地化占位，不解析或截断卡牌描述。
+static func fate_effect_brief(stable_card_id: String, reversed: bool = false) -> String:
+	var key := stable_card_id + (".reversed" if reversed else ".upright")
+	var hit := _lookup("fate_effect_brief", key)
+	return text("fate.effect_brief_unknown") if hit == key or hit.is_empty() else hit
+
+
 ## 节点类型枚举键：GUN_BODY / BULLET / ATTACHMENT
 static func node_type_key_name(type_key: String) -> String:
 	return _lookup("node_type", type_key)

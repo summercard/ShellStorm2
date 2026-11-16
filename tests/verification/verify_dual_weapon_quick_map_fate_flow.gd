@@ -198,11 +198,16 @@ func _ready() -> void:
 	_expect(dungeon.get("_weapon_panel") == null, "Hidden weapon presentation page was eagerly added to the fixed HUD shell", failures)
 	await _press_key(KEY_K)
 	var weapon_panel := dungeon.get("_weapon_panel") as WeaponAssemblyTreePanel
+	# 全息展开使用投影枢轴；布局居中应在真实开场变换收束后取样。
+	var panel_deadline := Time.get_ticks_msec() + 6000
+	while weapon_panel != null and weapon_panel.has_meta("weapon_hologram_tween") and Time.get_ticks_msec() < panel_deadline:
+		await get_tree().process_frame
+	_expect(weapon_panel != null and not weapon_panel.has_meta("weapon_hologram_tween"), "K页展开未在6000ms内收束", failures)
 	var viewport_center := Vector2(dungeon.get_viewport().get_visible_rect().size) * 0.5
 	_expect(
 		weapon_panel != null
 		and weapon_panel.visible
-		and is_equal_approx(weapon_panel.anchor_left, 0.5)
+		and is_equal_approx(weapon_panel.anchor_left, 0.0)
 		and weapon_panel.get_global_rect().get_center().distance_to(viewport_center) <= 1.0,
 		"K weapon presentation page is not centered",
 		failures

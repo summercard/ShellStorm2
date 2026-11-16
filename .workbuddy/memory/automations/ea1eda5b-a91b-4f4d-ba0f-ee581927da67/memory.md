@@ -5,6 +5,19 @@
 
 ## 执行历史
 
+### 2026-11-16 05:00 — **内容已上线，线上校验不通过（第十七天同一卡点：需登录门禁）**；首轮因**冒烟脚本 GBK 编码崩溃**假红中止
+- 首轮全流程：导出 392.0 MiB 一次过 → 两道静态门禁绿 → **第 3 道冒烟退出码 1 ⇒ 按硬约束中止，未发布**。根因已复现证实：`smoke_exported_pack.py:135` 的 `print("[存档] ✅ …")` 在 stdout=GBK 时抛 `UnicodeEncodeError: 'gbk' codec can't encode '\u2705'`；同次 headless 退出码 0、禁用字样 0 条 ⇒ **包没问题，是脚本打印 emoji 崩溃**。处置：不动门禁，仅 `PYTHONIOENCODING=utf-8`+`PYTHONUTF8=1` 后 `--skip-build` 重跑 → 三道真跑全绿 → 发布成功。**同一 exe 修编码后连续 5 次 `SMOKE_OK`。**
+- 包：**411,081,248 B / 392.0 MiB**，SHA256 `2f4c02dfdceb156bd9bb4e3d983244ab74e6ac698d79317583edc92ab69c069f`，比 11-15 版 **−7,199,728 B（−6.87 MiB）**。exe mtime 05:04:13。工作区开工/收工均 3 项（`_probe_loop.txt`、`override.cfg.disabled_20261109`、`verify_main_story_boss_gate.report.json`），HEAD `e81c3bc5`（11-16 04:03，38 项）。
+- **体积下降已归因**：本窗口三条资产减面提交真落库 —— 十三组件正式导入 119,720→15,240 三角、九件 v034 50,148→6,180（−87.68%）、远征03 五件 87,128→1,978 等；无删除记录。
+- 线上已被本版覆盖：`Files: 3` / `Bytes: 411,093,606` ＝ 本地三件（411,081,248 + 7,430 + 4,928）**逐字节相等**；`server-sites` 本站仍 `392.0 MiB / 需登录 / 私有 / 2 人 2 次`，全站仍 6 资源、Site ID 不变 ⇒ 未新建。
+- **卡点不变**：直链 / 更新页均 302 → `/oauth/feishu?rd=…&src=site`。未改策略、未删校验。闭环依据仍是字节总和 + 站点记录不变。
+- 5 条全为 11-15：远征03五组件减面、远征01 room_08 中庭自动贩卖机、先推十三件再导九件 v034、十三组件正式导入与重排、十三组件减面候选与自检（**末条 11-15 已发布过，按日期粒度重计**）⇒ 真新增 4 条。提交 3 条（`e81c3bc5`/`549940d4`/`ab4152d5`，另 1 折叠），未提交 3 项。
+- **采集器缺陷本轮未复现**：5 个 `<h3>` 标题全部完整，未被 `·` 或 `**…**` 冒号切断（此前连续五日复现）。
+- 合规：`config/name="弹壳风暴2"` 未动（`git diff project.godot` 空）；未 commit/push；未新建站点；`scripts/web_release.py` 不存在、未跑；发布目录仅 3 件；真实存档 `base_save.json` mtime 11-15 22:48:01（早于流水线 05:04）。
+- 环境：C 盘 59.5 G 空闲；`_isolated_smoke` 已清空。
+- 报告：`ShellStorm2-work\_logs\发布报告_2026-11-16.md`；日志 `_logs\daily_release_2026-11-16.log` + `_run2.log`（run2 才是成功那轮）。
+- **待业主（连续第十七天）**：①请管理员把本站 `access` 改 `public`；②`smoke_exported_pack.py` 的 `✅/❌` 在 GBK 控制台会假红，建议去 emoji 或 `sys.stdout.reconfigure(errors="replace")`；③采集器按日期粒度重计旧条目仍未修。
+
 ### 2026-11-15 05:01 — **内容已上线，线上校验不通过（第十六天同一卡点：需登录门禁）**
 - 全流程一次过：导出 398.9 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档（**CHANGELOG 2 条**）→ 覆盖发布 3 files → **`verify_online` 判 302 失败，退出码 1**。4m28s，无重试。
 - 包：**418,280,976 B / 398.9 MiB**，SHA256 `9ca092eba7ee84580441920c0e110ff877f0222dad760f2f3bb75286e5b80986`，比 11-14 版 **−3,682,000 B（−3.51 MiB）**。exe mtime 05:04:49。工作区开工/收工均 3 项（`_probe_loop.txt`、`override.cfg.disabled_20261109`、`verify_main_story_boss_gate.report.json`），HEAD `bf850456`（11-15 04:03，32 项）。
