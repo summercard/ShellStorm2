@@ -313,6 +313,7 @@ func _register_weapon_drops() -> void:
 			"rarity": "common",
 			"stack_max": 1,
 			"tags": ["weapon", "gun_body", "pistol"],
+			"fate_slot_capacity": 4,
 			# 2026-10-18 枪械产出收口：普通怪池（loot_floor_* / loot_abyss）**不再含远程枪械**。
 			# 枪只从 Boss / 强化怪 / 精英 / 搜刮容器出，普通怪只能掉近战（见文件末尾说明）。
 			"floor_loot_weights": {

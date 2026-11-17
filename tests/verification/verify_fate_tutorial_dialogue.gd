@@ -3,6 +3,7 @@ extends Node
 const DUNGEON := preload("res://scenes/Dungeon3D.tscn")
 const DROP := "nar_tutorial_fate_drop_01"
 const OPEN := "nar_tutorial_fate_open_01"
+const ASSEMBLED := "nar_tutorial_fate_assembled_01"
 const STAGE := preload("res://assets/art/ui/dialogue/dialogue_portrait_stage.tscn")
 var _host: Dungeon3D
 var _player: Player3D
@@ -80,6 +81,7 @@ func _ready() -> void:
 		_recording = true
 	await _drop_suite()
 	await _offer_suite()
+	await _assembled_suite()
 	await _dialogue_suite()
 	await _history_suite()
 	_finish()
@@ -174,11 +176,13 @@ func _complete(id: String, capture_name := "") -> void:
 	var seen: Array[int] = []
 	var session := ""
 	var duo := false
+	var spoken: Array[String] = []
 	while NarrativeDirector.active_id() == id and Time.get_ticks_msec() < deadline:
 		if DialogueUI.is_active():
 			var index := DialogueUI.current_line_index()
 			if not seen.has(index):
 				seen.append(index)
+				spoken.append(DialogueUI.current_text())
 				_check(not BaseManager.has_narrative_completed(id), "末句回执之前history始终false：%s/%d" % [id, index])
 			var current := _portrait()
 			if session.is_empty():
@@ -196,7 +200,9 @@ func _complete(id: String, capture_name := "") -> void:
 				current = _portrait()
 				_check_duo(current, "hologram")
 				_evidence[id + "_duo"] = current
-				if not capture_name.is_empty():
+				DialogueUI.reveal_all()
+				_check(not DialogueUI.is_typing() and DialogueUI.visible_char_count() >= DialogueUI.total_char_count(), "双人截图前当前台词全文显示")
+				if not capture_name.is_empty() and id != ASSEMBLED:
 					await _capture(capture_name)
 					if id == DROP:
 						await _capture("portrait_detail")
@@ -204,8 +210,20 @@ func _complete(id: String, capture_name := "") -> void:
 			elif index > 1:
 				_check(not bool((current.left as Dictionary).entering) and not bool((current.right as Dictionary).entering), "同session换句双方不再enter")
 			DialogueUI.reveal_all()
+			if id == ASSEMBLED:
+				_check(not DialogueUI.is_typing() and DialogueUI.visible_char_count() >= DialogueUI.total_char_count(), "护枪关键词截图前全文显示")
+				if DialogueUI.current_text().contains("独一无二"):
+					_check_duo(_portrait(), "hologram")
+					await _capture("assembled_hologram_duo")
+				if DialogueUI.current_text().contains("保护好") and DialogueUI.current_text().contains("K"):
+					_check_duo(_portrait(), "hologram")
+					await _capture("assembled_k_hint")
 			DialogueUI.advance()
 		await get_tree().process_frame
+	if id == ASSEMBLED:
+		var text := "\n".join(spoken)
+		_check(text.contains("独一无二") and text.contains("保护好") and text.contains("组合") and text.contains("射击") and text.contains("K"), "护枪实际经过台词包含独一无二/保护/组合功能/K四信息点")
+		_evidence["assembled_spoken_lines"] = spoken
 	_check(NarrativeDirector.active_id() != id, "逐句advance真实收口：" + id)
 	await get_tree().process_frame
 	var expected: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(NarrativeCatalog.path_for(id)))
@@ -293,6 +311,151 @@ func _offer_suite() -> void:
 	_profile_guard("open完成", 2)
 	_host.call("_cancel_door_fate_selection")
 	await _wait(func() -> bool: return not bool(_host.get("_door_fate_active")) and not _player.input_locked, "原modal正常退出后才解锁")
+
+func _purchase_idle() -> bool:
+	return not bool(_host.get("_fate_purchase_busy")) and not bool(_host.get("_fate_feedback_locked"))
+
+func _answer(accepted: bool) -> void:
+	var confirm := _host.get("_fate_confirm") as Control
+	if not is_instance_valid(confirm):
+		_check(false, "真实确认控件存在")
+		return
+	for node: Node in confirm.find_children("*", "Button", true, false):
+		if (node as Button).text == ("是" if accepted else "否"):
+			(node as Button).pressed.emit()
+			return
+	_check(false, "真实确认按钮存在")
+
+func _claim_fixture(id: String, cards: Array[FateCard]) -> void:
+	var pickup := _spawn(id)
+	if pickup == null:
+		return
+	await _wait(func() -> bool: return pickup.is_pickup_available(), "新真实pickup落稳")
+	_player.global_position = pickup.global_position
+	_check(pickup.perform_interaction(_player, pickup.get_interaction_candidate(_player)), "正式pickup认领：" + id)
+	await _wait(_offer_ready, "原随机offer稳定")
+	# 仅冻结测试候选输入；认领、事务、回执、退场始终走正式宿主。
+	var choices: Array = _host.get("_door_fate_choices")
+	choices.assign(cards)
+	var quotes: Dictionary = {}
+	for card: FateCard in cards:
+		quotes[card.get_stable_card_id()] = int(Dungeon3D.FATE_PRICE_BY_RARITY[int(card.card_rarity)])
+	_host.set("_fate_door_quote", quotes)
+	_host.call("_build_door_fate_overlay")
+	await _wait(_offer_ready, "冻结候选正式翻面稳定")
+	_check(str(_host.get("_fate_offer_source")) == "pickup" and bool((_host.get("_fate_pickup_claimed") as Dictionary).get(id, false)), "新offer保留正式认领证据")
+
+func _buy(index: int, accepted := true) -> void:
+	var choices: Array = _host.get("_door_fate_choices")
+	var card := choices[index] as FateCard
+	((_host.get("_fate_choice_buttons") as Array)[index] as Button).pressed.emit()
+	if card.scope == FateCard.Scope.WEAPON:
+		if not await _wait(func() -> bool: return is_instance_valid(_host.get("_fate_confirm")), "真实不可逆确认"):
+			return
+		_answer(accepted)
+	await _wait(_purchase_idle, "真实购买或取消完整反馈")
+
+func _exit_without_assembled(label: String) -> void:
+	var requests := int(_state().request_count)
+	_host.call("_cancel_door_fate_selection")
+	await _wait(func() -> bool: return not bool(_host.get("_door_fate_active")) and not is_instance_valid(_host.get("_fate_overlay")), label + "原主动退场完成")
+	await get_tree().create_timer(0.5).timeout
+	_check(not BaseManager.has_narrative_completed(ASSEMBLED) and NarrativeDirector.active_id() != ASSEMBLED and int(_state().request_count) == requests, label + "不触发护枪且无history")
+
+func _assembled_suite() -> void:
+	_phase = "E真实护枪购买与退场凭证"
+	_check(_player.get_equipped_weapon_instance().weapon_content_id == "weapon_pistol" and _player.get_equipped_weapon_instance().fate_slot_capacity == 4, "真实教程普通pistol必须4巢")
+	_check(not bool(_state().pending_assembly) and not BaseManager.has_narrative_completed(ASSEMBLED), "前段无购买原退出不触发护枪")
+	var original_item := _player.get_equipped_weapon_item().duplicate(true)
+	var original_money := GameManager.currency
+	var purchase_weapon := WeaponInstance.from_item(ItemRegistry.get_instance().get_item("weapon_pistol"))
+	_check(bool(_player.equip_weapon_item(purchase_weapon.to_item_dictionary()).get("success", false)), "购买夹具使用独立新pistol，不把同ID旧快照当缓存回滚")
+	_evidence["fixture_restore_root_cause"] = "首轮购买直接复用原枪ID，结尾用购买前快照重装会命中同ID已刻印运行树缓存；改用独立新pistol，原枪及全量守恒断言不变。首轮证据20261117_110650_8ab3ba。"
+	GameManager.add_currency(9999)
+	await _claim_fixture("fate:qa:scope_only", [FateCardPresets.overclock(), FateCardPresets.fate_extra_loot(), FateCardPresets.fate_bless_dead()])
+	await _buy(1)
+	await _buy(2)
+	_check(bool((_host.get("_door_fate_purchased") as Array)[1]) and bool((_host.get("_door_fate_purchased") as Array)[2]) and not bool(_state().pending_assembly), "仅月日真实购买不生成护枪实证")
+	await _exit_without_assembled("仅月日")
+	await _claim_fixture("fate:qa:assembled", [FateCardPresets.overclock(), FateCardPresets.chain_lightning(), FateCardPresets.gun_on_gun()])
+	var offer_id := int(_state().offer_id)
+	var generation := int(_state().generation)
+	var pickup_id := str(_host.get("_fate_offer_pickup_id"))
+	var money := GameManager.currency
+	var item := _player.get_equipped_weapon_item().duplicate(true)
+	await _buy(0, false)
+	_check(GameManager.currency == money and _player.get_equipped_weapon_item() == item and not bool(_state().pending_assembly), "确认否不生成实证且金币物品不变")
+	# 失败回执、未认领、伪成功但无领域刻印，负测必须明确拒绝。
+	var card := FateCardPresets.overclock()
+	for invalid in [{"success": false}, {"success": true, "weapon_instance_id": _player.get_equipped_weapon_instance_id(), "slot_index": 1}]:
+		_check(not bool(_controller.call("notify_weapon_assembled", pickup_id, offer_id, generation, card, invalid)), "无真实刻印的失败/伪成功回执被拒绝")
+	_check(not bool(_controller.call("notify_weapon_assembled", "not_claimed", offer_id, generation, card, {"success": true})), "未认领回执被拒绝")
+	_host.call("_on_door_fate_selected", 2)
+	if await _wait(func() -> bool: return is_instance_valid(_host.get("_fate_confirm")), "失败来源确认"):
+		_answer(true)
+		if await _wait(func() -> bool: return FateCardGameBridge.get_node_or_null("FateSourceSelectionPanel") != null, "真实来源选择"):
+			FateCardGameBridge.get_node("FateSourceSelectionPanel").call("cancel")
+			await _wait(_purchase_idle, "失败来源退款完成")
+	_check(GameManager.currency == money and _player.get_equipped_weapon_item() == item and not bool(_state().pending_assembly), "真实取消失败退款不生成护枪证据")
+	await _buy(0)
+	_check(bool((_host.get("_door_fate_purchased") as Array)[0]) and bool(_state().pending_assembly) and not bool(_state().exit_ready), "正式WEAPON成功留下真实待播证据而非手工notify")
+	_check(bool(_host.get("_door_fate_active")) and not NarrativeDirector.is_playing() and not bool(_state().locked), "买枪卡后offer仍可继续买且不抢播")
+	await _buy(1)
+	_check(_player.get_equipped_weapon_instance().fate_upgrades.size() == 2 and bool((_host.get("_door_fate_purchased") as Array)[1]), "同offer第二张WEAPON真实成功仍可多买")
+	var saved: Dictionary = _host.call("_export_door_fate_snapshot")
+	_evidence["assembled_actual_purchases"] = {"before_item": item, "after_item": _player.get_equipped_weapon_item().duplicate(true), "money_before": money, "money_after": GameManager.currency, "offer": saved}
+	var requests := int(_state().request_count)
+	_host.call("_close_door_fate_overlay")
+	await get_tree().create_timer(0.5).timeout
+	_check(NarrativeDirector.active_id() != ASSEMBLED and not bool(_state().exit_ready) and int(_state().request_count) == requests, "有真实成功但硬close不触发")
+	# 丢弃旧controller内存，验证activeoffer已购位能独立恢复证据。
+	_host.remove_child(_controller)
+	_controller.queue_free()
+	_host.set("_fate_tutorial", null)
+	_host.call("_install_fate_tutorial")
+	_controller = _host.get("_fate_tutorial") as Node
+	_check(not bool(_state().pending_assembly), "新controller无旧待播内存")
+	var decoded: Dictionary = JSON.parse_string(JSON.stringify(saved))
+	_check(bool(_host.call("_import_door_fate_snapshot", decoded)), "已购activeoffer真实JSON恢复")
+	_host.call("_restore_pending_door_fate_overlay")
+	await _wait(_offer_ready, "已购offer恢复表现稳定")
+	_check(_same_offer(saved, _host.call("_export_door_fate_snapshot"), "assembled_restore"), "已购位/报价/卡面/offerID恢复不重抽")
+	_check(bool(_state().pending_assembly) and str(_state().weaponid) == _player.get_equipped_weapon_instance_id() and not bool(_state().exit_ready), "恢复后真实已购位独立恢复护枪证据")
+	var assembled_item := _player.get_equipped_weapon_item().duplicate(true)
+	var assembled_money := GameManager.currency
+	var removed := _player.unequip_weapon_item()
+	_check(bool(removed.get("success", false)), "所有权负测真实卸下同枪且不放入库存")
+	_host.call("_cancel_door_fate_selection")
+	_check(bool(_host.get("_door_fate_active")) and NarrativeDirector.active_id() != ASSEMBLED and not bool(_state().exit_ready), "原主动退场动画尚未结束绝不护枪起播")
+	await _wait(func() -> bool: return not bool(_host.get("_door_fate_active")) and not is_instance_valid(_host.get("_fate_overlay")), "原offer所有卡与board全部收拢清理")
+	await get_tree().create_timer(0.5).timeout
+	_check(bool(_state().exit_ready) and NarrativeDirector.active_id() != ASSEMBLED and not BaseManager.has_narrative_completed(ASSEMBLED), "原退出完成但同枪所有权丢失不播")
+	_check(bool(_player.equip_weapon_item(assembled_item).get("success", false)), "归还同一真实购买枪")
+	if await _wait(func() -> bool: return NarrativeDirector.active_id() == ASSEMBLED and DialogueUI.is_active(), "恢复同枪后护枪真实起播"):
+		_check(not bool(_host.get("_door_fate_active")) and not is_instance_valid(_host.get("_fate_overlay")), "护枪起播时原offer彻底消失")
+		NarrativeDirector.abort("qa_assembled_abort")
+		_check(not BaseManager.has_narrative_completed(ASSEMBLED), "护枪abort未完整播放不写history")
+		await _wait(func() -> bool: return NarrativeDirector.active_id() == ASSEMBLED and DialogueUI.is_active(), "护枪abort同一实证可retry")
+		await _complete(ASSEMBLED, "assembled_hologram_duo")
+	await _wait(func() -> bool: return str(_portrait().session_id).is_empty() and not _player.input_locked, "护枪完整退场释放输入")
+	await _capture("assembled_released")
+	_check(GameManager.currency == assembled_money and _player.get_equipped_weapon_item() == assembled_item, "护枪完整run不改变金币物品容量卡片全字段")
+	var repeat_count := int(_state().request_count)
+	await _claim_fixture("fate:qa:assembled_history", [FateCardPresets.overclock(), FateCardPresets.chain_lightning(), FateCardPresets.gun_on_gun()])
+	await _buy(0)
+	_host.call("_cancel_door_fate_selection")
+	await _wait(func() -> bool: return not bool(_host.get("_door_fate_active")), "同护枪history再次真实购卡退出")
+	await get_tree().create_timer(0.5).timeout
+	_check(int(_state().request_count) == repeat_count and not NarrativeDirector.is_playing(), "重复history即使再次真实购买也不播")
+	# 仅撤销本专项明确制造的金币/装备输入，领域购买证据已保留在result。
+	_player.unequip_weapon_item()
+	_check(bool(_player.equip_weapon_item(original_item).get("success", false)), "归还前段原始装备夹具")
+	var delta := GameManager.currency - original_money
+	if delta > 0:
+		GameManager.spend_currency(delta)
+	elif delta < 0:
+		GameManager.add_currency(-delta)
+	_profile_guard("assembled完成", 3)
 
 func _same_offer(a: Dictionary, b: Dictionary, label: String) -> bool:
 	var fields: Dictionary = {}
@@ -471,11 +634,11 @@ func _history_suite() -> void:
 		_host.call("_cancel_door_fate_selection")
 		await _wait(func() -> bool: return not bool(_host.get("_door_fate_active")), "同历史offer退出")
 	_check(bool(BaseManager.call("_finish_room_writes", true)), "结束writer barrier")
-	_profile_guard("全部专项结束", 2)
+	_profile_guard("全部专项结束", 3)
 	var profile := BaseManager.get_profile_snapshot()
 	_check(profile.get("tutorial_completed") == _baseline.get("tutorial_completed"), "旧天台tutorial_completed独立不改")
 	_evidence["narrative_finished"] = _finished
-	for id in [DROP, OPEN]:
+	for id in [DROP, OPEN, ASSEMBLED]:
 		var normal := 0
 		for entry: Dictionary in _finished:
 			if entry.id == id and str(entry.reason) in ["flow.end", "duration"]:
@@ -487,18 +650,21 @@ func _profile_guard(label: String, expected_count: int) -> void:
 	var now := BaseManager.get_profile_snapshot().duplicate(true)
 	var changes := _diff(_baseline, now)
 	_evidence[label + "_all_profile_changes"] = changes
-	var allowed := ["/narrative_history", "/save_revision", "/last_saved_at_unix", "/last_save_reason"]
+	var allowed := ["/save_revision", "/last_saved_at_unix", "/last_save_reason"]
+	for id in [DROP, OPEN, ASSEMBLED]:
+		allowed.append("/narrative_history/" + id)
+		for field in ["completed_count", "first_completed_unix", "last_completed_unix", "last_result"]:
+			allowed.append("/narrative_history/" + id + "/" + field)
 	for change: Dictionary in changes:
-		var known := false
-		for prefix: String in allowed:
-			if str(change.path) == prefix or str(change.path).begins_with(prefix + "/"):
-				known = true
-		_check(known, label + "存档不得吞差：" + str(change.path))
+		_check(str(change.path) in allowed, label + "存档不得吞差：" + str(change.path))
 	var history := now.get("narrative_history", {}) as Dictionary
-	_check(history.size() == expected_count, label + "历史仅预期两教程前缀")
+	_check(history.size() == expected_count, label + "历史仅预期三段教程")
 	for id: String in history:
-		_check(id in [DROP, OPEN], label + "无额外历史：" + id)
+		_check(id in [DROP, OPEN, ASSEMBLED], label + "无额外历史：" + id)
+		var record := history[id] as Dictionary
+		_check(record.size() == 4 and record.has_all(["completed_count", "first_completed_unix", "last_completed_unix", "last_result"]) and int(record.completed_count) == 1 and str(record.last_result) in ["flow.end", "duration"], label + "history列严格白名单与完整run：" + id)
 	_check(str(now.get("last_save_reason", "")).begins_with("narrative_completed:"), label + "保存元数据来自真实教程完成")
+	_evidence[label + "_runtime_conservation"] = {"money_before": _money, "money_after": GameManager.currency, "weapon_changes": _diff(_weapon, _player.get_equipped_weapon_item())}
 	_check(GameManager.currency == _money and _player.get_equipped_weapon_item() == _weapon, label + "金币与武器全量快照不变")
 	var disk: Variant = JSON.parse_string(FileAccess.get_file_as_string(BaseManager.save_path)) if FileAccess.file_exists(BaseManager.save_path) else null
 	_evidence[label + "_disk"] = disk

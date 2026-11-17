@@ -240,7 +240,10 @@ func begin_presentation(session_id: String, participants: Array = [], options: D
 	_explicit_presentation = true
 	# 新显式会话接管表现；旧自动 run 的结束不能再关闭它。
 	_run_auto_presentation = false
-	return _portrait_stage.begin_presentation(session_id, participants, options)
+	var presentation_options := options.duplicate(true)
+	if not presentation_options.has("portraits_enabled"):
+		presentation_options["portraits_enabled"] = true
+	return _portrait_stage.begin_presentation(session_id, participants, presentation_options)
 
 
 func end_presentation(session_id: String, immediate: bool = false) -> void:

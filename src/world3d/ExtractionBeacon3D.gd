@@ -9,19 +9,45 @@ signal extraction_completed
 @export var accent_color := Color(0.32, 0.88, 1.0)
 @export_range(1.0, 10.0, 0.25) var duration := 4.0
 @export var beacon_type := "BOSS_KILL"
+@export var defense_encounter_enabled := true
+@export var visual_scene: PackedScene
 
 var locked := true
 var _player_in_range := false
 var _active := false
+var _interaction_ready := true
 var _remaining := 0.0
 var _prompt: Label3D
 var _light: OmniLight3D
+var _visual_root: Node3D
 
 
-func configure(color: Color, p_duration: float, p_beacon_type := "BOSS_KILL") -> void:
+func configure(color: Color, p_duration: float, p_beacon_type := "BOSS_KILL", p_defense_enabled := true, p_visual_scene: PackedScene = null) -> void:
 	accent_color = color
 	duration = p_duration
 	beacon_type = p_beacon_type
+	defense_encounter_enabled = p_defense_enabled
+	visual_scene = p_visual_scene
+
+
+func configure_story_safe_drop(drop_duration := 0.6) -> void:
+	beacon_type = "STORY_SAFE"
+	defense_encounter_enabled = false
+	locked = true
+	_interaction_ready = false
+	if is_inside_tree():
+		var tween := create_tween()
+		if _visual_root != null and is_instance_valid(_visual_root):
+			_visual_root.position.y = 1.2
+			tween.tween_property(_visual_root, "position:y", 0.0, maxf(0.0, drop_duration))
+		else:
+			tween.tween_interval(maxf(0.0, drop_duration))
+		tween.tween_callback(_finish_story_safe_drop)
+
+
+func _finish_story_safe_drop() -> void:
+	_interaction_ready = true
+	_refresh_prompt()
 
 
 func _ready() -> void:
@@ -31,6 +57,10 @@ func _ready() -> void:
 	collision_mask = 1
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
+	if visual_scene != null:
+		_visual_root = visual_scene.instantiate() as Node3D
+		if _visual_root != null:
+			add_child(_visual_root)
 	_build_visual()
 	_refresh_prompt()
 
@@ -57,7 +87,7 @@ func _process(delta: float) -> void:
 
 
 func get_interaction_candidate(_player: Player3D) -> Dictionary:
-	if not _player_in_range or _active:
+	if not _interaction_ready or not _player_in_range or _active:
 		return {}
 	return {
 		"available": true,
@@ -81,12 +111,12 @@ func get_interaction_dot_anchor() -> Vector3:
 
 ## 撤离同步进行中（或已锁定不可用时）不显示圆点。
 func is_interaction_dot_visible() -> bool:
-	return not _active
+	return _interaction_ready and not _active
 
 
 
 func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
-	if not _player_in_range or _active:
+	if not _interaction_ready or not _player_in_range or _active:
 		return false
 	if locked:
 		_prompt.text = "Boss 信号仍在干扰"
@@ -142,6 +172,7 @@ func get_snapshot() -> Dictionary:
 	return {
 		"type": beacon_type, "locked": locked, "active": _active,
 		"remaining": _remaining, "duration": duration, "player_in_range": _player_in_range,
+		"interaction_ready": _interaction_ready, "defense_encounter_enabled": defense_encounter_enabled,
 		"idle_light_stable": not _active,
 		"light_energy": _light.light_energy if _light != null else 0.0,
 	}
@@ -179,11 +210,12 @@ func _refresh_prompt() -> void:
 func _build_visual() -> void:
 	var metal := _material(Color(0.07, 0.10, 0.11), 0.74, 0.36)
 	var glow := _material(accent_color, 0.16, 0.22, true)
-	_add_cylinder("Base", Vector3(0, 0.18, 0), 1.1, 0.34, metal)
-	_add_cylinder("Core", Vector3(0, 1.15, 0), 0.28, 2.0, glow)
-	for index in range(3):
-		var ring := _add_torus("Ring", Vector3(0, 0.65 + index * 0.55, 0), 0.52 + index * 0.12, 0.07, glow)
-		ring.rotation_degrees.x = 90.0 if index % 2 == 0 else 0.0
+	if visual_scene == null:
+		_add_cylinder("Base", Vector3(0, 0.18, 0), 1.1, 0.34, metal)
+		_add_cylinder("Core", Vector3(0, 1.15, 0), 0.28, 2.0, glow)
+		for index in range(3):
+			var ring := _add_torus("Ring", Vector3(0, 0.65 + index * 0.55, 0), 0.52 + index * 0.12, 0.07, glow)
+			ring.rotation_degrees.x = 90.0 if index % 2 == 0 else 0.0
 	_light = OmniLight3D.new()
 	_light.position = Vector3(0, 1.5, 0)
 	_light.light_color = accent_color

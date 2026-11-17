@@ -11,6 +11,7 @@ var active_speaker := ""
 var exit_running := false
 var _participants: Dictionary = {}
 var _options: Dictionary = {}
+var _portraits_enabled := true
 var _slots: Dictionary = {}
 var _motions: Dictionary = {}
 var _progress := {"left": 0.0, "right": 0.0}
@@ -40,6 +41,12 @@ func begin_presentation(id: String, participants: Array = [], options: Dictionar
 	exit_running = false
 	_participants.clear()
 	_options = options.duplicate(true)
+	_portraits_enabled = bool(options.get("portraits_enabled", true))
+	if not _portraits_enabled:
+		for slot in _slots.values():
+			remove_child(slot)
+			slot.free()
+		_slots.clear()
 	_reduced = bool(options.get("reduce_motion", ProjectSettings.get_setting("accessibility/reduce_motion", false)))
 	for entry in participants:
 		if entry is Dictionary:
@@ -53,7 +60,7 @@ func begin_presentation(id: String, participants: Array = [], options: Dictionar
 
 
 func present_line(metadata: Dictionary) -> void:
-	if session_id.is_empty() or exit_running:
+	if session_id.is_empty() or exit_running or not _portraits_enabled:
 		return
 	var id := Catalog.speaker_id(metadata)
 	active_speaker = id
@@ -147,6 +154,8 @@ func get_presentation_snapshot() -> Dictionary:
 			count += int(state["viewport_count"])
 		result[side] = state
 	result["viewport_count"] = count
+	result["portraits_enabled"] = _portraits_enabled
+	result["mode"] = str(_options.get("dialogue_mode", ""))
 	return result
 
 

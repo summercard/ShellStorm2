@@ -10,6 +10,8 @@ var _trace: Array[Dictionary] = []
 var _dialogue_seen: Dictionary = {}
 var _capture_targets: Array[float] = []
 var _captured_targets: Dictionary = {}
+var _mirror_capture_targets: Array[Dictionary] = []
+var _mirror_captured: Dictionary = {}
 var _activation_frames: Dictionary = {}
 var _began_ms := 0
 var _duration := 0.0
@@ -53,6 +55,20 @@ func _run() -> void:
 	if _chapter_code == "032":
 		_capture_targets.append_array([0.5, 3.0, 12.0, 24.5])
 	_capture_targets.sort()
+	# 九镜不是替换原有 capture_targets：每个正式 camera.shot 仍保留独立的起/中/末三帧。
+	# 这是表现QA的镜头覆盖证据，不改变剧本时序或原有断言。
+	for cue in _script_data.get("cues", []):
+		if str(cue.get("do", "")) != "camera.shot":
+			continue
+		var shot_at := float(cue.get("at", -1.0))
+		var shot_duration := maxf(float(cue.get("duration", 0.0)), 0.0)
+		if shot_at < 0.0:
+			continue
+		_mirror_capture_targets.append({"index": _mirror_capture_targets.size() + 1, "phase": "start", "at": shot_at + 0.03})
+		_mirror_capture_targets.append({"index": _mirror_capture_targets.size() + 1, "phase": "middle", "at": shot_at + shot_duration * 0.5})
+		_mirror_capture_targets.append({"index": _mirror_capture_targets.size() + 1, "phase": "end", "at": shot_at + maxf(shot_duration - 0.03, 0.03)})
+	_mirror_capture_targets.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return float(a.at) < float(b.at))
+	print("VISUAL_STAGE nine_shot_targets ", _mirror_capture_targets.size())
 	print("VISUAL_STAGE instantiate ", _scene_path)
 	tower = (load(_scene_path) as PackedScene).instantiate() as Node3D
 	tower.set("test_mode", true)
@@ -130,6 +146,11 @@ func _run() -> void:
 					check(Vector2(player.global_position.x - listening.x, player.global_position.z - listening.z).length() < 0.25, "正式player.walk_to沿坡道到达听话点")
 					check(not bool(activation.get("started", true)) and bool(activation.get("held", false)), "下坡阶段Boss门闩始终保持inactive")
 				await _save_frame("t_%06.2f" % target, player)
+		for target in _mirror_capture_targets:
+			var mirror_key := "%02d_%s" % [int(target.get("index", 0)), str(target.get("phase", ""))]
+			if t >= float(target.get("at", 0.0)) and not _mirror_captured.has(mirror_key):
+				_mirror_captured[mirror_key] = true
+				await _save_frame("shot_%s_%s" % [mirror_key, str(target.get("phase", ""))], player)
 		if is_instance_valid(_boss) and bool(activation.get("started", false)):
 			var a := float(activation.get("elapsed", 0.0))
 			for target in [0.1, 2.5, 4.5, 5.35, 5.45, 6.35]:

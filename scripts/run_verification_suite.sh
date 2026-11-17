@@ -527,9 +527,13 @@ visual_scenes=(
 
 # 必须由人工操控/观察才能得出可靠结论；登记但不进入自动套件。
 manual_scenes=(
+  # 新容量guard仅经 run_fate_tutorial_qa.py --scene tests/verification/verify_pistol_fate_capacity.tscn --logic；Autoload前隔离。
+  verify_pistol_fate_capacity
   # 仅经 scripts/run_fate_tutorial_qa.py 复用已导入的工程外副本，Autoload前隔离。
   # 要求 SHELLSTORM_FATE_TUTORIAL_ISOLATED=1；登记不代表通过，不作零参数通用CI。
   verify_fate_tutorial_dialogue
+  # 贩卖机剧情教学仅经 run_narrative_presentation_qa.py 隔离运行，full/aggregate full 排除。
+  verify_run_vending_tutorial
   # 仅经 run_weapon_hologram_qa.py 在Autoload前隔离；分别要求
   # WEAPON_HOLOGRAM_VERIFY_ISOLATED=1 / PROJECTILE_ENCHANT_VERIFY_ISOLATED=1。
   verify_weapon_hologram_ui
@@ -565,8 +569,12 @@ retired_scenes=(
 )
 
 renderer_scenes=(
+  # 新容量guard排除full/aggregate full目录裸扫；只由专用隔离runner调用。
+  verify_pistol_fate_capacity
   # 命运教程专用隔离runner：排除full及aggregate full目录裸扫。
   verify_fate_tutorial_dialogue
+  # 贩卖机教学有真实模型渲染要求，专用runner负责逻辑/Forward+隔离，禁止full裸扫。
+  verify_run_vending_tutorial
   # 专用全息/附魔runner负责真实渲染与隔离，禁止full/aggregate full裸扫。
   verify_weapon_hologram_ui
   verify_projectile_enchant_visuals

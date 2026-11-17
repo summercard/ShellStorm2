@@ -60,16 +60,16 @@ func _ready() -> void:
 	for room_id in ["room_04", "room_06", "room_09", "room_10"]:
 		var room := tower._room_by_id[room_id] as DungeonRoom3D
 		var config := tower._build_room_encounter_config(room)
-		check(config["duration_sec"] == 60.0 and config["completion"] == "clear" and config.get("deadline_behavior") == "close_dispatch_and_clear" and config.get("repeat_last_stage") == true, "%s 未接60秒循环clear" % room_id)
-		check(config["preparation_sec"] == 0.0 and config["freeze_player_sec"] == 0.0 and config["stages"][0]["at_sec"] == 2.0, "%s 首批必须第2秒且不设准备/冻结" % room_id)
+		check(config["duration_sec"] == 40.0 and config["completion"] == "clear" and config.get("deadline_behavior") == "close_dispatch_and_clear" and config.get("repeat_last_stage") == true, "%s 未接40秒循环clear" % room_id)
+		check(config["preparation_sec"] == 0.0 and config["freeze_player_sec"] == 1.0 and config["stages"][0]["at_sec"] == 2.0, "%s 首批必须第2秒且无准备、独立冻结1秒" % room_id)
 		check(config["max_alive"] == room.encounter["max_alive"], "%s 容量未透传" % room_id)
 		check(config["intermission_sec"] == room.encounter["intermission_sec"], "%s 间歇未透传" % room_id)
 		check(config["min_player_distance_m"] == 6.0, "%s 安全距离未透传" % room_id)
 	var room03 := tower._room_by_id["room_03"] as DungeonRoom3D
 	var compiled := tower._build_room_encounter_config(room03)
-	for key in {"duration_sec": 60.0, "completion": "clear", "stage_advance": "clear", "preparation_sec": 0.0, "freeze_player_sec": 0.0, "intermission_sec": 0.0, "deadline_behavior": "close_dispatch_and_clear", "repeat_last_stage": true}:
+	for key in {"duration_sec": 40.0, "completion": "clear", "stage_advance": "clear", "preparation_sec": 0.0, "freeze_player_sec": 1.0, "intermission_sec": 0.0, "deadline_behavior": "close_dispatch_and_clear", "repeat_last_stage": true}:
 		check(compiled.get(key) == room03.encounter.get(key), "03真实配置透传丢失：%s" % key)
-	check(compiled["duration_sec"] == 60.0 and compiled["stages"][0]["at_sec"] == 2.0 and compiled["preparation_sec"] == 0.0 and compiled["freeze_player_sec"] == 0.0, "03必须fixed60、首批2秒且无准备/冻结")
+	check(compiled["duration_sec"] == 40.0 and compiled["stages"][0]["at_sec"] == 2.0 and compiled["preparation_sec"] == 0.0 and compiled["freeze_player_sec"] == 1.0, "03必须fixed40、首批2秒且无准备、独立冻结1秒")
 	check(compiled["deadline_behavior"] == "close_dispatch_and_clear" and compiled["repeat_last_stage"] == true and compiled["intermission_sec"] == 0.0, "03截止/循环/零间歇配置错误")
 	var second_fat_distance := 0.0
 	for spec: Dictionary in compiled["stages"][1]["monsters"]:
@@ -100,7 +100,10 @@ func _ready() -> void:
 		var leaf := room03.get_door_node_towards(str(target))
 		check(leaf != null and not leaf.is_open, "03封门未实际关闭门扇：%s" % str(target))
 	tower._encounter_event_director.tick(0.0)
-	check(enemies(room03).is_empty() and tower.get_encounter_event_snapshot(id).get("alert_remaining_sec") == 60.0, "03起点应无怪且总剩余60")
+	check(enemies(room03).is_empty() and tower.get_encounter_event_snapshot(id).get("alert_phase") == "trigger_freeze" and float(tower.get_encounter_event_snapshot(id).get("alert_remaining_sec", -1.0)) == 0.0, "03起点应无怪且处于触发冻结相位")
+	# 触发即封门并进入1秒独立冻结：冻结期间不推进battle时钟、不派发，结束后才发声警报。
+	tower._encounter_event_director.tick(1.0)
+	check(is_equal_approx(float(tower.get_encounter_event_snapshot(id).get("elapsed", -1.0)), 0.0), "03冻结期推进了battle时钟")
 	tower._encounter_event_director.tick(1.99)
 	check(enemies(room03).is_empty(), "03真实首批在1.99秒提前生成")
 	var before_first := disk_round_trip(tower.build_runtime_save_snapshot())
@@ -113,10 +116,13 @@ func _ready() -> void:
 	var peak := 0
 	var persistent_ids := {}
 	var kills_before := tower._kills
+	# 40秒窗口按「清批推进」模拟。2026-11-17 起 cap 抬到 12（= 最大模板），
+	# 五个模板 5/7/9/12 都 ≤ cap ⇒ 每一批都是完整一批，不再出现「模板9被cap8截成8+1」的孤儿尾巴。
 	for wave in 5:
 		var batch := enemies(room03)
-		var expected: int = [5, 7, 8, 8, 8][wave]
+		var expected: int = [5, 7, 9, 12, 12][wave]
 		check(batch.size() == expected, "03真实第%d批应%d只，实际%d" % [wave + 1, expected, batch.size()])
+		check(batch.size() <= 12, "03真实第%d批超过存活上限12：%d" % [wave + 1, batch.size()])
 		total += batch.size()
 		peak = maxi(peak, batch.size())
 		for actor: Enemy3D in batch:
@@ -156,27 +162,40 @@ func _ready() -> void:
 			actor.free()
 		check(tower._kills == kill_count + killed.size() and enemies(room03).is_empty(), "03真实清批重复/漏记击杀")
 		check(not room03.cleared and tower._room_is_sealed(room03.room_id), "03截止前清空不得清房解封")
-		tower._encounter_event_director.tick(0.01)
-	check(total == 36 and total > 20 and peak <= 8, "03真实循环应5/7/8/8/8累计36且峰值不超过8：%d/%d" % [total, peak])
+		tower._encounter_event_director.tick(6.0)
+	var kept_alive := enemies(room03).size()
+	# 5 批 = 5 / 7 / 9 / 12（末模板首次）/ 12（末模板循环）；最后一批留在场上交给截止。
+	check(total == 45 and peak == 12 and kept_alive == 12, "03五批累计/峰值/截止前残怪应为45/12/12：%d/%d/%d" % [total, peak, kept_alive])
 	var pre_deadline := tower.get_encounter_event_snapshot(id)
-	tower._encounter_event_director.tick(59.99 - float(pre_deadline.get("elapsed", 0.0)))
+	tower._encounter_event_director.tick(39.99 - float(pre_deadline.get("elapsed", 0.0)))
 	check(not bool(tower.get_encounter_event_snapshot(id).get("dispatch_closed", true)), "03截止前不应关派发")
 	tower._encounter_event_director.tick(0.01)
 	var expired := tower.get_encounter_event_snapshot(id)
-	check(expired.get("elapsed") == 60.0 and expired.get("dispatch_closed") == true and expired.get("alert_phase") == "cleanup", "03真实60秒未关闭派发进入cleanup")
-	check(expired.get("status") == "active" and enemies(room03).size() == 8 and not room03.cleared and tower._room_is_sealed(room03.room_id), "03截止残怪未清不得完成/解封/删除实体")
+	check(expired.get("elapsed") == 40.0 and expired.get("dispatch_closed") == true and expired.get("alert_phase") == "cleanup", "03真实40秒未关闭派发进入cleanup")
+	check(expired.get("status") == "active" and enemies(room03).size() == kept_alive and not room03.cleared and tower._room_is_sealed(room03.room_id), "03截止残怪未清不得完成/解封/删除实体")
 	var cleanup := disk_round_trip(tower.build_runtime_save_snapshot())
 	check(tower._restore_runtime_world_save_snapshot(cleanup), "03真实cleanup恢复失败")
 	tower._encounter_event_director.tick(10.0)
-	check(enemies(room03).size() == 8 and tower.get_encounter_event_snapshot(id).get("spawned") == total and tower.get_encounter_event_snapshot(id).get("status") == "active", "03截止恢复后重发或提前完成")
+	check(enemies(room03).size() == kept_alive and tower.get_encounter_event_snapshot(id).get("spawned") == total and tower.get_encounter_event_snapshot(id).get("status") == "active", "03截止恢复后重发或提前完成")
+	# 漏记回归（业主报告的形态：打完倒计时怪不出箱、门还锁着）：
+	# 把增量账人为抬高 2，模拟自爆连杀/休眠卸载漏销，场上并没有对应实体。
+	# 收口必须按真实节点重算，否则房间永远停在「还剩 2 个敌对信号」。
+	tower._alive_by_room[room03.room_id] = kept_alive + 2
+	tower._encounter_event_director.tick(0.1)
+	check(tower.get_encounter_event_snapshot(id).get("status") == "active", "03幽灵计数不得提前收口事件")
 	for actor: Enemy3D in enemies(room03):
 		tower._on_enemy_killed(actor, actor.get_enemy_data())
 		actor.free()
-	check(tower._kills == kills_before + total, "03总击杀数必须等于实际36实体且不重复")
+	check(tower._kills == kills_before + total, "03总击杀数必须等于实际实体数且不重复")
+	print("FLOW_INTEGRATION_ROOM03_SETTLE alive_by_room=%d reserved=%d nodes=%d cleared=%s sealed=%s active=%s status=%s has_actor=%s" % [int(tower._alive_by_room.get(room03.room_id, -1)), tower._reserved_spawn_count(room03.room_id), (tower._enemy_nodes_by_room.get(room03.room_id, []) as Array).size(), room03.cleared, tower._room_is_sealed(room03.room_id), str(tower._room_encounter_active.get(room03.room_id, "")), str(tower.get_encounter_event_snapshot(id).get("status", "")), tower._has_room_clear_actor(room03.room_id)])
 	check(tower.get_encounter_event_snapshot(id).get("status") == "completed" and room03.cleared and not tower._room_is_sealed(room03.room_id), "03截止残怪清零后必须completed、真实清房并解封")
 	check(int(tower._alive_by_room.get(room03.room_id, -1)) == 0 and enemies(room03).is_empty(), "03清房实体/存活账未归零")
 	check(int(tower.get_encounter_event_snapshot(id).get("dropped", -1)) == 0, "03全部已实到批次不得被截止作废")
 	await get_tree().process_frame
+	await get_tree().process_frame
+	# 正式链路自证：清房时 `_mark_room_cleared` 会 deferred 落箱，不能靠测试手动补调才算通过。
+	# 业主报告的就是「地上没有箱子」，所以这一条必须在手动补调之前成立。
+	check(room03.find_chest_by_id("drop_room_03") != null, "03清房未自动落箱（只能靠手动补调）")
 	tower._ensure_room_clear_drop(room03)
 	var chest := room03.find_chest_by_id("drop_room_03")
 	var chest_count := 0
@@ -187,7 +206,7 @@ func _ready() -> void:
 	check(tower._clear_drop_settled.has(room03.room_id), "03清房奖励未结算")
 	var settled := disk_round_trip(tower.build_runtime_save_snapshot())
 	check(tower._restore_runtime_world_save_snapshot(settled), "03清房及箱子正式恢复失败")
-	tower._encounter_event_director.tick(60.0)
+	tower._encounter_event_director.tick(40.0)
 	for _retry in 3:
 		tower._ensure_room_clear_drop(room03)
 	await get_tree().process_frame
@@ -203,6 +222,10 @@ func _ready() -> void:
 	if "--room03-timed-only" in OS.get_cmdline_user_args():
 		finish()
 		return
+	await verify_countdown_rooms()
+	if "--countdown-rooms-only" in OS.get_cmdline_user_args():
+		finish()
+		return
 	await verify_event_handler_orders()
 	await verify_box_queue()
 	await verify_rewards()
@@ -210,54 +233,245 @@ func _ready() -> void:
 	await verify_legacy_reward_migration()
 	finish()
 
+
+## 五个倒计时房里的另外四间（03 已在上面逐条详验）。
+## 覆盖同一条链：真实门位触发 → 独立冻结 → 首批 → 清批推进（含 cap 节流余量）→
+## 截止关派发并保留残怪 → 残怪清零收口 → 自动落箱 → 存档恢复。
+## 09 是「事件 + 战斗」双职房，终端未结算时必须仍然不解封、不出箱。
+const COUNTDOWN_EXPECT := {
+	"room_04": {"cap": 6, "stages": [6, 6, 9, 6]},
+	"room_06": {"cap": 13, "stages": [10, 11, 16, 15]},
+	"room_09": {"cap": 21, "stages": [15, 19, 24, 27]},
+	"room_10": {"cap": 13, "stages": [13, 15, 18, 15]},
+}
+
+func verify_countdown_rooms() -> void:
+	for room_id in COUNTDOWN_EXPECT.keys():
+		await verify_countdown_room(str(room_id), COUNTDOWN_EXPECT[room_id])
+
+
+func verify_countdown_room(room_id: String, expect: Dictionary) -> void:
+	var room := tower._room_by_id.get(room_id) as DungeonRoom3D
+	check(room != null, "%s 房间缺失" % room_id)
+	if room == null:
+		return
+	var cap := int(expect["cap"])
+	var stages: Array = expect["stages"]
+	check(int(room.encounter.get("max_alive", -1)) == cap, "%s cap 漂移，期望 %d 实际 %d" % [room_id, cap, int(room.encounter.get("max_alive", -1))])
+	var declared: Array = []
+	for stage_value in room.encounter.get("stages", []) as Array:
+		var stage_total := 0
+		for monster_value in (stage_value as Dictionary).get("monsters", []) as Array:
+			stage_total += int((monster_value as Dictionary).get("count", 0))
+		declared.append(stage_total)
+	check(declared == stages, "%s 模板漂移：%s ≠ %s" % [room_id, str(declared), str(stages)])
+	# 从干净状态开跑：上一次用例可能已经动过本房。
+	clear_live(room)
+	tower._resolved_event_rooms.erase(room.room_id)
+	tower._room_encounter_active.erase(room.room_id)
+	tower._room_encounters_fired.erase(room.room_id)
+	tower._room_enemy_damage_multipliers.erase(room.room_id)
+	tower._event_combat_rooms.erase(room.room_id)
+	room.cleared = false
+	tower.set_room_seal(room.room_id, false)
+	await enter(room)
+	# `enter()` 会从 segment_runtime_state 恢复房间快照（带上一次的 cleared/sealed），
+	# 重置必须放在进房**之后**，否则会被覆盖回去 —— 表现就是「已清房却还没结算终端」。
+	room.cleared = false
+	tower.set_room_seal(room.room_id, false)
+	var port := room.get_connection_port_by_id("A")
+	var port_target := str(port.get("target", ""))
+	if not port_target.is_empty():
+		tower.force_open_edge_for_test(port_target, room.room_id)
+	check(enemies(room).is_empty() and not room.cleared and not tower._room_is_sealed(room.room_id), "%s 踩入口前不应刷怪/清房/封门" % room_id)
+	var point: Array = port.get("position_m", [0.0, 0.0])
+	var outward: Array = port.get("outward", [0.0, 0.0])
+	var trigger := room.encounter["trigger"] as Dictionary
+	var inset := float(trigger["inset_m"]) + float(trigger["depth_m"]) * 0.5
+	tower.player.global_position = room.to_global(Vector3(float(point[0]) - float(outward[0]) * inset, 0.5, float(point[1]) - float(outward[1]) * inset))
+	tower._tick_room_encounter_triggers(0.0)
+	var id := str(tower._room_encounter_active.get(room.room_id, ""))
+	check(not id.is_empty() and tower._room_is_sealed(room.room_id), "%s 入口触发未启动或未封门" % room_id)
+	if id.is_empty():
+		return
+	for target in room.door_targets.values():
+		var leaf := room.get_door_node_towards(str(target))
+		check(leaf != null and not leaf.is_open, "%s 封门未实际关闭门扇：%s" % [room_id, str(target)])
+	# 独立冻结 1 秒：不推进 battle 时钟、不派发。
+	tower._encounter_event_director.tick(1.0)
+	check(is_equal_approx(float(tower.get_encounter_event_snapshot(id).get("elapsed", -1.0)), 0.0), "%s 冻结期推进了 battle 时钟" % room_id)
+	tower._encounter_event_director.tick(1.99)
+	check(enemies(room).is_empty(), "%s 首批在 1.99 秒提前生成" % room_id)
+	tower._encounter_event_director.tick(0.01)
+	var first_batch := enemies(room).size()
+	var first_expected := mini(int(stages[0]), cap)
+	check(first_batch == first_expected, "%s 首批应 %d 只，实际 %d" % [room_id, first_expected, first_batch])
+	# 清三批：完整一批 → 下一批；超 cap 的模板会先派 cap、清空后补余量（设计口径，不是掉怪）。
+	var batches: Array[int] = []
+	for _wave in 3:
+		var batch := enemies(room)
+		if batch.is_empty():
+			tower._encounter_event_director.tick(0.02)
+			batch = enemies(room)
+		if batch.is_empty():
+			break
+		batches.append(batch.size())
+		check(batch.size() <= cap, "%s 单批超过 cap %d：%d" % [room_id, cap, batch.size()])
+		for actor: Enemy3D in batch:
+			tower._on_enemy_killed(actor, actor.get_enemy_data())
+			actor.free()
+		check(not room.cleared and tower._room_is_sealed(room.room_id), "%s 截止前清空不得清房解封" % room_id)
+		tower._encounter_event_director.tick(2.0)
+	var survivors := enemies(room).size()
+	check(survivors > 0, "%s 截止前应有残怪留在场上" % room_id)
+	var elapsed_before := float(tower.get_encounter_event_snapshot(id).get("elapsed", 0.0))
+	tower._encounter_event_director.tick(39.99 - elapsed_before)
+	check(not bool(tower.get_encounter_event_snapshot(id).get("dispatch_closed", true)), "%s 截止前不应关派发" % room_id)
+	tower._encounter_event_director.tick(0.01)
+	var expired := tower.get_encounter_event_snapshot(id)
+	check(expired.get("elapsed") == 40.0 and expired.get("dispatch_closed") == true and expired.get("alert_phase") == "cleanup", "%s 40 秒未关派发进入 cleanup" % room_id)
+	check(expired.get("status") == "active" and enemies(room).size() == survivors and not room.cleared and tower._room_is_sealed(room.room_id), "%s 截止残怪未清不得完成/解封/删实体" % room_id)
+	var spawned_at_deadline := int(expired.get("spawned", -1))
+	for actor: Enemy3D in enemies(room):
+		tower._on_enemy_killed(actor, actor.get_enemy_data())
+		actor.free()
+	check(tower.get_encounter_event_snapshot(id).get("status") == "completed", "%s 残怪清零后事件未 completed" % room_id)
+	check(int(tower._alive_by_room.get(room.room_id, -1)) == 0 and enemies(room).is_empty(), "%s 清房实体/存活账未归零" % room_id)
+	var is_event_room := room.room_type == "EVENT"
+	if is_event_room:
+		# 双职房：终端未结算 ⇒ 不许清房、不许解封、不许出箱。
+		check(not room.cleared and tower._room_is_sealed(room.room_id), "%s 终端未结算就清房解封" % room_id)
+		check(room.find_chest_by_id("drop_%s" % room_id) == null, "%s 终端未结算就落箱" % room_id)
+		var station := room.ensure_required_service_station()
+		check(station != null, "%s 正式终端缺失" % room_id)
+		if station != null:
+			station._player_in_range = true
+			check(station.perform_interaction(tower.player, {}), "%s 正式终端交互拒绝" % room_id)
+			check(tower._resolved_event_rooms.has(room.room_id), "%s 终端未登记事件结算" % room_id)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	check(room.cleared and not tower._room_is_sealed(room.room_id), "%s 收口后未清房或仍封门" % room_id)
+	check(room.find_chest_by_id("drop_%s" % room_id) != null, "%s 清房未自动落箱" % room_id)
+	var chest_count := 0
+	for candidate in get_tree().get_nodes_in_group("treasure_chest_3d"):
+		if room.is_ancestor_of(candidate) and not candidate.is_queued_for_deletion():
+			chest_count += 1
+	check(chest_count == 1, "%s 清房宝箱数应为 1，实际 %d" % [room_id, chest_count])
+	check(tower._clear_drop_settled.has(room.room_id), "%s 清房奖励未结算" % room_id)
+	var settled := disk_round_trip(tower.build_runtime_save_snapshot())
+	check(tower._restore_runtime_world_save_snapshot(settled), "%s 清房及箱子恢复失败" % room_id)
+	await get_tree().process_frame
+	check(room.cleared and not tower._room_is_sealed(room.room_id) and enemies(room).is_empty(), "%s 恢复后重封门/重刷" % room_id)
+	check(room.find_chest_by_id("drop_%s" % room_id) != null, "%s 恢复后丢箱" % room_id)
+	print("FLOW_INTEGRATION_COUNTDOWN room=%s stages=%s cap=%d batches=%s survivors=%d spawned=%d cleared=true chest=1" % [room_id, str(stages), cap, str(batches), survivors, spawned_at_deadline])
+
 func verify_event_handler_orders() -> void:
 	var room := tower._room_by_id["room_09"] as DungeonRoom3D
-	await enter(room)
 	var outcomes := ["CURSE", "BLESSING", "TRADE", "GAMBLE", "REVEAL", "SUMMON"]
+	# 2026-11-17 起 09 是「40 秒限时战斗 + 事件终端」双职房，不再是固定 48 只的纯事件房。
+	# 本段验证的是**新契约**：六结果不得改写倒计时编排（派发序列一致），
+	# 终端先结算不得提前清房/解封，终端后结算必须等残怪清零才收口，重复交互幂等。
+	var baseline_batches: Array = []
 	for terminal_first in [false, true]:
 		for outcome in outcomes.size():
-			clear_live(room)
-			tower._resolved_event_rooms.erase(room.room_id)
-			tower._room_encounters_fired.erase(room.room_id)
-			tower._room_encounter_active.erase(room.room_id)
-			tower._room_enemy_damage_multipliers.erase(room.room_id)
-			room.cleared = false
-			var started := tower._start_room_encounter(room)
-			var id := str(started.get("instance_id", ""))
-			check(bool(started.get("ok", false)), "六结果遭遇启动失败")
-			var event_seed := 0
-			var probe := RandomNumberGenerator.new()
-			while event_seed < 1000:
-				probe.seed = event_seed
-				if probe.randi_range(0, 5) == outcome:
-					break
-				event_seed += 1
+			var id: String = await prepare_countdown_room(room)
+			check(not id.is_empty(), "09 踩点遭遇启动失败：%s terminal_first=%s" % [outcomes[outcome], terminal_first])
+			if id.is_empty():
+				continue
+			var event_seed := _seed_for_outcome(outcome)
 			if terminal_first:
 				interact_event(room, event_seed)
 				if outcome == 0:
-					check(is_equal_approx(float(tower._room_enemy_damage_multipliers.get(room.room_id, 1.0)), 1.15), "CURSE未保留后续波次15%伤害效果")
-				check(not room.cleared and tower._room_has_pending_combat(room), "先终端提前清房：%s" % outcomes[outcome])
-			var actual := 0
-			for _batch in 24:
-				tower._encounter_event_director.tick(2.6)
-				var batch := enemies(room)
-				actual += batch.size()
-				check(batch.size() <= 12, "EVENT并发超过12")
-				clear_live(room)
-				tower._encounter_event_director.notify_enemy_departed(id, "killed")
-				if bool(tower.get_encounter_event_snapshot(id).get("terminal", false)):
-					break
-			check(actual == 48 and int(tower.get_encounter_event_snapshot(id).get("spawned", 0)) == 48, "六结果改变48只编排：%s" % outcomes[outcome])
+					check(is_equal_approx(float(tower._room_enemy_damage_multipliers.get(room.room_id, 1.0)), 1.15), "CURSE 未保留后续波次 15% 伤害效果")
+				check(not room.cleared and tower._room_has_pending_combat(room), "先结算终端就提前清房：%s" % outcomes[outcome])
+				check(tower._room_is_sealed(room.room_id), "先结算终端就解封：%s" % outcomes[outcome])
+			var batches := run_countdown_batches(room, 2)
+			if baseline_batches.is_empty():
+				baseline_batches = batches.duplicate()
+			check(batches == baseline_batches, "六结果改变派发编排：%s %s ≠ %s" % [outcomes[outcome], str(batches), str(baseline_batches)])
 			if not terminal_first:
-				check(not room.cleared and tower._room_is_sealed(room.room_id), "未结算终端就放行")
+				check(not room.cleared and tower._room_is_sealed(room.room_id), "未结算终端就放行：%s cleared=%s sealed=%s resolved=%s alive=%d status=%s" % [outcomes[outcome], str(room.cleared), str(tower._room_is_sealed(room.room_id)), str(tower._resolved_event_rooms.has(room.room_id)), enemies(room).size(), str(tower.get_encounter_event_snapshot(id).get("status", ""))])
 				interact_event(room, event_seed)
+			check(finish_countdown_room(room, id), "09 残怪清零后未 completed：%s terminal_first=%s" % [outcomes[outcome], terminal_first])
 			check(room.cleared and not tower._room_is_sealed(room.room_id), "六结果未收口：%s terminal_first=%s" % [outcomes[outcome], terminal_first])
-			check(enemies(room).is_empty(), "终端重刷已完成遭遇")
+			check(enemies(room).is_empty(), "终端重刷已完成遭遇：%s" % outcomes[outcome])
 			var spawned := int(tower.get_encounter_event_snapshot(id).get("spawned", 0))
 			interact_event(room, event_seed)
-			check(int(tower.get_encounter_event_snapshot(id).get("spawned", 0)) == spawned and room.cleared, "重复交互重刷或撤销清房")
-			print("FLOW_INTEGRATION_EVENT_HANDLER result=%s terminal_first=%s actual=%d" % [outcomes[outcome], terminal_first, actual])
+			check(int(tower.get_encounter_event_snapshot(id).get("spawned", 0)) == spawned and room.cleared, "重复交互重刷或撤销清房：%s" % outcomes[outcome])
+			print("FLOW_INTEGRATION_EVENT_HANDLER result=%s terminal_first=%s batches=%s" % [outcomes[outcome], terminal_first, str(batches)])
 			await get_tree().process_frame
+
+
+## 把一间踩点房重置到「未触发」状态，再用真实门位条带触发它。
+## 返回 Director 实例 id（失败为空串）。调用方必须 await（内部要进房一帧）。
+func prepare_countdown_room(room: DungeonRoom3D) -> String:
+	clear_live(room)
+	tower._resolved_event_rooms.erase(room.room_id)
+	tower._event_combat_rooms.erase(room.room_id)
+	tower._room_encounter_active.erase(room.room_id)
+	tower._room_encounters_fired.erase(room.room_id)
+	tower._room_enemy_damage_multipliers.erase(room.room_id)
+	room.cleared = false
+	tower.set_room_seal(room.room_id, false)
+	await enter(room)
+	# 同上：进房会恢复房间快照里的 cleared/sealed，必须在之后重置。
+	room.cleared = false
+	tower.set_room_seal(room.room_id, false)
+	var port := room.get_connection_port_by_id("A")
+	var port_target := str(port.get("target", ""))
+	if not port_target.is_empty():
+		tower.force_open_edge_for_test(port_target, room.room_id)
+	var point: Array = port.get("position_m", [0.0, 0.0])
+	var outward: Array = port.get("outward", [0.0, 0.0])
+	var trigger := room.encounter["trigger"] as Dictionary
+	var inset := float(trigger["inset_m"]) + float(trigger["depth_m"]) * 0.5
+	tower.player.global_position = room.to_global(Vector3(float(point[0]) - float(outward[0]) * inset, 0.5, float(point[1]) - float(outward[1]) * inset))
+	tower._tick_room_encounter_triggers(0.0)
+	var id := str(tower._room_encounter_active.get(room.room_id, ""))
+	if id.is_empty():
+		return ""
+	# 走完 1 秒触发冻结，回到 battle 起点。
+	tower._encounter_event_director.tick(1.0)
+	return id
+
+
+## 推进 count 批：首批等第 2 秒，之后每清一批推进下一批。返回每批真实只数。
+func run_countdown_batches(room: DungeonRoom3D, count: int) -> Array:
+	var sizes: Array = []
+	tower._encounter_event_director.tick(1.99)
+	tower._encounter_event_director.tick(0.01)
+	for _index in count:
+		var batch := enemies(room)
+		if batch.is_empty():
+			break
+		sizes.append(batch.size())
+		for actor: Enemy3D in batch:
+			tower._on_enemy_killed(actor, actor.get_enemy_data())
+			actor.free()
+		tower._encounter_event_director.tick(2.0)
+	return sizes
+
+
+## 推到 40 秒截止 → 残怪留在场上 → 清零 → 返回是否 completed。
+func finish_countdown_room(room: DungeonRoom3D, id: String) -> bool:
+	var elapsed := float(tower.get_encounter_event_snapshot(id).get("elapsed", 0.0))
+	tower._encounter_event_director.tick(maxf(0.0, 39.99 - elapsed))
+	tower._encounter_event_director.tick(0.01)
+	for actor: Enemy3D in enemies(room):
+		tower._on_enemy_killed(actor, actor.get_enemy_data())
+		actor.free()
+	tower._encounter_event_director.tick(0.1)
+	return str(tower.get_encounter_event_snapshot(id).get("status", "")) == "completed"
+
+
+## 找到能让 `_rng.randi_range(0, 5)` 掷出指定结果的事件种子。
+func _seed_for_outcome(outcome: int) -> int:
+	var probe := RandomNumberGenerator.new()
+	for candidate in 1000:
+		probe.seed = candidate
+		if probe.randi_range(0, 5) == outcome:
+			return candidate
+	return 0
 
 func interact_event(room: DungeonRoom3D, event_seed: int) -> void:
 	var station := room.ensure_required_service_station()
@@ -564,6 +778,14 @@ func verify_legacy_reward_migration() -> void:
 	var delivered := tower._clear_drop_delivery.get(ordinary.room_id, {}) as Dictionary
 	check((delivered.get("grants_pending", []) as Array).is_empty() and (delivered.get("additional_weapon_pending", []) as Array).is_empty(), "旧普通房追加新奖励")
 	var boss := tower._room_by_id["boss"] as DungeonRoom3D
+	# 前面把 room_10 清掉后，flow 关卡会自动推开去 Boss 的门并**预刷** Boss 房；
+	# 本用例要验的是「旧档恢复后进 Boss 房会重新生成正式 Boss」，不是那个预刷。
+	# 不先清掉预刷状态，`_on_room_entered` 会走「已刷过 ⇒ 只修进度」分支，考的是错的东西。
+	tower._spawned_rooms.erase(boss.room_id)
+	tower._reserved_room_spawns.erase(boss.room_id)
+	tower._room_wave_queues[boss.room_id] = []
+	tower._room_wave_totals.erase(boss.room_id)
+	clear_live(boss)
 	await enter(boss)
 	tower.force_main_story_for_test = true
 	BaseManager.data.main_story = MainStoryProgress.default_state()
@@ -573,6 +795,13 @@ func verify_legacy_reward_migration() -> void:
 			boss_actor = actor
 			break
 	check(boss_actor != null, "旧档正式Boss实体未生成")
+	if boss_actor == null:
+		print("FLOW_INTEGRATION_BOSS_DIAG cleared=%s enemies=%d blocked=%s fired=%s alive=%s sealed=%s streamed=%s placements=%d encounter_keys=%s" % [
+			boss.cleared, enemies(boss).size(), str(tower._room_spawn_blocked.has(boss.room_id)),
+			str(tower._room_encounters_fired.has(boss.room_id)), str(tower._alive_by_room.get(boss.room_id, -1)),
+			str(tower._room_is_sealed(boss.room_id)), str(boss.is_streamed()), boss.spawn_placements.size(),
+			str(boss.encounter.keys()),
+		])
 	if boss_actor == null:
 		return
 	tower._on_enemy_killed(boss_actor, boss_actor.get_enemy_data())

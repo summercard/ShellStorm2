@@ -5,6 +5,7 @@ extends Node
 
 const BRIEFING_ID := "nar_main_031_green_briefing"
 const BOSS_ID := "nar_main_032_monitor_audience"
+const KEY_RETURN_CALL_ID := "nar_main_032_key_return_call"
 const DEPOSIT_ID := "nar_main_033_key_install"
 const KEY_RARE_EARTH := "mq_key_rare_earth"
 const KEY_SCENE_PATH := "res://assets/art/props/main_story/runtime/rare_earth_key.tscn"
@@ -21,6 +22,8 @@ var _activation_enemy: Node = null
 var _activation_requested := false
 var _control_held := false
 var _extraction_started := false
+var _key_return_call_succeeded := false
+var _key_return_ready_committing := false
 var _briefing_succeeded := false
 var _deposit_succeeded := false
 var _deposit_npc_started := false
@@ -42,7 +45,11 @@ func setup(host: Node) -> void:
 	if director != null:
 		director.call("arm", BRIEFING_ID)
 		director.call("arm", BOSS_ID)
+		director.call("arm", KEY_RETURN_CALL_ID)
 		director.call("arm", DEPOSIT_ID)
+		var finished := Callable(self, "_on_narrative_finished")
+		if director.has_signal("narrative_finished") and not director.is_connected("narrative_finished", finished):
+			director.connect("narrative_finished", finished)
 
 
 func _process(_delta: float) -> void:
@@ -66,6 +73,13 @@ func _process(_delta: float) -> void:
 	if _is_boss_ready():
 		director.call("play", BOSS_ID, {"priority": 30})
 		return
+	if _is_key_return_ready_commit_pending():
+		_commit_key_return_ready()
+		return
+	if _is_key_return_call_ready():
+		if bool(director.call("play", KEY_RETURN_CALL_ID, {"priority": 30})):
+			_key_return_call_succeeded = false
+		return
 	if _is_deposit_ready():
 		if bool(director.call("play", DEPOSIT_ID, {"priority": 30})):
 			_deposit_succeeded = false
@@ -84,6 +98,17 @@ func resolve_actor(actor_id: String) -> Node3D:
 
 func resolve_anchor(anchor_id: String) -> Variant:
 	if _host == null or not is_instance_valid(_host):
+		return null
+	if anchor_id in ["boss_frame", "boss_room_frame", "player_frame"]:
+		var boss := _boss()
+		var player := _player()
+		if anchor_id == "boss_frame":
+			return {"position": boss.global_position, "basis": boss.global_basis} if boss != null else null
+		if anchor_id == "player_frame":
+			return {"position": player.global_position, "basis": player.global_basis} if player != null else null
+		var boss_room := _main_story_room(BOSS_ROOM_ID)
+		if boss_room != null:
+			return {"position": boss_room.global_position, "basis": boss_room.global_basis}
 		return null
 	if anchor_id == "briefing_finish" and _host.has_method("get_facility_spawn_point"):
 		# 收尾沿基地中央主通道走近终端；不把玩法镜头还到贴墙吊灯下方。
@@ -169,11 +194,34 @@ func on_key_claimed() -> void:
 	var snapshot := _main_story_snapshot()
 	if not _key_is_acquired(snapshot):
 		return
-	if _extraction_started:
+	_extraction_started = false
+	_key_return_call_succeeded = false
+
+
+func _on_narrative_finished(narrative_id: String, reason: String) -> void:
+	if narrative_id != KEY_RETURN_CALL_ID or reason not in ["duration", "flow.end"]:
 		return
-	if _host != null and _host.has_method("start_main_story_auto_extraction"):
-		_host.call("start_main_story_auto_extraction", 8.0)
-		_extraction_started = true
+	if BaseManager == null or not BaseManager.has_narrative_completed(KEY_RETURN_CALL_ID):
+		return
+	if not _key_return_call_succeeded:
+		return
+	if _host == null or not _host.has_method("commit_main_story_beacon_ready"):
+		return
+	_key_return_ready_committing = true
+	var committed: Variant = _host.call("commit_main_story_beacon_ready")
+	_key_return_ready_committing = false
+	if committed is Dictionary and bool((committed as Dictionary).get("success", false)):
+		_key_return_call_succeeded = true
+
+
+func _commit_key_return_ready() -> Dictionary:
+	if _host == null or not _host.has_method("commit_main_story_beacon_ready"):
+		return _failed("安全信标待办保存接口不可用。")
+	var result: Variant = _host.call("commit_main_story_beacon_ready")
+	if result is Dictionary and bool((result as Dictionary).get("success", false)):
+		_key_return_call_succeeded = true
+		return _ok()
+	return _failed("安全信标待办保存失败，保留通讯待办以便重试。")
 
 
 func claim_main_story_key(source: Dictionary, checkpoint: Dictionary = {}) -> Dictionary:
@@ -225,6 +273,9 @@ func call_instruction(action: String, params: Dictionary) -> Dictionary:
 				params.get("checkpoint", {}) as Dictionary
 			)
 			return _domain_result(claim, "稀土钥匙领取失败。")
+		"key_return.complete":
+			_key_return_call_succeeded = true
+			return _ok()
 		"deposit.prepare":
 			return _prepare_deposit()
 		"deposit.move_to_player":
@@ -268,6 +319,7 @@ func get_snapshot() -> Dictionary:
 		"deposit_id": DEPOSIT_ID,
 		"key_id": KEY_RARE_EARTH,
 		"briefing_succeeded": _briefing_succeeded,
+		"key_return_call_succeeded": _key_return_call_succeeded,
 		"activation_requested": _activation_requested,
 		"activation_enemy_valid": _activation_enemy != null and is_instance_valid(_activation_enemy),
 		"activation": activation,
@@ -288,6 +340,8 @@ func should_end_narrative(narrative_id: String) -> bool:
 	match narrative_id:
 		BRIEFING_ID:
 			return _briefing_succeeded
+		KEY_RETURN_CALL_ID:
+			return _key_return_call_succeeded
 		BOSS_ID:
 			return _activation_requested and _activation_is_complete()
 		DEPOSIT_ID:
@@ -299,6 +353,8 @@ func can_commit_narrative(narrative_id: String, _reason: String) -> bool:
 	match narrative_id:
 		BRIEFING_ID:
 			return _briefing_succeeded
+		KEY_RETURN_CALL_ID:
+			return _key_return_call_succeeded
 		BOSS_ID:
 			return _activation_is_complete()
 		DEPOSIT_ID:
@@ -639,6 +695,27 @@ func _is_boss_ready() -> bool:
 	if activation is Dictionary and bool((activation as Dictionary).get("completed", false)):
 		return false
 	return true
+
+
+func _is_key_return_ready_commit_pending() -> bool:
+	if BaseManager == null or not BaseManager.has_narrative_completed(KEY_RETURN_CALL_ID):
+		return false
+	if _host == null or not _host.has_method("get_main_story_extraction_state"):
+		return false
+	var state: Variant = _host.call("get_main_story_extraction_state")
+	return state is Dictionary and str((state as Dictionary).get("stage", "")) == "call_pending"
+
+
+func _is_key_return_call_ready() -> bool:
+	if not _is_boss_room() or _completed(KEY_RETURN_CALL_ID):
+		return false
+	var snapshot := _main_story_snapshot()
+	if not _key_is_acquired(snapshot) or _key_is_deposited(snapshot):
+		return false
+	if _host == null or not _host.has_method("get_main_story_extraction_state"):
+		return false
+	var state: Variant = _host.call("get_main_story_extraction_state")
+	return state is Dictionary and str((state as Dictionary).get("stage", "")) == "call_pending"
 
 
 func _is_deposit_ready() -> bool:

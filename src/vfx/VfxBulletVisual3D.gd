@@ -82,11 +82,21 @@ var _pulse_phase := 0.0
 ##
 ## 所以「敌方子弹改成公告板」的主战场在这里 —— 只改 `VfxBulletBody3D` 是改错了地方。
 var _billboard := false
+var _suppress_body_light := false
+var _has_configuration := false
 var _icon: BulletBillboardIcon3D
 
 
 func _ready() -> void:
 	_build_visual()
+	if _has_configuration:
+		configure(effect_color, effect_size, {"billboard": _billboard, "suppress_body_light": _suppress_body_light})
+
+
+func _apply_light_state() -> void:
+	if _light != null:
+		_light.visible = not _suppress_body_light
+		_light.light_energy = 0.0 if _suppress_body_light else _LIGHT_ENERGY
 
 
 func _build_visual() -> void:
@@ -203,6 +213,9 @@ func configure(color: Color, size: float = 1.0, context: Dictionary = {}) -> voi
 	super.configure(color, size, context)
 	_base_scale = size
 	_billboard = bool(context.get("billboard", false))
+	_suppress_body_light = bool(context.get("suppress_body_light", false))
+	_has_configuration = true
+	_apply_light_state()
 	_apply_geometry_scale()
 	_apply_billboard_mode()
 	# 复借复色：外壳/拖尾用子弹色；亮芯保持白金；灯色跟随子弹色。图标同理逐发染色。
@@ -231,9 +244,7 @@ func activate(world_position: Vector3, color: Color, size: float, context: Dicti
 	_on_activate(world_position, color, size, context)
 	_elapsed = 0.0
 	# 复借复位：重新点亮并恢复拖尾可见。
-	if _light != null:
-		_light.visible = true
-		_light.light_energy = _LIGHT_ENERGY
+	_apply_light_state()
 	# 弹体 / 图标的可见性由 billboard 模式统一决定，不在这里硬写 `_root.visible = true`
 	# —— 否则敌方子弹会同时露出 3D 棱柱和图标。
 	_apply_billboard_mode()
@@ -250,6 +261,7 @@ func deactivate() -> void:
 		_light.light_energy = 0.0
 		_light.visible = false
 	_billboard = false
+	_suppress_body_light = false
 	_apply_billboard_mode()
 
 
@@ -311,6 +323,8 @@ func get_presentation_snapshot() -> Dictionary:
 		"light_energy": light_energy,
 		"light_range": light_range,
 		"light_visible": light_visible,
+		"suppress_body_light": _suppress_body_light,
+		"light_tint": _light.light_color if _light != null else Color.WHITE,
 		"light_shadows": false,
 		"trail_local_position": trail_pos,
 		"trail_is_behind": trail_behind,

@@ -708,8 +708,11 @@ static func _roll_dropped_weapon(item: Dictionary, state: Dictionary, forced_gra
 		var bullet_roll := rng.randf()
 		prepared["bullet_module_id"] = forced_bullet_module_id if not forced_bullet_module_id.is_empty() else WeaponBulletDrop.roll(bullet_roll)
 		prepared["bullet_module_locked"] = true
-	var ensured := _WEAPON_INSTANCE.ensure_weapon_item(prepared)
-	return WeaponDropGrade.apply_to_item(ensured, grade)
+	# 先在尚无实例品质的内容副本上落定容量，再水合身份与装配快照。
+	# 先ensure会写默认blue，被品质幂等守卫视为已有枪而漏掉紫/金加槽。
+	# 不放宽守卫：已有蓝枪仍不允许借品质应用入口追加槽位。
+	var graded := WeaponDropGrade.apply_to_item(prepared, grade)
+	return _WEAPON_INSTANCE.ensure_weapon_item(graded)
 
 
 static func _append_member(

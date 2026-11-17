@@ -1,0 +1,68 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://assets/art/vfx/combat_3d/vfx_fat_zombie_slam_root_top3d.gd" id="1_slam"]
+[ext_resource type="Texture2D" path="res://assets/art/vfx/combat_3d/textures/enm_normal_fat_zombie21_slam_dust.png" id="2_dust"]
+[ext_resource type="Texture2D" path="res://assets/art/vfx/combat_3d/textures/enm_normal_fat_zombie21_slam_ripple.png" id="3_ripple"]
+[ext_resource type="Texture2D" path="res://assets/art/vfx/combat_3d/textures/enm_normal_fat_zombie21_slam_flame.png" id="4_flame"]
+
+[sub_resource type="StandardMaterial3D" id="DustMaterial"]
+albedo_texture = ExtResource("2_dust")
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.5, 0.43, 0.34, 0.82)
+no_depth_test = true
+cull_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="RippleMaterial"]
+albedo_texture = ExtResource("3_ripple")
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.66, 0.78, 0.42, 0.86)
+no_depth_test = true
+cull_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="FlameMaterial"]
+albedo_texture = ExtResource("4_flame")
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1.0, 0.38, 0.08, 0.9)
+emission_enabled = true
+emission = Color(1.0, 0.12, 0.01, 1.0)
+emission_energy_multiplier = 1.4
+no_depth_test = true
+cull_mode = 2
+
+[node name="VfxFatZombieSlam3D" type="Node3D"]
+script = ExtResource("1_slam")
+metadata/asset_id = "VFX-FAT-ZOMBIE-SLAM-3D"
+metadata/asset_version = "v001"
+metadata/presentation_only = true
+metadata/damage_owner = "Enemy3D"
+metadata/trigger_event = "attack_visual_impact"
+metadata/source_asset_id = "ENM-NORMAL-FAT-ZOMBIE21"
+lifetime = 0.78
+
+[node name="DustSprite" type="Sprite3D" parent="."]
+texture = ExtResource("2_dust")
+material_override = SubResource("DustMaterial")
+billboard = 1
+pixel_size = 0.006
+no_depth_test = true
+
+[node name="RippleSprite" type="Sprite3D" parent="."]
+texture = ExtResource("3_ripple")
+material_override = SubResource("RippleMaterial")
+rotation_degrees = Vector3(-90, 0, 0)
+pixel_size = 0.006
+no_depth_test = true
+
+[node name="FlameSprite" type="Sprite3D" parent="."]
+texture = ExtResource("4_flame")
+material_override = SubResource("FlameMaterial")
+billboard = 1
+pixel_size = 0.0045
+no_depth_test = true
+

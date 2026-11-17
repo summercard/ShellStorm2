@@ -128,6 +128,10 @@ var _trail_material: StandardMaterial3D
 var _base_scale := 1.0
 var _pulse_phase := 0.0
 var _profile: Dictionary = {}
+var _has_configuration := false
+var _enchantment_body_tint := false
+var _suppress_body_light := false
+var _base_body_color := Color.WHITE
 
 # ── 敌方子弹 billboard 图标（2026-11-09 主人：「敌方子弹也一样 —— 一直面对摄像机的公告板」）
 #
@@ -165,6 +169,16 @@ func _ready() -> void:
 		_profile[key] = override[key]
 	_build_visual()
 	_apply_geometry_scale()
+	if _has_configuration:
+		_apply_body_tint(effect_color)
+		_apply_billboard_mode()
+	_apply_light_state()
+
+
+func _apply_light_state() -> void:
+	if _light != null:
+		_light.visible = not _suppress_body_light
+		_light.light_energy = 0.0 if _suppress_body_light else float(_profile.get("light_energy", 1.2))
 
 
 func _build_visual() -> void:
@@ -372,9 +386,22 @@ func configure(color: Color, size: float = 1.0, context: Dictionary = {}) -> voi
 	_grow_duration = maxf(0.0, float(context.get("grow_duration", 0.0)))
 	_flight_time = 0.0
 	_billboard = bool(context.get("billboard", false))
+	_has_configuration = true
+	_enchantment_body_tint = bool(context.get("tint_core", false))
+	_suppress_body_light = bool(context.get("suppress_body_light", false))
+	_apply_light_state()
+	_base_body_color = context.get("base_body_color", color) as Color
 	_apply_geometry_scale()
 	_apply_billboard_mode()
-	# 复借复色：外壳/尾迹/灯用子弹色；亮芯保持自身亮色。图标同理逐发染色。
+	_apply_body_tint(color)
+
+
+func _apply_body_tint(color: Color) -> void:
+	# 仅附魔标准弹染亮芯；无附魔及特殊弹种每次还原 profile 原亮芯。
+	if _core_material != null:
+		var core_color: Color = color.lightened(0.22) if _enchantment_body_tint else _profile.get("core_color", Color(0.92, 0.96, 1.0))
+		_core_material.albedo_color = core_color
+		_core_material.emission = core_color
 	if _icon != null:
 		_icon.set_tint(color)
 	if _shell_material != null:
@@ -397,9 +424,7 @@ func activate(world_position: Vector3, color: Color, size: float, context: Dicti
 	position = Vector3.ZERO
 	_on_activate(world_position, color, size, context)
 	_elapsed = 0.0
-	if _light != null:
-		_light.visible = true
-		_light.light_energy = float(_profile.get("light_energy", 1.2))
+	_apply_light_state()
 	# 弹体 / 图标的可见性由 billboard 模式统一决定，不在这里硬写 `_body_root.visible = true`
 	# —— 否则敌方子弹会同时露出 3D 棱柱和图标。
 	_apply_billboard_mode()
@@ -416,6 +441,10 @@ func deactivate() -> void:
 	_grow_from = 1.0
 	_grow_duration = 0.0
 	_flight_time = 0.0
+	_enchantment_body_tint = false
+	_suppress_body_light = false
+	effect_color = _base_body_color
+	_apply_body_tint(_base_body_color)
 	_apply_geometry_scale()
 	# 隐藏灯与主体；灯能量归零（回收必须归零）。不 emit retired、不 queue_free，随宿主离树释放。
 	if _light != null:
@@ -541,10 +570,21 @@ func get_presentation_snapshot() -> Dictionary:
 		"asset_id": get_meta("asset_id", ""),
 		"asset_version": get_meta("asset_version", "v001"),
 		"bullet_profile": String(_profile.get("key", "")),
+		"enchantment_body_tint": _enchantment_body_tint,
+		"tint_core": _enchantment_body_tint,
+		"resolved_visual_color": effect_color,
+		"base_body_color": _base_body_color,
+		"profile_core_tint": _profile.get("core_color", Color(0.92, 0.96, 1.0)),
+		"shell_tint": _shell_material.albedo_color if _shell_material != null else Color.WHITE,
+		"core_tint": _core_material.albedo_color if _core_material != null else Color.WHITE,
+		"shell_emission_tint": _shell_material.emission if _shell_material != null else Color.WHITE,
+		"core_emission_tint": _core_material.emission if _core_material != null else Color.WHITE,
+		"light_tint": _light.light_color if _light != null else Color.WHITE,
 		"light_name": "ProjectileLight" if _light != null else "",
 		"light_energy": light_energy,
 		"light_range": light_range,
 		"light_visible": light_visible,
+		"suppress_body_light": _suppress_body_light,
 		"light_shadows": false,
 		"trail_style": String(_profile.get("trail_style", "cone")),
 		"trail_parts": _trail_parts.size(),

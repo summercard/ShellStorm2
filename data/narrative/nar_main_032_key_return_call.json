@@ -1,0 +1,29 @@
+{
+  "narrative_id": "nar_main_032_key_return_call",
+  "schema_version": 1,
+  "priority": 30,
+  "trigger": { "kind": "manual", "once": "run" },
+  "duration": 14.8,
+  "presentation": {
+    "dialogue": {
+      "mode": "B",
+      "participants": [
+        { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram" },
+        { "speaker_id": "player", "speaker": "主角", "portrait_mode": "normal" }
+      ],
+      "presentation_options": { "left_mode": "hologram", "right_mode": "player", "portrait_scale": 0.8 }
+    }
+  },
+  "cues": [
+    { "at": 0.0, "do": "player.lock_input", "locked": true },
+    { "at": 0.0, "do": "player.combat", "enabled": false },
+    { "at": 0.2, "do": "ui.dialogue", "wait": true, "lines": [
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "happy", "text": "稀土钥匙拿到了。", "auto_advance_sec": 2.8 },
+      { "speaker_id": "player", "speaker": "主角", "expression": "question", "text": "那我可以回来了？", "auto_advance_sec": 2.8 },
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "neutral", "text": "可以，回到这里就好。安全信标不会引来防守遭遇，靠近后按 E 主动启动，八秒同步就能返航。", "auto_advance_sec": 5.8 }
+    ] },
+    { "at": 13.8, "do": "story.key_return.complete" },
+    { "at": 14.0, "do": "player.lock_input", "locked": false },
+    { "at": 14.8, "do": "flow.end" }
+  ]
+}

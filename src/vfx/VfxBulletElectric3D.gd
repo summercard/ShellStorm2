@@ -10,9 +10,31 @@ const BODY_LIGHT_RANGE := 3.0
 @onready var _arcs: Array[Node3D] = [$Arc0, $Arc1, $Arc2]
 @onready var _light: OmniLight3D = $ElectricLight
 var _projectile := false
+var _suppress_body_light := false
+var _has_configuration := false
+
+
+func _ready() -> void:
+	if _has_configuration:
+		_apply_light_state()
+
+
+func _ensure_light() -> void:
+	if _light == null:
+		_light = get_node("ElectricLight") as OmniLight3D
+
+
+func _apply_light_state() -> void:
+	_ensure_light()
+	_light.visible = not _suppress_body_light
+	_light.light_energy = 0.0 if _suppress_body_light else (PROJECTILE_LIGHT_ENERGY if _projectile else BODY_LIGHT_ENERGY)
+
 
 func _on_configure(context: Dictionary) -> void:
 	_projectile = bool(context.get("projectile", false))
+	_suppress_body_light = _projectile and bool(context.get("suppress_body_light", false))
+	_has_configuration = true
+	_apply_light_state()
 	# A projectile owns its visual lifetime. The player's root timer owns the body effect.
 	lifetime = 60.0 if _projectile else maxf(0.05, float(context.get("duration", 1.0))) + 0.10
 
@@ -23,8 +45,8 @@ func _on_tick(elapsed: float, _total: float) -> void:
 	var size := effect_size * VISUAL_SIZE_MULTIPLIER
 	_light.position = Vector3.ZERO if _projectile else Vector3.UP * 0.73 * effect_size
 	_light.omni_range = (PROJECTILE_LIGHT_RANGE if _projectile else BODY_LIGHT_RANGE) * effect_size
-	_light.light_energy = (PROJECTILE_LIGHT_ENERGY if _projectile else BODY_LIGHT_ENERGY) * (0.90 + 0.10 * sin(elapsed * 28.0))
-	_light.visible = true
+	_light.light_energy = 0.0 if _suppress_body_light else (PROJECTILE_LIGHT_ENERGY if _projectile else BODY_LIGHT_ENERGY) * (0.90 + 0.10 * sin(elapsed * 28.0))
+	_light.visible = not _suppress_body_light
 	for index in _arcs.size():
 		var arc := _arcs[index]
 		var pulse := 0.88 + 0.12 * sin(elapsed * 36.0 + index * 2.1)
@@ -47,8 +69,25 @@ func deactivate() -> void:
 	set_process(false)
 
 func _on_lifetime_expired() -> void:
+	_ensure_light()
+	_suppress_body_light = false
 	_light.light_energy = 0.0
 	_light.visible = false
+
+func get_presentation_snapshot() -> Dictionary:
+	_ensure_light()
+	return {
+		"asset_id": get_meta("asset_id", ""),
+		"asset_version": get_meta("asset_version", "v001"),
+		"light_name": String(_light.name),
+		"light_tint": _light.light_color,
+		"light_energy": _light.light_energy,
+		"light_range": _light.omni_range,
+		"light_visible": _light.visible,
+		"light_shadows": _light.shadow_enabled,
+		"suppress_body_light": _suppress_body_light,
+	}
+
 
 func activate(world_position: Vector3, color: Color, size: float, context: Dictionary = {}) -> void:
 	set_process(true)

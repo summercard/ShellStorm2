@@ -10,6 +10,7 @@
     "once": "run"
   },
   "duration": 4.4,
+  "presentation": { "dialogue": { "mode": "A" } },
   "cues": [
     {
       "at": 0,

@@ -57,9 +57,16 @@ func _ready() -> void:
 		var port := room.get_connection_port_by_id(port_id)
 		var p := room._placement_vec2(port.position_m) - room._placement_vec2(port.outward) * 3.5
 		requested.append({"label": "entry_" + port_id, "point": Vector3(p.x, 0, p.y)})
+	# 2026-11-17：08 房改矩形贯通后房内不再有固定门洞（PassagePortal 随 L 型斜墙删除）。
+	# 这里改为「存在才纳入锚点」，不再把已删除的节点当成必验锚点。
 	var art := room.get_node("AuthoredLayoutArtRoot") as Node3D
 	for suffix in ["WALL_Y_30_45", "WALL_X_35_REAR"]:
-		var portal := art.get_node("ENV-EXPEDITION-L-CORRIDOR-" + suffix + "/PassagePortal") as Node3D
+		var wrapper := art.get_node_or_null("ENV-EXPEDITION-L-CORRIDOR-" + suffix) as Node3D
+		if wrapper == null:
+			continue
+		var portal := wrapper.get_node_or_null("PassagePortal") as Node3D
+		if portal == null:
+			continue
 		requested.append({"label": suffix, "point": room.to_local(portal.global_position)})
 	for p in [Vector3(0, 0, 0), Vector3(2.5, 0, -2.5), Vector3(7.5, 0, -2.5), Vector3(15, 0, 3.752136)]:
 		requested.append({"label": "courtyard_or_visual_" + str(p), "point": p})

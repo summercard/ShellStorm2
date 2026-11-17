@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/enemies/normal_enemy_3d/fat_zombie21/components/enm_normal_fat_zombie21/enm_normal_fat_zombie21_visual_top3d.glb" id="1_glb"]
+[ext_resource type="Script" path="res://assets/art/enemies/normal_enemy_3d/fat_zombie21/runtime/fat_zombie21_formal_visual.gd" id="2_script"]
+
+[node name="FatZombie21" type="Node3D"]
+script = ExtResource("2_script")
+metadata/asset_id = "ENM-NORMAL-FAT-ZOMBIE21"
+metadata/content_id = "fat_zombie21"
+metadata/asset_version = "v007"
+metadata/presentation_only = true
+metadata/collision_owner = "Enemy3D"
+metadata/damage_owner = "Enemy3D"
+metadata/godot_forward = "-Z"
+metadata/validation_status = "replaced_pending_acceptance"
+metadata/compatibility_content_id = "fat_zombie03"
+metadata/compatibility_asset_id = "ENM-NORMAL-FAT-ZOMBIE03"
+metadata/game_height_m = 2.2
+metadata/base_display_multiplier = 0.7
+metadata/source_height_m = 0.79834
+metadata/display_scale = 3.936738
+metadata/forward_conversion = "Blender +X to Godot -Z"
+metadata/skeleton_id = "SKEL-FATZOMBIE21-ORIGINAL-001"
+metadata/attack_visual_contact_frame = 78
+metadata/attack_visual_contact_fps = 60
+metadata/slam_fx_asset_id = "VFX-FAT-ZOMBIE-SLAM-3D"
+
+[node name="VisualGLB" parent="." instance=ExtResource("1_glb")]
+rotation_degrees = Vector3(0, 90, 0)
+scale = Vector3(3.936738, 3.936738, 3.936738)

@@ -4,3 +4,5 @@
 
 [node name="FatZombie03" instance=ExtResource("1")]
 enemy_kind = "fat_zombie03"
+metadata/compatibility_asset_id = "ENM-NORMAL-FAT-ZOMBIE03"
+metadata/presentation_asset_id = "ENM-NORMAL-FAT-ZOMBIE21"

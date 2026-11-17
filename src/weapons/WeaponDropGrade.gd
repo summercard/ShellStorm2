@@ -112,17 +112,17 @@ static func color(grade: String) -> Color:
 ## 返回**新字典**，不改入参 —— 调用方（RewardService）拿到的是池成员 / 物品定义的副本，
 ## 就地改会污染同一次击杀里的其它条目。
 ##
-## `fate_slot_capacity` 只在这里加一次：掉落即落盘，之后 `from_item` 只读不算，
-## 因此反复读档不会复利。内容表若日后调整基线容量，已掉落的老实例保持自己的值
-## （实例是快照，与 `rarity` 同一口径）。
+## 显式容量的品质加成在此落盘；水合只补缺字段与已知豌豆旧容量，不重复叠加。
 static func apply_to_item(item: Dictionary, grade: String) -> Dictionary:
 	if item.is_empty():
 		return item
 	var resolved := normalize(grade)
 	var out := item.duplicate(true)
-	# 幂等守卫：已带品质的物品**不再加格子**。掉落边界只调用一次，但这条守卫挡住了
-	# 「有人对着背包里的枪再调一次」这种误用 —— 否则命运槽会越加越多。
-	var already_graded := is_valid(str(item.get("drop_grade", "")))
+	# 已落定任何品质的实例都不再加格子，包括蓝枪；不能借此接口升级已有枪。
+	# 新奖励必须在 ensure 写默认blue之前落定品质，见 RewardService 的唯一掉落边界。
+	var stored_nested := item.get("weapon_instance", {}) as Dictionary
+	var stored_grade := str(item.get("drop_grade", stored_nested.get("drop_grade", "")))
+	var already_graded := is_valid(stored_grade)
 	out["drop_grade"] = resolved
 
 	var capacity := int(out.get("fate_slot_capacity", 0))

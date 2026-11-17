@@ -25,7 +25,8 @@ SCENES = {
 ERROR = re.compile(r'SCRIPT ERROR:|\bERROR:|\bParse Error:|\bCompile Error:|Failed to load', re.I)
 KNOWN_TIMELINE = re.compile(r'^\s*ERROR: \[NarrativeDirector\] cue『player\.teleport』执行失败.*$')
 CAPTURES = ['drop_hologram_duo', 'drop_exit', 'offer_tutorial_duo', 'offer_released',
-            'normal_green_duo', 'portrait_detail']
+            'normal_green_duo', 'portrait_detail', 'assembled_hologram_duo',
+            'assembled_k_hint', 'assembled_released']
 
 
 def digest(path):
@@ -59,26 +60,40 @@ def required_files(scenes):
     files = {p.relative_to(wp.PROJECT_ROOT) for pattern in roots for p in wp.PROJECT_ROOT.glob(pattern)}
     files.update(Path(p) for p in ['src/world3d/Dungeon3D.gd', 'src/world3d/DungeonRoom3D.gd',
                                   'src/npc/NpcCharacter3D.gd', 'src/base3d/Base99Rescue3D.gd',
-                                  'src/weapons/FateCardView.gd'])
+                                  'src/weapons/FateCardView.gd', 'src/base/ItemRegistry.gd',
+                                  'src/weapons/WeaponInstance.gd', 'src/weapons/WeaponDropGrade.gd',
+                                  'src/rewards/RewardService.gd',
+                                  'assets/art/vfx/combat_3d/vfx_fat_zombie_slam_root_top3d.tscn',
+                                  'assets/art/vfx/combat_3d/vfx_fat_zombie_slam_root_top3d.gd',
+                                  'assets/art/vfx/combat_3d/vfx_fat_zombie_slam_root_top3d.gd.uid',
+                                  'assets/art/vfx/combat_3d/textures/enm_normal_fat_zombie21_slam_dust.png',
+                                  'assets/art/vfx/combat_3d/textures/enm_normal_fat_zombie21_slam_ripple.png',
+                                  'assets/art/shared/textures/enemies/tex_color_85eaa809e59fa600fe6c.png'])
     for scene in scenes:
         path = Path(scene.removeprefix('res://'))
         files.update([path, path.with_suffix('.gd')])
-    # 递归收齐脚本的代码依赖；不复制大型模型、纹理、音频或导入缓存。
+    # 代码依赖递归；资源仅收齐专项UI/VFX小型场景，不展开整屋/敌人模型资源树。
     pending = list(files)
     while pending:
         relative = pending.pop()
         source = wp.PROJECT_ROOT / relative
         if not source.is_file():
             raise ValueError('缺少专项依赖：' + str(source))
-        for reference in re.findall(r'res://([^"\s\)]+\.gd)', source.read_text(encoding='utf-8')):
+        source_text = source.read_text(encoding='utf-8') if source.suffix in ['.gd', '.tscn', '.json'] else ''
+        for reference in re.findall(r'res://([^"\s\)]+\.[A-Za-z0-9]+)', source_text):
             dependency = Path(reference)
-            if dependency.parts[0] == 'src' and dependency not in files:
-                files.add(dependency)
-                pending.append(dependency)
+            scoped_resource = reference.startswith(('assets/art/ui/', 'assets/art/vfx/combat_3d/'))
+            code_dependency = dependency.parts[0] == 'src' and dependency.suffix == '.gd'
+            scene_dependency = source.suffix == '.tscn' and relative.as_posix().startswith(('assets/art/ui/', 'assets/art/vfx/combat_3d/'))
+            if (code_dependency or scoped_resource or scene_dependency) and dependency not in files:
+                if dependency.suffix in ['.gd', '.tscn', '.tres', '.png', '.webp', '.jpg', '.gdshader']:
+                    files.add(dependency)
+                    pending.append(dependency)
     for relative in list(files):
-        sidecar = relative.with_name(relative.name + '.uid')
-        if (wp.PROJECT_ROOT / sidecar).is_file():
-            files.add(sidecar)
+        for suffix in ['.uid', '.import']:
+            sidecar = relative.with_name(relative.name + suffix)
+            if (wp.PROJECT_ROOT / sidecar).is_file():
+                files.add(sidecar)
     return sorted(files)
 
 

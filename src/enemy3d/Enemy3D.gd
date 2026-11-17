@@ -74,7 +74,7 @@ const HIT_EFFECT_BITE_M := 0.03
 ##   ③ 死亡表现按体型分两支（见 `GOO_DEATH_KINDS` 与 `_spawn_fat_death_burst()`）。
 ## 精英同族（如「巨大化 · 小僵尸」）一并适用 —— 它们本来就没有倒地动画（走压扁回收），
 ## 统一成一套表现，避免「同一只怪换个词缀就换一种死法」。
-const ZOMBIE_KINDS: Array[String] = ["melee_chaser", "ranged_caster", "fat_zombie03"]
+const ZOMBIE_KINDS: Array[String] = ["melee_chaser", "ranged_caster", "fat_zombie03", "fat_zombie21"]
 ## 死亡走 FX01-19 `VFX-ZOMBIE-GOO-DEATH-3D`（绿方块爆开 + 抛物线飞溅 + 地面液体 + 绿色冲击波）的怪种。
 ## 胖子僵尸**不在**本名单：它走自己的重型自爆（FX01-17 橙红方块 + 绿色冲击波）。
 const GOO_DEATH_KINDS: Array[String] = ["melee_chaser", "ranged_caster"]
@@ -142,6 +142,7 @@ const ILLUMINATION_UI_COLORS := {
 }
 const BODY_SCALE_BY_KIND := {
 	"fat_zombie03": 1.0,
+	"fat_zombie21": 1.0,
 	"exploder": 0.78,
 	"ranged_caster": 1.0,
 	"melee_chaser": 1.0,
@@ -221,6 +222,7 @@ const BODY_SCALE_BY_KIND := {
 }
 const HEALTH_BAR_SIZE_BY_KIND := {
 	"fat_zombie03": Vector2(1.8, 0.18),
+	"fat_zombie21": Vector2(1.8, 0.18),
 	"exploder": Vector2(1.15, 0.14),
 	"ranged_caster": Vector2(1.38, 0.15),
 	"melee_chaser": Vector2(1.38, 0.15),
@@ -287,6 +289,7 @@ const HEALTH_BAR_PIXEL_SIZE := 0.005
 # shielded仅为旧存档/历史行为测试保留，现行MonsterInjector与编辑器不再投放。
 const PROFILES := {
 	"fat_zombie03": {"hp": 232, "speed": 0.857142857, "damage": 19, "range": 1.55, "cooldown": 1.3, "patrol_multiplier": 0.5, "telegraph": 1.2, "recovery": 1.3, "alert": 0.6, "stagger": 0.8},
+	"fat_zombie21": {"hp": 232, "speed": 0.857142857, "damage": 19, "range": 1.55, "cooldown": 1.3, "patrol_multiplier": 0.5, "telegraph": 1.2, "recovery": 1.3, "alert": 0.6, "stagger": 0.8},
 	"melee_chaser": {"hp": 58, "speed": 3.7, "damage": 12, "range": 1.90, "cooldown": 1.05},
 	"ranged_caster": {"hp": 46, "speed": 2.25, "damage": 10, "range": 8.8, "cooldown": 1.8},
 	"summoner": {"hp": 72, "speed": 1.65, "damage": 8, "range": 7.2, "cooldown": 4.8},
@@ -757,7 +760,7 @@ const SOURCE_DAMAGE_BASE := {
 ## `_strong` 后缀的三个是「普通怪变种」，定义与倍率见 `MonsterVariants`；
 ## 列在这里只是为了场景里手动摆放时下拉选得到，它们的数值一律从基类派生。
 @export_enum(
-	"fat_zombie03", "melee_chaser", "ranged_caster", "summoner", "exploder", "ambusher", "boss",
+	"fat_zombie03", "fat_zombie21", "melee_chaser", "ranged_caster", "summoner", "exploder", "ambusher", "boss",
 	"fat_zombie03_strong", "melee_chaser_strong", "ranged_caster_strong",
 	"egt_bullet_kin", "egt_bandana_kin", "egt_veteran_kin",
 	"egt_red_shotgun", "egt_blue_shotgun",
@@ -2844,7 +2847,7 @@ func _perform_attack(to_target: Vector3, distance: float) -> void:
 			_target.call("apply_silence", 1.8)
 		return
 	match _table_kind():
-		"fat_zombie03":
+		"fat_zombie03", "fat_zombie21":
 			_last_attack_result = "miss"
 			if distance <= attack_range and (-global_basis.z).dot(to_target.normalized()) >= 0.5 and is_instance_valid(_target) and _has_line_of_sight(_target) and _target.has_method("take_damage"):
 				if _target.has_method("notify_attacked_by"):

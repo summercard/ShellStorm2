@@ -5,31 +5,32 @@
 
 [sub_resource type="Gradient" id="Gradient_alpha"]
 offsets = PackedFloat32Array(0, 0.12, 0.65, 1)
-colors = PackedColorArray(0.78, 0.56, 1, 0, 0.78, 0.56, 1, 0.66, 0.78, 0.56, 1, 0.42900000000000005, 0.78, 0.56, 1, 0)
+colors = PackedColorArray(0.78, 0.56, 1, 0.66, 0.78, 0.56, 1, 0.66, 0.78, 0.56, 1, 0.42900000000000005, 0.78, 0.56, 1, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture_alpha"]
 gradient = SubResource("Gradient_alpha")
 
 [sub_resource type="Curve" id="Curve_scale"]
-_data = [Vector2(0, 0.25), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.12), 0.0, 0.0, 0, 0]
-point_count = 3
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="CurveTexture" id="CurveTexture_scale"]
 curve = SubResource("Curve_scale")
 
 [sub_resource type="ParticleProcessMaterial" id="Particle_material"]
+resource_local_to_scene = true
 particle_flag_rotate_y = false
-emission_shape = 1
-emission_sphere_radius = 0.08
+emission_shape = 3
+emission_box_extents = Vector3(0.08, 0.08, 0.12)
 direction = Vector3(0, 0, 1)
-spread = 35.0
+spread = 20.0
 gravity = Vector3(0, 0, 0)
-initial_velocity_min = 0.1
-initial_velocity_max = 0.27
+initial_velocity_min = 0.16
+initial_velocity_max = 0.32
 angular_velocity_min = -65.0
 angular_velocity_max = 65.0
-scale_min = 0.55
-scale_max = 0.9
+scale_min = 1.1
+scale_max = 1.25
 scale_curve = SubResource("CurveTexture_scale")
 color_ramp = SubResource("GradientTexture_alpha")
 collision_mode = 0
@@ -46,18 +47,19 @@ texture_filter = 2
 
 [sub_resource type="QuadMesh" id="Quad_mesh"]
 material = SubResource("Quad_material")
-size = Vector2(0.18, 0.2)
+size = Vector2(0.34, 0.38)
 
 [node name="VfxProjectileEnchantReturn3D" type="Node3D"]
 visible = false
 script = ExtResource("1_script")
 lifetime = 0.0
 metadata/asset_id = "VFX-PROJECTILE-ENCHANT-RETURN-3D"
-metadata/asset_version = "v001"
+metadata/asset_version = "v002"
 metadata/lifecycle_owner = "Projectile3D"
 
 [node name="Particles" type="GPUParticles3D" parent="."]
 visible = false
+position = Vector3(0, 0, 0)
 cast_shadow = 0
 emitting = false
 amount = 24
@@ -69,5 +71,6 @@ visibility_aabb = AABB(-1, -1, -1, 2, 2, 3)
 use_fixed_seed = true
 seed = 160116
 process_material = SubResource("Particle_material")
+draw_passes = 1
 draw_pass_1 = SubResource("Quad_mesh")
 trail_enabled = false

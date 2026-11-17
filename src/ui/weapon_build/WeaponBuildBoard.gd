@@ -39,6 +39,8 @@ var _modules: VBoxContainer
 var _scroll: ScrollContainer
 var _canvas: Control
 var _track: Control
+var _root_track: Control
+var _root_connection: Dictionary = {}
 var _effects: Control
 var _flight_surface: Control
 
@@ -95,6 +97,11 @@ func _build() -> void:
 	_modules.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_modules.add_theme_constant_override("separation", 5)
 	_module_scroll.add_child(_modules)
+	# 根走线不受卡巢视口裁剪，且不截获枪械旋转或卡巢输入。
+	_root_track = TRACK.new()
+	_root_track.name = "WeaponRootTrack"
+	_root_track.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_root_track)
 	_scroll = ScrollContainer.new()
 	_scroll.name = "FateSocketViewport"
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
@@ -103,10 +110,12 @@ func _build() -> void:
 	_scroll.clip_contents = true
 	_scroll.gui_input.connect(_on_track_input)
 	add_child(_scroll)
+	_scroll.get_h_scroll_bar().value_changed.connect(_on_scroll_changed)
 	_canvas = Control.new()
 	_canvas.mouse_filter = Control.MOUSE_FILTER_PASS
 	_canvas.gui_input.connect(_on_track_input)
 	_scroll.add_child(_canvas)
+	_canvas.item_rect_changed.connect(_update_root_connection)
 	_track = TRACK.new()
 	_canvas.add_child(_track)
 	_detail = _label("悬停或聚焦卡巢查看刻印详情", 12, UIPalette.PRISM_LABEL)
@@ -407,24 +416,86 @@ func _layout() -> void:
 	_canvas.custom_minimum_size = Vector2(maxf(_scroll.size.x, pitch * _sockets.size() + 24), track_height)
 	_canvas.size = _canvas.custom_minimum_size
 	_track.size = _canvas.size
-	var segments: Array[Dictionary] = []
+	_root_track.size = size
 	for i in _sockets.size():
 		var socket := _sockets[i]
 		socket.position = Vector2(14 + i * pitch, 3 + (stagger if i % 2 == 1 else 0.0))
 		socket.size = Vector2(socket_width, socket_height)
-		var end := socket.position + Vector2(0, socket_height * 0.45)
-		var start := Vector2(0, track_height * 0.5)
+	var segments: Array[Dictionary] = []
+	var path_active := true
+	for i in _sockets.size():
+		var box := _socket_art_rect(_sockets[i], _track)
+		var end := Vector2(box.position.x, box.get_center().y)
+		var start := end
 		if i > 0:
-			var previous := _sockets[i - 1]
-			start = previous.position + Vector2(socket_width, socket_height * 0.45)
+			var previous := _socket_art_rect(_sockets[i - 1], _track)
+			start = Vector2(previous.end.x, previous.get_center().y)
 		var bend := (start.x + end.x) * 0.5
-		segments.append({"to_slot": i + 1, "active": _records.has(i + 1) and i + 1 != _pending_slot, "points": PackedVector2Array([start, Vector2(bend, start.y), Vector2(bend, end.y), end])})
+		path_active = path_active and _records.has(i + 1) and i + 1 != _pending_slot
+		# 保留每槽一段的查询契约；第一段由独立根层绘制。
+		segments.append({"to_slot": i + 1, "active": path_active, "render": i > 0, "points": PackedVector2Array([start, Vector2(bend, start.y), Vector2(bend, end.y), end])})
 	_track.call("set_segments", segments)
+	_update_root_connection()
+	call_deferred("_update_root_connection")
 	_detail.position = Vector2(right_x, size.y - (44 if _compact else 60))
 	_detail.size = Vector2(maxf(1, size.x - right_x - 20), 36 if _compact else 52)
 	_scope.position = Vector2(right_x, size.y - 65)
 	_scope.size = Vector2(maxf(1, size.x - right_x - 20), 40)
 	queue_redraw()
+
+func _local_point(source: Control, point: Vector2, target: Control) -> Vector2:
+	return target.get_global_transform_with_canvas().affine_inverse() * source.get_global_transform_with_canvas() * point
+
+func _socket_art_rect(socket: Control, target: Control) -> Rect2:
+	var art := socket.get("_art") as Control
+	if art == null:
+		return Rect2(_local_point(socket, Vector2.ZERO, target), socket.size)
+	var face := socket.get("_face") as TextureRect
+	var actual := CARD_VIEW.contained_texture_rect(art.size, face.texture if face != null else CARD_VIEW.back_texture())
+	var start := _local_point(art, actual.position, target)
+	return Rect2(start, _local_point(art, actual.end, target) - start)
+
+func _weapon_connection_anchor(target: Control) -> Vector2:
+	var rendered := _preview.get_node_or_null("ProjectedTexture") as Control
+	if rendered == null:
+		rendered = _preview
+	# 居中等比渲染框的中心也是真实预览中心，不从下方弹种模块取点。
+	return _local_point(rendered, rendered.size * 0.5, target)
+
+func _on_scroll_changed(_value: float) -> void:
+	_update_root_connection()
+	# ScrollContainer 的子节点位移可能晚于 value_changed 到达。
+	call_deferred("_update_root_connection")
+
+func _update_root_connection() -> void:
+	if _root_track == null or _track == null or _canvas == null:
+		return
+	_root_connection = {}
+	var root_segments: Array[Dictionary] = []
+	if not _sockets.is_empty():
+		var weapon_anchor := _weapon_connection_anchor(_root_track)
+		var viewport_start := _local_point(_scroll, Vector2.ZERO, _root_track)
+		var viewport_end := _local_point(_scroll, _scroll.size, _root_track)
+		var first := _socket_art_rect(_sockets[0], _root_track)
+		var card_entry := Vector2(first.position.x, first.get_center().y)
+		var boundary := Vector2(viewport_start.x, clampf(card_entry.y, viewport_start.y, viewport_end.y))
+		# 只有真实左中接点仍在视口内才接卡，滚出后不跨层追踪隐藏卡。
+		var reaches_first := card_entry.x >= viewport_start.x and card_entry.x <= viewport_end.x and card_entry.y >= viewport_start.y and card_entry.y <= viewport_end.y
+		var entry_anchor := card_entry if reaches_first else boundary
+		var bend := maxf(weapon_anchor.x, viewport_start.x - 8.0)
+		var points := PackedVector2Array([weapon_anchor, Vector2(bend, weapon_anchor.y), Vector2(bend, entry_anchor.y), entry_anchor])
+		var active := _records.has(1) and _pending_slot != 1
+		_root_connection = {"points": points, "weapon_anchor": weapon_anchor, "entry_anchor": entry_anchor, "active": active, "destination_slot": 1 if reaches_first else 0, "scroll_boundary": boundary, "clipped": not reaches_first, "coordinate_space": "board_local"}
+		root_segments.append({"to_slot": 1, "active": active, "points": points})
+		var segments: Array[Dictionary] = _track.get("segments")
+		if not segments.is_empty():
+			var track_points := PackedVector2Array()
+			for point: Vector2 in points:
+				track_points.append(_local_point(_root_track, point, _track))
+			segments[0]["points"] = track_points
+			segments[0]["active"] = active
+			segments[0]["render"] = false
+	_root_track.call("set_segments", root_segments)
 
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, size), UIPalette.PRISM_SURFACE)
@@ -476,6 +547,7 @@ func ensure_slot_visible(slot_index: int) -> void:
 		_scroll.scroll_horizontal = int(high - _scroll.size.x)
 
 func get_presentation_snapshot() -> Dictionary:
+	_update_root_connection()
 	var result := _snapshot.duplicate(true)
 	var cards: Array[Dictionary] = []
 	for index in range(1, _capacity() + 1):
@@ -483,7 +555,7 @@ func get_presentation_snapshot() -> Dictionary:
 		var occupied := not record.is_empty() and index != _pending_slot
 		var effect_brief := GameText.fate_effect_brief(str(record.get("stable_card_id", "")), str(record.get("orientation", "UPRIGHT")) == "REVERSED") if occupied else ""
 		cards.append({"slot_index": index, "stable_card_id": record.get("stable_card_id", ""), "orientation": record.get("orientation", "UPRIGHT"), "occupied": occupied, "pending": index == _pending_slot, "shows_back": record.is_empty() or index == _pending_slot, "effect_brief": effect_brief})
-	result.merge({"cards": cards, "slot_count": _capacity(), "used": _visible_used(), "committed_used": _records.size(), "pending_slot": _pending_slot, "branch_count": _branches.size(), "branches": _branches.duplicate(true), "branch_mapping": "shared_unmapped", "flow_segments": _track.get("segments").duplicate(true) if _track != null else [], "compact": _compact, "scroll_horizontal": _scroll.scroll_horizontal if _scroll != null else 0, "preview": _preview.call("get_snapshot") if _preview != null else {}}, true)
+	result.merge({"cards": cards, "slot_count": _capacity(), "used": _visible_used(), "committed_used": _records.size(), "pending_slot": _pending_slot, "branch_count": _branches.size(), "branches": _branches.duplicate(true), "branch_mapping": "shared_unmapped", "root_connection": _root_connection.duplicate(true), "flow_segments": _track.get("segments").duplicate(true) if _track != null else [], "compact": _compact, "scroll_horizontal": _scroll.scroll_horizontal if _scroll != null else 0, "preview": _preview.call("get_snapshot") if _preview != null else {}}, true)
 	return result
 
 func set_pending_install(slot_index: int) -> void:
@@ -560,20 +632,22 @@ func play_card_install(card: FateCard, slot_index: int, from_global_rect: Rect2)
 	landing = get_slot_global_rect(slot_index)
 	flyer.position = inverse * landing.position
 	flyer.size = inverse.basis_xform(landing.size).abs()
-	await _play_impact(landing.get_center(), reduced)
+	await _play_impact(landing.get_center(), reduced, true)
 	if is_instance_valid(flyer):
 		flyer.queue_free()
 	if epoch == _animation_epoch:
 		clear_pending_install()
 
-func _play_impact(global_point: Vector2, reduced: bool) -> void:
+func _play_impact(global_point: Vector2, reduced: bool, weapon_feedback := false) -> void:
 	var prefab := load(IMPACT_PATH) as PackedScene
 	if prefab == null:
 		return
 	var effect: Control = prefab.instantiate()
 	_effects.add_child(effect)
-	effect.size = size
-	await effect.call("play", _effects.get_global_transform().affine_inverse() * global_point, reduced)
+	effect.size = _effects.size
+	var origin := effect.get_global_transform().affine_inverse() * global_point
+	var weapon_anchor := _weapon_connection_anchor(effect) if weapon_feedback else Vector2.INF
+	await effect.call("play", origin, reduced, weapon_anchor)
 	if is_instance_valid(effect):
 		effect.queue_free()
 

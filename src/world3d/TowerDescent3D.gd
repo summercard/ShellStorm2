@@ -227,6 +227,8 @@ const CAMERA_DEFAULT_TRAILING_M := 4.914455
 const CAMERA_LOOK_HEIGHT_M := 0.45
 const CAMERA_LOOK_AHEAD_M := 0.75
 const CAMERA_FOV_DEG := 65.0
+# 2026-11-17：仅远征01固化旧默认按 `'` 五次的效果；公共机位与临时调试量不变。
+const CAMERA_EXPEDITION_01_DISTANCE_OFFSET_M := 1.0
 const CAMERA_EXPEDITION_PROFILE_SMOOTH_RATE := 4.0
 const CAMERA_LOWER_WALL_PROBE_HEIGHT_M := 1.09
 # 探针从角色前侧开始并向镜头后方穿过角色。若从角色身后0.42m起射，
@@ -240,7 +242,8 @@ const CAMERA_LOWER_WALL_LIFT_RISE_RATE := 8.0
 const CAMERA_LOWER_WALL_LIFT_FALL_RATE := 4.5
 const CAMERA_LOWER_WALL_MIN_TRAILING_M := 0.15
 # 收镜必须在墙进入当前默认镜头通道时触发，不得沿用任何旧阈值；
-# 本常量跟随 CAMERA_DEFAULT_TRAILING_M 自动更新（现为 4.914455m）。
+# 公共常量跟随 CAMERA_DEFAULT_TRAILING_M 自动更新（4.914455m）；远征01经
+# _camera_lower_wall_retract_trigger_m() 读取本关基础后移5.414396m，其它关不变。
 # 「跟随」而非冻结旧绝对值 3.699625，是有几何依据的：探针量出的是墙到玩家的距离，
 # 而相机在玩家后方 trailing 处，于是 distance − trailing = 相机到墙的距离。令阈值 =
 # trailing，触发点恰好落在「相机一碰到墙」上；若冻结旧值，相机得先穿墙 1.21m 才收镜。
@@ -543,11 +546,14 @@ const MAIN_STORY_SCRIPT = preload("res://src/narrative/MainStoryChapter3D.gd")
 const MAIN_STORY_INSERT_LOCAL := Vector3(5.0, 1.38, -3.77)
 const MAIN_STORY_EXTRACTION_KEY := "main_story_auto_extraction"
 const MAIN_STORY_EXTRACTION_SECONDS := 8.0
+const MAIN_STORY_SAFE_BEACON_SCENE := "res://assets/art/props/dungeon_3d/prp_extraction_safe_beacon_root_top3d.tscn"
+const MAIN_STORY_SAFE_BEACON_ASSET_ID := "PRP-EXTRACTION-SAFE-BEACON-3D"
 var _main_story_controller: MainStoryChapter3D
 var _main_story_pedestal: Node3D
 var _main_story_host_ready := false
 var _main_story_gameplay_started := false
 var _main_story_auto_extraction: Dictionary = {}
+var _main_story_safe_beacon: ExtractionBeacon3D = null
 var _main_story_extraction_retry := 0.0
 var _main_story_extraction_committing := false
 var _main_story_return_to_base := false
@@ -791,6 +797,7 @@ func _on_main_story_key_chest_committed(origin: Vector3) -> void:
 	_spawn_main_story_key_projection(origin)
 	DialogueUI.show_message("已获得主线道具：稀土钥匙", DialogueUI.SPEAKER_SYSTEM, 4.0)
 	if get_main_story_controller() != null:
+		_restore_main_story_extraction(BaseManager.get_active_run_checkpoint())
 		_main_story_controller.on_key_claimed()
 
 
@@ -811,32 +818,70 @@ func _spawn_main_story_key_projection(origin: Vector3) -> void:
 
 
 func _new_main_story_extraction_state() -> Dictionary:
-	return {"active": true, "remaining": MAIN_STORY_EXTRACTION_SECONDS, "duration": MAIN_STORY_EXTRACTION_SECONDS, "key_id": MAIN_STORY_SCRIPT.KEY_RARE_EARTH}
+	return {
+		"schema": 2,
+		"stage": "call_pending",
+		"key_id": MAIN_STORY_SCRIPT.KEY_RARE_EARTH,
+		"run_id": _run_id,
+		"map_id": get_expedition_level_id(),
+		"room_id": _current_room_id,
+		"local_position": _local_story_extraction_position(),
+	}
+
+
+func _local_story_extraction_position() -> Array:
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if room == null or player == null:
+		return []
+	var point := room.to_local(player.global_position)
+	return [point.x, point.y, point.z]
+
+
+func _main_story_extraction_state_matches(state: Dictionary) -> bool:
+	return (
+		int(state.get("schema", 1)) >= 2
+		and str(state.get("key_id", "")) == MAIN_STORY_SCRIPT.KEY_RARE_EARTH
+		and str(state.get("run_id", "")) == _run_id
+		and str(state.get("map_id", "")) == get_expedition_level_id()
+	)
 
 
 func start_main_story_auto_extraction(_seconds: float = MAIN_STORY_EXTRACTION_SECONDS) -> void:
+	# 兼容旧调用名：不再开始倒计时，只确保领取事务留下 call_pending。
 	if _main_story_run_profile() != "database" or _completed or _is_player_dead() or not _main_story_auto_extraction.is_empty() or _main_story_key_pending():
 		return
 	var checkpoint := BaseManager.get_active_run_checkpoint()
-	if str(checkpoint.get("run_id", "")) != _run_id or not bool((checkpoint.get(MAIN_STORY_EXTRACTION_KEY, {}) as Dictionary).get("active", false)):
+	var existing := checkpoint.get(MAIN_STORY_EXTRACTION_KEY, {}) as Dictionary
+	if str(checkpoint.get("run_id", "")) != _run_id or not _main_story_extraction_state_matches(existing):
 		return
-	_main_story_auto_extraction = _new_main_story_extraction_state()
-	_refresh_main_story_extraction_hud()
+	_main_story_auto_extraction = existing.duplicate(true)
+	_main_story_auto_extraction["stage"] = "call_pending"
+	_queue_runtime_autosave("main_story_key_call_pending")
 
 
 func _restore_main_story_extraction(snapshot: Dictionary) -> void:
 	_main_story_auto_extraction = {}
 	if _main_story_run_profile() != "database" or not _snapshot_matches_runtime_map(snapshot) or str(snapshot.get("scope", "")) != "combat" or str(snapshot.get("run_id", "")) != _run_id:
 		return
-	var state := snapshot.get(MAIN_STORY_EXTRACTION_KEY, {}) as Dictionary
-	if not bool(state.get("active", false)) or str(state.get("key_id", "")) != MAIN_STORY_SCRIPT.KEY_RARE_EARTH:
+	var raw_state: Variant = snapshot.get(MAIN_STORY_EXTRACTION_KEY, {})
+	if not raw_state is Dictionary:
+		return
+	var state := (raw_state as Dictionary).duplicate(true)
+	# schema1 active/remaining 旧档只迁移为待通讯，不再恢复 tick。
+	if int(state.get("schema", 1)) < 2 and bool(state.get("active", false)):
+		state = {
+			"schema": 2, "stage": "call_pending", "key_id": MAIN_STORY_SCRIPT.KEY_RARE_EARTH,
+			"run_id": _run_id, "map_id": get_expedition_level_id(),
+			"room_id": str(snapshot.get("current_room_id", _current_room_id)), "local_position": [],
+		}
+	if not _main_story_extraction_state_matches(state) or str(state.get("stage", "")) not in ["call_pending", "beacon_ready"]:
 		return
 	if MainStoryProgress.key_state(BaseManager.get_main_story_snapshot(), MAIN_STORY_SCRIPT.KEY_RARE_EARTH) != MainStoryProgress.STATE_ACQUIRED:
 		return
-	_main_story_auto_extraction = state.duplicate(true)
-	_main_story_auto_extraction["duration"] = MAIN_STORY_EXTRACTION_SECONDS
-	_main_story_auto_extraction["remaining"] = clampf(float(state.get("remaining", MAIN_STORY_EXTRACTION_SECONDS)), 0.0, MAIN_STORY_EXTRACTION_SECONDS)
+	_main_story_auto_extraction = state
 	_main_story_extraction_retry = 0.0
+	if str(state.get("stage", "")) == "beacon_ready":
+		call_deferred("_restore_main_story_safe_beacon")
 
 
 func _abort_extraction_on_death() -> void:
@@ -849,50 +894,82 @@ func _abort_extraction_on_death() -> void:
 func _cancel_main_story_extraction() -> void:
 	if _main_story_auto_extraction.is_empty():
 		return
-	_main_story_auto_extraction["active"] = false
+	_main_story_auto_extraction["stage"] = "cancelled"
+	if is_instance_valid(_main_story_safe_beacon):
+		_main_story_safe_beacon.abort_extraction()
+		_main_story_safe_beacon.queue_free()
+	_main_story_safe_beacon = null
+	if not _main_story_auto_extraction.is_empty():
+		_main_story_auto_extraction["stage"] = "cancelled"
 	if extraction_panel != null:
 		extraction_panel.hide()
 	_queue_runtime_autosave("main_story_extraction_cancelled")
 
 
-func _tick_main_story_auto_extraction(delta: float) -> void:
-	if not bool(_main_story_auto_extraction.get("active", false)):
-		return
+func _tick_main_story_auto_extraction(_delta: float) -> void:
+	# 方式B不再有8秒自动tick；仅由安全信标自己的真实读条触发正式结算。
 	if _completed or _is_player_dead():
 		_cancel_main_story_extraction()
+
+
+func get_main_story_extraction_state() -> Dictionary:
+	return _main_story_auto_extraction.duplicate(true)
+
+
+func commit_main_story_beacon_ready() -> Dictionary:
+	if _main_story_run_profile() != "database" or _main_story_auto_extraction.is_empty():
+		return {"success": false, "reason": "主线安全信标待办不存在"}
+	if str(_main_story_auto_extraction.get("stage", "")) != "call_pending":
+		return {"success": false, "reason": "主线安全信标阶段不可提交"}
+	_main_story_auto_extraction["stage"] = "beacon_ready"
+	var saved := BaseManager.set_active_run_checkpoint(build_runtime_save_snapshot(), "main_story_beacon_ready")
+	if not saved:
+		_main_story_auto_extraction["stage"] = "call_pending"
+		return {"success": false, "reason": "安全信标待办保存失败"}
+	call_deferred("_restore_main_story_safe_beacon")
+	return {"success": true}
+
+
+func _restore_main_story_safe_beacon() -> void:
+	if str(_main_story_auto_extraction.get("stage", "")) != "beacon_ready" or is_instance_valid(_main_story_safe_beacon):
 		return
-	if not _main_story_host_ready or not _main_story_gameplay_started or _expedition_loading_active or get_tree().paused:
+	if not ResourceLoader.exists(MAIN_STORY_SAFE_BEACON_SCENE):
+		push_warning("[TowerDescent3D] 安全信标 wrapper 尚未就绪；保留 beacon_ready 待办")
 		return
-	_main_story_auto_extraction["remaining"] = maxf(0.0, float(_main_story_auto_extraction["remaining"]) - delta)
-	_refresh_main_story_extraction_hud()
-	_main_story_extraction_retry = maxf(0.0, _main_story_extraction_retry - delta)
-	if float(_main_story_auto_extraction["remaining"]) > 0.0 or _main_story_extraction_retry > 0.0 or _main_story_extraction_committing:
+	var room := _room_by_id.get(str(_main_story_auto_extraction.get("room_id", _current_room_id))) as DungeonRoom3D
+	if room == null:
 		return
-	_main_story_extraction_committing = true
-	# 仅钥匙自动撤离强制回基地；普通信标、阵亡和弃局保留原塔3来源。
-	var previous_source := _expedition_entry_source
-	_main_story_return_to_base = true
-	_expedition_entry_source = ExpeditionEntryContext.BASE
-	_finish_run(true)
-	_main_story_extraction_committing = false
-	if not _completed:
-		_main_story_return_to_base = false
-		_expedition_entry_source = previous_source
-		_main_story_extraction_retry = 2.0
-	else:
-		_main_story_auto_extraction["active"] = false
+	var scene := load(MAIN_STORY_SAFE_BEACON_SCENE) as PackedScene
+	var beacon := scene.instantiate() as ExtractionBeacon3D
+	if beacon == null:
+		push_warning("[TowerDescent3D] 安全信标 wrapper 实例化失败；保留待办")
+		return
+	room.add_child(beacon)
+	var raw := _main_story_auto_extraction.get("local_position", []) as Array
+	var requested := room.to_global(Vector3(float(raw[0]), float(raw[1]), float(raw[2]))) if raw.size() >= 3 else room.global_position
+	var points: Array[Vector3] = room.resolve_narrative_floor_positions([requested], [], 8.0)
+	if points.is_empty():
+		push_warning("[TowerDescent3D] 安全信标没有可用真实地面落点；保留 beacon_ready 待办")
+		beacon.queue_free()
+		return
+	beacon.global_position = points[0]
+	var local_point := room.to_local(points[0])
+	_main_story_auto_extraction["local_position"] = [local_point.x, local_point.y, local_point.z]
+	beacon.set_meta("asset_id", MAIN_STORY_SAFE_BEACON_ASSET_ID)
+	beacon.configure(visual_theme.accent_color, MAIN_STORY_EXTRACTION_SECONDS, "STORY_SAFE", false)
+	beacon.configure_story_safe_drop(0.6)
+	beacon.set_locked(false)
+	beacon.extraction_started.connect(_on_extraction_started.bind(beacon))
+	beacon.extraction_progress.connect(_on_extraction_progress.bind(beacon))
+	beacon.extraction_cancelled.connect(_on_extraction_cancelled.bind(beacon))
+	beacon.extraction_completed.connect(_on_extraction_completed.bind(beacon))
+	_main_story_safe_beacon = beacon
 
 
 func _refresh_main_story_extraction_hud() -> void:
-	if extraction_panel == null or extraction_bar == null:
-		return
-	if _main_story_extraction_label == null:
-		_main_story_extraction_label = Label.new()
-		_main_story_extraction_label.name = "MainStoryExtractionCountdown"
-		extraction_bar.get_parent().add_child(_main_story_extraction_label)
-	extraction_panel.show()
-	extraction_bar.value = (1.0 - float(_main_story_auto_extraction.get("remaining", 0.0)) / MAIN_STORY_EXTRACTION_SECONDS) * 100.0
-	_main_story_extraction_label.text = "稀土钥匙已保存 · 自动返航99F基地 %d秒 · 可自由行动" % ceili(float(_main_story_auto_extraction.get("remaining", 0.0)))
+	# 方式B只显示安全信标实体提示，不再显示旧自动返航倒计时面板。
+	if extraction_panel != null:
+		extraction_panel.hide()
 
 func is_expedition() -> bool:
 	return expedition_mode
@@ -1094,7 +1171,11 @@ func _ready() -> void:
 	else:
 		_build_floor_stages()
 	_report_expedition_loading(0.88, "远征房间与碰撞装配已完成")
-	# 镜头固定在12m层高内部的斜俯视位置；墙体和物件不再推动或旋转镜头。
+	# 首帧即使用本关基础机位；后续墙/楼板探针与姿态合成读取同一组Y/Z。
+	if not _uses_expedition_camera_profiles():
+		_update_camera_profile(0.0)
+		_camera_trailing_current_m = _camera_profile_trailing_current_m
+		_camera_trailing_target_m = _camera_profile_trailing_current_m
 	_apply_indoor_camera_pose()
 	player.camera.fov = CAMERA_FOV_DEG
 	_install_player_occlusion_silhouette()
@@ -1547,6 +1628,23 @@ func _clear_new_game_opening_loadout() -> void:
 	if removed.is_empty():
 		# 不静默：说明 `Player3D.start_with_weapon` 与开场口径已经脱节，应被验收抓到。
 		push_warning("[TowerDescent3D] 开场玩家身上本来就没有枪。")
+
+
+func _on_extraction_completed(beacon: ExtractionBeacon3D) -> void:
+	if beacon == _main_story_safe_beacon:
+		_main_story_return_to_base = true
+		_expedition_entry_source = ExpeditionEntryContext.BASE
+		_main_story_extraction_committing = true
+		super(beacon)
+		_main_story_extraction_committing = false
+		if not _completed:
+			_main_story_return_to_base = false
+			if is_instance_valid(beacon):
+				beacon.queue_free()
+			_main_story_safe_beacon = null
+			call_deferred("_restore_main_story_safe_beacon")
+		return
+	super(beacon)
 
 
 func _process(delta: float) -> void:
@@ -2148,6 +2246,30 @@ func _update_base_fog_transition(delta: float, immediate := false) -> void:
 	_atmosphere.call("set_room_fog_profile", profile, immediate)
 
 
+## 关卡装配专属基准，不写入Player3D调试状态；F12仍回到各关自己的默认机位。
+func _camera_default_distance_offset_m() -> float:
+	if is_expedition() and get_expedition_level_id() == "expedition_01":
+		return CAMERA_EXPEDITION_01_DISTANCE_OFFSET_M
+	return 0.0
+
+
+## 固定拉远先换算为本关基础Y/Z，再交给原避障；不能在避障之后再次把镜头推回墙/楼板。
+func _camera_default_local_position() -> Vector3:
+	var original := Vector3(0.0, CAMERA_HEIGHT_M, CAMERA_DEFAULT_TRAILING_M)
+	var offset_m := _camera_default_distance_offset_m()
+	if is_zero_approx(offset_m):
+		return original
+	var focal := Vector3(0.0, CAMERA_LOOK_HEIGHT_M, -CAMERA_LOOK_AHEAD_M)
+	var relative := original - focal
+	return focal + relative.normalized() * (relative.length() + offset_m)
+
+
+func _camera_lower_wall_retract_trigger_m() -> float:
+	if not is_zero_approx(_camera_default_distance_offset_m()):
+		return _camera_default_local_position().z
+	return CAMERA_LOWER_WALL_RETRACT_TRIGGER_M
+
+
 func _uses_expedition_camera_profiles() -> bool:
 	return is_expedition() and get_expedition_level_id() == "expedition_02"
 
@@ -2171,8 +2293,11 @@ func _camera_profile_number(
 func _update_camera_profile(delta: float) -> void:
 	if not _uses_expedition_camera_profiles():
 		_camera_profile_active = false
-		_camera_profile_height_target_m = CAMERA_HEIGHT_M
-		_camera_profile_trailing_target_m = CAMERA_DEFAULT_TRAILING_M
+		var default_local := _camera_default_local_position()
+		_camera_profile_height_target_m = default_local.y
+		_camera_profile_height_current_m = default_local.y
+		_camera_profile_trailing_target_m = default_local.z
+		_camera_profile_trailing_current_m = default_local.z
 		_camera_profile_yaw_target_deg = 0.0
 		_camera_profile_look_height_target_m = CAMERA_LOOK_HEIGHT_M
 		_camera_profile_look_ahead_target_m = CAMERA_LOOK_AHEAD_M
@@ -2252,8 +2377,8 @@ func _apply_indoor_camera_pose() -> void:
 	player.camera_feedback.world_pose_managed = true
 	var feedback_offset: Vector3 = player.camera_feedback.look_offset
 	if not _uses_expedition_camera_profiles():
-		# 非远征02保持版本库原始相机：玩家局部坐标、坐姿下沉、debug trailing/yaw
-		# 均不改变；远征02专属 profile 不得污染远征01、塔楼和全局默认镜头。
+		# 非远征02沿用玩家局部姿态；01的固定拉远已换算到基础profile的Y/Z，
+		# 避障先消费该基准，最后仅叠加临时debug。02与公共默认常量不变。
 		var seat_drop_m := player.get_seated_camera_drop_m()
 		var focal_local := Vector3(
 			0.0,
@@ -2262,7 +2387,7 @@ func _apply_indoor_camera_pose() -> void:
 		)
 		var default_relative := Vector3(
 			0.0,
-			CAMERA_HEIGHT_M + _camera_lift_current_m
+			_camera_profile_height_current_m + _camera_lift_current_m
 				- _camera_stair_slab_drop_current_m
 			- CAMERA_LOOK_HEIGHT_M,
 			_camera_trailing_current_m + CAMERA_LOOK_AHEAD_M
@@ -2571,7 +2696,7 @@ func _update_camera_lower_wall_lift(delta: float, refresh_probe: bool = true) ->
 	# 沿固定后方轴收至角色正上方附近，保证整个视锥也回到墙内侧。
 	# Enter at the original distance; exit farther away so tiny position/probe
 	# fluctuations cannot alternate retract/extend and unlock south look each tick.
-	var retract_threshold := CAMERA_LOWER_WALL_RETRACT_TRIGGER_M
+	var retract_threshold := _camera_lower_wall_retract_trigger_m()
 	if _camera_lower_wall_retract_active:
 		retract_threshold += CAMERA_LOWER_WALL_RETRACT_EXIT_MARGIN_M
 	_camera_lower_wall_retract_active = (
@@ -9449,6 +9574,7 @@ func get_tower_snapshot() -> Dictionary:
 			- _camera_stair_slab_drop_current_m
 		),
 		"camera_base_height_m": _camera_profile_height_current_m,
+		"camera_default_distance_offset_m": _camera_default_distance_offset_m(),
 		"camera_profile_active": _camera_profile_active,
 		"camera_profile_id": _current_camera_profile_id(),
 		"camera_profile_height_target_m": _camera_profile_height_target_m,
@@ -9466,9 +9592,9 @@ func get_tower_snapshot() -> Dictionary:
 		"camera_lower_wall_probe_height_m": CAMERA_LOWER_WALL_PROBE_HEIGHT_M,
 		"camera_lower_wall_probe_start_m": CAMERA_LOWER_WALL_PROBE_START_M,
 		"camera_lower_wall_probe_length_m": CAMERA_LOWER_WALL_PROBE_LENGTH_M,
-		"camera_lower_wall_retract_trigger_m": CAMERA_LOWER_WALL_RETRACT_TRIGGER_M,
+		"camera_lower_wall_retract_trigger_m": _camera_lower_wall_retract_trigger_m(),
 		"camera_lower_wall_retract_active": _camera_lower_wall_retract_active,
-		"camera_lower_wall_retract_exit_m": CAMERA_LOWER_WALL_RETRACT_TRIGGER_M + CAMERA_LOWER_WALL_RETRACT_EXIT_MARGIN_M,
+		"camera_lower_wall_retract_exit_m": _camera_lower_wall_retract_trigger_m() + CAMERA_LOWER_WALL_RETRACT_EXIT_MARGIN_M,
 		"camera_wall_look_blocked_direction": _camera_wall_look_direction,
 		"camera_collision_mode": "lower_wall_lift_and_retract_arc",
 		"camera_stair_slab_mode": "tagged_upper_lower_flight_vertical_clamp",
@@ -9482,7 +9608,7 @@ func get_tower_snapshot() -> Dictionary:
 			0.0,
 			_camera_trailing_current_m
 		),
-		"camera_desired_trailing_offset_m": CAMERA_DEFAULT_TRAILING_M,
+		"camera_desired_trailing_offset_m": _camera_default_local_position().z,
 		"camera_look_height_m": CAMERA_LOOK_HEIGHT_M,
 		"camera_look_ahead_m": CAMERA_LOOK_AHEAD_M,
 		"camera_fov_deg": CAMERA_FOV_DEG,

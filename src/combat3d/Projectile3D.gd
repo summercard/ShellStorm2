@@ -201,8 +201,9 @@ func configure(config: Dictionary) -> void:
 	_sync_visual_route(config)
 	if _built:
 		_rebuild_carried_weapon()
-		_apply_visual_configuration()
 		_sync_visual_orientation()
+	# configure可先于入树；弹体脚本必须提前保存本发的灯抑制上下文。
+	_apply_visual_configuration()
 	_configure_enchantment_visuals()
 
 
@@ -227,7 +228,8 @@ func activate(config: Dictionary, world_position: Vector3) -> void:
 	velocity = Vector3.ZERO
 	_sync_visual_orientation()
 	if _visual != null:
-		_visual.activate(global_position, bullet_color, _visual_scale_factor(), _bullet_visual_context())
+		var resolved_visual_color := _bullet_visual_color()
+		_visual.activate(global_position, resolved_visual_color, _visual_scale_factor(), _bullet_visual_context())
 	if _enchantment_visuals != null:
 		_enchantment_visuals.set_emitting(true)
 	if _collision_shape != null:
@@ -811,6 +813,10 @@ func _build_visual() -> void:
 ## 池化复借时同种弹药（visual_id 不变）零成本——由 _sync_visual_route 拦在调用之前。
 func _ensure_visual(scene: PackedScene) -> void:
 	if _visual != null and is_instance_valid(_visual):
+		# 延迟释放前先灭旧灯，避免同帧切弹种时与附魔灯重叠。
+		if _visual.has_method("deactivate"):
+			_visual.call("deactivate")
+		_visual.visible = false
 		_visual.queue_free()
 	_visual = scene.instantiate() as VfxEffectBase3D
 	add_child(_visual)
@@ -863,6 +869,16 @@ func _base_scale_factor() -> float:
 	return scale_factor
 
 
+func _has_enchantment_body_tint() -> bool:
+	return _visual_id == "mod_bullet_standard" and not PROJECTILE_ENCHANT_VISUALS.selected_attributes(fate_behavior).is_empty()
+
+
+func _bullet_visual_color() -> Color:
+	if _has_enchantment_body_tint():
+		return PROJECTILE_ENCHANT_VISUALS.body_tint(PROJECTILE_ENCHANT_VISUALS.selected_attributes(fate_behavior))
+	return bullet_color
+
+
 ## 弹体几何 context：枪身档位决定的轴向拉伸与生长包络（纯视觉）。
 func _bullet_visual_context() -> Dictionary:
 	return {
@@ -870,6 +886,9 @@ func _bullet_visual_context() -> Dictionary:
 		"grow_from": float(_gun_bullet_geometry.get("grow_from", 1.0)),
 		"grow_duration": float(_gun_bullet_geometry.get("grow_duration", 0.0)),
 		"projectile": true,
+		"tint_core": _has_enchantment_body_tint(),
+		"suppress_body_light": not PROJECTILE_ENCHANT_VISUALS.selected_attributes(fate_behavior).is_empty(),
+		"base_body_color": bullet_color,
 		# 敌方子弹**默认 3D 弹体**（2026-11-10 业主：「我只要求把接触体积和模型（被放大）的
 		# 体积做成一致，没有要求做成公告板」）。公告板实现完整保留，由
 		# `GameDesignConfig.ENEMY_BULLET_BILLBOARD` 或单发 `projectile_config["billboard"]` 切换。
@@ -897,7 +916,8 @@ func _inherit_billboard(config: Dictionary) -> Dictionary:
 
 func _apply_visual_configuration() -> void:
 	if _visual != null:
-		_visual.configure(bullet_color, _visual_scale_factor(), _bullet_visual_context())
+		var resolved_visual_color := _bullet_visual_color()
+		_visual.configure(resolved_visual_color, _visual_scale_factor(), _bullet_visual_context())
 	if _collision_shape != null and _collision_shape.shape is SphereShape3D:
 		(_collision_shape.shape as SphereShape3D).radius = (0.18 if bool(fate_behavior.get("rock_projectile", false)) else 0.12) * _collision_scale_factor()
 
@@ -1206,10 +1226,24 @@ func _configure_enchantment_visuals() -> void:
 
 
 func get_enchantment_snapshot() -> Dictionary:
-	var snapshot := {"attributes": [], "attribute_count": 0, "attachments": [], "cached_attachments": [], "total_amount": 0, "emitting": false, "cached_count": 0}
+	var snapshot := {"attributes": [], "selected": [], "attribute_count": 0, "attachments": [], "cached_attachments": [], "total_amount": 0, "emitting": false, "cached_count": 0, "enchantment_light": {}, "cached_lights": [], "active_light_count": 0}
 	if _enchantment_visuals != null:
 		snapshot = _enchantment_visuals.get_enchantment_snapshot()
 	snapshot["visual_id"] = _visual_id
+	snapshot["bullet_color"] = bullet_color
+	snapshot["behavior_attributes"] = PROJECTILE_ENCHANT_VISUALS.selected_attributes(fate_behavior)
+	snapshot["resolved_visual_color"] = _bullet_visual_color()
+	snapshot["tint_core"] = _has_enchantment_body_tint()
+	snapshot["body_tint_applied"] = _has_enchantment_body_tint()
+	snapshot["visual_body_tint"] = _bullet_visual_color()
+	if _visual != null and _visual.has_method("get_presentation_snapshot"):
+		var presentation := _visual.call("get_presentation_snapshot") as Dictionary
+		snapshot["body_presentation"] = presentation
+		snapshot["tint_core"] = bool(presentation.get("tint_core", false))
+		snapshot["shell_tint"] = presentation.get("shell_tint", bullet_color)
+		snapshot["core_tint"] = presentation.get("core_tint", bullet_color)
+		snapshot["body_tint_applied"] = bool(presentation.get("enchantment_body_tint", false))
+		snapshot["visual_body_tint"] = presentation.get("shell_tint", bullet_color)
 	return snapshot
 
 

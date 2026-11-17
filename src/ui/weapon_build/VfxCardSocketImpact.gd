@@ -1,16 +1,18 @@
 extends Control
 
-## 独立界面特效：单次整体扫描脉冲与方块散射，不接收输入。
+## 独立界面特效：整板短闪、枪身与落巢局部脉冲及方块散射，不接收输入。
 var _progress := 1.0
 var _origin := Vector2.ZERO
+var _weapon_anchor := Vector2.INF
 var _reduced := false
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
-func play(origin: Vector2, reduced_motion := false) -> void:
+func play(origin: Vector2, reduced_motion := false, weapon_anchor: Vector2 = Vector2.INF) -> void:
 	_origin = origin
+	_weapon_anchor = weapon_anchor
 	_reduced = reduced_motion
 	_progress = 0.0
 	var tween := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
@@ -26,15 +28,20 @@ func _draw() -> void:
 		return
 	var alpha := (1.0 - _progress) * 0.65
 	var tint := Color(0.64, 0.91, 1.0, alpha)
-	# 成功落巢先给整板一次有力短闪，随后扫描衰减；不移动布局或改变命中区。
+	# 整板只短闪；不再画贯穿高度的扫描线或包含底边的整板描框。
 	var impact := pow(1.0 - _progress, 3.0)
 	draw_rect(Rect2(Vector2.ZERO, size), Color(0.45, 0.83, 1.0, impact * (0.06 if _reduced else 0.23)))
-	if not _reduced:
-		draw_rect(Rect2(Vector2(2, 2), size - Vector2(4, 4)), Color(0.78, 0.95, 1.0, impact * 0.92), false, 2.0)
-	var scan := size.x * _progress
-	draw_line(Vector2(scan, 0), Vector2(scan, size.y), tint, 3.0)
 	if _reduced:
 		return
+	# 能量仅在枪身出口与落巢附近横向传递，不横穿其他卡面、文字和弹种模块。
+	if _weapon_anchor.is_finite():
+		var departure := minf(_progress * 2.0, 1.0)
+		var weapon_head := _weapon_anchor + Vector2(lerpf(0.0, 30.0, departure), 0)
+		var departure_tint := Color(tint, alpha * (1.0 - departure))
+		draw_line(weapon_head - Vector2(18, 0), weapon_head, departure_tint, 3.0, true)
+	var arrival := clampf((_progress - 0.18) / 0.82, 0.0, 1.0)
+	var socket_head := _origin - Vector2(lerpf(30.0, 0.0, arrival), 0)
+	draw_line(socket_head - Vector2(12, 0), socket_head, tint, 3.0, true)
 	var radius := lerpf(4.0, 66.0, 1.0 - pow(1.0 - _progress, 3.0))
 	for i in 20:
 		var angle := TAU * float(i) / 20.0

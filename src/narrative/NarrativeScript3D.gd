@@ -9,6 +9,7 @@ extends RefCounted
 ## 指令名形如 `域.动作` 都在这里判；判不过就整体拒绝加载（不半播）。
 
 const SCHEMA_VERSION := 1
+const DIALOGUE_MODES := ["A", "B", "A+B"]
 
 ## 位置触发半径下限。理由：位置判定是**轮询**不是事件（见 08 文档 §4.2）。
 ## 按 0.1s 轮询、玩家最快约 8m/s 计，单次间隔位移约 0.8m，radius >= 1.0 才不会漏触发。
@@ -102,6 +103,7 @@ func _ingest(source: Dictionary, source_label: String) -> void:
 	priority = int(source.get("priority", 0))
 	var raw_presentation: Variant = source.get("presentation", {})
 	presentation = raw_presentation.duplicate(true) if raw_presentation is Dictionary else {}
+	_validate_dialogue_presentation(source_label)
 
 	var raw_cues: Variant = source.get("cues", [])
 	if not (raw_cues is Array) or (raw_cues as Array).is_empty():
@@ -178,6 +180,20 @@ func _ingest(source: Dictionary, source_label: String) -> void:
 	if not warnings.is_empty():
 		for warning in warnings:
 			push_warning("[NarrativeScript3D] %s" % warning)
+
+
+func _validate_dialogue_presentation(source_label: String) -> void:
+	var dialogue: Variant = presentation.get("dialogue", null)
+	if dialogue == null:
+		return
+	if not (dialogue is Dictionary):
+		errors.append("%s：presentation.dialogue 必须是对象。" % source_label)
+		return
+	var mode := str((dialogue as Dictionary).get("mode", "A")).strip_edges().to_upper()
+	if mode not in DIALOGUE_MODES:
+		errors.append("%s：presentation.dialogue.mode『%s』非法（可选 A / B / A+B）。" % [source_label, mode])
+	else:
+		(dialogue as Dictionary)["mode"] = mode
 
 
 func _ingest_trigger(source: Dictionary, source_label: String) -> void:

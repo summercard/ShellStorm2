@@ -46,6 +46,8 @@ const FX01_FATE_ROCK_SHATTER := "VFX-FATE-ROCK-SHATTER-3D"
 ## 抛出物同族：**不绑 follow**、无碰撞体、程序化落地（见 `VfxBoardDebris3D`）。
 const FX01_BOARD_DEBRIS := "VFX-BOARD-DEBRIS-3D"
 const FX01_FAT_ENTRY_BREACH := "VFX-FAT-ENTRY-BREACH-3D"
+## 胖子僵尸2.1攻击砸地视觉事件：透明贴图烟尘 + 外扩落地波纹；不拥有伤害。
+const FX01_FAT_ZOMBIE_SLAM := "VFX-FAT-ZOMBIE-SLAM-3D"
 
 ## 瞬移「消失 / 出现」配对特效（FX01-34 / FX01-35）。由 `Enemy3D` 的
 ## `_play_teleport_fx()` 在 blink 位移的两端（原点 + 落点）与 `_vanish()` 时借出。
@@ -73,6 +75,7 @@ const FX01_SPECIAL_BLAST := &"VFX-SPECIAL-BLAST-3D"
 
 const _REGISTRY := {
 	FX01_FAT_ENTRY_BREACH: preload("res://assets/art/vfx/combat_3d/vfx_fat_entry_breach_root_top3d.tscn"),
+	FX01_FAT_ZOMBIE_SLAM: preload("res://assets/art/vfx/combat_3d/vfx_fat_zombie_slam_root_top3d.tscn"),
 	FX01_SPECIAL_FIRE: preload("res://assets/art/vfx/combat_3d/vfx_special_fire_root_top3d.tscn"),
 	FX01_SPECIAL_OIL: preload("res://assets/art/vfx/combat_3d/vfx_special_oil_root_top3d.tscn"),
 	FX01_SPECIAL_BLAST: preload("res://assets/art/vfx/combat_3d/vfx_special_blast_root_top3d.tscn"),
@@ -247,6 +250,7 @@ const COMBAT_PREWARM := [
 	FX01_DEATH_BLAST,
 	FX01_TELEPORT_IN,
 	FX01_FAT_ENTRY_BREACH,
+	FX01_FAT_ZOMBIE_SLAM,
 ]
 
 ## 按 AssetID 借出特效

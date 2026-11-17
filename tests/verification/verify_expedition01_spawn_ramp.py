@@ -16,7 +16,13 @@ RUNTIME_ROOT = ROOT / 'data/level_plans/expedition_01'
 ORDINARY = ('room_01', 'room_02', 'room_05', 'room_07', 'room_08')
 TIMED = ('room_03', 'room_04', 'room_06', 'room_09', 'room_10')
 COUNTS = {'room_01': (8, 8), 'room_02': (9, 10), 'room_05': (39, 39), 'room_07': (20, 20), 'room_08': (25, 25)}
-WAVES = {'room_03': [5, 7, 9, 8], 'room_04': [6, 6, 9, 6], 'room_06': [10, 11, 16, 15], 'room_09': [15, 19, 24, 27], 'room_10': [13, 15, 18, 15]}
+WAVES = {'room_03': [5, 7, 9, 12], 'room_04': [6, 6, 9, 6], 'room_06': [10, 11, 16, 15], 'room_09': [15, 19, 24, 27], 'room_10': [13, 15, 18, 15]}
+# 2026-11-17 业主授权（仅 room_03）：末模板 ×1.5（2/2/4 → 3/3/6），cap 8 → 12（= 最大模板），
+# 消除「模板 9 被 cap 8 截成 8+1」的孤儿余量。其余四房仍逐字沿用 2026-11-16 冻结值。
+TERMINAL_TEMPLATE_OVERRIDE = {
+    'room_03': [{'type': 'fat_zombie03', 'count': 3}, {'type': 'ranged_caster', 'count': 3}, {'type': 'melee_chaser', 'count': 6}],
+}
+MAX_ALIVE_OVERRIDE = {'room_03': 12}
 
 
 def load(path):
@@ -126,7 +132,11 @@ def main():
         e, old = rooms[key]['encounter'], old_rooms[key]['encounter']
         for field, value in {'duration_sec':40.0,'freeze_player_sec':1.0,'start_delay_sec':2.0,'intermission_sec':0.0,'preparation_sec':0.0,'completion':'clear','stage_advance':'clear','deadline_behavior':'close_dispatch_and_clear','repeat_last_stage':True,'min_player_distance_m':6.0}.items():
             check(e.get(field) == value, f'{key}:{field}冻结规则不符')
-        check({k:v for k,v in e.items() if k not in ('duration_sec','stages')} == {k:v for k,v in old.items() if k not in ('duration_sec','stages')}, f'{key}非授权事件字段变化')
+        # room_03 的 cap 属 2026-11-17 授权项，单列核对；其余四房仍按冻结值逐字比对。
+        frozen_keys = ('duration_sec', 'stages') + (('max_alive',) if key in MAX_ALIVE_OVERRIDE else ())
+        check({k:v for k,v in e.items() if k not in frozen_keys} == {k:v for k,v in old.items() if k not in frozen_keys}, f'{key}非授权事件字段变化')
+        if key in MAX_ALIVE_OVERRIDE:
+            check(e['max_alive'] == MAX_ALIVE_OVERRIDE[key], f'{key}授权cap不符:{e["max_alive"]}')
         check(e['stages'][:2] == old['stages'][:2], f'{key}前两波变化')
         third = e['stages'][2]['monsters']
         strong = [m for m in third if m['type'] == 'fat_zombie03_strong']
@@ -134,7 +144,11 @@ def main():
         check([m for m in third if m['type'] == 'fat_zombie03'] == [{'type':'fat_zombie03','count':2}], f'{key}普通胖子非严格2')
         original_third = old['stages'][2] if len(old['stages']) > 2 else old['stages'][-1]
         check([m for m in third if not m['type'].startswith('fat_zombie03')] == [m for m in original_third['monsters'] if not m['type'].startswith('fat_zombie03')], f'{key}第三波其它原小怪被改')
-        check(len(e['stages']) == 4 and e['stages'][3] == old['stages'][-1], f'{key}普通末模板必须保持原末模板')
+        allowed_terminal = TERMINAL_TEMPLATE_OVERRIDE.get(key)
+        if allowed_terminal is None:
+            check(len(e['stages']) == 4 and e['stages'][3] == old['stages'][-1], f'{key}普通末模板必须保持原末模板')
+        else:
+            check(len(e['stages']) == 4 and e['stages'][3] == {'monsters': allowed_terminal}, f'{key}授权末模板不符')
         check(sum(m['count'] for s in e['stages'] for m in s['monsters'] if m['type'] == 'fat_zombie03_strong') == 1, f'{key}强化胖子重复')
         counts = [sum(m['count'] for m in s['monsters']) for s in e['stages']]
         check(counts == WAVES[key], f'{key}波次总量漂移:{counts}')

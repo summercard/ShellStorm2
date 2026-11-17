@@ -1,40 +1,1644 @@
 {
   "schema_version": 1,
   "asset_id": "ENM-NORMAL-FAT-ZOMBIE21",
-  "version": "v002",
+  "version": "v007",
   "status": "exported_pending_godot_validation",
   "visual_review": "pending_user_visual_review",
-  "validation_scope": "original_data_restoration + idle_only + Blender_roundtrip; NOT locomotion/engine acceptance",
+  "validation_scope": "v007 source/GLB直线步态 + Godot世界接触锁脚专项；非全资产/整关accepted",
   "model_source": "res://art_source/enemies/normal_enemy_3d/fat_zombie21/source/model/enm_normal_fat_zombie21_model_v002.blend",
-  "animation_source": "res://art_source/enemies/normal_enemy_3d/fat_zombie21/source/animation/enm_normal_fat_zombie21_animation_v002.blend",
+  "animation_source": "res://art_source/enemies/normal_enemy_3d/fat_zombie21/source/animation/enm_normal_fat_zombie21_animation_v007.blend",
   "skel_id": "SKEL-FATZOMBIE21-ORIGINAL-001",
   "skeleton_signature": "4931ec7ec3e7a2b0978d3cd69aafa99f511656b6c21d68bfb637de53ff29fc65",
   "runtime_glb": {
     "res_path": "res://assets/art/enemies/normal_enemy_3d/fat_zombie21/components/enm_normal_fat_zombie21/enm_normal_fat_zombie21_visual_top3d.glb",
-    "bytes": 562372,
-    "sha256": "71af6e0a627c4b5aa68d602ef5968d15c76e415845317234227bd65d0367594a"
+    "bytes": 1367900,
+    "sha256": "59cafc091fe6cd4d99c717969131d1366a41bfe63e75d19a6ae9ad6a9fd1e043"
   },
   "manifest": {
     "res_path": "res://assets/art/enemies/normal_enemy_3d/fat_zombie21/enm_normal_fat_zombie21_manifest_v002.json",
-    "bytes": 6778,
-    "sha256": "79f3bae57f7e07b25915634b6d88babb0521321e73b3f081a82985b094b97671"
+    "bytes": 63400,
+    "sha256": "bfc60984848ec2248f8df77b49ef984beda92915d1cfaec117e6087fad596634"
   },
   "clips": [
+    {
+      "name": "attack",
+      "fps": 60,
+      "start": 0,
+      "end": 150,
+      "seconds": 2.5,
+      "loop": false,
+      "contact_frame": 78,
+      "contact_seconds": 1.3,
+      "runtime_contact_seconds": 1.2
+    },
     {
       "name": "idle",
       "fps": 60,
       "start": 0,
+      "end": 192,
+      "seconds": 3.2,
+      "loop": true,
       "closure": 192,
-      "playback_end": 191,
-      "seconds": 3.2
+      "playback_end": 191
+    },
+    {
+      "name": "move_start",
+      "fps": 60,
+      "start": 0,
+      "end": 24,
+      "seconds": 0.4,
+      "loop": false
+    },
+    {
+      "name": "move_stop",
+      "fps": 60,
+      "start": 0,
+      "end": 36,
+      "seconds": 0.6,
+      "loop": false
+    },
+    {
+      "name": "running",
+      "fps": 60,
+      "start": 0,
+      "end": 72,
+      "seconds": 1.2,
+      "loop": true
+    },
+    {
+      "name": "walking",
+      "fps": 60,
+      "start": 0,
+      "end": 120,
+      "seconds": 2.0,
+      "loop": true
     }
   ],
   "previous_acceptance_withdrawn": true,
   "backup": "I:\\工作项目\\shellstrom2\\ShellStorm2-backup\\2026-11-16_1732_fatzombie_original_idle",
   "pending": [
-    "User continuous visual review",
-    "Godot wrapper/import/playback and scale/forward alignment",
-    "Locomotion re-authoring not in this task",
-    "Replacement of existing fat zombie not performed"
-  ]
+    "整关AI真实运行与人工连续视觉复核",
+    "眼位、四足轮廓与旧碰撞的完整可玩兼容",
+    "目标设备/全资产验收；来源许可待确认"
+  ],
+  "runtime_replacement": {
+    "gameplay_content_id": "fat_zombie03",
+    "compatibility_asset_id": "ENM-NORMAL-FAT-ZOMBIE03",
+    "visual_asset_id": "ENM-NORMAL-FAT-ZOMBIE21",
+    "status": "replaced_pending_acceptance",
+    "runtime_scene": "assets/art/enemies/normal_enemy_3d/fat_zombie21/runtime/enm_normal_fat_zombie21_root_top3d.tscn",
+    "runtime_scene_sha256": "1adb821773e115cfde8d058caf611552b41800fa34d7fea1270d6b067da432af",
+    "gameplay_owner": "Enemy3D",
+    "source_contact_frame": 78,
+    "runtime_contact_sec": 1.2,
+    "runtime_recovery_sec": 1.3,
+    "runtime_attack_end_frame": 150,
+    "development_record": "docs/v0.1/development/2026-11-17_fat_zombie21_gait_fix.md",
+    "visual_version": "v007",
+    "status_note": "本次gait专项已通过282/282；全资产仍待整关验收"
+  },
+  "runtime_measured_clip_seconds": {
+    "attack": 2.5,
+    "idle": 3.2,
+    "move_start": 0.4,
+    "move_stop": 0.6,
+    "running": 1.2,
+    "walking": 2.0
+  },
+  "source_metadata_conflict": {
+    "status": "resolved_against_v007_source_frames_and_runtime_measurement",
+    "previous_declared_seconds": {
+      "walking": 2.5,
+      "running": 2.0,
+      "attack": 2.0
+    },
+    "source_action_frame_ranges": {
+      "attack": [
+        0.0,
+        150.0
+      ],
+      "idle": [
+        0.0,
+        192.0
+      ],
+      "move_start": [
+        0.0,
+        24.0
+      ],
+      "move_stop": [
+        0.0,
+        36.0
+      ],
+      "running": [
+        0.0,
+        72.0
+      ],
+      "walking": [
+        0.0,
+        120.0
+      ]
+    },
+    "source_fps": 60,
+    "measured_source_seconds": {
+      "attack": 2.5,
+      "idle": 3.2,
+      "move_start": 0.4,
+      "move_stop": 0.6,
+      "running": 1.2,
+      "walking": 2.0
+    },
+    "measured_glb_seconds": {
+      "attack": 2.5,
+      "idle": 3.2,
+      "move_start": 0.4,
+      "move_stop": 0.6,
+      "running": 1.2,
+      "walking": 2.0
+    },
+    "history_source": "docs/v0.1/development/2026-11-17_fat_zombie21_replacement.md §3；改前v006 manifest/transfer已在before_edits/registration冻结",
+    "source_metadata_evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-17_1617_fat_zombie_gait\\registration\\source_actions.json",
+    "runtime_evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-17_1617_fat_zombie_gait\\runtime\\contact_lock\\verification.json",
+    "resolution": "仅更正清单；v007实际源与GLB/Godot时长一致；保留旧声明及原记录，不声称全资产已验收。",
+    "acceptance_blocker": false
+  },
+  "asset_version": "v007",
+  "status_note": "本次gait专项已通过282/282；全资产仍待整关验收",
+  "compatibility_manifest_path": {
+    "filename_revision": "v002",
+    "internal_asset_version": "v007",
+    "note": "既有v002文件名为稳定兼容登记入口，不改名以保留历史引用。"
+  },
+  "source_files": {
+    "model": {
+      "res_path": "res://art_source/enemies/normal_enemy_3d/fat_zombie21/source/model/enm_normal_fat_zombie21_model_v002.blend",
+      "bytes": 859656,
+      "sha256": "89d98a65976a93410d8bde1b935a8630ea24352406039fe663414cf6a2d94174"
+    },
+    "animation": {
+      "res_path": "res://art_source/enemies/normal_enemy_3d/fat_zombie21/source/animation/enm_normal_fat_zombie21_animation_v007.blend",
+      "bytes": 14011256,
+      "sha256": "01ec0e16310ac5f4a325d37302f3cae0536ee8aa1d6f512c1cc6126adc37d3f3"
+    }
+  },
+  "animation_source_bytes": 14011256,
+  "animation_source_sha256": "01ec0e16310ac5f4a325d37302f3cae0536ee8aa1d6f512c1cc6126adc37d3f3",
+  "locomotion_calibration": {
+    "version": "v007",
+    "reference_total_visual_scale": 2.7557166,
+    "walking_stride_game_m": 0.6,
+    "running_stride_game_m": 0.72,
+    "walking_source_stride_m": 0.21772921061621503,
+    "running_source_stride_m": 0.26127505273945806,
+    "design_reference_speed_mps": {
+      "walking": 0.3,
+      "running": 0.6
+    },
+    "actual_base_speed_mps": {
+      "walking": 0.255,
+      "running": 0.51
+    },
+    "pace_scale": 0.85,
+    "phase": "phase = fposmod(phase + actual_distance_game_m / stride_length_game_m, 1.0)",
+    "sample_time": "time_s = phase * duration_s",
+    "scale_rule": "stride_length_game_m *= actual_total_visual_scale / 2.7557166",
+    "speed_unchanged": true,
+    "note": "参考0.3/0.6m/s只用于标定。运行应读取实际世界移动距离；不以参考速度覆盖玩法。距离累计不应在速度变化时反复重算整个elapsed相位。停止时不推进移动相位。",
+    "duty": {
+      "walking": 0.6,
+      "running": 0.61
+    },
+    "source_evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-17_1617_fat_zombie_gait\\animation_v007\\handoff.json"
+  },
+  "runtime_contact_lock": {
+    "procedural_pose": true,
+    "presentation_only": true,
+    "gameplay_owner": "Enemy3D",
+    "criterion_m": 0.01,
+    "checks": 282,
+    "failures": 0,
+    "status": "contact_lock_turning_and_clip_switch_strict_runtime_pass",
+    "status_note": "本次gait专项已通过282/282；全资产仍待整关验收",
+    "implementation": {
+      "adapter": "assets/art/enemies/normal_enemy_3d/fat_zombie21/runtime/fat_zombie21_formal_visual.gd",
+      "distance_root": "CharacterBody3D祖先global_position，不使用颤抖VisualGLB",
+      "anchor": "自然连续支撑segment=floor(unwrapped_phase+offset)，world刚体delta作用coherent bones全部未改world pose快照，父先子后写入",
+      "source_resample": "先恢复上次源局部pose，再AnimationPlayer play/seek(true)/advance(0)，源快照不保存程序纠偏",
+      "duty": {
+        "walking": 0.6,
+        "running": 0.61
+      },
+      "offsets": {
+        "Lfoot": 0,
+        "Rhand": 0,
+        "Rfoot": 0.5,
+        "Lhand": 0.5
+      },
+      "transition": "同相位切换0.08phase pose混合；支撑anchor纠偏；swing离地纠偏0.12phase消退；攻击无混合",
+      "resets": "非movement/death_warning/离树/垂直离地、大瞬移、跨完整周期清锚；不依据漂移大小重锚",
+      "scale": "移动pose scale固定1，数值误差验收<1e-5；非移动保留源曲线"
+    },
+    "measurement": {
+      "method": "原probe.json的48源顶点匹配idle，Godot真实Mesh ARRAY_BONES/WEIGHTS + Skin bind + Skeleton实际pose CPU蒙皮到世界，不是骨中心",
+      "criterion_m": 0.01,
+      "rate_hz": 120,
+      "contact_window": "完整duty，无缩窄，连续跨cycle全pairwise",
+      "max_mapping_error_source_m": 1.65762994583929e-05,
+      "cases": [
+        {
+          "baseline": false,
+          "cycles": 2.14998725019991,
+          "max_pairwise_contact_drift_m": 1.10927730929689e-05,
+          "name": "巡逻",
+          "per_contact_m": {
+            "Lfoot": 1.10927730929689e-05,
+            "Lhand": 1.09056247765693e-06,
+            "Rfoot": 1.13402836632304e-06,
+            "Rhand": 1.12466693735769e-06
+          },
+          "samples": 18024,
+          "scale_multiplier": 1.0,
+          "speed_mps": 0.255,
+          "travel_m": 1.29000000000001,
+          "turning": false,
+          "variable_speed": false
+        },
+        {
+          "baseline": false,
+          "cycles": 2.15000529716205,
+          "max_pairwise_contact_drift_m": 1.34718811750645e-05,
+          "name": "追击",
+          "per_contact_m": {
+            "Lfoot": 1.34718811750645e-05,
+            "Lhand": 1.10912503714644e-06,
+            "Rfoot": 8.61825185438647e-07,
+            "Rhand": 1.27318082832062e-06
+          },
+          "samples": 11064,
+          "scale_multiplier": 1.0,
+          "speed_mps": 0.51,
+          "travel_m": 1.54799999999999,
+          "turning": false,
+          "variable_speed": false
+        },
+        {
+          "baseline": false,
+          "cycles": 2.14998311098841,
+          "max_pairwise_contact_drift_m": 1.38282803163747e-05,
+          "name": "人工光追击",
+          "per_contact_m": {
+            "Lfoot": 1.38282803163747e-05,
+            "Lhand": 1.25027759168006e-06,
+            "Rfoot": 1.2104010238545e-06,
+            "Rhand": 1.44373370858375e-06
+          },
+          "samples": 27528,
+          "scale_multiplier": 1.0,
+          "speed_mps": 0.204,
+          "travel_m": 1.54800000000003,
+          "turning": false,
+          "variable_speed": false
+        },
+        {
+          "baseline": false,
+          "cycles": 2.15000930391876,
+          "max_pairwise_contact_drift_m": 1.1211404853384e-05,
+          "name": "人工光巡逻",
+          "per_contact_m": {
+            "Lfoot": 1.1211404853384e-05,
+            "Lhand": 1.50301752910309e-06,
+            "Rfoot": 1.37892891416413e-06,
+            "Rhand": 1.15897853447677e-06
+          },
+          "samples": 44880,
+          "scale_multiplier": 1.0,
+          "speed_mps": 0.102,
+          "travel_m": 1.29000000000002,
+          "turning": false,
+          "variable_speed": false
+        },
+        {
+          "baseline": false,
+          "cycles": 2.14999900556058,
+          "max_pairwise_contact_drift_m": 1.35900027089519e-05,
+          "name": "关卡覆盖",
+          "per_contact_m": {
+            "Lfoot": 1.35900027089519e-05,
+            "Lhand": 1.04340722373308e-06,
+            "Rfoot": 7.16285740054445e-07,
+            "Rhand": 8.07699336746737e-07
+          },
+          "samples": 3792,
+          "scale_multiplier": 1.0,
+          "speed_mps": 1.5,
+          "travel_m": 1.548,
+          "turning": false,
+          "variable_speed": false
+        },
+        {
+          "baseline": false,
+          "cycles": 2.14999579775555,
+          "max_pairwise_contact_drift_m": 2.05071264645085e-05,
+          "name": "强化1.5体型",
+          "per_contact_m": {
+            "Lfoot": 2.05071264645085e-05,
+            "Lhand": 1.93974938156316e-06,
+            "Rfoot": 1.50795619902055e-06,
+            "Rhand": 1.97708186533418e-06
+          },
+          "samples": 16512,
+          "scale_multiplier": 1.5,
+          "speed_mps": 0.51,
+          "travel_m": 2.32199999999999,
+          "turning": false,
+          "variable_speed": false
+        },
+        {
+          "baseline": false,
+          "cycles": 2.57654607512204,
+          "max_pairwise_contact_drift_m": 1.35910631797742e-05,
+          "name": "加速刹停",
+          "per_contact_m": {
+            "Lfoot": 1.35910631797742e-05,
+            "Lhand": 1.28400984067412e-06,
+            "Rfoot": 9.31875604237575e-07,
+            "Rhand": 1.49548952776968e-06
+          },
+          "samples": 15336,
+          "scale_multiplier": 1.0,
+          "speed_mps": 0.51,
+          "travel_m": 1.85511335837055,
+          "turning": false,
+          "variable_speed": true
+        },
+        {
+          "baseline": true,
+          "cycles": 2.52941176470588,
+          "max_pairwise_contact_drift_m": 0.0645013824105263,
+          "name": "v006旧脚本巡逻",
+          "per_contact_m": {
+            "Lfoot": 0.0535484924912453,
+            "Lhand": 0.0562368668615818,
+            "Rfoot": 0.0522253811359406,
+            "Rhand": 0.0645013824105263
+          },
+          "samples": 15936,
+          "scale_multiplier": 1.0,
+          "speed_mps": 0.255,
+          "travel_m": 1.29000000000001,
+          "turning": false,
+          "variable_speed": false
+        },
+        {
+          "baseline": true,
+          "cycles": 2.52941166419609,
+          "max_pairwise_contact_drift_m": 0.0800596252083778,
+          "name": "v006旧脚本追击",
+          "per_contact_m": {
+            "Lfoot": 0.0658756121993065,
+            "Lhand": 0.0692525953054428,
+            "Rfoot": 0.0645374059677124,
+            "Rhand": 0.0800596252083778
+          },
+          "samples": 10824,
+          "scale_multiplier": 1.0,
+          "speed_mps": 0.51,
+          "travel_m": 1.54799999999999,
+          "turning": false,
+          "variable_speed": false
+        },
+        {
+          "baseline": false,
+          "cycles": 2.14999965082882,
+          "max_pairwise_contact_drift_m": 1.34616757350159e-05,
+          "name": "转弯严格验收",
+          "per_contact_m": {
+            "Lfoot": 1.34616757350159e-05,
+            "Lhand": 1.51370147705165e-06,
+            "Rfoot": 1.02602507467964e-06,
+            "Rhand": 1.38558766593633e-06
+          },
+          "samples": 11064,
+          "scale_multiplier": 1.0,
+          "speed_mps": 0.51,
+          "travel_m": 1.54799999999999,
+          "turning": true,
+          "variable_speed": false
+        },
+        {
+          "baseline": false,
+          "cycles": 2.15000056541072,
+          "max_pairwise_contact_drift_m": 1.11038316390477e-05,
+          "name": "巡逻转弯严格验收",
+          "per_contact_m": {
+            "Lfoot": 1.11038316390477e-05,
+            "Lhand": 1.35989046157192e-06,
+            "Rfoot": 1.23321524370112e-06,
+            "Rhand": 1.26385793919326e-06
+          },
+          "samples": 18024,
+          "scale_multiplier": 1.0,
+          "speed_mps": 0.255,
+          "travel_m": 1.29000000000001,
+          "turning": true,
+          "variable_speed": false
+        },
+        {
+          "baseline": false,
+          "cycles": 2.1499992262753,
+          "max_pairwise_contact_drift_m": 2.06497479666723e-05,
+          "name": "强化转弯严格验收",
+          "per_contact_m": {
+            "Lfoot": 2.06497479666723e-05,
+            "Lhand": 2.05106266548682e-06,
+            "Rfoot": 1.85559724741324e-06,
+            "Rhand": 1.98695965991647e-06
+          },
+          "samples": 16512,
+          "scale_multiplier": 1.5,
+          "speed_mps": 0.51,
+          "travel_m": 2.32199999999999,
+          "turning": true,
+          "variable_speed": false
+        },
+        {
+          "baseline": true,
+          "cycles": 2.14999965082882,
+          "max_pairwise_contact_drift_m": 0.619944214820862,
+          "name": "v007锁锚前转弯",
+          "per_contact_m": {
+            "Lfoot": 0.619944214820862,
+            "Lhand": 0.525210738182068,
+            "Rfoot": 0.596653342247009,
+            "Rhand": 0.60148960351944
+          },
+          "samples": 11064,
+          "scale_multiplier": 1.0,
+          "speed_mps": 0.51,
+          "travel_m": 1.54799999999999,
+          "turning": true,
+          "variable_speed": false
+        }
+      ],
+      "transitions": {
+        "cases": 36,
+        "phase_targets": [
+          0,
+          0.05,
+          0.105,
+          0.25,
+          0.5,
+          0.55,
+          0.605,
+          0.75,
+          0.958
+        ],
+        "directions": [
+          "walking->running",
+          "running->walking"
+        ],
+        "scale_multipliers": [
+          1,
+          1.5
+        ],
+        "support_jump_m": 1.18103935164982e-06,
+        "swing_jump_m": 1.68824306001625e-06,
+        "post_switch_pairwise_drift_m": 2.02824394364143e-05,
+        "bone_scale_error": 1.04605726392037e-06,
+        "wall_transition_jump_m": 6.93194351697457e-07,
+        "records": [
+          {
+            "baseline": false,
+            "bone_scale_error": 5.05762159264123e-07,
+            "common_support_points": 48,
+            "from": "patrol",
+            "multiplier": 1.0,
+            "phase": 8.25084734090709e-07,
+            "post_switch_pairwise_drift_m": 1.36621611090959e-05,
+            "support_jump_m": 4.38608452668632e-07,
+            "swing_jump_m": 0.0,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 6.07850495271123e-07,
+            "common_support_points": 48,
+            "from": "patrol",
+            "multiplier": 1.0,
+            "phase": 0.0499984112215939,
+            "post_switch_pairwise_drift_m": 1.32425757328747e-05,
+            "support_jump_m": 5.96538086483633e-07,
+            "swing_jump_m": 0.0,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 6.41961662495305e-07,
+            "common_support_points": 24,
+            "from": "patrol",
+            "multiplier": 1.0,
+            "phase": 0.105001860061333,
+            "post_switch_pairwise_drift_m": 1.31521810544655e-05,
+            "support_jump_m": 4.92179424327333e-07,
+            "swing_jump_m": 6.05104560236214e-07,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 5.23028631960187e-07,
+            "common_support_points": 24,
+            "from": "patrol",
+            "multiplier": 1.0,
+            "phase": 0.249998714174907,
+            "post_switch_pairwise_drift_m": 1.3243266948848e-05,
+            "support_jump_m": 8.97502161478769e-07,
+            "swing_jump_m": 1.04095033748308e-06,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 8.59630404193013e-07,
+            "common_support_points": 48,
+            "from": "patrol",
+            "multiplier": 1.0,
+            "phase": 0.500001848669987,
+            "post_switch_pairwise_drift_m": 1.34344072648673e-05,
+            "support_jump_m": 6.99271481607866e-07,
+            "swing_jump_m": 0.0,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 4.4604033178075e-07,
+            "common_support_points": 48,
+            "from": "patrol",
+            "multiplier": 1.0,
+            "phase": 0.550002191595089,
+            "post_switch_pairwise_drift_m": 1.31995366245974e-05,
+            "support_jump_m": 4.36780908330547e-07,
+            "swing_jump_m": 0.0,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 5.8400388525115e-07,
+            "common_support_points": 24,
+            "from": "patrol",
+            "multiplier": 1.0,
+            "phase": 0.604995621939094,
+            "post_switch_pairwise_drift_m": 1.3402731383394e-05,
+            "support_jump_m": 5.49682340533764e-07,
+            "swing_jump_m": 6.50681954539323e-07,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 9.31054330521874e-07,
+            "common_support_points": 24,
+            "from": "patrol",
+            "multiplier": 1.0,
+            "phase": 0.749998729941844,
+            "post_switch_pairwise_drift_m": 1.3690410014533e-05,
+            "support_jump_m": 5.0967429388038e-07,
+            "swing_jump_m": 1.16670003080799e-06,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 6.33606077826698e-07,
+            "common_support_points": 24,
+            "from": "patrol",
+            "multiplier": 1.0,
+            "phase": 0.957994708999409,
+            "post_switch_pairwise_drift_m": 1.32636823764187e-05,
+            "support_jump_m": 3.88101511816785e-07,
+            "swing_jump_m": 7.17821990292578e-07,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 5.43024157195759e-07,
+            "common_support_points": 48,
+            "from": "chase",
+            "multiplier": 1.0,
+            "phase": 1.02376688637662e-06,
+            "post_switch_pairwise_drift_m": 1.10357541416306e-05,
+            "support_jump_m": 5.29315400399355e-07,
+            "swing_jump_m": 0.0,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 6.74349564633303e-07,
+            "common_support_points": 48,
+            "from": "chase",
+            "multiplier": 1.0,
+            "phase": 0.0500016398065526,
+            "post_switch_pairwise_drift_m": 1.11784011096461e-05,
+            "support_jump_m": 4.84164559111377e-07,
+            "swing_jump_m": 0.0,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 4.4604033178075e-07,
+            "common_support_points": 24,
+            "from": "chase",
+            "multiplier": 1.0,
+            "phase": 0.104998581805876,
+            "post_switch_pairwise_drift_m": 1.07665364339482e-05,
+            "support_jump_m": 3.99840104137184e-07,
+            "swing_jump_m": 5.96072652570001e-07,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 8.36591027564282e-07,
+            "common_support_points": 24,
+            "from": "chase",
+            "multiplier": 1.0,
+            "phase": 0.249997075047159,
+            "post_switch_pairwise_drift_m": 1.07454216049518e-05,
+            "support_jump_m": 7.99811573415354e-07,
+            "swing_jump_m": 8.94349000191141e-07,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 4.29815202096506e-07,
+            "common_support_points": 48,
+            "from": "chase",
+            "multiplier": 1.0,
+            "phase": 0.500001881783693,
+            "post_switch_pairwise_drift_m": 1.12112484202953e-05,
+            "support_jump_m": 6.08033815296949e-07,
+            "swing_jump_m": 0.0,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 6.74349564633303e-07,
+            "common_support_points": 48,
+            "from": "chase",
+            "multiplier": 1.0,
+            "phase": 0.550002390277239,
+            "post_switch_pairwise_drift_m": 1.11227500383393e-05,
+            "support_jump_m": 4.98608244470233e-07,
+            "swing_jump_m": 0.0,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 6.2513879584003e-07,
+            "common_support_points": 24,
+            "from": "chase",
+            "multiplier": 1.0,
+            "phase": 0.605000920129719,
+            "post_switch_pairwise_drift_m": 1.08196672954364e-05,
+            "support_jump_m": 7.43643454370613e-07,
+            "swing_jump_m": 3.87004604363028e-07,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 4.12953085060508e-07,
+            "common_support_points": 24,
+            "from": "chase",
+            "multiplier": 1.0,
+            "phase": 0.750005783158189,
+            "post_switch_pairwise_drift_m": 1.11103781819111e-05,
+            "support_jump_m": 4.86361102502997e-07,
+            "swing_jump_m": 7.7270817655517e-07,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 1.04605726392037e-06,
+            "common_support_points": 24,
+            "from": "chase",
+            "multiplier": 1.0,
+            "phase": 0.957993053314831,
+            "post_switch_pairwise_drift_m": 1.12364505184814e-05,
+            "support_jump_m": 5.9661658724508e-07,
+            "swing_jump_m": 1.12080829239858e-06,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 4.80548010273196e-07,
+            "common_support_points": 24,
+            "from": "patrol",
+            "multiplier": 1.5,
+            "phase": 0.999999235922712,
+            "post_switch_pairwise_drift_m": 1.99712594621815e-05,
+            "support_jump_m": 7.66170614951989e-07,
+            "swing_jump_m": 1.03646470961394e-06,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 9.32960290356277e-07,
+            "common_support_points": 48,
+            "from": "patrol",
+            "multiplier": 1.5,
+            "phase": 0.050000630456281,
+            "post_switch_pairwise_drift_m": 1.98597444978077e-05,
+            "support_jump_m": 9.84217194854864e-07,
+            "swing_jump_m": 0.0,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 5.19621266903414e-07,
+            "common_support_points": 24,
+            "from": "patrol",
+            "multiplier": 1.5,
+            "phase": 0.105001288492945,
+            "post_switch_pairwise_drift_m": 1.93752875929931e-05,
+            "support_jump_m": 1.09687437088724e-06,
+            "swing_jump_m": 1.17207912353479e-06,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 8.80052027696365e-07,
+            "common_support_points": 24,
+            "from": "patrol",
+            "multiplier": 1.5,
+            "phase": 0.250002702258457,
+            "post_switch_pairwise_drift_m": 1.98120796994772e-05,
+            "support_jump_m": 1.00740692232648e-06,
+            "swing_jump_m": 8.30230078463501e-07,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 6.44722831566469e-07,
+            "common_support_points": 48,
+            "from": "patrol",
+            "multiplier": 1.5,
+            "phase": 0.500001676283097,
+            "post_switch_pairwise_drift_m": 2.00683134607971e-05,
+            "support_jump_m": 1.13701332793426e-06,
+            "swing_jump_m": 0.0,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 8.92080663561501e-07,
+            "common_support_points": 48,
+            "from": "patrol",
+            "multiplier": 1.5,
+            "phase": 0.550002167459011,
+            "post_switch_pairwise_drift_m": 1.96197524928721e-05,
+            "support_jump_m": 8.06454352186847e-07,
+            "swing_jump_m": 0.0,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 5.77888499719847e-07,
+            "common_support_points": 24,
+            "from": "patrol",
+            "multiplier": 1.5,
+            "phase": 0.604996988277261,
+            "post_switch_pairwise_drift_m": 2.02824394364143e-05,
+            "support_jump_m": 1.11828228455124e-06,
+            "swing_jump_m": 1.12494831228105e-06,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 8.86086752416304e-07,
+            "common_support_points": 24,
+            "from": "patrol",
+            "multiplier": 1.5,
+            "phase": 0.750001317584121,
+            "post_switch_pairwise_drift_m": 2.01419843506301e-05,
+            "support_jump_m": 7.58993053295853e-07,
+            "swing_jump_m": 7.39711708774848e-07,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 3.99840104137184e-07,
+            "common_support_points": 24,
+            "from": "patrol",
+            "multiplier": 1.5,
+            "phase": 0.957997150804823,
+            "post_switch_pairwise_drift_m": 2.00756949197967e-05,
+            "support_jump_m": 7.16498846031755e-07,
+            "swing_jump_m": 1.01276009445428e-06,
+            "to": "chase"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 6.69060455038561e-07,
+            "common_support_points": 48,
+            "from": "chase",
+            "multiplier": 1.5,
+            "phase": 3.17636694724399e-07,
+            "post_switch_pairwise_drift_m": 1.62870237545576e-05,
+            "support_jump_m": 8.96054302756966e-07,
+            "swing_jump_m": 0.0,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 7.92988203102141e-07,
+            "common_support_points": 48,
+            "from": "chase",
+            "multiplier": 1.5,
+            "phase": 0.050001204426952,
+            "post_switch_pairwise_drift_m": 1.64046286954544e-05,
+            "support_jump_m": 9.53780045165331e-07,
+            "swing_jump_m": 0.0,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 6.74349564633303e-07,
+            "common_support_points": 24,
+            "from": "chase",
+            "multiplier": 1.5,
+            "phase": 0.104999853566236,
+            "post_switch_pairwise_drift_m": 1.56619298650185e-05,
+            "support_jump_m": 6.89822797994566e-07,
+            "swing_jump_m": 1.59936473664857e-06,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 7.79431843511702e-07,
+            "common_support_points": 24,
+            "from": "chase",
+            "multiplier": 1.5,
+            "phase": 0.249999081828036,
+            "post_switch_pairwise_drift_m": 1.62234209710732e-05,
+            "support_jump_m": 1.18103935164982e-06,
+            "swing_jump_m": 1.04105697573686e-06,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 5.5275074828387e-07,
+            "common_support_points": 48,
+            "from": "chase",
+            "multiplier": 1.5,
+            "phase": 0.500000506265967,
+            "post_switch_pairwise_drift_m": 1.69172762980452e-05,
+            "support_jump_m": 8.32208513656951e-07,
+            "swing_jump_m": 0.0,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 9.68460881267674e-07,
+            "common_support_points": 48,
+            "from": "chase",
+            "multiplier": 1.5,
+            "phase": 0.549996891343893,
+            "post_switch_pairwise_drift_m": 1.61651278176578e-05,
+            "support_jump_m": 8.06075718173815e-07,
+            "swing_jump_m": 0.0,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 1.02200681340037e-06,
+            "common_support_points": 24,
+            "from": "chase",
+            "multiplier": 1.5,
+            "phase": 0.604997628475312,
+            "post_switch_pairwise_drift_m": 1.64569592016051e-05,
+            "support_jump_m": 8.2826363723143e-07,
+            "swing_jump_m": 1.04799244127207e-06,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 6.61047465655429e-07,
+            "common_support_points": 24,
+            "from": "chase",
+            "multiplier": 1.5,
+            "phase": 0.749997189410399,
+            "post_switch_pairwise_drift_m": 1.66713198268553e-05,
+            "support_jump_m": 9.11357062705065e-07,
+            "swing_jump_m": 1.68824306001625e-06,
+            "to": "patrol"
+          },
+          {
+            "baseline": false,
+            "bone_scale_error": 5.46285605196317e-07,
+            "common_support_points": 24,
+            "from": "chase",
+            "multiplier": 1.5,
+            "phase": 0.957994987376898,
+            "post_switch_pairwise_drift_m": 1.6457252058899e-05,
+            "support_jump_m": 8.02760212081921e-07,
+            "swing_jump_m": 1.38901384616474e-06,
+            "to": "patrol"
+          }
+        ]
+      }
+    },
+    "regression": [
+      "巡逻0.255m/s",
+      "追击0.51m/s",
+      "覆盖1.5m/s",
+      "人工光0.102/0.204m/s",
+      "强化1.5体型",
+      "加速刹停",
+      "重复sync无distance不推进",
+      "真实物理墙堵墙",
+      "瞬移与离树重入",
+      "大帧跨整周期",
+      "垂直离地清锚",
+      "所有非movement状态清锚",
+      "原41骨rest不变",
+      "攻击F39/F78映射",
+      "与prelock攻击源骨曲线逐骨一致",
+      "正式VFX池触发一次",
+      "flash与death_warning材质恢复"
+    ],
+    "render": {
+      "method": "forward_plus",
+      "headless": false,
+      "videos": [
+        "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-17_1617_fat_zombie_gait\\runtime\\contact_lock\\after_turning_forward_plus.mp4",
+        "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-17_1617_fat_zombie_gait\\runtime\\contact_lock\\after_transition_forward_plus.mp4"
+      ]
+    },
+    "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-17_1617_fat_zombie_gait\\runtime\\contact_lock\\handoff_contact_lock.json",
+    "risks_and_not_executed": [
+      "不是等长IK；世界锚定会使近端与支撑段连接伸缩，限自然stance；极端转向/原地长时间旋转未验收，不能外推本±0.35rad结果。",
+      "摆动腿恢复源clip，短pose混合不保证全身速度/加速度严格连续；phase混合在堵墙时冻结而不让支撑滑动。",
+      "未测楼梯、动态平台或任意非等比缩放；没有修改玩法移动或碰撞。",
+      "未跑完整关卡AI录像；使用正式visual+稳定CharacterBody及真实墙，玩法速度沿用上次正式Enemy探针事实。",
+      "小于原瞬移阈值且无显式teleport事件的位置跳变无法可靠区分真实位移。",
+      "未对完整主工程重新导入；本次只在工程外最小Godot项目导入/运行/渲染。"
+    ]
+  },
+  "original_rest_skin_fingerprints": {
+    "geometry": "cd653422baa5d05854c2ba97fee9621e74e112fdb65cd93e8b990641e49e76a4",
+    "skeleton": "4931ec7ec3e7a2b0978d3cd69aafa99f511656b6c21d68bfb637de53ff29fc65",
+    "weights": "969213b937d2776b3d82a6a02603cc92eda419aaf711f4b9cd4804c1b97466a7",
+    "binding": "a78d08e8da12d0585e9714c1b5b8a00026699b97b735b665cbf4eaaad19d5f52"
+  },
+  "untouched_action_hashes": {
+    "idle": "6a418cf9e291fb14e0b05336454cfb680c4818c503871939d93d61dc76093b3c",
+    "attack": "6a2228b6874720aba01069526f87d33ed93f42fad40ff092886796d258397985",
+    "move_start": "8b3e929c5ebbcc7be00569ec1e32370eb6e5048e10ab078de1fec43b5c70a140",
+    "move_stop": "cb54b5ed64cfc306aa29a02fbf12757f63e04ca19830d837cc08422a830f3bf0"
+  },
+  "untouched_action_hashes_match": {
+    "idle": true,
+    "attack": true,
+    "move_start": true,
+    "move_stop": true
+  },
+  "source_validation_v007": {
+    "evidence": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-11-17_1617_fat_zombie_gait\\animation_v007\\validation.json",
+    "original_binding_match": true,
+    "counts": {
+      "bones": 41,
+      "vertices": 597,
+      "vertex_groups": 29
+    },
+    "walking_running": {
+      "walking": {
+        "duration_s": 2.0,
+        "source_stride_m": 0.21772921061621503,
+        "stride_length_game_m": 0.6,
+        "v006_max_support_vertex_displacement_game_m": 0.0522618140074968,
+        "v007_source_max_support_pairwise_diameter_game_m": 8.127340685989352e-06,
+        "v007_glb_max_support_pairwise_diameter_game_m": 8.85897078773473e-06,
+        "ground_min_source_game_m": 0.0009571444961384288,
+        "ground_min_glb_game_m": 0.0009569322818879736,
+        "source_to_glb_max_vertex_error_game_m": 2.120841197873292e-06,
+        "loop_error_game_m": 0.0,
+        "hip_lateral_range_game_m": 0.03219083771772282,
+        "root_basis_max_error": 0.0,
+        "bone_scale_max_error": 0.0,
+        "contacts": {
+          "Lhand": {
+            "phase_offset": 0.5,
+            "phase_intervals": [
+              [
+                0.0,
+                0.10000000000000009
+              ],
+              [
+                0.5,
+                1.0
+              ]
+            ],
+            "interval_end_exclusive": true,
+            "indices": [
+              91,
+              95,
+              102,
+              108,
+              109,
+              193,
+              198,
+              226,
+              228,
+              230
+            ],
+            "coherent_bones": [
+              "L_Forearm",
+              "L_ForearmTwist01",
+              "L_ForearmTwist02",
+              "L_Hand"
+            ]
+          },
+          "Lfoot": {
+            "phase_offset": 0,
+            "phase_intervals": [
+              [
+                0,
+                0.6
+              ]
+            ],
+            "interval_end_exclusive": true,
+            "indices": [
+              422,
+              428,
+              444,
+              457,
+              459,
+              461,
+              498,
+              502,
+              522,
+              532,
+              570,
+              574,
+              576,
+              586
+            ],
+            "coherent_bones": [
+              "L_Calf",
+              "L_CalfTwist01",
+              "L_CalfTwist02",
+              "L_Foot",
+              "L_ToeBase"
+            ]
+          },
+          "Rhand": {
+            "phase_offset": 0.0,
+            "phase_intervals": [
+              [
+                0.0,
+                0.6
+              ]
+            ],
+            "interval_end_exclusive": true,
+            "indices": [
+              90,
+              94,
+              101,
+              107,
+              110,
+              194,
+              197,
+              225,
+              227,
+              229
+            ],
+            "coherent_bones": [
+              "R_Forearm",
+              "R_ForearmTwist01",
+              "R_ForearmTwist02",
+              "R_Hand"
+            ]
+          },
+          "Rfoot": {
+            "phase_offset": 0.5,
+            "phase_intervals": [
+              [
+                0.0,
+                0.10000000000000009
+              ],
+              [
+                0.5,
+                1.0
+              ]
+            ],
+            "interval_end_exclusive": true,
+            "indices": [
+              421,
+              427,
+              443,
+              456,
+              458,
+              460,
+              497,
+              501,
+              521,
+              531,
+              569,
+              573,
+              575,
+              585
+            ],
+            "coherent_bones": [
+              "R_Calf",
+              "R_CalfTwist01",
+              "R_CalfTwist02",
+              "R_Foot",
+              "R_ToeBase"
+            ]
+          }
+        },
+        "measured_per_contact": {
+          "Lhand": {
+            "max_vertex_displacement_game_m": 7.818586792176054e-06,
+            "max_pairwise_diameter_game_m": 7.851679686058648e-06,
+            "pass": true,
+            "ground_min_game_m": 0.0009575816767428245,
+            "maximum_sole_minimum_height_game_m": 0.061590261476603146,
+            "inferred_source_stride_m_range": [
+              0.21772849743742578,
+              0.21772941272775348
+            ],
+            "inferred_game_stride_m_range": [
+              0.5999980346813717,
+              0.6000005569621215
+            ],
+            "segments": [
+              {
+                "start_frame": 0.0,
+                "end_frame": 11.75,
+                "max_displacement_game_m": 3.332101947795441e-06,
+                "pairwise_diameter_game_m": 3.3928700607197743e-06,
+                "worst_frame": 10.5,
+                "worst_vertex": 230
+              },
+              {
+                "start_frame": 60.0,
+                "end_frame": 131.75,
+                "max_displacement_game_m": 7.818586792176054e-06,
+                "pairwise_diameter_game_m": 7.851679686058648e-06,
+                "worst_frame": 65.5,
+                "worst_vertex": 198
+              },
+              {
+                "start_frame": 180.0,
+                "end_frame": 240.0,
+                "max_displacement_game_m": 7.818586792176054e-06,
+                "pairwise_diameter_game_m": 7.851679686058648e-06,
+                "worst_frame": 185.5,
+                "worst_vertex": 198
+              }
+            ]
+          },
+          "Lfoot": {
+            "max_vertex_displacement_game_m": 6.720025754395382e-07,
+            "max_pairwise_diameter_game_m": 1.0064724732017614e-06,
+            "pass": true,
+            "ground_min_game_m": 0.0009642701149199624,
+            "maximum_sole_minimum_height_game_m": 0.061590261476603146,
+            "inferred_source_stride_m_range": [
+              0.2177291089458246,
+              0.2177293038827568
+            ],
+            "inferred_game_stride_m_range": [
+              0.5999997198252173,
+              0.6000002570161573
+            ],
+            "segments": [
+              {
+                "start_frame": 0.0,
+                "end_frame": 71.75,
+                "max_displacement_game_m": 6.720025754395382e-07,
+                "pairwise_diameter_game_m": 1.0064724732017614e-06,
+                "worst_frame": 68.75,
+                "worst_vertex": 532
+              },
+              {
+                "start_frame": 120.0,
+                "end_frame": 191.75,
+                "max_displacement_game_m": 6.720025754395382e-07,
+                "pairwise_diameter_game_m": 1.0064724732017614e-06,
+                "worst_frame": 188.75,
+                "worst_vertex": 532
+              },
+              {
+                "start_frame": 240.0,
+                "end_frame": 240.0,
+                "max_displacement_game_m": 0.0,
+                "pairwise_diameter_game_m": 0.0,
+                "worst_frame": 240.0,
+                "worst_vertex": 422
+              }
+            ]
+          },
+          "Rhand": {
+            "max_vertex_displacement_game_m": 7.951739347769425e-06,
+            "max_pairwise_diameter_game_m": 8.127340685989352e-06,
+            "pass": true,
+            "ground_min_game_m": 0.0009571444961384288,
+            "maximum_sole_minimum_height_game_m": 0.061590246077836676,
+            "inferred_source_stride_m_range": [
+              0.21772812936195993,
+              0.2177285936796491
+            ],
+            "inferred_game_stride_m_range": [
+              0.5999970203697004,
+              0.5999982998976642
+            ],
+            "segments": [
+              {
+                "start_frame": 0.0,
+                "end_frame": 71.75,
+                "max_displacement_game_m": 7.951739347769425e-06,
+                "pairwise_diameter_game_m": 8.127340685989352e-06,
+                "worst_frame": 7.5,
+                "worst_vertex": 197
+              },
+              {
+                "start_frame": 120.0,
+                "end_frame": 191.75,
+                "max_displacement_game_m": 7.951739347769425e-06,
+                "pairwise_diameter_game_m": 8.127340685989352e-06,
+                "worst_frame": 127.5,
+                "worst_vertex": 197
+              },
+              {
+                "start_frame": 240.0,
+                "end_frame": 240.0,
+                "max_displacement_game_m": 0.0,
+                "pairwise_diameter_game_m": 0.0,
+                "worst_frame": 240.0,
+                "worst_vertex": 90
+              }
+            ]
+          },
+          "Rfoot": {
+            "max_vertex_displacement_game_m": 8.078463967407811e-07,
+            "max_pairwise_diameter_game_m": 1.1481977352606865e-06,
+            "pass": true,
+            "ground_min_game_m": 0.0009643402915900864,
+            "maximum_sole_minimum_height_game_m": 0.06159021528030373,
+            "inferred_source_stride_m_range": [
+              0.21772911358812128,
+              0.21772941505707094
+            ],
+            "inferred_game_stride_m_range": [
+              0.5999997326180714,
+              0.6000005633810603
+            ],
+            "segments": [
+              {
+                "start_frame": 0.0,
+                "end_frame": 11.75,
+                "max_displacement_game_m": 7.329520009590265e-07,
+                "pairwise_diameter_game_m": 8.673730796090028e-07,
+                "worst_frame": 0.5,
+                "worst_vertex": 497
+              },
+              {
+                "start_frame": 60.0,
+                "end_frame": 131.75,
+                "max_displacement_game_m": 8.078463967407811e-07,
+                "pairwise_diameter_game_m": 1.1481977352606865e-06,
+                "worst_frame": 120.5,
+                "worst_vertex": 575
+              },
+              {
+                "start_frame": 180.0,
+                "end_frame": 240.0,
+                "max_displacement_game_m": 6.596381233328458e-07,
+                "pairwise_diameter_game_m": 9.669128354830344e-07,
+                "worst_frame": 220.75,
+                "worst_vertex": 575
+              }
+            ]
+          }
+        }
+      },
+      "running": {
+        "duration_s": 1.2,
+        "source_stride_m": 0.26127505273945806,
+        "stride_length_game_m": 0.72,
+        "v006_max_support_vertex_displacement_game_m": 0.0641060827494876,
+        "v007_source_max_support_pairwise_diameter_game_m": 4.3388697723373386e-05,
+        "v007_glb_max_support_pairwise_diameter_game_m": 4.3677525929080595e-05,
+        "ground_min_source_game_m": 0.0009302990726482182,
+        "ground_min_glb_game_m": 0.0009302243244692975,
+        "source_to_glb_max_vertex_error_game_m": 1.9504023553925174e-06,
+        "loop_error_game_m": 0.0,
+        "hip_lateral_range_game_m": 0.052766311457538975,
+        "root_basis_max_error": 0.0,
+        "bone_scale_max_error": 0.0,
+        "contacts": {
+          "Lhand": {
+            "phase_offset": 0.5,
+            "phase_intervals": [
+              [
+                0.0,
+                0.10999999999999988
+              ],
+              [
+                0.5,
+                1.0
+              ]
+            ],
+            "interval_end_exclusive": true,
+            "indices": [
+              91,
+              95,
+              102,
+              108,
+              109,
+              193,
+              198,
+              226,
+              228,
+              230
+            ],
+            "coherent_bones": [
+              "L_Forearm",
+              "L_ForearmTwist01",
+              "L_ForearmTwist02",
+              "L_Hand"
+            ]
+          },
+          "Lfoot": {
+            "phase_offset": 0,
+            "phase_intervals": [
+              [
+                0,
+                0.61
+              ]
+            ],
+            "interval_end_exclusive": true,
+            "indices": [
+              422,
+              428,
+              444,
+              457,
+              459,
+              461,
+              498,
+              502,
+              522,
+              532,
+              570,
+              574,
+              576,
+              586
+            ],
+            "coherent_bones": [
+              "L_Calf",
+              "L_CalfTwist01",
+              "L_CalfTwist02",
+              "L_Foot",
+              "L_ToeBase"
+            ]
+          },
+          "Rhand": {
+            "phase_offset": 0.0,
+            "phase_intervals": [
+              [
+                0.0,
+                0.61
+              ]
+            ],
+            "interval_end_exclusive": true,
+            "indices": [
+              90,
+              94,
+              101,
+              107,
+              110,
+              194,
+              197,
+              225,
+              227,
+              229
+            ],
+            "coherent_bones": [
+              "R_Forearm",
+              "R_ForearmTwist01",
+              "R_ForearmTwist02",
+              "R_Hand"
+            ]
+          },
+          "Rfoot": {
+            "phase_offset": 0.5,
+            "phase_intervals": [
+              [
+                0.0,
+                0.10999999999999988
+              ],
+              [
+                0.5,
+                1.0
+              ]
+            ],
+            "interval_end_exclusive": true,
+            "indices": [
+              421,
+              427,
+              443,
+              456,
+              458,
+              460,
+              497,
+              501,
+              521,
+              531,
+              569,
+              573,
+              575,
+              585
+            ],
+            "coherent_bones": [
+              "R_Calf",
+              "R_CalfTwist01",
+              "R_CalfTwist02",
+              "R_Foot",
+              "R_ToeBase"
+            ]
+          }
+        },
+        "measured_per_contact": {
+          "Lhand": {
+            "max_vertex_displacement_game_m": 3.819223186883861e-05,
+            "max_pairwise_diameter_game_m": 4.332281181335721e-05,
+            "pass": true,
+            "ground_min_game_m": 0.0009308085151723644,
+            "maximum_sole_minimum_height_game_m": 0.09190126526283994,
+            "inferred_source_stride_m_range": [
+              0.26125849726612616,
+              0.2612739091267965
+            ],
+            "inferred_game_stride_m_range": [
+              0.7199543778073184,
+              0.7199968485276046
+            ],
+            "segments": [
+              {
+                "start_frame": 0.0,
+                "end_frame": 7.75,
+                "max_displacement_game_m": 1.540726904062192e-05,
+                "pairwise_diameter_game_m": 1.5791144268664952e-05,
+                "worst_frame": 7.75,
+                "worst_vertex": 108
+              },
+              {
+                "start_frame": 36.0,
+                "end_frame": 79.75,
+                "max_displacement_game_m": 3.819223186878442e-05,
+                "pairwise_diameter_game_m": 4.332281181335721e-05,
+                "worst_frame": 38.5,
+                "worst_vertex": 198
+              },
+              {
+                "start_frame": 108.0,
+                "end_frame": 144.0,
+                "max_displacement_game_m": 3.819223186883861e-05,
+                "pairwise_diameter_game_m": 3.830345189040854e-05,
+                "worst_frame": 110.5,
+                "worst_vertex": 198
+              }
+            ]
+          },
+          "Lfoot": {
+            "max_vertex_displacement_game_m": 1.4557542666391918e-05,
+            "max_pairwise_diameter_game_m": 1.4870117773807996e-05,
+            "pass": true,
+            "ground_min_game_m": 0.000964067204090918,
+            "maximum_sole_minimum_height_game_m": 0.09190137818712742,
+            "inferred_source_stride_m_range": [
+              0.2612743684192232,
+              0.2612745514399885
+            ],
+            "inferred_game_stride_m_range": [
+              0.7199981142073691,
+              0.7199986185607302
+            ],
+            "segments": [
+              {
+                "start_frame": 0.0,
+                "end_frame": 43.75,
+                "max_displacement_game_m": 1.4557542666391918e-05,
+                "pairwise_diameter_game_m": 1.4870117773807996e-05,
+                "worst_frame": 43.75,
+                "worst_vertex": 532
+              },
+              {
+                "start_frame": 72.0,
+                "end_frame": 115.75,
+                "max_displacement_game_m": 1.4557542666391918e-05,
+                "pairwise_diameter_game_m": 1.4870117773807996e-05,
+                "worst_frame": 115.75,
+                "worst_vertex": 532
+              },
+              {
+                "start_frame": 144.0,
+                "end_frame": 144.0,
+                "max_displacement_game_m": 0.0,
+                "pairwise_diameter_game_m": 0.0,
+                "worst_frame": 144.0,
+                "worst_vertex": 422
+              }
+            ]
+          },
+          "Rhand": {
+            "max_vertex_displacement_game_m": 3.795597450673652e-05,
+            "max_pairwise_diameter_game_m": 4.3388697723373386e-05,
+            "pass": true,
+            "ground_min_game_m": 0.0009302990726482182,
+            "maximum_sole_minimum_height_game_m": 0.09190142951634898,
+            "inferred_source_stride_m_range": [
+              0.26126963405758175,
+              0.2612718582966767
+            ],
+            "inferred_game_stride_m_range": [
+              0.7199850676484033,
+              0.7199911970209997
+            ],
+            "segments": [
+              {
+                "start_frame": 0.0,
+                "end_frame": 43.75,
+                "max_displacement_game_m": 3.795597450673652e-05,
+                "pairwise_diameter_game_m": 4.3388697723373386e-05,
+                "worst_frame": 3.5,
+                "worst_vertex": 197
+              },
+              {
+                "start_frame": 72.0,
+                "end_frame": 115.75,
+                "max_displacement_game_m": 3.795597450673652e-05,
+                "pairwise_diameter_game_m": 4.3388697723309655e-05,
+                "worst_frame": 75.5,
+                "worst_vertex": 197
+              },
+              {
+                "start_frame": 144.0,
+                "end_frame": 144.0,
+                "max_displacement_game_m": 0.0,
+                "pairwise_diameter_game_m": 0.0,
+                "worst_frame": 144.0,
+                "worst_vertex": 90
+              }
+            ]
+          },
+          "Rfoot": {
+            "max_vertex_displacement_game_m": 1.4507508685152931e-05,
+            "max_pairwise_diameter_game_m": 1.4860584257660258e-05,
+            "pass": true,
+            "ground_min_game_m": 0.0009643906583887583,
+            "maximum_sole_minimum_height_game_m": 0.09190133712375015,
+            "inferred_source_stride_m_range": [
+              0.26125983443777584,
+              0.261275004625433
+            ],
+            "inferred_game_stride_m_range": [
+              0.7199580626734305,
+              0.7199998674113826
+            ],
+            "segments": [
+              {
+                "start_frame": 0.0,
+                "end_frame": 7.75,
+                "max_displacement_game_m": 1.4498559385667072e-05,
+                "pairwise_diameter_game_m": 1.4800751921094232e-05,
+                "worst_frame": 7.75,
+                "worst_vertex": 569
+              },
+              {
+                "start_frame": 36.0,
+                "end_frame": 79.75,
+                "max_displacement_game_m": 1.4507508685152931e-05,
+                "pairwise_diameter_game_m": 1.4860584257660258e-05,
+                "worst_frame": 79.75,
+                "worst_vertex": 569
+              },
+              {
+                "start_frame": 108.0,
+                "end_frame": 144.0,
+                "max_displacement_game_m": 2.1772374244081677e-06,
+                "pairwise_diameter_game_m": 2.342799517663156e-06,
+                "worst_frame": 108.5,
+                "worst_vertex": 501
+              }
+            ]
+          }
+        }
+      }
+    },
+    "limitations": [
+      "未接入正式Godot资源、未代签实际游戏旋转、加减速、混合和转弯支撑；由主代理运行验收。",
+      "move_start/move_stop保持原样，未宣称它们的移动锁脚通过；切入修正步态需运行侧处理相位/过渡。",
+      "非Root骨有原体系允许的平移，静止骨和权重未改；不宣称完成严格等长IK关节约束。",
+      "视频为真实Blender工作台15fps两循环，未制作VFX或改正式材质。",
+      "原41骨/597顶点/29组未变；GLB按格式可拆分UV顶点，不用导入网格编号替代源编号。"
+    ]
+  },
+  "development_record": "docs/v0.1/development/2026-11-17_fat_zombie21_gait_fix.md"
 }

@@ -17,6 +17,8 @@ const ROOT := "res://data/narrative/"
 const ENTRIES := {
 	"nar_tutorial_fate_drop_01": ROOT + "nar_tutorial_fate_drop_01.json",
 	"nar_tutorial_fate_open_01": ROOT + "nar_tutorial_fate_open_01.json",
+	"nar_tutorial_fate_assembled_01": ROOT + "nar_tutorial_fate_assembled_01.json",
+	"nar_tutorial_run_vending_01": ROOT + "nar_tutorial_run_vending_01.json",
 	# 开场第一段：新游戏在 98F 主人的办公室（区块00 最深房间）醒来。
 	"nar_tower_opening_01_wake": ROOT + "nar_tower_opening_01_wake.json",
 	# 开场第二段：走进会议室（区块00 的下一间）时触发。
@@ -43,6 +45,8 @@ const ENTRIES := {
 	"nar_main_031_green_briefing": ROOT + "nar_main_031_green_briefing.json",
 	# 主线 3.2：数据库显示器首领 audience / activation。
 	"nar_main_032_monitor_audience": ROOT + "nar_main_032_monitor_audience.json",
+	# 主线 3.2 返航通讯：稀土钥匙领取后主动安全信标待办。
+	"nar_main_032_key_return_call": ROOT + "nar_main_032_key_return_call.json",
 	# 主线 3.3：稀土钥匙交接与安装。
 	"nar_main_033_key_install": ROOT + "nar_main_033_key_install.json",
 	# 远征入场仪式 A：由脚底扫描带逐层写入角色轮廓。

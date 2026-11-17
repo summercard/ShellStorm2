@@ -18,8 +18,8 @@ EXPECTED = {
         "category": "UI",
         "skill": "ui-asset-pipeline",
         # 2026-11-16 approved additions: shared weapon board + fate hologram host.
-        "count": 23,
-        "required_additions": {"UI-WEAPON-BUILD-BOARD", "UI-FATE-HOLOGRAM-PRESENTATION"},
+        "count": 26,
+        "required_additions": {"UI-WEAPON-BUILD-BOARD", "UI-FATE-HOLOGRAM-PRESENTATION", "UI-DIALOGUE-PORTRAIT-PLAYER", "UI-DIALOGUE-PORTRAIT-GREEN", "UI-DIALOGUE-PORTRAIT-STAGE"},
         "initial_count": 16,
         "tests": ["verify_hud_presenter_3d", "verify_pause_game_save_reset_flow", "verify_gamepad_input_flow"],
     },

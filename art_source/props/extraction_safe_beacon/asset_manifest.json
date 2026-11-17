@@ -1,0 +1,57 @@
+{
+  "asset_id": "PRP-EXTRACTION-SAFE-BEACON-3D",
+  "asset_version": "v001",
+  "name_zh": "安全撤离信标_三足开放双翼固定设施",
+  "category": "场景道具",
+  "package": {
+    "source_blend": "art_source/props/extraction_safe_beacon/prp_extraction_safe_beacon_v001.blend",
+    "authoring_script": "art_source/props/extraction_safe_beacon/author_extraction_safe_beacon_v001.py",
+    "stable_glb": "assets/art/props/dungeon_3d/components/prp_extraction_safe_beacon/prp_extraction_safe_beacon_visual_top3d.glb",
+    "runtime_wrapper": "assets/art/props/dungeon_3d/prp_extraction_safe_beacon_root_top3d.tscn"
+  },
+  "source": {
+    "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+    "palette_uv": "PaletteUV",
+    "palette_interpolation": "Closest",
+    "embedded_palette": false,
+    "editable_collection": "01_制作组件_已统一材质",
+    "output_collection": "02_游戏输出_独立资产包"
+  },
+  "geometry": {
+    "aabb_min": [
+      -0.829618,
+      -0.8,
+      0.0
+    ],
+    "aabb_max": [
+      0.829618,
+      0.8,
+      2.2
+    ],
+    "dimensions_m": [
+      1.659237,
+      1.6,
+      2.2
+    ],
+    "triangles": 3634,
+    "output_meshes": [
+      "prp_extraction_safe_beacon_主体_金属哑光反光",
+      "prp_extraction_safe_beacon_UI灯光_柔和自发光"
+    ]
+  },
+  "materials": {
+    "count": 4,
+    "roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emissive_mesh": "prp_extraction_safe_beacon_UI灯光_柔和自发光",
+    "body_mesh": "prp_extraction_safe_beacon_主体_金属哑光反光"
+  },
+  "fixed_facility": true,
+  "pickup_allowed": false,
+  "front_direction": "+Y",
+  "notes": "低矮三足落地通讯柱，开放双翼、上行箭头与收拢环；非发光主体与发光独立。"
+}

@@ -6,6 +6,7 @@
   "duration": 0.4,
   "presentation": {
     "dialogue": {
+      "mode": "B",
       "participants": [
         { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram" },
         { "speaker_id": "player", "speaker": "主角" }

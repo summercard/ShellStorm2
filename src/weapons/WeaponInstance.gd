@@ -59,13 +59,15 @@ static func from_item(item: Dictionary, runtime_tree: WeaponAssemblyTree = null)
 	):
 		instance.assembly_id = canonical_assembly_id
 	instance.rarity = str(item.get("rarity", nested.get("rarity", "common")))
-	## 品质只读不算：`fate_slot_capacity` 在掉落时已含加成（见 WeaponDropGrade.apply_to_item），
-	## 这里再按品质加一次会让每次读档多涨格子。
-	instance.drop_grade = WeaponDropGrade.normalize(str(item.get(
-		"drop_grade", nested.get("drop_grade", WeaponDropGrade.GRADE_BLUE)
-	)))
+	var stored_grade := str(item.get("drop_grade", nested.get("drop_grade", "")))
+	instance.drop_grade = WeaponDropGrade.normalize(stored_grade)
+	# 显式容量已含品质加成；仅缺字段时从内容基线补齐，不能把默认蓝色当作旧品质事实。
+	var base_capacity := int(canonical_item.get("fate_slot_capacity", DEFAULT_FATE_SLOT_CAPACITY))
+	var missing_capacity := base_capacity
+	if WeaponDropGrade.is_valid(stored_grade):
+		missing_capacity += WeaponDropGrade.fate_slot_bonus(stored_grade)
 	instance.fate_slot_capacity = maxi(0, int(item.get(
-		"fate_slot_capacity", nested.get("fate_slot_capacity", DEFAULT_FATE_SLOT_CAPACITY)
+		"fate_slot_capacity", nested.get("fate_slot_capacity", missing_capacity)
 	)))
 	## 弹药绑定锁定只读不算：它是掉落时定下的事实，不能因读档路径不同而变。
 	## 兼容旧存档（没有这个键）⇒ 默认 false。身份锁只描述「是不是掉落身份锁」；
@@ -78,6 +80,21 @@ static func from_item(item: Dictionary, runtime_tree: WeaponAssemblyTree = null)
 		for upgrade in stored_upgrades:
 			if upgrade is Dictionary:
 				instance.fate_upgrades.append((upgrade as Dictionary).duplicate(true))
+	# 仅校正已知继承通用8槽的豌豆旧实例；越界刻印必须连同旧容量完整保留。
+	if instance.weapon_content_id == "weapon_pistol" and (
+		item.has("fate_slot_capacity") or nested.has("fate_slot_capacity")
+	):
+		var grade_bonus := WeaponDropGrade.fate_slot_bonus(instance.drop_grade)
+		var target_capacity := 4 + grade_bonus
+		var max_slot_index := 0
+		for upgrade in instance.fate_upgrades:
+			max_slot_index = maxi(max_slot_index, int(upgrade.get("slot_index", 0)))
+		if (
+			instance.fate_slot_capacity == DEFAULT_FATE_SLOT_CAPACITY + grade_bonus
+			and instance.fate_upgrades.size() <= target_capacity
+			and max_slot_index <= target_capacity
+		):
+			instance.fate_slot_capacity = target_capacity
 	var stored_snapshot: Variant = item.get(
 		"assembly_snapshot", nested.get("assembly_snapshot", {})
 	)

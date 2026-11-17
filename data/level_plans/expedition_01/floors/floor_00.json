@@ -359,7 +359,7 @@
         "completion": "clear",
         "stage_advance": "clear",
         "intermission_sec": 0.0,
-        "max_alive": 8,
+        "max_alive": 12,
         "min_player_distance_m": 6.0,
         "seal_room": true,
         "light_on_finish": true,
@@ -420,15 +420,15 @@
             "monsters": [
               {
                 "type": "fat_zombie03",
-                "count": 2
+                "count": 3
               },
               {
                 "type": "ranged_caster",
-                "count": 2
+                "count": 3
               },
               {
                 "type": "melee_chaser",
-                "count": 4
+                "count": 6
               }
             ]
           }

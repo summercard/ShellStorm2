@@ -279,6 +279,29 @@ func _phase_a_static() -> void:
 			room_ref = str((script.trigger.get("filter", {}) as Dictionary).get("room_id", ""))
 		_check(room_ref != "", "%s 触发点名了房间（room_id / point_room）" % narrative_id)
 
+	# 方式A/B隔离：主线14段显式A，三段命运教学显式B；A仍必须保留合法对白会话能力。
+	var main_presentation_ids := [
+		"nar_tower_opening_01_wake", "nar_tower_opening_02_1_find_owner", "nar_tower_opening_02_2_outside_boom",
+		"nar_tower_opening_02_3_aftershock", "nar_tower_opening_02_5_stairwell_blackout", "nar_tower_opening_02_lobby",
+		"nar_tower_opening_02_zombies", "nar_tower_opening_03_base_dark", "nar_tower_opening_04_stair_zombies",
+		"nar_tower_opening_05_bridge_fat", "nar_tower_opening_05_rooftop_crowd", "nar_main_031_green_briefing",
+		"nar_main_032_monitor_audience", "nar_main_033_key_install",
+	]
+	for narrative_id in main_presentation_ids:
+		var main_script := NarrativeScript3D.load_from_id(narrative_id)
+		_check(main_script.is_valid() and str((main_script.presentation.get("dialogue", {}) as Dictionary).get("mode", "")) == "A", "%s 使用方式A" % narrative_id)
+	for narrative_id in ["nar_tutorial_fate_drop_01", "nar_tutorial_fate_open_01", "nar_tutorial_fate_assembled_01"]:
+		var fate_script := NarrativeScript3D.load_from_id(narrative_id)
+		_check(fate_script.is_valid() and str((fate_script.presentation.get("dialogue", {}) as Dictionary).get("mode", "")) == "B", "%s 使用方式B" % narrative_id)
+	var monitor_script := NarrativeScript3D.load_from_id("nar_main_032_monitor_audience")
+	var shot_times: Array[float] = []
+	for cue in monitor_script.cues:
+		if str(cue.get("do", "")) == "camera.shot":
+			shot_times.append(float(cue.get("at", -1.0)))
+	_check(shot_times == [26.2, 30.7, 35.2, 39.751, 44.3, 48.8, 53.0, 57.497, 62.0], "Boss032 九组camera.shot分界准确（实际 %s）" % str(shot_times))
+	_check(_dialogue_ab_contract_wired(), "DialogueUI/PortraitStage 已接入 A/B portraits_enabled 隔离")
+	_check(_camera_shot_contract_wired(), "NarrativeAdapter3D 已接入 camera.shot 明确 look_at 与FOV归还")
+
 	# 开场类剧本必须挂 gameplay_started，**不能挂 room_entered**：后者在场景 `_ready` 里就发了，
 	# 那一刻开场页还没把相机与输入接管完，剧情会在菜单背后空跑、并与开场页互相顶
 	# （输入锁被还原成"可操控"、相机被钉在近景）。这是真机缺陷，不是风格偏好。
@@ -377,6 +400,17 @@ func _dungeon_binding_wired() -> bool:
 
 ## 塔楼把相机交给「叙事相机」的那一处开关：一旦被误删，剧情镜头会被玩法镜头每帧顶掉，
 ## 而运行时只表现为"镜头没动"，不会报错。所以这里做一次源码级守卫。
+func _dialogue_ab_contract_wired() -> bool:
+	var adapter := FileAccess.get_file_as_string("res://src/narrative/NarrativeAdapter3D.gd")
+	var stage := FileAccess.get_file_as_string("res://src/ui/dialogue/DialoguePortraitStage.gd")
+	return adapter.contains("portraits_enabled") and adapter.contains("mode != \"A\"") and stage.contains("_portraits_enabled") and stage.contains("_slots.clear()")
+
+
+func _camera_shot_contract_wired() -> bool:
+	var adapter := FileAccess.get_file_as_string("res://src/narrative/NarrativeAdapter3D.gd")
+	return adapter.contains("\"shot\":") and adapter.contains("looking_at(target, Vector3.UP)") and adapter.contains("_camera_rest_fov")
+
+
 func _tower_camera_override_wired() -> bool:
 	var text := FileAccess.get_file_as_string("res://src/world3d/TowerDescent3D.gd")
 	var marker := "func _has_camera_presentation_override() -> bool:"

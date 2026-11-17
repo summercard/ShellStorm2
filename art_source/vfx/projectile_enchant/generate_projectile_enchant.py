@@ -11,16 +11,18 @@ from PIL import Image, ImageDraw, ImageFilter
 ROOT = Path(__file__).resolve().parents[3]
 SIDE = 512
 FINAL_SIDE = 256
-VERSION = "v001"
+VERSION = "v002"
+# v002源参数清单：中心box覆盖弹身，出生足尺寸，+Z温和漂移以透明度衰减形成短尾。
+# 轴向仅由实例缩放box.z；单GPU、24/N预算、local_coords防池化旧轨迹残留。
 # 每件具有独立AssetID、类和Prefab；不生成运行时kind分支。
 RECIPES = {
-    "fire": {"class": "Fire", "life": 0.28, "quad": (0.16, 0.28), "velocity": (0.20, 0.52), "spread": 26, "radius": 0.075, "scale": (0.55, 1.0), "color": (1, 0.62, 0.25), "alpha": 0.86},
-    "ice": {"class": "Ice", "life": 0.34, "quad": (0.09, 0.19), "velocity": (0.12, 0.36), "spread": 55, "radius": 0.09, "scale": (0.5, 0.95), "color": (0.52, 0.86, 1), "alpha": 0.90},
-    "poison": {"class": "Poison", "life": 0.38, "quad": (0.22, 0.22), "velocity": (0.10, 0.28), "spread": 65, "radius": 0.09, "scale": (0.55, 1.05), "color": (0.42, 0.90, 0.26), "alpha": 0.43},
-    "lightning": {"class": "Lightning", "life": 0.16, "quad": (0.21, 0.30), "velocity": (0.04, 0.18), "spread": 80, "radius": 0.095, "scale": (0.65, 1.0), "color": (0.52, 0.78, 1), "alpha": 0.88},
-    "bounce": {"class": "Bounce", "life": 0.23, "quad": (0.14, 0.16), "velocity": (0.12, 0.30), "spread": 45, "radius": 0.075, "scale": (0.55, 0.9), "color": (1, 0.66, 0.30), "alpha": 0.66},
-    "homing": {"class": "Homing", "life": 0.25, "quad": (0.13, 0.21), "velocity": (0.10, 0.32), "spread": 18, "radius": 0.06, "scale": (0.5, 0.85), "color": (0.36, 1, 0.78), "alpha": 0.62},
-    "return": {"class": "Return", "life": 0.30, "quad": (0.18, 0.20), "velocity": (0.10, 0.27), "spread": 35, "radius": 0.08, "scale": (0.55, 0.9), "color": (0.78, 0.56, 1), "alpha": 0.66},
+    'fire': {'class': 'Fire', 'life': 0.28, 'quad': (0.32, 0.44), 'velocity': (0.2, 0.42), 'spread': 18, 'scale': (1.1, 1.25), 'color': (1, 0.22, 0.06), 'alpha': 0.86, 'box': (0.075, 0.075, 0.12)},
+    'ice': {'class': 'Ice', 'life': 0.34, 'quad': (0.28, 0.38), 'velocity': (0.16, 0.32), 'spread': 22, 'scale': (1.1, 1.25), 'color': (0.52, 0.86, 1), 'alpha': 0.9, 'box': (0.08, 0.08, 0.12)},
+    'poison': {'class': 'Poison', 'life': 0.38, 'quad': (0.38, 0.38), 'velocity': (0.12, 0.28), 'spread': 26, 'scale': (1.1, 1.25), 'color': (0.42, 0.9, 0.26), 'alpha': 0.43, 'box': (0.085, 0.085, 0.13)},
+    'lightning': {'class': 'Lightning', 'life': 0.16, 'quad': (0.34, 0.46), 'velocity': (0.2, 0.4), 'spread': 24, 'scale': (1.1, 1.25), 'color': (0.52, 0.78, 1), 'alpha': 0.88, 'box': (0.085, 0.085, 0.13)},
+    'bounce': {'class': 'Bounce', 'life': 0.23, 'quad': (0.30, 0.34), 'velocity': (0.18, 0.36), 'spread': 20, 'scale': (1.1, 1.25), 'color': (1, 0.66, 0.3), 'alpha': 0.66, 'box': (0.075, 0.075, 0.12)},
+    'homing': {'class': 'Homing', 'life': 0.25, 'quad': (0.30, 0.40), 'velocity': (0.18, 0.36), 'spread': 16, 'scale': (1.1, 1.25), 'color': (0.36, 1, 0.78), 'alpha': 0.62, 'box': (0.075, 0.075, 0.12)},
+    'return': {'class': 'Return', 'life': 0.3, 'quad': (0.34, 0.38), 'velocity': (0.16, 0.32), 'spread': 20, 'scale': (1.1, 1.25), 'color': (0.78, 0.56, 1), 'alpha': 0.66, 'box': (0.08, 0.08, 0.12)},
 }
 
 
@@ -110,6 +112,7 @@ def scene_text(kind: str, recipe: dict) -> str:
     width, height = recipe["quad"]
     velocity_min, velocity_max = recipe["velocity"]
     scale_min, scale_max = recipe["scale"]
+    box_x, box_y, box_z = recipe["box"]
     return f'''[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://src/vfx/projectile_enchant/{class_name}.gd" id="1_script"]
@@ -117,22 +120,23 @@ def scene_text(kind: str, recipe: dict) -> str:
 
 [sub_resource type="Gradient" id="Gradient_alpha"]
 offsets = PackedFloat32Array(0, 0.12, 0.65, 1)
-colors = PackedColorArray({red}, {green}, {blue}, 0, {red}, {green}, {blue}, {recipe["alpha"]}, {red}, {green}, {blue}, {recipe["alpha"] * 0.65}, {red}, {green}, {blue}, 0)
+colors = PackedColorArray({red}, {green}, {blue}, {recipe["alpha"]}, {red}, {green}, {blue}, {recipe["alpha"]}, {red}, {green}, {blue}, {recipe["alpha"] * 0.65}, {red}, {green}, {blue}, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture_alpha"]
 gradient = SubResource("Gradient_alpha")
 
 [sub_resource type="Curve" id="Curve_scale"]
-_data = [Vector2(0, 0.25), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.12), 0.0, 0.0, 0, 0]
-point_count = 3
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="CurveTexture" id="CurveTexture_scale"]
 curve = SubResource("Curve_scale")
 
 [sub_resource type="ParticleProcessMaterial" id="Particle_material"]
+resource_local_to_scene = true
 particle_flag_rotate_y = false
-emission_shape = 1
-emission_sphere_radius = {recipe["radius"]}
+emission_shape = 3
+emission_box_extents = Vector3({box_x}, {box_y}, {box_z})
 direction = Vector3(0, 0, 1)
 spread = {recipe["spread"]}.0
 gravity = Vector3(0, 0, 0)
@@ -170,6 +174,7 @@ metadata/lifecycle_owner = "Projectile3D"
 
 [node name="Particles" type="GPUParticles3D" parent="."]
 visible = false
+position = Vector3(0, 0, 0)
 cast_shadow = 0
 emitting = false
 amount = 24
@@ -181,6 +186,7 @@ visibility_aabb = AABB(-1, -1, -1, 2, 2, 3)
 use_fixed_seed = true
 seed = 160116
 process_material = SubResource("Particle_material")
+draw_passes = 1
 draw_pass_1 = SubResource("Quad_mesh")
 trail_enabled = false
 '''
@@ -189,19 +195,24 @@ trail_enabled = false
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--preview", action="store_true", help="通过workspace_paths保存工程外贴图预览")
+    parser.add_argument("--prefabs-only", action="store_true", help="仅重建Prefab，不生成或覆盖纹理")
     args = parser.parse_args()
     textures = ROOT / "assets/art/vfx/textures"
     prefabs = ROOT / "assets/art/vfx/combat_3d"
     assert textures.is_dir() and prefabs.is_dir()
     images = {}
     for kind, recipe in RECIPES.items():
-        image = flame() if kind == "fire" else ice() if kind == "ice" else poison() if kind == "poison" else glyph(kind)
-        image = image.resize((FINAL_SIDE, FINAL_SIDE), Image.Resampling.LANCZOS)
-        # 明确透明边界，避免缩小过滤将外缘污染成方框。
-        ImageDraw.Draw(image).rectangle((0, 0, FINAL_SIDE - 1, FINAL_SIDE - 1), outline=(0, 0, 0, 0), width=2)
-        image.save(textures / f"projectile_enchant_{kind}.png", optimize=True)
+        if not args.prefabs_only:
+            image = flame() if kind == "fire" else ice() if kind == "ice" else poison() if kind == "poison" else glyph(kind)
+            image = image.resize((FINAL_SIDE, FINAL_SIDE), Image.Resampling.LANCZOS)
+            # 明确透明边界，避免缩小过滤将外缘污染成方框。
+            ImageDraw.Draw(image).rectangle((0, 0, FINAL_SIDE - 1, FINAL_SIDE - 1), outline=(0, 0, 0, 0), width=2)
+            image.save(textures / f"projectile_enchant_{kind}.png", optimize=True)
+            images[kind] = image
+        elif args.preview:
+            with Image.open(textures / f"projectile_enchant_{kind}.png") as image:
+                images[kind] = image.convert("RGBA")
         (prefabs / f"vfx_projectile_enchant_{kind}_root_top3d.tscn").write_text(scene_text(kind, recipe), encoding="utf-8")
-        images[kind] = image
     if args.preview:
         sys.path.insert(0, str(ROOT / "scripts"))
         import workspace_paths as wp
@@ -210,10 +221,10 @@ def main() -> None:
         for index, (kind, image) in enumerate(images.items()):
             sheet.paste(image, (index * FINAL_SIDE, 0), image)
             draw.text((index * FINAL_SIDE + 12, FINAL_SIDE + 8), kind, fill=(224, 232, 242))
-        target = wp.work_path("sessions/2026-11-16_projectile_enchant/texture_contact_sheet.png")
+        target = wp.work_path("sessions/2026-11-17_projectile_enchant_wrap/texture_contact_sheet.png")
         sheet.save(target)
         print(target)
-    print(f"已生成{len(images)}张RGBA贴图和独立Prefab；未运行Godot。")
+    print(f"已生成{len(RECIPES)}份独立Prefab；" + ("纹理未写入。" if args.prefabs_only else f"已生成{len(images)}张RGBA贴图。") + "未运行Godot。")
 
 
 if __name__ == "__main__":

@@ -336,6 +336,7 @@ const PLAYER_BARK_HEIGHT_M := 2.55
 @export var run_seed_override := -1
 @export var test_mode := false
 @export var enable_fate_tutorial_in_test := false
+@export var enable_run_vending_tutorial_in_test := false
 @export_file("*.tscn") var return_scene_path := GameDesignConfig.BASE_SCENE_3D
 
 @onready var player: Player3D = $Player3D
@@ -491,6 +492,9 @@ var _fate_purchase_busy := false
 var _fate_tutorial_locked := false
 var _fate_tutorial_focus: WeakRef
 var _fate_tutorial: Node
+var _run_vending_tutorial_locked := false
+var _run_vending_tutorial_lock_reason := ""
+var _run_vending_tutorial: Node
 var _fate_confirm: Control
 var _fate_presentation: Control
 var _fate_board: Control
@@ -801,6 +805,7 @@ func release_loading_scene() -> void:
 
 func _ready() -> void:
 	_install_fate_tutorial()
+	_install_run_vending_tutorial()
 	_begin_expedition_loading_if_active()
 	if not _hud_presenter.weapon_hud_command_ready.is_connected(_apply_weapon_hud_command):
 		_hud_presenter.weapon_hud_command_ready.connect(_apply_weapon_hud_command)
@@ -1248,9 +1253,9 @@ func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
 	if not _fate_door_snapshot_to_restore.is_empty():
 		call_deferred("_restore_pending_door_fate_overlay")
 	_restore_merchant_stock_from_snapshot(snapshot)
-	_trade_extraction_unlocked = bool(snapshot.get("trade_extraction_unlocked", false))
-	_trade_extraction_room_id = str(snapshot.get("trade_extraction_room_id", ""))
-	if _trade_extraction_unlocked and not _trade_extraction_room_id.is_empty():
+	_trade_extraction_unlocked = bool(snapshot.get("trade_extraction_unlocked", false)) and _merchant_unlocks_trade_extraction
+	_trade_extraction_room_id = str(snapshot.get("trade_extraction_room_id", "")) if _merchant_unlocks_trade_extraction else ""
+	if _merchant_unlocks_trade_extraction and _trade_extraction_unlocked and not _trade_extraction_room_id.is_empty():
 		var trade_room := _room_by_id.get(_trade_extraction_room_id) as DungeonRoom3D
 		if trade_room != null:
 			_ensure_conditional_extraction("TRADE", trade_room, Vector3(-4.0, 0.0, 3.0))
@@ -1391,6 +1396,7 @@ func _restore_pending_door_fate_overlay() -> void:
 	_sync_player_input_lock()
 	if is_instance_valid(_fate_tutorial):
 		_fate_tutorial.call("notify_offer_open", _fate_offer_pickup_id, _fate_door_offer_id)
+		_fate_tutorial.call("restore_offer_assembly", _fate_offer_pickup_id, _fate_door_offer_id)
 
 
 func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) -> void:
@@ -1652,7 +1658,24 @@ func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
 			_encounter_event_director.import_snapshot(encounter_state as Dictionary)
 	_import_flow_integration_state(snapshot.get("world_state", {}) as Dictionary)
 	_restore_narrative_spawned_keys(snapshot)
+	# 旧档自愈：老版本收尾被吞掉会留下「事件已完成、房间没肃清」的死锁存档（门还锁着、地上没箱）。
+	# 延迟一帧等房间/玩家/小地图稳定，再按只读账补跑一次清房链；幂等，且有活体时不动。
+	call_deferred("_settle_orphaned_completed_encounters")
 	return true
+
+
+## 收尾孤儿自愈：判定只读既有账 —— 事件已记为完成、房间仍未肃清、场上真的空了。
+## 三条同时成立才补跑 `_try_settle_encounter_room_clear`，因此不会替玩家清掉还没打完的房；
+## 已清房 / 未完成 / 还有活体的房间一律跳过。
+func _settle_orphaned_completed_encounters() -> void:
+	for room_id_value in _room_by_id.keys():
+		var room_id := str(room_id_value)
+		var room := _room_by_id.get(room_id) as DungeonRoom3D
+		if room == null or room.cleared:
+			continue
+		if "room_encounter:%s" % room_id not in _encounter_event_completed_history:
+			continue
+		_try_settle_encounter_room_clear(room_id)
 
 
 func _restore_narrative_spawned_keys(snapshot: Dictionary) -> void:
@@ -1939,24 +1962,40 @@ func _on_encounter_event_finished(snapshot: Dictionary) -> void:
 	if str(snapshot.get("status", "")) == "completed" and not event_id.is_empty() and event_id not in _encounter_event_completed_history:
 		_encounter_event_completed_history.append(event_id)
 	var room_id := str(snapshot.get("room_id", ""))
-	if not room_id.is_empty() and _room_encounter_active.has(room_id):
-		_room_encounter_active.erase(room_id)
-		if status == "completed":
-			# 计时到点：不再出新波，但**已出的怪还要打完**。
-			# 若此刻场上已空（玩家在到点前刚把最后一波清干净），本房直接判肃清 ——
-			# 否则不会再有击杀事件来推动清房判定，房间会一直锁着。
-			_try_settle_encounter_room_clear(room_id)
-		else:
-			# 取消 / 失败一律解封：任何非正常收尾都不能把玩家永久锁死在房里。
-			set_room_seal(room_id, false)
+	if room_id.is_empty():
+		encounter_event_finished.emit(snapshot)
+		_queue_runtime_autosave("encounter_event_finished")
+		return
+	# 完成事实以 Director 快照为准，**不以 `_room_encounter_active` 这份易失索引为前置条件**：
+	# 清房（`_mark_room_cleared`）、读档恢复与流送卸载都会改写/擦除它，
+	# 一旦把它当门禁，事件真的结束了也会被静默吞掉 —— 表现正是「打完倒计时怪不出箱、门还锁着」。
+	var instance_id := str(snapshot.get("instance_id", ""))
+	var active_instance := str(_room_encounter_active.get(room_id, ""))
+	if not active_instance.is_empty() and not instance_id.is_empty() and active_instance != instance_id:
+		# 旧实例的迟到回调不能收掉新事件；保留新实例登记。
+		encounter_event_finished.emit(snapshot)
+		_queue_runtime_autosave("encounter_event_finished_stale")
+		return
+	_room_encounter_active.erase(room_id)
+	if status == "completed":
+		# 计时到点：不再出新波，但**已出的怪还要打完**。
+		# 若此刻场上已空（玩家在到点前刚把最后一波清干净），本房直接判肃清 ——
+		# 否则不会再有击杀事件来推动清房判定，房间会一直锁着。
+		_try_settle_encounter_room_clear(room_id)
+	else:
+		# 取消 / 失败一律解封：任何非正常收尾都不能把玩家永久锁死在房里。
+		set_room_seal(room_id, false)
 	encounter_event_finished.emit(snapshot)
 	_queue_runtime_autosave("encounter_event_finished")
 
 
 ## 遭遇收尾补判：场上真的空了 ⇒ 本房肃清。
-## 只由 `_on_encounter_event_finished` 调用 —— 正常路径仍走击杀事件。
+## Director 完成回调与恢复/重入路径都可调用，必须幂等。
+## 判据**不复用增量账** `_alive_by_room`：它只由击杀/取消逐笔维护，任何一次漏记
+## （自爆连杀、休眠卸载、读档重放）都会留下清不掉的幽灵计数，房间就永远不解封。
+## 这里按「真实节点 + 休眠快照 + 在途预约」重算，并顺手把账修正回真实值。
 func _try_settle_encounter_room_clear(room_id: String) -> void:
-	if int(_alive_by_room.get(room_id, 0)) > 0 or _reserved_spawn_count(room_id) > 0:
+	if _synchronize_room_clear_live_count(room_id) > 0:
 		return
 	if _has_room_clear_actor(room_id):
 		return
@@ -1971,6 +2010,33 @@ func _try_settle_encounter_room_clear(room_id: String) -> void:
 		if _room_key_economy_enabled() and _room_produces_room_key(room)
 		else "遭遇结束 · 房间肃清"
 	)
+
+
+## 清房存活重算：已实例化节点、休眠房间快照、在途预约三者合一，写回 `_alive_by_room`。
+## 口径与 `EncounterEventHost3D.encounter_event_live_count()` 对齐 —— 同一批事实不能
+## 一边按节点算、一边按增量账算，否则「Director 说打完 / 房间说还有怪」就会互相打架。
+func _synchronize_room_clear_live_count(room_id: String) -> int:
+	var count := _reserved_spawn_count(room_id)
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	var has_valid_nodes := false
+	for value in _enemy_nodes_by_room.get(room_id, []):
+		var enemy := value as Enemy3D
+		if enemy == null or not is_instance_valid(enemy) or enemy.is_queued_for_deletion() or enemy.ai_state == "dead":
+			continue
+		if not _counts_for_room_clear(enemy.enemy_data):
+			continue
+		has_valid_nodes = true
+		count += 1
+	# 流送卸载后节点不存在，房间快照才是实体集合的权威来源；不要把旧增量账带回来。
+	if not has_valid_nodes and (room == null or not room.is_streamed()):
+		var runtime_state := _segment_runtime_state.get(room_id, {}) as Dictionary
+		for enemy_state_value in runtime_state.get("enemies", []) as Array:
+			var enemy_state := enemy_state_value as Dictionary
+			var enemy_data := enemy_state.get("enemy_data", {}) as Dictionary
+			if _counts_for_room_clear(enemy_data):
+				count += 1
+	_alive_by_room[room_id] = count
+	return count
 
 
 func _process(delta: float) -> void:
@@ -3106,7 +3172,7 @@ func _sync_player_input_lock() -> void:
 		return
 	var inventory_open := _inventory_ui != null and _inventory_ui.is_inventory_open()
 	player.set_input_locked(
-		_has_exclusive_modal() or inventory_open or _narrative_holds_player_input()
+		_has_exclusive_modal() or inventory_open or _run_vending_tutorial_locked or _narrative_holds_player_input()
 	)
 
 
@@ -3175,6 +3241,41 @@ func _install_fate_tutorial() -> void:
 	_fate_tutorial.name = "FateTutorial3D"
 	_fate_tutorial.call("configure", self)
 	add_child(_fate_tutorial)
+
+
+func _install_run_vending_tutorial() -> void:
+	if is_instance_valid(_run_vending_tutorial) or (test_mode and not enable_run_vending_tutorial_in_test):
+		return
+	_run_vending_tutorial = preload("res://src/narrative/RunVendingTutorial3D.gd").new()
+	_run_vending_tutorial.name = "RunVendingTutorial3D"
+	_run_vending_tutorial.call("configure", self)
+	add_child(_run_vending_tutorial)
+
+
+func set_run_vending_tutorial_locked(locked: bool, reason := "run_vending_tutorial") -> void:
+	_run_vending_tutorial_locked = locked
+	_run_vending_tutorial_lock_reason = reason if locked else ""
+	_sync_player_input_lock()
+
+
+func get_run_vending_tutorial_station_snapshot() -> Dictionary:
+	if _completed or player == null or not is_instance_valid(player) or player.current_hp <= 0:
+		return {}
+	if _current_room_id.is_empty() or not is_inside_tree() or (not _room_by_id.has(_current_room_id) and not _secret_branch_room_ids.has(_current_room_id)):
+		return {}
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if room == null:
+		room = _secret_branch_room_ids.get(_current_room_id) as DungeonRoom3D
+	if room == null or not room.is_inside_tree() or not is_ancestor_of(room):
+		return {}
+	for value in room.find_children("*", "ServiceStation3D", true, false):
+		var station := value as ServiceStation3D
+		if station == null or station.station_type != "merchant" or not station.is_inside_tree() or not room.is_ancestor_of(station):
+			continue
+		var snapshot := station.get_snapshot()
+		if bool(snapshot.get("player_in_range", false)):
+			return {"station": station, "room_id": room.room_id, "station_type": "merchant", "player_in_range": true}
+	return {}
 
 
 func set_fate_tutorial_locked(locked: bool) -> void:
@@ -8947,6 +9048,9 @@ func _get_offscreen_enemy_positions() -> Array[Vector3]:
 func _on_service_activated(_room: DungeonRoom3D, station: ServiceStation3D) -> void:
 	match station.station_type:
 		"merchant":
+			if is_instance_valid(_run_vending_tutorial) and bool(_run_vending_tutorial.call("should_block_merchant_open", station)):
+				_refresh_loot_label()
+				return
 			_merchant_unlocks_trade_extraction = station.unlocks_trade_extraction
 			_open_merchant(_room.room_id if _room != null else "")
 		"upgrade":
@@ -9078,6 +9182,9 @@ func _on_merchant_purchase_command(
 
 
 func _commit_merchant_purchase_checkpoint() -> bool:
+	# 交易回调可能由 RunMerchantService 无条件调用；能力关闭时必须是无副作用提交。
+	if not _merchant_unlocks_trade_extraction:
+		return true
 	var was_unlocked := _trade_extraction_unlocked
 	var previous_room_id := _trade_extraction_room_id
 	_trade_extraction_unlocked = true
@@ -10747,6 +10854,9 @@ func _purchase_fate_card(choice_index: int) -> void:
 	_set_fate_feedback_buttons_disabled(true)
 	var overlay := _fate_overlay
 	var board := _fate_board
+	var tutorial_pickup_id := _fate_offer_pickup_id
+	var tutorial_offer_id := _fate_door_offer_id
+	var tutorial_generation := int((_fate_tutorial.call("get_snapshot") as Dictionary).get("generation", -1)) if is_instance_valid(_fate_tutorial) else -1
 	var card := _door_fate_choices[choice_index]
 	var target_id := str(FateCardGameBridge.get_target_summary(card).get("weapon_instance_id", ""))
 	if card.scope == FateCard.Scope.WEAPON:
@@ -10790,6 +10900,9 @@ func _purchase_fate_card(choice_index: int) -> void:
 			status_label.text = "购买失败 · %s：%s · 已退还 %d 金币" % [card.card_name, failure, price]
 		_finish_fate_purchase_ui(overlay)
 		return
+	if card.scope == FateCard.Scope.WEAPON and is_instance_valid(_fate_tutorial):
+		_fate_tutorial.call("notify_weapon_assembled", tutorial_pickup_id, tutorial_offer_id,
+			tutorial_generation, card, result)
 	if overlay != _fate_overlay or not _door_fate_active:
 		_queue_runtime_autosave("fate_card_purchased")
 		return
@@ -11295,7 +11408,12 @@ func _finish_fate_overlay_exit(overlay: Control, bought: int) -> void:
 	# 紧急清理或重开以后，旧动画不得关闭新弹窗。
 	if not _door_fate_active or overlay != _fate_overlay:
 		return
+	var tutorial_generation := int((_fate_tutorial.call("get_snapshot") as Dictionary).get("generation", -1)) if is_instance_valid(_fate_tutorial) else -1
+	var tutorial_pickup_id := _fate_offer_pickup_id
+	var tutorial_offer_id := _fate_door_offer_id
 	_close_door_fate_overlay()
+	if is_instance_valid(_fate_tutorial):
+		_fate_tutorial.call("notify_offer_exit_completed", tutorial_pickup_id, tutorial_offer_id, tutorial_generation)
 	status_label.text = (
 		"已退出命运购买 · 本次买下 %d 张 · 行动继续" % bought
 		if bought > 0
@@ -12920,8 +13038,11 @@ func get_last_killed_enemy() -> Dictionary:
 
 
 func _on_extraction_started(start_duration: float, beacon: ExtractionBeacon3D) -> void:
+	if _active_extraction_beacon != null and is_instance_valid(_active_extraction_beacon) and _active_extraction_beacon != beacon:
+		beacon.abort_extraction()
+		return
 	_active_extraction_beacon = beacon
-	_extraction_defense_active = true
+	_extraction_defense_active = beacon.defense_encounter_enabled
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
 	if AudioManager != null:
@@ -12932,7 +13053,7 @@ func _on_extraction_started(start_duration: float, beacon: ExtractionBeacon3D) -
 	# 子图撤离房跳过防线遭遇：子图房不在 `_room_by_id` 里，按 `_current_room_id`
 	# 取的会是玩家**已经离开**的主图房间 —— 表现成「人在子图读条、主图房里刷怪」。
 	# 读条、面板与结算全部照旧，只有这一场遭遇不建。
-	var skip_defense := beacon.has_meta("secret_branch")
+	var skip_defense := not beacon.defense_encounter_enabled
 	if not skip_defense and room != null and _encounter_event_director != null:
 		var config := _build_extraction_encounter_config(room, start_duration)
 		var started := start_encounter_event(config)

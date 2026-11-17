@@ -1,0 +1,33 @@
+{
+  "narrative_id": "nar_tutorial_fate_assembled_01",
+  "schema_version": 1,
+  "priority": 20,
+  "trigger": { "kind": "manual", "once": "run" },
+  "duration": 0.4,
+  "presentation": {
+    "dialogue": {
+      "mode": "B",
+      "participants": [
+        { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram" },
+        { "speaker_id": "player", "speaker": "主角", "portrait_mode": "normal" }
+      ],
+      "presentation_options": { "left_mode": "hologram", "portrait_scale": 0.8 }
+    }
+  },
+  "cues": [
+    { "at": 0.0, "do": "player.lock_input", "locked": true },
+    { "at": 0.0, "do": "player.combat", "enabled": false },
+    { "at": 0.2, "do": "ui.dialogue", "wait": true, "lines": [
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "alert", "text": "等等，先别急着把它当普通枪收起来。", "auto_advance_sec": 2.8 },
+      { "speaker_id": "player", "speaker": "主角", "expression": "question", "text": "多刻了张牌，差这么大？", "auto_advance_sec": 2.4 },
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "happy", "text": "从这一刻起，它就是独一无二的枪了。", "auto_advance_sec": 2.8 },
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "neutral", "text": "不同卡牌、不同组合，会长出不同的射击本事。", "auto_advance_sec": 3.2 },
+      { "speaker_id": "player", "speaker": "主角", "expression": "neutral", "text": "不只是变强，是走上不同的路。", "auto_advance_sec": 2.6 },
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "alert", "text": "对。刻印跟着这把枪走，换一把可不会替你搬家。", "auto_advance_sec": 3.4 },
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "neutral", "text": "保护好它，别随手丢了。想看清它变成什么，按 K。", "auto_advance_sec": 3.4 },
+      { "speaker_id": "player", "speaker": "主角", "expression": "happy", "text": "K，查看枪械构筑。记住了，这把我会带好。", "auto_advance_sec": 3.0 }
+    ] },
+    { "at": 0.3, "do": "player.lock_input", "locked": false },
+    { "at": 0.4, "do": "flow.end" }
+  ]
+}

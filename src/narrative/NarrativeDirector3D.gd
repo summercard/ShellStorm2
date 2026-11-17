@@ -422,6 +422,8 @@ func _play_internal(narrative_id: String, context: Dictionary) -> bool:
 		if str(cue.get("do", "")) == "ui.dialogue" and dialogue_config.is_empty():
 			dialogue_config = {"presentation_id": cue.get("presentation_id", ""), "participants": cue.get("participants", []), "options": cue.get("presentation_options", cue.get("options", {}))}
 	dialogue_config.merge(script.presentation.get("dialogue", {}), true)
+	if not dialogue_config.is_empty() and not dialogue_config.has("mode"):
+		dialogue_config["mode"] = "A"
 	if has_dialogue and not _adapter.begin_dialogue_presentation(narrative_id, dialogue_config):
 		_warn("剧情『%s』对白会话被拒绝。" % narrative_id)
 		return false

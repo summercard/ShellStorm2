@@ -120,7 +120,7 @@ func _run() -> void:
 	check(room.get_pending_chest_grants() == before_pending, "领取失败撤销普通奖励 pending")
 	check(room.get_persistent_detail_state("treasure_chests") == before_chests, "领取失败未改 opened 账")
 	check(BaseManager.get_main_story_snapshot() == before_story and BaseManager.get_active_run_checkpoint() == before_checkpoint, "领取失败永久事实与 checkpoint 整体回滚")
-	check(tower._main_story_auto_extraction.is_empty(), "领取失败不启动撤离")
+	check(tower._main_story_auto_extraction.is_empty(), "领取失败不创建通讯待办")
 	BaseManager.force_save_failure_for_test = false
 	chest._player_in_range = true
 	check(chest.perform_interaction(tower.player, {}), "真实交互信号触发首领箱领取")
@@ -130,9 +130,9 @@ func _run() -> void:
 	var frozen := ((acquired_checkpoint.get("world_state", {}) as Dictionary).get("segment_runtime_state", {}) as Dictionary).get(room.room_id, {}) as Dictionary
 	check(bool((frozen.get("treasure_chests", {}) as Dictionary).get(chest.chest_id, {}).get("opened", false)), "领取同批存档含箱 opened")
 	check(not (frozen.get("pending_chest_grants", {}) as Dictionary).get(chest.chest_id, {}).get("grants", []).is_empty(), "领取同批存档含普通奖励 pending，不丢物")
-	check(bool(acquired_checkpoint.get(PHASE, {}).get("active", false)), "领取同批存档含撤离阶段")
-	check(bool(tower._main_story_auto_extraction.get("active", false)), "实际取得后启动8秒倒计时")
-	check(not tower.player.input_locked, "自动撤离不锁移动/战斗输入")
+	check(str(acquired_checkpoint.get(PHASE, {}).get("stage", "")) == "call_pending", "领取同批存档含 call_pending 待通讯阶段")
+	check(not tower._main_story_auto_extraction.has("remaining"), "领取后不再启动8秒自动倒计时")
+	check(not tower.player.input_locked, "通讯待办不锁移动/战斗输入")
 	check(bool(tower._prepare_story_boss_chest_config(room, config).get("mimic", false)), "已领取后普通拟态规则恢复")
 	var revision := BaseManager.data.save_revision
 	var duplicate := tower._story_chest_claim(room, chest)
@@ -236,15 +236,14 @@ func _verify_enemy_gate(room: DungeonRoom3D) -> void:
 func _verify_snapshot_and_death() -> void:
 	get_tree().paused = true
 	tower._tick_main_story_auto_extraction(2.0)
-	check(is_equal_approx(float(tower._main_story_auto_extraction.get("remaining", -1.0)), 8.0), "暂停不推进自动撤离")
+	check(not tower._main_story_auto_extraction.has("remaining"), "方式B不推进自动返航倒计时")
 	get_tree().paused = false
-	tower._tick_main_story_auto_extraction(2.0)
 	var saved := tower.build_runtime_save_snapshot()
-	check(is_equal_approx(float(saved.get(PHASE, {}).get("remaining", -1.0)), 6.0), "倒计时快照保留真实剩余秒数")
+	check(str(saved.get(PHASE, {}).get("stage", "")) == "call_pending", "方式B快照保留通讯待办")
 	check(BaseManager.set_active_run_checkpoint(saved, "integration_resume"), "存盘运行快照")
 	BaseManager.load_base()
 	tower._restore_main_story_extraction(BaseManager.get_active_run_checkpoint())
-	check(is_equal_approx(float(tower._main_story_auto_extraction.get("remaining", -1.0)), 6.0), "磁盘重载延续而非重置8秒")
+	check(str(tower._main_story_auto_extraction.get("stage", "")) == "call_pending", "磁盘重载恢复通讯待办而非自动倒计时")
 	var fresh := saved.duplicate(true)
 	fresh.erase(PHASE)
 	tower._restore_main_story_extraction(fresh)
@@ -256,7 +255,7 @@ func _verify_snapshot_and_death() -> void:
 	tower._restore_main_story_extraction(saved)
 	tower.player.current_hp = 0
 	tower._tick_main_story_auto_extraction(10.0)
-	check(not bool(tower._main_story_auto_extraction.get("active", true)) and not tower._completed, "倒计时死亡立即取消，不结算成功")
+	check(str(tower._main_story_auto_extraction.get("stage", "")) == "cancelled" and not tower._completed, "死亡取消安全信标待办，不结算成功")
 	check(MainStoryProgress.key_state(BaseManager.get_main_story_snapshot(), KEY) == "acquired", "死亡不撤销永久钥匙")
 	tower.player.current_hp = tower.player.max_hp
 	tower._restore_main_story_extraction(saved)
@@ -268,7 +267,7 @@ func _verify_real_scene_reload() -> void:
 	BaseManager.data = BaseData.new()
 	BaseManager.load_base()
 	snapshot = BaseManager.get_active_run_checkpoint()
-	check(str(snapshot.get("run_id", "")) == tower._run_id and bool(snapshot.get(PHASE, {}).get("active", false)), "丢弃内存存档后从磁盘读取同一行动与撤离阶段")
+	check(str(snapshot.get("run_id", "")) == tower._run_id and str(snapshot.get(PHASE, {}).get("stage", "")) == "call_pending", "丢弃内存存档后从磁盘读取同一行动与通讯待办")
 	var original_run := tower._run_id
 	var restored := SCENE.instantiate() as TowerDescent3D
 	restored.test_mode = true
@@ -280,8 +279,8 @@ func _verify_real_scene_reload() -> void:
 	restored.get_main_story_controller().set_process(false)
 	restored._run_id = original_run
 	restored._restore_runtime_save_snapshot(snapshot)
-	check(bool(restored._main_story_auto_extraction.get("active", false)), "真实场景运行快照入口恢复撤离阶段")
-	check(is_equal_approx(float(restored._main_story_auto_extraction.get("remaining", -1.0)), 6.0), "真实场景恢复剩余秒数，不重发钥匙")
+	check(str(restored._main_story_auto_extraction.get("stage", "")) == "call_pending", "真实场景运行快照入口恢复通讯待办")
+	check(not restored._main_story_auto_extraction.has("remaining"), "真实场景恢复不重建8秒倒计时")
 	var room := restored.get_main_story_room("boss") as DungeonRoom3D
 	restored._restore_room_runtime_state("boss")
 	check(restored.is_room_boss_defeated("boss"), "读档保留首领已败事实，不复活奖励门槛")
@@ -291,7 +290,7 @@ func _verify_real_scene_reload() -> void:
 	restored.run_completed.connect(func(success: bool, _summary: Dictionary) -> void: abort_results.append(success))
 	restored._confirm_expedition_exit()
 	restored._tick_main_story_auto_extraction(20.0)
-	check(abort_results == [false] and not bool(restored._main_story_auto_extraction.get("active", true)), "主动弃局取消倒计时，只发布一次失败")
+	check(abort_results == [false] and str(restored._main_story_auto_extraction.get("stage", "")) == "cancelled", "主动弃局取消通讯待办，只发布一次失败")
 	check(MainStoryProgress.key_state(BaseManager.get_main_story_snapshot(), KEY) == "acquired", "弃局不撤销已落盘钥匙")
 	GameEntryFlow.consume_main_scene_entry()
 	restored.queue_free()
@@ -300,36 +299,11 @@ func _verify_real_scene_reload() -> void:
 
 
 func _verify_unique_settlement() -> void:
-	tower.force_extraction_settlement_for_test = true
-	tower._expedition_entry_source = ExpeditionEntryContext.TOWER03
-	tower.run_completed.connect(func(success: bool, _summary: Dictionary) -> void:
-		if success: successes += 1
-		else: failures_emitted += 1)
 	var runs_before := BaseManager.data.total_runs
-	tower._tick_main_story_auto_extraction(5.5)
-	check(not tower._completed and successes == 0 and is_equal_approx(float(tower._main_story_auto_extraction.get("remaining", -1.0)), 0.5), "累计7.5秒尚不结算，8秒倒计时不提前成功")
-	BaseManager.force_save_failure_for_test = true
-	print("MAIN_STORY_EXPECTED_FAILURE_BEGIN settlement_save")
-	tower._tick_main_story_auto_extraction(0.5)
-	print("MAIN_STORY_EXPECTED_FAILURE_END settlement_save")
-	check(not tower._completed and successes == 0 and BaseManager.data.total_runs == runs_before, "成功提交失败可重试，不先发布成功")
-	check(not tower.player.input_locked, "成功提交失败后恢复可行动输入")
-	check(tower._expedition_entry_source == ExpeditionEntryContext.TOWER03, "失败重试恢复原入口来源")
-	var revision := BaseManager.data.save_revision
-	tower._tick_main_story_auto_extraction(0.1)
-	check(BaseManager.data.save_revision == revision and tower._main_story_extraction_retry > 0.0, "保存失败后限频重试，不每帧刷盘")
-	BaseManager.force_save_failure_for_test = false
-	tower._tick_main_story_auto_extraction(2.1)
-	check(tower._completed and successes == 1, "正式 _finish_run(true) 成功且只发布一次")
-	check(BaseManager.data.total_runs == runs_before + 1, "成功统计唯一")
-	var returned := BaseManager.get_active_run_checkpoint()
-	check(str(returned.get("scope", "")) == "base" and str(returned.get("current_room_id", "")) == "facility", "钥匙自动撤离强制返航99F")
-	check(str(returned.get(ExpeditionEntryContext.RETURN_KEY, "")) == ExpeditionEntryContext.BASE, "主线返航写 BASE 来源，不沿用塔3")
-	check(bool(returned.get(Dungeon3D.SUCCESSFUL_EXTRACTION_CARRY_KEY, false)) and not returned.has(PHASE), "返航交接保留携带物且清除撤离标记")
-	tower._tick_main_story_auto_extraction(10.0)
-	tower._finish_run(true)
-	tower._finish_run(false)
-	check(successes == 1 and failures_emitted == 0 and BaseManager.data.total_runs == runs_before + 1, "完成后死亡/重复调用不二次成功或失败结算")
+	tower._tick_main_story_auto_extraction(8.0)
+	check(not tower._completed and BaseManager.data.total_runs == runs_before, "方式B不因旧8秒档自动结算")
+	check(str(tower._main_story_auto_extraction.get("stage", "")) == "call_pending", "旧自动阶段保持通讯待办")
+	check(not tower._main_story_auto_extraction.has("remaining"), "方式B不保留倒计时字段")
 
 
 func _verify_base_host() -> void:

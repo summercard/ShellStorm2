@@ -34,8 +34,12 @@ var _camera: Camera3D = null
 var _camera_rest_basis := Basis.IDENTITY
 var _camera_rest_offset := Vector3.ZERO
 var _camera_rest_global := Transform3D.IDENTITY
+var _camera_rest_transform := Transform3D.IDENTITY
 var _camera_rest_local := Transform3D.IDENTITY
+var _camera_rest_fov := 75.0
 var _camera_channel := {}          # 距离通道 {from, to, t, duration}
+var _camera_shot_channel := {}     # 通用镜头 {position/target/fov 起终点, t, duration}
+var _camera_return_channel := {}   # 精确回镜 {from/to Transform3D + FOV, t, duration}
 var _camera_yaw_channel := {}      # 方位通道（度）{from, to, t, duration}
 var _camera_elev_channel := {}     # 仰角通道（度）{from, to, t, duration}
 var _camera_rest_elevation_deg := 0.0  # 接管前那套俯角（度），elevation_deg 的缺省值
@@ -120,7 +124,14 @@ func begin_dialogue_presentation(narrative_id: String, config: Dictionary = {}) 
 	elif session == str(DialogueUI.get_presentation_snapshot().get("session_id", "")):
 		_dialogue_narrative_id = ""
 		return false
-	var accepted := DialogueUI.begin_presentation(session, config.get("participants", []), config.get("presentation_options", config.get("options", {})))
+	var mode := str(config.get("mode", "A")).strip_edges().to_upper()
+	if mode not in ["A", "B", "A+B"]:
+		_warn("presentation.dialogue.mode『%s』非法，按剧情缺省 A 处理。" % mode)
+		mode = "A"
+	var options: Dictionary = config.get("presentation_options", config.get("options", {})).duplicate(true)
+	options["portraits_enabled"] = mode != "A"
+	options["dialogue_mode"] = mode
+	var accepted := DialogueUI.begin_presentation(session, config.get("participants", []), options)
 	if accepted != session:
 		_dialogue_narrative_id = ""
 		return false
@@ -190,6 +201,8 @@ func tick(delta: float) -> void:
 		_advance_channel(_camera_channel, delta)
 		_advance_channel(_camera_yaw_channel, delta)
 		_advance_channel(_camera_elev_channel, delta)
+		if not _camera_shot_channel.is_empty():
+			_advance_camera_shot(delta)
 		if _camera_pivot_mode == "anchor" and not _camera_pivot_channel.is_empty():
 			var anchor: Variant = scene_anchor(_camera_pivot_anchor)
 			if anchor is Vector3:
@@ -209,7 +222,9 @@ func tick(delta: float) -> void:
 					_expedition_entry_close_attributes.dof_blur_near_enabled = original.dof_blur_near_enabled
 					_expedition_entry_close_attributes.dof_blur_far_enabled = original.dof_blur_far_enabled
 					_expedition_entry_close_attributes.dof_blur_amount = original.dof_blur_amount * weight
-		else:
+		elif not _camera_return_channel.is_empty():
+			_advance_camera_return(delta)
+		elif _camera_shot_channel.is_empty():
 			_apply_camera_pose()
 	if _facing_active:
 		_advance_channel(_facing_channel, delta)
@@ -590,6 +605,8 @@ func _camera_instruction(action: String, params: Dictionary) -> Dictionary:
 			return _camera_focus(params)
 		"pan":
 			return _camera_pan(params)
+		"shot":
+			return _camera_shot(params)
 		"restore":
 			return _camera_restore(params)
 		"shake":
@@ -647,8 +664,10 @@ func _ensure_camera_override() -> bool:
 		return false
 	_camera = camera
 	_camera_rest_global = camera.global_transform
+	_camera_rest_transform = camera.global_transform
 	_camera_rest_local = camera.transform
 	_camera_rest_basis = camera.global_basis
+	_camera_rest_fov = camera.fov
 	_camera_rest_offset = camera.global_position - player.global_position
 	# 接管前那套俯角：elevation_deg 不给时沿用它，保证「只改距离」的老行为一字不变。
 	_camera_rest_elevation_deg = rad_to_deg(
@@ -658,12 +677,15 @@ func _ensure_camera_override() -> bool:
 		)
 	)
 	_camera_pivot_channel = {}
+	_camera_return_channel = {}
 	_camera_pivot_mode = "player"
 	_camera_override_active = true
 	return true
 
 
 func _camera_focus(params: Dictionary) -> Dictionary:
+	_camera_return_channel = {}
+	_camera_shot_channel = {}
 	if not _ensure_camera_override():
 		return _degraded("camera.focus：拿不到玩家相机，本镜头的运镜被跳过。")
 	var target_distance := maxf(CAMERA_MIN_DISTANCE_M, float(params.get("distance", _camera_rest_offset.length())))
@@ -686,6 +708,8 @@ func _camera_focus(params: Dictionary) -> Dictionary:
 
 
 func _camera_pan(params: Dictionary) -> Dictionary:
+	_camera_return_channel = {}
+	_camera_shot_channel = {}
 	if not _ensure_camera_override():
 		return _degraded("camera.pan：拿不到玩家相机，本镜头的运镜被跳过。")
 	var target_yaw := float(params.get("yaw_deg", 0.0))
@@ -710,34 +734,125 @@ func _camera_pan(params: Dictionary) -> Dictionary:
 	return _done(Callable(self, "release_camera_override"))
 
 
+func _camera_shot(params: Dictionary) -> Dictionary:
+	_camera_return_channel = {}
+	_camera_channel = {}
+	_camera_yaw_channel = {}
+	_camera_elev_channel = {}
+	if not _ensure_camera_override():
+		return _degraded("camera.shot：拿不到玩家相机，本镜头被跳过。")
+	var position_to: Variant = _resolve_camera_shot_point(params, "position_anchor", "position_offset")
+	var target_to: Variant = _resolve_camera_shot_point(params, "target_anchor", "target_offset")
+	var position_from: Variant = _resolve_camera_shot_point(params, "position_anchor", "position_from_offset")
+	var target_from: Variant = _resolve_camera_shot_point(params, "target_anchor", "target_from_offset")
+	if not (position_to is Vector3) or not (target_to is Vector3):
+		return _degraded("camera.shot：position_anchor/target_anchor 不可用。")
+	if not (position_from is Vector3):
+		position_from = _camera.global_position
+	if not (target_from is Vector3):
+		target_from = position_from - _camera.global_basis.z * 10.0
+	var from_transform := _camera_shot_transform(position_from as Vector3, target_from as Vector3)
+	var to_transform := _camera_shot_transform(position_to as Vector3, target_to as Vector3)
+	var duration := maxf(0.0, float(params.get("duration", 0.0)))
+	_camera_return_channel = {}
+	_camera_shot_channel = {
+		"from": from_transform, "to": to_transform,
+		"from_target": target_from as Vector3, "to_target": target_to as Vector3,
+		"from_fov": _camera.fov, "to_fov": float(params.get("fov", _camera.fov)),
+		"t": 0.0, "duration": duration,
+	}
+	# 机位切换先落到起点，之后才进行镜内平移/取景；duration=0 直接到终点。
+	_camera.global_transform = from_transform
+	_apply_camera_shot(1.0 if duration <= 0.0 else 0.0)
+	return _done(Callable(self, "release_camera_override"))
+
+
+func _camera_shot_transform(position: Vector3, target: Vector3) -> Transform3D:
+	var transform := Transform3D.IDENTITY
+	transform.origin = position
+	return transform.looking_at(target, Vector3.UP)
+
+
+func _resolve_camera_shot_point(params: Dictionary, anchor_key: String, offset_key: String) -> Variant:
+	var anchor_id := str(params.get(anchor_key, ""))
+	if anchor_id.is_empty():
+		return null
+	var anchor: Variant = scene_anchor(anchor_id)
+	var position := Vector3.ZERO
+	var basis := Basis.IDENTITY
+	if anchor is Vector3:
+		position = anchor
+	elif anchor is Dictionary and (anchor as Dictionary).get("position", null) is Vector3:
+		var frame: Dictionary = anchor
+		position = frame["position"]
+		if frame.get("basis", null) is Basis:
+			basis = frame["basis"]
+	else:
+		return null
+	var offset_value: Variant = params.get(offset_key, [0.0, 0.0, 0.0])
+	if not (offset_value is Array) or (offset_value as Array).size() != 3:
+		return null
+	var values: Array = offset_value
+	return position + basis * Vector3(float(values[0]), float(values[1]), float(values[2]))
+
+
+func _advance_camera_shot(delta: float) -> void:
+	if _camera_shot_channel.is_empty():
+		return
+	var duration := float(_camera_shot_channel.get("duration", 0.0))
+	var elapsed := float(_camera_shot_channel.get("t", 0.0)) + delta
+	_camera_shot_channel["t"] = elapsed
+	var weight := 1.0 if duration <= 0.0 else clampf(elapsed / duration, 0.0, 1.0)
+	_apply_camera_shot(weight)
+	if weight >= 1.0:
+		_camera_shot_channel["t"] = duration
+
+
+func _advance_camera_return(delta: float) -> void:
+	if _camera_return_channel.is_empty() or _camera == null or not is_instance_valid(_camera):
+		return
+	var duration := float(_camera_return_channel.get("duration", 1.0))
+	var elapsed := float(_camera_return_channel.get("t", 0.0)) + delta
+	_camera_return_channel["t"] = elapsed
+	var weight := 1.0 if duration <= 0.0 else smoothstep(0.0, 1.0, clampf(elapsed / duration, 0.0, 1.0))
+	var from_transform: Transform3D = _camera_return_channel.get("from", _camera.global_transform)
+	var to_transform: Transform3D = _camera_return_channel.get("to", _camera_rest_transform)
+	_camera.global_transform = _constrain_camera_pose(from_transform.interpolate_with(to_transform, weight), to_transform.origin)
+	_camera.fov = lerpf(float(_camera_return_channel.get("from_fov", _camera.fov)), float(_camera_return_channel.get("to_fov", _camera_rest_fov)), weight)
+	if weight >= 1.0:
+		_camera.global_transform = to_transform
+		_camera.fov = _camera_rest_fov
+
+
+func _apply_camera_shot(weight: float) -> void:
+	if _camera == null or not is_instance_valid(_camera) or _camera_shot_channel.is_empty():
+		return
+	var progress := clampf(weight, 0.0, 1.0)
+	var from_transform: Transform3D = _camera_shot_channel.get("from", _camera.global_transform)
+	var to_transform: Transform3D = _camera_shot_channel.get("to", from_transform)
+	var target_from: Vector3 = _camera_shot_channel.get("from_target", to_transform.origin - to_transform.basis.z * 10.0)
+	var target_to: Vector3 = _camera_shot_channel.get("to_target", target_from)
+	var target := target_from.lerp(target_to, progress)
+	_camera.global_transform = _constrain_camera_pose(from_transform.interpolate_with(to_transform, progress), target)
+	_camera.fov = lerpf(float(_camera_shot_channel.get("from_fov", _camera_rest_fov)), float(_camera_shot_channel.get("to_fov", _camera_rest_fov)), progress)
+
+
 func _camera_restore(params: Dictionary) -> Dictionary:
+	_camera_shot_channel = {}
+	_camera_channel = {}
+	_camera_yaw_channel = {}
+	_camera_elev_channel = {}
+	_camera_pivot_channel = {}
 	if not _camera_override_active:
 		return _ok()
-	var duration := maxf(0.0, float(params.get("duration", 0.6)))
-	if _expedition_entry_presentation != null and is_instance_valid(_camera):
-		_expedition_entry_return = {"from": _camera.global_transform, "t": 0.0, "duration": duration}
-		return _done(Callable(self, "release_camera_override"))
-	# 回镜必须把**枢轴**也带回玩家：否则机位会绕着一个远处的点收镜，最后再「跳」回玩家。
-	var restore_player := player_node()
-	if restore_player != null:
-		var pivot_from := _current_camera_pivot(restore_player)
-		_camera_pivot_mode = "player"
-		_camera_pivot_channel = {
-			"from": pivot_from, "to": restore_player.global_position, "t": 0.0,
-			"duration": duration, "value": pivot_from,
-		}
-	_camera_channel = {
-		"from": _camera_distance(), "to": _camera_rest_offset.length(),
-		"t": 0.0, "duration": duration, "value": _camera_distance(),
-	}
-	_camera_yaw_channel = {
-		"from": _camera_yaw_deg(), "to": 0.0, "t": 0.0, "duration": duration,
-		"value": _camera_yaw_deg(),
-	}
-	# 回镜必须连俯角一起回，否则收口瞬间会从叙事俯角"跳"回玩法俯角。
-	_camera_elev_channel = {
-		"from": _camera_elev_deg(), "to": _camera_rest_elevation_deg,
-		"t": 0.0, "duration": duration, "value": _camera_elev_deg(),
+	var duration := maxf(0.0, float(params.get("duration", 1.0)))
+	_camera_return_channel = {
+		"from": _camera.global_transform,
+		"to": _camera_rest_transform,
+		"from_fov": _camera.fov,
+		"to_fov": _camera_rest_fov,
+		"t": 0.0,
+		"duration": duration,
 	}
 	return _done(Callable(self, "release_camera_override"))
 
@@ -892,6 +1007,10 @@ func _apply_camera_pose() -> void:
 		var snapshot: Dictionary = _expedition_entry_presentation.get_snapshot()
 		var target := player.global_position + Vector3.UP * (float(snapshot["world_min"]) + float(snapshot["world_max"]) - player.global_position.y * 2.0) * 0.5
 		desired = desired.looking_at(target, Vector3.UP)
+	elif _camera_pivot_mode != "player":
+		# 显式脱开玩家的旧 camera.focus/pan 仍复用原轨道位置，额外明确取景目标，
+		# 保证 pivot=last_spawn/room_center 等构图确实指向该枢轴，而不依赖接管前 basis。
+		desired = desired.looking_at(center, Vector3.UP)
 	_camera.global_transform = _constrain_camera_pose(desired, center)
 
 
@@ -925,9 +1044,12 @@ func release_camera_override() -> void:
 				_camera.global_transform = _constrain_camera_pose(Transform3D(_camera_rest_basis, player.global_position + _camera_rest_offset), player.global_position)
 			else:
 				_camera.global_transform = _camera_rest_global
+		_camera.fov = _camera_rest_fov
 	_expedition_entry_return = {}
+	_camera_return_channel = {}
 	_camera_override_active = false
 	_camera = null
+	_camera_shot_channel = {}
 	_camera_channel = {}
 	_camera_yaw_channel = {}
 	_camera_elev_channel = {}
@@ -1416,7 +1538,7 @@ func _fx_vfx(params: Dictionary) -> Dictionary:
 
 
 static func is_fate_tutorial(narrative_id: String) -> bool:
-	return narrative_id in ["nar_tutorial_fate_drop_01", "nar_tutorial_fate_open_01"]
+	return narrative_id in ["nar_tutorial_fate_drop_01", "nar_tutorial_fate_open_01", "nar_tutorial_fate_assembled_01"]
 
 
 func can_commit_narrative(narrative_id: String, reason: String) -> bool:
@@ -1886,4 +2008,4 @@ func _grant_instruction(action: String, params: Dictionary) -> Dictionary:
 			return _degraded("grant.item：物品『%s』发放失败（%s）。" % [item_id, str(result)])
 		"unlock":
 			return _degraded("grant.unlock 尚未接通：依赖具体解锁项（见 08 文档 §5.2）。")
-	return _degraded("grant.%s 尚未接通（见 08 文档 §5.2 指令表）。" % action)
+	return _degraded("grant.%s 尚未接通（见 08 文档 §5.

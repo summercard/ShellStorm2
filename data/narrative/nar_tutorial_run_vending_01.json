@@ -1,0 +1,32 @@
+{
+  "narrative_id": "nar_tutorial_run_vending_01",
+  "schema_version": 1,
+  "priority": 20,
+  "trigger": { "kind": "manual", "once": "run" },
+  "duration": 0.6,
+  "presentation": {
+    "require_completed_dialogue": true,
+    "dialogue": {
+      "mode": "B",
+      "participants": [
+        { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram" },
+        { "speaker_id": "player", "speaker": "主角" }
+      ],
+      "presentation_options": { "left_mode": "hologram", "portrait_scale": 0.8 }
+    }
+  },
+  "cues": [
+    { "at": 0.0, "do": "player.lock_input", "locked": true },
+    { "at": 0.0, "do": "player.combat", "enabled": false },
+    { "at": 0.1, "do": "ui.dialogue", "wait": true, "lines": [
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "alert", "text": "这是局内自动贩卖机，买东西只能用这局挣到的金币。", "auto_advance_sec": 3.6, "focus_target": "merchant_station" },
+      { "speaker_id": "player", "speaker": "主角", "expression": "question", "text": "基地里的钱也不能用？", "auto_advance_sec": 2.6 },
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "neutral", "text": "不能，基地货币和这局金币是两本账。", "auto_advance_sec": 3.1, "focus_target": "run_coin_readout" },
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "alert", "text": "货架上的东西数量有限，本局买完就不会再刷新。", "auto_advance_sec": 3.5, "focus_target": "merchant_station" },
+      { "speaker_id": "player", "speaker": "主角", "expression": "question", "text": "那要现在就把好东西买走吗？", "auto_advance_sec": 2.8 },
+      { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "happy", "text": "不用急着全买；新一局里，货架可能会刷出更好的东西。", "auto_advance_sec": 3.8, "focus_target": "merchant_station" }
+    ] },
+    { "at": 0.2, "do": "player.lock_input", "locked": false },
+    { "at": 0.6, "do": "flow.end" }
+  ]
+}

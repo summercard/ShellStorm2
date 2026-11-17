@@ -1,8 +1,16 @@
-# 胖子僵尸 2.1 · 原始蒙皮还原与待机修订（2026-11-16）
+# 胖子僵尸 2.1 · v006攻击动作与正式运行包装（2026-11-17）
 
 资产 `ENM-NORMAL-FAT-ZOMBIE21` / slug `enm_normal_fat_zombie21`。
 
-## 0. 当前有效修订：v002 原始蒙皮，仅待机
+## 0A. v006攻击动作候选：正式包装已落地，仍待运行验收
+
+- 当前表现源沿用 `enm_normal_fat_zombie21_animation_v006.blend`，GLB 内含 `idle / walking / running / move_start / move_stop / attack` 六段；`attack` 为 60fps、2.0秒单次动作，攻击视觉接触帧为 **F78（1.300秒）**，表现为抬身下扑。
+- 运行入口：`assets/art/enemies/normal_enemy_3d/fat_zombie21/runtime/enm_normal_fat_zombie21_root_top3d.tscn`；稳定 GLB 仍为 `components/enm_normal_fat_zombie21/enm_normal_fat_zombie21_visual_top3d.glb`，不把版本号写入运行路径。包装只做 `+X → -Z` 朝向转换与 `3.936738` 视觉缩放，Enemy3D 的玩法根缩放、碰撞和伤害数值不改。
+- `EnemyAvatar3D` 仅把 `fat_zombie21` 路由到该包装；`fat_zombie21_formal_visual.gd` 在唯一表现入口检测 attack 的 F78，只触发一次 `VfxPool3D.FX01_FAT_ZOMBIE_SLAM`。烟尘和波纹均为透明 PNG 的 `Sprite3D`，不创建模型几何；特效没有伤害、碰撞或命中结算所有权。
+- 伤害仍由 `Enemy3D._perform_attack()` 负责，视觉 F78 与旧胖子僵尸03设计的 **F36** 不是同一时序。旧设计的 F36 不能被偷偷改成新怪的伤害时刻；本轮保留该时序风险，未改变 Enemy3D 伤害所有权/结算入口。
+- 状态：`exported_pending_godot_validation` / `pending_user_visual_review`；这是候选接入，不标 `accepted`。尚缺正式 Godot 窗口下的真实场景加载、动作播放、F78烟尘+明显外扩波纹的画面确认。
+
+## 0. v002 源修订（保留为历史基线）：原始蒙皮，仅待机
 
 **用户报告上一轮“完全扭曲”，否决重建蒙皮。下文 §1–§8 仅为被否决的 v001 历史，不再代表当前资产。撤销其中“动画质量合格”“移动动画验收通过”的结论；数值不变量不能代替视觉形变验收。**
 
@@ -40,6 +48,23 @@
 - 预览视频实测9.600秒，包含3个3.2秒循环。未做Godot播放、完整玩法状态或用户人工视觉签收。
 
 **待完成**：用户连续动态确认；Godot 包装/真实播放；原尺寸/朝向的工程对齐；移动动作重新设计与制作（本次不做）。
+
+## 0B. 2026-11-17 接管验证记录（逐项退出码）
+
+| 项目 | 命令/范围 | 退出码 | 结论 |
+|---|---|---:|---|
+| EnemyAvatar3D 脚本 | Godot `--editor --quit --check-only --script res://src/enemy3d/EnemyAvatar3D.gd` | 0 | 通过语法加载 |
+| VfxPool3D 脚本 | Godot `--editor --quit --check-only --script res://src/vfx/VfxPool3D.gd` | 0 | 通过语法加载 |
+| fat_zombie21 表现脚本 | Godot `--editor --quit --check-only --script res://assets/art/enemies/normal_enemy_3d/fat_zombie21/runtime/fat_zombie21_formal_visual.gd` | 0 | 通过语法加载 |
+| 砸地 VFX 脚本 | Godot `--editor --quit --check-only --script res://assets/art/vfx/combat_3d/vfx_fat_zombie_slam_root_top3d.gd` | 0 | 通过语法加载 |
+| fat_zombie21 PackedScene | Godot headless `--quit-after 3 --scene res://assets/art/enemies/normal_enemy_3d/fat_zombie21/runtime/enm_normal_fat_zombie21_root_top3d.tscn` | 0 | 真实场景加载通过；两张 PNG 已被加载 |
+| Enemy3D 独立脚本 | Godot `--editor --quit --check-only --script res://src/enemy3d/Enemy3D.gd` | 1 | 阻断于现有独立脚本环境：`MonsterAIManager` 标识未在该模式注入；不是本次新增语法错误，需完整 Autoload/主工程验证 |
+| 主工程全量扫描 | Godot `--headless --editor --quit --check-only` | 1/终止 | 既有全量扫描/初始化未在检查窗口内完成，并报告工程内既有 UID 警告；本次新增贴图首次扫描错误已由独立场景加载复核为退出0 |
+| 运行资源命名 | `scripts/check_asset_runtime_naming.py` | 0 | `ASSET_RUNTIME_NAMING_OK`；本资产稳定 GLB/包装路径无版本号 |
+| 账本引用 | `scripts/check_ledger_refs.py` | 0 | `LEDGER_REFS_OK pending=0` |
+| 分账本无损 | `tools/asset_pipeline/verify_ledger_split.py` | 1 | 24 条既有失败、2 个既有额外 props、列摘要漂移；本次目标行已存在且未新增重复 AssetID，失败集合含本次前既有债务，未冒称全绿 |
+
+候选失败项保留：未做 Godot Forward+ 真窗口攻击播放、F78 烟尘与明显外扩波纹逐帧画面验收、用户连续动态确认、完整 Enemy3D 状态流/伤害回归；因此资产状态仍为 `exported_pending_godot_validation`，不是 `accepted`。另保留关键时序风险：v006 表现接触 F78（1.300s）与旧胖子僵尸03设计 F36（1.2s）不一致；本轮不把 F78 改成伤害帧，不改 Enemy3D 伤害时机与所有权。
 
 ---
 

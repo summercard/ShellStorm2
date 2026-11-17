@@ -5,6 +5,7 @@ extends Node3D
 
 const COLORS := {
 	"fat_zombie03": Color(0.38, 0.43, 0.26),
+	"fat_zombie21": Color(0.46, 0.50, 0.30),
 	"melee_chaser": Color(0.58, 0.19, 0.12),
 	"ranged_caster": Color(0.18, 0.44, 0.50),
 	"summoner": Color(0.42, 0.22, 0.52),
@@ -147,6 +148,7 @@ static func resolve_asset_kind(kind: String) -> String:
 # 其余怪种（summoner / shielded / exploder / ambusher / boss）**逐字不动**。
 const FOOTPRINT_PROFILES := {
 	"fat_zombie03": {"radius": 0.88, "height": 3.142857},
+	"fat_zombie21": {"radius": 0.88, "height": 3.142857},
 	"melee_chaser": {"radius": 0.816, "height": 1.30},
 	"ranged_caster": {"radius": 0.88, "height": 1.62},
 	"summoner": {"radius": 1.22, "height": 1.82},
@@ -190,12 +192,14 @@ static func _cached_scene(path: String) -> PackedScene:
 
 
 const FORMAL_NORMAL_SCENES := {
-	"fat_zombie03": "res://assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/enm_normal_fat_zombie03_root_top3d.tscn",
+	# 旧玩法/存档 ID 映射到 2.1 视觉，不能把 _base_kind 改成新玩法 ID。
+	"fat_zombie03": "res://assets/art/enemies/normal_enemy_3d/fat_zombie21/runtime/enm_normal_fat_zombie21_root_top3d.tscn",
+	"fat_zombie21": "res://assets/art/enemies/normal_enemy_3d/fat_zombie21/runtime/enm_normal_fat_zombie21_root_top3d.tscn",
 	"melee_chaser": "res://assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/enm_melee_fungboar01_root_top3d.tscn",
 	"ranged_caster": "res://assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/enm_ranged_sporeshooter01_root_top3d.tscn",
 	"exploder": "res://assets/art/enemies/normal_enemy_3d/exploder/runtime/enm_bomber_fruit01_root_top3d.tscn",
 }
-const FORMAL_NORMAL_HEIGHTS := {"fat_zombie03": 3.142857, "melee_chaser": 1.857143, "ranged_caster": 1.857143, "exploder": 1.15}
+const FORMAL_NORMAL_HEIGHTS := {"fat_zombie03": 3.142857, "fat_zombie21": 3.142857, "melee_chaser": 1.857143, "ranged_caster": 1.857143, "exploder": 1.15}
 const FORMAL_MELEE_KIND := "melee_chaser"
 const FORMAL_MELEE_SCENE_PATH := FORMAL_NORMAL_SCENES[FORMAL_MELEE_KIND]
 const FORMAL_MELEE_VISUAL_HEIGHT := FORMAL_NORMAL_HEIGHTS[FORMAL_MELEE_KIND]
@@ -753,6 +757,9 @@ func _load_formal_normal_model() -> void:
 	if not _uses_formal_normal_model():
 		return
 	var scene_path := str(FORMAL_NORMAL_SCENES.get(_base_kind, ""))
+	# 三种远征03借皮怪不属于本次胖子替换，保持原视觉和染色。
+	if enemy_kind in ["egt_mimic", "egt_gun_nut", "egt_chain_gunner"]:
+		scene_path = "res://assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/enm_normal_fat_zombie03_root_top3d.tscn"
 	var scene := _cached_scene(scene_path)
 	assert(scene != null, "Formal normal scene missing for %s" % enemy_kind)
 	_formal_normal_root = scene.instantiate() as Node3D

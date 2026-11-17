@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/world3d/ExtractionBeacon3D.gd" id="1_beacon"]
+[ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/components/prp_extraction_safe_beacon/prp_extraction_safe_beacon_visual_top3d.glb" id="2_visual"]
+
+[node name="ExtractionSafeBeacon3D" type="Area3D"]
+script = ExtResource("1_beacon")
+accent_color = Color(0.02, 0.85, 0.7, 1)
+duration = 8.0
+beacon_type = "STORY_SAFE"
+defense_encounter_enabled = false
+visual_scene = ExtResource("2_visual")
+metadata/asset_id = "PRP-EXTRACTION-SAFE-BEACON-3D"
+metadata/asset_version = "v001"
+metadata/asset_kind = "fixed_facility"
+metadata/pickup_allowed = false
+metadata/source_blend = "art_source/props/extraction_safe_beacon/prp_extraction_safe_beacon_v001.blend"
+metadata/stable_glb = "assets/art/props/dungeon_3d/components/prp_extraction_safe_beacon/prp_extraction_safe_beacon_visual_top3d.glb"
+metadata/palette_source = "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
+metadata/authoring_script = "art_source/props/extraction_safe_beacon/author_extraction_safe_beacon_v001.py"
+metadata/game_height_m = 2.2
+metadata/game_diameter_m = 1.6
+metadata/runtime_drop_animation = "ExtractionBeacon3D.configure_story_safe_drop(0.6)"
+metadata/validation_status = "blender_source_and_glb_verified"

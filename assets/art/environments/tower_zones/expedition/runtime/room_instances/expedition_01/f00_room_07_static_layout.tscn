@@ -14,13 +14,13 @@ metadata/asset_id = "EXPEDITION-GENERIC-SHELL-ROOM_07"
 metadata/asset_version = "runtime_generated"
 metadata/authored_room_id = "room_07"
 metadata/authored_layout_shell = true
-metadata/layout_instance_total = 37
+metadata/layout_instance_total = 46
 metadata/authored_layout_asset_id = "EXPEDITION-GENERIC-SHELL-ROOM_07"
 metadata/authored_layout_version = "runtime_generated"
 metadata/authored_layout_room_id = "room_07"
 metadata/authored_layout_corner_count = 2
-metadata/authored_layout_solid_wall_count = 9
-metadata/authored_layout_door_wall_count = 1
+metadata/authored_layout_solid_wall_count = 14
+metadata/authored_layout_door_wall_count = 2
 metadata/authored_layout_floor_tile_count = 25
 metadata/authored_layout_exclusive_count = 0
 metadata/authored_layout_multi_level_count = 0
@@ -137,6 +137,55 @@ metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "north"
 metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="WALL_south_ym210_xp50_5" parent="." unique_id=2139706697 instance=ExtResource("2_rj58s")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 5.0, 0, -12.5)
+metadata/grid_unit_m = 5.0
+metadata/tower_wall_direction = "north"
+metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="WALL_south_yp12p5_xm100_5" parent="." unique_id=2139706698 instance=ExtResource("2_rj58s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.0, 0, 12.5)
+metadata/grid_unit_m = 5.0
+metadata/tower_wall_direction = "south"
+metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="WALL_south_yp12p5_xm50_5" parent="." unique_id=2139706699 instance=ExtResource("2_rj58s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.0, 0, 12.5)
+metadata/grid_unit_m = 5.0
+metadata/tower_wall_direction = "south"
+metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="WALL_south_yp12p5_xp50_5" parent="." unique_id=2139706700 instance=ExtResource("2_rj58s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0, 0, 12.5)
+metadata/grid_unit_m = 5.0
+metadata/tower_wall_direction = "south"
+metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="WALL_south_yp12p5_xp100_5" parent="." unique_id=2139706701 instance=ExtResource("2_rj58s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.0, 0, 12.5)
+metadata/grid_unit_m = 5.0
+metadata/tower_wall_direction = "south"
+metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="DOORWALL_south_yp12p5_xp0_5" parent="." unique_id=2139706702 instance=ExtResource("3_d8g3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0, 12.5)
+metadata/grid_unit_m = 5.0
+metadata/tower_wall_direction = "south"
+metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-DOOR-5M"
+metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-DOOR-5M"
+metadata/authored_door_wall_promoted = false
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="FLOOR_ROOM_07_R01_C01" parent="." unique_id=589741450 instance=ExtResource("4_dqr52")]

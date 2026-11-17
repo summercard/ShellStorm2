@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "version": "0.1.0",
-  "updated_at": "2026-11-16",
+  "updated_at": "2026-11-17",
   "source_index": "docs/v0.1/MODULE_INDEX.md",
   "note": "功能级机器可追溯真源；Owner 表示当前状态事实所有者，不等于完成度或人员分工。",
   "features": [
@@ -16,7 +16,8 @@
         "docs/v0.1/development/2026-11-02_camera_damage_defeat_feedback.md",
         "docs/v0.1/development/2026-11-02_feedback_revision.md",
         "docs/v0.1/development/2026-11-06_camera_lower_wall_mouse_look.md",
-        "docs/v0.1/development/2026-11-10_camera_wall_stability.md"
+        "docs/v0.1/development/2026-11-10_camera_wall_stability.md",
+        "docs/v0.1/development/2026-11-17_expedition01_camera_distance.md"
       ],
       "verification": [
         {
@@ -26,6 +27,13 @@
         {
           "kind": "scene",
           "id": "verify_player_camera_defeat_feedback"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_debug_camera_hotkeys",
+          "suite": "manual",
+          "runner": "scripts/run_verification_suite.sh",
+          "requires": "scene verify_debug_camera_hotkeys；Autoload前隔离APPDATA/LOCALAPPDATA与独立custom_user_dir；接受套件隔离标识或SHELLSTORM_CAMERA_VERIFY_ISOLATED=1；真实Owner身份矩阵，不启动完整关卡；相机专项不代签整关遮挡与构图"
         }
       ],
       "status": "partial"
@@ -80,9 +88,17 @@
         "docs/v0.1/development/2026-11-10_enemy_bullet_presentation_rollback.md",
         "docs/v0.1/development/2026-11-10_shotgun_two_shell_mag.md",
         "docs/v0.1/development/2026-11-16_expedition01_combat_feel.md",
-        "docs/v0.1/development/2026-11-16_weapon_hologram_ui.md"
+        "docs/v0.1/development/2026-11-16_weapon_hologram_ui.md",
+        "docs/v0.1/development/2026-11-17_weapon_link_aftercare.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_pistol_fate_capacity",
+          "suite": "manual",
+          "runner": "scripts/run_fate_tutorial_qa.py",
+          "requires": "唯一入口 --scene tests/verification/verify_pistol_fate_capacity.tscn --logic；Autoload前隔离，SHELLSTORM_FATE_TUTORIAL_ISOLATED=1；full/aggregate full排除，禁止裸跑guard；豌豆4/6/8与安全旧容量校正；原verify_weapon_drop_grade注册保持；最终回归见2026-11-17开发记录"
+        },
         {
           "kind": "scene",
           "id": "verify_weapon_hologram_ui",
@@ -214,20 +230,36 @@
         "docs/v0.1/development/2026-11-08_fate_pickup_chest_closure.md",
         "docs/v0.1/development/2026-11-11_expedition01_flow.md",
         "docs/v0.1/development/2026-11-16_weapon_hologram_ui.md",
-        "docs/v0.1/development/2026-11-16_fate_tutorial_galgame.md"
+        "docs/v0.1/development/2026-11-16_fate_tutorial_galgame.md",
+        "docs/v0.1/development/2026-11-17_weapon_link_aftercare.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_pistol_fate_capacity",
+          "suite": "manual",
+          "runner": "scripts/run_fate_tutorial_qa.py",
+          "requires": "唯一入口 --scene tests/verification/verify_pistol_fate_capacity.tscn --logic；Autoload前隔离，SHELLSTORM_FATE_TUTORIAL_ISOLATED=1；full/aggregate full排除，禁止裸跑guard；豌豆4/6/8与安全旧容量校正；原verify_weapon_drop_grade注册保持；最终回归见2026-11-17开发记录"
+        },
         {
           "kind": "scene",
           "id": "verify_fate_tutorial_dialogue",
           "suite": "manual",
           "runner": "scripts/run_fate_tutorial_qa.py",
-          "requires": "仅复用已成功导入的工程外副本；runner在Autoload前隔离；SHELLSTORM_FATE_TUTORIAL_ISOLATED=1；首次/重复/中断/恢复/无钱满槽、完成屏障、双侧与原输入回归；full裸扫排除；真实引擎结果待汇总，开发记录由主代理待补，UI账本占用未写入"
+          "requires": "仅复用已成功导入的工程外副本；runner在Autoload前隔离；SHELLSTORM_FATE_TUTORIAL_ISOLATED=1；drop/open/assembled完整wait屏障、主动exit与双侧原输入；full裸扫排除；最终回归见2026-11-17开发记录，账本状态不在此代签"
         },
         {
           "kind": "command",
           "path": "scripts/run_fate_tutorial_qa.py",
-          "args": ["--reuse-isolated-project", "I:/工作项目/shellstrom2/ShellStorm2-work/verification/weapon_hologram/20261116_173024_0f0e06/project", "--scene", "fate_tutorial_dialogue", "--resolution", "1280x720", "1920x1080"],
+          "args": [
+            "--reuse-isolated-project",
+            "I:/工作项目/shellstrom2/ShellStorm2-work/verification/weapon_hologram/20261116_173024_0f0e06/project",
+            "--scene",
+            "fate_tutorial_dialogue",
+            "--resolution",
+            "1280x720",
+            "1920x1080"
+          ],
           "suite": "manual",
           "requires": "此命令固定复用本轮已授权既有副本，执行前须复核仍可用；父级result.json须有成功import证据及缓存/custom_user_dir匹配；Autoload前隔离，不重导全项目、不回退主工程，不是零参数通用CI；当前运行中未签通过"
         },
@@ -337,7 +369,9 @@
         "docs/v0.1/development/2026-11-06_expedition01_no_key_chest_drops.md",
         "docs/v0.1/development/2026-11-06_expedition02_no_key_doors.md",
         "docs/v0.1/development/2026-11-06_expedition03_workshop_layouts.md",
-        "docs/v0.1/development/2026-11-11_expedition01_flow.md"
+        "docs/v0.1/development/2026-11-11_expedition01_flow.md",
+        "docs/v0.1/development/2026-11-17_room07_08_layout_fix.md",
+        "docs/v0.1/development/2026-11-17_room08_equipment_enclosures.md"
       ],
       "verification": [
         {
@@ -987,7 +1021,15 @@
         {
           "kind": "command",
           "path": "scripts/run_fate_tutorial_qa.py",
-          "args": ["--reuse-isolated-project", "I:/工作项目/shellstrom2/ShellStorm2-work/verification/weapon_hologram/20261116_173024_0f0e06/project", "--scene", "fate_tutorial_dialogue", "--resolution", "1280x720", "1920x1080"],
+          "args": [
+            "--reuse-isolated-project",
+            "I:/工作项目/shellstrom2/ShellStorm2-work/verification/weapon_hologram/20261116_173024_0f0e06/project",
+            "--scene",
+            "fate_tutorial_dialogue",
+            "--resolution",
+            "1280x720",
+            "1920x1080"
+          ],
           "suite": "manual",
           "requires": "此命令固定复用本轮已授权既有副本，执行前须复核仍可用；成功import证据/缓存/custom_user_dir匹配；Autoload前隔离，不是零参数通用CI；不回退主工程，不签本轮通过"
         },
@@ -1094,6 +1136,13 @@
         {
           "kind": "scene",
           "id": "verify_run_merchant_integration"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_run_vending_tutorial",
+          "suite": "manual",
+          "runner": "scripts/run_narrative_presentation_qa.py",
+          "requires": "仅经专用隔离runner；Autoload前隔离APPDATA/LOCALAPPDATA与独立custom_user_dir；SHELLSTORM_MAIN_STORY_ISOLATED=1；SHELLSTORM_RUN_VENDING_TUTORIAL_ISOLATED=1；真实ServiceStation merchant/upgrade反例、可中断重试、金币不变；逻辑headless与Forward+/Vulkan真实渲染分开记录；full/aggregate full排除"
         },
         {
           "kind": "scene",
@@ -1294,20 +1343,36 @@
         "docs/v0.1/development/2026-11-10_rescue_dialogue_advance.md",
         "docs/v0.1/development/2026-11-11_expedition_entry_hologram_ceremonies.md",
         "docs/v0.1/development/2026-11-11_expedition01_flow.md",
-        "docs/v0.1/development/2026-11-16_fate_tutorial_galgame.md"
+        "docs/v0.1/development/2026-11-16_fate_tutorial_galgame.md",
+        "docs/v0.1/development/2026-11-17_weapon_link_aftercare.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_pistol_fate_capacity",
+          "suite": "manual",
+          "runner": "scripts/run_fate_tutorial_qa.py",
+          "requires": "唯一入口 --scene tests/verification/verify_pistol_fate_capacity.tscn --logic；Autoload前隔离，SHELLSTORM_FATE_TUTORIAL_ISOLATED=1；full/aggregate full排除，禁止裸跑guard；旧pistol8/10/12仅安全校正，超限保留全部卡；最终回归见2026-11-17开发记录"
+        },
         {
           "kind": "scene",
           "id": "verify_fate_tutorial_dialogue",
           "suite": "manual",
           "runner": "scripts/run_fate_tutorial_qa.py",
-          "requires": "仅复用已成功导入的工程外副本；runner在Autoload前隔离；SHELLSTORM_FATE_TUTORIAL_ISOLATED=1；首次/重复/中断/恢复/无钱满槽、wait完成屏障、双侧与原输入回归；full裸扫排除；不改主线key/Boss时序；运行结果与开发记录待主代理汇总"
+          "requires": "仅复用已成功导入的工程外副本；runner在Autoload前隔离；SHELLSTORM_FATE_TUTORIAL_ISOLATED=1；drop/open/assembled完整wait屏障与主动exit证据；full裸扫排除；不改主线key/Boss时序；最终回归见2026-11-17开发记录"
         },
         {
           "kind": "command",
           "path": "scripts/run_fate_tutorial_qa.py",
-          "args": ["--reuse-isolated-project", "I:/工作项目/shellstrom2/ShellStorm2-work/verification/weapon_hologram/20261116_173024_0f0e06/project", "--scene", "fate_tutorial_dialogue", "--resolution", "1280x720", "1920x1080"],
+          "args": [
+            "--reuse-isolated-project",
+            "I:/工作项目/shellstrom2/ShellStorm2-work/verification/weapon_hologram/20261116_173024_0f0e06/project",
+            "--scene",
+            "fate_tutorial_dialogue",
+            "--resolution",
+            "1280x720",
+            "1920x1080"
+          ],
           "suite": "manual",
           "requires": "此命令固定复用本轮已授权既有副本，执行前须复核仍可用；成功import证据/缓存/custom_user_dir匹配；Autoload前隔离，不重导全项目、不回退主工程，不是零参数通用CI；真实引擎运行中未签通过"
         },
@@ -1405,20 +1470,36 @@
         "docs/v0.1/development/2026-11-10_key_inset_and_dialogue_advance.md",
         "docs/v0.1/development/2026-11-10_dialogue_bottom_bar.md",
         "docs/v0.1/development/2026-11-10_rescue_dialogue_advance.md",
-        "docs/v0.1/development/2026-11-16_fate_tutorial_galgame.md"
+        "docs/v0.1/development/2026-11-16_fate_tutorial_galgame.md",
+        "docs/v0.1/development/2026-11-17_weapon_link_aftercare.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_pistol_fate_capacity",
+          "suite": "manual",
+          "runner": "scripts/run_fate_tutorial_qa.py",
+          "requires": "唯一入口 --scene tests/verification/verify_pistol_fate_capacity.tscn --logic；Autoload前隔离，SHELLSTORM_FATE_TUTORIAL_ISOLATED=1；full/aggregate full排除，禁止裸跑guard；最终回归见2026-11-17开发记录"
+        },
         {
           "kind": "scene",
           "id": "verify_fate_tutorial_dialogue",
           "suite": "manual",
           "runner": "scripts/run_fate_tutorial_qa.py",
-          "requires": "仅复用已成功导入的工程外副本；runner在Autoload前隔离；SHELLSTORM_FATE_TUTORIAL_ISOLATED=1；首次/重复/中断/恢复/无钱满槽、完成屏障、双侧会话与原Space/左键/Enter/暂停/防开火输入回归；full裸扫排除；运行结果与开发记录待主代理汇总，UI账本占用未写入"
+          "requires": "仅复用已成功导入的工程外副本；runner在Autoload前隔离；SHELLSTORM_FATE_TUTORIAL_ISOLATED=1；drop/open/assembled完整wait屏障、主动exit、双侧会话与原Space/左键/Enter/暂停/防开火输入回归；full裸扫排除；最终回归见2026-11-17开发记录，账本状态不在此代签"
         },
         {
           "kind": "command",
           "path": "scripts/run_fate_tutorial_qa.py",
-          "args": ["--reuse-isolated-project", "I:/工作项目/shellstrom2/ShellStorm2-work/verification/weapon_hologram/20261116_173024_0f0e06/project", "--scene", "fate_tutorial_dialogue", "--resolution", "1280x720", "1920x1080"],
+          "args": [
+            "--reuse-isolated-project",
+            "I:/工作项目/shellstrom2/ShellStorm2-work/verification/weapon_hologram/20261116_173024_0f0e06/project",
+            "--scene",
+            "fate_tutorial_dialogue",
+            "--resolution",
+            "1280x720",
+            "1920x1080"
+          ],
           "suite": "manual",
           "requires": "此命令固定复用本轮已授权既有副本，执行前须复核仍可用；成功import证据/缓存/custom_user_dir匹配；Autoload前隔离，不重导全项目、不回退主工程，不是零参数通用CI；逻辑不代签真实渲染，当前未签通过"
         },
@@ -1992,7 +2073,8 @@
         "docs/v0.1/05_技术施工_关卡生成与爬楼.md"
       ],
       "development_records": [
-        "docs/v0.1/development/2026-10-18_secret_branch_phase1.md"
+        "docs/v0.1/development/2026-10-18_secret_branch_phase1.md",
+        "docs/v0.1/development/2026-11-17_room07_08_layout_fix.md"
       ],
       "verification": [
         {

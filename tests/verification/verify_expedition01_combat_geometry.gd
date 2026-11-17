@@ -221,43 +221,96 @@ func _sample_physical_graph(room: DungeonRoom3D, row: Dictionary) -> void:
 				row.walkable_edges.append([cell.x, cell.y, next.x, next.y])
 
 func _verify_portals(room: DungeonRoom3D) -> Array:
+	# 2026-11-17：08 房由 L 型改为矩形贯通布局，房内两个固定门洞（PassagePortal）
+	# 随 L 型斜墙一起删除。这里的验收对象改为**两条真实主路门墙**（DOORWALL_*）：
+	# 门洞净宽处必须可通行、门垛处必须被阻挡、门洞下方地面必须连续。
+	# 这条断言的口径与改前逐字一致（|along| < 1.0 通、= 1.8 挡），只换了被测节点。
 	var checks: Array = []
 	var art := room.get_node("AuthoredLayoutArtRoot") as Node3D
 	var space := room.get_world_3d().direct_space_state
-	for suffix in ["WALL_Y_30_45", "WALL_X_35_REAR"]:
-		var wrapper := art.get_node("ENV-EXPEDITION-L-CORRIDOR-" + suffix) as Node3D
-		var portal := wrapper.get_node("PassagePortal") as Node3D
+	# 主路门墙配的是**真实可开关门扇**（Door_*，RoomDoor3D）：门关着时门洞必然被挡，
+	# 那是门的功能、不是几何缺陷。量门洞净空时必须把门扇排除，只看门墙自身的门垛/门楣。
+	var door_leaf_rids: Array[RID] = []
+	for child in room.get_children():
+		var body := child as StaticBody3D
+		if body == null:
+			continue
+		if not str(body.name).begins_with("Door_"):
+			continue
+		door_leaf_rids.append(body.get_rid())
+	_query.exclude = _excluded + door_leaf_rids
+	var door_walls: Array[Node3D] = []
+	for child in art.get_children():
+		var node := child as Node3D
+		if node == null:
+			continue
+		if "DOORWALL" not in str(node.name):
+			continue
+		if not str(node.scene_file_path).contains("wall_door"):
+			continue
+		door_walls.append(node)
+	if door_walls.size() != 2:
+		failures.append("room_08:主路门墙数量不是2:" + str(door_walls.size()))
+	for portal in door_walls:
 		var shapes := portal.find_children("*", "CollisionShape3D", true, false)
 		var meshes := portal.find_children("*", "MeshInstance3D", true, false)
 		var relative := portal.transform
-		var old_axis := Vector3.BACK if suffix == "WALL_Y_30_45" else Vector3.RIGHT
-		var endpoint_a := relative * Vector3(2.5, 0, 0)
-		var endpoint_b := relative * Vector3(-2.5, 0, 0)
-		# 双面门洞两端允许互换，但端点集合必须与原5m墙严格重合。
-		var endpoints_match := (endpoint_a.distance_to(old_axis * 2.5) < 0.0001 and endpoint_b.distance_to(old_axis * -2.5) < 0.0001) or (endpoint_a.distance_to(old_axis * -2.5) < 0.0001 and endpoint_b.distance_to(old_axis * 2.5) < 0.0001)
-		var record := {"slot": suffix, "portal_resource": portal.scene_file_path, "shape_count": shapes.size(), "mesh_count": meshes.size(), "legacy_collision_absent": wrapper.get_node_or_null("CollisionBody") == null, "endpoints_match": endpoints_match, "portal_local_transform": str(relative), "expected_axis": str(old_axis), "positive_endpoint": str(relative * Vector3(2.5, 0, 0)), "wall_height_m": portal.get_meta("wall_visual_height_m"), "door_clear_width_m": portal.get_meta("door_clear_width_m"), "door_clear_height_m": portal.get_meta("door_clear_height_m"), "sweeps": []}
-		if not endpoints_match or not is_equal_approx(float(record.wall_height_m), 11.9) or not is_equal_approx(float(record.door_clear_width_m), 2.2) or not is_equal_approx(float(record.door_clear_height_m), 2.5):
-			failures.append("room_08:" + suffix + ":端点/墙高/门洞尺寸不符")
-		if shapes.size() != 3 or meshes.size() != 1 or not record.legacy_collision_absent or wrapper.get_child_count() != 1:
-			failures.append("room_08:" + suffix + ":重复网格或旧墙碰撞残留")
+		# 门墙本地 5m 长轴在 X、穿墙方向在 Z；两端必须与所在墙段的 5m 槽严格重合。
+		# 长轴必须落在本地 X、且与穿墙方向正交（门墙本地 5m 长轴在 X）。
+		var endpoints_match := (
+			is_equal_approx(relative.basis.x.length(), 1.0)
+			and is_equal_approx(relative.basis.z.length(), 1.0)
+			and absf(relative.basis.x.dot(relative.basis.z)) < 0.001
+		)
+		var record := {
+			"slot": str(portal.name),
+			"portal_resource": portal.scene_file_path,
+			"shape_count": shapes.size(),
+			"mesh_count": meshes.size(),
+			"self_collision_present": portal.get_node_or_null("WallDoorCollision") != null,
+			"endpoints_match": endpoints_match,
+			"portal_local_transform": str(relative),
+			"wall_height_m": portal.get_meta("wall_visual_height_m"),
+			"door_clear_width_m": portal.get_meta("door_clear_width_m"),
+			"door_clear_height_m": portal.get_meta("door_clear_height_m"),
+			"sweeps": [],
+		}
+		# 门墙契约：门洞净宽 2.2m、净高 2.5m、墙高 11.9m。
+		if (
+			not is_equal_approx(float(record.wall_height_m), 11.9)
+			or not is_equal_approx(float(record.door_clear_width_m), 2.2)
+			or not is_equal_approx(float(record.door_clear_height_m), 2.5)
+		):
+			failures.append("room_08:" + str(portal.name) + ":墙高/门洞尺寸不符")
+		if shapes.is_empty() or meshes.is_empty() or not record.self_collision_present or not endpoints_match:
+			failures.append("room_08:" + str(portal.name) + ":门墙缺网格或缺自持碰撞")
+		# 门墙在房间包围盒边缘，外侧没有地砖 ⇒ 不跨墙扫掠，只判「墙线上」的净空/门垛。
+		# 房内侧方向用于确认门洞正下方有支撑地面。
+		var room_center_local := room.to_local(room.global_position)
+		var inward := 1.0
+		var plus := room.to_local(portal.to_global(Vector3(0, 0, 0.6))).distance_squared_to(room_center_local)
+		var minus := room.to_local(portal.to_global(Vector3(0, 0, -0.6))).distance_squared_to(room_center_local)
+		if plus > minus:
+			inward = -1.0
 		for along in [0.0, -0.7, 0.7, -1.8, 1.8]:
-			var a := room.to_local(portal.to_global(Vector3(along, 0, -1.25)))
-			var b := room.to_local(portal.to_global(Vector3(along, 0, 1.25)))
-			var supported := true
-			for i in 11:
-				var sample := a.lerp(b, i / 10.0)
-				sample.y = 0.0
-				supported = supported and is_finite(_floor_height(room, sample))
-			_set_capsule(room, a)
-			var start_clear := space.intersect_shape(_query, 64).is_empty()
-			_set_capsule(room, b)
-			var finish_clear := space.intersect_shape(_query, 64).is_empty()
-			_set_capsule(room, a, b - a)
+			var on_wall := room.to_local(portal.to_global(Vector3(along, 0, 0)))
+			on_wall.y = 0.0
+			var inside := room.to_local(portal.to_global(Vector3(along, 0, 0.6 * inward)))
+			inside.y = 0.0
+			var supported := is_finite(_floor_height(room, inside))
+			_set_capsule(room, on_wall)
+			var on_wall_clear := space.intersect_shape(_query, 64).is_empty()
+			_set_capsule(room, inside, on_wall - inside)
 			var fraction: float = space.cast_motion(_query)[0]
+			# 门洞净宽 2.2m ⇒ |along| < 1.1 必须无碰撞；门垛（±1.8）必须有碰撞。
 			var expected_clear := absf(along) < 1.0
-			var passed := supported and start_clear and finish_clear and ((fraction >= 1.0) if expected_clear else (fraction < 1.0))
+			var passed := supported and (on_wall_clear if expected_clear else not on_wall_clear)
 			if not passed:
-				failures.append("room_08:" + suffix + ":门洞/门垛/支撑扫掠失败:" + str(along))
-			record.sweeps.append({"along_m": along, "expected_clear": expected_clear, "supported": supported, "start_clear": start_clear, "finish_clear": finish_clear, "safe_fraction": fraction, "passed": passed})
+				failures.append("room_08:" + str(portal.name) + ":门洞/门垛/支撑判定失败:" + str(along))
+			record.sweeps.append({
+				"along_m": along, "expected_clear": expected_clear, "supported": supported,
+				"on_wall_clear": on_wall_clear, "safe_fraction": fraction, "passed": passed,
+			})
 		checks.append(record)
+	_query.exclude = _excluded
 	return checks

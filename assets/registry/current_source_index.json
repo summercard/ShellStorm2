@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-16",
+  "date": "2026-11-17",
   "sources": [
     {
       "path": "art_source/legacy_design/卧室/左墙区域深化_v4.blend",
@@ -12384,7 +12384,9 @@
       "version": [
         2
       ],
-      "sha256": "285c932f9ac36da94362035d289aef6ab4115e69dec0ac790619602e5c8cd072"
+      "sha256": "285c932f9ac36da94362035d289aef6ab4115e69dec0ac790619602e5c8cd072",
+      "current": false,
+      "superseded_by": "art_source/enemies/normal_enemy_3d/fat_zombie21/source/animation/enm_normal_fat_zombie21_animation_v007.blend"
     },
     {
       "path": "art_source/enemies/enemy_3d/enm_melee_stone_giant01/source/model/enm_melee_stone_giant01_model_v001.blend",
@@ -12448,8 +12450,146 @@
         2
       ],
       "sha256": "9439ad8b9b2ac04d4fb7dd79dacf5651a49cdd68e4392e6d5e667d9f359306a1"
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/fat_zombie21/source/animation/enm_normal_fat_zombie21_animation_v007.blend",
+      "bytes": 14011256,
+      "family": "art_source/enemies/normal_enemy_3d/fat_zombie21/source/animation/enm_normal_fat_zombie21_animation_VERSION.blend",
+      "version": [
+        7
+      ],
+      "sha256": "01ec0e16310ac5f4a325d37302f3cae0536ee8aa1d6f512c1cc6126adc37d3f3",
+      "current": true,
+      "previous_source": {
+        "path": "art_source/enemies/normal_enemy_3d/fat_zombie21/source/animation/enm_normal_fat_zombie21_animation_v006.blend",
+        "sha256": "e0932518ada4d9e4a9b233ce677f55cfa923f92075fb092d999ea4ea7fc8a2d3",
+        "archive": "I:\\工作项目\\shellstrom2\\ShellStorm2-backup\\2026-11-17_fat_zombie_gait\\original_tree\\art_source\\enemies\\normal_enemy_3d\\fat_zombie21\\source\\animation\\enm_normal_fat_zombie21_animation_v006.blend",
+        "reason": "被v007动作母版替代；历史源不留在同角色当前位置"
+      }
+    },
+    {
+      "path": "art_source/vfx/combat_3d/fat_zombie_slam/source/v002_assetlib/tex_flame_01.png",
+      "bytes": 35189,
+      "family": "art_source/vfx/combat_3d/fat_zombie_slam/source/v002_assetlib/tex_flame_01.png",
+      "version": [
+        2
+      ],
+      "sha256": "dc6b5decd0e7e99900b0493fa1496f80e34d272f5603081634d0e99235ea9d2b",
+      "current": true,
+      "assetlib_source": "aleksei-starter-vfx-lite/tex_flame_01.png",
+      "runtime_path": "assets/art/vfx/combat_3d/textures/enm_normal_fat_zombie21_slam_flame.png",
+      "runtime_sha256": "03554e5a28210dd9dc3bfcd554e2f44eafb9f6491ac6914c8829c36272253fb7",
+      "runtime_size_px": "256x256",
+      "runtime_mode": "RGBA",
+      "runtime_alpha_range": [
+        0,
+        228
+      ]
+    },
+    {
+      "path": "art_source/vfx/combat_3d/fat_zombie_slam/source/v002_assetlib/smoke_06.png",
+      "bytes": 58581,
+      "family": "art_source/vfx/combat_3d/fat_zombie_slam/source/v002_assetlib/smoke_06.png",
+      "version": [
+        2
+      ],
+      "sha256": "74968cd44ba5c72bdaf1ebfc50d6113a401aae0ffded43f785055b4eeb9399df",
+      "current": true,
+      "assetlib_source": "kenney_particle_pack/smoke_06.png",
+      "runtime_path": "assets/art/vfx/combat_3d/textures/enm_normal_fat_zombie21_slam_dust.png",
+      "runtime_sha256": "40bda546472f524746dde171f0c48d177864302820e3c0a119ff941d310d84f0",
+      "runtime_size_px": "256x256",
+      "runtime_mode": "RGBA",
+      "runtime_alpha_range": [
+        0,
+        190
+      ]
+    },
+    {
+      "path": "art_source/props/extraction_safe_beacon/prp_extraction_safe_beacon_v001.blend",
+      "bytes": 953021,
+      "family": "art_source/props/extraction_safe_beacon/prp_extraction_safe_beacon_v_VERSION.blend",
+      "version": [
+        1
+      ],
+      "sha256": "99627e7bffb3e94a7c480317768317d7ea9bd0e8c854d80d05c72378ad089bba"
     }
   ],
   "authoring_root": "art_source",
-  "migration": "assets/registry/art_source_migration.json"
+  "migration": "assets/registry/art_source_migration.json",
+  "runtime_visual_mappings": {
+    "fat_zombie03": {
+      "compatibility_asset_id": "ENM-NORMAL-FAT-ZOMBIE03",
+      "visual_asset_id": "ENM-NORMAL-FAT-ZOMBIE21",
+      "visual_version": "v007",
+      "runtime_scene": "assets/art/enemies/normal_enemy_3d/fat_zombie21/runtime/enm_normal_fat_zombie21_root_top3d.tscn",
+      "model_source": "art_source/enemies/normal_enemy_3d/fat_zombie21/source/model/enm_normal_fat_zombie21_model_v002.blend",
+      "animation_source": "art_source/enemies/normal_enemy_3d/fat_zombie21/source/animation/enm_normal_fat_zombie21_animation_v007.blend",
+      "gameplay_owner": "Enemy3D",
+      "status": "exported_pending_godot_validation",
+      "preserved_legacy_directory": "assets/art/enemies/normal_enemy_3d/fat_zombie03",
+      "development_record": "docs/v0.1/development/2026-11-17_fat_zombie21_gait_fix.md",
+      "slam_vfx_texture_trace": {
+        "asset_id": "VFX-FAT-ZOMBIE-SLAM-3D",
+        "scope": "仅胖子僵尸03入口映射到fat_zombie21的砸地表现",
+        "source_version": "v002_assetlib",
+        "runtime_scene": "assets/art/vfx/combat_3d/vfx_fat_zombie_slam_root_top3d.tscn",
+        "geometry": "none; root + DustSprite/RippleSprite/FlameSprite only",
+        "ownership": {
+          "vfx_root": "VfxFatZombieSlam3D",
+          "damage": "Enemy3D",
+          "collision": "none"
+        },
+        "flame": {
+          "path": "art_source/vfx/combat_3d/fat_zombie_slam/source/v002_assetlib/tex_flame_01.png",
+          "bytes": 35189,
+          "family": "art_source/vfx/combat_3d/fat_zombie_slam/source/v002_assetlib/tex_flame_01.png",
+          "version": [
+            2
+          ],
+          "sha256": "dc6b5decd0e7e99900b0493fa1496f80e34d272f5603081634d0e99235ea9d2b",
+          "current": true,
+          "assetlib_source": "aleksei-starter-vfx-lite/tex_flame_01.png",
+          "runtime_path": "assets/art/vfx/combat_3d/textures/enm_normal_fat_zombie21_slam_flame.png",
+          "runtime_sha256": "03554e5a28210dd9dc3bfcd554e2f44eafb9f6491ac6914c8829c36272253fb7",
+          "runtime_size_px": "256x256",
+          "runtime_mode": "RGBA",
+          "runtime_alpha_range": [
+            0,
+            228
+          ]
+        },
+        "dust": {
+          "path": "art_source/vfx/combat_3d/fat_zombie_slam/source/v002_assetlib/smoke_06.png",
+          "bytes": 58581,
+          "family": "art_source/vfx/combat_3d/fat_zombie_slam/source/v002_assetlib/smoke_06.png",
+          "version": [
+            2
+          ],
+          "sha256": "74968cd44ba5c72bdaf1ebfc50d6113a401aae0ffded43f785055b4eeb9399df",
+          "current": true,
+          "assetlib_source": "kenney_particle_pack/smoke_06.png",
+          "runtime_path": "assets/art/vfx/combat_3d/textures/enm_normal_fat_zombie21_slam_dust.png",
+          "runtime_sha256": "40bda546472f524746dde171f0c48d177864302820e3c0a119ff941d310d84f0",
+          "runtime_size_px": "256x256",
+          "runtime_mode": "RGBA",
+          "runtime_alpha_range": [
+            0,
+            190
+          ]
+        },
+        "ripple_radius_m": [
+          0.18,
+          1.4
+        ],
+        "flame_visible_sec": 0.22,
+        "status": "replaced_pending_acceptance"
+      },
+      "animation_source_sha256": "01ec0e16310ac5f4a325d37302f3cae0536ee8aa1d6f512c1cc6126adc37d3f3",
+      "animation_source_bytes": 14011256,
+      "runtime_glb_sha256": "59cafc091fe6cd4d99c717969131d1366a41bfe63e75d19a6ae9ad6a9fd1e043",
+      "runtime_scene_sha256": "1adb821773e115cfde8d058caf611552b41800fa34d7fea1270d6b067da432af",
+      "status_note": "本次gait专项已通过282/282；全资产仍待整关验收"
+    }
+  }
 }

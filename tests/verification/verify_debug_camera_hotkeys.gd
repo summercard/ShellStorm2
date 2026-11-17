@@ -1,26 +1,68 @@
 extends Node
-## 调试快捷键烟雾验证：只确认 ; / ' / [ / ] / F12 五条路径让 Player3D 偏移
-## 变量正确变化、边界生效、玩家朝向与运动控制不被污染。相机姿态合成
-## 通过单独算子独立验证（不在本测试里实例化完整的 TowerDescent3D 以避免
-## 触发场景生成的全部 _process 副作用）。
-##
-## 注：本测试不通过 _unhandled_input 入口触发原有 - / = 缩放快捷键与
-## 小键盘 +/- ，因为这两个分支依赖 Player3D._ready 完成的 avatar / 碰撞体
-## 子节点初始化（否则 adjust_debug_scale 会触碰 null 节点）。这两条路径的
-## 回归由 Smoke 套件中 verify_player3d_avatar_bounds 覆盖。
+## 调试快捷键与真实 TowerDescent3D Owner 矩阵验证。
+## Owner 只使用真实 PackedScene 的节点配置，替换根/玩家脚本以禁止生产 _ready、
+## process 与 physics；不生成整关、不触碰生产存档。相机姿态仍由生产
+## TowerDescent3D._apply_indoor_camera_pose 合成，输入则经过真实 Player3D._unhandled_input。
+
+var camera_owner_checks := 0
+
+
+class CameraTestOwner extends TowerDescent3D:
+	func _ready() -> void:
+		set_process(false)
+		set_physics_process(false)
+
+
+class CameraTestPlayer extends Player3D:
+	func _ready() -> void:
+		set_physics_process(false)
+		camera_feedback.configure(self)
+		camera_feedback.set_physics_process(false)
+
 
 func _ready() -> void:
 	var failures: Array[String] = []
-	_run_key_classification_checks(failures)
-	_run_offset_function_checks(failures)
+	if not _check_isolated_user_data_before_players(failures):
+		for failure in failures:
+			push_error(failure)
+		get_tree().quit(1)
+		return
+	await _run_key_classification_checks(failures)
+	await _run_offset_function_checks(failures)
 	_run_camera_formula_checks(failures)
+	await _run_camera_owner_checks(failures)
 	if failures.is_empty():
+		if DisplayServer.get_name() != "headless":
+			await RenderingServer.frame_post_draw
+		print("CAMERA_OWNER_SCOPE_OK checks=%d" % camera_owner_checks)
 		print("DEBUG_CAMERA_HOTKEYS_OK: ; zoom in / ' zoom out / [ yaw left / ] yaw right / F12 reset")
 		get_tree().quit(0)
 		return
 	for failure in failures:
 		push_error(failure)
 	get_tree().quit(1)
+
+
+func _check_isolated_user_data_before_players(failures: Array[String]) -> bool:
+	var appdata := OS.get_environment("APPDATA").replace("\\", "/").trim_suffix("/")
+	var user_root := OS.get_user_data_dir().replace("\\", "/")
+	var isolated := not appdata.is_empty() and user_root.begins_with(appdata + "/")
+	if not isolated:
+		failures.append(
+			"拒绝运行：SHELLSTORM_CAMERA_VERIFY_ISOLATED 必须为 1，且 user data 必须位于 APPDATA；got=%s" % user_root
+		)
+		return false
+	var custom_name := str(ProjectSettings.get_setting("application/config/custom_user_dir_name", ""))
+	var suite_name := OS.get_environment("SHELLSTORM_VERIFICATION_USER_DIR_NAME")
+	var named_isolation := bool(ProjectSettings.get_setting("application/config/use_custom_user_dir", false)) \
+		and not custom_name.is_empty() and user_root.ends_with("/" + custom_name)
+	var authorized := OS.get_environment("SHELLSTORM_CAMERA_VERIFY_ISOLATED") == "1" \
+		or (not suite_name.is_empty() and suite_name == custom_name)
+	if not named_isolation or not authorized:
+		failures.append("拒绝运行：必须在启动前配置独立custom_user_dir，且隔离标识与目录相符")
+		return false
+	print("ISOLATION_USER_DIR ", user_root)
+	return true
 
 
 ## 验证 ; / ' / [ / ] / F12 的按键分类器返回 true，以及 9 / 0 / KEY_KP_ADD / SUBTRACT
@@ -75,6 +117,7 @@ func _run_key_classification_checks(failures: Array[String]) -> void:
 			)
 
 	stub.queue_free()
+	await get_tree().process_frame
 
 
 ## 直接调用 Player3D 内部的 adjust / reset / get 函数，验证偏移与边界。
@@ -148,6 +191,264 @@ func _run_offset_function_checks(failures: Array[String]) -> void:
 		failures.append("调试相机 adjust 函数被误改玩家 yaw")
 
 	stub.queue_free()
+	await get_tree().process_frame
+
+
+func _run_camera_owner_checks(failures: Array[String]) -> void:
+	var cases: Array[Dictionary] = [
+		{"path": "res://scenes/TowerDescent3D.tscn", "expected_offset": 0.0, "level_id": "expedition_01", "expedition": false},
+		{"path": "res://scenes/ExpeditionLevel01_3D.tscn", "expected_offset": 1.0, "level_id": "expedition_01", "expedition": true},
+		{"path": "res://scenes/ExpeditionLevel02_3D.tscn", "expected_offset": 0.0, "level_id": "expedition_02", "expedition": true},
+		{"path": "res://scenes/ExpeditionLevel03_3D.tscn", "expected_offset": 0.0, "level_id": "expedition_03", "expedition": true},
+		{"path": "res://scenes/ExpeditionLevel99_3D.tscn", "expected_offset": 0.0, "level_id": "99", "expedition": true},
+	]
+	for case in cases:
+		var owner: TowerDescent3D = await _instantiate_camera_owner(str(case["path"]), failures)
+		if owner == null:
+			continue
+		var player := owner.get_node_or_null("Player3D") as Player3D
+		_owner_check(player != null, failures, str(case["path"]) + " 缺少真实 Player3D")
+		if player == null:
+			owner.queue_free()
+			await get_tree().process_frame
+			continue
+		owner.player = player
+		owner.call("_update_camera_profile", 0.0)
+		owner.set("_camera_trailing_current_m", float(owner.get("_camera_profile_trailing_current_m")))
+		player.camera_feedback.configure(player)
+		player.camera_feedback.world_pose_managed = false
+		player.camera_feedback.look_offset = Vector3.ZERO
+		_owner_check(is_zero_approx(player.get_debug_camera_trailing_offset_m()), failures, "固定机位不可预填Player临时偏移")
+		player.reset_debug_camera_adjustments()
+		var level_id := owner.get_expedition_level_id()
+		_owner_check(level_id == str(case["level_id"]) and owner.is_expedition() == bool(case["expedition"]),
+			failures, "真实场景身份与隔离矩阵不符")
+		print("CAMERA_OWNER_ID path=%s expedition=%s run_id=%s plan_id=%s level_id=%s" % [
+			str(case["path"]), owner.is_expedition(), owner.expedition_run_id,
+			owner.expedition_plan_id, level_id
+		])
+		_owner_check(
+			is_equal_approx(float(owner.call("_camera_default_distance_offset_m")), float(case["expected_offset"])),
+			failures,
+			str(case["path"]) + " _camera_default_distance_offset_m 身份矩阵错误"
+		)
+		owner.call("_apply_indoor_camera_pose")
+		var base_position := player.camera.global_position
+		var expected_offset := float(case["expected_offset"])
+		var expected_position := _expected_default_camera_position(expected_offset)
+		_owner_check(
+			base_position.distance_to(expected_position) < 0.0001,
+			failures,
+			str(case["path"]) + " 真实 Owner 默认相机位置错误：got=%s expected=%s" % [base_position, expected_position]
+		)
+		_owner_check(
+			player.camera_feedback.world_pose_managed,
+			failures,
+			str(case["path"]) + " 真实 Player camera_feedback 未进入 world pose 管理"
+		)
+		var focal := player.global_position + Vector3(0, 0.45, -0.75)
+		_owner_check((-player.camera.global_basis.z).dot((focal - base_position).normalized()) > 0.99999,
+			failures, "相机必须仍看向固定焦点")
+		if str(case["path"]).ends_with("ExpeditionLevel01_3D.tscn"):
+			await _verify_expedition01_input(owner, player, failures)
+			await _verify_expedition01_avoidance(owner, player, failures)
+		else:
+			player._unhandled_input(_make_key(KEY_APOSTROPHE))
+			player._unhandled_input(_make_key(KEY_F12))
+			owner.call("_apply_indoor_camera_pose")
+			_owner_check(player.camera.global_position.distance_to(expected_position) < 0.0001,
+				failures, "其他关卡F12不得获得01固定偏移")
+		if level_id == "expedition_02":
+			_owner_check(
+				bool(owner.call("_uses_expedition_camera_profiles")),
+				failures,
+				"远征02 真实身份未启用 profile 相机分支"
+			)
+			# 远征02 的真实 profile 分支也必须在已入树的 world 上完成约束查询。
+			player.camera_feedback.look_offset = Vector3(0.1, 0.0, 0.0)
+			owner.call("_apply_indoor_camera_pose")
+			_owner_check(player.camera.global_position.is_finite(), failures, "远征02 world constrain query 后相机位置非法")
+			player.camera_feedback.look_offset = Vector3.ZERO
+			# 显式房间profile也不能被01的偏移污染；只推进生产profile读取，不造整关。
+			var room := DungeonRoom3D.new()
+			room.camera_profile = {"id": "camera_test_low", "height_m": 1.55, "trailing_m": 3.4}
+			# 只读房间profile不需要入树，避免触发与相机无关的房间构建。
+			owner.set("_room_by_id", {"camera_test_low": room})
+			owner.set("_current_room_id", "camera_test_low")
+			owner.call("_update_camera_profile", 10.0)
+			owner.set("_camera_trailing_current_m", 3.4)
+			owner.call("_apply_indoor_camera_pose")
+			_owner_check(player.camera.global_position.distance_to(Vector3(0, 1.55, 3.4)) < 0.0001,
+				failures, "远征02房间profile被01机位覆盖")
+			owner.set("_room_by_id", {})
+			owner.set("_current_room_id", "")
+			room.free()
+		if str(case["path"]).ends_with("ExpeditionLevel03_3D.tscn"):
+			# 真实 flow Owner 尚未生成房间；显式打开 flow 分支，确认无房间时夹取早退，
+			# 不把缺失房间误判为成功，也不让测试构造整关。
+			owner.set("_flow_rules_active", true)
+			owner.call("_apply_indoor_camera_pose")
+			_owner_check(
+				player.camera.global_position.distance_to(expected_position) < 0.0001,
+				failures,
+				"远征03 无房间时 flow 相机夹取未安全早退"
+			)
+		owner.queue_free()
+		await get_tree().process_frame
+		_owner_check(not is_instance_valid(owner), failures, str(case["path"]) + " Owner 清理失败")
+
+
+func _instantiate_camera_owner(path: String, failures: Array[String]) -> TowerDescent3D:
+	var packed := load(path) as PackedScene
+	if packed == null:
+		failures.append("真实 Owner 场景加载失败：" + path)
+		return null
+	var owner: TowerDescent3D = packed.instantiate() as TowerDescent3D
+	if owner == null:
+		failures.append("真实 Owner 场景实例化失败：" + path)
+		return null
+	var player := owner.get_node_or_null("Player3D") as Player3D
+	if player == null:
+		failures.append("真实 Owner 场景没有 Player3D：" + path)
+		owner.free()
+		return null
+	# 必须在入树前替换脚本；set_script 会重置导出属性，所以显式保留真实场景身份。
+	# 不执行 TowerDescent3D/Dungeon3D 或 Player3D 的生产 _ready。
+	var expedition_mode := owner.expedition_mode
+	var run_id := owner.expedition_run_id
+	var plan_id := owner.expedition_plan_id
+	owner.set_script(CameraTestOwner)
+	owner.expedition_mode = expedition_mode
+	owner.expedition_run_id = run_id
+	owner.expedition_plan_id = plan_id
+	player.set_script(CameraTestPlayer)
+	# 仅保留父类@onready要求的公共壳体；不让塔楼美术与其他业务节点抢跑。
+	var blocks := owner.get_node_or_null("Blocks")
+	if blocks != null:
+		owner.remove_child(blocks)
+		blocks.free()
+	add_child(owner)
+	await get_tree().process_frame
+	return owner
+
+
+func _verify_expedition01_input(owner: TowerDescent3D, player: Player3D, failures: Array[String]) -> void:
+	var fixed_position := _expected_default_camera_position(1.0)
+	player.reset_debug_camera_adjustments()
+	owner.call("_apply_indoor_camera_pose")
+	_owner_check(
+		player.camera.global_position.distance_to(fixed_position) < 0.0001,
+		failures,
+		"远征01 F12 前新默认固定+1m位置错误"
+	)
+	_owner_check(
+		fixed_position.distance_to(Vector3(0.0, 11.128718, 5.414396)) < 0.0001,
+		failures,
+		"远征01 +1m 预期位置不是 (0,11.128718,5.414396)"
+	)
+	for _index in range(5):
+		player._unhandled_input(_make_key(KEY_APOSTROPHE))
+	owner.call("_apply_indoor_camera_pose")
+	var plus_one_position := _expected_default_camera_position(2.0)
+	_owner_check(
+		player.camera.global_position.distance_to(plus_one_position) < 0.0001,
+		failures,
+		"远征01 通过 Player3D._unhandled_input 连按5次 ' 未额外+1m"
+	)
+	player._unhandled_input(_make_key(KEY_F12))
+	owner.call("_apply_indoor_camera_pose")
+	_owner_check(is_zero_approx(player.get_debug_camera_trailing_offset_m()), failures, "F12 未清除 debug trailing")
+	_owner_check(
+		player.camera.global_position.distance_to(fixed_position) < 0.0001,
+		failures,
+		"远征01 F12 错误清除了生产固定+1m"
+	)
+	player._unhandled_input(_make_key(KEY_SEMICOLON))
+	owner.call("_apply_indoor_camera_pose")
+	var plus_point_eight_position := _expected_default_camera_position(0.8)
+	_owner_check(
+		player.camera.global_position.distance_to(plus_point_eight_position) < 0.0001,
+		failures,
+		"远征01 ; 后有效固定距离未为+0.8m"
+	)
+	var settled_position := player.camera.global_position
+	for _frame in range(60):
+		owner.call("_apply_indoor_camera_pose")
+	_owner_check(
+		player.camera.global_position.distance_to(settled_position) < 0.0001,
+		failures,
+		"连续帧重复应用导致相机距离累加"
+	)
+
+
+func _verify_expedition01_avoidance(owner: TowerDescent3D, player: Player3D, failures: Array[String]) -> void:
+	player.reset_debug_camera_adjustments()
+	_owner_check(absf(float(owner.call("_camera_lower_wall_retract_trigger_m")) - 5.414396) < 0.0001,
+		failures, "01收镜阈值必须覆盖新机位水平后移")
+	# 墙内表面5.10m，位于旧阈值4.914与新阈值5.414之间；旧探针基准应漏报。
+	var wall := _camera_test_box(Vector3(20, 20, 0.3), Vector3(0, 10, 5.25), "camera_lower_wall")
+	owner.add_child(wall)
+	await get_tree().physics_frame
+	for frame in range(120):
+		owner.call("_update_camera_lower_wall_lift", 1.0 / 60.0, true)
+		owner.call("_apply_indoor_camera_pose")
+	_owner_check(bool(owner.get("_camera_lower_wall_retract_active")), failures, "新机位墙通道必须触发收镜")
+	_owner_check(player.camera.position.z < 5.10, failures, "收镜后不得再次固定拉远穿回墙后")
+	wall.queue_free()
+	await get_tree().process_frame
+	await get_tree().physics_frame
+	for frame in range(240):
+		owner.call("_update_camera_lower_wall_lift", 1.0 / 60.0, true)
+		owner.call("_apply_indoor_camera_pose")
+	_owner_check(not bool(owner.get("_camera_lower_wall_retract_active")), failures, "移除墙后收镜必须自然解除")
+	_owner_check(player.camera.position.distance_to(_expected_default_camera_position(1.0)) < 0.0001,
+		failures, "墙体避障必须自然恢复01新默认")
+	player.camera_feedback.reset()
+	# 窄顶盖只覆盖新Z=5.414、不覆盖旧Z=4.914，下表面10.65高于旧相机Y。
+	var slab := _camera_test_box(Vector3(4, 0.2, 0.3), Vector3(0, 10.75, 5.414396), "camera_ceiling_occluder")
+	owner.add_child(slab)
+	await get_tree().physics_frame
+	owner.call("_update_camera_stair_slab_drop", 1.0 / 60.0, true)
+	owner.call("_apply_indoor_camera_pose")
+	_owner_check(bool(owner.get("_camera_stair_slab_detected")), failures, "新高度与水平位置必须命中真实顶盖")
+	_owner_check(player.camera.position.y <= 10.65 - 0.28 + 0.0001,
+		failures, "避障后不得再追加固定拉远穿回楼板")
+	_owner_check(absf(player.camera.position.z - 5.414396) < 0.0001,
+		failures, "楼板下压保持新机位水平后移")
+	slab.queue_free()
+	await get_tree().process_frame
+	await get_tree().physics_frame
+	for frame in range(240):
+		owner.call("_update_camera_stair_slab_drop", 1.0 / 60.0, true)
+		owner.call("_apply_indoor_camera_pose")
+	_owner_check(player.camera.position.distance_to(_expected_default_camera_position(1.0)) < 0.0001,
+		failures, "解除避障后必须恢复01新默认")
+
+
+func _camera_test_box(size: Vector3, location: Vector3, tag: String) -> StaticBody3D:
+	var body := StaticBody3D.new()
+	body.collision_layer = 16
+	body.collision_mask = 0
+	body.set_meta(tag, true)
+	body.position = location
+	var collision := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = size
+	collision.shape = box
+	body.add_child(collision)
+	return body
+
+
+func _expected_default_camera_position(distance_offset_m: float) -> Vector3:
+	var focal_local := Vector3(0.0, 0.45, -0.75)
+	var default_relative := Vector3(0.0, 10.262659 - 0.45, 4.914455 + 0.75)
+	return focal_local + default_relative.normalized() * (default_relative.length() + distance_offset_m)
+
+
+func _owner_check(condition: bool, failures: Array[String], reason: String) -> void:
+	camera_owner_checks += 1
+	if not condition:
+		failures.append(reason)
 
 
 ## 验证 _apply_indoor_camera_pose 的局部位置公式：相机位置 = focal_local +

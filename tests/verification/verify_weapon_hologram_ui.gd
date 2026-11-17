@@ -111,6 +111,57 @@ func _panel_idle(panel: Control) -> bool:
 func _board_snapshot(board: Control) -> Dictionary:
 	return board.call("get_presentation_snapshot") as Dictionary
 
+func _check_root_connection(board: Control, label: String) -> void:
+	var snapshot := _board_snapshot(board)
+	var connection: Dictionary = snapshot.get("root_connection", {})
+	var points: PackedVector2Array = connection.get("points", PackedVector2Array())
+	_check(points.size() == 4, label + "根连线四点契约")
+	if points.size() != 4:
+		return
+	var inverse := board.get_global_transform_with_canvas().affine_inverse()
+	var preview := board.get("_preview") as Control
+	var projected := preview.get_node_or_null("ProjectedTexture") as Control
+	if projected == null:
+		projected = preview
+	var center := inverse * projected.get_global_transform_with_canvas() * (projected.size * 0.5)
+	var scroll := board.get("_scroll") as ScrollContainer
+	var viewport_start := inverse * scroll.get_global_transform_with_canvas() * Vector2.ZERO
+	var viewport_end := inverse * scroll.get_global_transform_with_canvas() * scroll.size
+	var card_rect := board.call("get_slot_global_rect", 1) as Rect2
+	var card_entry := inverse * Vector2(card_rect.position.x, card_rect.get_center().y)
+	var visible_entry := Rect2(viewport_start, viewport_end - viewport_start).has_point(card_entry)
+	var expected_entry := card_entry if visible_entry else Vector2(viewport_start.x, clampf(card_entry.y, viewport_start.y, viewport_end.y))
+	var finite := true
+	for point: Vector2 in points:
+		finite = finite and point.is_finite()
+	_check(finite, label + "根连线无NaN/Inf")
+	_check(points[0].distance_to(center) < 0.1 and points[0].y < board.size.y - 30, label + "根起点是真实preview中心而非board底")
+	_check(points[1].x > points[0].x and is_equal_approx(points[1].y, points[0].y), label + "根第一段向右水平")
+	_check(points[3].distance_to(expected_entry) < 0.1 and bool(connection.get("clipped", false)) == not visible_entry, label + "终点为首卡实际左中或滚出后的viewport边")
+	_check(bool(connection.get("active", false)) == bool((snapshot.cards as Array)[0].occupied), label + "根线仅已刻印active")
+	_check((snapshot.flow_segments as Array).size() == int(snapshot.slot_count), label + "getflowsegments保持原槽数")
+	_evidence["root_" + label] = connection
+
+func _check_root_layouts(board: Control) -> void:
+	var old_compact := bool(board.get("_compact"))
+	var old_scale := board.scale
+	var scroll := board.get("_scroll") as ScrollContainer
+	var old_scroll := scroll.scroll_horizontal
+	for compact in [false, true]:
+		for factor in [1.0, 0.68]:
+			board.call("set_compact", compact)
+			board.scale = Vector2.ONE * factor
+			scroll.scroll_horizontal = 0
+			await get_tree().process_frame
+			_check_root_connection(board, "compact%s_scale%s" % [compact, factor])
+			board.call("ensure_slot_visible", 12)
+			await get_tree().process_frame
+			_check_root_connection(board, "scroll_compact%s_scale%s" % [compact, factor])
+	board.scale = old_scale
+	board.call("set_compact", old_compact)
+	scroll.scroll_horizontal = old_scroll
+	await get_tree().process_frame
+
 func _check_inactive_back_palette(board: Control, label: String) -> void:
 	var empty_count := 0
 	var dark_palette_ok := true
@@ -135,7 +186,10 @@ func _check_inactive_back_palette(board: Control, label: String) -> void:
 	_check(occupied_unchanged, label + "已刻印卡面不附加压暗材质")
 
 func _check_board_and_k() -> void:
-	_set_stage("正式K页与8/10/12巢")
+	_set_stage("正式K页与通用步枪8/10/12巢")
+	var rifle := WeaponInstance.from_item(ItemRegistry.get_instance().get_item("weapon_rifle"))
+	_check(rifle != null and rifle.fate_slot_capacity == 8, "8/10/12滚动夹具明确使用非pistol通用步枪")
+	_check(bool(_player.equip_weapon_item(rifle.to_item_dictionary()).get("success", false)), "通用步枪夹具正式装备")
 	var instance := _player.get_equipped_weapon_instance()
 	_check(instance != null, "真实武器实例存在")
 	if instance == null:
@@ -220,6 +274,8 @@ func _check_board_and_k() -> void:
 	var global_back := FateCardView.build_back_layer(global_back_host)
 	_check(global_back != null and global_back.material == null and global_back.modulate == Color.WHITE, "全局翻牌卡背不受空巢暗色影响")
 	global_back_host.queue_free()
+	await _check_root_layouts(board)
+	_check_root_connection(board, "k_build")
 	await _capture("k_build")
 	board.call("ensure_slot_visible", 12)
 	await _wait(func() -> bool:
@@ -246,6 +302,7 @@ func _check_board_and_k() -> void:
 	_check(bool(switched.get("success", false)), "真实切换武器")
 	await _wait(func() -> bool: return str(_board_snapshot(board).get("weapon_instance_id", "")) == _player.get_equipped_weapon_instance_id(), "切枪自动重绑")
 	_check(int(_board_snapshot(board).used) == 0, "新枪不继承旧枪刻槽")
+	_check_root_connection(board, "空枪inactive")
 	_check(bool(_player.equip_weapon_item(original).get("success", false)), "恢复原武器")
 	await _wait(func() -> bool: return int(_board_snapshot(board).used) == 4, "原枪重绑恢复四槽")
 	_evidence["k_board"] = _board_snapshot(board)
@@ -385,6 +442,7 @@ func _check_purchases() -> void:
 	_check(exit_button != null and exit_button.size.x >= 180 and exit_button.size.y >= 40, "底部大退出按钮")
 	_check_candidate_captions()
 	_check_socket_captions(board, "购卡页")
+	_check_root_connection(board, "purchase_stable")
 	await _capture("purchase_stable")
 	var money := GameManager.currency
 	var item := _player.get_equipped_weapon_item().duplicate(true)
@@ -717,8 +775,6 @@ func _motion_info() -> Dictionary:
 		"frame_pattern": "frame_%05d.png", "encoded_video": false}
 
 func _capture_install_impact(board: Control) -> void:
-	if not _render:
-		return
 	# 并行观察真实Effects，不在原QA链路插入额外等待或推进正式动画。
 	var effects := board.get("_effects") as Control
 	var deadline := Time.get_ticks_msec() + 8000
@@ -731,6 +787,15 @@ func _capture_install_impact(board: Control) -> void:
 	await get_tree().create_timer(0.08).timeout
 	_check(is_instance_valid(impact) and impact.is_visible_in_tree(), "峰值截图时真实落巢特效仍可见")
 	if is_instance_valid(impact) and impact.is_visible_in_tree():
+		var anchor: Vector2 = impact.get("_weapon_anchor")
+		var preview := board.get("_preview") as Control
+		var projected := preview.get_node_or_null("ProjectedTexture") as Control
+		if projected == null:
+			projected = preview
+		var expected := (impact as Control).get_global_transform_with_canvas().affine_inverse() * projected.get_global_transform_with_canvas() * (projected.size * 0.5)
+		_check(anchor.is_finite() and anchor.distance_to(expected) < 0.1, "真实横向落巢反馈从枪preview中心发出")
+		_evidence["impact_anchors"] = {"weapon": anchor, "socket": impact.get("_origin"), "progress": impact.get("_progress")}
+		_check_root_connection(board, "install_impact")
 		await _capture("install_impact")
 
 func _capture(label: String) -> void:
