@@ -2008,4 +2008,4 @@ func _grant_instruction(action: String, params: Dictionary) -> Dictionary:
 			return _degraded("grant.item：物品『%s』发放失败（%s）。" % [item_id, str(result)])
 		"unlock":
 			return _degraded("grant.unlock 尚未接通：依赖具体解锁项（见 08 文档 §5.2）。")
-	return _degraded("grant.%s 尚未接通（见 08 文档 §5.
+	return _degraded("grant.%s 尚未接通（见 08 文档 §5.2 指令表）。" % action)
