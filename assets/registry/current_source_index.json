@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-17",
+  "date": "2026-11-19",
   "sources": [
     {
       "path": "art_source/legacy_design/卧室/左墙区域深化_v4.blend",
@@ -12513,6 +12513,106 @@
         1
       ],
       "sha256": "99627e7bffb3e94a7c480317768317d7ea9bd0e8c854d80d05c72378ad089bba"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v024/env_boss02b_mechanical_platform_source_v024.blend",
+      "bytes": 13809232,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/current/env_boss02b_mechanical_platform_source.blend",
+      "version": [
+        23
+      ],
+      "role": "source",
+      "sha256": "a7d0059424c7c958cc4fe92f299b224fbf9053325a2b54857f4f8488887435cb"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v024/component_packages/display_tile_5m/env_display_tile_5m_source_v024.blend",
+      "bytes": 1307516,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/current/component_packages/display_tile_5m/env_display_tile_5m_source.blend",
+      "version": [
+        23
+      ],
+      "role": "source",
+      "sha256": "4f66e82beadedb124123a72e555d385e16149601f9b3740ec2ec9152089caaef"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v024/component_packages/display_command_5m/env_display_command_5m_source_v024.blend",
+      "bytes": 1311213,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/current/component_packages/display_command_5m/env_display_command_5m_source.blend",
+      "version": [
+        23
+      ],
+      "role": "source",
+      "sha256": "ed89fd1bc0614a92e767392e445163cdb09b5224536e6ccd1532f1add1a5467c"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v024/component_packages/reactor_fascia_5m/env_reactor_fascia_5m_source_v024.blend",
+      "bytes": 257310,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/current/component_packages/reactor_fascia_5m/env_reactor_fascia_5m_source.blend",
+      "version": [
+        23
+      ],
+      "role": "source",
+      "sha256": "1b2f2d99c6ce572f24fef4c6bfae5cda34d10e55b4b124e287b081a11cc181d5"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v024/component_packages/guardrail_5m/env_guardrail_5m_source_v024.blend",
+      "bytes": 94896,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/current/component_packages/guardrail_5m/env_guardrail_5m_source.blend",
+      "version": [
+        23
+      ],
+      "role": "source",
+      "sha256": "a0c9e405a09bcb36c317a5331c1a91b6a3963f7339695517d6afdc43f414f524"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v024/component_packages/corner_beacon/env_corner_beacon_source_v024.blend",
+      "bytes": 96090,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/current/component_packages/corner_beacon/env_corner_beacon_source.blend",
+      "version": [
+        23
+      ],
+      "role": "source",
+      "sha256": "1fbdc137d8121e524cf655a64adc56974b34cffe36438dd9d47f3320a8bd5498"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v024/component_packages/deck_girder_5m/env_deck_girder_5m_source_v024.blend",
+      "bytes": 114781,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/current/component_packages/deck_girder_5m/env_deck_girder_5m_source.blend",
+      "version": [
+        23
+      ],
+      "role": "source",
+      "sha256": "a0fc8df4bd782f14cb6fbaf3835f1aefc0dc121c7ae7b0bfb2d2264e892014aa"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v024/component_packages/keel_cradle_5m/env_keel_cradle_5m_source_v024.blend",
+      "bytes": 87945,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/current/component_packages/keel_cradle_5m/env_keel_cradle_5m_source.blend",
+      "version": [
+        23
+      ],
+      "role": "source",
+      "sha256": "b6e9ebec456ed948c1dad72c09b217111991fd964c714641458024d889f4962b"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v024/component_packages/articulated_grapple/env_articulated_grapple_source_v024.blend",
+      "bytes": 1042389,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/current/component_packages/articulated_grapple/env_articulated_grapple_source.blend",
+      "version": [
+        23
+      ],
+      "role": "source",
+      "sha256": "d6f92c1a56cc571b51a330585b88782e3d09a811dbb188e7305855cc8917e398"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v024/component_packages/perimeter_sentry/env_perimeter_sentry_source_v024.blend",
+      "bytes": 511710,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/current/component_packages/perimeter_sentry/env_perimeter_sentry_source.blend",
+      "version": [
+        23
+      ],
+      "role": "source",
+      "sha256": "d65deab8ad223f749cbce90f4e2e8132ce2b024330cfe61f5259656f00dd5942"
     }
   ],
   "authoring_root": "art_source",

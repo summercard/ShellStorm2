@@ -1,4 +1,12 @@
-- [界面排版与模态收放](2026-11-18_ui_layout_revision.md)：K页/购卡根连线、主副手只读预览滑动、装备页排版、四角HUD模态收放；Godot无头解析exit0，专项真实渲染待执行。`r`n`r`n- [七种子弹附魔与 21 种双附魔的命中反馈](2026-11-18_enchant_hit_feedback.md) · WEAPON-COMBAT / FATE-RULES / VFX-POOL。记录轮廓、双属性共存、池化与双分辨率打靶。
+- [Boss02-B v024 三节枪臂、砸台与四路断件](2026-11-19_boss02b_v024_mechanical_refinement.md)。枪体留在台外，增加两类扭头和制动剪辑，24 个下坠区块各有四组下部断件。
+
+- [Boss02-B v023 骨骼、战斗动作与台面坍塌](2026-11-19_boss02b_platform_motion.md)。放大两类机械臂，制作 10 段动画及三阶段屏幕，外 16 内 8 的坍塌由区块骨骼持有。
+
+- [Boss02-B 机械臂显示屏平台](2026-11-19_boss02b_mechanical_platform.md)。25×25 米平台、9 个 Blender 组件源、125 个实例、65 样本机构扫掠。场景账本已登记，待运行导入。
+
+- [界面排版与模态收放](2026-11-18_ui_layout_revision.md)：K页/购卡根连线、主副手只读预览滑动、装备页排版、四角HUD模态收放；Godot无头解析exit0，专项真实渲染待执行。
+
+- [七种子弹附魔与 21 种双附魔的命中反馈](2026-11-18_enchant_hit_feedback.md) · WEAPON-COMBAT / FATE-RULES / VFX-POOL。记录轮廓、双属性共存、池化与双分辨率打靶。
 
 - [击败Boss后钥匙返航段落连续录制与安全信标落点修复](2026-11-18_boss_key_return_recording.md)：按业主指正录的是**稀土钥匙返航段落**（击败首领→首领箱→领钥匙→方式B返航通讯→安全信标落地→主动8秒同步），不是3.3。capture 新增 `032K` 章节码复用正式链；同时修掉真实缺陷：首领箱落在入口高台时，`resolve_narrative_floor_positions` 对玩家开箱点整批拒绝，信标永久重试，现改为依次退回首领战场锚点/房间中心。Forward+ 30 checks／`failures=[]`，1280×720、30FPS、714帧、23.8秒 H.264 视频与9组关键帧已落工程外录制目录。
 

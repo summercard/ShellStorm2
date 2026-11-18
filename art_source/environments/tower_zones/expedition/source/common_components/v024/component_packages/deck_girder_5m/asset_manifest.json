@@ -1,0 +1,90 @@
+{
+  "component_id": "ENV-EXP01-BOSS02B-DECK-GIRDER-5M",
+  "slug": "deck_girder_5m",
+  "name_zh": "走面至机腹承重框 5 米",
+  "component_family": "deck_girder",
+  "category": "structure",
+  "description": "螺接甲板与底舱的5米格构承重框及停机状态检修灯；下部按四个独立承力与断裂区段建模",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "bounds_target_xyz_m": [
+    5,
+    5,
+    4.1
+  ],
+  "front_axis": "+Z",
+  "front_axis_space": "godot_y_up",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "origin_contract": "bottom_center_at_rest_bbox",
+  "module_pitch_m": 5,
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM_02_B"
+  ],
+  "collision_owner": "godot_wrapper",
+  "has_emissive": true,
+  "instance_count": 25,
+  "collection": "OUT_deck_girder_5m",
+  "root_object": "ROOT_deck_girder_5m",
+  "decorative_armature": false,
+  "materials": [
+    "paint",
+    "metal",
+    "seal",
+    "emissive"
+  ],
+  "room_type": "BOSS_ROOM_02_B",
+  "level_id": "expedition_01",
+  "block_id": "expedition",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v024/env_boss02b_mechanical_platform_source_v024.blend",
+  "source_room_type_sha256": "a7d0059424c7c958cc4fe92f299b224fbf9053325a2b54857f4f8488887435cb",
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v024/component_packages/deck_girder_5m/env_deck_girder_5m_source_v024.blend",
+  "component_blend_sha256": "a0fc8df4bd782f14cb6fbaf3835f1aefc0dc121c7ae7b0bfb2d2264e892014aa",
+  "bounds_size_m": [
+    5.0,
+    5.0,
+    3.978
+  ],
+  "local_bounds_m": [
+    [
+      -2.5,
+      -2.5,
+      0.0
+    ],
+    [
+      2.5,
+      2.5,
+      3.978
+    ]
+  ],
+  "vertex_count": 4512,
+  "geometry_fingerprint": "d5e17ec3016239ce250e9ca0e547af625765bdfb81402c8fb188594c12d78de2",
+  "bounds_pose": "unanimated bind pose",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "resolved_by_ledger_index",
+  "asset_version": "v024",
+  "package_status": "blender_source",
+  "runtime_path": null,
+  "room_owned_geometry": false,
+  "master_origin_offset_from_mount_coordinates_m": [
+    0.0,
+    0.0,
+    -4.335
+  ],
+  "skeleton_id": null,
+  "bones": [],
+  "actions": [],
+  "display_shader": null,
+  "sockets": []
+}

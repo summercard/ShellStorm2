@@ -1,0 +1,87 @@
+{
+  "asset_id": "ENV-EXP01-BOSS02B-MECHANICAL-PLATFORM",
+  "source": "art_source/environments/tower_zones/expedition/source/common_components/v022/env_boss02b_mechanical_platform_source_v022.blend",
+  "components": [
+    {
+      "component_id": "ENV-EXP01-BOSS02B-DISPLAY-TILE-5M",
+      "slug": "display_tile_5m",
+      "collection": "OUT_display_tile_5m",
+      "manifest": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/display_tile_5m/asset_manifest.json",
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/display_tile_5m/env_display_tile_5m_source_v022.blend",
+      "instance_count": 24,
+      "geometry_fingerprint": "99a04f8e991c0cec599734e4aa24dde15c0ea738c8d6eea58ad2a135f6925ff1"
+    },
+    {
+      "component_id": "ENV-EXP01-BOSS02B-DISPLAY-COMMAND-5M",
+      "slug": "display_command_5m",
+      "collection": "OUT_display_command_5m",
+      "manifest": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/display_command_5m/asset_manifest.json",
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/display_command_5m/env_display_command_5m_source_v022.blend",
+      "instance_count": 1,
+      "geometry_fingerprint": "1c9143bd94077496a30ee609733a4d8f0e152cb471429744c7182fd5f591e9c6"
+    },
+    {
+      "component_id": "ENV-EXP01-BOSS02B-REACTOR-FASCIA-5M",
+      "slug": "reactor_fascia_5m",
+      "collection": "OUT_reactor_fascia_5m",
+      "manifest": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/reactor_fascia_5m/asset_manifest.json",
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/reactor_fascia_5m/env_reactor_fascia_5m_source_v022.blend",
+      "instance_count": 20,
+      "geometry_fingerprint": "391a35b0b81c0253432bab5df7cceb2c59dd0685ad0e4f8ec7e82f793ca67f8c"
+    },
+    {
+      "component_id": "ENV-EXP01-BOSS02B-GUARDRAIL-5M",
+      "slug": "guardrail_5m",
+      "collection": "OUT_guardrail_5m",
+      "manifest": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/guardrail_5m/asset_manifest.json",
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/guardrail_5m/env_guardrail_5m_source_v022.blend",
+      "instance_count": 17,
+      "geometry_fingerprint": "b5b536940d3f45631c0a407bd9654c86691e52d0db224fe0916541d64efdba14"
+    },
+    {
+      "component_id": "ENV-EXP01-BOSS02B-CORNER-BEACON",
+      "slug": "corner_beacon",
+      "collection": "OUT_corner_beacon",
+      "manifest": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/corner_beacon/asset_manifest.json",
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/corner_beacon/env_corner_beacon_source_v022.blend",
+      "instance_count": 4,
+      "geometry_fingerprint": "7f7e7df106fe8da8206c4ec4a4729da578ed8046eb35646693db0d1f9d75b985"
+    },
+    {
+      "component_id": "ENV-EXP01-BOSS02B-DECK-GIRDER-5M",
+      "slug": "deck_girder_5m",
+      "collection": "OUT_deck_girder_5m",
+      "manifest": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/deck_girder_5m/asset_manifest.json",
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/deck_girder_5m/env_deck_girder_5m_source_v022.blend",
+      "instance_count": 25,
+      "geometry_fingerprint": "37d9be947fecb2f07db81bbfd33003a6cf4457f53341f52eb764085ade2c4e7a"
+    },
+    {
+      "component_id": "ENV-EXP01-BOSS02B-KEEL-CRADLE-5M",
+      "slug": "keel_cradle_5m",
+      "collection": "OUT_keel_cradle_5m",
+      "manifest": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/keel_cradle_5m/asset_manifest.json",
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/keel_cradle_5m/env_keel_cradle_5m_source_v022.blend",
+      "instance_count": 9,
+      "geometry_fingerprint": "e31ca86617add89727970d3eee9b268bebe04db2dc651013661412ff503c8c51"
+    },
+    {
+      "component_id": "ENV-EXP01-BOSS02B-ARTICULATED-GRAPPLE",
+      "slug": "articulated_grapple",
+      "collection": "OUT_articulated_grapple",
+      "manifest": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/articulated_grapple/asset_manifest.json",
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/articulated_grapple/env_articulated_grapple_source_v022.blend",
+      "instance_count": 4,
+      "geometry_fingerprint": "04a70643c7fabaae4b67b2e77d713d3a68bebae442eef25b971bdf5e32de0087"
+    },
+    {
+      "component_id": "ENV-EXP01-BOSS02B-PERIMETER-SENTRY",
+      "slug": "perimeter_sentry",
+      "collection": "OUT_perimeter_sentry",
+      "manifest": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/perimeter_sentry/asset_manifest.json",
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/perimeter_sentry/env_perimeter_sentry_source_v022.blend",
+      "instance_count": 21,
+      "geometry_fingerprint": "e01651e050d1d305a616e888db03ceef4ddefb10fe1498a7e84b9e0aa882dfe0"
+    }
+  ]
+}

@@ -1,0 +1,160 @@
+{
+  "component_id": "ENV-EXP01-BOSS02B-ARTICULATED-GRAPPLE",
+  "slug": "articulated_grapple",
+  "name_zh": "大型机械触手",
+  "component_family": "arm_grapple",
+  "category": "facility",
+  "description": "可动承座、两段主臂、腕及双指",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "bounds_target_xyz_m": [
+    4.5,
+    6.6,
+    11.7
+  ],
+  "front_axis": "+Z",
+  "front_axis_space": "godot_y_up",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "origin_contract": "bottom_center_at_rest_bbox",
+  "module_pitch_m": null,
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM_02_B"
+  ],
+  "collision_owner": "godot_wrapper",
+  "has_emissive": true,
+  "instance_count": 4,
+  "collection": "OUT_articulated_grapple",
+  "root_object": "ROOT_articulated_grapple",
+  "decorative_armature": true,
+  "materials": [
+    "paint",
+    "metal",
+    "seal",
+    "emissive"
+  ],
+  "room_type": "BOSS_ROOM_02_B",
+  "level_id": "expedition_01",
+  "block_id": "expedition",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v022/env_boss02b_mechanical_platform_source_v022.blend",
+  "source_room_type_sha256": "833111fb90bfba597f6dcb45a40e7b36a3208fb365e5e4799a3782f0cd1ea2ba",
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/articulated_grapple/env_articulated_grapple_source_v022.blend",
+  "component_blend_sha256": "5b9e0d0c60ad9a0ec116d6910b8931cc4f0ec911daec895a8e3252d7687826b3",
+  "bounds_size_m": [
+    4.12666,
+    5.89,
+    10.67735
+  ],
+  "local_bounds_m": [
+    [
+      -2.06333,
+      -2.945,
+      0.0
+    ],
+    [
+      2.06333,
+      2.945,
+      10.67735
+    ]
+  ],
+  "geometry_fingerprint": "04a70643c7fabaae4b67b2e77d713d3a68bebae442eef25b971bdf5e32de0087",
+  "fingerprint_quantization_m": 0.0001,
+  "vertex_count": 25496,
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "resolved_by_ledger_index",
+  "asset_version": "v022",
+  "package_status": "blender_source",
+  "runtime_path": null,
+  "room_owned_geometry": false,
+  "dependency_objects": [
+    "articulated_grapple__Shoulder_X",
+    "articulated_grapple__Elbow_X",
+    "articulated_grapple__WristPitch_X",
+    "articulated_grapple__ClawPalm_X",
+    "articulated_grapple__ClawJawL_Z",
+    "articulated_grapple__ClawJawR_Z",
+    "articulated_grapple__Base saddle",
+    "articulated_grapple__Saddle lights_Emissive",
+    "articulated_grapple__Shoulder bearing",
+    "articulated_grapple__Shoulder ring_Emissive",
+    "articulated_grapple__Lower arm",
+    "articulated_grapple__Lower arm slots_Emissive",
+    "articulated_grapple__Upper arm",
+    "articulated_grapple__Upper arm slots_Emissive",
+    "articulated_grapple__Wrist linkage",
+    "articulated_grapple__Wrist linkage slots_Emissive",
+    "articulated_grapple__Claw palm",
+    "articulated_grapple__Palm markers_Emissive",
+    "articulated_grapple__ClawJawL_Z.001",
+    "articulated_grapple__ClawJawL_Z lamp_Emissive",
+    "articulated_grapple__ClawJawR_Z.001",
+    "articulated_grapple__ClawJawR_Z lamp_Emissive"
+  ],
+  "master_origin_offset_from_mount_coordinates_m": [
+    0.0,
+    0.415,
+    -2.19735
+  ],
+  "embedded_screen_art": null,
+  "joints": {
+    "Shoulder_X": {
+      "object": "articulated_grapple__Shoulder_X",
+      "axis": "+X",
+      "angle_limits_deg": [
+        -8,
+        13
+      ]
+    },
+    "Elbow_X": {
+      "object": "articulated_grapple__Elbow_X",
+      "axis": "+X",
+      "angle_limits_deg": [
+        -17,
+        17
+      ]
+    },
+    "WristPitch_X": {
+      "object": "articulated_grapple__WristPitch_X",
+      "axis": "+X",
+      "angle_limits_deg": [
+        -20,
+        18
+      ]
+    },
+    "ClawPalm_X": {
+      "object": "articulated_grapple__ClawPalm_X",
+      "axis": "+X",
+      "angle_limits_deg": [
+        -13,
+        19
+      ]
+    },
+    "ClawJawL_Z": {
+      "object": "articulated_grapple__ClawJawL_Z",
+      "axis": "+Z",
+      "angle_limits_deg": [
+        -24,
+        24
+      ]
+    },
+    "ClawJawR_Z": {
+      "object": "articulated_grapple__ClawJawR_Z",
+      "axis": "+Z",
+      "angle_limits_deg": [
+        -24,
+        24
+      ]
+    }
+  }
+}

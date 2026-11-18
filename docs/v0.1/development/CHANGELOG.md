@@ -1,3 +1,9 @@
+- 2026-11-19 · ASSET-PIPELINE / WORLD-BLOCKS · [Boss02-B v024 三节枪臂、砸台与四路断件](2026-11-19_boss02b_v024_mechanical_refinement.md)。完整枪身在台外，新增转头扫描和伺服停顿，强化下砸与爆裂，外围区块下部 96 个实体断件独立掉落。场景账本源更新至 v024。
+
+- 2026-11-19 · ASSET-PIPELINE / WORLD-BLOCKS · [Boss02-B v023 骨骼、战斗动作与台面坍塌](2026-11-19_boss02b_platform_motion.md)。放大大臂和枪臂，完成 30 fps 独立剪辑与区块动作。25 屏三阶段警报，外 16 格到内 8 格掉落，留中心格。Blender 实测 342 次射击脉冲和 487 个机构样本。场景账本 10 项更新到 v023。
+
+- 2026-11-19 · ASSET-PIPELINE / WORLD-BLOCKS · [Boss02-B 机械臂显示屏平台](2026-11-19_boss02b_mechanical_platform.md)。25×25 米走面由 25 块显示屏组成，四组大机械臂和 21 组周界枪臂可在 Blender 时间轴演示。9 个组件、125 个实例独立重放通过，场景账本登记 10 行。待运行导入。
+
 - 2026-11-18 · UI-HUD / INVENTORY / WEAPON-COMBAT / FATE-RULES · [界面排版与模态收放](2026-11-18_ui_layout_revision.md)：K页与购卡页根连线改从枪械区与卡巢区中线接入；新增主副手只读预览箭头与横向滑动；装备页扩宽左区并重排武器/卡牌/配件/角色支持区；模态打开时四角HUD向屏幕四边展开，关闭后归位。仅改显示与转场，不改玩法逻辑、事务、存档或输入契约。Godot无头解析exit0，专项真实渲染待执行。
 
 - [七种子弹附魔与 21 种双附魔的命中反馈](2026-11-18_enchant_hit_feedback.md) · WEAPON-COMBAT / FATE-RULES / VFX-POOL。记录轮廓、双属性共存、池化与双分辨率打靶。

@@ -1,0 +1,91 @@
+{
+  "component_id": "ENV-EXP01-BOSS02B-CORNER-BEACON",
+  "slug": "corner_beacon",
+  "name_zh": "边角装甲与信标",
+  "component_family": "edge_beacon",
+  "category": "support",
+  "description": "防撞角甲、信标、转角接口",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "bounds_target_xyz_m": [
+    0.9,
+    0.9,
+    1.8
+  ],
+  "front_axis": "+Z",
+  "front_axis_space": "godot_y_up",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "origin_contract": "bottom_center_at_rest_bbox",
+  "module_pitch_m": null,
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM_02_B"
+  ],
+  "collision_owner": "godot_wrapper",
+  "has_emissive": true,
+  "instance_count": 4,
+  "collection": "OUT_corner_beacon",
+  "root_object": "ROOT_corner_beacon",
+  "decorative_armature": false,
+  "materials": [
+    "paint",
+    "metal",
+    "seal",
+    "emissive"
+  ],
+  "room_type": "BOSS_ROOM_02_B",
+  "level_id": "expedition_01",
+  "block_id": "expedition",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v022/env_boss02b_mechanical_platform_source_v022.blend",
+  "source_room_type_sha256": "833111fb90bfba597f6dcb45a40e7b36a3208fb365e5e4799a3782f0cd1ea2ba",
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/corner_beacon/env_corner_beacon_source_v022.blend",
+  "component_blend_sha256": "4ba9b6bc66623638e24dfd51693c9b938122f21f6251b210955e000005a9db37",
+  "bounds_size_m": [
+    1.03654,
+    1.03654,
+    2.316
+  ],
+  "local_bounds_m": [
+    [
+      -0.51827,
+      -0.51827,
+      0.0
+    ],
+    [
+      0.51827,
+      0.51827,
+      2.316
+    ]
+  ],
+  "geometry_fingerprint": "7f7e7df106fe8da8206c4ec4a4729da578ed8046eb35646693db0d1f9d75b985",
+  "fingerprint_quantization_m": 0.0001,
+  "vertex_count": 1120,
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "resolved_by_ledger_index",
+  "asset_version": "v022",
+  "package_status": "blender_source",
+  "runtime_path": null,
+  "room_owned_geometry": false,
+  "dependency_objects": [
+    "corner_beacon__Corner shield",
+    "corner_beacon__Tower lamp_Emissive"
+  ],
+  "master_origin_offset_from_mount_coordinates_m": [
+    0.0,
+    0.0,
+    -1.08
+  ],
+  "embedded_screen_art": null,
+  "joints": {}
+}

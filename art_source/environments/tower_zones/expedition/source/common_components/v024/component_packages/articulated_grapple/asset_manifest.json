@@ -1,0 +1,408 @@
+{
+  "component_id": "ENV-EXP01-BOSS02B-ARTICULATED-GRAPPLE",
+  "slug": "articulated_grapple",
+  "name_zh": "大型机械触手",
+  "component_family": "arm_grapple",
+  "category": "facility",
+  "description": "大型砸台机械臂与饱满转鼓，独立头部回转、停顿与爆裂骨",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "bounds_target_xyz_m": [
+    5.7,
+    8.0,
+    12.2
+  ],
+  "front_axis": "+Z",
+  "front_axis_space": "godot_y_up",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "origin_contract": "bottom_center_at_rest_bbox",
+  "module_pitch_m": null,
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM_02_B"
+  ],
+  "collision_owner": "godot_wrapper",
+  "has_emissive": true,
+  "instance_count": 4,
+  "collection": "OUT_articulated_grapple",
+  "root_object": "ROOT_articulated_grapple",
+  "decorative_armature": true,
+  "materials": [
+    "paint",
+    "metal",
+    "seal",
+    "emissive"
+  ],
+  "room_type": "BOSS_ROOM_02_B",
+  "level_id": "expedition_01",
+  "block_id": "expedition",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v024/env_boss02b_mechanical_platform_source_v024.blend",
+  "source_room_type_sha256": "a7d0059424c7c958cc4fe92f299b224fbf9053325a2b54857f4f8488887435cb",
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v024/component_packages/articulated_grapple/env_articulated_grapple_source_v024.blend",
+  "component_blend_sha256": "d6f92c1a56cc571b51a330585b88782e3d09a811dbb188e7305855cc8917e398",
+  "bounds_size_m": [
+    5.23,
+    6.80247,
+    11.70469
+  ],
+  "local_bounds_m": [
+    [
+      -2.615,
+      -3.40124,
+      0.0
+    ],
+    [
+      2.615,
+      3.40124,
+      11.70469
+    ]
+  ],
+  "vertex_count": 36616,
+  "geometry_fingerprint": "dfa5f6588490b1df2577402bbcb45cecbbdd4cf5503a89f380996df9c647a272",
+  "bounds_pose": "unanimated bind pose",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "resolved_by_ledger_index",
+  "asset_version": "v024",
+  "package_status": "blender_source",
+  "runtime_path": null,
+  "room_owned_geometry": false,
+  "master_origin_offset_from_mount_coordinates_m": [
+    0.0,
+    -0.13124,
+    -2.47232
+  ],
+  "skeleton_id": "articulated_grapple",
+  "bones": [
+    {
+      "bone": "root",
+      "parent": null,
+      "position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rigid_deform": false
+    },
+    {
+      "bone": "shoulder",
+      "parent": "root",
+      "position_m": [
+        0.0,
+        0.131237,
+        2.472317
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "elbow",
+      "parent": "shoulder",
+      "position_m": [
+        0.0,
+        -2.358763,
+        6.552317
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "wrist",
+      "parent": "elbow",
+      "position_m": [
+        0.0,
+        -1.508763,
+        10.432317
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "head_yaw",
+      "parent": "wrist",
+      "position_m": [
+        0.0,
+        0.851237,
+        10.982317
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "palm",
+      "parent": "head_yaw",
+      "position_m": [
+        0.0,
+        0.851237,
+        10.982317
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "jaw_l",
+      "parent": "palm",
+      "position_m": [
+        -0.86,
+        1.441236,
+        10.792316
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "piece_claw_jaw_l",
+      "parent": "jaw_l",
+      "position_m": [
+        -0.86,
+        1.441236,
+        10.792316
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "jaw_r",
+      "parent": "palm",
+      "position_m": [
+        0.86,
+        1.441236,
+        10.792316
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "piece_claw_jaw_r",
+      "parent": "jaw_r",
+      "position_m": [
+        0.86,
+        1.441236,
+        10.792316
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "piece_claw_block",
+      "parent": "palm",
+      "position_m": [
+        0.0,
+        0.851237,
+        10.982317
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "piece_head_slew_race",
+      "parent": "head_yaw",
+      "position_m": [
+        0.0,
+        0.851237,
+        10.982317
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "piece_head_slew_index",
+      "parent": "head_yaw",
+      "position_m": [
+        0.0,
+        0.851237,
+        10.982317
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "piece_curved_wrist",
+      "parent": "wrist",
+      "position_m": [
+        0.0,
+        -1.508763,
+        10.432317
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "piece_curved_wrist_back_plate",
+      "parent": "wrist",
+      "position_m": [
+        0.0,
+        -1.508763,
+        10.432317
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "piece_curved_wrist_axle",
+      "parent": "wrist",
+      "position_m": [
+        0.0,
+        -1.508763,
+        10.432317
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "piece_upper_casing",
+      "parent": "elbow",
+      "position_m": [
+        0.0,
+        -2.358763,
+        6.552317
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "piece_upper_casing_back_plate",
+      "parent": "elbow",
+      "position_m": [
+        0.0,
+        -2.358763,
+        6.552317
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "piece_upper_casing_axle",
+      "parent": "elbow",
+      "position_m": [
+        0.0,
+        -2.358763,
+        6.552317
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "piece_shoulder_rotor",
+      "parent": "shoulder",
+      "position_m": [
+        0.0,
+        0.131237,
+        2.472317
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "piece_lift_casing",
+      "parent": "shoulder",
+      "position_m": [
+        0.0,
+        0.131237,
+        2.472317
+      ],
+      "rigid_deform": true
+    },
+    {
+      "bone": "piece_lift_casing_back_plate",
+      "parent": "shoulder",
+      "position_m": [
+        0.0,
+        0.131237,
+        2.472317
+      ],
+      "rigid_deform": true
+    }
+  ],
+  "actions": [
+    {
+      "clip_id": "activate_grapple",
+      "fps": 30,
+      "duration_frames": 88,
+      "duration_s": 2.933333333333333,
+      "first_frame": 1,
+      "last_frame": 89,
+      "loop": false,
+      "tracks": 105,
+      "events": {
+        "unlatch": 17,
+        "reach": 69,
+        "ready": 89
+      }
+    },
+    {
+      "clip_id": "idle_grapple",
+      "fps": 30,
+      "duration_frames": 84,
+      "duration_s": 2.8,
+      "first_frame": 1,
+      "last_frame": 85,
+      "loop": true,
+      "tracks": 105,
+      "events": {}
+    },
+    {
+      "clip_id": "scan_grapple",
+      "fps": 30,
+      "duration_frames": 42,
+      "duration_s": 1.4,
+      "first_frame": 1,
+      "last_frame": 43,
+      "loop": false,
+      "tracks": 105,
+      "events": {
+        "look_left": 10,
+        "stop": 15,
+        "look_right": 30
+      }
+    },
+    {
+      "clip_id": "servo_pause_grapple",
+      "fps": 30,
+      "duration_frames": 27,
+      "duration_s": 0.9,
+      "first_frame": 1,
+      "last_frame": 28,
+      "loop": false,
+      "tracks": 105,
+      "events": {
+        "load": 8,
+        "brake": 11,
+        "release": 21
+      }
+    },
+    {
+      "clip_id": "attack_grapple_slam",
+      "fps": 30,
+      "duration_frames": 64,
+      "duration_s": 2.1333333333333333,
+      "first_frame": 1,
+      "last_frame": 65,
+      "loop": false,
+      "tracks": 105,
+      "events": {
+        "windup": 9,
+        "release": 30,
+        "impact": 36,
+        "recover": 48
+      }
+    },
+    {
+      "clip_id": "death_grapple",
+      "fps": 30,
+      "duration_frames": 65,
+      "duration_s": 2.1666666666666665,
+      "first_frame": 1,
+      "last_frame": 66,
+      "loop": false,
+      "tracks": 105,
+      "events": {
+        "separate": 14,
+        "flash": 16,
+        "debris_fall": 30
+      }
+    }
+  ],
+  "display_shader": null,
+  "sockets": [
+    {
+      "socket_id": "grip_contact_l",
+      "bone_id": "jaw_l"
+    },
+    {
+      "socket_id": "grip_contact_r",
+      "bone_id": "jaw_r"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "asset_count": 1471,
+  "asset_count": 1481,
   "assets": {
     "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
       "c": "场景",
@@ -7355,6 +7355,56 @@
       "c": "武器",
       "d": "weapons",
       "v": "918186220c780d9577a3613bed28f1296566d34b936419730c330b714d4d0bab"
+    },
+    "ENV-EXP01-BOSS02B-MECHANICAL-PLATFORM": {
+      "v": "98ba8d38c9d5ab859509307af4496f7d229bb58c05608ec6a05fcf979dffd737",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-EXP01-BOSS02B-DISPLAY-TILE-5M": {
+      "v": "8a570502a15e47c95bef4bb10d3d130236076ff26b2be826461bdf037d69d0c7",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-EXP01-BOSS02B-DISPLAY-COMMAND-5M": {
+      "v": "ea68310f64cab5be8af5d520a2d03bc58a9fbd06bcd8dd8ba22acebe9ff453be",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-EXP01-BOSS02B-REACTOR-FASCIA-5M": {
+      "v": "56b7f1a79d7e87fd4afdd953f6b66ff08001465b9997fa83a062e9ac54600b6f",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-EXP01-BOSS02B-GUARDRAIL-5M": {
+      "v": "7450523d4ade0fa8e920dd6c8edd59c1d8ec300c8c8c38f3db9f9fd04da86f2c",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-EXP01-BOSS02B-CORNER-BEACON": {
+      "v": "8a78ed95cb01dc83bc665829fcefa8d8783a76063a2d3125e1f96e3260161b2a",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-EXP01-BOSS02B-DECK-GIRDER-5M": {
+      "v": "fe1b21f7c30bda9720043ed805c38700be266351b1e3ba3beef5fd498a17bdb2",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-EXP01-BOSS02B-KEEL-CRADLE-5M": {
+      "v": "a93f54a8f26a400a61264e7b38138df743ec3bb8f1a7b2c4baa546e2a993b7fd",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-EXP01-BOSS02B-ARTICULATED-GRAPPLE": {
+      "v": "05f17db02604267015955a074b2595ddf5ea012dbadddeefc6f81605f4a42741",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-EXP01-BOSS02B-PERIMETER-SENTRY": {
+      "v": "0c3efcd3e33d5945de2c727a8ed04eb53e4eb8ed94a77e492ac57c7329cd6dc8",
+      "c": "场景",
+      "d": "scenes"
     }
   },
   "captured_at": "2026-11-17",
@@ -7365,7 +7415,7 @@
     "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_bedroom/env_manor_rug_bedroom_root_top3d.tscn": 1,
     "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_lounge/env_manor_rug_lounge_root_top3d.tscn": 1,
     "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_runner/env_manor_rug_runner_root_top3d.tscn": 1,
-    "场景": 849,
+    "场景": 859,
     "场景道具": 52,
     "基地资产包": 114,
     "子弹特效": 11,
@@ -7378,29 +7428,29 @@
     "音效": 184
   },
   "column_digests": {
-    "1": "0a2f9d8ab5aa752f44a1bcf1966690e35f1a3f2f865894f0668f12395ba68c9a",
-    "10": "f40dd5af05097d3d00330bd90ee70561a706f442d06603a0efadf3690394b90e",
-    "11": "24356609aee4b2658236cb34c72e25bb390ed186455952ae8410376119fc9ff2",
-    "12": "4d6220f0b65c77d77bc73500344ccdecead19e8f470aaf8a10050546006527c5",
-    "13": "a40670006c1c7afa52a6046440d9ff89bd321aecee0a131a824fa3c25149a462",
-    "14": "cb779cadd9bd4f2666165b4cfd62646286520170ff71766ae4c3de2c54b2b56c",
-    "15": "a88f409811250ff8481d30d58767e4f0f885250bcaec672ed894dc0d03a45b79",
-    "16": "4d16335131eda3ebb3e5538df169de0bca796ef32bc00cc22eda4218d9117ee9",
-    "17": "bcce1bfe40bc19e54aac3d1bd113c0c852ff6eee8e634c962e22e4e331a08617",
-    "2": "0890b5c224a57ad19406ca3ab3b2223d82cf32e0223a08e3c4cd3546408b2f43",
-    "20": "4a666c84f5e5ebf58d269ae89c35efac6954070e77a7dafd6e43b4157251bb8b",
-    "21": "a78d5c28569f04bccd828d67148a7ca00f910b24cdff65421bb73bbfc31fdc65",
-    "22": "06b4a8105add833a6cc6745ad49bf43b8aee4e2f9ed45630436d8d3b7ddb12f5",
-    "23": "bbc7cfdc5ff532482b428ad207ced296b345460b56a4ea16ae09425d3dc73175",
-    "24": "d128bb84dea136a8e277770f8b6acfc163a7ca5b2989e8cc851e26407ad162a6",
-    "25": "35aa092cd8b260aa5013c479a2f843eb1898d98772ed5e980630860319b01db2",
-    "3": "3529ae6bb0482de536aa54e3922caa2b909126e0cd8acf5b1ef6e63656de26df",
-    "4": "4199b1d0d4b8d24c5f3643391ba06982d6248d45db2ea1400b58a256f5c0a264",
-    "5": "b4e9e6b772e3012b3a966533832ba84a41b843854471d2225df708168b9a5a44",
-    "6": "6b28f8a793d18365ad501c2a899a53655fa81192e95825b90ae43c492747b544",
-    "7": "adc177032f6ef2436a3518317005d9abbaa05406dfc1691c89216bb86d3f8bd7",
-    "8": "528dc8acbf44322290dcb72cf8e5ba8185b6235ca56c7f20dbf50d4f9ea4db4e",
-    "9": "475c60dd13c710b7cfaef035a30a78955fb7b5947bc4d3a36b316d1e1ca3e097"
+    "1": "a8042a08e4f2faf25a329c2e86788ce1be23179fb03c151bc764379d24417118",
+    "2": "706fcb5c6089ed38306a45768b7b6dfb498c5b7065756fcd84e10c0991ec72fa",
+    "3": "51efccba30a9168b1315887336bc6b04d7b8895e0045d5538617a014806432f8",
+    "4": "0d016ecf552d4030b51d56f1f76159d773fe7e9183b56daf2999d90bfcb1071e",
+    "5": "45d17003c20e7edbf35d3846a503fb2bf1b7c523b6a3f6ecb0698dcccd2e457b",
+    "6": "460d170574222099e45a76c8f4ce497a90ff1a79f3b18e87103999cc51cbc8b3",
+    "7": "f162890d2d77f6d2646bb4418819a5cf40b20fc404feea2dbfb28ff3670b0bd0",
+    "8": "45f4dd588eaf40a2fd923043ddc19487a16e79f653547e9bbc90c0335604999e",
+    "9": "e92bf9d68e4a212f90084129c1f538c2becac1e5a436aa5d34bc3ce958e4c4df",
+    "10": "d1a1f53bdd443bc0b43392d2127be38507c451fc80ac0a75579c7832c674a836",
+    "11": "3186c23abfae0e7f7ba67108d9e027c42e23fc14d9edfbe3822cae9a5d1400b0",
+    "12": "95bf98cd1018d59e708b5973c6f964db44bb98bfac1e08a874724bd59504a69d",
+    "13": "e5bd30fa3d3f32fd95d8e0a81d8488a619ffbf8d2e6f5715dc09435a2264a5fc",
+    "14": "f899551c5f114e1bca684e1eb3a071b0726af807c594b73dda3aaa33ed3d2d3a",
+    "15": "db290a11fe4ac0dd4d39903aeebc65d02a82a4ca2fdff60e5f3408125bf0cc5d",
+    "16": "ae4178de7b2014e6b46de952ae3173f24deb822e1f80770ddf727cb291a6bc61",
+    "17": "cfab3dbb70dcae66662c2da6d6ba00bf58a4b8450a78e3fb98ce6c023a245577",
+    "20": "4572cf18bed955838573cbb5d56b314b51e1160b39f499fa4190c2b1fbf8e273",
+    "21": "e233819ca162c1c6b9c9754663943632bd69d76a06ed37098949653aa9f255ca",
+    "22": "9046df0010edc7b39f7c3ed9eae79195f97393c8ff5347aa22fae42506c67f6f",
+    "23": "4b032b977cfd3431d735af36b4220acecbd90fc4986b45a3ff4af274f6b2eb9e",
+    "24": "414bcfc085c11d80950e15380d4d0a1be4221a72979372a2d2f23f5dc3d223bd",
+    "25": "417c3688f3f5a9d1726778946fd31277ae3d333a0f95ef2f324d54c76fe20e86"
   },
   "columns": [
     "AssetID",

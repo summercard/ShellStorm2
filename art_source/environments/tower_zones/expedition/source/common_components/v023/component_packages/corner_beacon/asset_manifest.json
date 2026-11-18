@@ -1,0 +1,90 @@
+{
+  "component_id": "ENV-EXP01-BOSS02B-CORNER-BEACON",
+  "slug": "corner_beacon",
+  "name_zh": "边角装甲与信标",
+  "component_family": "edge_beacon",
+  "category": "support",
+  "description": "防撞角甲、信标、转角接口",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "bounds_target_xyz_m": [
+    0.9,
+    0.9,
+    1.8
+  ],
+  "front_axis": "+Z",
+  "front_axis_space": "godot_y_up",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "origin_contract": "bottom_center_at_rest_bbox",
+  "module_pitch_m": null,
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM_02_B"
+  ],
+  "collision_owner": "godot_wrapper",
+  "has_emissive": true,
+  "instance_count": 4,
+  "collection": "OUT_corner_beacon",
+  "root_object": "ROOT_corner_beacon",
+  "decorative_armature": false,
+  "materials": [
+    "paint",
+    "metal",
+    "seal",
+    "emissive"
+  ],
+  "room_type": "BOSS_ROOM_02_B",
+  "level_id": "expedition_01",
+  "block_id": "expedition",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v023/env_boss02b_mechanical_platform_source_v023.blend",
+  "source_room_type_sha256": "0b095e6b00cfcb8ce7e2269c01541139ec2a4470760e8f14e8808ff28e878e1d",
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v023/component_packages/corner_beacon/env_corner_beacon_source_v023.blend",
+  "component_blend_sha256": "32643afd2b677342006449da38416a8b4f539e731250e7bba11f27e4ed663268",
+  "bounds_size_m": [
+    1.03654,
+    1.03654,
+    2.316
+  ],
+  "local_bounds_m": [
+    [
+      -0.51827,
+      -0.51827,
+      0.0
+    ],
+    [
+      0.51827,
+      0.51827,
+      2.316
+    ]
+  ],
+  "vertex_count": 1120,
+  "geometry_fingerprint": "7f7e7df106fe8da8206c4ec4a4729da578ed8046eb35646693db0d1f9d75b985",
+  "bounds_pose": "unanimated bind pose",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "resolved_by_ledger_index",
+  "asset_version": "v023",
+  "package_status": "blender_source",
+  "runtime_path": null,
+  "room_owned_geometry": false,
+  "master_origin_offset_from_mount_coordinates_m": [
+    0.0,
+    0.0,
+    -1.08
+  ],
+  "skeleton_id": null,
+  "bones": [],
+  "actions": [],
+  "display_shader": null,
+  "sockets": []
+}

@@ -1,0 +1,90 @@
+{
+  "component_id": "ENV-EXP01-BOSS02B-REACTOR-FASCIA-5M",
+  "slug": "reactor_fascia_5m",
+  "name_zh": "算力舱外沿 5 米",
+  "component_family": "reactor_fascia",
+  "category": "structure",
+  "description": "外沿承重梁与灯，算力机柜面后收0.46m形成凹入式散热带",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "bounds_target_xyz_m": [
+    5,
+    1.2,
+    4.35
+  ],
+  "front_axis": "+Z",
+  "front_axis_space": "godot_y_up",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "origin_contract": "bottom_center_at_rest_bbox",
+  "module_pitch_m": 5,
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM_02_B"
+  ],
+  "collision_owner": "godot_wrapper",
+  "has_emissive": true,
+  "instance_count": 20,
+  "collection": "OUT_reactor_fascia_5m",
+  "root_object": "ROOT_reactor_fascia_5m",
+  "decorative_armature": false,
+  "materials": [
+    "paint",
+    "metal",
+    "seal",
+    "emissive"
+  ],
+  "room_type": "BOSS_ROOM_02_B",
+  "level_id": "expedition_01",
+  "block_id": "expedition",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v024/env_boss02b_mechanical_platform_source_v024.blend",
+  "source_room_type_sha256": "a7d0059424c7c958cc4fe92f299b224fbf9053325a2b54857f4f8488887435cb",
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v024/component_packages/reactor_fascia_5m/env_reactor_fascia_5m_source_v024.blend",
+  "component_blend_sha256": "1b2f2d99c6ce572f24fef4c6bfae5cda34d10e55b4b124e287b081a11cc181d5",
+  "bounds_size_m": [
+    5.0,
+    2.116,
+    4.69181
+  ],
+  "local_bounds_m": [
+    [
+      -2.5,
+      -1.058,
+      0.0
+    ],
+    [
+      2.5,
+      1.058,
+      4.69181
+    ]
+  ],
+  "vertex_count": 10400,
+  "geometry_fingerprint": "dc1e1cf2ea285648c2e1f1f70231edbfffd44358400559678fac5362ae998408",
+  "bounds_pose": "unanimated bind pose",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "resolved_by_ledger_index",
+  "asset_version": "v024",
+  "package_status": "blender_source",
+  "runtime_path": null,
+  "room_owned_geometry": false,
+  "master_origin_offset_from_mount_coordinates_m": [
+    0.0,
+    0.647,
+    -4.82181
+  ],
+  "skeleton_id": null,
+  "bones": [],
+  "actions": [],
+  "display_shader": null,
+  "sockets": []
+}

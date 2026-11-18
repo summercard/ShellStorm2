@@ -1,0 +1,143 @@
+{
+  "component_id": "ENV-EXP01-BOSS02B-PERIMETER-SENTRY",
+  "slug": "perimeter_sentry",
+  "name_zh": "周界机械枪臂",
+  "component_family": "arm_sentry",
+  "category": "facility",
+  "description": "高支点与两段抬升链、独立摆头和虚构道具枪口",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "bounds_target_xyz_m": [
+    1.6,
+    5.5,
+    2.65
+  ],
+  "front_axis": "+Z",
+  "front_axis_space": "godot_y_up",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "origin_contract": "bottom_center_at_rest_bbox",
+  "module_pitch_m": null,
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM_02_B"
+  ],
+  "collision_owner": "godot_wrapper",
+  "has_emissive": true,
+  "instance_count": 21,
+  "collection": "OUT_perimeter_sentry",
+  "root_object": "ROOT_perimeter_sentry",
+  "decorative_armature": true,
+  "materials": [
+    "paint",
+    "metal",
+    "seal",
+    "emissive"
+  ],
+  "room_type": "BOSS_ROOM_02_B",
+  "level_id": "expedition_01",
+  "block_id": "expedition",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v022/env_boss02b_mechanical_platform_source_v022.blend",
+  "source_room_type_sha256": "833111fb90bfba597f6dcb45a40e7b36a3208fb365e5e4799a3782f0cd1ea2ba",
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v022/component_packages/perimeter_sentry/env_perimeter_sentry_source_v022.blend",
+  "component_blend_sha256": "8e5e451dadba935141e6dfb5c86186684653671236758324abf69eaaf036cc82",
+  "bounds_size_m": [
+    1.44462,
+    6.23413,
+    2.26251
+  ],
+  "local_bounds_m": [
+    [
+      -0.72231,
+      -3.11706,
+      0.0
+    ],
+    [
+      0.72231,
+      3.11706,
+      2.26251
+    ]
+  ],
+  "geometry_fingerprint": "e01651e050d1d305a616e888db03ceef4ddefb10fe1498a7e84b9e0aa882dfe0",
+  "fingerprint_quantization_m": 0.0001,
+  "vertex_count": 13048,
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "resolved_by_ledger_index",
+  "asset_version": "v022",
+  "package_status": "blender_source",
+  "runtime_path": null,
+  "room_owned_geometry": false,
+  "dependency_objects": [
+    "perimeter_sentry__MountAxis",
+    "perimeter_sentry__Lift_X",
+    "perimeter_sentry__Elbow_X",
+    "perimeter_sentry__TraversePitch_X",
+    "perimeter_sentry__EmitterOrigin",
+    "perimeter_sentry__EmitterForward",
+    "perimeter_sentry__Deck edge mount",
+    "perimeter_sentry__Deck edge light_Emissive",
+    "perimeter_sentry__Lift linkage",
+    "perimeter_sentry__Lift linkage emitter_Emissive",
+    "perimeter_sentry__Upper linkage",
+    "perimeter_sentry__Upper linkage emitter_Emissive",
+    "perimeter_sentry__Fictional sentry housing",
+    "perimeter_sentry__Sentry energy strips_Emissive"
+  ],
+  "master_origin_offset_from_mount_coordinates_m": [
+    0.0,
+    -1.75706,
+    -1.52397
+  ],
+  "embedded_screen_art": null,
+  "joints": {
+    "MountAxis": {
+      "object": "perimeter_sentry__MountAxis",
+      "axis": null,
+      "angle_limits_deg": null
+    },
+    "Lift_X": {
+      "object": "perimeter_sentry__Lift_X",
+      "axis": "+X",
+      "angle_limits_deg": [
+        -78,
+        40
+      ]
+    },
+    "Elbow_X": {
+      "object": "perimeter_sentry__Elbow_X",
+      "axis": "+X",
+      "angle_limits_deg": [
+        -94,
+        3
+      ]
+    },
+    "TraversePitch_X": {
+      "object": "perimeter_sentry__TraversePitch_X",
+      "axis": "+X",
+      "angle_limits_deg": [
+        -40,
+        49
+      ]
+    },
+    "EmitterOrigin": {
+      "object": "perimeter_sentry__EmitterOrigin",
+      "axis": null,
+      "angle_limits_deg": null
+    },
+    "EmitterForward": {
+      "object": "perimeter_sentry__EmitterForward",
+      "axis": null,
+      "angle_limits_deg": null
+    }
+  }
+}

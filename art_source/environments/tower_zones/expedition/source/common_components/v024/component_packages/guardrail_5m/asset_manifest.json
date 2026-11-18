@@ -1,0 +1,90 @@
+{
+  "component_id": "ENV-EXP01-BOSS02B-GUARDRAIL-5M",
+  "slug": "guardrail_5m",
+  "name_zh": "信号护栏 5 米",
+  "component_family": "guardrail",
+  "category": "structure",
+  "description": "双横杆、警示条、立柱发光节点",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "bounds_target_xyz_m": [
+    5,
+    0.42,
+    1.18
+  ],
+  "front_axis": "+Z",
+  "front_axis_space": "godot_y_up",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "origin_contract": "bottom_center_at_rest_bbox",
+  "module_pitch_m": 5,
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM_02_B"
+  ],
+  "collision_owner": "godot_wrapper",
+  "has_emissive": true,
+  "instance_count": 17,
+  "collection": "OUT_guardrail_5m",
+  "root_object": "ROOT_guardrail_5m",
+  "decorative_armature": false,
+  "materials": [
+    "paint",
+    "metal",
+    "seal",
+    "emissive"
+  ],
+  "room_type": "BOSS_ROOM_02_B",
+  "level_id": "expedition_01",
+  "block_id": "expedition",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v024/env_boss02b_mechanical_platform_source_v024.blend",
+  "source_room_type_sha256": "a7d0059424c7c958cc4fe92f299b224fbf9053325a2b54857f4f8488887435cb",
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v024/component_packages/guardrail_5m/env_guardrail_5m_source_v024.blend",
+  "component_blend_sha256": "a0c9e405a09bcb36c317a5331c1a91b6a3963f7339695517d6afdc43f414f524",
+  "bounds_size_m": [
+    5.0,
+    0.43,
+    1.1915
+  ],
+  "local_bounds_m": [
+    [
+      -2.5,
+      -0.215,
+      0.0
+    ],
+    [
+      2.5,
+      0.215,
+      1.1915
+    ]
+  ],
+  "vertex_count": 1056,
+  "geometry_fingerprint": "b5b536940d3f45631c0a407bd9654c86691e52d0db224fe0916541d64efdba14",
+  "bounds_pose": "unanimated bind pose",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "resolved_by_ledger_index",
+  "asset_version": "v024",
+  "package_status": "blender_source",
+  "runtime_path": null,
+  "room_owned_geometry": false,
+  "master_origin_offset_from_mount_coordinates_m": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "skeleton_id": null,
+  "bones": [],
+  "actions": [],
+  "display_shader": null,
+  "sockets": []
+}
