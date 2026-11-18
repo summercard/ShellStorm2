@@ -33,6 +33,7 @@ func _ready() -> void:
 	_check_layer(ui)
 	_check_layout(ui)
 	_check_dialogue_line(ui)
+	_check_guidance_style(ui)
 	await _check_typing_progress(ui)
 	await _check_advance_reveals_all(ui)
 	await _check_auto_advance_completes(ui)
@@ -97,6 +98,24 @@ func _check_dialogue_line(ui: Node) -> void:
 	_expect(short_hold >= 1.8 and short_hold <= 5.0, "短句停留 %.2fs 超出 1.8~5.0" % short_hold)
 	_expect(long_hold > short_hold, "长句停留没有比短句长（%.2f vs %.2f）" % [long_hold, short_hold])
 	_expect(long_hold <= 5.0, "长句停留 %.2fs 超过上限 5.0" % long_hold)
+	ui.call("close")
+
+
+func _check_guidance_style(ui: Node) -> void:
+	var text := "高级宝箱里，有第一把稀土钥匙。[b]按 K。"
+	ui.call("show_message", text, "系统", 0.0, "guidance", {"guidance_highlight": true})
+	var rich := ui.get("_guidance_label") as RichTextLabel
+	var normal := ui.get("_text_label") as Label
+	_expect(rich != null and rich.visible and not normal.visible, "引导应启用富文字载体")
+	if rich != null:
+		_expect(rich.get_parsed_text() == text, "引导文字不得吞掉字面方括号或重复重叠词")
+		var bold := rich.get_theme_font("bold_font") as FontVariation
+		_expect(bold != null and bold.variation_embolden > 0.0 and bold != rich.get_theme_font("normal_font"), "引导必须有独立加粗字重")
+		_expect(rich.get_theme_constant("outline_size") == normal.get_theme_constant("outline_size"), "引导须继承原描边")
+	ui.call("advance")
+	_expect(int(ui.call("visible_char_count")) == text.length(), "引导快进只按原文字数全显")
+	ui.call("show_message", text, "系统", 0.0)
+	_expect(normal.visible and normal.text == text and not rich.visible, "无引导标记的对白应恢复原载体")
 	ui.call("close")
 
 

@@ -47,7 +47,9 @@ var _run_presentation_id := ""
 var _run_auto_presentation := false
 var _panel: PanelContainer
 var _speaker_label: Label
-var _text_label: RichTextLabel
+var _text_label: Label
+var _guidance_label: RichTextLabel
+var _guidance_active := false
 var _raw_text := ""
 var _hint_label: Label
 
@@ -408,24 +410,53 @@ func current_text() -> String:
 	return _raw_text
 
 
-func _highlight_guidance_text(text: String, enabled: bool) -> String:
-	var clean := text.strip_edges()
-	if clean.is_empty() or not enabled:
-		return clean
-	var guidance_terms := [
-		"打开你身上的手电，那里有危险！按F开启手电", "打开房间的灯光", "远征情报室的传送器还在运作",
-		"先去数据中心，打败守在那里的首领", "高级宝箱里，有第一把稀土钥匙", "钥匙接入 1/4 · 无限公馆已解锁",
-		"靠近后按 E 主动启动", "八秒同步就能返航", "第一把稀土钥匙", "四把钥匙", "四把都齐了",
-		"下一把，在无限公馆", "回到这里就好", "安全信标"
-	]
-	var highlighted := clean
-	for term in guidance_terms:
-		highlighted = highlighted.replace(term, "[color=#FF2D7E][b]%s[/b][/color]" % term)
-	return highlighted
+# Only narrative-tagged lines opt in; ordinary UI messages stay on the original Label.
+const GUIDANCE_COLOR := Color("#FF2D7E")
+const GUIDANCE_TERMS := [
+	"主人留下的礼物", "找到主人", "按F开启手电", "打开房间的灯光",
+	"被困在中心大楼", "四把钥匙", "四把都齐了", "远征情报室的传送器",
+	"你是机器人，能用", "先去数据中心，打败守在那里的首领", "远征情报室：选择数据中心",
+	"高级宝箱里，有第一把稀土钥匙", "第一把稀土钥匙", "钥匙接入 1/4 · 无限公馆已解锁", "下一把，在无限公馆",
+	"安全信标不会引来防守遭遇", "靠近后按 E 主动启动", "八秒同步就能返航",
+	"局内自动贩卖机", "只能用这局挣到的金币", "基地货币和这局金币是两本账", "本局买完就不会再刷新", "新一局里，货架可能会刷出更好的东西",
+	"命运凭据", "靠近按E", "不会自动花钱", "用本局金币买", "钱够可以多买，也能一张不买",
+	"退出就放弃没买的候选", "买下的继续生效", "星改当前这把枪，月改本局角色，日改世界",
+	"原枪的卡巢", "卡下那五个字", "刻印不可逆，也不能换", "看清作用和价格",
+	"不同卡牌、不同组合", "刻印跟着这把枪走", "保护好它，别随手丢了", "按 K", "查看枪械构筑",
+]
+
+
+func _write_guidance_text(text: String) -> bool:
+	_guidance_label.clear()
+	var marked := false
+	var cursor := 0
+	while cursor < text.length():
+		var first := text.length()
+		var match_text := ""
+		# Search the original text, not inserted markup; longest match wins at the same index.
+		for term: String in GUIDANCE_TERMS:
+			var index := text.find(term, cursor)
+			if index >= 0 and (index < first or (index == first and term.length() > match_text.length())):
+				first = index
+				match_text = term
+		if first > cursor:
+			_guidance_label.add_text(text.substr(cursor, first - cursor))
+		if match_text.is_empty():
+			break
+		_guidance_label.push_color(GUIDANCE_COLOR)
+		_guidance_label.push_bold()
+		_guidance_label.add_text(match_text)
+		_guidance_label.pop()
+		_guidance_label.pop()
+		marked = true
+		cursor = first + match_text.length()
+	return marked
 
 
 ## 已显示字符数 —— 供验收检查打字机进度（不是"节点存在"这类假绿判据）。
 func visible_char_count() -> int:
+	if _guidance_active:
+		return _guidance_label.visible_characters
 	return _text_label.visible_characters if _text_label != null else 0
 
 
@@ -462,10 +493,11 @@ func _present_current() -> void:
 	_speaker_label.text = str(line["speaker"])
 	_speaker_label.visible = not _speaker_label.text.is_empty()
 	_raw_text = str(line["text"])
-	var guidance_highlight := bool(line.get("guidance_highlight", false))
-	_text_label.bbcode_enabled = true
-	_text_label.bbcode_text = _highlight_guidance_text(_raw_text, guidance_highlight)
-	_text_label.visible_characters = 0
+	_guidance_active = bool(line.get("guidance_highlight", false)) and _write_guidance_text(_raw_text)
+	_text_label.visible = not _guidance_active
+	_guidance_label.visible = _guidance_active
+	_text_label.text = "" if _guidance_active else _raw_text
+	_set_visible_characters(0)
 	_elapsed = 0.0
 	_auto_left = 0.0
 	_typing = _raw_text.length() > 0
@@ -479,19 +511,26 @@ func _advance_typing(delta: float, line: Dictionary) -> void:
 	var per_second := float(line["chars_per_sec"])
 	var total := _raw_text.length()
 	if per_second <= 0.0:
-		_text_label.visible_characters = total
+		_set_visible_characters(total)
 	else:
 		_elapsed += delta
-		_text_label.visible_characters = mini(total, int(floor(_elapsed * per_second)))
-	if _text_label.visible_characters >= total:
+		_set_visible_characters(mini(total, int(floor(_elapsed * per_second))))
+	if visible_char_count() >= total:
 		_on_line_typed(line)
 
 
 func _reveal_all() -> void:
 	if not _typing:
 		return
-	_text_label.visible_characters = _text_label.text.length()
+	_set_visible_characters(_raw_text.length())
 	_on_line_typed(_current_line())
+
+
+func _set_visible_characters(amount: int) -> void:
+	if _guidance_active:
+		_guidance_label.visible_characters = amount
+	else:
+		_text_label.visible_characters = amount
 
 
 func _on_line_typed(line: Dictionary) -> void:
@@ -536,8 +575,11 @@ func _set_shown(shown: bool) -> void:
 	_panel.visible = shown
 	if not shown:
 		_text_label.text = ""
-		_raw_text = ""
 		_text_label.visible_characters = 0
+		_guidance_label.clear()
+		_guidance_label.hide()
+		_guidance_active = false
+		_raw_text = ""
 		_speaker_label.text = ""
 
 
@@ -583,15 +625,24 @@ func _build() -> void:
 	UIStyleFactory.apply_prism_label(_speaker_label, "label", 3, 15)
 	column.add_child(_speaker_label)
 
-	_text_label = RichTextLabel.new()
+	_text_label = UIStyleFactory.make_outline_label("", UIPalette.PRISM_TEXT)
 	_text_label.name = "Text"
-	_text_label.bbcode_enabled = true
-	_text_label.fit_content = false
-	_text_label.scroll_active = false
-	_text_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	UIStyleFactory.apply_prism_rich_text(_text_label, "value", 1, 19)
+	UIStyleFactory.apply_prism_label(_text_label, "value", 1, 19)
+	_text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_text_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	column.add_child(_text_label)
+
+	_guidance_label = RichTextLabel.new()
+	_guidance_label.name = "GuidanceText"
+	_guidance_label.fit_content = true
+	_guidance_label.scroll_active = false
+	_guidance_label.autowrap_mode = _text_label.autowrap_mode
+	_guidance_label.visible_characters_behavior = _text_label.visible_characters_behavior
+	_guidance_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_guidance_label.size_flags_vertical = _text_label.size_flags_vertical
+	UIStyleFactory.apply_prism_rich_text(_guidance_label, _text_label)
+	_guidance_label.hide()
+	column.add_child(_guidance_label)
 
 	_hint_label = UIStyleFactory.make_outline_label("[左键/空格/回车] 继续", UIPalette.PRISM_TEXT_FAINT)
 	_hint_label.name = "Hint"
