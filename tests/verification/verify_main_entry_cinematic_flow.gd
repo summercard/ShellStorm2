@@ -32,7 +32,13 @@ func _ready() -> void:
 	var entry := (load("res://scenes/ui/MainEntryScreen3D.tscn") as PackedScene).instantiate() as MainEntryScreen3D
 	entry.auto_present_when_player_found = false
 	tower.add_child(entry)
+	# 接入塔楼真实的入口覆盖层槽位，验证 Dungeon3D 的统一锁裁决不会
+	# 在下一帧把 MainEntryScreen3D.present() 建立的锁覆盖掉。
+	tower._main_entry_screen = entry
 	_expect(entry.present(player), "present", true)
+	await get_tree().process_frame
+	_expect(player.input_locked, "main entry keeps player input locked after sync", true)
+	_expect(player.get_state_machine_state() == "locked", "main entry keeps locked player state", true)
 	await get_tree().create_timer(2.0).timeout
 	var snap := entry.get_entry_snapshot()
 	print("ENTRY_SNAPSHOT=", JSON.stringify(snap))

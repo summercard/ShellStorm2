@@ -2,7 +2,42 @@
 
 [ext_resource type="Script" path="res://src/vfx/VfxGooHit3D.gd" id="1_goo_hit"]
 
+[ext_resource type="Texture2D" path="res://assets/art/vfx/textures/projectile_enchant_hits.png" id="2_atlas"]
+
 [node name="VfxGooHit3D" type="Node3D"]
 script = ExtResource("1_goo_hit")
 metadata/asset_id = "VFX-GOO-HIT-3D"
-metadata/asset_version = "v002"
+metadata/asset_version = "v003"
+
+[node name="EnchantImpact" type="Sprite3D" parent="."]
+visible = false
+cast_shadow = 0
+billboard = 1
+shaded = false
+double_sided = false
+texture_filter = 1
+texture = ExtResource("2_atlas")
+hframes = 6
+vframes = 14
+
+[node name="SecondEnchantImpact" type="Sprite3D" parent="."]
+visible = false
+cast_shadow = 0
+billboard = 1
+shaded = false
+double_sided = false
+texture_filter = 1
+texture = ExtResource("2_atlas")
+hframes = 6
+vframes = 14
+
+[node name="ModuleImpact" type="Sprite3D" parent="."]
+visible = false
+cast_shadow = 0
+billboard = 1
+shaded = false
+double_sided = false
+texture_filter = 1
+texture = ExtResource("2_atlas")
+hframes = 6
+vframes = 14

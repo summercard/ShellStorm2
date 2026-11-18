@@ -462,6 +462,7 @@ func commit_narrative_completion(narrative_id: String, result: String) -> bool:
 	_ensure_data()
 	if data == null:
 		return false
+	var original_data := data
 	var previous := data.narrative_history.duplicate(true)
 	var record := get_narrative_history(narrative_id)
 	var now := int(Time.get_unix_time_from_system())
@@ -472,7 +473,9 @@ func commit_narrative_completion(narrative_id: String, result: String) -> bool:
 	data.narrative_history[narrative_id] = record
 	if save_base("narrative_completed:%s" % narrative_id):
 		return true
-	data.narrative_history = previous
+	# stale revision 会重载并替换 data；不能把事务前的旧历史写回权威对象。
+	if data == original_data:
+		data.narrative_history = previous
 	return false
 
 

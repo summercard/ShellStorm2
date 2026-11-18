@@ -26,6 +26,7 @@
 - 速度由外推决定的状态直接赋 `velocity.x/z`，不要把当前速度当 steer 目标；朝向用 `move_and_slide()` 后的位置差。
 - 动画切段要保留归一化相位并使用 blend；`MANUAL` 下 `play()+seek()` 成对使用，不能每帧重播。
 - 材质变体开关只在建材质时设置；灭/淡出优先用能量、颜色、实例透明度。材质缓存需长命持有。
+- 往左上状态块加读数走 `Dungeon3D._hud_stat_column`（`PlayerStatColumn`，血条→电芯→…），由容器落位；别在 `$HUD` 下另起绝对锚框的引导卡（2026-11-18 已按业主要求撤除 `TowerCurrentInfoHUD`）。`TowerDescent3D._journey_objective()` 是目标规则真源但不再渲染，两个门禁仍直接调用。
 
 ## 已确认结论
 - 收租人战败事务（2026-11-08）正式专项已通过；旧性能日志中的 UID 警告不代表当前专项失败。

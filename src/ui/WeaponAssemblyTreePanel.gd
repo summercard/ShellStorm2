@@ -18,6 +18,10 @@ var _board: Control
 var _header: Label
 var _hint: Label
 var _close_button: Button
+var _prev_button: Button
+var _next_button: Button
+var _preview_slot := -1
+var _page_tween: Tween
 var _animation: Tween
 var _previous_focus: WeakRef
 
@@ -55,6 +59,14 @@ func _build_panel() -> void:
 	UIStyleFactory.apply_prism_button(_close_button, "ghost", 0, 15, 1, "none")
 	_close_button.pressed.connect(hide_panel)
 	add_child(_close_button)
+	_prev_button = _make_page_button("‹")
+	_prev_button.name = "PreviewPreviousWeapon"
+	_prev_button.pressed.connect(func() -> void: _shift_preview(-1))
+	add_child(_prev_button)
+	_next_button = _make_page_button("›")
+	_next_button.name = "PreviewNextWeapon"
+	_next_button.pressed.connect(func() -> void: _shift_preview(1))
+	add_child(_next_button)
 	var scene := load(BOARD_PATH) as PackedScene
 	_board = scene.instantiate() as Control
 	_board.name = "WeaponBuildBoard"
@@ -71,6 +83,14 @@ func _build_panel() -> void:
 	_fate_track_label.hide()
 	add_child(_fate_track_label)
 
+func _make_page_button(symbol: String) -> Button:
+	var button := Button.new()
+	button.text = symbol
+	button.focus_mode = Control.FOCUS_ALL
+	button.add_theme_font_size_override("font_size", 28)
+	UIStyleFactory.apply_prism_button(button, "ghost", 0, 26, 1, "none")
+	return button
+
 func _layout() -> void:
 	if _board == null:
 		return
@@ -78,6 +98,10 @@ func _layout() -> void:
 	_header.size = Vector2(maxf(1, size.x - 130), 32)
 	_close_button.position = Vector2(maxf(0, size.x - 94), 7)
 	_close_button.size = Vector2(76, 32)
+	_prev_button.position = Vector2(8, size.y * 0.50 - 24)
+	_prev_button.size = Vector2(44, 48)
+	_next_button.position = Vector2(maxf(0, size.x - 52), size.y * 0.50 - 24)
+	_next_button.size = Vector2(44, 48)
 	_hint.position = Vector2(18, size.y - 27)
 	_hint.size = Vector2(maxf(1, size.x - 36), 22)
 	_board.position = Vector2(0, 46)
@@ -156,6 +180,42 @@ func get_build_board() -> Control:
 func refresh_from_owner() -> void:
 	if _board != null:
 		_board.call("refresh_from_owner")
+	_update_preview_buttons()
+
+func _weapon_item_for_slot(slot_index: int) -> Dictionary:
+	if not is_instance_valid(_owner) or not _owner.has_method("get_equipped_weapon_item_for_slot"):
+		return {}
+	return _owner.call("get_equipped_weapon_item_for_slot", slot_index) as Dictionary
+
+func _update_preview_buttons() -> void:
+	var has_owner := is_instance_valid(_owner)
+	var alternate_slot := 1 - (_preview_slot if _preview_slot >= 0 else (int(_owner.call("get_active_weapon_slot")) if has_owner and _owner.has_method("get_active_weapon_slot") else 0))
+	var can_switch := has_owner and not _weapon_item_for_slot(alternate_slot).is_empty()
+	_prev_button.disabled = not can_switch
+	_next_button.disabled = not can_switch
+
+func _shift_preview(direction: int) -> void:
+	if not is_instance_valid(_owner):
+		return
+	var current := _preview_slot
+	if current < 0:
+		current = int(_owner.call("get_active_weapon_slot")) if _owner.has_method("get_active_weapon_slot") else 0
+	var target := 1 - current
+	var item := _weapon_item_for_slot(target)
+	if item.is_empty():
+		return
+	var from_x := -size.x if direction < 0 else size.x
+	# 不复制运行态节点：页面滑动只使用同一个只读 Board，事务与焦点不分叉。
+	var old_position := _board.position
+	_preview_slot = target
+	_board.call("set_preview_item", item, target)
+	_board.position = old_position + Vector2(-from_x, 0)
+	if _page_tween != null and _page_tween.is_valid():
+		_page_tween.kill()
+	_page_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_page_tween.set_parallel(true).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	_page_tween.tween_property(_board, "position:x", old_position.x, 0.26)
+	_page_tween.tween_callback(func() -> void: _update_preview_buttons())
 
 func _on_presentation_changed(snapshot: Dictionary) -> void:
 	_weapon_tree = _board.get("_weapon_tree") as WeaponAssemblyTree

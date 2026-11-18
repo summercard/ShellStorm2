@@ -1,76 +1,114 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene format=3 uid="uid://crw7xwj7jv7lw"]
 
-[ext_resource type="Script" path="res://src/vfx/projectile_enchant/VfxProjectileEnchantHoming3D.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/art/vfx/textures/projectile_enchant_homing.png" id="2_texture"]
+[ext_resource type="Script" uid="uid://cws5i64mknn7k" path="res://src/vfx/projectile_enchant/VfxProjectileEnchantHoming3D.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://ul0yuqetdxpy" path="res://assets/art/vfx/textures/projectile_enchant_homing.png" id="2_texture"]
+
+[sub_resource type="StandardMaterial3D" id="Bullet_core_material"]
+resource_local_to_scene = true
+shading_mode = 0
+albedo_color = Color(0.17678332, 0.4417043, 0.35349277, 1)
+
+[sub_resource type="CylinderMesh" id="Bullet_core_mesh"]
+top_radius = 0.0427
+bottom_radius = 0.00488
+height = 0.35475
+radial_segments = 5
+rings = 0
+
+[sub_resource type="StandardMaterial3D" id="Bullet_shell_material"]
+resource_local_to_scene = true
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.36, 1, 0.78, 0.82)
+
+[sub_resource type="CylinderMesh" id="Bullet_shell_mesh"]
+top_radius = 0.07
+bottom_radius = 0.008
+height = 0.275
+radial_segments = 5
+rings = 0
 
 [sub_resource type="Gradient" id="Gradient_alpha"]
 offsets = PackedFloat32Array(0, 0.12, 0.65, 1)
-colors = PackedColorArray(0.36, 1, 0.78, 0.62, 0.36, 1, 0.78, 0.62, 0.36, 1, 0.78, 0.403, 0.36, 1, 0.78, 0)
+colors = PackedColorArray(0.36, 1, 0.78, 0.68, 0.36, 1, 0.78, 0.68, 0.36, 1, 0.78, 0.34, 0.36, 1, 0.78, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture_alpha"]
 gradient = SubResource("Gradient_alpha")
 
 [sub_resource type="Curve" id="Curve_scale"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
+_data = [Vector2(0, 1), 0.0, 0.0, 1, 1, Vector2(0.5, 0.65), 0.0, 0.0, 1, 1, Vector2(1, 0.06), 0.0, 0.0, 1, 1]
+point_count = 3
 
 [sub_resource type="CurveTexture" id="CurveTexture_scale"]
 curve = SubResource("Curve_scale")
 
 [sub_resource type="ParticleProcessMaterial" id="Particle_material"]
 resource_local_to_scene = true
-particle_flag_rotate_y = false
+lifetime_randomness = 0.15
 emission_shape = 3
-emission_box_extents = Vector3(0.075, 0.075, 0.12)
+emission_box_extents = Vector3(0.07510, 0.07510, 0.17747)
+angle_max = 360.0
 direction = Vector3(0, 0, 1)
-spread = 16.0
+spread = 18.0
+initial_velocity_min = 0.4
+initial_velocity_max = 0.8
+angular_velocity_min = -120.0
+angular_velocity_max = 120.0
 gravity = Vector3(0, 0, 0)
-initial_velocity_min = 0.18
-initial_velocity_max = 0.36
-angular_velocity_min = -65.0
-angular_velocity_max = 65.0
-scale_min = 1.1
+linear_accel_min = -0.2
+linear_accel_max = 0.12
+damping_min = 0.1
+damping_max = 0.3
+scale_min = 0.8
 scale_max = 1.25
 scale_curve = SubResource("CurveTexture_scale")
 color_ramp = SubResource("GradientTexture_alpha")
-collision_mode = 0
 
 [sub_resource type="StandardMaterial3D" id="Quad_material"]
 transparency = 1
+cull_mode = 2
 shading_mode = 0
 vertex_color_use_as_albedo = true
+albedo_color = Color(0.20392157, 0.93333334, 0.4627451, 1)
 albedo_texture = ExtResource("2_texture")
+texture_filter = 2
 billboard_mode = 3
 billboard_keep_scale = true
-cull_mode = 2
-texture_filter = 2
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="Quad_mesh"]
 material = SubResource("Quad_material")
 size = Vector2(0.3, 0.4)
 
-[node name="VfxProjectileEnchantHoming3D" type="Node3D"]
-visible = false
+[node name="VfxProjectileEnchantHoming3D" type="Node3D" unique_id=1287460031]
 script = ExtResource("1_script")
 lifetime = 0.0
 metadata/asset_id = "VFX-PROJECTILE-ENCHANT-HOMING-3D"
-metadata/asset_version = "v002"
+metadata/asset_version = "v004"
 metadata/lifecycle_owner = "Projectile3D"
+metadata/body_visual_contract = "BulletRoot/Core+Shell; root origin; local -Z forward; low-poly CylinderMesh 3-6 radial segments; resource_local_to_scene materials; enchantment tint drives shell/core"
 
-[node name="Particles" type="GPUParticles3D" parent="."]
-visible = false
-position = Vector3(0, 0, 0)
+[node name="BulletRoot" type="Node3D" parent="." unique_id=133255071]
+
+[node name="Core" type="MeshInstance3D" parent="BulletRoot" unique_id=1884246986]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+material_override = SubResource("Bullet_core_material")
 cast_shadow = 0
-emitting = false
-amount = 24
-lifetime = 0.25
-preprocess = 0.0
-local_coords = true
-speed_scale = 0.0
+mesh = SubResource("Bullet_core_mesh")
+
+[node name="Shell" type="MeshInstance3D" parent="BulletRoot" unique_id=1942444354]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+material_override = SubResource("Bullet_shell_material")
+cast_shadow = 0
+mesh = SubResource("Bullet_shell_mesh")
+
+[node name="Particles" type="GPUParticles3D" parent="." unique_id=1814620624]
+cast_shadow = 0
+amount = 7
+lifetime = 0.34
 visibility_aabb = AABB(-1, -1, -1, 2, 2, 3)
-use_fixed_seed = true
-seed = 160116
+local_coords = true
 process_material = SubResource("Particle_material")
-draw_passes = 1
 draw_pass_1 = SubResource("Quad_mesh")
-trail_enabled = false

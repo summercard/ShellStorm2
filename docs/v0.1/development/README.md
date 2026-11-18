@@ -1,4 +1,18 @@
-- [仅远征01默认镜头拉远五次](2026-11-17_expedition01_camera_distance.md)：按旧默认单引号五次固化+1m视线距离，局部约(0,11.128718,5.414396)，其它关不变；设计与场景账本H2/v0.1.94/单一专表摘要同步。真实Owner矩阵及门禁结果见记录，整关partial不提升。
+- [界面排版与模态收放](2026-11-18_ui_layout_revision.md)：K页/购卡根连线、主副手只读预览滑动、装备页排版、四角HUD模态收放；Godot无头解析exit0，专项真实渲染待执行。`r`n`r`n- [七种子弹附魔与 21 种双附魔的命中反馈](2026-11-18_enchant_hit_feedback.md) · WEAPON-COMBAT / FATE-RULES / VFX-POOL。记录轮廓、双属性共存、池化与双分辨率打靶。
+
+- [击败Boss后钥匙返航段落连续录制与安全信标落点修复](2026-11-18_boss_key_return_recording.md)：按业主指正录的是**稀土钥匙返航段落**（击败首领→首领箱→领钥匙→方式B返航通讯→安全信标落地→主动8秒同步），不是3.3。capture 新增 `032K` 章节码复用正式链；同时修掉真实缺陷：首领箱落在入口高台时，`resolve_narrative_floor_positions` 对玩家开箱点整批拒绝，信标永久重试，现改为依次退回首领战场锚点/房间中心。Forward+ 30 checks／`failures=[]`，1280×720、30FPS、714帧、23.8秒 H.264 视频与9组关键帧已落工程外录制目录。
+
+- [远征01 3.2怒吼震屏与台词同帧](2026-11-18_boss032_shake_sync.md)：业主指出震屏迟了。`camera.shake` 由 68.283 移到 65.684，与「啊啊啊啊！」`ui.subtitle` 同一时刻起震，数组顺序保证字幕先派发；参数 0.65s／0.12 与怒吼特写 63.683、激活 68.936、`duration` 69.183 均不变。Forward+ 70 checks／`failures=[]`，新增 `t=65.75` 采样帧确认震屏与出字同帧。
+
+- [远征01 3.2末句后还镜回角色视角并停1.5秒](2026-11-18_boss032_camera_return_pause.md)：按业主指令把原 57.497 的 `central_screen_pressure` 中央屏镜头删掉，改为 56.68 `camera.restore`（1秒）还回角色视角，还镜完成后再停 1.5 秒，59.18 主角才说「你一句我也没听懂…」；后续 cue 整体后移 1.683 秒，`duration` 67.5→69.183、激活 67.253→68.936。`camera.shot` 由 9 组降为 8 组，台词/激活/方式A 均未改。
+
+- [远征01 Boss房去掉所有随从，只留Boss本体](2026-11-18_expedition01_boss_room_wave_trim.md)：按业主两次指令，先删原第二波（`box_room_spread`＋`box_corner_ambush`）与第三波（`box_wall_arc`），再删首波盒子 `box_boss_arena` 的 `spawn_overrides` 里 SM／SR／召唤者三条 ⇒ 进房只有 1 只显示器 Boss，`spawn_placements` 4→1、`encounter.stages` 3→1、`spawn_overrides` 4→1。`boss_reinforcement_plan`（激活后双侧增援）与共享盒定义保持不变。设计源与运行时投影逐字节同步、manifest 重算，`verify_expedition_monitor_boss_flow` 断言改为「Boss 阵亡后场上无 Boss 以外活物 + Boss 阵亡即清房」。未跑 Godot；实到数量、清房延迟与开门时机未验，整关 partial 不提升。
+
+- [塔楼左侧引导卡撤除、只留基地金币并挪到电芯下方](2026-11-18_tower_guide_card_removal.md)：`TowerCurrentInfoHUD` 四行（楼层/目标/按键/金币）整块撤除，只留 `TowerBaseCurrencyHUD` 单行基地金币，挂 `PlayerStatusBlock/PlayerStatColumn`，由容器排在电芯正下方；`Dungeon3D` 仅命名并暴露 `stat_vbox`，不改锚框。`_journey_objective()` 保留为规则真源但不再渲染，`_expedition_objective()` 删除；楼层读数仍由右上 `_hud_floor_label` 承担。headless 结构探针全真（撤除/存在/在电芯下方/无 ProgressBar），解耦与资产命名 exit0，文档新增断链 0；完整真渲染用例与手动目视未执行，partial 不提升。
+
+- [2026-11-18叙事A/B、安全信标与局内商人教学文档收口](2026-11-18_narrative_ab_safe_extraction.md)：仅更新授权设计/施工/索引/开发记录文档；新增 `nar_tutorial_run_vending_01`、`nar_main_032_key_return_call`，3.2九镜/`room-frame`与安全信标主动返航规则。旧8秒自动返航、旧17份/旧A+B事实已按当前代码核对更新；vending最终通过与安全完整链最终结果未执行/待回填，旧前19项文档债单列，不提升整体状态。
+
+- [仅远征01默认镜头逐步拉远（累计13次/2.60m）](2026-11-17_expedition01_camera_distance.md)：11-17按旧默认单引号五次+1.00m，11-18业主再追加8次+1.60m，局部约(0,12.514413,6.214302)，其它关不变；设计与场景账本H2/v0.1.96/单一专表摘要同步。真实Owner矩阵及门禁结果见记录，整关partial不提升。
 
 - [剧情方式A/B定义与旧主线混用核查](2026-11-17_narrative_presentation_ab_audit.md)：A现场演绎、B双侧立绘，底栏共用不等于B；原主线14份中11份共39条文字cue直接请求立绘。只更新设计/技术说明与核查记录，不改代码、JSON、资产、存档，不决定回退范围；真实渲染未验，整体partial不提升。
 

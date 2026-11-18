@@ -8,7 +8,7 @@ FeatureID：BOSS-STAGES / ENEMY-AI / ASSET-PIPELINE；游戏版本0.1.0；设计
 
 ### 远征01正式投放
 
-`floor_00.json` 的 `boss` 房间通过 `boss_content_id=boss_monitor002` 指派身份。沿用 `spawn_placements` 与 `encounter.stages` 三波：首波 `box_boss_arena` 的 boss 条目经 MonsterInjector 生成一个显示器 Boss，随从按盒子延迟入场；后两波沿用原房间编成，不额外手工生成 Boss。身份、数值和技能仍取唯一内容目录。未进入不提前激活，死亡走 Enemy3D.killed 及房间存活账；Boss死亡不跳过后续波次，全部清完才结算清房奖励并允许按既有门策略离开。重进已清房不得重复刷新或重复发奖。
+`floor_00.json` 的 `boss` 房间通过 `boss_content_id=boss_monitor002` 指派身份。现行 `spawn_placements` 只有 1 个实例、`encounter.stages` 只有 1 波（2026-11-18 起）：`box_boss_arena` 的 `spawn_overrides` 只保留 boss 一条，经 MonsterInjector 生成 1 只显示器 Boss；原随从（强化小僵尸／强化远程／召唤者）、原第二波（`box_room_spread` ＋ `box_corner_ambush`）与第三波（`box_wall_arc`）已全部移除。身份、数值和技能仍取唯一内容目录。未进入不提前激活，死亡走 Enemy3D.killed 及房间存活账；本房摆位只有 Boss，Boss 死亡即满足清房条件、结算一次清房奖励，并按既有门策略离开；Boss 激活后 `boss_reinforcement_plan` 的两侧增援不受影响。重进已清房不得重复刷新或重复发奖。
 
 远征为单层行动，清 Boss 房不增加塔楼下行权限，也不生成 BOSS_KILL 信标；终点继续使用 STANDARD 撤离。独立验收入口 `verify_expedition_monitor_boss_flow` 使用正式远征场景、进房生命周期、触发盒、死亡信号及自动续波；不得以直接实例化 Boss 替代投放验收。
 

@@ -49,7 +49,7 @@ func _asset_id() -> String:
 
 ## v002：造型语言由「12 枚绿方块爆开」换成「5 颗方块 + 2 根长条火星（绿色）」
 func _asset_version() -> String:
-	return "v002"
+	return "v003"
 
 
 func _cube_base_color() -> Color:

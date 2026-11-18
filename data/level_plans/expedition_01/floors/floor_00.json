@@ -1876,43 +1876,7 @@
               "type": "boss",
               "count": 1,
               "delay_sec": 0.0
-            },
-            {
-              "type": "melee_chaser_strong",
-              "count": 1,
-              "delay_sec": 1.5
-            },
-            {
-              "type": "ranged_caster_strong",
-              "count": 1,
-              "delay_sec": 1.5
-            },
-            {
-              "type": "summoner",
-              "count": 1,
-              "delay_sec": 3.0
             }
-          ]
-        },
-        {
-          "box": "box_room_spread",
-          "center_m": [
-            -7.5,
-            -15.0
-          ]
-        },
-        {
-          "box": "box_corner_ambush",
-          "center_m": [
-            7.5,
-            -22.5
-          ]
-        },
-        {
-          "box": "box_wall_arc",
-          "center_m": [
-            0.0,
-            -32.5
           ]
         }
       ],
@@ -1921,17 +1885,6 @@
           {
             "boxes": [
               0
-            ]
-          },
-          {
-            "boxes": [
-              1,
-              2
-            ]
-          },
-          {
-            "boxes": [
-              3
             ]
           }
         ]

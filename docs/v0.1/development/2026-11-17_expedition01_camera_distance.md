@@ -64,3 +64,49 @@ C1 = F + normalize(V) × (length(V) + D)
 - 同目录`before_structure.log / after_structure.log / before_split.log / after_split.log`：旧债反向对照。
 - `ShellStorm2-work/verification/2026-11-17_2349_expedition01_camera/`：相机隔离工程、逻辑/渲染结果与完整日志。
 - 生产代码`src/world3d/TowerDescent3D.gd`；验收脚本`tests/verification/verify_debug_camera_hotkeys.gd`。
+
+## 5. 2026-11-18 追加8次（当前生效值）
+
+业主原话：「远征01，改成再往上调整8下快捷键’的位置」。理解为**在当前基础上**继续按 `'` 八次，不是从原默认重算八次。
+
+```text
+11-17 已固化 5 次 = 1.00m
+11-18 再追加 8 次 = 1.60m
+累计 13 次 = 2.60m（常量 CAMERA_EXPEDITION_01_DISTANCE_OFFSET_M: 1.0 → 2.6）
+
+R  = 11.330239499 + 2.60 = 13.930239499
+C1 = F + U × R
+   = (0, 12.514413, 6.214302)
+```
+
+| 量 | 11-17（5次） | 11-18（13次） |
+|---|---:|---:|
+| 固定视线偏移 | 1.00m | **2.60m** |
+| 相对角色高度 Y | 11.128718 | **12.514413** |
+| 水平后移 Z | 5.414396 | **6.214302** |
+| 到焦点距离 | 12.330239 | **13.930239** |
+| 01 收镜进入阈值 | 5.414396 | **6.214302** |
+| 俯视角 / FOV / 焦点 | 60.003882° / 65° / (0,0.45,-0.75) | 不变 |
+
+改动边界与 11-17 完全一致：只改 `CAMERA_EXPEDITION_01_DISTANCE_OFFSET_M` 一个常量；避障基准、收镜阈值、首帧初始化都经 `_camera_default_local_position()` 自动跟随；公共常量、`Player3D`、各关场景文件与远征02/03/99、塔楼/基地零改动。账本再追加 `H2` 一句与 `v0.1.96` 一行（第126行，因期间其它会话占用 v0.1.95），基线只刷新「关卡名称对照」摘要。
+
+验收同口径：真实 Owner 矩阵 + 热键 + 墙/楼板夹具，headless 与真实 OpenGL 各跑一遍；旧阈值(5.414396)与新阈值(6.214302)之间的墙内表面取 5.80m，窄顶盖取新 Z=6.214302、下表面 11.80m（高于 11-17 相机 Y），确保只有本次阈值/基准真正生效才会通过。
+
+### 5.1 2026-11-18 验收
+
+| 验证 | 结果 |
+|---|---|
+| 相机专项 headless（重建隔离工程后） | 退出0，64项Owner断言通过，`CAMERA_OWNER_SCOPE_OK`/`DEBUG_CAMERA_HOTKEYS_OK`，日志门禁0，无SCRIPT ERROR/ERROR |
+| 相机专项真实 OpenGL 3.3 / RTX 4060 Ti | 退出0，64项通过，日志门禁0 |
+| 账本 structure | 改前/改后均退出1，完整stdout/stderr逐字一致，新增0 |
+| 无损 split | 改前/改后均退出1，完整stdout/stderr逐字一致，新增0 |
+| 场景账本 | 仅 `关卡名称对照!H2` 与 `域变更日志!A126:G126`（v0.1.96）变化；资产1471条、公式、DV、合并与筛选未动 |
+| 基线 | 仅 `sheet_digests.关卡名称对照` 摘要由 `76a7cf4f…` 更新为 `6bd30ace…` |
+| 关卡解耦 | 退出0，violations=0 |
+| 补丁格式 | `git diff --check` 退出0 |
+
+过程事故与处置：
+
+1. 首次运行报 `Could not resolve class "TowerDescent3D"`，根因是复用的隔离工程类缓存与当前源码不同步（`.godot/global_script_class_cache.cfg` 停留在 11-17 23:06）。已把旧副本改名为 `project_stale_20261118` 并重建隔离工程，未改动主工程缓存。
+2. 重建后首次运行 180s 超时，是冷副本首次导入所致；把 runner 超时从 180s 放宽到 600s 后 86s 通过。超时放宽只作用于工程外 runner，不改工程内验证契约。
+3. `docs/v0.1/development/README.md`、`CHANGELOG.md` 多次写入报 `Errno 22` / “用户映射区域打开的文件”，确认有其他会话正占用这两个文件。处置：写临时文件后 `File.Replace`，失败则改名旧文件再写新内容（留下 `.swapbak`），写入后校验 UTF-8 无替换字符、关键数值完整。**这两个文件仍可能被并发会话再次覆盖，交付后应由主线程复核一次。**

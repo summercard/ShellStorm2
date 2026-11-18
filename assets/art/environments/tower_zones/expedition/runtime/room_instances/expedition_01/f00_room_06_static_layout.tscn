@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/cable_coil/cable_coil_root_top3d.tscn" id="1_vf3xf"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_deck_40m/ceiling_deck_40m_root_top3d.tscn" id="2_pix2k"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_deck_10m/ceiling_deck_10m_root_top3d.tscn" id="3_v2j07"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/repair_island/repair_island_root_top3d.tscn" id="9_pgw6g"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/corner_guard/corner_guard_root_top3d.tscn" id="10_aixpn"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d.tscn" id="11_qvqff"]
@@ -67,33 +66,8 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -8.9
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CABLE_COIL"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_-1" parent="." unique_id=1586364819 instance=ExtResource("2_pix2k")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.5, 11.38, -2.9812202e-08)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
-metadata/authored_slot_role = "room_type_component"
-
 [node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_-2" parent="." unique_id=1978805913 instance=ExtResource("2_pix2k")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.5, 11.38, -8.9436604e-08)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_-3" parent="." unique_id=517419581 instance=ExtResource("3_v2j07")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 12.5, 11.38, -1.4906101e-07)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_10M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_0" parent="." unique_id=1476035341 instance=ExtResource("2_pix2k")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5, 11.38, 2.9812202e-08)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_1" parent="." unique_id=1349957145 instance=ExtResource("2_pix2k")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.5, 11.38, 8.9436604e-08)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_2" parent="." unique_id=254882472 instance=ExtResource("2_pix2k")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.5, 11.38, 1.4906101e-07)
+transform = Transform3D(-4.3711374e-08, 0, 8.422764, 0, 1, 0, -0.9999997, 0, -3.681707e-07, -1.0166388, 16.93142, -8.9436604e-08)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
 metadata/authored_slot_role = "room_type_component"
 

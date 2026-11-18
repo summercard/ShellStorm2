@@ -5,6 +5,7 @@
   "trigger": { "kind": "manual", "once": "run" },
   "duration": 0.4,
   "presentation": {
+    "guidance_highlight": true,
     "dialogue": {
       "mode": "B",
       "participants": [

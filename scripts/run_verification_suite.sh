@@ -534,6 +534,11 @@ manual_scenes=(
   verify_fate_tutorial_dialogue
   # 贩卖机剧情教学仅经 run_narrative_presentation_qa.py 隔离运行，full/aggregate full 排除。
   verify_run_vending_tutorial
+  # safe仅wrapper/GLB/真实0.6秒落下/主动8秒/普通能力单元，不代签主线播放与返航。
+  # 仅受控runner --scene tests/verification/verify_story_safe_beacon.tscn；
+  # Autoload前隔离APPDATA/custom_user_dir，NARRATIVE_PRESENTATION_QA_ISOLATED=1。
+  # runner已解析safe REPORT；单元通过不代表正式Tower集成链通过。
+  verify_story_safe_beacon
   # 仅经 run_weapon_hologram_qa.py 在Autoload前隔离；分别要求
   # WEAPON_HOLOGRAM_VERIFY_ISOLATED=1 / PROJECTILE_ENCHANT_VERIFY_ISOLATED=1。
   verify_weapon_hologram_ui
@@ -575,6 +580,8 @@ renderer_scenes=(
   verify_fate_tutorial_dialogue
   # 贩卖机教学有真实模型渲染要求，专用runner负责逻辑/Forward+隔离，禁止full裸扫。
   verify_run_vending_tutorial
+  # safe需要真实renderer与专用启动隔离；full/aggregate full目录扫描均排除，归属仅manual。
+  verify_story_safe_beacon
   # 专用全息/附魔runner负责真实渲染与隔离，禁止full/aggregate full裸扫。
   verify_weapon_hologram_ui
   verify_projectile_enchant_visuals

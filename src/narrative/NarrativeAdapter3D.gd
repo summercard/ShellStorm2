@@ -90,8 +90,10 @@ var _expedition_entry_feedback_suspended := false
 ## 收口时据此判断「底栏现在这条还是不是我摆的」⇒ 是才关，不是就不动（见 `_restore_dialogue`）。
 var _narrative_dialogue_run := ""
 var _dialogue_presentation_id := ""
+var _dialogue_guidance_highlight := false
 var _dialogue_presentation_seq := 0
 var _dialogue_narrative_id := ""
+var _dialogue_requires_completed := false
 var _dialogue_wait_run := ""
 var _dialogue_wait_outcome := ""
 var _dialogue_requesting := false
@@ -115,6 +117,8 @@ func bind(tree: SceneTree) -> void:
 
 func begin_dialogue_presentation(narrative_id: String, config: Dictionary = {}) -> bool:
 	_dialogue_narrative_id = narrative_id
+	_dialogue_requires_completed = bool(config.get("require_completed_dialogue", false))
+	_dialogue_guidance_highlight = bool(config.get("guidance_highlight", false))
 	_dialogue_wait_run = ""
 	_dialogue_wait_outcome = ""
 	_dialogue_presentation_seq += 1
@@ -143,6 +147,8 @@ func end_dialogue_presentation(immediate := false) -> void:
 	var session := _dialogue_presentation_id
 	_dialogue_presentation_id = ""
 	_dialogue_narrative_id = ""
+	_dialogue_requires_completed = false
+	_dialogue_guidance_highlight = false
 	DialogueUI.end_presentation(session, immediate)
 
 
@@ -1007,11 +1013,10 @@ func _apply_camera_pose() -> void:
 		var snapshot: Dictionary = _expedition_entry_presentation.get_snapshot()
 		var target := player.global_position + Vector3.UP * (float(snapshot["world_min"]) + float(snapshot["world_max"]) - player.global_position.y * 2.0) * 0.5
 		desired = desired.looking_at(target, Vector3.UP)
-	elif _camera_pivot_mode != "player":
-		# 显式脱开玩家的旧 camera.focus/pan 仍复用原轨道位置，额外明确取景目标，
-		# 保证 pivot=last_spawn/room_center 等构图确实指向该枢轴，而不依赖接管前 basis。
-		desired = desired.looking_at(center, Vector3.UP)
-	_camera.global_transform = _constrain_camera_pose(desired, center)
+	var constrained := _constrain_camera_pose(desired, center)
+	if _camera_pivot_mode != "player":
+		constrained = constrained.looking_at(center, Vector3.UP)
+	_camera.global_transform = constrained
 
 
 func _constrain_camera_pose(desired: Transform3D, center: Vector3) -> Transform3D:
@@ -1213,6 +1218,7 @@ func _actor_say(params: Dictionary) -> Dictionary:
 	var metadata := params.duplicate(true)
 	if not _dialogue_presentation_id.is_empty():
 		metadata["presentation_id"] = _dialogue_presentation_id
+	metadata["guidance_highlight"] = _dialogue_guidance_highlight
 	var run_id := _say_dialogue_on_actor(actor, who, text, hold, metadata)
 	if not _accept_dialogue_run(run_id):
 		return _failed("actor.say：演员『%s』拒绝脚本台词或底栏未接管。" % who)
@@ -1542,8 +1548,9 @@ static func is_fate_tutorial(narrative_id: String) -> bool:
 
 
 func can_commit_narrative(narrative_id: String, reason: String) -> bool:
-	if is_fate_tutorial(narrative_id):
-		return narrative_id == _dialogue_narrative_id and reason in ["duration", "flow.end"] and dialogue_wait_state() == "completed"
+	if is_fate_tutorial(narrative_id) or (narrative_id == _dialogue_narrative_id and _dialogue_requires_completed):
+		if narrative_id != _dialogue_narrative_id or reason not in ["duration", "flow.end"] or dialogue_wait_state() != "completed":
+			return false
 	if not narrative_id.begins_with("nar_main_"):
 		return true
 	var controller := _main_story_controller()
@@ -1657,10 +1664,12 @@ func _ui_instruction(action: String, params: Dictionary) -> Dictionary:
 			if text.strip_edges().is_empty():
 				return _failed("ui.subtitle 缺少 text。")
 			_dialogue_requesting = true
+			var subtitle_metadata := params.duplicate(true)
+			subtitle_metadata["guidance_highlight"] = _dialogue_guidance_highlight
 			var run_id := DialogueUI.show_message(
 				text,
 				str(params.get("speaker", DialogueUI.SPEAKER_SYSTEM)),
-				float(params.get("auto", 3.0)), "", params
+				float(params.get("auto", 3.0)), "", subtitle_metadata
 			)
 			if not _accept_dialogue_run(run_id):
 				return _failed("ui.subtitle：底栏拒绝或被同步替换。")
@@ -1674,7 +1683,13 @@ func _ui_instruction(action: String, params: Dictionary) -> Dictionary:
 			# 必须由收口收掉，否则「按 F 之后那句提示还挂在屏幕上」（08 文档 §5.2 已写明
 			# 「保持到显式交互或剧情收口」，这里补上后半句的实现）。
 			_dialogue_requesting = true
-			var run_id := DialogueUI.announce(hint, float(params.get("auto", 3.0)))
+			var hint_metadata := params.duplicate(true)
+			hint_metadata["guidance_highlight"] = _dialogue_guidance_highlight
+			var run_id := DialogueUI.show_message(
+				hint,
+				DialogueUI.SPEAKER_SYSTEM,
+				float(params.get("auto", 3.0)), "", hint_metadata
+			)
 			if not _accept_dialogue_run(run_id):
 				return _failed("ui.hint：底栏拒绝或被同步替换。")
 			_bind_dialogue_carrier(DialogueUI, "hint", hint)
@@ -1686,8 +1701,13 @@ func _ui_instruction(action: String, params: Dictionary) -> Dictionary:
 			for line: Variant in lines:
 				if not (line is Dictionary) or str((line as Dictionary).get("text", "")).strip_edges().is_empty():
 					return _failed("ui.dialogue：lines 含无效或空台词。")
+			var dialogue_lines: Array = []
+			for line: Dictionary in lines:
+				var decorated_line := line.duplicate(true)
+				decorated_line["guidance_highlight"] = _dialogue_guidance_highlight
+				dialogue_lines.append(decorated_line)
 			var request := {
-				"lines": lines,
+				"lines": dialogue_lines,
 				"interrupt": bool(params.get("interrupt", true)),
 				"presentation_id": str(params.get("presentation_id", _dialogue_presentation_id)),
 				"participants": params.get("participants", []),
@@ -1700,7 +1720,7 @@ func _ui_instruction(action: String, params: Dictionary) -> Dictionary:
 			var run_id := DialogueUI.show_lines(request)
 			if not _accept_dialogue_run(run_id, bool(params.get("wait", false))):
 				return _failed("ui.dialogue：底栏拒绝或被同步替换。")
-			_bind_dialogue_carrier(DialogueUI, "dialogue", str((lines as Array)[0].get("text", "")))
+			_bind_dialogue_carrier(DialogueUI, "dialogue", str(dialogue_lines[0].get("text", "")))
 			return _done(Callable(self, "_restore_dialogue"))
 	return _degraded("ui.%s 尚未接通（见 08 文档 §5.2 指令表）。" % action)
 

@@ -20,14 +20,18 @@ var _remaining := 0.0
 var _prompt: Label3D
 var _light: OmniLight3D
 var _visual_root: Node3D
+var _visual_scene_failed := false
 
 
 func configure(color: Color, p_duration: float, p_beacon_type := "BOSS_KILL", p_defense_enabled := true, p_visual_scene: PackedScene = null) -> void:
-	accent_color = color
+	# 保留 wrapper 在场景上声明的视觉资源与配色；调用方可显式传入 visual_scene 覆盖。
+	if color.a >= 0.0:
+		accent_color = color
 	duration = p_duration
 	beacon_type = p_beacon_type
 	defense_encounter_enabled = p_defense_enabled
-	visual_scene = p_visual_scene
+	if p_visual_scene != null:
+		visual_scene = p_visual_scene
 
 
 func configure_story_safe_drop(drop_duration := 0.6) -> void:
@@ -61,12 +65,23 @@ func _ready() -> void:
 		_visual_root = visual_scene.instantiate() as Node3D
 		if _visual_root != null:
 			add_child(_visual_root)
-	_build_visual()
+		else:
+			_visual_scene_failed = true
+	if _visual_scene_failed:
+		locked = true
+		_interaction_ready = false
+		push_warning("[ExtractionBeacon3D] visual_scene 实例化失败；拒绝把外部视觉资源伪装成成功")
+	else:
+		_build_visual()
 	_refresh_prompt()
 
 
 func _process(delta: float) -> void:
-	rotation.y += delta * 0.36
+	if beacon_type == "STORY_SAFE":
+		if _visual_root != null and is_instance_valid(_visual_root):
+			_visual_root.rotation.y += delta * 0.36
+	else:
+		rotation.y += delta * 0.36
 	if _light != null:
 		# 待机信标不能周期性改写基地地板亮度，否则玩家操作独立的房灯
 		# 开关后会误以为房灯没有恢复。只在真正撤离同步时保留能量脉冲。
@@ -141,7 +156,7 @@ func force_complete_for_test() -> void:
 
 
 func force_start_for_test() -> bool:
-	if locked or _active:
+	if not _interaction_ready or locked or _active:
 		return false
 	_player_in_range = true
 	_active = true
@@ -153,6 +168,13 @@ func force_start_for_test() -> bool:
 func abort_extraction() -> void:
 	if _active:
 		_cancel()
+
+
+func reset_for_retry() -> void:
+	_active = false
+	_remaining = 0.0
+	_interaction_ready = true
+	_refresh_prompt()
 
 
 func apply_fate_time_multiplier(multiplier: float) -> void:
@@ -202,7 +224,7 @@ func _refresh_prompt() -> void:
 		return
 	var type_name: String = {
 		"STANDARD": "固定", "ELITE_KILL": "精英", "BOSS_KILL": "Boss",
-		"BEACON": "信标", "TRADE": "交易",
+		"BEACON": "信标", "TRADE": "交易", "STORY_SAFE": "安全信标",
 	}.get(beacon_type, "未知")
 	_prompt.text = "%s撤离未解锁" % type_name if locked else "[E] 启动%s撤离" % type_name
 

@@ -1,4 +1,20 @@
-- 2026-11-17 · PLAYER-STATE / WORLD-PLAN · [仅远征01默认镜头拉远五次](2026-11-17_expedition01_camera_distance.md)：仅01基于原局部机位增加固定视线距离1m，无遮挡局部约(0,11.128718,5.414396)，焦点/俯角/FOV不变，F12清临时量仍回本关新默认。其它关和公共默认不动；场景账本H2+日志v0.1.94共8格白名单及单一专表摘要同步，不改资产行。真实Owner/输入矩阵与既有门禁问题分列，未代签整关构图和Android，partial不提升。
+- 2026-11-18 · UI-HUD / INVENTORY / WEAPON-COMBAT / FATE-RULES · [界面排版与模态收放](2026-11-18_ui_layout_revision.md)：K页与购卡页根连线改从枪械区与卡巢区中线接入；新增主副手只读预览箭头与横向滑动；装备页扩宽左区并重排武器/卡牌/配件/角色支持区；模态打开时四角HUD向屏幕四边展开，关闭后归位。仅改显示与转场，不改玩法逻辑、事务、存档或输入契约。Godot无头解析exit0，专项真实渲染待执行。
+
+- [七种子弹附魔与 21 种双附魔的命中反馈](2026-11-18_enchant_hit_feedback.md) · WEAPON-COMBAT / FATE-RULES / VFX-POOL。记录轮廓、双属性共存、池化与双分辨率打靶。
+
+- 2026-11-18 · NARRATIVE-TRIGGER / DIALOGUE-UI / SAVE-PROFILE · [击败Boss后钥匙返航段落连续录制与安全信标落点修复](2026-11-18_boss_key_return_recording.md)：业主指出上一轮录错章节，实际要的是击败Boss后的**钥匙返航段落**（击败首领→首领箱→领稀土钥匙→方式B返航通讯→安全信标落地→主动8秒同步）。capture 增加 `032K` 章节码，走正式控制器/真实wrapper/真实交互，不做手工造箱或伪造history。同时修真实缺陷：首领箱落在入口高台时，以玩家开箱点解析地面落点会整批失败，安全信标只在2秒间隔无限重试；现改为解析失败后依次退回 `boss_spawn_position_world()` 与房间中心（Boss房中心可能是深井，故战场锚点优先）。Forward+ 30 checks、`failures=[]`、退出码0，视频 714帧/23.8秒/1280×720 H.264，另存9组关键帧。
+
+- 2026-11-18 · NARRATIVE-TRIGGER / BOSS-STAGES · [远征01 3.2怒吼震屏与台词同帧](2026-11-18_boss032_shake_sync.md)：`camera.shake` 68.283→65.684，与「啊啊啊啊！」出字同一时刻起震（0.65s／0.12 不变），吼完才震的问题消除；镜头/激活/时长不变。Forward+ 70 checks、`failures=[]`，`t=65.75` 采样帧可见倾斜偏移。
+
+- 2026-11-18 · NARRATIVE-TRIGGER / BOSS-STAGES · [远征01 3.2末句后还镜回角色视角并停1.5秒](2026-11-18_boss032_camera_return_pause.md)：删原 57.497 `central_screen_pressure`，改 56.68 `camera.restore`（1s）还回角色视角；还镜完成后停 1.5s，59.18 主角才开口。反打镜头 duration 4.497→3.679、后续 cue 整体 +1.683s，`duration` 69.183、激活 68.936；`camera.shot` 9→8 组，台词/真实激活/方式A 不变。
+
+- 2026-11-18 · WORLD-PLAN / ENCOUNTER-EVENT · [远征01 Boss房去掉所有随从，只留Boss本体](2026-11-18_expedition01_boss_room_wave_trim.md)：两次指令合并——删原第二波（`box_room_spread`＋`box_corner_ambush`）、第三波（`box_wall_arc`），再删首波盒子 `box_boss_arena` 的 SM／SR／召唤者三条 `spawn_overrides`；进房只剩 1 只显示器 Boss，`spawn_placements` 4→1、`encounter.stages` 3→1、盒实例 33→30。`boss_reinforcement_plan` 双侧增援与共享盒定义不变。设计源/投影/清单同步；Boss 专项断言改为「Boss 阵亡后无残留活物」并改清房口径。未跑 Godot，实到与清房延迟未验，partial 不提升。
+
+- 2026-11-18 · UI-HUD · [塔楼左侧引导卡撤除、只留基地金币并挪到电芯下方](2026-11-18_tower_guide_card_removal.md)：`TowerCurrentInfoHUD` 四行（楼层/目标/按键/金币）整块撤除，改挂 `TowerBaseCurrencyHUD` 到 `PlayerStatusBlock/PlayerStatColumn`，由容器排在电芯（`FlashlightBatteryPanel`）正下方；`Dungeon3D` 仅把 `stat_vbox` 命名并暴露为 `_hud_stat_column`，不改锚框。`_journey_objective()` 保留为规则真源但不再渲染（两处门禁仍调用），`_expedition_objective()` 删除，`_announce_floor_arrival()` 哨兵换 `_tower_base_currency_label`。楼层读数仍由右上 `_hud_floor_label` 承担；金币仍是基地持久账户（`extraction_points`），与右下本局金币不合并。headless 结构探针 `GUIDE_REMOVED/CURRENCY_FOUND/BELOW_BATTERY` 全真、无 ProgressBar，解耦与资产命名门禁 exit0，文档新增断链0；`verify_reference_hud_fate_visual` 塔楼断言已改写但完整运行（含真渲染）与手动目视未执行，`UI-HUD` partial 不提升。
+
+- 2026-11-18 · NARRATIVE-TRIGGER / DIALOGUE-UI / RUN-MERCHANT / SAVE-PROFILE · [2026-11-18叙事A/B、安全信标与局内商人教学文档收口](2026-11-18_narrative_ab_safe_extraction.md)：仅更新授权文档与开发记录；新增 `nar_tutorial_run_vending_01`、`nar_main_032_key_return_call`，3.2九镜/`room-frame`、安全信标主动E返航、兼容schema2迁移和正式绿苔ID边界。旧8秒自动返航、旧17份及旧A+B现状已按当前代码核对更新；vending最终通过、安全完整链最终结果未执行/待主线程回填，不改代码/JSON/账本/feature_registry，不提升整体状态。
+
+- 2026-11-17 · PLAYER-STATE / WORLD-PLAN · [仅远征01默认镜头逐步拉远（累计13次/2.60m）](2026-11-17_expedition01_camera_distance.md)：11-17仅01基于原局部机位增加固定视线距离1.00m；11-18业主再追加8次+1.60m，累计13次/2.60m，无遮挡局部约(0,12.514413,6.214302)，焦点/俯角/FOV不变，F12清临时量仍回本关新默认。其它关和公共默认不动；场景账本H2+日志v0.1.96共8格白名单及单一专表摘要同步，不改资产行。真实Owner/输入矩阵与既有门禁问题分列，未代签整关构图和Android，partial不提升。
 
 - 2026-11-17 · NARRATIVE-TRIGGER / DIALOGUE-UI · [剧情方式A/B定义与旧主线混用核查](2026-11-17_narrative_presentation_ab_audit.md)：正式命名A=现场演绎/运镜＋实体三点示意、B=底部对白＋侧边人物立绘；同用底栏不是B判据。原主线14份中11份有B请求路径，28条actor.say＋3.2的11条Boss身份字幕共39条直接请求立绘；2.5与05两份无对白不自行引入B，3.3仅绿苔发言不必双侧。确认共用UI按身份自动带入立绘，现场A未被替换；当前无A/B选择/隔离开关。同步剧本、节点表、对话设计、3.1—3.3专项及08/18技术事实，不改代码/JSON/时序/资产/存档，也不决定旧段回退。文档验证与既有问题见独立记录；真实渲染/新档全程未验，整体partial不提升。
 

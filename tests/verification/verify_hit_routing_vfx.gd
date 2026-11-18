@@ -39,8 +39,8 @@ const MELEE_SCRIPT := preload("res://src/player3d/melee/PlayerMeleeCombat3D.gd")
 const GOO_HIT_ID := "VFX-GOO-HIT-3D"
 const METAL_ID := "VFX-METAL-SPARK-HIT-3D"
 ## 两件各自的身份：FX01-20 在第四轮换了造型语言 ⇒ 升 v002；FX01-21 未动过
-const EXPECTED_GOO_HIT_VERSION := "v002"
-const EXPECTED_METAL_VERSION := "v001"
+const EXPECTED_GOO_HIT_VERSION := "v003"
+const EXPECTED_METAL_VERSION := "v002"
 
 ## 期望值硬编码（不引用被测常量）
 ## FX01-20 v002 是 FX01-21 的**同形件**（只换色板）⇒ 件数与寿命与金属那件**完全一致**；
@@ -95,6 +95,10 @@ var _fat_enemy: Enemy3D = null
 
 
 func _ready() -> void:
+	if "--enchant-reel" in OS.get_cmdline_user_args():
+		set_process(false)
+		add_child(preload("res://tests/verification/enchant_impact_reel.gd").new())
+		return
 	# ⚠ 分步执行：本仓 GDScript 的运行期报错会**中断当前函数**；全串在 `_ready` 里时
 	# 中途一处报错会跳过 `_report()` ⇒ headless 场景永远挂着（本仓验收的经典假死）。
 	_steps = [
@@ -112,6 +116,7 @@ func _ready() -> void:
 		_check_collision_free,
 		_check_routing_predicate,
 		_check_projectile_routing,
+		_check_enchant_hits,
 		_check_melee_routing,
 		_check_size_linearity,
 		_enemy_death_case_begin,
@@ -136,6 +141,70 @@ func _process(_delta: float) -> void:
 
 func _tick_wait() -> void:
 	pass
+
+
+func _check_enchant_hits() -> void:
+	var pool := _pool()
+	var rounds := ProjectilePool3D.new()
+	add_child(rounds)
+	var cases := [{"fate_elements":{"fire":{}}}, {"fate_elements":{"ice":{}}},
+		{"fate_elements":{"poison":{}}}, {"chain_lightning":true}, {"bounce_count":1},
+		{"homing":true}, {"return_on_hit":true}, {}]
+	# Exercise both material pools, then reuse the metal effect below for single and ordinary hits.
+	for first in 7:
+		for second in range(first + 1, 7):
+			var behavior: Dictionary = cases[second].duplicate(true)
+			behavior.merge(cases[first])
+			var elements: Dictionary = cases[second].get("fate_elements", {}).duplicate()
+			elements.merge(cases[first].get("fate_elements", {}))
+			behavior["fate_elements"] = elements
+			var shot := rounds.acquire({"behavior": behavior}, Vector3.ZERO)
+			for kind in [METAL_ID, GOO_HIT_ID]:
+				shot._spawn_effect(kind, Vector3.ZERO, Color.WHITE, 0.55, {"normal": Vector3.UP})
+				var hits: Array = pool._active[kind]
+				if hits.is_empty():
+					_failures.append("双附魔未借出命中件 %s" % kind)
+					continue
+				var effect := hits.back() as VfxEffectBase3D
+				var a := effect.get_node("EnchantImpact") as Sprite3D
+				var b := effect.get_node("SecondEnchantImpact") as Sprite3D
+				_expect(a.visible and b.visible and a.frame_coords == Vector2i(0, first)
+					and b.frame_coords == Vector2i(0, second), "同一发的两种命中轮廓须同时从第零帧播放")
+				_expect(a.pixel_size == b.pixel_size and not a.position.is_equal_approx(b.position),
+					"双属性动画应平分视觉空间")
+				_expect(effect.get_node("Cube0").visible and not effect.get_node("Cube1").visible
+					and not effect.get_node("Streak0").visible, "双属性仅保留一颗目标材质碎屑")
+				var duration_a: float = VfxMetalSparkHit3D.IMPACT_DURATIONS[first]
+				var duration_b: float = VfxMetalSparkHit3D.IMPACT_DURATIONS[second]
+				var t := (duration_a + duration_b) * 0.5
+				effect._on_tick(t, effect.lifetime)
+				_expect(a.visible == (t < duration_a) and b.visible == (t < duration_b),
+					"两种命中反馈分别按本属性的时长消退")
+				effect._retire()
+				_samples += 1
+			shot._retire()
+	for index in cases.size():
+		var shot := rounds.acquire({"behavior": cases[index]}, Vector3.ZERO)
+		shot._hit_surface(Vector3.UP, {"normal":Vector3.UP})
+		var hits: Array = pool._active[METAL_ID]
+		_expect(not hits.is_empty(), "墙面命中必须从池借出")
+		if hits.is_empty():
+			break
+		var effect := hits.back() as VfxEffectBase3D
+		var mark := effect.get_node("EnchantImpact") as Sprite3D
+		_expect(not effect.get_node("SecondEnchantImpact").visible, "单属性和普通弹清除上次第二属性")
+		var enchanted := index < 7
+		_expect(mark.visible == enchanted, "复借时按本发开关命中图集")
+		_expect(effect.get_node("Cube2").visible != enchanted and effect.get_node("Streak0").visible != enchanted, "附魔用两颗碎屑与单面片")
+		if enchanted:
+			_expect(mark.frame_coords == Vector2i(0, index), "首属性选择图集行 %d" % index)
+			effect._on_tick(effect.lifetime * 0.8, effect.lifetime)
+			_expect(mark.frame_coords == Vector2i(4, index), "逐帧冲击推进")
+		effect._retire()
+		if shot._active:
+			shot._retire()
+		_samples += 1
+	rounds.queue_free()
 
 
 func _expect(condition: bool, message: String) -> void:

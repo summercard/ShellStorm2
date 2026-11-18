@@ -1,12 +1,14 @@
 extends Node3D
 ## 启动前隔离APPDATA；截图仅写入工程外的显式证据目录。
 
-signal motion_stepped
-
 const ORIGIN := Vector3(23.0, -1175.28, -17.0)
 const MODULES := ["standard", "sticky", "bounce", "piercing", "explosive", "homing", "blackhole", "balloon"]
 const ELEMENTS := ["fire", "ice", "poison", "lightning"]
-const EXPECTED_LIFETIMES := {"fire": 0.28, "ice": 0.34, "poison": 0.38, "lightning": 0.16, "bounce": 0.23, "homing": 0.25, "return": 0.30}
+const ENCHANT_KEYS := ["fire", "ice", "poison", "lightning", "bounce", "homing", "return"]
+const MOTION_INTERVAL := 0.045
+const MOTION_FRAME_TARGET := 72
+const FLIGHT_SPEED := 23.0
+const FLIGHT_RETIRE_DISTANCE := 20.0
 const ENCHANT_VISUALS = preload("res://src/vfx/projectile_enchant/ProjectileEnchantmentVisuals3D.gd")
 const EXPECTED_TINTS := {
 	"fire": Color(1.0, 0.22, 0.06), "ice": Color(0.52, 0.86, 1.0),
@@ -14,36 +16,74 @@ const EXPECTED_TINTS := {
 	"bounce": Color(1.0, 0.66, 0.30), "homing": Color(0.36, 1.0, 0.78),
 	"return": Color(0.78, 0.56, 1.0),
 }
-const EXPECTED_QUADS := {
-	"fire": Vector2(0.32, 0.44), "ice": Vector2(0.28, 0.38),
-	"poison": Vector2(0.38, 0.38), "lightning": Vector2(0.34, 0.46),
-	"bounce": Vector2(0.30, 0.34), "homing": Vector2(0.30, 0.40),
-	"return": Vector2(0.34, 0.38),
-}
 const RENDER_SCALE := 2.0
 var _checks := 0
 var _failures: Array[String] = []
 var _pool: ProjectilePool3D
-var _moving_shots: Array[Projectile3D] = []
-var _motion_elapsed := 0.0
-var _motion_distance := 0.0
+var _authored: Dictionary = {}
+var _motion_report: Dictionary = {}
+var _flight_records: Array[Dictionary] = []
+var _flight_completed: Array[Dictionary] = []
+var _flight_probes: Dictionary = {}
+var _flight_only := false
+var _flight_running := false
+var _flight_elapsed := 0.0
+var _flight_next_launch := 0.0
+var _started_usec := 0
+
+
+func _physics_process(delta: float) -> void:
+	# 在子弹之前记实测物理时钟；不调用子弹物理函数，也不写子弹位置。
+	if _flight_running:
+		for record in _flight_records:
+			record.physics_elapsed += delta
 
 
 func _process(delta: float) -> void:
-	if _moving_shots.is_empty():
+	var watchdog_usec := 8_000_000 if _flight_only else 55_000_000
+	var watchdog_label := "8秒" if _flight_only else "55秒"
+	if _started_usec > 0 and Time.get_ticks_usec() - _started_usec > watchdog_usec:
+		for shot in _pool.get_children():
+			if shot is Projectile3D and shot._active:
+				shot._retire()
+		_check(false, "验收超出%s预算，已归还池对象并终止" % watchdog_label)
+		print("PROJECTILE_ENCHANT_VISUALS_RESULT ", JSON.stringify({"passed": false, "failures": _failures, "pool": _pool.get_snapshot()}))
+		get_tree().quit(1)
 		return
-	_motion_elapsed += delta
-	_motion_distance += 2.0 * delta
-	for shot in _moving_shots:
-		# 仅宿主按真实渲染delta手动平移；GPU继续用自身delta，绝不手工推进粒子。
-		shot.global_position += Vector3.RIGHT * 2.0 * delta
-	motion_stepped.emit()
+	if not _flight_running:
+		return
+	_flight_elapsed += delta
+	for record in _flight_records.duplicate():
+		var shot: Projectile3D = record.shot
+		var distance := shot.global_position.distance_to(record.origin)
+		if distance >= FLIGHT_RETIRE_DISTANCE or not shot._active:
+			_finish_flight(record, distance)
+	if _flight_elapsed >= _flight_next_launch:
+		_launch_flight_wave()
+		_flight_next_launch = _flight_elapsed + 0.8
+	for key in _flight_probes:
+		var probe: Dictionary = _flight_probes[key]
+		if is_instance_valid(probe.get("shot")):
+			var camera: Camera3D = probe.camera
+			camera.global_position = probe.shot.global_position + Vector3(0, 5, 0)
+			camera.look_at(probe.shot.global_position, Vector3.FORWARD)
 
 
 func _ready() -> void:
 	if OS.get_environment("PROJECTILE_ENCHANT_VERIFY_ISOLATED") != "1":
 		push_error("主代理必须在启动Godot前隔离APPDATA并设置PROJECTILE_ENCHANT_VERIFY_ISOLATED=1")
 		get_tree().quit(2)
+		return
+	_started_usec = Time.get_ticks_usec()
+	process_physics_priority = -100
+	_flight_only = OS.get_cmdline_user_args().has("--flight-only")
+	if _flight_only:
+		_check_minimal_authored_resources()
+		_pool = ProjectilePool3D.new()
+		add_child(_pool)
+		await get_tree().process_frame
+		await _run_flight_only()
+		_print_result_and_quit()
 		return
 	await get_tree().process_frame
 	_pool = ProjectilePool3D.new()
@@ -61,9 +101,15 @@ func _ready() -> void:
 	await _check_live_particle_reuse()
 	if OS.get_cmdline_user_args().has("--render-grid"):
 		await _render_grid()
+	_print_result_and_quit()
+
+
+func _print_result_and_quit() -> void:
 	print("PROJECTILE_ENCHANT_VISUALS_RESULT ", JSON.stringify({
 		"checks": _checks, "failures": _failures,
 		"passed": _failures.is_empty(), "render_reviewed": false,
+		"primary_acceptance": "真实23m/s飞行动态，静态grid/mix仅补充",
+		"authored": _authored, "motion": _motion_report, "pool": _pool.get_snapshot(),
 	}))
 	_pool.free()
 	get_tree().quit(0 if _failures.is_empty() else 1)
@@ -89,8 +135,30 @@ func _spawn(behavior: Dictionary, module: String = "standard") -> Projectile3D:
 	return projectile
 
 
+func _check_minimal_authored_resources() -> void:
+	for key in ENCHANT_KEYS:
+		var path := "res://assets/art/vfx/combat_3d/vfx_projectile_enchant_%s_root_top3d.tscn" % key
+		var packed := load(path) as PackedScene
+		_check(packed != null, "flight-only authored Prefab可加载：" + key)
+		if packed == null:
+			continue
+		var fx := packed.instantiate() as VfxEffectBase3D
+		_check(fx != null, "flight-only authored Prefab可实例化：" + key)
+		if fx == null:
+			continue
+		add_child(fx)
+		var authored: Dictionary = fx.call("get_enchantment_snapshot")
+		_check(authored.authored_amount > 0, "flight-only读取TSCN authored amount：" + key)
+		_check(authored.particle_lifetime > 0.0, "flight-only读取TSCN authored lifetime：" + key)
+		_check(authored.asset_version == "v004", "flight-only读取TSCN asset_version=v004：" + key)
+		_check(FileAccess.file_exists(authored.texture), "flight-only运行贴图路径存在：" + key)
+		_authored[key] = authored.duplicate(true)
+		fx.free()
+
+
 func _check_prefabs_and_textures() -> void:
-	for key in EXPECTED_LIFETIMES:
+	var texture_families: Dictionary = {}
+	for key in ENCHANT_KEYS:
 		var path := "res://assets/art/vfx/combat_3d/vfx_projectile_enchant_%s_root_top3d.tscn" % key
 		var packed := load(path) as PackedScene
 		_check(packed != null, "独立Prefab可加载：" + key)
@@ -100,7 +168,7 @@ func _check_prefabs_and_textures() -> void:
 		add_child(fx)
 		_check(fx != null, "Prefab继承VfxEffectBase3D：" + key)
 		_check(fx.get_meta("asset_id") == "VFX-PROJECTILE-ENCHANT-%s-3D" % key.to_upper(), "独立AssetID：" + key)
-		_check(fx.get_meta("asset_version") == "v002" and fx.scene_file_path == path, "v002元信息和稳定路径：" + key)
+		_check(fx.get_meta("asset_version") == "v004" and fx.scene_file_path == path, "v004元信息和稳定路径：" + key)
 		_check(fx.lifetime == 0.0, "持续附件没有自动到期计时：" + key)
 		_check(fx.find_children("*", "CollisionObject3D", true, false).is_empty(), "附件无物理体：" + key)
 		_check(fx.find_children("*", "CollisionShape3D", true, false).is_empty(), "附件无碰撞形状：" + key)
@@ -123,19 +191,32 @@ func _check_prefabs_and_textures() -> void:
 		# 从PNG源字节解码，避免headless纹理回读阻塞渲染线程。
 		var image := Image.load_from_file(texture_path)
 		_check(image != null and image.get_format() == Image.FORMAT_RGBA8 and image.get_size() == Vector2i(256, 256), "真实256平方RGBA PNG：" + key)
-		_check(image.get_pixel(0, 0).a == 0.0 and image.get_pixel(255, 0).a == 0.0 and image.get_pixel(0, 255).a == 0.0 and image.get_pixel(255, 255).a == 0.0, "贴图四角透明：" + key)
+		var additive: bool = key == "fire" or key == "lightning"
+		_check(material.blend_mode == (BaseMaterial3D.BLEND_MODE_ADD if additive else BaseMaterial3D.BLEND_MODE_MIX), "火/雷additive，其余alpha：" + key)
 		var content := 0
 		var transparent := 0
+		var opaque := 0
 		var colors: Dictionary = {}
 		for y in range(0, 256, 8):
 			for x in range(0, 256, 8):
 				var pixel := image.get_pixel(x, y)
-				if pixel.a > 0.1:
+				if pixel.a > 0.1 and maxf(pixel.r, maxf(pixel.g, pixel.b)) > 0.02:
 					content += 1
 					colors[pixel.to_rgba32()] = true
-				else:
+				if pixel.a < 0.1:
 					transparent += 1
-		_check(content > 12 and transparent > 80 and colors.size() > 8, "非空且有内部层次的透明图形：" + key)
+				if pixel.a == 1.0:
+					opaque += 1
+		_check(content > 12 and colors.size() > 8, "新库纹理非空且有内部层次：" + key)
+		if key == "fire":
+			_check(opaque == 1024 and image.get_pixel(0, 0).r < 0.02 and image.get_pixel(0, 0).g < 0.02 and image.get_pixel(0, 0).b < 0.02, "火原图alpha255黑底用additive零贡献，不要求抠图透明")
+		else:
+			_check(transparent > 80 and image.get_pixel(0, 0).a == 0.0 and image.get_pixel(255, 0).a == 0.0 and image.get_pixel(0, 255).a == 0.0 and image.get_pixel(255, 255).a == 0.0, "其他源图保留正常alpha及透明四角：" + key)
+		texture_families[key] = FileAccess.get_sha256(texture_path)
+		var authored: Dictionary = fx.call("get_enchantment_snapshot")
+		_authored[key] = authored.duplicate(true)
+		_check(authored.authored_amount == particles.amount and authored.particle_capacity == particles.amount and particles.amount >= 7, "首次reset前从Prefab捕获容量：" + key)
+		_check(fx.visible and particles.visible and particles.emitting and particles.speed_scale == 1.0, "Prefab编辑器预览默认可见发射：" + key)
 		fx.configure(Color.WHITE, 1.0, {"attribute_count": 1})
 		fx.call("set_emitting", true)
 		fx._process(2.0)
@@ -144,7 +225,34 @@ func _check_prefabs_and_textures() -> void:
 		_check(sustained.emitting and not fx.is_queued_for_deletion(), "附件长于基类寿命仍由宿主持有：" + key)
 		fx.call("deactivate")
 		_check(not particles.emitting and not particles.visible and not fx.visible, "停用立即隐藏并停止真实发射器：" + key)
+		_check(particles.amount == int(_authored[key].authored_amount), "reset恢复Prefab authored容量：" + key)
 		fx.free()
+	var distinct: Dictionary = {}
+	for digest in texture_families.values():
+		distinct[digest] = true
+	_check(distinct.size() == 4 and texture_families.ice == texture_families.poison and texture_families.bounce == texture_families.homing and texture_families.homing == texture_families["return"], "七属性使用四张新库图：火/烟/电/机制")
+	for key in ["fire", "poison"]:
+		_check(_authored.lightning.authored_amount > _authored[key].authored_amount, "雷数量必须高于火/毒：" + key)
+		_check(_authored.lightning.particle_lifetime < _authored[key].particle_lifetime, "雷寿命必须短于火/毒：" + key)
+
+
+func _amount(key: String, count: int = 1) -> int:
+	return floori(float(_authored[key].authored_amount) / count)
+
+
+func _total_amount(keys: Array) -> int:
+	var total := 0
+	for key in keys:
+		total += _amount(key, keys.size())
+	return total
+
+
+func _check_authored(entry: Dictionary, count: int) -> void:
+	var source: Dictionary = _authored[entry.attribute]
+	_check(entry.amount == _amount(entry.attribute, count) and entry.particle_capacity == entry.amount, "实际amount=floor(authored/N)：" + entry.attribute)
+	# 只复制读回值，不在测试内维护第二套美术调参表。
+	for property in ["authored_amount", "base_amount", "particle_lifetime", "texture", "quad_size", "scale_min", "scale_max", "scale_curve_samples", "birth_scale", "end_scale", "birth_tint", "end_tint", "direction", "gravity", "spread", "velocity_min", "velocity_max", "angle_min", "angle_max", "angular_velocity_min", "angular_velocity_max", "lifetime_randomness", "linear_accel_min", "linear_accel_max", "damping_min", "damping_max", "blend_mode", "use_fixed_seed", "local_coords", "trail_enabled", "collision_mode", "base_emission_box_extents", "base_visibility_aabb"]:
+		_check(entry[property] == source[property], "运行时不覆盖Prefab authored参数：%s/%s" % [entry.attribute, property])
 
 
 func _check_light_prefabs() -> void:
@@ -296,12 +404,20 @@ func _check_wrap_and_tail(snapshot: Dictionary, particles: GPUParticles3D, key: 
 	_check(snapshot.emission_shape == ParticleProcessMaterial.EMISSION_SHAPE_BOX and material.emission_shape == ParticleProcessMaterial.EMISSION_SHAPE_BOX, "使用中心box体积分布而非点或外环：" + key)
 	var extents: Vector3 = snapshot.emission_box_extents
 	_check(extents.x + 0.000001 >= 0.075 and extents.y + 0.000001 >= 0.075 and extents.z + 0.000001 >= 0.12, "box半径及轴长覆盖标准弹身：" + key)
-	_check(snapshot.quad_size.is_equal_approx(EXPECTED_QUADS[key]), "v002粗粒子Quad尺寸：" + key)
-	_check(is_equal_approx(snapshot.scale_min, 1.1) and is_equal_approx(snapshot.scale_max, 1.25), "粗粒子最小缩放1.1而非细碎火星：" + key)
+	var source: Dictionary = _authored[key]
+	_check(snapshot.quad_size.is_equal_approx(source.quad_size) and snapshot.quad_size.x > 0.0 and snapshot.quad_size.y > 0.0, "保留Prefab authored Quad尺寸：" + key)
+	_check(snapshot.scale_min > 0.0 and snapshot.scale_max > snapshot.scale_min, "出生尺度具有非零随机区间：" + key)
+	_check(is_zero_approx(snapshot.angle_min) and is_equal_approx(snapshot.angle_max, 360.0), "出生角覆盖0至360度：" + key)
+	_check(snapshot.angular_velocity_min < 0.0 and snapshot.angular_velocity_max > 0.0, "非零双向随机角速度：" + key)
+	_check(snapshot.lifetime_randomness > 0.0 and snapshot.lifetime_randomness < 1.0 and not snapshot.use_fixed_seed, "真实随机寿命且不锁seed：" + key)
 	var curve := (material.scale_curve as CurveTexture).curve
-	for age in [0.0, 0.25, 0.5, 0.75, 1.0]:
-		_check(is_equal_approx(curve.sample(age), 1.0), "寿命中不缩成细点：%s/%.2f" % [key, age])
-	_check(is_equal_approx(snapshot.birth_scale, 1.0) and is_equal_approx(snapshot.end_scale, 1.0), "快照出生到结束保持粗尺寸：" + key)
+	var previous_scale := curve.sample(0.0)
+	for index in range(1, 101):
+		var age := index / 100.0
+		var value := curve.sample(age)
+		_check(value < previous_scale and value >= 0.0, "curve严格大到小，拒绝恒1或中段回涨：%s/%.2f" % [key, age])
+		previous_scale = value
+	_check(snapshot.birth_scale > snapshot.end_scale and snapshot.end_scale <= 0.1 and snapshot.end_scale >= 0.0, "曲线末端不超过0.1：" + key)
 	var gradient := (material.color_ramp as GradientTexture1D).gradient
 	var previous_alpha := 1.0
 	for age in [0.0, 0.12, 0.4, 0.65, 0.85, 1.0]:
@@ -312,11 +428,14 @@ func _check_wrap_and_tail(snapshot: Dictionary, particles: GPUParticles3D, key: 
 	_check(snapshot.birth_tint.a > 0.4 and is_zero_approx(snapshot.end_tint.a) and gradient.sample(0.85).a > 0.0 and gradient.sample(0.85).a < snapshot.birth_tint.a, "不是突然消失：出生可见、中后段变淡、末尾透明：" + key)
 	_check(snapshot.direction.is_equal_approx(Vector3.BACK) and material.direction.is_equal_approx(Vector3.BACK), "沿local +Z向弹后漂移：" + key)
 	_check(snapshot.gravity.is_equal_approx(Vector3.ZERO), "无重力拉离弹心：" + key)
-	_check(snapshot.velocity_min > 0.0 and snapshot.velocity_max >= snapshot.velocity_min and snapshot.velocity_max <= 0.42, "低速漂移形成短尾：" + key)
-	_check(snapshot.spread > 0.0 and snapshot.spread <= 26.0, "短尾方向集中而非球形爆散：" + key)
-	_check(is_equal_approx(snapshot.short_tail_max_distance, snapshot.velocity_max * EXPECTED_LIFETIMES[key]) and snapshot.short_tail_max_distance > 0.0 and snapshot.short_tail_max_distance <= 0.12, "寿命乘速度的短尾距离不超过0.12m：" + key)
+	_check(snapshot.velocity_min > 0.0 and snapshot.velocity_max > snapshot.velocity_min and snapshot.velocity_max == source.velocity_max, "非零随机漂移保持Prefab authored速度：" + key)
+	_check(snapshot.spread > 0.0 and snapshot.spread < 90.0 and snapshot.spread == source.spread, "定向短尾而非球形爆散，角度来自Prefab：" + key)
+	_check(is_equal_approx(snapshot.short_tail_max_distance, snapshot.velocity_max * source.particle_lifetime) and snapshot.short_tail_max_distance > 0.0, "寿命乘速度的短尾长度来自Prefab：" + key)
+	# 含正向加速度上界；阻尼只缩短尾长，不能用旧0.12m阈值截掉v004动态。
+	var tail_bound: float = snapshot.short_tail_max_distance + 0.5 * maxf(0.0, snapshot.linear_accel_max) * pow(source.particle_lifetime, 2.0)
+	_check(tail_bound < 1.0, "短尾仍小于1m，不成为持久长拖尾：" + key)
 	var bounds: AABB = snapshot.visibility_aabb
-	_check(bounds.encloses(AABB(-extents, extents * 2.0 + Vector3.BACK * snapshot.short_tail_max_distance)), "可见AABB包含包裹范围及短尾：" + key)
+	_check(bounds.encloses(AABB(-extents - Vector3.ONE * tail_bound, extents * 2.0 + Vector3.ONE * tail_bound * 2.0)), "可见AABB包含包裹和随机扩散短尾上界：" + key)
 
 
 func _expected_average(keys: Array) -> Color:
@@ -364,13 +483,19 @@ func _check_body_tints_and_restore() -> void:
 			if standard:
 				_check(not snapshot.core_tint.is_equal_approx(Color.WHITE) and not snapshot.core_tint.is_equal_approx(body.core_tint), "标准七色弹芯不留原白芯：" + key)
 				for entry in snapshot.attachments:
+					_check(entry.body_core.is_visible_in_tree() and not shot._visual.is_visible_in_tree(), "标准弹可见主体来自首属性：" + key)
+					var shell_color: Color = entry.body_shell.material_override.albedo_color
+					var core_color: Color = entry.body_core.material_override.albedo_color
+					_check(Color(shell_color, 1).is_equal_approx(expected) and core_color.is_equal_approx(expected_core), "实测可见弹壳与弹芯颜色：" + key)
 					var extents: Vector3 = entry.emission_box_extents
 					for piece_name in ["Core", "Shell"]:
-						var piece := shot._visual.get_node("BulletRoot/" + piece_name) as MeshInstance3D
+						var piece := entry.body_root.get_node(piece_name) as MeshInstance3D
 						var body_bounds: AABB = piece.transform * piece.get_aabb()
 						_check(AABB(-extents, extents * 2.0).grow(0.000001).encloses(body_bounds), "中心box实测覆盖原弹芯及弹壳几何：%s/%s" % [key, piece_name])
 				if key == "fire":
 					_check(snapshot.shell_tint.r > 0.95 and snapshot.shell_tint.g < 0.3 and snapshot.shell_tint.b < 0.1 and snapshot.core_tint.g < 0.5 and snapshot.core_tint.b < 0.4, "火焰弹身橙红且芯不是白/淡黄")
+			else:
+				_check(shot._visual.is_visible_in_tree() and not snapshot.attachments[0].body_core.is_visible_in_tree(), "特殊弹保留可见原主体：" + module)
 			shot._retire()
 			_check_clean(shot)
 			var restored := _spawn({}, module)
@@ -420,10 +545,10 @@ func _check_body_tints_and_restore() -> void:
 		var expected := _expected_average(keys)
 		_check_enchantment_light(mixed, keys)
 		_check(is_zero_approx(snapshot.body_presentation.light_energy) and not snapshot.body_presentation.light_visible, "混合N=2至7主体灯仍关闭：N=%d" % count)
-		_check(snapshot.attribute_count == count and snapshot.total_amount == count * floori(24.0 / count), "混合N=2至7仍按floor(24/N)共享预算：%d" % count)
+		_check(snapshot.attribute_count == count and snapshot.total_amount == _total_amount(keys), "混合N=2至7按各自floor(authored/N)合计：%d" % count)
 		_check(snapshot.body_tint.is_equal_approx(expected) and snapshot.shell_tint.is_equal_approx(expected) and snapshot.core_tint.is_equal_approx(expected.lightened(0.22)), "混合色按去重RGB算术平均、芯同步：N=%d" % count)
 		for entry in snapshot.attachments:
-			_check(entry.amount == floori(24.0 / count), "混合每种数量不扩预算：N=%d/%s" % [count, entry.attribute])
+			_check_authored(entry, count)
 		mixed._retire()
 	var duplicated: Array[String] = ["fire", "fire", "lightning", "lightning", "return", "return", "unknown"]
 	_check(ENCHANT_VISUALS.body_tint(duplicated).is_equal_approx(_expected_average(["fire", "lightning", "return"])), "body_tint输入去重且忽略未知键，不做加权或线性空间混色")
@@ -440,7 +565,7 @@ func _check_body_tints_and_restore() -> void:
 	var enchanted_mesh := enchanted_rock._visual.get_node("Rock") as MeshInstance3D
 	var enchanted_material := enchanted_mesh.mesh.surface_get_material(0) as StandardMaterial3D
 	_check(enchanted_material.albedo_color.is_equal_approx(rock_color) and rock_color.is_equal_approx(Color(0.42, 0.35, 0.27)), "力量滚石真实石材保持原棕色")
-	_check(rock_snapshot.attributes == ["fire"] and rock_snapshot.total_amount == 24, "力量滚石保色但仍携带正确独立附魔附件")
+	_check(rock_snapshot.attributes == ["fire"] and rock_snapshot.total_amount == _amount("fire"), "力量滚石保色但仍携带正确独立附魔附件")
 	_check_enchantment_light(enchanted_rock, ["fire"])
 	enchanted_rock._retire()
 	_check_clean(enchanted_rock)
@@ -508,11 +633,11 @@ func _check_counts_and_module_identity() -> void:
 			_check(projectile.damage == 17 and projectile.speed == 23.0 and projectile.direction == Vector3.FORWARD, "不改伤害速度方向")
 			_check(projectile.fate_behavior == original and behavior == original, "不改行为或原持续伤害数据")
 			_check(snapshot.attribute_count == count and snapshot.attachments.size() == count, "属性数去重")
-			_check(snapshot.total_amount == 24, "1/2/3/4总粒子预算24")
+			_check(snapshot.total_amount == _total_amount(snapshot.attributes), "总数量为各自authored/N分摊之和")
 			for entry in snapshot.attachments:
-				_check(entry.amount == [24, 12, 8, 6][count - 1], "每种粒子准确24/12/8/6")
+				_check_authored(entry, count)
 				_check(entry.emitting and entry.visible, "启用属性真实发射可见")
-				_check(is_equal_approx(entry.particle_lifetime, EXPECTED_LIFETIMES[entry.attribute]), "分摊数量不缩短粒子寿命")
+				_check(is_equal_approx(entry.particle_lifetime, _authored[entry.attribute].particle_lifetime), "分摊数量不缩短Prefab粒子寿命")
 				var fx := projectile.get_node("ProjectileEnchantments/Enchant_" + entry.attribute)
 				_check((fx.get_node("Particles") as GPUParticles3D).amount == entry.amount, "快照数量等于真实发射器")
 			projectile._retire()
@@ -539,9 +664,9 @@ func _check_behavior_routing() -> void:
 	var all_behavior := {"fate_elements": {"fire": {}, "ice": {}, "poison": {}, "lightning": {}}, "chain_lightning": true, "chain_count": 3, "bounce_count": 2, "homing": true, "return_on_hit": true}
 	var all := _spawn(all_behavior)
 	var snapshot := all.get_enchantment_snapshot()
-	_check(snapshot.attribute_count == 7 and snapshot.total_amount == 21, "非元素也计入N：7种各floor(24/7)=3")
+	_check(snapshot.attribute_count == 7 and snapshot.total_amount == _total_amount(ENCHANT_KEYS), "非元素也计入N：7种各自floor(authored/7)")
 	for entry in snapshot.attachments:
-		_check(entry.amount == 3, "所有属性共享预算")
+		_check_authored(entry, 7)
 	all._retire()
 
 
@@ -561,7 +686,7 @@ func _check_pool_reuse_and_follow() -> void:
 	var detached := projectile.get_enchantment_snapshot()
 	detached.attributes.clear()
 	detached.attachments[0]["amount"] = 999
-	_check(projectile.get_enchantment_snapshot().attribute_count == 4 and projectile.get_enchantment_snapshot().attachments[0].amount == 6, "快照是副本而非可写内部状态")
+	_check(projectile.get_enchantment_snapshot().attribute_count == 4 and projectile.get_enchantment_snapshot().attachments[0].amount == _amount("fire", 4), "快照是副本而非可写内部状态")
 	projectile._retire()
 	_check_clean(projectile)
 	var reused := _spawn({})
@@ -570,7 +695,7 @@ func _check_pool_reuse_and_follow() -> void:
 	reused._retire()
 	reused = _spawn({"fate_elements": {"fire": {}}})
 	var next := reused.get_enchantment_snapshot()
-	_check(next.attributes == ["fire"] and next.attachments[0].amount == 24, "复借清空旧属性并恢复单属性24")
+	_check(next.attributes == ["fire"] and next.attachments[0].amount == _amount("fire"), "复借清空旧属性并恢复单属性authored容量")
 	_check(next.attachments[0].instance_id == ids.fire, "发射器缓存复用而非逐发重建")
 	for entry in next.cached_attachments:
 		if entry.attribute != "fire":
@@ -613,6 +738,7 @@ func _check_clean(projectile: Projectile3D) -> void:
 		var fx := projectile.get_node("ProjectileEnchantments/Enchant_" + entry.attribute)
 		var particles := fx.get_node("Particles") as GPUParticles3D
 		_check(not particles.emitting and not particles.visible and particles.speed_scale == 0.0, "真实GPU发射器停止并冻结隐藏")
+		_check(particles.amount == int(_authored[entry.attribute].authored_amount) and entry.particle_capacity == particles.amount, "回收真实GPU容量恢复authored而非分摊值：" + entry.attribute)
 
 
 func _check_configure_before_tree() -> void:
@@ -659,7 +785,7 @@ func _check_live_particle_reuse() -> void:
 	_check(reused.get_instance_id() == id, "真实渲染帧后仍复借同一宿主")
 	await get_tree().process_frame
 	var snapshot := reused.get_enchantment_snapshot()
-	_check(snapshot.attributes == ["ice"] and snapshot.total_amount == 24, "真实跨帧复借只显示新属性")
+	_check(snapshot.attributes == ["ice"] and snapshot.total_amount == _amount("ice"), "真实跨帧复借只显示新属性")
 	_check_enchantment_light(reused, ["ice"])
 	for entry in snapshot.cached_attachments:
 		if entry.attribute != "ice":
@@ -734,7 +860,7 @@ func _render_grid() -> void:
 	var samples := Node3D.new()
 	add_child(samples)
 	var shots: Array[Projectile3D] = []
-	var keys: Array = EXPECTED_LIFETIMES.keys()
+	var keys: Array = ENCHANT_KEYS.duplicate()
 	keys.append("fire+ice+poison+lightning")
 	for index in MODULES.size():
 		var center := ORIGIN + Vector3((index % 4 - 1.5) * 3.15, 0, (floori(index / 4.0) - 0.5) * 3.2)
@@ -742,7 +868,7 @@ func _render_grid() -> void:
 		var behavior := _render_behavior(key) if index < 7 else {"fate_elements": {"fire": {}, "ice": {}, "poison": {}, "lightning": {}}}
 		shots.append(_render_shot({}, MODULES[index], center + Vector3(-0.65, 0, 0)))
 		shots.append(_render_shot(behavior, MODULES[index], center + Vector3(0.65, 0, 0)))
-		_render_label(samples, center + Vector3(0, 0, 0.85), "%s\n%s / amount=%d" % [MODULES[index], key, 24 if index < 7 else 6])
+		_render_label(samples, center + Vector3(0, 0, 0.85), "%s\n%s / total=%d" % [MODULES[index], key, shots[-1].get_enchantment_snapshot().total_amount])
 	await get_tree().create_timer(1.0).timeout
 	await _capture_render(output, "projectile_enchant_grid", shots)
 	for shot in shots:
@@ -752,7 +878,7 @@ func _render_grid() -> void:
 	samples = Node3D.new()
 	add_child(samples)
 	camera.size = 6.4
-	heading.text = "单 / 双 / 三 / 四元素真实GPU发射对照\n每种 amount=24 / 12 / 8 / 6　|　总预算24　|　主体与附件配置倍率×2，保留原生脉动；标准弹去重RGB平均/穿透弹保色"
+	heading.text = "静态补充：单 / 双 / 三 / 四元素真实GPU发射\n每种floor(Prefab authored/N)，总数为各属性之和；样品visual_scale=2；标准弹平均色/穿透弹保色"
 	for row in 2:
 		var module: String = "standard" if row == 0 else "piercing"
 		for count in range(1, 5):
@@ -763,7 +889,7 @@ func _render_grid() -> void:
 				names.append(ELEMENTS[index])
 			var center := ORIGIN + Vector3((count - 2.5) * 2.7, 0, (row - 0.5) * 3.0)
 			shots.append(_render_shot({"fate_elements": elements}, module, center))
-			_render_label(samples, center + Vector3(0, 0, 0.85), "%s / N=%d / amount=%d\n%s" % [module, count, 24 / count, "+".join(names)])
+			_render_label(samples, center + Vector3(0, 0, 0.85), "%s / N=%d / total=%d\n%s" % [module, count, shots[-1].get_enchantment_snapshot().total_amount, "+".join(names)])
 	await get_tree().create_timer(1.0).timeout
 	await _capture_render(output, "projectile_enchant_mix", shots)
 	for shot in shots:
@@ -774,14 +900,14 @@ func _render_grid() -> void:
 	samples = Node3D.new()
 	add_child(samples)
 	camera.size = 7.4
-	heading.text = "标准弹：原色 + 七种单附魔（不是八模块各配一种）\n真实GPU中心包裹/短尾　|　主体和附件配置倍率×2，主体保留原生±4%脉动　|　amount=24"
+	heading.text = "静态补充：标准弹原色 + 七种单附魔\n中心包裹/短尾；样品visual_scale=2，保留原生脉动；amount/lifetime为各自Prefab authored值"
 	var standard_keys: Array = ["plain"]
-	standard_keys.append_array(EXPECTED_LIFETIMES.keys())
+	standard_keys.append_array(ENCHANT_KEYS)
 	for index in standard_keys.size():
 		var center := ORIGIN + Vector3((index % 4 - 1.5) * 3.15, 0, (floori(index / 4.0) - 0.5) * 3.2)
 		var key: String = standard_keys[index]
 		shots.append(_render_shot({} if key == "plain" else _render_behavior(key), "standard", center))
-		_render_label(samples, center + Vector3(0, 0, 0.85), "standard / %s\n原色" % key if key == "plain" else "standard / %s\namount=24 / N=1" % key)
+		_render_label(samples, center + Vector3(0, 0, 0.85), "standard / %s\n原色" % key if key == "plain" else "standard / %s\namount=%d / life=%.2fs" % [key, _amount(key), _authored[key].particle_lifetime])
 	await get_tree().create_timer(0.6).timeout
 	await _capture_render(output, "projectile_enchant_standard_seven", shots)
 	for shot in shots:
@@ -791,7 +917,7 @@ func _render_grid() -> void:
 
 	samples = Node3D.new()
 	add_child(samples)
-	heading.text = "特殊弹七模块 + 力量滚石保色：左原色 / 右火焰附魔\n真实原Prefab和材质　|　配置倍率×2，主体保留原生脉动　|　右侧amount=24，滚石保留棕色"
+	heading.text = "静态补充：特殊弹七模块 + 力量滚石保色，左原色/右火焰\n原Prefab材质；样品visual_scale=2，原生脉动；火amount=%d，滚石保留棕色" % _amount("fire")
 	for index in 8:
 		var center := ORIGIN + Vector3((index % 4 - 1.5) * 3.15, 0, (floori(index / 4.0) - 0.5) * 3.2)
 		var module: String = MODULES[index + 1] if index < 7 else "standard"
@@ -808,45 +934,8 @@ func _render_grid() -> void:
 	shots.clear()
 	samples.free()
 
-	samples = Node3D.new()
-	add_child(samples)
-	for index in 8:
-		var center := ORIGIN + Vector3((index % 4 - 1.5) * 3.15 - 0.5, 0, (floori(index / 4.0) - 0.5) * 3.2)
-		var key: String = EXPECTED_LIFETIMES.keys()[index] if index < 7 else "multi7"
-		var behavior := _render_behavior(key) if index < 7 else {"fate_elements": {"fire": {}, "ice": {}, "poison": {}, "lightning": {}}, "bounce_count": 2, "homing": true, "return_on_hit": true}
-		var shot := _render_shot(behavior, "standard", center)
-		shot.direction = Vector3.RIGHT
-		shot._sync_visual_orientation()
-		shots.append(shot)
-		_render_label(samples, center + Vector3(0, 0, 0.85), "%s / amount=%d\n出生X=%.2f，向右移动→" % [key, 24 if index < 7 else 3, center.x])
-	# 先让真实GPU建立稳定包裹，再连续移动同一批样品，绝不重启发射器伪造时间帧。
-	await get_tree().create_timer(0.6).timeout
-	_motion_elapsed = 0.0
-	_motion_distance = 0.0
-	_moving_shots.assign(shots)
-	var previous_time := -1.0
-	var previous_distance := -1.0
-	for frame in 3:
-		if frame > 0:
-			await get_tree().create_timer(0.12).timeout
-		await motion_stepped
-		heading.text = "移动包裹/短尾，同一批标准弹连续三帧：%d/3\n真实GPU delta，宿主向右2m/s；t=%.3fs，位移=%.3fm　|　配置倍率×2，原生脉动保留\n固定相机/网格/出生标签；local +Z在右行弹身后（左侧）；非持久世界空间拖尾" % [frame + 1, _motion_elapsed, _motion_distance]
-		_check(_motion_elapsed > previous_time and _motion_distance > previous_distance, "移动证据时间和位移逐帧推进：%d" % frame)
-		_check(is_equal_approx(_motion_distance, _motion_elapsed * 2.0), "移动证据按真实delta积分而非伪造固定GPU步长")
-		for shot in shots:
-			var snapshot := shot.get_enchantment_snapshot()
-			_check(shot.get_orientation_snapshot().alignment > 0.999, "移动截图主体前向与实际平移方向一致")
-			for entry in snapshot.attachments:
-				_check(entry.world_position.distance_to(shot.global_position) < 0.001 and entry.emitter_position.is_equal_approx(Vector3.ZERO), "移动截图中心持续包裹且没有钉在出生点：" + entry.attribute)
-			print("MOVING_WRAP_FRAME ", JSON.stringify({"frame": frame, "elapsed": _motion_elapsed, "distance": _motion_distance, "world_position": shot.global_position, "attributes": snapshot.attributes, "total_amount": snapshot.total_amount, "configured_scale": RENDER_SCALE}))
-		await _capture_render(output, "projectile_enchant_moving_wrap_trail_%02d" % frame, shots)
-		previous_time = _motion_elapsed
-		previous_distance = _motion_distance
-	_moving_shots.clear()
-	for shot in shots:
-		shot._retire()
-	shots.clear()
-	samples.free()
+	# --render-grid 默认必采真实飞行，不依赖UI的--record-motion。
+	await _render_flight(output, camera, overlay, heading)
 
 	# 真实受光表面专场：禁用原方向光/网格，不能用弹身emission冒充地面和墙面投光。
 	light.light_energy = 0.0
@@ -910,6 +999,259 @@ func _render_grid() -> void:
 	_check(_pool.get_snapshot().active == 0, "全部截图结束归还真实池样品")
 
 
+func _launch_flight_wave() -> void:
+	for index in ENCHANT_KEYS.size():
+		var key: String = ENCHANT_KEYS[index]
+		var origin := ORIGIN + Vector3(0, 0, (index - 3) * 1.4)
+		var config := _config(_render_behavior(key))
+		config.merge({"speed": FLIGHT_SPEED, "direction": Vector3.RIGHT, "range": 48.0, "projectile_collision_mask": 0, "visual_scale": RENDER_SCALE}, true)
+		# acquire内部调用真实Projectile3D.activate；恢复曾被静态单元测试关闭的物理处理。
+		var shot := _pool.acquire(config, origin)
+		shot.set_physics_process(true)
+		_check(shot._active and shot.is_physics_processing() and shot.collision_mask == 0 and shot.range_m >= 40.0 and shot.speed == FLIGHT_SPEED, "真实池激活/正常物理/23m/s/mask0/range>=40：" + key)
+		var particles := shot.get_node("ProjectileEnchantments/Enchant_" + key + "/Particles") as GPUParticles3D
+		# 仅实例可见层供粒子专用追踪窗统计；不改任何资源或发射参数。
+		particles.layers = 1 | (1 << (12 + index))
+		_flight_records.append({"shot": shot, "key": key, "origin": origin, "physics_elapsed": 0.0, "render_birth": _flight_elapsed})
+		_flight_probes[key]["shot"] = shot
+
+
+func _finish_flight(record: Dictionary, distance: float) -> void:
+	var shot: Projectile3D = record.shot
+	var elapsed: float = record.physics_elapsed
+	var measured := distance / maxf(elapsed, 0.000001)
+	_check(distance >= FLIGHT_RETIRE_DISTANCE and shot._active, "飞出20m才由验收场退役，不提前自然过期：" + record.key)
+	_check(absf(measured - FLIGHT_SPEED) < 0.15, "实测actual distance/真实物理delta≈23m/s：" + record.key)
+	var result := {"attribute": record.key, "instance_id": shot.get_instance_id(), "actual_distance_m": distance, "actual_physics_seconds": elapsed, "render_seconds": _flight_elapsed - float(record.render_birth), "measured_speed_mps": measured}
+	_flight_completed.append(result)
+	print("PROJECTILE_FLIGHT_RETIRED ", JSON.stringify(result))
+	if shot._active:
+		shot._retire()
+	_check_clean(shot)
+	_flight_records.erase(record)
+
+
+func _run_flight_only() -> void:
+	var output := OS.get_environment("SHELLSTORM_VERIFICATION_OUTPUT")
+	var camera := Camera3D.new()
+	add_child(camera)
+	camera.current = true
+	var overlay := CanvasLayer.new()
+	add_child(overlay)
+	var heading := Label.new()
+	heading.position = Vector2(24, 16)
+	heading.size.x = get_viewport().get_visible_rect().size.x - 48.0
+	heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	heading.add_theme_font_size_override("font_size", 24)
+	overlay.add_child(heading)
+	# flight-only只建立真实飞行相机和七个粒子追踪probe，不初始化静态grid/mix/light_cast。
+	await _render_flight(output, camera, overlay, heading)
+	overlay.free()
+	camera.free()
+
+
+func _render_flight(output: String, camera: Camera3D, overlay: CanvasLayer, heading: Label) -> void:
+	var motion_dir := output.path_join("motion")
+	_check(DirAccess.make_dir_recursive_absolute(motion_dir) == OK, "真实飞行PNG序列目录可用")
+	var samples := Node3D.new()
+	add_child(samples)
+	camera.global_position = ORIGIN + Vector3(10, 24, 0)
+	camera.look_at(ORIGIN + Vector3(10, 0, 0), Vector3.FORWARD)
+	camera.keep_aspect = Camera3D.KEEP_WIDTH
+	camera.size = 30.0
+	var panels := Control.new()
+	overlay.add_child(panels)
+	_create_particle_probes(samples, panels, get_viewport().get_visible_rect().size)
+	_flight_running = true
+	_flight_elapsed = 0.0
+	_flight_next_launch = 0.8
+	_launch_flight_wave()
+	await _capture_flight_sequence(output, motion_dir, heading)
+	panels.free()
+	samples.free()
+	camera.keep_aspect = Camera3D.KEEP_HEIGHT
+
+
+func _create_particle_probes(samples: Node3D, panels: Control, screen: Vector2) -> void:
+	for index in ENCHANT_KEYS.size():
+		var key: String = ENCHANT_KEYS[index]
+		var lane_label := Label.new()
+		lane_label.position = Vector2(20, screen.y * 0.5 + (index - 3) * 1.4 * screen.x / 30.0 - 12)
+		lane_label.text = "%s %d/%.2fs" % [key, _amount(key), _authored[key].particle_lifetime]
+		lane_label.add_theme_font_size_override("font_size", 18)
+		panels.add_child(lane_label)
+		var lane_mesh := ImmediateMesh.new()
+		var lane_material := StandardMaterial3D.new()
+		lane_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		lane_material.albedo_color = Color(0.08, 0.18, 0.28)
+		lane_mesh.surface_begin(Mesh.PRIMITIVE_LINES, lane_material)
+		lane_mesh.surface_add_vertex(Vector3(0, -0.4, (index - 3) * 1.4))
+		lane_mesh.surface_add_vertex(Vector3(20, -0.4, (index - 3) * 1.4))
+		lane_mesh.surface_end()
+		var lane := MeshInstance3D.new()
+		lane.mesh = lane_mesh
+		samples.add_child(lane)
+		lane.global_position = ORIGIN
+		var viewport := SubViewport.new()
+		viewport.size = Vector2i(192, 128)
+		viewport.world_3d = get_world_3d()
+		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+		add_child(viewport)
+		var tracking := Camera3D.new()
+		viewport.add_child(tracking)
+		tracking.projection = Camera3D.PROJECTION_ORTHOGONAL
+		tracking.keep_aspect = Camera3D.KEEP_WIDTH
+		tracking.size = 2.4
+		tracking.cull_mask = 1 << (12 + index)
+		tracking.environment = Environment.new()
+		tracking.environment.background_mode = Environment.BG_COLOR
+		tracking.environment.background_color = Color.BLACK
+		tracking.current = true
+		var panel := TextureRect.new()
+		panel.texture = viewport.get_texture()
+		panel.position = Vector2(index * screen.x / 7.0 + 4, screen.y - 132)
+		panel.size = Vector2(screen.x / 7.0 - 8, 108)
+		panel.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		panel.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		panels.add_child(panel)
+		var caption := Label.new()
+		caption.position = Vector2(panel.position.x, screen.y - 24)
+		caption.text = key + " 粒子追踪x2"
+		caption.add_theme_font_size_override("font_size", 16)
+		panels.add_child(caption)
+		_flight_probes[key] = {"viewport": viewport, "panel": panel, "camera": tracking, "previous": PackedByteArray(), "changes": 0, "visible_frames": 0, "samples": []}
+
+
+func _capture_flight_sequence(output: String, motion_dir: String, heading: Label) -> void:
+	var frames: Array[Dictionary] = []
+	var png_jobs: Array[int] = []
+	var png_results: Array[Array] = []
+	var next_capture := MOTION_INTERVAL
+	var last_capture := 0.0
+	while frames.size() < MOTION_FRAME_TARGET and _flight_elapsed < 5.0:
+		await get_tree().process_frame
+		if _flight_elapsed < next_capture:
+			continue
+		next_capture = _flight_elapsed + MOTION_INTERVAL
+		heading.text = "主验收：非静止真实飞行 / 7并行lane / 23m/s向右 / 0.8s循环 / 20m退役\n样品visual_scale=2（非实战倍率），不改Prefab；下排粒子追踪，包裹/短尾用真实GPU delta\nt=%.3fs PNG=%d/%d pool active=%d；amount/lifetime读取当前TSCN" % [_flight_elapsed, frames.size() + 1, MOTION_FRAME_TARGET, _pool.get_snapshot().active]
+		await RenderingServer.frame_post_draw
+		var timestamp := _flight_elapsed
+		var measurements := _measure_flight_frame()
+		var image := get_viewport().get_texture().get_image()
+		var frame := frames.size()
+		_check(image != null and not image.is_empty(), "真实飞行viewport帧非空")
+		if image == null or image.is_empty():
+			break
+		for key in ENCHANT_KEYS:
+			_sample_particle_probe(key, image)
+		var result: Array = [FAILED]
+		png_results.append(result)
+		var path := motion_dir.path_join("frame_%05d.png" % frame)
+		png_jobs.append(WorkerThreadPool.add_task(_save_motion_frame.bind(image, path, result)))
+		if frame in [3, 7, 11]:
+			var moment := [3, 7, 11].find(frame)
+			_check(image.save_png(output.path_join("projectile_enchant_moving_wrap_trail_%02d.png" % moment)) == OK, "飞行三时刻保存")
+			if moment == 1:
+				_check(image.save_png(output.path_join("projectile_enchant_flight.png")) == OK, "主飞行图保存")
+		frames.append({"frame": frame, "render_seconds": timestamp, "actual_interval_seconds": timestamp - last_capture, "projectiles": measurements})
+		last_capture = timestamp
+	for index in png_jobs.size():
+		WorkerThreadPool.wait_for_task_completion(png_jobs[index])
+		_check(png_results[index][0] == OK, "飞行PNG帧保存")
+	_finish_motion_report(output, frames)
+
+
+func _save_motion_frame(image: Image, path: String, result: Array) -> void:
+	result[0] = image.save_png(path)
+
+
+func _measure_flight_frame() -> Array[Dictionary]:
+	var measurements: Array[Dictionary] = []
+	for record in _flight_records:
+		var shot: Projectile3D = record.shot
+		var elapsed: float = record.physics_elapsed
+		var distance := shot.global_position.distance_to(record.origin)
+		if elapsed > 0.0:
+			_check(absf(distance / elapsed - FLIGHT_SPEED) < 0.15, "逐帧位置/真实物理时钟实测23m/s：" + record.key)
+		var snapshot := shot.get_enchantment_snapshot()
+		_check(shot.is_physics_processing() and shot.get_orientation_snapshot().alignment > 0.999, "飞行持续正常物理且朝向与位移一致：" + record.key)
+		_check_enchantment_light(shot, snapshot.attributes)
+		for entry in snapshot.attachments:
+			_check_authored(entry, 1)
+			var particles := shot.get_node("ProjectileEnchantments/Enchant_" + entry.attribute + "/Particles") as GPUParticles3D
+			_check(particles.emitting and particles.visible and particles.speed_scale == 1.0 and particles.amount == entry.amount, "飞行中真实GPU持续发射，不手工推进或停住：" + entry.attribute)
+			_check(entry.asset_version == "v004" and entry.prefab_path == _authored[entry.attribute].prefab_path, "飞行仍使用真实v004独立Prefab：" + entry.attribute)
+			_check(is_equal_approx(shot.visual_scale, RENDER_SCALE) and entry.visual_scale.is_equal_approx(Vector3.ONE * RENDER_SCALE), "飞行样品仅显式visual_scale=2，无额外资源调参：" + entry.attribute)
+			_check(entry.world_position.distance_to(shot.global_position) < 0.001 and entry.emitter_position.is_equal_approx(Vector3.ZERO), "飞行中包裹中心跟随弹心、不钉出生点：" + entry.attribute)
+		measurements.append({"attribute": record.key, "instance_id": shot.get_instance_id(), "actual_distance_m": distance, "actual_physics_seconds": elapsed, "measured_speed_mps": distance / maxf(elapsed, 0.000001)})
+	return measurements
+
+
+func _sample_particle_probe(key: String, rendered_frame: Image) -> void:
+	var probe: Dictionary = _flight_probes[key]
+	var viewport: SubViewport = probe.viewport
+	var panel: TextureRect = probe.panel
+	# The tracking viewport is already composited here with KEEP_ASPECT_CENTERED.
+	# Measure its pixels from the same rendered frame, omitting the panel's letterbox.
+	var native_size := Vector2(viewport.size)
+	var content := native_size * minf(panel.size.x / native_size.x, panel.size.y / native_size.y)
+	var texture_scale := Vector2(rendered_frame.get_size()) / get_viewport().get_visible_rect().size
+	var origin := (panel.global_position + (panel.size - content) * 0.5) * texture_scale
+	var image := rendered_frame.get_region(Rect2i(Vector2i(origin.round()), Vector2i((content * texture_scale).round())))
+	if image == null or image.is_empty():
+		_check(false, "粒子追踪viewport非空：" + key)
+		return
+	image.resize(64, 48, Image.INTERPOLATE_BILINEAR)
+	image.convert(Image.FORMAT_RGBA8)
+	var data := image.get_data()
+	var previous: PackedByteArray = probe.previous
+	var changed := 0
+	var lit := 0
+	var total_difference := 0
+	for offset in range(0, data.size(), 4):
+		if maxi(data[offset], maxi(data[offset + 1], data[offset + 2])) > 16:
+			lit += 1
+		if previous.size() == data.size():
+			var difference := absi(data[offset] - previous[offset]) + absi(data[offset + 1] - previous[offset + 1]) + absi(data[offset + 2] - previous[offset + 2])
+			total_difference += difference
+			if difference > 12:
+				changed += 1
+	var tracked: Projectile3D = probe.shot
+	var same_instance: bool = probe.get("previous_instance", 0) == tracked.get_instance_id()
+	if changed > 0 and same_instance:
+		probe.changes += 1
+	probe.previous_instance = tracked.get_instance_id()
+	if lit > 0:
+		probe.visible_frames += 1
+	probe.samples.append({"render_seconds": _flight_elapsed, "instance_id": tracked.get_instance_id(), "same_instance_as_previous": same_instance, "luminous_pixels": lit, "changed_pixels": changed, "mean_absolute_rgb_difference": total_difference / (64.0 * 48.0 * 3.0)})
+	probe.previous = data
+
+
+func _finish_motion_report(output: String, frames: Array[Dictionary]) -> void:
+	_flight_running = false
+	for record in _flight_records:
+		var shot: Projectile3D = record.shot
+		shot._retire()
+		_check_clean(shot)
+	_flight_records.clear()
+	var statistics: Dictionary = {}
+	for key in ENCHANT_KEYS:
+		var probe: Dictionary = _flight_probes[key]
+		_check(probe.changes > 0 and probe.visible_frames > 0, "同属性瞬时粒子专用追踪图确有可见内容和帧变化：" + key)
+		statistics[key] = {"changed_frames": probe.changes, "visible_frames": probe.visible_frames, "samples": probe.samples, "method": "真实粒子专用追踪viewport，排除弹身脉动/平移/灯光；非GPU存活粒子数回读"}
+		var viewport: SubViewport = probe.viewport
+		viewport.free()
+	_flight_probes.clear()
+	_check(frames.size() >= 60 and not _flight_completed.is_empty(), "至少60帧且发生完整20m真实飞行退役")
+	_check(_pool.get_snapshot().active == 0, "动态验收结束pool active=0")
+	_motion_report = {"video_frames": frames.size(), "video_frame_count": frames.size(), "recording": false, "interval_seconds": MOTION_INTERVAL, "elapsed_seconds": _flight_elapsed, "frames": frames, "completed_flights": _flight_completed, "particle_frame_statistics": statistics, "pool_active_after": _pool.get_snapshot().active, "primary_acceptance": "非静止，真实池activate和正常_physics_process，visual_scale=2"}
+	var evidence := FileAccess.open(output.path_join("projectile_enchant_flight.json"), FileAccess.WRITE)
+	_check(evidence != null, "飞行实测统计文件可写")
+	if evidence != null:
+		evidence.store_string(JSON.stringify(_motion_report, "\t"))
+		evidence.close()
+
+
 func _render_behavior(key: String) -> Dictionary:
 	if key == "bounce":
 		return {"bounce_count": 2}
@@ -949,8 +1291,9 @@ func _capture_render(output: String, label: String, shots: Array[Projectile3D]) 
 			_check_clean(shot)
 		for entry in snapshot.attachments:
 			var particles := shot.get_node("ProjectileEnchantments/Enchant_" + entry.attribute + "/Particles") as GPUParticles3D
-			_check(particles.emitting and particles.visible and particles.speed_scale == 1.0 and particles.amount == floori(24.0 / snapshot.attribute_count), "截图时真实发射器持续运行：" + label + "/" + entry.attribute)
-			_check(entry.asset_version == "v002" and entry.prefab_path == "res://assets/art/vfx/combat_3d/vfx_projectile_enchant_%s_root_top3d.tscn" % entry.attribute, "截图不替换原v002附件Prefab：" + label + "/" + entry.attribute)
+			_check(particles.emitting and particles.visible and particles.speed_scale == 1.0 and particles.amount == _amount(entry.attribute, snapshot.attribute_count), "截图时真实发射器持续运行：" + label + "/" + entry.attribute)
+			_check_authored(entry, snapshot.attribute_count)
+			_check(entry.asset_version == "v004" and entry.prefab_path == "res://assets/art/vfx/combat_3d/vfx_projectile_enchant_%s_root_top3d.tscn" % entry.attribute, "截图不替换原v004附件Prefab：" + label + "/" + entry.attribute)
 			_check(is_equal_approx(entry.visual_size, RENDER_SCALE) and entry.visual_scale.is_equal_approx(Vector3.ONE * RENDER_SCALE) and is_equal_approx(shot.visual_scale, RENDER_SCALE), "截图主体与附件配置倍率如实为×2：" + label + "/" + entry.attribute)
 	await RenderingServer.frame_post_draw
 	var image := get_viewport().get_texture().get_image()

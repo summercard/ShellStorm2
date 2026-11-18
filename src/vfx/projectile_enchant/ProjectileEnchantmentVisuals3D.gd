@@ -33,6 +33,7 @@ var _light_instances: Dictionary = {}
 var _active_light_key := ""
 var _selected: Array[String] = []
 var _emitting := false
+var _body_enabled := true
 
 
 static func selected_attributes(behavior: Dictionary) -> Array[String]:
@@ -69,16 +70,21 @@ static func body_tint(attributes: Array[String]) -> Color:
 
 func configure(behavior: Dictionary, size: float, context: Dictionary) -> void:
 	reset()
+	_body_enabled = bool(context.get("enchantment_body_enabled", true))
 	_selected = selected_attributes(behavior)
 	for key in _selected:
 		if not _instances.has(key):
 			var instance: VfxEffectBase3D = (PREFABS[key] as PackedScene).instantiate() as VfxEffectBase3D
 			instance.name = "Enchant_" + key
+			instance.reset()
 			add_child(instance)
 			_instances[key] = instance
 		var attachment: VfxEffectBase3D = _instances[key]
 		var parameters := context.duplicate(true)
 		parameters["attribute_count"] = _selected.size()
+		parameters["body_tint"] = BODY_PALETTE[key]
+		parameters["body_tint_resolved"] = body_tint(_selected) if key == _selected[0] else BODY_PALETTE[key]
+		parameters["body_root_visible"] = _body_enabled and key == _selected[0]
 		attachment.configure(Color.WHITE, size, parameters)
 	if not _selected.is_empty():
 		# 第一属性决定灯对象与宿主，最终灯色混合全部去重属性。
@@ -110,19 +116,21 @@ func set_emitting(enabled: bool) -> void:
 
 
 func reset() -> void:
-	for light in _light_instances.values():
-		light.reset()
+	if not _active_light_key.is_empty():
+		_light_instances[_active_light_key].reset()
 	_active_light_key = ""
-	for attachment in _instances.values():
-		attachment.reset()
+	for key in _selected:
+		_instances[key].reset()
 	_selected.clear()
 	_emitting = false
+	_body_enabled = true
 	visible = false
 
 
 func get_enchantment_snapshot() -> Dictionary:
 	var attachments: Array[Dictionary] = []
 	var cached: Array[Dictionary] = []
+	var by_attribute := {}
 	var total := 0
 	var cached_lights: Array[Dictionary] = []
 	var enchantment_light: Dictionary = {}
@@ -138,13 +146,17 @@ func get_enchantment_snapshot() -> Dictionary:
 		var entry: Dictionary = _instances[key].get_enchantment_snapshot()
 		entry["attribute"] = key
 		cached.append(entry)
-		if _selected.has(key):
-			attachments.append(entry.duplicate(true))
-			total += int(entry["amount"])
+		by_attribute[key] = entry
+	for key in _selected:
+		attachments.append(by_attribute[key])
+		total += int(by_attribute[key]["amount"])
 	return {
 		"attributes": _selected.duplicate(), "selected": _selected.duplicate(),
 		"attribute_count": _selected.size(),
 		"body_tint": body_tint(_selected),
+		"scene_body_owner": "enchantment_attachment" if _emitting and not _selected.is_empty() else "original_visual",
+		"body_root_visible": _emitting and not _selected.is_empty(),
+		"body_root_attribute": _selected[0] if not _selected.is_empty() else "",
 		"attachments": attachments, "cached_attachments": cached,
 		"total_amount": total, "emitting": _emitting,
 		"cached_count": _instances.size(),

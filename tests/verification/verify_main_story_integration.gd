@@ -155,6 +155,7 @@ func _run() -> void:
 	print("MAIN_STORY_INTEGRATION_BEGIN unique_settlement")
 	_verify_unique_settlement()
 	print("MAIN_STORY_INTEGRATION_END unique_settlement checks=", checks)
+	await _verify_safe_return_flow(room)
 	await _finish()
 
 
@@ -304,6 +305,81 @@ func _verify_unique_settlement() -> void:
 	check(not tower._completed and BaseManager.data.total_runs == runs_before, "方式B不因旧8秒档自动结算")
 	check(str(tower._main_story_auto_extraction.get("stage", "")) == "call_pending", "旧自动阶段保持通讯待办")
 	check(not tower._main_story_auto_extraction.has("remaining"), "方式B不保留倒计时字段")
+
+
+func _verify_safe_return_flow(room: DungeonRoom3D) -> void:
+	print("MAIN_STORY_INTEGRATION_BEGIN safe_return_flow")
+	tower._completed = false
+	tower.player.current_hp = tower.player.max_hp
+	tower._current_room_id = room.room_id
+	tower.player.global_position = room.to_global(Vector3(0.0, 0.08, -14.0))
+	room.ensure_detail_built()
+	await get_tree().physics_frame
+	var state := tower._new_main_story_extraction_state()
+	tower._main_story_auto_extraction = state.duplicate(true)
+	var snapshot := tower.build_runtime_save_snapshot()
+	check(BaseManager.set_active_run_checkpoint(snapshot, "integration_safe_pending"), "正式安全返航夹具保存待播阶段")
+	NarrativeDirector.bind_dungeon_for_test(tower)
+	DialogueUI.close()
+	var controller := tower.get_main_story_controller()
+	controller._process(0.0)
+	check(NarrativeDirector.active_id() == MainStoryChapter3D.KEY_RETURN_CALL_ID, "真实主线控制器从领取待办起播方式B返航通讯")
+	NarrativeDirector._process(0.25)
+	check(DialogueUI.is_active(), "方式B真实对白载体接收多句")
+	var picture := DialogueUI.get_presentation_snapshot()
+	check(bool(picture.get("portraits_enabled", false)), "返航通讯启用B立绘而不是A")
+	check(not BaseManager.has_narrative_completed(MainStoryChapter3D.KEY_RETURN_CALL_ID), "首句显示尚未记返航通讯完成")
+	NarrativeDirector.skip()
+	await get_tree().process_frame
+	check(not BaseManager.has_narrative_completed(MainStoryChapter3D.KEY_RETURN_CALL_ID), "返航通讯skip拒绝完成历史")
+	check(str(tower.get_main_story_extraction_state().get("stage", "")) == "call_pending", "skip仍保留可重试待办")
+	controller._process(0.0)
+	check(NarrativeDirector.active_id() == MainStoryChapter3D.KEY_RETURN_CALL_ID, "返航通讯中断后真实条件可重试")
+	NarrativeDirector._process(0.25)
+	for line_index in range(3):
+		check(DialogueUI.is_active(), "返航通讯逐句真实活跃_%d" % line_index)
+		DialogueUI.reveal_all()
+		DialogueUI.advance()
+		NarrativeDirector._process(0.01)
+	NarrativeDirector._process(0.5)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	check(BaseManager.has_narrative_completed(MainStoryChapter3D.KEY_RETURN_CALL_ID), "真实多句completed后保存返航通讯history")
+	check(str(tower.get_main_story_extraction_state().get("stage", "")) == "beacon_ready", "正常收口同步提交beacon_ready")
+	var beacon := tower.get("_main_story_safe_beacon") as ExtractionBeacon3D
+	check(beacon != null, "正常通讯结束后实例化真实安全wrapper")
+	if beacon == null:
+		return
+	check(beacon.visual_scene != null and not bool(beacon.get_snapshot().get("interaction_ready", true)), "真实GLB可见资源且落下阶段不可交互")
+	check(not beacon.force_start_for_test(), "真实投放0.6秒前拒绝启动")
+	await get_tree().create_timer(0.7, false).timeout
+	check(bool(beacon.get_snapshot().get("interaction_ready", false)), "真实投放落地后才开放交互")
+	check(room.is_narrative_floor_position_valid(beacon.global_position), "安全信标实际世界坐标通过真实地面校验")
+	var saved_position := tower.get_main_story_extraction_state().get("local_position", []) as Array
+	check(saved_position.size() == 3 and beacon.position.distance_to(Vector3(float(saved_position[0]), float(saved_position[1]), float(saved_position[2]))) < 0.01, "非恒等房间变换下实体位置与存档局部落点一致")
+	var ordinary := tower._create_extraction_beacon(room, "STANDARD", 30.0, false, Vector3(9, 0, 9))
+	check(ordinary.force_start_for_test(), "普通撤离信标对照真实启动")
+	check(not str(tower.get("_extraction_encounter_instance_id")).is_empty(), "普通撤离仍创建防守遭遇")
+	ordinary.abort_extraction()
+	ordinary.queue_free()
+	beacon._player_in_range = true
+	check(beacon.perform_interaction(tower.player, {}), "安全信标通过正式主动交互入口启动")
+	check(str(tower.get("_extraction_encounter_instance_id")).is_empty() and not bool(tower.get("_extraction_defense_active")), "安全同步不创建或推进防守遭遇")
+	check(is_equal_approx(float(beacon.get_snapshot().get("duration", 0)), 8.0), "主动同步为真实8秒而不是自动返航")
+	tower.force_extraction_settlement_for_test = true
+	var runs_before := BaseManager.data.total_runs
+	var outcomes: Array[Dictionary] = []
+	tower.run_completed.connect(func(success: bool, summary: Dictionary) -> void: outcomes.append({"success": success, "summary": summary}))
+	var expires := Time.get_ticks_msec() + 12000
+	while not tower._completed and Time.get_ticks_msec() < expires:
+		await get_tree().process_frame
+	check(tower._completed and outcomes.size() == 1 and bool(outcomes[0].get("success", false)), "安全信标8秒真实读条完成仅一次正式成功结算")
+	check(BaseManager.data.total_runs == runs_before + 1, "正式安全返航只增加一次行动统计")
+	if not outcomes.is_empty():
+		check(str((outcomes[0].get("summary", {}) as Dictionary).get("return_room_id", "")) == "facility", "安全主线信标保持99F基地目的地")
+	check(MainStoryProgress.key_state(BaseManager.get_main_story_snapshot(), KEY) == "acquired", "安全返航不丢永久稀土钥匙")
+	check(not BaseManager.get_active_run_checkpoint().has(PHASE), "返航携带物交接移除已消费行动待办")
+	print("MAIN_STORY_INTEGRATION_END safe_return_flow")
 
 
 func _verify_base_host() -> void:

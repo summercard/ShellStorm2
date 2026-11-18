@@ -5,6 +5,17 @@
 
 ## 执行历史
 
+### 2026-11-18 05:00 — **内容已上线，线上校验不通过（第十八天同一卡点：需登录门禁）**；首轮因**导出与源码编辑赛跑**取到半写脚本假红中止
+- 首轮（05:01—05:17，16m18s）：导出 398.6 MiB 一次过 → 两道静态门禁绿 → **第 3 道冒烟退出码 1 ⇒ 按硬约束中止，未发布**。真因不是代码缺陷：另一会话在导出编译脚本期间（05:10—05:14）正在写 `src/world3d/TowerDescent3D.gd`，包内取到写一半的版本 ⇒ `SCRIPT ERROR: Parse Error: Expected indented block after "if" block. (TowerDescent3D.gd:1674)` + 级联 `RooftopExpeditionEntrance3D.gd`（依赖 `TowerDescent3D` 类注册）⇒ 共 2 行 ERROR。**判据：包内报 Parse Error 而现场源码第 1674 行缩进正常（4 层 tab）+ 源码 mtime 05:14:10 落在导出窗口内。**
+- 处置：不动源码、不放宽门禁。先跑全项目解析证明工作区干净（`--headless --editor --quit` + 隔离 APPDATA ⇒ **Parse Error 0 / SCRIPT ERROR 0**），再**重建一次** → 三道真跑全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）。第二轮 1m44s（`.godot/exported` 缓存已热，导出仅约 40s）。
+- 包：**417,929,288 B / 398.6 MiB**，SHA256 `a0c0821a0a6cb18532914e2ad3e45259cc085e6abd8cd529968a30d0ccad88de`，比 11-17 版 **+472,968 B（+461.9 KiB）**。exe mtime 05:24:10。工作区开工 27 项 / 收工 32 项，HEAD `b2a57ea3`（11-18 04:23）。
+- 线上已被本版覆盖：`Files: 3` / `Bytes: 417,953,528` ＝ 本地三件（417,929,288 + 13,514 + 10,726）**逐字节相等，差 0**；`server-sites` 本站 **398.6 MiB / 需登录 / 私有 / 2 人 2 次**，全站仍 6 资源、Site ID 不变 ⇒ 未新建。
+- **卡点不变**：直链 / 更新页均 302 → `/oauth/feishu?rd=…&src=site`。未改策略、未删校验。闭环依据仍是字节总和 + 站点记录。
+- **12 条全为真新增**（1 条 11-18 + 11 条 11-17）：源开发记录 mtime 全在 11-17 14:09—11-18 01:05，均晚于昨日 05:04 发布 ⇒ 本轮无重复计数。提交 2 条（`b2a57ea3`/`33ff1bf0`），未提交 32 项（修改 22 / 新增 10），已打进包。
+- 合规：`config/name="弹壳风暴2"` 未动（`git diff project.godot` 空）；未 commit/push；未新建站点；`scripts/web_release.py` 不存在、未跑；发布目录仅 3 件；真实存档 `base_save.json` mtime 11-17 23:06（早于流水线）。
+- 报告：`ShellStorm2-work\_logs\发布报告_2026-11-18.md`；日志 `_logs\daily_release_2026-11-18.log`（首轮失败）+ `_run2.log`（成功轮）+ `editor_parse_probe_2026-11-18.log`。
+- **待业主（连续第十八天）**：①请管理员把本站 `access` 改 `public`；②建议给 `daily_release.py` 加「导出期间源码变动」检测（导出前后快照 `src/`、`scenes/`、`assets/` 最新 mtime，窗口内有新写入就警告并按新快照重建）—— 今天门禁没漏，是喂进去的包已经脏了。
+
 ### 2026-11-16 05:00 — **内容已上线，线上校验不通过（第十七天同一卡点：需登录门禁）**；首轮因**冒烟脚本 GBK 编码崩溃**假红中止
 - 首轮全流程：导出 392.0 MiB 一次过 → 两道静态门禁绿 → **第 3 道冒烟退出码 1 ⇒ 按硬约束中止，未发布**。根因已复现证实：`smoke_exported_pack.py:135` 的 `print("[存档] ✅ …")` 在 stdout=GBK 时抛 `UnicodeEncodeError: 'gbk' codec can't encode '\u2705'`；同次 headless 退出码 0、禁用字样 0 条 ⇒ **包没问题，是脚本打印 emoji 崩溃**。处置：不动门禁，仅 `PYTHONIOENCODING=utf-8`+`PYTHONUTF8=1` 后 `--skip-build` 重跑 → 三道真跑全绿 → 发布成功。**同一 exe 修编码后连续 5 次 `SMOKE_OK`。**
 - 包：**411,081,248 B / 392.0 MiB**，SHA256 `2f4c02dfdceb156bd9bb4e3d983244ab74e6ac698d79317583edc92ab69c069f`，比 11-15 版 **−7,199,728 B（−6.87 MiB）**。exe mtime 05:04:13。工作区开工/收工均 3 项（`_probe_loop.txt`、`override.cfg.disabled_20261109`、`verify_main_story_boss_gate.report.json`），HEAD `e81c3bc5`（11-16 04:03，38 项）。

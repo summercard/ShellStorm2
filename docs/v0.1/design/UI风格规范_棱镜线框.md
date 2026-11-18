@@ -255,11 +255,12 @@ ESC 暂停页的「复位游戏存档二次确认」是 `ConfirmationDialog`（`
 | 右下 | `HUD/ReferenceCombatHUD/CurrentWeaponPanel` | 无背板 |
 | 底部中 | `HUD/ReferenceCombatHUD/QuickItemHUD_0` / `_1` | 无背板 |
 | 底部中 | `HUD/ExtractionPanel` | 外壳无背板；进度条本体（background + fill）保留 |
-| 左中 | `HUD/TowerCurrentInfoHUD` | 无背板、无括号；**只留左侧 2px 白竖线** |
+| 左中 | `HUD/ReferenceCombatHUD/PlayerStatusBlock/…/PlayerStatColumn/TowerBaseCurrencyHUD` | 无背板、无括号、无竖线；纯单行文字 |
 | 右上 | `HUD/ReferenceCombatHUD/WorldDateTimeHUD` | 无背板、无括号 |
 
-**唯一保留的结构线**：`TowerCurrentInfoHUD` 左侧 `2px` 白竖线（`border_width_left = 2`、
-`Color(1, 1, 1, 0.78)`）。它宽仅 2px、不成框，只用来表明"这几行属于同一段引导信息"。
+**结构线现状（2026-11-18）**：原 `TowerCurrentInfoHUD` 左侧那条 `2px` 白竖线已随引导卡整块撤除。
+现在常驻 HUD 上**没有任何结构线**，分组只靠文字的行距与层级色差承担。
+（历史：该竖线为 `border_width_left = 2` / `Color(1, 1, 1, 0.78)`，仅表明"这几行属于同一段引导信息"。）
 
 **`_make_prism_hud_card_style` 的现状**：不再是 HUD 外壳的默认口径，只保留给 **HUD 内部的内容件**——
 目前唯一调用点是电量电芯格（`_update_hud_battery`，未充能 alpha `0.14` / 已充能 `0.46`）。
@@ -571,7 +572,7 @@ ESC 暂停页的「复位游戏存档二次确认」是 `ConfirmationDialog`（`
 - **45° 斜纹警戒分节条**（`make_duckov_section_header` 及斜纹贴图）；
 - `8~12px` 圆角、内发光渐变、彩色发光描边、`shadow_size > 0` 的卡片；
 - **常驻 HUD 上的卡片背板与四角括号**（2026-10-17 业主否决：太占视野）——
-  HUD 只允许**文字 + 细线 + 内容件**；唯一例外是 `TowerCurrentInfoHUD` 的 2px 左侧引导竖线；
+  HUD 只允许**文字 + 细线 + 内容件**；2026-11-18 起原 2px 引导竖线也撤了，常驻 HUD 上不再有结构线例外；
 - 恢复性回弹动效（`TRANS_BACK`）；
 - 面板纯黑底（`#000`）；
 - **`_add_neon_frame` 及 `NEON_FRAME_SCRIPT`**（2026-10-17 已从 `Dungeon3D` 删除；

@@ -116,6 +116,7 @@ def main():
     parser.add_argument('--godot', default=os.environ.get('GODOT_BIN', GODOT))
     parser.add_argument('--logic', action='store_true')
     parser.add_argument('--record-motion', action='store_true', help='仅真实渲染UI专项采集0.09秒间隔PNG帧，不编码视频')
+    parser.add_argument('--flight-only', action='store_true', help='projectile专项仅采集真实飞行，不初始化静态grid/mix/light_cast')
     parser.add_argument('--resolution', nargs='+', choices=['1280x720', '1920x1080'], default=['1280x720'])
     parser.add_argument('--scene', nargs='+', default=['weapon_hologram_ui'], help='专项简称、all 或 tests/verification 下的 tscn 路径')
     parser.add_argument('--timeout', type=int, default=240)
@@ -125,6 +126,8 @@ def main():
     args = parser.parse_args()
     if args.logic and args.record_motion:
         parser.error('--record-motion 需要真实渲染，不能与 --logic 同用')
+    if args.logic and args.flight_only:
+        parser.error('--flight-only 需要真实渲染，不能与 --logic 同用')
     scenes = []
     for value in args.scene:
         if value == 'all':
@@ -140,7 +143,8 @@ def main():
     root = wp.work_path('verification/weapon_hologram/' + time.strftime('%Y%m%d_%H%M%S') + '_' + uuid.uuid4().hex[:6] + '/result.json').parent
     report_path = root / 'result.json'
     print('JSON路径=' + str(report_path), flush=True)
-    summary = {'passed': False, 'root': str(root), 'logic': args.logic, 'record_motion': args.record_motion, 'runs': [],
+    summary = {'passed': False, 'root': str(root), 'logic': args.logic, 'record_motion': args.record_motion,
+               'flight_only': args.flight_only, 'runs': [],
                'isolation': {'appdata_before_autoload': True, 'independent_project_and_cache': True,
                              'custom_user_dir': 'weapon_hologram_qa', 'runtime_present': (wp.PROJECT_ROOT / 'runtime').exists()}}
     report_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding='utf-8')
@@ -194,12 +198,13 @@ def main():
             command.append(scene)
             user_args = []
             if not args.logic and scene == SCENES['projectile_enchant_visuals']:
-                user_args.append('--render-grid')
+                user_args.append('--flight-only' if args.flight_only else '--render-grid')
             if args.record_motion and scene == SCENES['weapon_hologram_ui']:
                 user_args.append('--record-motion')
             if user_args:
                 command += ['--'] + user_args
-            run, text = execute(command, run_env, run_dir, 'scene', args.timeout)
+            enchant_render = not args.logic and scene == SCENES['projectile_enchant_visuals']
+            run, text = execute(command, run_env, run_dir, 'scene', min(args.timeout, 60) if enchant_render else args.timeout)
             marker = 'WEAPON_HOLOGRAM_UI_RESULT ' if 'weapon_hologram_ui' in scene else 'PROJECTILE_ENCHANT_VISUALS_RESULT '
             reports = [line.split(marker, 1)[1] for line in text.splitlines() if marker in line]
             try:
@@ -212,9 +217,9 @@ def main():
             run['images'] = [str(p) for p in sorted(output.glob('*.png'))]
             run['video_frames'] = [str(p) for p in sorted((output / 'motion').glob('frame_*.png'))]
             run['video_frame_count'] = len(run['video_frames'])
-            run['motion_output'] = str(output / 'motion') if '--record-motion' in user_args else None
+            run['motion_output'] = str(output / 'motion') if enchant_render or '--record-motion' in user_args else None
             run['motion_frame_pattern'] = str(output / 'motion' / 'frame_%05d.png') if run['motion_output'] else None
-            run['motion_interval_seconds'] = 0.09 if run['motion_output'] else None
+            run['motion_interval_seconds'] = (0.045 if enchant_render else 0.09) if run['motion_output'] else None
             run['passed'] = bool(run['passed'] and run['report'].get('passed') and (args.logic or run['renderer_verified']))
             if not args.logic and 'weapon_hologram_ui' in scene:
                 run['passed'] = run['passed'] and all((output / (stage + '.png')).exists() for stage in ['k_build', 'purchase_stable', 'confirmation', 'install_motion', 'assembled'])
@@ -224,8 +229,32 @@ def main():
                     run['passed'] = bool(run['passed'] and run['video_frame_count'] > 0
                                          and motion.get('video_frames') == run['video_frame_count']
                                          and not motion.get('recording', True))
-            if not args.logic and scene == SCENES['projectile_enchant_visuals']:
-                run['passed'] = run['passed'] and all((output / (name + '.png')).exists() for name in ['projectile_enchant_grid', 'projectile_enchant_mix'])
+            if enchant_render:
+                if args.flight_only:
+                    required = ['projectile_enchant_flight']
+                    run['primary_acceptance'] = 'flight-only非静止真实飞行；跳过静态grid/mix/light_cast'
+                else:
+                    required = ['projectile_enchant_grid', 'projectile_enchant_mix', 'projectile_enchant_flight',
+                                'projectile_enchant_standard_seven', 'projectile_enchant_special_preserve',
+                                'projectile_enchant_light_cast']
+                    run['primary_acceptance'] = '非静止真实飞行；静态grid/mix仅补充'
+                required += [f'projectile_enchant_moving_wrap_trail_{index:02d}' for index in range(3)]
+                run['missing_images'] = [name + '.png' for name in required if not (output / (name + '.png')).is_file()]
+                motion = run['report'].get('motion', {})
+                run['flight_evidence'] = str(output / 'projectile_enchant_flight.json')
+                statistics = motion.get('particle_frame_statistics', {})
+                keys = ['fire', 'ice', 'poison', 'lightning', 'bounce', 'homing', 'return']
+                run['passed'] = bool(run['passed'] and not run['missing_images']
+                                     and run['video_frame_count'] > 0 and run['video_frame_count'] >= 60
+                                     and motion.get('video_frames') == run['video_frame_count']
+                                     and motion.get('video_frame_count') == run['video_frame_count']
+                                     and motion.get('recording') is False
+                                     and motion.get('pool_active_after') == 0
+                                     and run['report'].get('pool', {}).get('active') == 0
+                                     and motion.get('completed_flights')
+                                     and Path(run['flight_evidence']).is_file()
+                                     and all(statistics.get(key, {}).get('changed_frames', 0) > 0
+                                             and statistics.get(key, {}).get('visible_frames', 0) > 0 for key in keys))
             summary['runs'].append(run)
             summary['passed'] = bool(imported['passed'] and all(item['passed'] for item in summary['runs']))
             report_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding='utf-8')

@@ -124,7 +124,7 @@ func _player_valid(host: Node) -> bool:
 
 
 func _merchant_station_snapshot(host: Node) -> Dictionary:
-	if not host.has_method("get_run_vending_tutorial_station_snapshot"):
+	if not is_instance_valid(host) or not host.has_method("get_run_vending_tutorial_station_snapshot"):
 		return {}
 	var value: Variant = host.call("get_run_vending_tutorial_station_snapshot")
 	return value as Dictionary if value is Dictionary else {}
@@ -192,6 +192,7 @@ func _on_narrative_finished(narrative_id: String, reason: String) -> void:
 		return
 	_active = false
 	_active_generation = -1
+	_generation += 1
 	if reason in ["duration", "flow.end"]:
 		if not _completed():
 			_read_without_commit = true

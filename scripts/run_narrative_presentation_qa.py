@@ -23,6 +23,7 @@ SCENES = {
     'main_story_integration': 'res://tests/verification/verify_main_story_integration.tscn',
     'main_story_performance': 'res://tests/verification/verify_main_story_performance.tscn',
     'capture_main_story_chapter': 'res://tests/verification/capture_main_story_chapter.tscn',
+    'story_safe_beacon': 'res://tests/verification/verify_story_safe_beacon.tscn',
 }
 ERROR = re.compile(r'SCRIPT ERROR:|(?:^|\n)\s*ERROR:|Parse Error:|Compile Error:|Failed to load', re.I)
 KNOWN_TIMELINE = re.compile(r'^\s*ERROR: \[NarrativeDirector\] cue『player\.teleport』执行失败.*$')
@@ -113,6 +114,7 @@ def required_files(scenes):
 
 def synchronize(project, root, scenes):
     rows = []
+    copied_relative = []
     for relative in required_files(scenes):
         source, target = wp.PROJECT_ROOT / relative, project / relative
         old_hash = digest(target) if target.exists() else None
@@ -128,8 +130,87 @@ def synchronize(project, root, scenes):
             staging = target.with_name(target.name + '.qa_' + uuid.uuid4().hex)
             shutil.copy2(source, staging)
             os.replace(staging, target)
+        copied_relative.append(relative)
         rows.append(row)
-    (root / 'sync_manifest.json').write_text(json.dumps(rows, ensure_ascii=False, indent=2), encoding='utf-8')
+
+    # .import 只描述导入结果，正式工程副本还需要对应的 Godot 导入缓存。
+    # 不重导整份工程：只按本次同步文件的 path=... 精确补齐 .godot/imported 下的
+    # PackedScene/材质缓存。否则真实场景可能把“缺缓存”误报成业务脚本失败。
+    # GLB 外置纹理路径藏在二进制文件里，文本依赖扫描不一定发现。
+    # 同步同目录纹理及其 .import，避免既有资产缺依赖污染本轮业务验收。
+    existing = set(copied_relative)
+    for relative in list(copied_relative):
+        if relative.suffix.lower() != '.glb':
+            continue
+        for sibling in (wp.PROJECT_ROOT / relative).parent.iterdir():
+            if not sibling.is_file() or sibling.suffix.lower() not in {'.jpg', '.jpeg', '.png', '.webp'}:
+                continue
+            sibling_relative = sibling.relative_to(wp.PROJECT_ROOT)
+            sidecar = sibling.with_name(sibling.name + '.import')
+            extras = [sibling_relative]
+            if sidecar.is_file():
+                extras.append(sidecar.relative_to(wp.PROJECT_ROOT))
+            for extra in extras:
+                if extra in existing:
+                    continue
+                target = project / extra
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(wp.PROJECT_ROOT / extra, target)
+                existing.add(extra)
+                copied_relative.append(extra)
+                rows.append({'path': extra.as_posix(), 'source_sha256': digest(wp.PROJECT_ROOT / extra), 'previous_sha256': None, 'changed': True, 'reason': 'glb_external_texture_dependency'})
+
+    # GLB 还可能引用跨目录的外置贴图。解析其 JSON chunk 中的相对 URI，
+    # 只同步工程根内的图片及 .import；不运行导入器、不接受越界路径。
+    existing = set(copied_relative)
+    uri_pattern = re.compile(rb'"uri"\s*:\s*"([^"\r\n]+\.(?:png|jpg|jpeg|webp))"', re.I)
+    for relative in list(copied_relative):
+        if relative.suffix.lower() != '.glb':
+            continue
+        binary = (wp.PROJECT_ROOT / relative).read_bytes()
+        for match in uri_pattern.finditer(binary):
+            uri = match.group(1).decode('utf-8', 'replace').replace('\\\\', '/')
+            source_texture = ((wp.PROJECT_ROOT / relative).parent / Path(uri)).resolve()
+            if not source_texture.is_file() or not source_texture.is_relative_to(wp.PROJECT_ROOT):
+                continue
+            texture_relative = source_texture.relative_to(wp.PROJECT_ROOT)
+            sidecar = source_texture.with_name(source_texture.name + '.import')
+            extras = [texture_relative]
+            if sidecar.is_file():
+                extras.append(sidecar.relative_to(wp.PROJECT_ROOT))
+            for extra in extras:
+                if extra in existing:
+                    continue
+                target = project / extra
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(wp.PROJECT_ROOT / extra, target)
+                existing.add(extra)
+                copied_relative.append(extra)
+                rows.append({'path': extra.as_posix(), 'source_sha256': digest(wp.PROJECT_ROOT / extra), 'previous_sha256': None, 'changed': True, 'reason': 'glb_uri_texture_dependency'})
+
+    imported_root = project / '.godot/imported'
+    imported_root.mkdir(parents=True, exist_ok=True)
+    cache_rows = []
+    for relative in copied_relative:
+        if relative.suffix != '.import':
+            continue
+        import_file = project / relative
+        import_text = import_file.read_text(encoding='utf-8', errors='replace')
+        cache_values = re.findall(r'^path(?:\.[A-Za-z0-9_]+)?="res://([^"\r\n]+)"', import_text, re.M)
+        for cache_value in cache_values:
+            cache_path = Path(cache_value)
+            cache_relative = cache_path if cache_path.parts[:2] == ('.godot', 'imported') else Path('.godot/imported') / cache_path
+            source_cache, target_cache = wp.PROJECT_ROOT / cache_relative, project / cache_relative
+            if not source_cache.is_file():
+                cache_rows.append({'path': cache_relative.as_posix(), 'copied': False, 'reason': 'source_cache_missing'})
+                continue
+            target_cache.parent.mkdir(parents=True, exist_ok=True)
+            old_hash = digest(target_cache) if target_cache.exists() else None
+            new_hash = digest(source_cache)
+            if old_hash != new_hash:
+                shutil.copy2(source_cache, target_cache)
+            cache_rows.append({'path': cache_relative.as_posix(), 'copied': old_hash != new_hash, 'source_sha256': new_hash})
+    (root / 'sync_manifest.json').write_text(json.dumps({'files': rows, 'imported_cache': cache_rows}, ensure_ascii=False, indent=2), encoding='utf-8')
     return rows
 
 
@@ -231,6 +312,18 @@ def scene_report(scene, text):
     if scene == SCENES['narrative_timeline']:
         marker = 'verify_narrative_timeline_OK checks='
         return {'completed': marker in text, 'passed': marker in text}
+    if scene == SCENES['story_safe_beacon']:
+        marker = 'STORY_SAFE_BEACON_REPORT '
+        rows = [line.split(marker, 1)[1] for line in text.splitlines() if marker in line]
+        if rows:
+            try:
+                payload = json.loads(rows[-1])
+                # 单元测试只对自身 scope 签字；正式主线链由 integration 独立签字。
+                payload['passed'] = bool(payload.get('completed', False) and payload.get('passed', False) and not payload.get('failures', []))
+                return payload
+            except json.JSONDecodeError:
+                return {}
+        return {'completed': False, 'passed': False, 'failures': ['缺少 STORY_SAFE_BEACON_REPORT']}
     markers = {
         SCENES['run_vending_tutorial']: 'RUN_VENDING_TUTORIAL_RESULT ',
         SCENES['main_story_integration']: 'MAIN_STORY_INTEGRATION_REPORT ',
@@ -251,7 +344,7 @@ def scene_report(scene, text):
         return {'completed': bool(rows), 'passed': bool(rows) and 'failures=0' in rows[-1]}
     if scene == SCENES['capture_main_story_chapter']:
         rows = [line for line in text.splitlines() if 'MAIN_STORY_VISUAL_RESULT ' in line]
-        return {'completed': bool(rows), 'passed': bool(rows) and re.search(r'failures=0(?:\\s|$)', rows[-1]) is not None}
+        return {'completed': bool(rows), 'passed': bool(rows) and re.search(r'failures=(?:0|\[\])(?:\s|$)', rows[-1]) is not None}
     return {}
 
 

@@ -299,10 +299,20 @@ func clear_kind(asset_id: StringName) -> void:
 			eff.queue_free()
 	_active[asset_id].clear()
 
+## 只结束当前正在播放的特效，保留 inactive 预热池供后续场景复用。
+## 场景切换/本局结束时调用，避免 active VFX 跨场景残留。
+func clear_active() -> void:
+	for asset_id in _active.keys():
+		# finish() 会同步发出 retired，不能直接遍历原数组。
+		var active_effects: Array = _active[asset_id].duplicate()
+		for eff in active_effects:
+			if is_instance_valid(eff):
+				eff.finish()
+		_active[asset_id].clear()
+
 ## 清理所有特效
 func clear_all() -> void:
-	for asset_id in _active.keys():
-		clear_kind(asset_id)
+	clear_active()
 	for asset_id in _inactive.keys():
 		for eff in _inactive[asset_id]:
 			if is_instance_valid(eff):

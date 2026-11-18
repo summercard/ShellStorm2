@@ -6,6 +6,10 @@ const BOARD_PATH := "res://assets/art/ui/weapon_build/weapon_build_board.tscn"
 var row: HBoxContainer
 var board: Control
 var _owner: Node
+var _preview_slot := -1
+var _prev_button: Button
+var _next_button: Button
+var _page_tween: Tween
 var _intro: Tween
 var _epoch := 0
 var _settled := false
@@ -33,12 +37,59 @@ func _ready() -> void:
 	add_child(board)
 	board.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 	board.call("set_compact", true)
+	_prev_button = _make_page_button("‹")
+	_prev_button.name = "PreviewPreviousWeapon"
+	_prev_button.pressed.connect(func() -> void: _shift_preview(-1))
+	add_child(_prev_button)
+	_next_button = _make_page_button("›")
+	_next_button.name = "PreviewNextWeapon"
+	_next_button.pressed.connect(func() -> void: _shift_preview(1))
+	add_child(_next_button)
 	resized.connect(_layout)
 	_layout()
 
 func set_player(player: Node) -> void:
 	_owner = player
+	_preview_slot = int(player.call("get_active_weapon_slot")) if is_instance_valid(player) and player.has_method("get_active_weapon_slot") else -1
 	board.call("set_weapon_owner", player)
+	_update_preview_buttons()
+
+func _make_page_button(symbol: String) -> Button:
+	var button := Button.new()
+	button.text = symbol
+	button.focus_mode = Control.FOCUS_ALL
+	button.add_theme_font_size_override("font_size", 26)
+	UIStyleFactory.apply_prism_button(button, "ghost", 0, 24, 1, "none")
+	return button
+
+func _weapon_item_for_slot(slot_index: int) -> Dictionary:
+	if not is_instance_valid(_owner) or not _owner.has_method("get_equipped_weapon_item_for_slot"):
+		return {}
+	return _owner.call("get_equipped_weapon_item_for_slot", slot_index) as Dictionary
+
+func _update_preview_buttons() -> void:
+	var current := _preview_slot if _preview_slot >= 0 else (int(_owner.call("get_active_weapon_slot")) if is_instance_valid(_owner) and _owner.has_method("get_active_weapon_slot") else 0)
+	var enabled := not _weapon_item_for_slot(1 - current).is_empty()
+	_prev_button.disabled = not enabled
+	_next_button.disabled = not enabled
+
+func _shift_preview(direction: int) -> void:
+	if not is_instance_valid(_owner):
+		return
+	var current := _preview_slot if _preview_slot >= 0 else (int(_owner.call("get_active_weapon_slot")) if _owner.has_method("get_active_weapon_slot") else 0)
+	var target := 1 - current
+	var item := _weapon_item_for_slot(target)
+	if item.is_empty():
+		return
+	_preview_slot = target
+	var base_x := board.position.x
+	board.call("set_preview_item", item, target)
+	board.position.x = base_x + (-size.x if direction < 0 else size.x)
+	if _page_tween != null and _page_tween.is_valid():
+		_page_tween.kill()
+	_page_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_page_tween.tween_property(board, "position:x", base_x, 0.26).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	_update_preview_buttons()
 
 func _board_destination() -> Vector2:
 	if _dialogue_reserved:
@@ -50,6 +101,11 @@ func _layout() -> void:
 		return
 	row.position = Vector2(24, maxf(12, size.y * 0.025))
 	row.size = Vector2(maxf(1, size.x - 48), 320)
+	_prev_button.position = Vector2(8, size.y * 0.50 - 24)
+	_prev_button.size = Vector2(44, 48)
+	_next_button.position = Vector2(maxf(0, size.x - 52), size.y * 0.50 - 24)
+	_next_button.size = Vector2(44, 48)
+	_update_preview_buttons()
 	if _moving:
 		return
 	board.size = Vector2(maxf(1, size.x - 64), maxf(1, size.y * 0.45 - 40))

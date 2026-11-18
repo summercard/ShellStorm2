@@ -114,6 +114,7 @@ var _active := true
 var _collision_shape: CollisionShape3D
 var _visual: VfxEffectBase3D
 var _enchantment_visuals: PROJECTILE_ENCHANT_VISUALS
+var _enchant_attributes: Array[String] = []
 var _returning := false
 var _turret_active := false
 var _turret_remaining := 0.0
@@ -159,6 +160,7 @@ func configure(config: Dictionary) -> void:
 	if not is_instance_valid(shooter):
 		shooter = null
 	fate_behavior = (config.get("behavior", {}) as Dictionary).duplicate(true)
+	_enchant_attributes = PROJECTILE_ENCHANT_VISUALS.selected_attributes(fate_behavior)
 	# 每次 configure 一律重取（缺省空字典 ⇒ 中性档），池化复借不得残留上一发的枪身档位。
 	_gun_bullet_geometry = (config.get("gun_bullet_geometry", {}) as Dictionary).duplicate(true)
 	# 同上：敌弹的纯视觉倍率也必须逐发重取，否则池化复借会把上一只怪的放大档带过来。
@@ -204,6 +206,7 @@ func configure(config: Dictionary) -> void:
 		_sync_visual_orientation()
 	# configure可先于入树；弹体脚本必须提前保存本发的灯抑制上下文。
 	_apply_visual_configuration()
+	_sync_original_visual_body_visibility()
 	_configure_enchantment_visuals()
 
 
@@ -230,6 +233,7 @@ func activate(config: Dictionary, world_position: Vector3) -> void:
 	if _visual != null:
 		var resolved_visual_color := _bullet_visual_color()
 		_visual.activate(global_position, resolved_visual_color, _visual_scale_factor(), _bullet_visual_context())
+		_sync_original_visual_body_visibility()
 	if _enchantment_visuals != null:
 		_enchantment_visuals.set_emitting(true)
 	if _collision_shape != null:
@@ -245,6 +249,7 @@ func _ready() -> void:
 	_built = true
 	_rebuild_carried_weapon()
 	_apply_visual_configuration()
+	_sync_original_visual_body_visibility()
 	_sync_visual_orientation()
 	_configure_enchantment_visuals()
 	if _enchantment_visuals != null:
@@ -869,14 +874,25 @@ func _base_scale_factor() -> float:
 	return scale_factor
 
 
+func _uses_enchantment_body_visual() -> bool:
+	return _visual_id == "mod_bullet_standard" and not _enchant_attributes.is_empty() and not (hostile and _hostile_billboard_enabled())
+
+
 func _has_enchantment_body_tint() -> bool:
-	return _visual_id == "mod_bullet_standard" and not PROJECTILE_ENCHANT_VISUALS.selected_attributes(fate_behavior).is_empty()
+	return _visual_id == "mod_bullet_standard" and _uses_enchantment_body_visual()
 
 
 func _bullet_visual_color() -> Color:
 	if _has_enchantment_body_tint():
-		return PROJECTILE_ENCHANT_VISUALS.body_tint(PROJECTILE_ENCHANT_VISUALS.selected_attributes(fate_behavior))
+		return PROJECTILE_ENCHANT_VISUALS.body_tint(_enchant_attributes)
 	return bullet_color
+
+
+func _sync_original_visual_body_visibility() -> void:
+	if _visual == null:
+		return
+	var uses_enchantment_body := _uses_enchantment_body_visual()
+	_visual.visible = not uses_enchantment_body
 
 
 ## 弹体几何 context：枪身档位决定的轴向拉伸与生长包络（纯视觉）。
@@ -887,7 +903,8 @@ func _bullet_visual_context() -> Dictionary:
 		"grow_duration": float(_gun_bullet_geometry.get("grow_duration", 0.0)),
 		"projectile": true,
 		"tint_core": _has_enchantment_body_tint(),
-		"suppress_body_light": not PROJECTILE_ENCHANT_VISUALS.selected_attributes(fate_behavior).is_empty(),
+		"suppress_body_light": not _enchant_attributes.is_empty(),
+		"enchantment_body_enabled": _uses_enchantment_body_visual(),
 		"base_body_color": bullet_color,
 		# 敌方子弹**默认 3D 弹体**（2026-11-10 业主：「我只要求把接触体积和模型（被放大）的
 		# 体积做成一致，没有要求做成公告板」）。公告板实现完整保留，由
@@ -1236,6 +1253,8 @@ func get_enchantment_snapshot() -> Dictionary:
 	snapshot["tint_core"] = _has_enchantment_body_tint()
 	snapshot["body_tint_applied"] = _has_enchantment_body_tint()
 	snapshot["visual_body_tint"] = _bullet_visual_color()
+	snapshot["scene_body_owner"] = "enchantment_attachment" if _uses_enchantment_body_visual() else "original_visual"
+	snapshot["body_root_visible"] = _uses_enchantment_body_visual() and _enchantment_visuals != null and _enchantment_visuals.visible
 	if _visual != null and _visual.has_method("get_presentation_snapshot"):
 		var presentation := _visual.call("get_presentation_snapshot") as Dictionary
 		snapshot["body_presentation"] = presentation
@@ -1244,6 +1263,13 @@ func get_enchantment_snapshot() -> Dictionary:
 		snapshot["core_tint"] = presentation.get("core_tint", bullet_color)
 		snapshot["body_tint_applied"] = bool(presentation.get("enchantment_body_tint", false))
 		snapshot["visual_body_tint"] = presentation.get("shell_tint", bullet_color)
+	if _uses_enchantment_body_visual() and snapshot["body_root_visible"]:
+		var first: Dictionary = snapshot["attachments"][0]
+		var shell := first["body_shell"] as MeshInstance3D
+		var core := first["body_core"] as MeshInstance3D
+		snapshot["shell_tint"] = Color((shell.material_override as StandardMaterial3D).albedo_color, 1.0)
+		snapshot["core_tint"] = (core.material_override as StandardMaterial3D).albedo_color
+		snapshot["visual_body_tint"] = snapshot["shell_tint"]
 	return snapshot
 
 
@@ -1283,6 +1309,7 @@ func get_orientation_snapshot() -> Dictionary:
 
 
 func _retire() -> void:
+	_enchant_attributes.clear()
 	if _enchantment_visuals != null:
 		_enchantment_visuals.reset()
 	if is_instance_valid(_carried_weapon):
@@ -1309,6 +1336,11 @@ func _retire() -> void:
 
 
 func _spawn_effect(effect_id: StringName, world_position: Vector3, color: Color, size: float, context: Dictionary = {}) -> void:
+	if effect_id == VfxPool3D.FX01_METAL_SPARK_HIT or effect_id == VfxPool3D.FX01_GOO_HIT:
+		context = context.duplicate()
+		context["impact_attributes"] = _enchant_attributes
+		context["bullet_visual_id"] = _visual_id
+		context["impact_direction"] = direction
 	# 已注册 AssetID（FX01-* 战斗反馈）走全局 VfxPool 新体系，按 AssetID 路由。
 	var vfx_pool := _resolve_vfx_pool()
 	if vfx_pool != null and VfxPool3D.has_effect(effect_id):

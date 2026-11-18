@@ -151,8 +151,8 @@
 
 | `z_index` | 节点名称 | 界面类型 | 备注 |
 |---|---|---|---|
-| **0** (默认) | `HudReloadRing` / `InteractionPromptPanel` / `ExtractionProgressPanel` / `RunOutcomePanel` / `TowerCurrentInfoHUD` / `TowerElevatorOverlay` | 常驻反馈与基础面板 | 随状态显隐 |
-| **100** | `ReferenceCombatHUD` (`HUDPresenter3D`) | 主战斗 HUD | 生命、弹药、武器卡、快捷栏、状态条、世界时间 |
+| **0** (默认) | `HudReloadRing` / `InteractionPromptPanel` / `ExtractionProgressPanel` / `RunOutcomePanel` / `TowerElevatorOverlay` | 常驻反馈与基础面板 | 随状态显隐 |
+| **100** | `ReferenceCombatHUD` (`HUDPresenter3D`) | 主战斗 HUD | 生命、弹药、武器卡、快捷栏、状态条、世界时间、基地金币读数（`TowerBaseCurrencyHUD`） |
 | **105** | `DungeonMinimap3D` | 局部小地图（右上常驻，无背板，382×265 设计 px） | 逻辑常驻，供 M 键大地图复制已探索房间状态 |
 | **110** | `OffscreenEnemyIndicator3D` | 屏外怪物红箭头环 | 仅在激活态同层 50m 内敌人在屏幕外时绘制 |
 | **120** | `EncounterCountdownRing` | 遭遇事件倒计时圆环 | 右上角，平时隐藏，触发限时事件时显隐 |
@@ -181,7 +181,7 @@
 |---|---|---|
 | **棱镜线框 · 第一批（定标样板）** | `UI-06` 主战斗 HUD、`UI-07` 塔楼/远征引导 HUD、`UI-08` 权威世界时间 HUD、`UI-28` 98F 新手环路撤退确认、`UI-29` 跨区段隔离间确认、`UI-30` 远征中途退出确认、`UI-31` 玩家阵亡结算确认、`UI-32` 暂停与系统设置主菜单（含画面设置子页 / 操作设置子页 / 复位存档二次确认） | ✅ 已完成并实机截图归档 |
 | **棱镜线框 · 第二批（全站推广）** | `UI-01` 启动加载页、`UI-02` 远征读取页、`UI-04` 3D 实景主页面菜单（含两个按钮）、`UI-05` 开场影片层、`UI-12` Boss 血条、`UI-15` 交互提示、`UI-16` 撤离读条、`UI-17` 战局结算板、`UI-18` 棋盘式包裹与装备主界面、`UI-19` 3D 物品缩略图控件、`UI-20` 武器表现与构建树、`UI-21` 局内武器工作台、`UI-22` 局内流浪拾荒商、`UI-23` 门后命运塔罗三选一、`UI-24` 命运卡赋能目标选择框、`UI-25` 命运卡生效横幅、`UI-26` 战术大地图、`UI-27` 电梯选层面板、`UI-34` 基地衣柜、`UI-35` 保险库、`UI-36` 售货机、`UI-37` 枪械工坊、`UI-38` 状态恢复终端、`UI-39` 怪物图鉴、`UI-40` 命运牌组图鉴、`UI-41` 塔罗占卜屋、`UI-42` 叙事对话框、`DEV-02` 性能监控器 | ✅ 已完成（做法规格 §5.10：口径收口到工厂 + 三档窄口径工具） |
-| **业主明确划出 · 不改动** | `UI-33` 出发选关与 3D 全息沙盘（`RogueMapSelectMenu` / `HologramCity3D`，远征情报室）。**实测该脚本除 `env.background_color` 外无任何 2D UI 样式，天然满足**。包裹 / 装备 / 仓库（`UI-18` / `UI-35` / `UI-36`）**只改样式，布局与功能一行未动** | ⛔ 见规范 §10.1 |
+| **业主明确划出 · 不改动** | `UI-33` 出发选关与 3D 全息沙盘（`RogueMapSelectMenu` / `HologramCity3D`，远征情报室）。**实测该脚本除 `env.background_color` 外无任何 2D UI 样式，天然满足**。包裹 / 装备 / 仓库（`UI-18` / `UI-35` / `UI-36`）保留棋盘列数、拖放、保险、交易和输入契约；本轮只调整装备页排版、显示层级与模态收放，不改领域逻辑 | ⛔ 见规范 §10.1 |
 | **无需改造** | `UI-03` 全局光圈过场（纯遮罩，无 UI 元素） | — |
 
 > **下文各条目中的"布局与视觉"描述记录了改造前的原始实现**，作为界面职责与节点契约的权威说明；
@@ -275,11 +275,19 @@
     - 主武器（槽位 1）与副武器（槽位 2）切换卡，当前激活武器高亮放大，含 3D 枪械侧视缩略图、枪名、当前弹夹/备弹超大号读数（`AmmoReadoutLabel`）及命运词条数角标。
     - 本局战利品/金币唯一读数行（`RunLootReadout`，灵魂金配色）。
 
-#### UI-07 塔楼/远征行动引导 HUD（`TowerCurrentInfoHUD`）
+#### UI-07 基地金币读数（`TowerBaseCurrencyHUD`）
 - **场景与脚本**：`src/world3d/TowerDescent3D.gd` (`_install_tower_hud`)
 - **账本 ID**：归属 `UI-SCREEN-HUD` 子组件
-- **层级**：`Dungeon3D/$HUD (z_index = 0)`，左上角生命条正下方（`14, 176` → `270, 290`）
-- **布局与视觉**：全透明无背板容器 + 4 行 5px 黑描边文字：当前楼层名（如 `楼顶 · 100F` / `基地层 · 99F`）、当前阶段目标引导、电梯解锁状态提示、基地长期金币余额（琥珀金）。
+- **层级**：不单独占 `$HUD` 层 —— 挂在 `HUD/ReferenceCombatHUD/PlayerStatusBlock` 内的
+  `PlayerStatColumn`（z_index 100 体系内），排在血条 → 电芯之后的第三行
+- **布局与视觉**：单行 5px 黑描边文字 `金币：◈ N`（`prism` 语义色 `warn` 琥珀金、13px、字距 2），
+  左对齐，无背板、无竖线、无图标。落位由容器决定，不写绝对锚点。
+- **语义**：`◈` 后是**基地持久金币**（`BaseManager.get_extraction_points()`，撤离后入库、跨局存在），
+  与右下角 `RunLootReadout` 的**本局局内金币**是两个账户，不可混读。
+- **2026-11-18 业主变更**：原 `TowerCurrentInfoHUD` 引导卡（楼层名 / 阶段目标 / 电梯与按键提示）
+  整块撤除，只保留金币读数并挪到电芯正下方。楼层读数不受影响 —— 右上
+  `FloorInfoLabel`（`高塔外层 · 99F`）仍是唯一楼层出口；逐层目标文案的规则真源
+  `TowerDescent3D._journey_objective()` 保留（仍被门禁调用），但不再渲染。
 
 #### UI-08 权威世界时间 HUD（`WorldDateTimeHUD`）
 - **场景与脚本**：`src/world3d/TowerDescent3D.gd` (`_install_world_time_hud`)
@@ -640,7 +648,7 @@
 | 04 | `MainEntryScreen3D` | 3D 实景主页面菜单 | `src/ui/main_entry/MainEntryScreen3D.gd` | `L:110` | 棱镜线框 | 已接入 | `UI-SCREEN-MAIN-MENU` |
 | 05 | `OpeningMovieScreen3D` | 新档开场影片播放层 | `src/ui/main_entry/OpeningMovieScreen3D.gd` | `L:110` | 棱镜线框(影院黑底保留) | 任意键跳过 | 待补录 |
 | 06 | `ReferenceCombatHUD` | 战局主战斗 HUD | `src/world3d/Dungeon3D.gd` + `HUDPresenter3D.gd` | `L:1 / z:100` | 棱镜线框(无背板) | 键位直达 | `UI-SCREEN-HUD` |
-| 07 | `TowerCurrentInfoHUD` | 塔楼/基地引导信息卡 | `src/world3d/TowerDescent3D.gd` | `L:1 / z:0` | 棱镜线框(无背板) | 纯展示 | 归属 HUD |
+| 07 | `TowerBaseCurrencyHUD` | 基地金币读数（电芯下一行） | `src/world3d/TowerDescent3D.gd` | `L:100 体系内` | 棱镜线框(无背板) | 纯展示 | 归属 HUD |
 | 08 | `WorldDateTimeHUD` | 权威世界时间读数栏 | `src/world3d/TowerDescent3D.gd` | `L:1 / z:100` | 棱镜线框(无背板) | 纯展示 | 归属 HUD |
 | 09 | `HudReloadRing` | 角色身侧换弹进度环 | `src/ui/HudReloadRing.gd` | `L:1 / z:0` | 战术矢量圆环 | 纯展示 | 归属 HUD |
 | 10 | `EncounterCountdownRing` | 遭遇事件倒计时圆环 | `src/ui/EncounterCountdownRing.gd` | `L:1 / z:120` | 战术刻度圆环 | 纯展示 | 归属 HUD |

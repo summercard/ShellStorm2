@@ -227,8 +227,9 @@ const CAMERA_DEFAULT_TRAILING_M := 4.914455
 const CAMERA_LOOK_HEIGHT_M := 0.45
 const CAMERA_LOOK_AHEAD_M := 0.75
 const CAMERA_FOV_DEG := 65.0
-# 2026-11-17：仅远征01固化旧默认按 `'` 五次的效果；公共机位与临时调试量不变。
-const CAMERA_EXPEDITION_01_DISTANCE_OFFSET_M := 1.0
+# 2026-11-17：仅远征01固化旧默认按 `'` 五次（+1.00m）；2026-11-18 业主追加8次，
+# 累计13次 = 2.60m。公共机位与临时调试量不变。
+const CAMERA_EXPEDITION_01_DISTANCE_OFFSET_M := 2.6
 const CAMERA_EXPEDITION_PROFILE_SMOOTH_RATE := 4.0
 const CAMERA_LOWER_WALL_PROBE_HEIGHT_M := 1.09
 # 探针从角色前侧开始并向镜头后方穿过角色。若从角色身后0.42m起射，
@@ -243,7 +244,7 @@ const CAMERA_LOWER_WALL_LIFT_FALL_RATE := 4.5
 const CAMERA_LOWER_WALL_MIN_TRAILING_M := 0.15
 # 收镜必须在墙进入当前默认镜头通道时触发，不得沿用任何旧阈值；
 # 公共常量跟随 CAMERA_DEFAULT_TRAILING_M 自动更新（4.914455m）；远征01经
-# _camera_lower_wall_retract_trigger_m() 读取本关基础后移5.414396m，其它关不变。
+# _camera_lower_wall_retract_trigger_m() 读取本关基础后移6.214302m，其它关不变。
 # 「跟随」而非冻结旧绝对值 3.699625，是有几何依据的：探针量出的是墙到玩家的距离，
 # 而相机在玩家后方 trailing 处，于是 distance − trailing = 相机到墙的距离。令阈值 =
 # trailing，触发点恰好落在「相机一碰到墙」上；若冻结旧值，相机得先穿墙 1.21m 才收镜。
@@ -329,9 +330,8 @@ var _elevator_overlay: Control
 var _elevator_facility: BaseFacility3D
 var _elevator_facilities_by_floor: Dictionary = {}
 var _elevator_access_room_by_floor: Dictionary = {}
-var _tower_floor_label: Label
-var _tower_target_label: Label
-var _tower_elevator_label: Label
+## 状态块里的基地金币读数。2026-11-18 起是原「楼层/目标/按键」引导卡唯一留下的内容，
+## 挂在 `_hud_stat_column`（血条 → 电芯 → 金币）末尾，由容器落位。
 var _tower_base_currency_label: Label
 var _world_time_label: Label
 ## 冷启动/显式主页这**一次**入口的覆盖层槽位，承载二者之一：
@@ -554,6 +554,7 @@ var _main_story_host_ready := false
 var _main_story_gameplay_started := false
 var _main_story_auto_extraction: Dictionary = {}
 var _main_story_safe_beacon: ExtractionBeacon3D = null
+var _main_story_safe_beacon_retry := 0.0
 var _main_story_extraction_retry := 0.0
 var _main_story_extraction_committing := false
 var _main_story_return_to_base := false
@@ -583,7 +584,7 @@ func _ensure_main_story_controller() -> void:
 
 
 func _on_main_story_controller_exiting() -> void:
-	if NarrativeDirector.is_playing() and NarrativeDirector.active_id() in [MAIN_STORY_SCRIPT.BRIEFING_ID, MAIN_STORY_SCRIPT.BOSS_ID, MAIN_STORY_SCRIPT.DEPOSIT_ID]:
+	if NarrativeDirector.is_playing() and NarrativeDirector.active_id() in [MAIN_STORY_SCRIPT.BRIEFING_ID, MAIN_STORY_SCRIPT.BOSS_ID, MAIN_STORY_SCRIPT.KEY_RETURN_CALL_ID, MAIN_STORY_SCRIPT.DEPOSIT_ID]:
 		NarrativeDirector.abort("main_story_host_unloaded")
 
 
@@ -869,6 +870,8 @@ func _restore_main_story_extraction(snapshot: Dictionary) -> void:
 	var state := (raw_state as Dictionary).duplicate(true)
 	# schema1 active/remaining 旧档只迁移为待通讯，不再恢复 tick。
 	if int(state.get("schema", 1)) < 2 and bool(state.get("active", false)):
+		if str(state.get("key_id", "")) != MAIN_STORY_SCRIPT.KEY_RARE_EARTH:
+			return
 		state = {
 			"schema": 2, "stage": "call_pending", "key_id": MAIN_STORY_SCRIPT.KEY_RARE_EARTH,
 			"run_id": _run_id, "map_id": get_expedition_level_id(),
@@ -886,30 +889,35 @@ func _restore_main_story_extraction(snapshot: Dictionary) -> void:
 
 func _abort_extraction_on_death() -> void:
 	_cancel_main_story_extraction()
-	if get_main_story_controller() != null and NarrativeDirector.is_playing() and NarrativeDirector.active_id() in [MAIN_STORY_SCRIPT.BRIEFING_ID, MAIN_STORY_SCRIPT.BOSS_ID, MAIN_STORY_SCRIPT.DEPOSIT_ID]:
+	if get_main_story_controller() != null and NarrativeDirector.is_playing() and NarrativeDirector.active_id() in [MAIN_STORY_SCRIPT.BRIEFING_ID, MAIN_STORY_SCRIPT.BOSS_ID, MAIN_STORY_SCRIPT.KEY_RETURN_CALL_ID, MAIN_STORY_SCRIPT.DEPOSIT_ID]:
 		NarrativeDirector.abort("main_story_player_dead")
 	super()
 
 
 func _cancel_main_story_extraction() -> void:
-	if _main_story_auto_extraction.is_empty():
+	if _main_story_auto_extraction.is_empty() or str(_main_story_auto_extraction.get("stage", "")) == "cancelled":
 		return
 	_main_story_auto_extraction["stage"] = "cancelled"
 	if is_instance_valid(_main_story_safe_beacon):
 		_main_story_safe_beacon.abort_extraction()
 		_main_story_safe_beacon.queue_free()
-	_main_story_safe_beacon = null
-	if not _main_story_auto_extraction.is_empty():
-		_main_story_auto_extraction["stage"] = "cancelled"
+		_main_story_safe_beacon = null
 	if extraction_panel != null:
 		extraction_panel.hide()
 	_queue_runtime_autosave("main_story_extraction_cancelled")
 
 
-func _tick_main_story_auto_extraction(_delta: float) -> void:
-	# 方式B不再有8秒自动tick；仅由安全信标自己的真实读条触发正式结算。
+func _tick_main_story_auto_extraction(delta: float) -> void:
+	# 方式B不再有8秒自动tick；仅ready阶段低频重建安全信标。
 	if _completed or _is_player_dead():
 		_cancel_main_story_extraction()
+		return
+	if str(_main_story_auto_extraction.get("stage", "")) != "beacon_ready" or is_instance_valid(_main_story_safe_beacon):
+		return
+	_main_story_safe_beacon_retry = maxf(0.0, _main_story_safe_beacon_retry - delta)
+	if _main_story_safe_beacon_retry <= 0.0:
+		_main_story_safe_beacon_retry = 2.0
+		_restore_main_story_safe_beacon()
 
 
 func get_main_story_extraction_state() -> Dictionary:
@@ -931,8 +939,14 @@ func commit_main_story_beacon_ready() -> Dictionary:
 
 
 func _restore_main_story_safe_beacon() -> void:
-	if str(_main_story_auto_extraction.get("stage", "")) != "beacon_ready" or is_instance_valid(_main_story_safe_beacon):
+	if str(_main_story_auto_extraction.get("stage", "")) != "beacon_ready":
 		return
+	if is_instance_valid(_main_story_safe_beacon):
+		return
+	for value in get_tree().get_nodes_in_group("extraction_beacon_3d"):
+		if value is ExtractionBeacon3D and is_ancestor_of(value) and (value as ExtractionBeacon3D).beacon_type == "STORY_SAFE":
+			_main_story_safe_beacon = value as ExtractionBeacon3D
+			return
 	if not ResourceLoader.exists(MAIN_STORY_SAFE_BEACON_SCENE):
 		push_warning("[TowerDescent3D] 安全信标 wrapper 尚未就绪；保留 beacon_ready 待办")
 		return
@@ -940,23 +954,54 @@ func _restore_main_story_safe_beacon() -> void:
 	if room == null:
 		return
 	var scene := load(MAIN_STORY_SAFE_BEACON_SCENE) as PackedScene
+	if scene == null:
+		push_warning("[TowerDescent3D] 安全信标 wrapper load 失败；保留待办")
+		return
 	var beacon := scene.instantiate() as ExtractionBeacon3D
 	if beacon == null:
 		push_warning("[TowerDescent3D] 安全信标 wrapper 实例化失败；保留待办")
 		return
-	room.add_child(beacon)
+	beacon.configure(visual_theme.accent_color, MAIN_STORY_EXTRACTION_SECONDS, "STORY_SAFE", false)
 	var raw := _main_story_auto_extraction.get("local_position", []) as Array
+	var original_local_position := raw.duplicate(true)
 	var requested := room.to_global(Vector3(float(raw[0]), float(raw[1]), float(raw[2]))) if raw.size() >= 3 else room.global_position
-	var points: Array[Vector3] = room.resolve_narrative_floor_positions([requested], [], 8.0)
+	var occupied: Array[Vector3] = []
+	for value in get_tree().get_nodes_in_group("extraction_beacon_3d"):
+		if value is ExtractionBeacon3D and value != beacon and room.is_ancestor_of(value):
+			occupied.append((value as ExtractionBeacon3D).global_position)
+	for value in get_tree().get_nodes_in_group("treasure_chest_3d"):
+		if value is TreasureChest3D and room.is_ancestor_of(value):
+			occupied.append((value as TreasureChest3D).global_position)
+	var points: Array[Vector3] = room.resolve_narrative_floor_positions([requested], occupied, 8.0)
 	if points.is_empty():
+		# 首领箱可能落在入口高台/坡道上（局部高度不为 0），或箱体本身占住了唯一落点。
+		# 依次退回首领战场锚点、房间中心：安全信标必须能在本房落地，不能永久停在待办里重试。
+		# 注意 Boss 房中心可能是深井，不能只退中心，所以首领生成点优先。
+		var fallbacks: Array[Vector3] = []
+		if room.has_method("boss_spawn_position_world"):
+			fallbacks.append(room.call("boss_spawn_position_world") as Vector3)
+		fallbacks.append(room.to_global(Vector3.ZERO))
+		for fallback in fallbacks:
+			points = room.resolve_narrative_floor_positions([fallback], occupied, 12.0)
+			if not points.is_empty():
+				push_warning("[TowerDescent3D] 安全信标请求点不可放置，已退回房间内可站立地面")
+				break
+	if points.is_empty():
+		_main_story_auto_extraction["local_position"] = original_local_position
 		push_warning("[TowerDescent3D] 安全信标没有可用真实地面落点；保留 beacon_ready 待办")
 		beacon.queue_free()
 		return
-	beacon.global_position = points[0]
 	var local_point := room.to_local(points[0])
+	beacon.position = local_point
 	_main_story_auto_extraction["local_position"] = [local_point.x, local_point.y, local_point.z]
+	var frozen_save := BaseManager.set_active_run_checkpoint(build_runtime_save_snapshot(), "main_story_beacon_position_frozen")
+	if not frozen_save:
+		_main_story_auto_extraction["local_position"] = original_local_position
+		push_warning("[TowerDescent3D] 安全信标落点冻结保存失败；释放实例并保留 ready 待重试")
+		beacon.queue_free()
+		return
 	beacon.set_meta("asset_id", MAIN_STORY_SAFE_BEACON_ASSET_ID)
-	beacon.configure(visual_theme.accent_color, MAIN_STORY_EXTRACTION_SECONDS, "STORY_SAFE", false)
+	room.add_child(beacon)
 	beacon.configure_story_safe_drop(0.6)
 	beacon.set_locked(false)
 	beacon.extraction_started.connect(_on_extraction_started.bind(beacon))
@@ -1640,9 +1685,10 @@ func _on_extraction_completed(beacon: ExtractionBeacon3D) -> void:
 		if not _completed:
 			_main_story_return_to_base = false
 			if is_instance_valid(beacon):
-				beacon.queue_free()
-			_main_story_safe_beacon = null
-			call_deferred("_restore_main_story_safe_beacon")
+				beacon.reset_for_retry()
+				_main_story_safe_beacon = beacon
+			_main_story_auto_extraction["stage"] = "beacon_ready"
+			_queue_runtime_autosave("main_story_beacon_settlement_retry")
 		return
 	super(beacon)
 
@@ -8364,54 +8410,27 @@ func _install_atmosphere() -> void:
 		_atmosphere.call("set_expedition_dark_distant", true)
 
 
+## 2026-11-18 主人要求：撤掉左侧整块引导卡（楼层号 / 目标文案 / 按键提示），
+## 只留金币读数，并把它挪到电池（`FlashlightBatteryPanel`）正下方。
+##
+## 位置由容器负责：`_hud_stat_column` 里依次是血条 → 电芯 → 本行，帧内自动堆叠，
+## 不再有独立的 `TowerCurrentInfoHUD` 绝对锚框。楼层号信息没有丢失 ——
+## 右上 `_hud_floor_label`（`高塔外层 · 99F`）仍然是楼层读数的唯一出口。
 func _install_tower_hud() -> void:
-	if _tower_floor_label != null:
+	if _tower_base_currency_label != null:
 		return
-	var margin := MarginContainer.new()
-	margin.name = "TowerCurrentInfoHUD"
-	margin.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	margin.offset_left = 14.0
-	margin.offset_top = 176.0
-	margin.offset_right = 278.0
-	margin.offset_bottom = 294.0
-	$HUD.add_child(margin)
-	var panel := PanelContainer.new()
-	margin.add_child(panel)
-	# 2026-10-17 主人要求：引导卡的背框（底衬 + 四角括号）撤掉。只留左侧 2px 白强调竖条 ——
-	# 那是「引用块」式分组线，宽仅 2px、不成框，用来表明这几行属于同一段引导信息；
-	# 文字本身带 4px 描边，去掉底衬后压在实景上仍然读得出。
-	var style := _make_bare_hud_style()
-	style.border_width_left = 2
-	style.border_color = Color(1.0, 1.0, 1.0, 0.78)
-	style.content_margin_left = 10.0
-	style.content_margin_right = 12.0
-	style.content_margin_top = 8.0
-	style.content_margin_bottom = 8.0
-	panel.add_theme_stylebox_override("panel", style)
-	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 3)
-	panel.add_child(vbox)
-	_tower_floor_label = Label.new()
-	UIStyleFactory.apply_prism_label(_tower_floor_label, "value", 3, 19)
-	vbox.add_child(_tower_floor_label)
-	_tower_target_label = Label.new()
-	_tower_target_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	UIStyleFactory.apply_prism_label(_tower_target_label, "label", 1, 12)
-	vbox.add_child(_tower_target_label)
-	_tower_elevator_label = Label.new()
-	UIStyleFactory.apply_prism_label(_tower_elevator_label, "faint", 1, 11)
-	vbox.add_child(_tower_elevator_label)
+	if _hud_stat_column == null:
+		# 防御：唯一调用点（`_ready` 第 1219 行）晚于基类 `_install_holographic_hud_style()`，
+		# 正常运行到不了这里。宁可本帧不装，也不建一个无父节点的孤儿 Label。
+		return
 	_tower_base_currency_label = Label.new()
+	_tower_base_currency_label.name = "TowerBaseCurrencyHUD"
 	UIStyleFactory.apply_prism_label(_tower_base_currency_label, "warn", 2, 13)
-	vbox.add_child(_tower_base_currency_label)
-	for label in [
-		_tower_floor_label, _tower_target_label,
-		_tower_elevator_label, _tower_base_currency_label,
-	]:
-		# 撤掉背板后，描边是唯一的可读性保障。口径与 `Dungeon3D._outline_labels` 对齐
-		# （纯黑 0.85 / 5px）—— 楼顶白墙 + 云海天空上，4px 会明显发虚。
-		label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
-		label.add_theme_constant_override("outline_size", 5)
+	_hud_stat_column.add_child(_tower_base_currency_label)
+	# 口径与 `Dungeon3D._outline_labels` 对齐（纯黑 0.85 / 5px）：
+	# 楼顶白墙 + 云海天空上，4px 会明显发虚。
+	_tower_base_currency_label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
+	_tower_base_currency_label.add_theme_constant_override("outline_size", 5)
 
 
 func _install_world_time_hud() -> void:
@@ -8509,6 +8528,17 @@ func _should_play_opening_movie() -> bool:
 ## 本次是否真的在放开场影片（而非主页菜单）。约定：没装覆盖层时恒为 false。
 func is_opening_movie_active() -> bool:
 	return _main_entry_screen is OpeningMovieScreen3D
+
+
+## Dungeon3D 的统一输入锁裁决查询。主页面/开场影片展示期间，真实玩家的
+## 移动、瞄准、开火等全部输入必须保持锁定；过渡完成后由覆盖层关闭并自动解除。
+func is_main_entry_input_locked() -> bool:
+	return (
+		_main_entry_screen != null
+		and is_instance_valid(_main_entry_screen)
+		and _main_entry_screen.has_method("is_camera_override_active")
+		and bool(_main_entry_screen.call("is_camera_override_active"))
+	)
 
 
 func _entry_context_requests_main_entry() -> bool:
@@ -8622,29 +8652,10 @@ func _refresh_tower_hud() -> void:
 		elif _arrival_tween_paused_for_lock:
 			_arrival_tween.play()
 			_arrival_tween_paused_for_lock = false
-	if _tower_floor_label == null or player == null:
+	if _tower_base_currency_label == null or player == null:
 		return
-	if is_expedition():
-		# 远征关卡是单层关卡，没有楼层号概念：区位标签直接写关卡名与当前房间。
-		_tower_floor_label.text = get_expedition_display_name()
-		_tower_target_label.text = _expedition_objective()
-		_tower_elevator_label.text = "M 路线地图 · F 手电 · Shift 冲刺"
-		_tower_base_currency_label.text = "金币：◈ %d" % BaseManager.get_extraction_points()
-		return
-	var floor_number := _current_floor_number()
-	_tower_floor_label.text = (
-		"楼顶 · 100F"
-		if floor_number >= 100
-		else "%dF" % floor_number
-	)
-	_tower_target_label.text = _journey_objective(floor_number)
-	_tower_elevator_label.text = (
-		"WASD 移动 · E 交互"
-		if floor_number >= 100 else
-		"I / Tab 背包 · Esc 暂停"
-		if floor_number == 99 else
-		"M 路线地图 · F 手电 · Shift 冲刺"
-	)
+	# 2026-11-18 起状态块只承载基地金币这一项读数（楼层/目标/按键三行已按业主指令撤除）。
+	# 远征与塔楼层共用同一行文案：◈ 后面永远是基地持久金币，不是本局掉落。
 	_tower_base_currency_label.text = "金币：◈ %d" % BaseManager.get_extraction_points()
 
 
@@ -8658,6 +8669,10 @@ func _room_display_name(type_id: String) -> String:
 	}.get(type_id, "探索区")
 
 
+## 逐楼层目标文案的唯一真源。**2026-11-18 起不再渲染到 HUD**（业主撤掉了引导卡），
+## 保留因为它仍是「本层该往哪走」的规则表述，被 `verify_tower_journey_polish`
+## 与 `verify_opening_script_runtime` 直接调用做回归；将来接任务系统时从这里取值，
+## 不要另写一份平行实现。
 func _journey_objective(floor_number: int) -> String:
 	if floor_number >= 100:
 		return "沿天台前往西侧楼梯，进入99F基地"
@@ -8690,35 +8705,15 @@ func _expedition_entry_objective() -> String:
 	return "肃清全部内容房，穿过命运之门，抵达终点撤离点。"
 
 
-## 远征关卡没有楼层，目标提示按"当前房间 → 终点撤离房"的推进关系给出。
-func _expedition_objective() -> String:
-	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
-	if room == null or room.room_id == "start":
-		return "穿过入口门进入 01 号房；抵达尽头撤离点即可带物返航"
-	if room.room_type == "EXTRACTION":
-		return "已完成全部房间 · 靠近信标读取撤离"
-	if room.room_type == "EVENT" and not room.cleared:
-		return "靠近异常信号，按 E 调查"
-	if not room.cleared:
-		var alive := int(_alive_by_room.get(room.room_id, 0))
-		return (
-			"肃清威胁 · 剩余 %d 个敌对信号" % alive
-			if alive > 0 else "保持警戒，留意增援与周围掩体"
-		)
-	if not _room_produces_room_key(room):
-		return "房间已肃清 · 直接开启下一扇门"
-	if _get_total_room_keys() <= 0:
-		return "房间已肃清 · 拾取掉落钥匙，再选择下一扇门"
-	return "搜索剩余物资，用钥匙开门选择路线"
-
-
 func _announce_floor_arrival(floor_number: int) -> void:
 	if player != null:
 		var special_controller := player.get_special_item_controller()
 		if is_instance_valid(special_controller.world) and special_controller.world.floor_number != floor_number:
 			special_controller.clear_world()
 			special_controller.world.floor_number = floor_number
-	if _announced_floors.has(floor_number) or _tower_floor_label == null:
+	# 哨兵换成金币读数：引导卡撤除后它是本类唯一挂在状态块里的控件，
+	# 同样只在 `_install_tower_hud()` 之后才不为 null。
+	if _announced_floors.has(floor_number) or _tower_base_currency_label == null:
 		return
 	_announced_floors[floor_number] = true
 	if _arrival_title == null:

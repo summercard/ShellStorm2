@@ -46,7 +46,7 @@ func _ready() -> void:
 	tower.player.global_position = room.global_position + Vector3(0, 0.5, 0)
 	tower._on_room_entered(room)
 	await get_tree().physics_frame
-	check(int(tower._room_wave_totals.get(room.room_id, 0)) == 3, "使用房间设计源三波 encounter")
+	check(int(tower._room_wave_totals.get(room.room_id, 0)) == 1, "本房 2026-11-18 起为单波护场 encounter")
 	var bosses: Array[Enemy3D] = []
 	for enemy in enemies():
 		if str(enemy.enemy_data.get("boss_content_id", "")) == "boss_monitor002": bosses.append(enemy)
@@ -102,13 +102,20 @@ func _ready() -> void:
 		check(boss.boss_phase == 3, "实伤进入第三阶段")
 		boss.take_damage(100000)
 		check(boss.ai_state == "dead", "实伤触发正式死亡状态")
-		check(not room.cleared, "只击败 Boss 不跳过随从和后续波次")
-	# 等待盒子延迟随从，逐波实际击杀；自动推进，不触碰门。
+		# 2026-11-18 起本房没有护场随从：盒子实例清单只剩 Boss 一条。
+		# 因此这条断言从「不能跳过随从」改成「确认场上不存在 Boss 以外的活物」——
+		# 只要护场怪被加回来，这里立刻变红。
+		var remaining_guard := 0
+		for enemy in enemies():
+			if enemy != boss and enemy.ai_state != "dead":
+				remaining_guard += 1
+		check(remaining_guard == 0, "Boss 房无护场随从，Boss 阵亡后场上无残留活物")
+	# 无随从可补杀；仍保留等待窗口，覆盖清房信号延迟到达的情况。
 	var deadline := Time.get_ticks_msec() + 18000
 	while not room.cleared and Time.get_ticks_msec() < deadline:
 		for enemy in enemies(): enemy.take_damage(100000)
 		await get_tree().create_timer(0.1).timeout
-	check(room.cleared, "三波清完自动清房")
+	check(room.cleared, "Boss 阵亡即满足本房清房条件")
 	check(clear_count == 1, "清房事件只结算一次")
 	check(int(tower._alive_by_room.get(room.room_id, -1)) == 0, "死亡与延迟刷怪存活账归零")
 	check(tower._boss_descent_key_count == 0, "远征不授予塔楼下行权限")

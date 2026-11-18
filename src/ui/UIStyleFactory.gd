@@ -430,6 +430,24 @@ static func apply_prism_label(
 
 
 ## 文字色语义表。与 prism_line_color 分开维护：文字与线条的对比度诉求不同。
+static func apply_prism_rich_text(
+	rich: RichTextLabel,
+	role: String = "value",
+	spacing: int = 2,
+	font_size: int = 0
+) -> void:
+	if rich == null:
+		return
+	var variation := make_prism_font(spacing)
+	if variation != null:
+		rich.add_theme_font_override("normal_font", variation)
+		rich.add_theme_font_override("bold_font", variation)
+		rich.add_theme_color_override("default_color", prism_text_color(role))
+	if font_size > 0:
+		rich.add_theme_font_size_override("normal_font_size", font_size)
+		rich.add_theme_font_size_override("bold_font_size", font_size)
+
+
 static func prism_text_color(role: String) -> Color:
 	match role:
 		"label":

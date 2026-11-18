@@ -4,7 +4,7 @@
   "priority": 30,
   "trigger": { "kind": "manual", "once": "run" },
   "duration": 18.5,
-  "presentation": { "dialogue": { "mode": "A" } },
+  "presentation": { "dialogue": { "mode": "A" }, "guidance_highlight": true },
   "cues": [
     { "at": 0.0, "do": "story.deposit.prepare" },
     { "at": 0.0, "do": "player.lock_input", "locked": true },

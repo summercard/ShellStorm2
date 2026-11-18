@@ -592,12 +592,26 @@ func _ready() -> void:
 	add_child(tower)
 	for _frame in 10:
 		await get_tree().process_frame
-	var tower_info := tower.get_node_or_null("HUD/TowerCurrentInfoHUD") as Control
-	var tower_player_status := tower.get_node_or_null("HUD/ReferenceCombatHUD/PlayerStatusBlock") as Control
-	_check(tower_info != null, "Tower current information panel is missing", failures)
-	if tower_info != null and tower_player_status != null:
-		_check(tower_info.global_position.y >= tower_player_status.get_global_rect().end.y + 20.0, "Tower current information was not moved below player status", failures)
-		_check(tower_info.find_children("*", "ProgressBar", true, false).is_empty(), "Tower current information still contains the duplicate gray HP bar", failures)
+	# 2026-11-18 主人要求：左侧引导卡（楼层号 / 目标文案 / 按键提示）整块撤除，
+	# 只留基地金币读数，并挪到电芯行正下方。断言从「引导卡在状态块下方」改为
+	# 「引导卡不存在 + 金币读数紧接电芯」。
+	var tower_guide := tower.get_node_or_null("HUD/TowerCurrentInfoHUD") as Control
+	var tower_currency := tower.find_child("TowerBaseCurrencyHUD", true, false) as Control
+	var tower_battery := tower.find_child("FlashlightBatteryPanel", true, false) as Control
+	_check(tower_guide == null, "Tower guide card should be removed", failures)
+	_check(tower_currency != null, "Tower base currency readout is missing", failures)
+	if tower_currency != null and tower_battery != null:
+		_check(
+			tower_currency.global_position.y >= tower_battery.get_global_rect().end.y,
+			"Tower base currency was not moved below the battery row",
+			failures,
+		)
+	if tower_currency != null:
+		_check(
+			tower_currency.find_children("*", "ProgressBar", true, false).is_empty(),
+			"Tower base currency row still contains a ProgressBar",
+			failures,
+		)
 	_check(_capture("reference_tower_hud_compact.png"), "Could not capture compact tower HUD", failures)
 
 	if failures.is_empty():

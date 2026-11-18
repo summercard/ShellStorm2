@@ -135,7 +135,8 @@ func _check_root_connection(board: Control, label: String) -> void:
 	for point: Vector2 in points:
 		finite = finite and point.is_finite()
 	_check(finite, label + "根连线无NaN/Inf")
-	_check(points[0].distance_to(center) < 0.1 and points[0].y < board.size.y - 30, label + "根起点是真实preview中心而非board底")
+	var expected_midline := Vector2(viewport_start.x, clampf(card_entry.y, viewport_start.y, viewport_end.y))
+	_check(points[0].distance_to(expected_midline) < 0.1 and points[0].y < board.size.y - 30, label + "根起点位于枪械区与卡巢区中线而非枪身模型")
 	_check(points[1].x > points[0].x and is_equal_approx(points[1].y, points[0].y), label + "根第一段向右水平")
 	_check(points[3].distance_to(expected_entry) < 0.1 and bool(connection.get("clipped", false)) == not visible_entry, label + "终点为首卡实际左中或滚出后的viewport边")
 	_check(bool(connection.get("active", false)) == bool((snapshot.cards as Array)[0].occupied), label + "根线仅已刻印active")

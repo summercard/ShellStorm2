@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "asset_version": "v004",
+  "authoring": {
+    "editable_source": "各 assets[].prefab 指向的七份 TSCN；粒子数量、寿命、曲线和运动参数只以 TSCN 为准",
+    "legacy_generator": "generate_projectile_enchant.py 已改为只读检查；兼容 --prefabs-only 但不写任何文件",
+    "runtime": "首次 reset 前缓存场景 amount 为 authored_amount；分摊 max(1, floor(authored_amount / N))；reset 恢复 authored_amount；尺寸调整以场景原始 emission_box_extents 与 visibility_aabb 为基准，不重写美术曲线、寿命、Quad 或随机参数",
+    "preview": "七场景根及 Particles 均 visible=true、emitting=true、speed_scale=1；正式实例化后立即 reset 再 add_child",
+    "runtime_texture_conversion": "原图先 convert RGBA，再以 Pillow 13.0.0 LANCZOS 缩为 256x256，按 compress_level=6、optimize=false 保存 PNG；保留原 alpha 语义，不截图、不抠图、不染色；调色在 TSCN 材质 color_ramp 完成",
+    "intake": "ShellStorm2-work/sessions/2026-11-18_projectile_enchant_motion/intake（工程同级）",
+    "before_edits": "ShellStorm2-backup/2026-11-18_projectile_enchant_motion/before_edits/implementation（工程同级）"
+  },
+  "source_textures": [
+    {
+      "path": "art_source/vfx/projectile_enchant/textures/tex_flame_01.png",
+      "library_source": "aleksei-starter-vfx-lite/tex_flame_01.png",
+      "sha256": "dc6b5decd0e7e99900b0493fa1496f80e34d272f5603081634d0e99235ea9d2b",
+      "size": [512, 512],
+      "original_mode": "RGBA",
+      "rgba_alpha_range": [255, 255],
+      "license_metadata": "-",
+      "license_status": "未提供，待核对"
+    },
+    {
+      "path": "art_source/vfx/projectile_enchant/textures/tex_smoke_01.png",
+      "library_source": "aleksei-starter-vfx-lite/tex_smoke_01.png",
+      "sha256": "e8724c219e8d35859167fc0a7e207e13c72ccf0c29704909b9bb3d3dc71c6cf7",
+      "size": [512, 512],
+      "original_mode": "P",
+      "rgba_alpha_range": [0, 189],
+      "license_metadata": "-",
+      "license_status": "未提供，待核对"
+    },
+    {
+      "path": "art_source/vfx/projectile_enchant/textures/spark_02.png",
+      "library_source": "kenney_particle_pack/spark_02.png",
+      "sha256": "7e6272d9ac71494b553b114a0bc40ff4e7dd95749140eb92ce1ada3caef8d19d",
+      "size": [512, 512],
+      "original_mode": "P",
+      "rgba_alpha_range": [0, 255],
+      "license_metadata": "-",
+      "license_status": "未提供，待核对"
+    },
+    {
+      "path": "art_source/vfx/projectile_enchant/textures/flame_04.png",
+      "library_source": "kenney_particle_pack/flame_04.png",
+      "sha256": "4ca5e6a8693849ed25291c4b8ad3dbbee41641f8b953761eff06ffcfd331fcd4",
+      "size": [512, 512],
+      "original_mode": "P",
+      "rgba_alpha_range": [0, 133],
+      "license_metadata": "-",
+      "license_status": "未提供，待核对"
+    }
+  ],
+  "assets": [
+    {
+      "key": "fire",
+      "prefab": "assets/art/vfx/combat_3d/vfx_projectile_enchant_fire_root_top3d.tscn",
+      "source_texture": "art_source/vfx/projectile_enchant/textures/tex_flame_01.png",
+      "runtime_texture": {
+        "path": "assets/art/vfx/textures/projectile_enchant_fire.png",
+        "sha256": "9bdd1f2b6cc0b7d0d93bb1084bf729064a78b8ce912ed2330d6e9721799e81e1",
+        "size": [256, 256],
+        "mode": "RGBA"
+      }
+    },
+    {
+      "key": "ice",
+      "prefab": "assets/art/vfx/combat_3d/vfx_projectile_enchant_ice_root_top3d.tscn",
+      "source_texture": "art_source/vfx/projectile_enchant/textures/tex_smoke_01.png",
+      "runtime_texture": {
+        "path": "assets/art/vfx/textures/projectile_enchant_ice.png",
+        "sha256": "ed663e66e29d55b27809573985c53c4e6aa8b6eb4a0d998351498d633b308d98",
+        "size": [256, 256],
+        "mode": "RGBA"
+      }
+    },
+    {
+      "key": "poison",
+      "prefab": "assets/art/vfx/combat_3d/vfx_projectile_enchant_poison_root_top3d.tscn",
+      "source_texture": "art_source/vfx/projectile_enchant/textures/tex_smoke_01.png",
+      "runtime_texture": {
+        "path": "assets/art/vfx/textures/projectile_enchant_poison.png",
+        "sha256": "ed663e66e29d55b27809573985c53c4e6aa8b6eb4a0d998351498d633b308d98",
+        "size": [256, 256],
+        "mode": "RGBA"
+      }
+    },
+    {
+      "key": "lightning",
+      "prefab": "assets/art/vfx/combat_3d/vfx_projectile_enchant_lightning_root_top3d.tscn",
+      "source_texture": "art_source/vfx/projectile_enchant/textures/spark_02.png",
+      "runtime_texture": {
+        "path": "assets/art/vfx/textures/projectile_enchant_lightning.png",
+        "sha256": "f0efc0161c56effd883b3e2dc5a61d194c3c874d41c46cdf5e6f1e67db1e5009",
+        "size": [256, 256],
+        "mode": "RGBA"
+      }
+    },
+    {
+      "key": "bounce",
+      "prefab": "assets/art/vfx/combat_3d/vfx_projectile_enchant_bounce_root_top3d.tscn",
+      "source_texture": "art_source/vfx/projectile_enchant/textures/flame_04.png",
+      "runtime_texture": {
+        "path": "assets/art/vfx/textures/projectile_enchant_bounce.png",
+        "sha256": "d8a292760fae360c23a67aeb4a3b0ba6e97eb9a833188eec689f6babc6eef304",
+        "size": [256, 256],
+        "mode": "RGBA"
+      }
+    },
+    {
+      "key": "homing",
+      "prefab": "assets/art/vfx/combat_3d/vfx_projectile_enchant_homing_root_top3d.tscn",
+      "source_texture": "art_source/vfx/projectile_enchant/textures/flame_04.png",
+      "runtime_texture": {
+        "path": "assets/art/vfx/textures/projectile_enchant_homing.png",
+        "sha256": "d8a292760fae360c23a67aeb4a3b0ba6e97eb9a833188eec689f6babc6eef304",
+        "size": [256, 256],
+        "mode": "RGBA"
+      }
+    },
+    {
+      "key": "return",
+      "prefab": "assets/art/vfx/combat_3d/vfx_projectile_enchant_return_root_top3d.tscn",
+      "source_texture": "art_source/vfx/projectile_enchant/textures/flame_04.png",
+      "runtime_texture": {
+        "path": "assets/art/vfx/textures/projectile_enchant_return.png",
+        "sha256": "d8a292760fae360c23a67aeb4a3b0ba6e97eb9a833188eec689f6babc6eef304",
+        "size": [256, 256],
+        "mode": "RGBA"
+      }
+    }
+  ],
+  "validation_scope": {
+    "godot_executed": false,
+    "runtime_and_render_acceptance": "未执行，不以静态检查替代真实随机模拟、池化运行及飞行观感验收",
+    "tests_docs_ledgers": "按用户限定未修改；现有 v002 测试中的24基数、寿命、等尺寸曲线及版本断言已过期，不视为 v004 通过证据",
+    "source_compositing": "tex_flame_01.png 原图为黑底灰白且alpha全255，原图保留不抠图；火采用additive使黑底零贡献，避免alpha混合遮黑方片。其他素材沿用原alpha；闪电也采用additive增强短促电击感。", 
+    "tuning": "数量和寿命完全采用冻结初值；火/冰/雷出生alpha下调以保主体可读性，毒保留0.43；三机制略提高alpha补偿原图最大alpha仅133。火/雷 additive，其余 alpha。"
+  }
+}

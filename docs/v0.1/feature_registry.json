@@ -1213,6 +1213,22 @@
       "verification": [
         {
           "kind": "scene",
+          "id": "verify_story_safe_beacon",
+          "suite": "manual",
+          "runner": "scripts/run_narrative_presentation_qa.py",
+          "args": ["--scene", "tests/verification/verify_story_safe_beacon.tscn"],
+          "requires": "Autoload前隔离APPDATA/LOCALAPPDATA与custom_user_dir；NARRATIVE_PRESENTATION_QA_ISOLATED=1；需要真实renderer；full/aggregate full排除；仅wrapper/真实GLB网格/0.6秒落下/主动8秒同步/普通能力字段单元；runtime_story_playback=false，不代签history、beacon_ready保存失败或state恢复及正式返航；受控runner已解析此REPORT；本轮单元已运行，正式Tower链另由integration验收"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_main_story_integration",
+          "suite": "manual",
+          "runner": "scripts/run_narrative_presentation_qa.py",
+          "args": ["--scene", "tests/verification/verify_main_story_integration.tscn"],
+          "requires": "Autoload前隔离APPDATA与custom_user_dir=main_story_integration；SHELLSTORM_MAIN_STORY_ISOLATED=1；full/aggregate full排除；_verify_safe_return_flow拥有正式Tower方式B/skip重试/history/beacon_ready/投放/主动8秒/零防守/一次结算返99F链；普通true实际遭遇已有断言，secret对照待补；history/beacon_ready写盘失败与完整state恢复矩阵仍待验；不得用safe单元代签，本轮未运行"
+        },
+        {
+          "kind": "scene",
           "id": "verify_main_story_progress",
           "suite": "core"
         },
@@ -1424,8 +1440,19 @@
         },
         {
           "kind": "scene",
+          "id": "verify_story_safe_beacon",
+          "suite": "manual",
+          "runner": "scripts/run_narrative_presentation_qa.py",
+          "args": ["--scene", "tests/verification/verify_story_safe_beacon.tscn"],
+          "requires": "Autoload前隔离APPDATA/LOCALAPPDATA与custom_user_dir；NARRATIVE_PRESENTATION_QA_ISOLATED=1；需要真实renderer；full/aggregate full排除；仅方式B JSON契约、wrapper load/真实GLB实例网格、0.6秒真实落下、主动8秒同步及普通能力字段对照；runtime_story_playback=false，正式链另见integration；受控runner已解析此REPORT；本轮单元已运行，正式Tower链另由integration验收"
+        },
+        {
+          "kind": "scene",
           "id": "verify_main_story_integration",
-          "suite": "manual"
+          "suite": "manual",
+          "runner": "scripts/run_narrative_presentation_qa.py",
+          "args": ["--scene", "tests/verification/verify_main_story_integration.tscn"],
+          "requires": "Autoload前隔离APPDATA与custom_user_dir=main_story_integration；SHELLSTORM_MAIN_STORY_ISOLATED=1；full/aggregate full排除；_verify_safe_return_flow拥有正式Tower方式B/skip重试/history/beacon_ready/投放/主动8秒/零防守/一次结算返99F链；普通true实际遭遇已有断言，secret对照待补；history/beacon_ready写盘失败与完整state恢复矩阵仍待验；不得用safe单元代签，本轮未运行"
         },
         {
           "kind": "scene",

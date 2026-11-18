@@ -197,7 +197,7 @@ func _run_offset_function_checks(failures: Array[String]) -> void:
 func _run_camera_owner_checks(failures: Array[String]) -> void:
 	var cases: Array[Dictionary] = [
 		{"path": "res://scenes/TowerDescent3D.tscn", "expected_offset": 0.0, "level_id": "expedition_01", "expedition": false},
-		{"path": "res://scenes/ExpeditionLevel01_3D.tscn", "expected_offset": 1.0, "level_id": "expedition_01", "expedition": true},
+		{"path": "res://scenes/ExpeditionLevel01_3D.tscn", "expected_offset": 2.6, "level_id": "expedition_01", "expedition": true},
 		{"path": "res://scenes/ExpeditionLevel02_3D.tscn", "expected_offset": 0.0, "level_id": "expedition_02", "expedition": true},
 		{"path": "res://scenes/ExpeditionLevel03_3D.tscn", "expected_offset": 0.0, "level_id": "expedition_03", "expedition": true},
 		{"path": "res://scenes/ExpeditionLevel99_3D.tscn", "expected_offset": 0.0, "level_id": "99", "expedition": true},
@@ -333,23 +333,23 @@ func _instantiate_camera_owner(path: String, failures: Array[String]) -> TowerDe
 
 
 func _verify_expedition01_input(owner: TowerDescent3D, player: Player3D, failures: Array[String]) -> void:
-	var fixed_position := _expected_default_camera_position(1.0)
+	var fixed_position := _expected_default_camera_position(2.6)
 	player.reset_debug_camera_adjustments()
 	owner.call("_apply_indoor_camera_pose")
 	_owner_check(
 		player.camera.global_position.distance_to(fixed_position) < 0.0001,
 		failures,
-		"远征01 F12 前新默认固定+1m位置错误"
+		"远征01 F12 前新默认固定+2.6m位置错误"
 	)
 	_owner_check(
-		fixed_position.distance_to(Vector3(0.0, 11.128718, 5.414396)) < 0.0001,
+		fixed_position.distance_to(Vector3(0.0, 12.514413, 6.214302)) < 0.0001,
 		failures,
-		"远征01 +1m 预期位置不是 (0,11.128718,5.414396)"
+		"远征01 +2.6m 预期位置不是 (0,12.514413,6.214302)"
 	)
 	for _index in range(5):
 		player._unhandled_input(_make_key(KEY_APOSTROPHE))
 	owner.call("_apply_indoor_camera_pose")
-	var plus_one_position := _expected_default_camera_position(2.0)
+	var plus_one_position := _expected_default_camera_position(3.6)
 	_owner_check(
 		player.camera.global_position.distance_to(plus_one_position) < 0.0001,
 		failures,
@@ -361,15 +361,15 @@ func _verify_expedition01_input(owner: TowerDescent3D, player: Player3D, failure
 	_owner_check(
 		player.camera.global_position.distance_to(fixed_position) < 0.0001,
 		failures,
-		"远征01 F12 错误清除了生产固定+1m"
+		"远征01 F12 错误清除了生产固定+2.6m"
 	)
 	player._unhandled_input(_make_key(KEY_SEMICOLON))
 	owner.call("_apply_indoor_camera_pose")
-	var plus_point_eight_position := _expected_default_camera_position(0.8)
+	var plus_point_eight_position := _expected_default_camera_position(2.4)
 	_owner_check(
 		player.camera.global_position.distance_to(plus_point_eight_position) < 0.0001,
 		failures,
-		"远征01 ; 后有效固定距离未为+0.8m"
+		"远征01 ; 后有效固定距离未为+2.4m"
 	)
 	var settled_position := player.camera.global_position
 	for _frame in range(60):
@@ -383,17 +383,17 @@ func _verify_expedition01_input(owner: TowerDescent3D, player: Player3D, failure
 
 func _verify_expedition01_avoidance(owner: TowerDescent3D, player: Player3D, failures: Array[String]) -> void:
 	player.reset_debug_camera_adjustments()
-	_owner_check(absf(float(owner.call("_camera_lower_wall_retract_trigger_m")) - 5.414396) < 0.0001,
+	_owner_check(absf(float(owner.call("_camera_lower_wall_retract_trigger_m")) - 6.214302) < 0.0001,
 		failures, "01收镜阈值必须覆盖新机位水平后移")
-	# 墙内表面5.10m，位于旧阈值4.914与新阈值5.414之间；旧探针基准应漏报。
-	var wall := _camera_test_box(Vector3(20, 20, 0.3), Vector3(0, 10, 5.25), "camera_lower_wall")
+	# 墙内表面5.80m，位于上一版01阈值5.414与新阈值6.214之间；沿用旧阈值应漏报。
+	var wall := _camera_test_box(Vector3(20, 20, 0.3), Vector3(0, 10, 5.95), "camera_lower_wall")
 	owner.add_child(wall)
 	await get_tree().physics_frame
 	for frame in range(120):
 		owner.call("_update_camera_lower_wall_lift", 1.0 / 60.0, true)
 		owner.call("_apply_indoor_camera_pose")
 	_owner_check(bool(owner.get("_camera_lower_wall_retract_active")), failures, "新机位墙通道必须触发收镜")
-	_owner_check(player.camera.position.z < 5.10, failures, "收镜后不得再次固定拉远穿回墙后")
+	_owner_check(player.camera.position.z < 5.80, failures, "收镜后不得再次固定拉远穿回墙后")
 	wall.queue_free()
 	await get_tree().process_frame
 	await get_tree().physics_frame
@@ -401,19 +401,19 @@ func _verify_expedition01_avoidance(owner: TowerDescent3D, player: Player3D, fai
 		owner.call("_update_camera_lower_wall_lift", 1.0 / 60.0, true)
 		owner.call("_apply_indoor_camera_pose")
 	_owner_check(not bool(owner.get("_camera_lower_wall_retract_active")), failures, "移除墙后收镜必须自然解除")
-	_owner_check(player.camera.position.distance_to(_expected_default_camera_position(1.0)) < 0.0001,
+	_owner_check(player.camera.position.distance_to(_expected_default_camera_position(2.6)) < 0.0001,
 		failures, "墙体避障必须自然恢复01新默认")
 	player.camera_feedback.reset()
-	# 窄顶盖只覆盖新Z=5.414、不覆盖旧Z=4.914，下表面10.65高于旧相机Y。
-	var slab := _camera_test_box(Vector3(4, 0.2, 0.3), Vector3(0, 10.75, 5.414396), "camera_ceiling_occluder")
+	# 窄顶盖只覆盖新Z=6.214、不覆盖上一版5.414；下表面11.80高于上一版相机Y。
+	var slab := _camera_test_box(Vector3(4, 0.2, 0.3), Vector3(0, 11.90, 6.214302), "camera_ceiling_occluder")
 	owner.add_child(slab)
 	await get_tree().physics_frame
 	owner.call("_update_camera_stair_slab_drop", 1.0 / 60.0, true)
 	owner.call("_apply_indoor_camera_pose")
 	_owner_check(bool(owner.get("_camera_stair_slab_detected")), failures, "新高度与水平位置必须命中真实顶盖")
-	_owner_check(player.camera.position.y <= 10.65 - 0.28 + 0.0001,
+	_owner_check(player.camera.position.y <= 11.80 - 0.28 + 0.0001,
 		failures, "避障后不得再追加固定拉远穿回楼板")
-	_owner_check(absf(player.camera.position.z - 5.414396) < 0.0001,
+	_owner_check(absf(player.camera.position.z - 6.214302) < 0.0001,
 		failures, "楼板下压保持新机位水平后移")
 	slab.queue_free()
 	await get_tree().process_frame
@@ -421,7 +421,7 @@ func _verify_expedition01_avoidance(owner: TowerDescent3D, player: Player3D, fai
 	for frame in range(240):
 		owner.call("_update_camera_stair_slab_drop", 1.0 / 60.0, true)
 		owner.call("_apply_indoor_camera_pose")
-	_owner_check(player.camera.position.distance_to(_expected_default_camera_position(1.0)) < 0.0001,
+	_owner_check(player.camera.position.distance_to(_expected_default_camera_position(2.6)) < 0.0001,
 		failures, "解除避障后必须恢复01新默认")
 
 

@@ -688,43 +688,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="ceiling_deck_-1" parent="." unique_id=316003890 instance=ExtResource("18_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1855695e-07, 11.4775, 2.5)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_deck_-2" parent="." unique_id=1886006656 instance=ExtResource("18_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.556708e-07, 11.4775, 7.5)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_deck_-3" parent="." unique_id=1591564350 instance=ExtResource("18_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0927847e-06, 11.4775, 12.5)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_deck_-4" parent="." unique_id=406302126 instance=ExtResource("18_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5298986e-06, 11.4775, 17.5)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
-metadata/authored_slot_role = "room_type_component"
-
 [node name="ceiling_deck_0" parent="." unique_id=1792759799 instance=ExtResource("18_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1855695e-07, 11.4775, -2.5)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_deck_1" parent="." unique_id=913643277 instance=ExtResource("18_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.556708e-07, 11.4775, -7.5)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_deck_2" parent="." unique_id=865166566 instance=ExtResource("18_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0927847e-06, 11.4775, -12.5)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_deck_3" parent="." unique_id=1855812219 instance=ExtResource("18_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5298986e-06, 11.4775, -17.5)
+transform = Transform3D(1.4130738, 0, 0, 0, 1, 0, 0, 0, 10.558137, -2.1855695e-07, 18.315186, -2.5)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/authored_slot_role = "room_type_component"
 

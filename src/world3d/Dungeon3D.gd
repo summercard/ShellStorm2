@@ -583,6 +583,8 @@ var _dot_cache_frame := -1
 var _dot_anchor_cache := Vector3.ZERO
 var _dot_visible_cache := false
 var _reference_hud_root: Control = null
+var _hud_corner_transition_tween: Tween = null
+var _hud_corner_transition_open := true
 var _hud_weapon_meta_label: Label = null
 var _hud_weapon_fate_label: Label = null
 var _hud_weapon_model_icon: ItemModelIcon3D = null
@@ -605,6 +607,9 @@ var _quick_item_ids: Array[String] = ["", ""]
 var _hud_battery_time_label: Label = null
 var _hud_battery_cells: Array[Panel] = []
 var _hud_battery_panel: Control = null
+## 状态块右列（血条 → 电芯 → 后续行）的垂直容器。子类往这里追加读数，
+## 由容器负责落位，不必跟着 `PlayerStatusBlock` 的锚框手算绝对坐标。
+var _hud_stat_column: VBoxContainer = null
 var _hud_battery_cell_prev_filled: Array[bool] = []
 var _hud_battery_blink_accum := 0.0
 var _last_battery_tier := -1
@@ -2439,6 +2444,8 @@ func _ensure_weapon_presentation_panel() -> WeaponAssemblyTreePanel:
 			get_viewport().size_changed.connect(_layout_weapon_presentation_panel)
 		_weapon_panel.panel_shown.connect(_sync_player_input_lock)
 		_weapon_panel.panel_hidden.connect(_sync_player_input_lock)
+		_weapon_panel.panel_shown.connect(func() -> void: _set_hud_corner_transition(false))
+		_weapon_panel.panel_hidden.connect(func() -> void: _set_hud_corner_transition(true))
 		_weapon_panel.z_index = 420
 		_weapon_panel.set_weapon_tree(player.get_weapon_tree())
 		_weapon_panel.set_weapon_owner(player)
@@ -2536,10 +2543,12 @@ func _build_reference_main_hud() -> void:
 	portrait.visible = false
 	player_row.add_child(portrait)
 	var stat_vbox := VBoxContainer.new()
+	stat_vbox.name = "PlayerStatColumn"
 	stat_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	stat_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	stat_vbox.add_theme_constant_override("separation", _hud_int(6))
 	player_row.add_child(stat_vbox)
+	_hud_stat_column = stat_vbox
 	# 对标《逃离鸭科夫》圆角胶囊血条：HP 读数直接居中嵌在圆角红血条正中央，省去上方冗余独立行
 	var hp_stack := Control.new()
 	hp_stack.name = "PlayerHealthBarStack"
@@ -3140,12 +3149,48 @@ func _hud_int(value: int) -> int:
 	return maxi(1, int(round(float(value) * HUD_UI_SCALE)))
 
 
+func _set_hud_corner_transition(opened: bool) -> void:
+	if _reference_hud_root == null or not is_instance_valid(_reference_hud_root):
+		return
+	if _hud_corner_transition_tween != null and _hud_corner_transition_tween.is_valid():
+		_hud_corner_transition_tween.kill()
+	_hud_corner_transition_open = opened
+	var corners: Array[Control] = []
+	for node_name in ["PlayerStatusBlock", "HudDashCooldownRing", "CurrentWeaponPanel", "QuickItemHUD_0", "QuickItemHUD_1"]:
+		var node := _reference_hud_root.find_child(node_name, true, false) as Control
+		if node != null:
+			corners.append(node)
+	var minimap_corner := get_node_or_null("HUD/DungeonMinimap3D") as Control
+	if minimap_corner != null:
+		corners.append(minimap_corner)
+	if not opened:
+		for node in corners:
+			node.set_meta("hud_corner_rest_position", node.position)
+	var reduced := bool(ProjectSettings.get_setting("accessibility/reduce_motion", false))
+	var duration := 0.01 if reduced else 0.28
+	_hud_corner_transition_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	for node in corners:
+		var rest: Vector2 = node.get_meta("hud_corner_rest_position", node.position)
+		var viewport := get_viewport().get_visible_rect().size
+		var direction := Vector2(-1, -1)
+		if node.name in ["DungeonMinimap3D"]:
+			direction = Vector2(1, -1)
+		elif node.name in ["CurrentWeaponPanel", "QuickItemHUD_0", "QuickItemHUD_1"]:
+			direction = Vector2(1, 1)
+		elif node.name == "HudDashCooldownRing":
+			direction = Vector2(-1, 1)
+		var target := rest if opened else rest + direction * Vector2(420, 260)
+		if opened:
+			node.position = rest + direction * Vector2(420, 260)
+		_hud_corner_transition_tween.parallel().tween_property(node, "position", target, duration).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+
 func _on_inventory_open_changed(opened: bool) -> void:
 	if opened and _has_exclusive_modal():
 		_inventory_ui.set_inventory_panel_open(false)
 		status_label.text = "先完成当前交互，再打开背包"
 		return
 	_sync_player_input_lock()
+	_set_hud_corner_transition(opened)
 	if opened:
 		status_label.text = "背包已打开 · 左键使用/装备，右键存入保险格"
 		_ensure_inventory_close_button()
@@ -3167,12 +3212,27 @@ func _has_exclusive_modal() -> bool:
 	)
 
 
+## 子类覆盖：塔楼入口层持有主页面/开场影片；普通 Dungeon 不持有入口覆盖层。
+## 输入锁仍由本 Owner 统一裁决，避免覆盖层直接写入后被下一帧清掉。
+func is_main_entry_input_locked() -> bool:
+	return false
+
+
 func _sync_player_input_lock() -> void:
 	if player == null:
 		return
 	var inventory_open := _inventory_ui != null and _inventory_ui.is_inventory_open()
+	# 主页面/开场影片是塔楼层的进程级覆盖层，不属于 Dungeon3D 的普通模态 UI。
+	# 但它们仍然占有真实 Player3D 的相机与展示期输入；若不纳入这里的唯一
+	# 锁裁决，MainEntryScreen3D.present() 写入的 true 会在下一帧被覆盖回 false，
+	# 造成主页面期间可以移动、瞄准和开火。
+	var main_entry_open := is_main_entry_input_locked()
 	player.set_input_locked(
-		_has_exclusive_modal() or inventory_open or _run_vending_tutorial_locked or _narrative_holds_player_input()
+		_has_exclusive_modal()
+		or inventory_open
+		or main_entry_open
+		or _run_vending_tutorial_locked
+		or _narrative_holds_player_input()
 	)
 
 
@@ -3950,6 +4010,7 @@ func _create_secret_branch_extraction_beacon(room: DungeonRoom3D) -> void:
 	if beacon == null:
 		push_warning("[Dungeon3D] 子图撤离信标创建失败：%s" % str(room.room_id if room else "<null>"))
 		return
+	beacon.defense_encounter_enabled = false
 	beacon.set_meta("secret_branch", true)
 
 
@@ -10116,6 +10177,7 @@ func _build_door_fate_overlay() -> void:
 		_fate_overlay_closing = false
 		_fate_overlay.get_parent().remove_child(_fate_overlay)
 		_fate_overlay.queue_free()
+	_set_hud_corner_transition(false)
 	_fate_overlay = Control.new()
 	_fate_overlay.name = "DoorFateOverlay3D"
 	_fate_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -11466,6 +11528,7 @@ func _close_door_fate_overlay() -> void:
 			overlay_parent.remove_child(_fate_overlay)
 		_fate_overlay.queue_free()
 	_fate_overlay = null
+	_set_hud_corner_transition(true)
 	_fate_feedback_label = null
 	# 反馈 tween 的宿主已经销毁，引用一并清掉，免得下一轮弹窗拿到失效对象。
 	_fate_shake_tweens.clear()
@@ -13054,6 +13117,8 @@ func _on_extraction_started(start_duration: float, beacon: ExtractionBeacon3D) -
 	# 取的会是玩家**已经离开**的主图房间 —— 表现成「人在子图读条、主图房里刷怪」。
 	# 读条、面板与结算全部照旧，只有这一场遭遇不建。
 	var skip_defense := not beacon.defense_encounter_enabled
+	if skip_defense:
+		_extraction_encounter_instance_id = ""
 	if not skip_defense and room != null and _encounter_event_director != null:
 		var config := _build_extraction_encounter_config(room, start_duration)
 		var started := start_encounter_event(config)
@@ -13701,6 +13766,10 @@ func _finish_run(success: bool) -> void:
 	if _completed:
 		return
 	_completed = true
+	# 本局离场前结束所有正在播放的 VFX，避免全局 VfxPool 中的实例跨场景带入基地；
+	# inactive 预热池由 clear_active() 保留，供后续场景继续复用。
+	if VfxPool != null and VfxPool.has_method("clear_active"):
+		VfxPool.clear_active()
 	if _encounter_event_director != null:
 		_encounter_event_director.cancel_all("run_finished")
 	for room_id in _wave_spawn_pending.keys():

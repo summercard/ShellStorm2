@@ -22,6 +22,9 @@ var _animation_epoch := 0
 var _refresh_queued := false
 var _refreshing := false
 var _preview_key := ""
+var _preview_item_override: Dictionary = {}
+var _preview_slot := -1
+var _preview_tree: WeaponAssemblyTree = null
 var _inspected_slot := 0
 var _dragging := false
 var _drag_position := Vector2.ZERO
@@ -160,6 +163,32 @@ func set_weapon_owner(owner: Node) -> void:
 					_owner.connect(signal_name, _queue_refresh)
 	refresh_from_owner()
 
+## 只读浏览另一把装备武器；不调用切枪，不改 active_weapon_slot，也不改变购买目标。
+func set_preview_item(item: Dictionary, slot_index: int = -1) -> void:
+	if _preview_tree != null and is_instance_valid(_preview_tree):
+		_preview_tree.free()
+	_preview_item_override = item.duplicate(true)
+	_preview_slot = slot_index
+	_preview_tree = null
+	var instance := WeaponInstance.from_item(_preview_item_override)
+	if instance != null:
+		_preview_tree = instance.build_runtime_tree()
+	_cancel_install()
+	refresh_from_owner()
+
+func clear_preview_item() -> void:
+	if _preview_item_override.is_empty() and _preview_tree == null:
+		return
+	if _preview_tree != null and is_instance_valid(_preview_tree):
+		_preview_tree.free()
+	_preview_item_override = {}
+	_preview_slot = -1
+	_preview_tree = null
+	refresh_from_owner()
+
+func get_preview_slot() -> int:
+	return _preview_slot
+
 func _disconnect_owner() -> void:
 	if is_instance_valid(_owner):
 		for signal_name in ["weapon_instance_changed", "weapon_loadout_changed", "weapon_changed"]:
@@ -198,7 +227,13 @@ func refresh_from_owner() -> void:
 	_refreshing = true
 	var snapshot: Dictionary = {}
 	_item = {}
-	if is_instance_valid(_owner):
+	if not _preview_item_override.is_empty():
+		_item = _preview_item_override.duplicate(true)
+		if _preview_tree != null and is_instance_valid(_preview_tree):
+			_bind_tree(_preview_tree)
+		else:
+			_bind_tree(null)
+	elif is_instance_valid(_owner):
 		_bind_tree(_property(_owner, "weapon_tree") as WeaponAssemblyTree)
 		if _owner.has_method("get_weapon_presentation_snapshot"):
 			var value: Variant = _owner.call("get_weapon_presentation_snapshot")
@@ -473,19 +508,22 @@ func _update_root_connection() -> void:
 	_root_connection = {}
 	var root_segments: Array[Dictionary] = []
 	if not _sockets.is_empty():
-		var weapon_anchor := _weapon_connection_anchor(_root_track)
+		var preview_center := _weapon_connection_anchor(_root_track)
 		var viewport_start := _local_point(_scroll, Vector2.ZERO, _root_track)
 		var viewport_end := _local_point(_scroll, _scroll.size, _root_track)
 		var first := _socket_art_rect(_sockets[0], _root_track)
 		var card_entry := Vector2(first.position.x, first.get_center().y)
 		var boundary := Vector2(viewport_start.x, clampf(card_entry.y, viewport_start.y, viewport_end.y))
+		# 根线从枪械区与卡巢区之间的中线起步，不再穿过枪身模型。
+		# 这样第一根线只表达“枪械区 -> 卡巢区”的关系，和后续卡巢连线同一层级。
+		var midline_anchor := Vector2(viewport_start.x, clampf(card_entry.y, viewport_start.y, viewport_end.y))
 		# 只有真实左中接点仍在视口内才接卡，滚出后不跨层追踪隐藏卡。
 		var reaches_first := card_entry.x >= viewport_start.x and card_entry.x <= viewport_end.x and card_entry.y >= viewport_start.y and card_entry.y <= viewport_end.y
 		var entry_anchor := card_entry if reaches_first else boundary
-		var bend := maxf(weapon_anchor.x, viewport_start.x - 8.0)
-		var points := PackedVector2Array([weapon_anchor, Vector2(bend, weapon_anchor.y), Vector2(bend, entry_anchor.y), entry_anchor])
+		var bend := maxf(midline_anchor.x + 24.0, viewport_start.x + 16.0)
+		var points := PackedVector2Array([midline_anchor, Vector2(bend, midline_anchor.y), Vector2(bend, entry_anchor.y), entry_anchor])
 		var active := _records.has(1) and _pending_slot != 1
-		_root_connection = {"points": points, "weapon_anchor": weapon_anchor, "entry_anchor": entry_anchor, "active": active, "destination_slot": 1 if reaches_first else 0, "scroll_boundary": boundary, "clipped": not reaches_first, "coordinate_space": "board_local"}
+		_root_connection = {"points": points, "weapon_anchor": midline_anchor, "preview_center": preview_center, "entry_anchor": entry_anchor, "active": active, "destination_slot": 1 if reaches_first else 0, "scroll_boundary": boundary, "clipped": not reaches_first, "coordinate_space": "board_local", "start_semantics": "weapon_area_midline"}
 		root_segments.append({"to_slot": 1, "active": active, "points": points})
 		var segments: Array[Dictionary] = _track.get("segments")
 		if not segments.is_empty():

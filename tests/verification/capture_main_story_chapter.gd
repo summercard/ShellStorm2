@@ -25,8 +25,8 @@ var _finish_reason := ""
 func _run() -> void:
 	_began_ms = Time.get_ticks_msec()
 	_chapter_code = OS.get_environment("SHELLSTORM_MAIN_STORY_CHAPTER")
-	if DisplayServer.get_name() == "headless" or _capture_dir.is_empty() or _chapter_code not in ["031", "032", "033"]:
-		push_error("正式表演capture需要真实渲染器、工程外目录及031/032/033章节")
+	if DisplayServer.get_name() == "headless" or _capture_dir.is_empty() or _chapter_code not in ["031", "032", "032K", "033"]:
+		push_error("正式表演capture需要真实渲染器、工程外目录及031/032/032K/033章节")
 		get_tree().quit(2)
 		return
 	get_tree().create_timer(450.0).timeout.connect(_watchdog)
@@ -39,11 +39,14 @@ func _run() -> void:
 	var history := {"nar_opening_01": {"completed_count": 1}, "nar_opening_02": {"completed_count": 1}, "nar_opening_03": {"completed_count": 1}}
 	if _chapter_code != "031":
 		history[MainStoryChapter3D.BRIEFING_ID] = {"completed_count": 1}
+	if _chapter_code == "032K":
+		# 返航段落发生在 3.2 之后：3.2 必须已完成，否则 Boss 房会先重播显示器台词。
+		history[MainStoryChapter3D.BOSS_ID] = {"completed_count": 1}
 	BaseManager.replace_narrative_history_for_test(history)
 	NarrativeDirector.reset_for_test()
 	NarrativeDirector.set_process(false)
-	_chapter_id = {"031": MainStoryChapter3D.BRIEFING_ID, "032": MainStoryChapter3D.BOSS_ID, "033": MainStoryChapter3D.DEPOSIT_ID}[_chapter_code]
-	_scene_path = "res://scenes/ExpeditionLevel01_3D.tscn" if _chapter_code == "032" else "res://scenes/TowerDescent3D.tscn"
+	_chapter_id = {"031": MainStoryChapter3D.BRIEFING_ID, "032": MainStoryChapter3D.BOSS_ID, "032K": MainStoryChapter3D.KEY_RETURN_CALL_ID, "033": MainStoryChapter3D.DEPOSIT_ID}[_chapter_code]
+	_scene_path = "res://scenes/ExpeditionLevel01_3D.tscn" if _chapter_code in ["032", "032K"] else "res://scenes/TowerDescent3D.tscn"
 	_script_data = JSON.parse_string(FileAccess.get_file_as_string("res://data/narrative/" + _chapter_id + ".json"))
 	for cue: Dictionary in _script_data.get("cues", []):
 		if cue.get("do", "") in ["actor.say", "ui.subtitle"]:
@@ -53,9 +56,11 @@ func _run() -> void:
 	if _chapter_code == "031":
 		_capture_targets.append_array([55.05, 55.2])
 	if _chapter_code == "032":
-		_capture_targets.append_array([0.5, 3.0, 12.0, 24.5])
+		# 57.9/58.6 覆盖「还镜回角色视角」与「1.5秒停顿」两段，便于目视确认没有残留镜头。
+		# 65.75 落在「啊啊啊啊！」起震的 0.65 秒窗口内，用于确认震屏与出字同帧。
+		_capture_targets.append_array([0.5, 3.0, 12.0, 24.5, 57.9, 58.6, 65.75])
 	_capture_targets.sort()
-	# 九镜不是替换原有 capture_targets：每个正式 camera.shot 仍保留独立的起/中/末三帧。
+	# 每个正式 camera.shot 都保留独立的起/中/末三帧，不替换原有 capture_targets。
 	# 这是表现QA的镜头覆盖证据，不改变剧本时序或原有断言。
 	for cue in _script_data.get("cues", []):
 		if str(cue.get("do", "")) != "camera.shot":
@@ -68,7 +73,7 @@ func _run() -> void:
 		_mirror_capture_targets.append({"index": _mirror_capture_targets.size() + 1, "phase": "middle", "at": shot_at + shot_duration * 0.5})
 		_mirror_capture_targets.append({"index": _mirror_capture_targets.size() + 1, "phase": "end", "at": shot_at + maxf(shot_duration - 0.03, 0.03)})
 	_mirror_capture_targets.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return float(a.at) < float(b.at))
-	print("VISUAL_STAGE nine_shot_targets ", _mirror_capture_targets.size())
+	print("VISUAL_STAGE shot_targets ", _mirror_capture_targets.size())
 	print("VISUAL_STAGE instantiate ", _scene_path)
 	tower = (load(_scene_path) as PackedScene).instantiate() as Node3D
 	tower.set("test_mode", true)
@@ -96,8 +101,8 @@ func _run() -> void:
 	NarrativeDirector.bind_dungeon_for_test(tower)
 	DialogueUI.close()
 	var player := tower.get("player") as Node3D
-	player.set_physics_process(_chapter_code in ["031", "032"])
-	if _chapter_code == "032":
+	player.set_physics_process(_chapter_code in ["031", "032", "032K"])
+	if _chapter_code in ["032", "032K"]:
 		await _setup_boss(player)
 	else:
 		npc = tower.call("find_npc", "npc_base99_green") as Node3D
@@ -117,6 +122,9 @@ func _run() -> void:
 	camera.make_current()
 	await get_tree().process_frame
 	await _save_frame("00_gameplay_pose", player)
+	if _chapter_code == "032K":
+		await _capture_key_return(player)
+		return
 	if _chapter_code == "032" and _boss == null:
 		await _finish()
 		return
@@ -220,11 +228,182 @@ func _setup_boss(player: Node3D) -> void:
 	check(_boss != null, "真实显示器Boss存在")
 	if _boss == null: return
 	_initial_activation = _boss.get_story_activation_snapshot().duplicate(true)
-	check(bool(_initial_activation.get("held", false)) and not bool(_initial_activation.get("started", true)) and not bool(_initial_activation.get("completed", true)), "Boss保持正常未激活起态")
+	if _chapter_code == "032":
+		check(bool(_initial_activation.get("held", false)) and not bool(_initial_activation.get("started", true)) and not bool(_initial_activation.get("completed", true)), "Boss保持正常未激活起态")
 	_boss.set_runtime_active(true)
 	_boss.set_physics_process(true)
 	await get_tree().physics_frame
 	print("VISUAL_BOSS entry=", spawn, " boss=", _boss.global_position, " initial=", _initial_activation)
+
+## 击败首领 → 首领箱 → 领取稀土钥匙 → 方式B返航通讯 → 安全撤离信标 → 主动8秒同步的连续录制。
+## 只用正式运行链；夹具仅把玩家摆到真实箱前、并关闭本房主动增援，避免与「安全信标不刷怪」混淆。
+func _capture_key_return(player: Node3D) -> void:
+	var room := tower.call("get_main_story_room", "boss") as DungeonRoom3D
+	check(room != null, "返航段落使用真实Boss房")
+	if room == null:
+		await _finish()
+		return
+	room.boss_reinforcement_plan = {}
+	_boss.set_story_activation_hold(false)
+	# 真实玩法里玩家是在战场中央打倒 Boss 的。`_setup_boss` 为了让 032 从门口沿坡道
+	# 走位，把玩家停在门内 3 m 的入口高台；首领箱按 `_clear_drop_offset` 掉在玩家附近，
+	# 停在门口就会把箱子钉在门口。这里按真实战斗位摆到 Boss 前方，再让正式掉落链自己选点。
+	var battlefield := room.to_global(Vector3(0.0, 0.08, -17.5))
+	var probe := PhysicsRayQueryParameters3D.create(battlefield + Vector3.UP * 2.0, battlefield + Vector3.DOWN * 2.5, 1)
+	probe.collide_with_areas = false
+	probe.exclude = [(player as CollisionObject3D).get_rid()]
+	var ground := tower.get_world_3d().direct_space_state.intersect_ray(probe)
+	check(not ground.is_empty() and (ground.get("normal", Vector3.ZERO) as Vector3).y > 0.7, "战场中央有承重地面")
+	if not ground.is_empty():
+		battlefield = (ground["position"] as Vector3) + Vector3.UP * 0.05
+	player.global_position = battlefield
+	var to_boss := _boss.global_position - battlefield
+	to_boss.y = 0.0
+	if to_boss.length() > 0.01:
+		player.rotation.y = atan2(-to_boss.x, -to_boss.z)
+		player.set("aim_yaw", player.rotation.y)
+	tower.call("_apply_indoor_camera_pose")
+	await get_tree().physics_frame
+	await get_tree().create_timer(0.4, false).timeout
+	await _save_frame("kr_01_boss_alive", player)
+	print("KEY_RETURN_STAGE boss_kill")
+	_boss.take_damage(9999999, false, Vector3.ZERO, 0.0, false)
+	var waited := 0.0
+	while is_instance_valid(_boss) and waited < 8.0:
+		await get_tree().process_frame
+		waited += get_process_delta_time()
+	check(bool(tower.call("is_room_boss_defeated", room.room_id)), "真实击杀登记首领阵亡")
+	await get_tree().create_timer(0.6, false).timeout
+	await _save_frame("kr_02_boss_defeated", player)
+	# 首领箱由正式击杀结算生成；这里不手工造箱。
+	var chest: TreasureChest3D = null
+	waited = 0.0
+	while chest == null and waited < 8.0:
+		for node in room.find_children("*", "", true, false):
+			if node is TreasureChest3D and str((node as TreasureChest3D).chest_id) == "drop_boss":
+				chest = node as TreasureChest3D
+				break
+		if chest == null:
+			await get_tree().process_frame
+			waited += get_process_delta_time()
+	check(chest != null, "首领阵亡后正式生成 drop_boss 首领箱")
+	if chest == null:
+		await _finish()
+		return
+	var chest_local := room.to_local(chest.global_position)
+	var player_local := room.to_local(player.global_position)
+	print("KEY_RETURN_STAGE chest=", chest.global_position, " chest_local=", chest_local, " player_local=", player_local, " dist=", Vector2(chest_local.x - player_local.x, chest_local.z - player_local.z).length())
+	var away := player.global_position - chest.global_position
+	away.y = 0.0
+	if away.length() < 0.05:
+		away = Vector3(0.0, 0.0, 1.0)
+	var approach := chest.global_position + away.normalized() * 1.5
+	player.global_position = Vector3(approach.x, chest.global_position.y + 0.08, approach.z)
+	await get_tree().physics_frame
+	await get_tree().create_timer(1.1, false).timeout
+	await _save_frame("kr_03_chest", player)
+	chest._player_in_range = true
+	check(chest.perform_interaction(player, {}), "真实交互领取首领箱")
+	await get_tree().process_frame
+	check(MainStoryProgress.key_state(BaseManager.get_main_story_snapshot(), MainStoryChapter3D.KEY_RARE_EARTH) == "acquired", "稀土钥匙已取得")
+	await _save_frame("kr_04_key_acquired", player)
+	# 领取落盘后由正式控制器起播方式B返航通讯。
+	waited = 0.0
+	while NarrativeDirector.active_id() != MainStoryChapter3D.KEY_RETURN_CALL_ID and waited < 6.0:
+		await get_tree().process_frame
+		controller.call("_process", get_process_delta_time())
+		waited += get_process_delta_time()
+	check(NarrativeDirector.active_id() == MainStoryChapter3D.KEY_RETURN_CALL_ID, "领取后自动起播方式B返航通讯")
+	print("KEY_RETURN_STAGE call_started")
+	# 导演此前被压成手动模式（同 031/032）；这里恢复真实 time 推进，否则 wait=true 的
+	# 对话屏障永远不会被判定完成，后续 cue 与 beacon_ready 也不会派发。
+	NarrativeDirector.set_process(true)
+	var lines := 0
+	var last_index := -1
+	var held := 0.0
+	var talk_began := Time.get_ticks_msec()
+	while NarrativeDirector.is_playing() and float(Time.get_ticks_msec() - talk_began) / 1000.0 < 40.0:
+		await get_tree().process_frame
+		held += get_process_delta_time()
+		controller.call("_process", get_process_delta_time())
+		if not DialogueUI.is_active():
+			continue
+		var index := DialogueUI.current_line_index()
+		if index != last_index:
+			last_index = index
+			lines += 1
+			held = 0.0
+			print("KEY_RETURN_LINE ", lines, " index=", index, " text=", DialogueUI.current_text())
+			await _save_frame("kr_05_line_%02d" % lines, player)
+		elif held >= 2.6:
+			# 显式推进：先补完打字，再进下一句；对话自身也有 auto_advance_sec 兜底。
+			DialogueUI.reveal_all()
+			DialogueUI.advance()
+			held = 0.0
+	check(lines > 0, "方式B返航通讯真实显示多句")
+	print("KEY_RETURN_AFTER_TALK playing=", NarrativeDirector.is_playing(), " dispatch=", JSON.stringify(NarrativeDirector.dispatch_log()), " diagnostics=", JSON.stringify(NarrativeDirector.diagnostics()))
+	print("KEY_RETURN_AFTER_TALK history=", BaseManager.has_narrative_completed(MainStoryChapter3D.KEY_RETURN_CALL_ID), " state=", JSON.stringify(tower.get_main_story_extraction_state()), " controller=", JSON.stringify(controller.call("get_snapshot")))
+	check(BaseManager.has_narrative_completed(MainStoryChapter3D.KEY_RETURN_CALL_ID), "通讯完整播放后写入完成历史")
+	var beacon: ExtractionBeacon3D = null
+	waited = 0.0
+	while beacon == null and waited < 8.0:
+		beacon = tower.get("_main_story_safe_beacon") as ExtractionBeacon3D
+		if beacon != null:
+			break
+		await get_tree().process_frame
+		controller.call("_process", get_process_delta_time())
+		waited += get_process_delta_time()
+	check(beacon != null, "通讯收口后落下真实安全撤离信标")
+	if beacon == null:
+		await _finish()
+		return
+	print("KEY_RETURN_STAGE beacon=", beacon.global_position)
+	# 通讯结束后玩家走到信标旁（正式玩法就是走过去按 E），朝向信标并重算室内机位，
+	# 否则第三人称相机还留在开箱方向，画面上看不到信标。
+	var approach_dir := Vector3(0.0, 0.0, 1.0)
+	if is_instance_valid(_boss):
+		approach_dir = (player.global_position - beacon.global_position)
+		approach_dir.y = 0.0
+		if approach_dir.length() < 0.5:
+			approach_dir = Vector3(0.0, 0.0, 1.0)
+	# 先走过去自动拾取首领掉落的普通物资，避免拾取飘字压在信标上；再退到 3.4 m 外取景，
+	# 第三人称俯视机位在这个距离能同时看到主角与 2.2 m 信标。
+	player.global_position = beacon.global_position
+	await get_tree().physics_frame
+	await get_tree().create_timer(2.0, false).timeout
+	player.global_position = beacon.global_position - approach_dir.normalized() * 3.4
+	var look := beacon.global_position - player.global_position
+	look.y = 0.0
+	if look.length() > 0.01:
+		# 侧偏约 22°：主角与信标不重叠，画面同时交代「站在信标旁」与信标本体。
+		player.rotation.y = atan2(-look.x, -look.z) + 0.38
+		player.set("aim_yaw", player.rotation.y)
+	tower.call("_apply_indoor_camera_pose")
+	await get_tree().physics_frame
+	await get_tree().create_timer(0.3, false).timeout
+	await _save_frame("kr_06_beacon_drop", player)
+	await get_tree().create_timer(0.6, false).timeout
+	tower.call("_apply_indoor_camera_pose")
+	await get_tree().physics_frame
+	await _save_frame("kr_07_beacon_ready", player)
+	check(bool(beacon.get_snapshot().get("interaction_ready", false)), "安全信标0.6秒落地后开放交互")
+	check(not bool(beacon.get_snapshot().get("defense_encounter_enabled", true)), "安全信标不启用防守遭遇")
+	# 走近到交互距离再按 E（正式玩法同样是靠近后交互）。
+	player.global_position = beacon.global_position - approach_dir.normalized() * 1.5
+	tower.call("_apply_indoor_camera_pose")
+	await get_tree().physics_frame
+	await get_tree().create_timer(0.3, false).timeout
+	beacon._player_in_range = true
+	check(beacon.perform_interaction(player, {}), "安全信标主动交互启动同步")
+	await get_tree().create_timer(3.6, false).timeout
+	await _save_frame("kr_08_sync_mid", player)
+	await get_tree().create_timer(3.8, false).timeout
+	await _save_frame("kr_09_sync_end", player)
+	_duration = float(Time.get_ticks_msec() - _began_ms) / 1000.0
+	check(_duration > 0.0, "返航段落真实运行时长已记录")
+	_end_state = {"key_state": MainStoryProgress.key_state(BaseManager.get_main_story_snapshot(), MainStoryChapter3D.KEY_RARE_EARTH), "beacon": beacon.get_snapshot(), "extraction_stage": str((tower.get("_main_story_auto_extraction") as Dictionary).get("stage", ""))}
+	await _finish()
+
 
 func _bark_text(actor: Node3D) -> String:
 	if not is_instance_valid(actor): return ""

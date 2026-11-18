@@ -59,6 +59,8 @@ var equipment_weapon_label: Label
 var equipment_weapon_slots: Array[Control] = []
 var equipment_weapon_labels: Array[Label] = []
 var equipment_attachment_slots: Array = []
+var equipment_fate_rows: Array[Control] = []
+var equipment_moon_fate_row: Control = null
 ## 每把武器下面那一行「弹药」的只读格子与名字标签。弹药槽不是配件槽
 ## （`AssemblyNode.PUBLIC_ATTACHMENT_SLOTS` 不含 BULLET），所以单独一套控件。
 var equipment_bullet_slots: Array[Control] = []
@@ -220,9 +222,9 @@ func _setup_standalone_panels() -> void:
 
 	equipment_panel = PanelContainer.new()
 	equipment_panel.name = "CharacterEquipmentPanel"
-	equipment_panel.custom_minimum_size = Vector2(400, 0)
+	equipment_panel.custom_minimum_size = Vector2(610, 0)
 	equipment_panel.size_flags_horizontal = Control.SIZE_FILL
-	equipment_panel.size_flags_stretch_ratio = 0.0
+	equipment_panel.size_flags_stretch_ratio = 1.45
 	equipment_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	equipment_panel.add_theme_stylebox_override(
 		"panel", UIStyleFactory.make_panel_with_border(1, Color(0.32, 0.50, 0.68), 7, 1)
@@ -231,8 +233,9 @@ func _setup_standalone_panels() -> void:
 	# 中央区域故意保留给游戏世界：不拦截鼠标，不放置 UI 面板。
 	drop_zone = _create_slot()
 	drop_zone.name = "CenterGameplaySpace"
-	drop_zone.custom_minimum_size = Vector2(120, 0)
+	drop_zone.custom_minimum_size = Vector2(24, 0)
 	drop_zone.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	drop_zone.size_flags_stretch_ratio = 0.18
 	drop_zone.set_meta("slot_kind", "drop")
 	drop_zone.set_meta("invisible_drop_zone", true)
 	drop_zone.get_node("CountLabel").hide()
@@ -266,10 +269,12 @@ func _setup_standalone_panels() -> void:
 	var attribute_label := Label.new()
 	attribute_label.text = "当前状态"
 	attribute_label.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
+	attribute_label.visible = false
 	equipment_vbox.add_child(attribute_label)
 	equipment_hp_label = Label.new()
 	equipment_hp_label.name = "EquipmentHPLabel"
 	equipment_hp_label.text = "生命 100 / 100"
+	equipment_hp_label.visible = false
 	equipment_vbox.add_child(equipment_hp_label)
 	equipment_hp_bar = ProgressBar.new()
 	equipment_hp_bar.name = "EquipmentHPBar"
@@ -289,17 +294,18 @@ func _setup_standalone_panels() -> void:
 	equipment_vbox.add_child(weapon_slots_row)
 	for weapon_slot_index in range(2):
 		var slot_box := VBoxContainer.new()
-		slot_box.custom_minimum_size.x = 108
-		slot_box.size_flags_horizontal = Control.SIZE_FILL
+		slot_box.custom_minimum_size.x = 176
+		slot_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		weapon_slots_row.add_child(slot_box)
 		var slot_caption := Label.new()
 		slot_caption.text = "[1] 主武器" if weapon_slot_index == 0 else "[2] 副武器"
 		slot_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		slot_caption.add_theme_font_size_override("font_size", 12)
+		slot_caption.visible = false
 		slot_box.add_child(slot_caption)
 		var weapon_slot := _create_slot()
 		weapon_slot.name = "MainWeaponEquipmentSlot" if weapon_slot_index == 0 else "SecondaryWeaponEquipmentSlot"
-		weapon_slot.custom_minimum_size = Vector2(104, 80)
+		weapon_slot.custom_minimum_size = Vector2(168, 116)
 		weapon_slot.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		if weapon_slot.has_method("set_slot_index"):
 			weapon_slot.call("set_slot_index", weapon_slot_index)
@@ -314,8 +320,16 @@ func _setup_standalone_panels() -> void:
 		weapon_label.custom_minimum_size.y = 32
 		weapon_label.add_theme_font_size_override("font_size", 11)
 		weapon_label.text = "未装备"
+		weapon_label.visible = false
 		slot_box.add_child(weapon_label)
 		equipment_weapon_labels.append(weapon_label)
+		var fate_row := HBoxContainer.new()
+		fate_row.name = "Weapon%dFateCardRow" % weapon_slot_index
+		fate_row.add_theme_constant_override("separation", 4)
+		fate_row.alignment = BoxContainer.ALIGNMENT_CENTER
+		fate_row.custom_minimum_size.y = 74
+		slot_box.add_child(fate_row)
+		equipment_fate_rows.append(fate_row)
 		# 弹药行：显示这把枪实际装的子弹模块。玩家在背包里换了弹种，
 		# 这里必须立刻能看出来 —— 否则「我明明换了弹，怎么没变化」会反复被当成 bug。
 		var bullet_row := HBoxContainer.new()
@@ -325,7 +339,7 @@ func _setup_standalone_panels() -> void:
 		slot_box.add_child(bullet_row)
 		var bullet_slot := _create_slot()
 		bullet_slot.name = "Weapon%dBulletSlot" % weapon_slot_index
-		bullet_slot.custom_minimum_size = Vector2(30, 30)
+		bullet_slot.custom_minimum_size = Vector2(38, 38)
 		# 只读展示格：不吃拖放（slot_kind 不在任何可接收分支里），也不可拖出。
 		bullet_slot.set_meta("slot_kind", "bullet_display_%d" % weapon_slot_index)
 		bullet_slot.set_meta("drag_disabled", true)
@@ -338,6 +352,7 @@ func _setup_standalone_panels() -> void:
 		bullet_text_col.name = "Weapon%dBulletText" % weapon_slot_index
 		bullet_text_col.add_theme_constant_override("separation", 0)
 		bullet_text_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		bullet_text_col.visible = false
 		bullet_row.add_child(bullet_text_col)
 		var bullet_caption := Label.new()
 		# 2026-10-19：手动更换总闸关闭 —— 标题直接写「锁定」，玩家不用点开悬浮卡
@@ -358,14 +373,14 @@ func _setup_standalone_panels() -> void:
 		equipment_bullet_slots.append(bullet_slot)
 		equipment_bullet_labels.append(bullet_label)
 		var attachment_title := Label.new()
-		attachment_title.text = "配件 · 点击拆卸"
+		attachment_title.text = "配件"
 		attachment_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		attachment_title.add_theme_font_size_override("font_size", 10)
 		attachment_title.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
 		slot_box.add_child(attachment_title)
 		var attachment_grid := GridContainer.new()
 		attachment_grid.name = "WeaponAttachmentGrid_%d" % weapon_slot_index
-		attachment_grid.columns = 3
+		attachment_grid.columns = 4
 		attachment_grid.add_theme_constant_override("h_separation", 4)
 		attachment_grid.add_theme_constant_override("v_separation", 4)
 		attachment_grid.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -403,7 +418,7 @@ func _setup_standalone_panels() -> void:
 		equipment_attachment_slots.append(weapon_attachment_slots)
 	character_preview = ITEM_MODEL_ICON_SCENE.instantiate() as ItemModelIcon3D
 	character_preview.name = "CharacterPreview"
-	character_preview.custom_minimum_size = Vector2(132, 254)
+	character_preview.custom_minimum_size = Vector2(210, 300)
 	character_preview.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	character_preview.icon_resolution = 384
 	character_preview.configure_custom_model(_create_character_preview, "avatar_full")
@@ -478,8 +493,18 @@ func _setup_standalone_panels() -> void:
 	reserved.add_theme_font_size_override("font_size", 13)
 	equipment_vbox.add_child(reserved)
 	reserved.hide()
+	var moon_fate_title := Label.new()
+	moon_fate_title.text = "月亮命运"
+	moon_fate_title.add_theme_color_override("font_color", Color(0.72, 0.80, 1.0))
+	moon_fate_title.add_theme_font_size_override("font_size", 12)
+	equipment_vbox.add_child(moon_fate_title)
+	equipment_moon_fate_row = HBoxContainer.new()
+	equipment_moon_fate_row.name = "MoonFateCardRow"
+	equipment_moon_fate_row.add_theme_constant_override("separation", 6)
+	equipment_vbox.add_child(equipment_moon_fate_row)
 	equipment_fate_label = Label.new()
 	equipment_fate_label.name = "RunFateStateLabel"
+	equipment_fate_label.visible = false
 	equipment_fate_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	equipment_fate_label.add_theme_font_size_override("font_size", 12)
 	equipment_fate_label.add_theme_color_override("font_color", Color(0.78, 0.86, 0.96))
@@ -494,7 +519,7 @@ func _setup_standalone_panels() -> void:
 	)
 	inventory_panel.custom_minimum_size = Vector2(432, 0)
 	inventory_panel.size_flags_horizontal = Control.SIZE_FILL
-	inventory_panel.size_flags_stretch_ratio = 0.0
+	inventory_panel.size_flags_stretch_ratio = 0.92
 	inventory_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	inventory_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	columns.add_child(inventory_panel)
@@ -1374,6 +1399,10 @@ func _on_owner_hp_changed(current: int, maximum: int) -> void:
 		equipment_hp_bar.value = clampi(current, 0, maximum)
 	if equipment_hp_label != null:
 		equipment_hp_label.text = "生命 %d / %d" % [current, maximum]
+	if equipment_hp_label != null:
+		equipment_hp_label.visible = false
+	if equipment_hp_bar != null:
+		equipment_hp_bar.visible = false
 
 
 func _refresh_equipment_ui() -> void:
@@ -1391,7 +1420,9 @@ func _refresh_equipment_ui() -> void:
 			item = _weapon_owner.call("get_equipped_weapon_item") as Dictionary
 		if item.is_empty():
 			_clear_slot(slot)
-			equipment_weapon_labels[weapon_slot_index].text = "%s未装备" % ("主武器" if weapon_slot_index == 0 else "副武器")
+			equipment_weapon_labels[weapon_slot_index].text = "未装备"
+			_refresh_weapon_fate_cards(weapon_slot_index, [])
+			_refresh_weapon_fate_cards(weapon_slot_index, [])
 			_refresh_weapon_attachment_slots(weapon_slot_index, [])
 			_refresh_weapon_bullet_display(weapon_slot_index, {})
 			continue
@@ -1399,6 +1430,7 @@ func _refresh_equipment_ui() -> void:
 		var instance_id := str(item.get("weapon_instance_id", ""))
 		var upgrades: Variant = item.get("fate_upgrades", [])
 		var used: int = upgrades.size() if upgrades is Array else 0
+		_refresh_weapon_fate_cards(weapon_slot_index, upgrades as Array if upgrades is Array else [])
 		equipment_weapon_labels[weapon_slot_index].text = "%s%s\n命运 %d/%d" % [
 			"▶ " if weapon_slot_index == active_slot else "",
 			item.get("name", "武器"), used,
@@ -1414,6 +1446,26 @@ func _refresh_equipment_ui() -> void:
 		_refresh_weapon_bullet_display(weapon_slot_index, bullet_item)
 	_refresh_quick_item_ui()
 
+
+func _refresh_weapon_fate_cards(weapon_slot_index: int, upgrades: Array) -> void:
+	if weapon_slot_index < 0 or weapon_slot_index >= equipment_fate_rows.size():
+		return
+	var row := equipment_fate_rows[weapon_slot_index]
+	for child in row.get_children():
+		row.remove_child(child)
+		child.queue_free()
+	for index in range(4):
+		var host := Control.new()
+		host.custom_minimum_size = Vector2(42, 62)
+		host.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		if index < upgrades.size() and upgrades[index] is Dictionary:
+			var card_data := upgrades[index] as Dictionary
+			var card := FateCardPresets.get_by_card_id(str(card_data.get("stable_card_id", "")))
+			if card != null:
+				var art := FateCardView.art_for(card)
+				if art != null:
+					FateCardView.build_art_layer(host, art, str(card_data.get("orientation", "UPRIGHT")) == "REVERSED", "WeaponFateCard")
+		row.add_child(host)
 
 func _refresh_weapon_attachment_slots(weapon_slot_index: int, layout: Array[Dictionary]) -> void:
 	if weapon_slot_index < 0 or weapon_slot_index >= equipment_attachment_slots.size():
@@ -1574,13 +1626,31 @@ func _refresh_run_fate_ui() -> void:
 	var snapshot := FateCardGameBridge.get_scope_state_snapshot()
 	var moon_cards := snapshot.get("character", []) as Array
 	var sun_cards := snapshot.get("world", []) as Array
-	var lines: Array[String] = [
-		"☾ 月亮命运 %d张 · 角色本局" % moon_cards.size(),
-	]
-	lines.append_array(_format_run_fate_cards(moon_cards))
-	lines.append("☀ 太阳命运 %d张 · 世界规则" % sun_cards.size())
-	lines.append_array(_format_run_fate_cards(sun_cards))
+	var lines: Array[String] = ["月亮命运 %d张 · 角色本局" % moon_cards.size(), "太阳命运 %d张 · 世界规则"]
 	equipment_fate_label.text = "\n".join(lines)
+	if equipment_moon_fate_row == null:
+		return
+	for child in equipment_moon_fate_row.get_children():
+		equipment_moon_fate_row.remove_child(child)
+		child.queue_free()
+	for card_data: Variant in moon_cards:
+		if not card_data is Dictionary:
+			continue
+		var card_id := str((card_data as Dictionary).get("stable_card_id", ""))
+		var card := FateCardPresets.get_by_card_id(card_id)
+		if card == null:
+			continue
+		var host := Control.new()
+		host.custom_minimum_size = Vector2(72, 104)
+		host.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var art := FateCardView.art_for(card)
+		if art != null:
+			FateCardView.build_art_layer(host, art, str((card_data as Dictionary).get("orientation", "UPRIGHT")) == "REVERSED", "MoonFateCard")
+		equipment_moon_fate_row.add_child(host)
+	for index in range(moon_cards.size(), 4):
+		var empty := Control.new()
+		empty.custom_minimum_size = Vector2(72, 104)
+		equipment_moon_fate_row.add_child(empty)
 
 
 func _format_run_fate_cards(cards: Array) -> Array[String]:

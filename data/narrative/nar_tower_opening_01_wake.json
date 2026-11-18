@@ -11,7 +11,7 @@
     "once": "run"
   },
   "duration": 18.0,
-  "presentation": { "dialogue": { "mode": "A" } },
+  "presentation": { "dialogue": { "mode": "A" }, "guidance_highlight": true },
   "cues": [
     {
       "at": 0.0,

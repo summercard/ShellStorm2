@@ -3,10 +3,12 @@
   "schema_version": 1,
   "priority": 30,
   "trigger": { "kind": "manual", "once": "run" },
-  "duration": 14.8,
+  "duration": 0.4,
   "presentation": {
+    "guidance_highlight": true,
     "dialogue": {
       "mode": "B",
+      "require_completed_dialogue": true,
       "participants": [
         { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram" },
         { "speaker_id": "player", "speaker": "主角", "portrait_mode": "normal" }
@@ -22,8 +24,8 @@
       { "speaker_id": "player", "speaker": "主角", "expression": "question", "text": "那我可以回来了？", "auto_advance_sec": 2.8 },
       { "speaker_id": "npc_base99_green", "speaker": "绿苔", "portrait_mode": "hologram", "expression": "neutral", "text": "可以，回到这里就好。安全信标不会引来防守遭遇，靠近后按 E 主动启动，八秒同步就能返航。", "auto_advance_sec": 5.8 }
     ] },
-    { "at": 13.8, "do": "story.key_return.complete" },
-    { "at": 14.0, "do": "player.lock_input", "locked": false },
-    { "at": 14.8, "do": "flow.end" }
+    { "at": 0.3, "do": "story.key_return.complete" },
+    { "at": 0.35, "do": "player.lock_input", "locked": false },
+    { "at": 0.4, "do": "flow.end" }
   ]
 }

@@ -47,7 +47,7 @@ func _asset_id() -> String:
 
 ## 资产版本
 func _asset_version() -> String:
-	return "v001"
+	return "v002"
 
 
 ## 白方块基色
@@ -66,6 +66,18 @@ func _caller_color_blend() -> float:
 
 ## 寿命 = 火星段 + 0.02s 尾巴
 const HIT_LIFETIME := 0.32
+## Rows in projectile_enchant_hits.png, each containing six authored poses.
+const IMPACT_ROWS := {"fire": 0, "ice": 1, "poison": 2, "lightning": 3, "bounce": 4, "homing": 5, "return": 6}
+const MODULE_ROWS := {"mod_bullet_sticky": 7, "mod_bullet_bounce": 8, "mod_bullet_piercing": 9,
+	"mod_bullet_explosive": 10, "mod_bullet_homing": 11, "mod_bullet_blackhole": 12, "mod_bullet_balloon": 13}
+const IMPACT_DURATIONS := [0.26, 0.23, 0.32, 0.17, 0.22, 0.24, 0.28, 0.30, 0.18, 0.16, 0.21, 0.23, 0.32, 0.27]
+@onready var _impact: Sprite3D = $EnchantImpact
+@onready var _second_impact: Sprite3D = $SecondEnchantImpact
+@onready var _module_impact: Sprite3D = $ModuleImpact
+var _impact_row := -1
+var _second_row := -1
+var _module_row := -1
+var _visible_cubes := CUBE_COUNT
 
 ## ── 白色方块（业主：4-5 颗）──────────────────────────────────────────────
 const CUBE_COUNT := 5
@@ -131,10 +143,56 @@ func _on_activate(_world_pos: Vector3, color: Color, _size: float, context: Dict
 	_normal = _normal.normalized()
 	if _cubes.is_empty():
 		_build()
+	var attributes: Array = context.get("impact_attributes", [])
+	_impact_row = IMPACT_ROWS.get(attributes[0], -1) if attributes.size() > 0 else -1
+	_second_row = IMPACT_ROWS.get(attributes[1], -1) if attributes.size() > 1 else -1
+	_module_row = MODULE_ROWS.get(context.get("bullet_visual_id", ""), -1)
+	var count := int(_impact_row >= 0) + int(_second_row >= 0) + int(_module_row >= 0)
+	if count > 0:
+		lifetime = 0.0
+		for row in [_impact_row, _second_row, _module_row]:
+			if row >= 0:
+				lifetime = maxf(lifetime, IMPACT_DURATIONS[row])
+	_visible_cubes = CUBE_COUNT if count == 0 else maxi(1, 3 - count)
+	for i in _cubes.size():
+		_cubes[i].visible = i < _visible_cubes
+	for streak in _streaks:
+		streak.visible = count == 0
 	# 朝向：局部 +Y 对齐 normal（同 VfxImpact3D 口径）⇒ 局部 XZ 平面就是被击表面
 	global_transform = Transform3D(Basis(Quaternion(Vector3.UP, _normal)), global_position)
+	if count > 0:
+		_layout_stamps(count, context.get("impact_direction", Vector3.ZERO))
+	_impact.visible = _impact_row >= 0
+	_second_impact.visible = _second_row >= 0
+	_module_impact.visible = _module_row >= 0
 	_reset_state(color)
 	_on_tick(0.0, lifetime)
+
+
+func _layout_stamps(count: int, direction: Vector3) -> void:
+	var camera := get_viewport().get_camera_3d()
+	var axes := camera.global_basis.orthonormalized() if camera != null else Basis.IDENTITY
+	var center := global_position + (global_basis.y * 0.12 + axes.z * 0.42) * effect_size
+	var horizontal := axes.x * effect_size * 0.64
+	var vertical := axes.y * effect_size * 0.56
+	var pixels := 0.031 * effect_size * (1.0 if count == 1 else 0.77)
+	_impact.pixel_size = pixels
+	_second_impact.pixel_size = pixels
+	_module_impact.pixel_size = pixels
+	_impact.global_position = center if count == 1 else center - horizontal
+	_second_impact.global_position = center + horizontal
+	_module_impact.global_position = center if count == 1 else center + horizontal
+	if count == 3:
+		_module_impact.global_position = center + vertical
+		_impact.global_position -= vertical * 0.6
+		_second_impact.global_position -= vertical * 0.6
+	# The base ricochet and piercing marks follow the projected trajectory.
+	_module_impact.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	if camera != null and _module_row in [8, 9]:
+		var projected := Vector2(direction.dot(axes.x), direction.dot(axes.y))
+		if projected.length_squared() > 0.0001:
+			_module_impact.billboard = BaseMaterial3D.BILLBOARD_DISABLED
+			_module_impact.global_basis = axes.rotated(axes.z, projected.angle())
 
 
 func _build() -> void:
@@ -210,7 +268,13 @@ func _reset_state(caller_color: Color) -> void:
 
 func _on_tick(elapsed: float, _total: float) -> void:
 	var size: float = effect_size
-	var lt: float = clampf(elapsed / HIT_LIFETIME, 0.0, 1.0)
+	var lt: float = clampf(elapsed / lifetime, 0.0, 1.0)
+	if _impact_row >= 0:
+		_tick_stamp(_impact, _impact_row, elapsed)
+	if _second_row >= 0:
+		_tick_stamp(_second_impact, _second_row, elapsed)
+	if _module_row >= 0:
+		_tick_stamp(_module_impact, _module_row, elapsed)
 
 	# 白方块：过冲后收缩，沿法线向外喷
 	var cube_mul := _scale_mul(lt, CUBE_POP_RATIO, CUBE_SCALE_MIN, CUBE_SCALE_PEAK, CUBE_SCALE_END)
@@ -219,7 +283,7 @@ func _on_tick(elapsed: float, _total: float) -> void:
 	if lt > CUBE_FADE_START:
 		cube_alpha = 1.0 - (lt - CUBE_FADE_START) / (1.0 - CUBE_FADE_START)
 	_mat_cube.albedo_color.a = clampf(cube_alpha, 0.0, 1.0)
-	for index in _cubes.size():
+	for index in _visible_cubes:
 		var cube := _cubes[index]
 		var direction := _cube_dirs[index]
 		var edge: float = size * CUBE_BASE * _cube_size_ratios[index] * maxf(0.0001, cube_mul)
@@ -229,6 +293,8 @@ func _on_tick(elapsed: float, _total: float) -> void:
 			direction.z * elapsed * 7.0, direction.x * elapsed * 5.0, direction.y * elapsed * 6.0
 		)
 
+	if _visible_cubes != CUBE_COUNT:
+		return
 	# 金色长条火星：前段快速射出去 + 从短粗拉成细长
 	var streak_reach := _reach(lt, STREAK_DIST_START, STREAK_DIST_END, STREAK_REACH_POW)
 	var streak_len: float = lerpf(STREAK_LENGTH_START, STREAK_LENGTH_END, pow(lt, 0.55))
@@ -264,6 +330,14 @@ func _reach(lt: float, dist_start: float, dist_end: float, expo: float) -> float
 
 
 ## 供验收 / 巡检读取的呈现快照（不写入 res://）。
+func _tick_stamp(sprite: Sprite3D, row: int, elapsed: float) -> void:
+	var progress := clampf(elapsed / float(IMPACT_DURATIONS[row]), 0.0, 1.0)
+	sprite.visible = progress < 1.0
+	if sprite.visible:
+		sprite.frame_coords = Vector2i(mini(int(progress * sprite.hframes), sprite.hframes - 1), row)
+		sprite.modulate.a = 1.0 - smoothstep(0.58, 1.0, progress)
+
+
 func get_presentation_snapshot() -> Dictionary:
 	var streak_world_dirs: Array[Vector3] = []
 	for index in _streaks.size():

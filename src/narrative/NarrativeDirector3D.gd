@@ -422,6 +422,8 @@ func _play_internal(narrative_id: String, context: Dictionary) -> bool:
 		if str(cue.get("do", "")) == "ui.dialogue" and dialogue_config.is_empty():
 			dialogue_config = {"presentation_id": cue.get("presentation_id", ""), "participants": cue.get("participants", []), "options": cue.get("presentation_options", cue.get("options", {}))}
 	dialogue_config.merge(script.presentation.get("dialogue", {}), true)
+	dialogue_config["require_completed_dialogue"] = bool(script.presentation.get("require_completed_dialogue", dialogue_config.get("require_completed_dialogue", false)))
+	dialogue_config["guidance_highlight"] = bool(script.presentation.get("guidance_highlight", false))
 	if not dialogue_config.is_empty() and not dialogue_config.has("mode"):
 		dialogue_config["mode"] = "A"
 	if has_dialogue and not _adapter.begin_dialogue_presentation(narrative_id, dialogue_config):
@@ -959,7 +961,9 @@ func _finish(reason: String) -> void:
 		var retry_entry: Dictionary = _armed[narrative_id]
 		retry_entry.erase("last_departure_id")
 		_armed[narrative_id] = retry_entry
-	if (narrative_id.begins_with("nar_main_") or NarrativeAdapter3D.is_fate_tutorial(narrative_id)) and not _history_has(narrative_id):
+	var finished_script := _active.get("script") as NarrativeScript3D
+	var requires_read := finished_script != null and bool(finished_script.presentation.get("require_completed_dialogue", (finished_script.presentation.get("dialogue", {}) as Dictionary).get("require_completed_dialogue", false)))
+	if (narrative_id.begins_with("nar_main_") or NarrativeAdapter3D.is_fate_tutorial(narrative_id) or requires_read) and not _history_has(narrative_id):
 		var entry: Dictionary = _armed.get(narrative_id, {})
 		entry["fired_count"] = 0
 		entry["last_fired_msec"] = -10_000_000

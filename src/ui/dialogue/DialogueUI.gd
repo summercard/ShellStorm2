@@ -47,7 +47,8 @@ var _run_presentation_id := ""
 var _run_auto_presentation := false
 var _panel: PanelContainer
 var _speaker_label: Label
-var _text_label: Label
+var _text_label: RichTextLabel
+var _raw_text := ""
 var _hint_label: Label
 
 var _lines: Array[Dictionary] = []
@@ -404,7 +405,23 @@ func current_speaker() -> String:
 
 
 func current_text() -> String:
-	return _text_label.text if _text_label != null else ""
+	return _raw_text
+
+
+func _highlight_guidance_text(text: String, enabled: bool) -> String:
+	var clean := text.strip_edges()
+	if clean.is_empty() or not enabled:
+		return clean
+	var guidance_terms := [
+		"打开你身上的手电，那里有危险！按F开启手电", "打开房间的灯光", "远征情报室的传送器还在运作",
+		"先去数据中心，打败守在那里的首领", "高级宝箱里，有第一把稀土钥匙", "钥匙接入 1/4 · 无限公馆已解锁",
+		"靠近后按 E 主动启动", "八秒同步就能返航", "第一把稀土钥匙", "四把钥匙", "四把都齐了",
+		"下一把，在无限公馆", "回到这里就好", "安全信标"
+	]
+	var highlighted := clean
+	for term in guidance_terms:
+		highlighted = highlighted.replace(term, "[color=#FF2D7E][b]%s[/b][/color]" % term)
+	return highlighted
 
 
 ## 已显示字符数 —— 供验收检查打字机进度（不是"节点存在"这类假绿判据）。
@@ -413,7 +430,7 @@ func visible_char_count() -> int:
 
 
 func total_char_count() -> int:
-	return _text_label.text.length() if _text_label != null else 0
+	return _raw_text.length()
 
 
 func _current_line() -> Dictionary:
@@ -444,11 +461,14 @@ func _present_current() -> void:
 		_portrait_stage.present_line(line)
 	_speaker_label.text = str(line["speaker"])
 	_speaker_label.visible = not _speaker_label.text.is_empty()
-	_text_label.text = str(line["text"])
+	_raw_text = str(line["text"])
+	var guidance_highlight := bool(line.get("guidance_highlight", false))
+	_text_label.bbcode_enabled = true
+	_text_label.bbcode_text = _highlight_guidance_text(_raw_text, guidance_highlight)
 	_text_label.visible_characters = 0
 	_elapsed = 0.0
 	_auto_left = 0.0
-	_typing = _text_label.text.length() > 0
+	_typing = _raw_text.length() > 0
 	if not _typing:
 		_on_line_typed(line)
 	_hint_label.visible = float(line["auto_advance_sec"]) <= 0.0
@@ -457,7 +477,7 @@ func _present_current() -> void:
 
 func _advance_typing(delta: float, line: Dictionary) -> void:
 	var per_second := float(line["chars_per_sec"])
-	var total := _text_label.text.length()
+	var total := _raw_text.length()
 	if per_second <= 0.0:
 		_text_label.visible_characters = total
 	else:
@@ -516,6 +536,7 @@ func _set_shown(shown: bool) -> void:
 	_panel.visible = shown
 	if not shown:
 		_text_label.text = ""
+		_raw_text = ""
 		_text_label.visible_characters = 0
 		_speaker_label.text = ""
 
@@ -562,10 +583,13 @@ func _build() -> void:
 	UIStyleFactory.apply_prism_label(_speaker_label, "label", 3, 15)
 	column.add_child(_speaker_label)
 
-	_text_label = UIStyleFactory.make_outline_label("", UIPalette.PRISM_TEXT)
+	_text_label = RichTextLabel.new()
 	_text_label.name = "Text"
-	UIStyleFactory.apply_prism_label(_text_label, "value", 1, 19)
-	_text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_text_label.bbcode_enabled = true
+	_text_label.fit_content = false
+	_text_label.scroll_active = false
+	_text_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	UIStyleFactory.apply_prism_rich_text(_text_label, "value", 1, 19)
 	_text_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	column.add_child(_text_label)
 

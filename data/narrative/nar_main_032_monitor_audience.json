@@ -6,11 +6,12 @@
     "kind": "manual",
     "once": "run"
   },
-  "duration": 67.5,
+  "duration": 69.183,
   "presentation": {
     "dialogue": {
       "mode": "A"
-    }
+    },
+    "guidance_highlight": true
   },
   "cues": [
     {
@@ -53,28 +54,33 @@
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
-        0.0,
-        3.4,
-        -5.5
+        -4.5,
+        1.0,
+        -14.8
       ],
       "position_offset": [
-        0.0,
-        4.0,
-        -5.0
+        -3.6,
+        1.2,
+        -13.6
       ],
       "target_anchor": "boss_frame",
       "target_from_offset": [
         0.0,
-        1.45,
+        1.15,
         0.0
       ],
       "target_offset": [
         0.0,
-        1.55,
+        1.45,
         0.0
       ],
       "duration": 4.5,
-      "fov": 47.0
+      "fov": 41.0,
+      "shot_label": "boss_low_left_close",
+      "composition": "boss_low_angle_close",
+      "projection_targets": [
+        "boss_frame"
+      ]
     },
     {
       "at": 26.2,
@@ -97,28 +103,34 @@
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
-        0.0,
-        3.4,
-        -5.5
+        2.5,
+        1.2,
+        -15.0
       ],
       "position_offset": [
-        0.0,
-        4.0,
-        -5.0
+        1.6,
+        1.4,
+        -13.8
       ],
       "target_anchor": "boss_room_frame",
       "target_from_offset": [
         0.0,
-        2.0,
-        -32.0
+        2.5,
+        -31.0
       ],
       "target_offset": [
         0.0,
-        2.2,
-        -33.0
+        2.8,
+        -30.0
       ],
       "duration": 4.5,
-      "fov": 49.0
+      "fov": 48.0,
+      "shot_label": "center_screen_right_angle",
+      "composition": "center_screen_side",
+      "projection_targets": [
+        "screen_center",
+        "cable_bank"
+      ]
     },
     {
       "at": 33.018,
@@ -133,28 +145,34 @@
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
-        0.0,
-        3.4,
-        -5.5
+        -2.8,
+        1.25,
+        -15.0
       ],
       "position_offset": [
-        0.0,
-        4.0,
-        -5.0
+        -2.0,
+        1.45,
+        -13.8
       ],
       "target_anchor": "boss_room_frame",
       "target_from_offset": [
-        0.0,
-        2.0,
-        -32.0
+        -6.5,
+        2.4,
+        -31.0
       ],
       "target_offset": [
-        0.0,
-        2.2,
-        -33.0
+        -6.0,
+        2.6,
+        -30.5
       ],
       "duration": 4.551,
-      "fov": 50.0
+      "fov": 49.0,
+      "shot_label": "left_screen_side_angle",
+      "composition": "left_screen_side",
+      "projection_targets": [
+        "screen_left",
+        "cable_bank"
+      ]
     },
     {
       "at": 36.499,
@@ -169,28 +187,34 @@
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
-        0.0,
-        3.4,
-        -5.5
+        2.8,
+        1.1,
+        -15.0
       ],
       "position_offset": [
-        0.0,
-        4.0,
-        -5.0
+        2.0,
+        1.3,
+        -13.8
       ],
       "target_anchor": "boss_room_frame",
       "target_from_offset": [
-        0.0,
-        2.0,
-        -32.0
+        6.5,
+        2.4,
+        -31.0
       ],
       "target_offset": [
-        0.0,
-        2.2,
-        -33.0
+        6.0,
+        2.6,
+        -30.5
       ],
       "duration": 4.549,
-      "fov": 49.0
+      "fov": 49.0,
+      "shot_label": "right_screen_side_angle",
+      "composition": "right_screen_side",
+      "projection_targets": [
+        "screen_right",
+        "cable_bank"
+      ]
     },
     {
       "at": 39.751,
@@ -213,28 +237,35 @@
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
-        0.0,
-        3.4,
-        -5.5
+        -2.0,
+        2.5,
+        -15.2
       ],
       "position_offset": [
-        0.0,
-        4.0,
-        -5.0
+        -1.0,
+        3.1,
+        -13.8
       ],
       "target_anchor": "boss_room_frame",
       "target_from_offset": [
         0.0,
-        2.0,
-        -32.0
+        3.8,
+        -30.0
       ],
       "target_offset": [
         0.0,
-        2.2,
-        -33.0
+        4.5,
+        -29.0
       ],
       "duration": 4.5,
-      "fov": 50.0
+      "fov": 52.0,
+      "shot_label": "upper_cable_environment",
+      "composition": "high_angle_environment",
+      "projection_targets": [
+        "screen_center",
+        "upper_cables",
+        "deep_well"
+      ]
     },
     {
       "at": 46.855,
@@ -249,28 +280,34 @@
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
-        0.0,
-        3.4,
-        -5.5
+        -3.2,
+        0.95,
+        -16.0
       ],
       "position_offset": [
-        0.0,
-        4.0,
-        -5.0
+        -4.0,
+        1.15,
+        -14.8
       ],
-      "target_anchor": "boss_room_frame",
+      "target_anchor": "boss_frame",
       "target_from_offset": [
         0.0,
-        2.0,
-        -32.0
+        1.1,
+        0.0
       ],
       "target_offset": [
         0.0,
-        2.2,
-        -33.0
+        1.35,
+        0.0
       ],
       "duration": 4.2,
-      "fov": 51.0
+      "fov": 40.0,
+      "shot_label": "boss_low_right_close",
+      "composition": "boss_low_angle_close_right",
+      "projection_targets": [
+        "boss_frame",
+        "hanging_equipment"
+      ]
     },
     {
       "at": 50.764,
@@ -285,28 +322,34 @@
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
-        0.0,
-        3.4,
-        -5.5
+        -0.6,
+        1.2,
+        -18.0
       ],
       "position_offset": [
-        0.0,
-        4.0,
-        -5.0
+        0.4,
+        1.4,
+        -16.8
       ],
-      "target_anchor": "boss_frame",
+      "target_anchor": "player_frame",
       "target_from_offset": [
         0.0,
-        1.6,
+        0.5,
         0.0
       ],
       "target_offset": [
-        -2.0,
-        1.8,
-        0.5
+        0.0,
+        0.8,
+        0.0
       ],
-      "duration": 4.497,
-      "fov": 48.0
+      "duration": 3.679,
+      "fov": 47.0,
+      "shot_label": "player_reverse_reaction",
+      "composition": "player_reverse_from_boss",
+      "projection_targets": [
+        "player_frame",
+        "boss_south_axis"
+      ]
     },
     {
       "at": 54.016,
@@ -317,42 +360,19 @@
       "auto": 2.663
     },
     {
-      "at": 57.497,
-      "do": "camera.shot",
-      "position_anchor": "boss_room_frame",
-      "position_from_offset": [
-        0.0,
-        3.4,
-        -5.5
-      ],
-      "position_offset": [
-        0.0,
-        4.0,
-        -5.0
-      ],
-      "target_anchor": "player_frame",
-      "target_from_offset": [
-        0.0,
-        0.08,
-        0.0
-      ],
-      "target_offset": [
-        0.0,
-        0.3,
-        0.0
-      ],
-      "duration": 3.252,
-      "fov": 46.0
+      "at": 56.68,
+      "do": "camera.restore",
+      "duration": 1.0
     },
     {
-      "at": 57.497,
+      "at": 59.18,
       "do": "actor.say",
       "who": "player",
       "text": "你一句我也没听懂…",
       "hold": 2.701
     },
     {
-      "at": 60.749,
+      "at": 62.432,
       "do": "ui.subtitle",
       "speaker": "系统",
       "speaker_id": "boss_monitor002",
@@ -360,35 +380,41 @@
       "auto": 2.901
     },
     {
-      "at": 62.0,
+      "at": 63.683,
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
-        0.0,
-        3.4,
-        -5.5
+        3.8,
+        1.0,
+        -14.8
       ],
       "position_offset": [
-        0.0,
-        4.0,
-        -5.0
+        3.0,
+        1.2,
+        -13.6
       ],
       "target_anchor": "boss_frame",
       "target_from_offset": [
         0.0,
-        1.55,
+        1.15,
         0.0
       ],
       "target_offset": [
         0.0,
-        1.75,
+        1.5,
         0.0
       ],
       "duration": 4.6,
-      "fov": 45.0
+      "fov": 39.0,
+      "shot_label": "boss_roar_front_close",
+      "composition": "boss_front_low_roar",
+      "projection_targets": [
+        "boss_frame",
+        "deep_well"
+      ]
     },
     {
-      "at": 64.001,
+      "at": 65.684,
       "do": "ui.subtitle",
       "speaker": "系统",
       "speaker_id": "boss_monitor002",
@@ -396,22 +422,22 @@
       "auto": 2.834
     },
     {
-      "at": 66.6,
+      "at": 65.684,
       "do": "camera.shake",
       "duration": 0.65,
       "amplitude": 0.12
     },
     {
-      "at": 67.253,
+      "at": 68.936,
       "do": "story.boss.control_hold",
       "held": true
     },
     {
-      "at": 67.253,
+      "at": 68.936,
       "do": "story.boss.activate"
     },
     {
-      "at": 67.5,
+      "at": 69.183,
       "do": "flow.end"
     }
   ]

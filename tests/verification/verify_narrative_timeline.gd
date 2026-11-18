@@ -299,6 +299,35 @@ func _phase_a_static() -> void:
 		if str(cue.get("do", "")) == "camera.shot":
 			shot_times.append(float(cue.get("at", -1.0)))
 	_check(shot_times == [26.2, 30.7, 35.2, 39.751, 44.3, 48.8, 53.0, 57.497, 62.0], "Boss032 九组camera.shot分界准确（实际 %s）" % str(shot_times))
+	var shot_specs: Array[Dictionary] = []
+	for cue in monitor_script.cues:
+		if str(cue.get("do", "")) == "camera.shot":
+			shot_specs.append(cue)
+	var position_keys: Array[String] = []
+	var target_keys: Array[String] = []
+	var composition_labels: Array[String] = []
+	var projection_target_count := 0
+	var low_angle_count := 0
+	var wide_pan_count := 0
+	for cue in shot_specs:
+		position_keys.append(str(cue.get("position_from_offset", [])) + "->" + str(cue.get("position_offset", [])))
+		target_keys.append(str(cue.get("target_anchor", "")) + str(cue.get("target_from_offset", [])) + str(cue.get("target_offset", [])))
+		composition_labels.append(str(cue.get("composition", "")))
+		projection_target_count += (cue.get("projection_targets", []) as Array).size()
+		var from_offset: Array = cue.get("position_from_offset", [])
+		var to_offset: Array = cue.get("position_offset", [])
+		if from_offset.size() == 3 and to_offset.size() == 3:
+			if float(from_offset[1]) <= 1.5 and float(to_offset[1]) <= 1.6:
+				low_angle_count += 1
+			if absf(float(to_offset[0]) - float(from_offset[0])) >= 0.5:
+				wide_pan_count += 1
+	_check(position_keys.size() == 9 and _unique_strings(position_keys).size() == 9, "Boss032 九镜position起终点全部唯一（实际 %d）" % _unique_strings(position_keys).size())
+	_check(_unique_strings(target_keys).size() >= 5, "Boss032 至少五种target构图（实际 %d）" % _unique_strings(target_keys).size())
+	_check(_unique_strings(composition_labels).size() >= 5, "Boss032 至少五种composition标签（实际 %d）" % _unique_strings(composition_labels).size())
+	_check(projection_target_count >= 14, "Boss032 每镜声明目标投影对象（实际 %d）" % projection_target_count)
+	_check(low_angle_count >= 5, "Boss032 至少五镜低位仰拍（实际 %d）" % low_angle_count)
+	_check(wide_pan_count >= 5, "Boss032 至少五镜0.5m以上横移（实际 %d）" % wide_pan_count)
+	_check(shot_specs.size() == 9 and str(shot_specs[6].get("target_anchor", "")) == "player_frame", "Boss032 第七镜为主角独立反拍")
 	_check(_dialogue_ab_contract_wired(), "DialogueUI/PortraitStage 已接入 A/B portraits_enabled 隔离")
 	_check(_camera_shot_contract_wired(), "NarrativeAdapter3D 已接入 camera.shot 明确 look_at 与FOV归还")
 
@@ -400,6 +429,14 @@ func _dungeon_binding_wired() -> bool:
 
 ## 塔楼把相机交给「叙事相机」的那一处开关：一旦被误删，剧情镜头会被玩法镜头每帧顶掉，
 ## 而运行时只表现为"镜头没动"，不会报错。所以这里做一次源码级守卫。
+func _unique_strings(values: Array[String]) -> Array[String]:
+	var unique: Array[String] = []
+	for value in values:
+		if not unique.has(value):
+			unique.append(value)
+	return unique
+
+
 func _dialogue_ab_contract_wired() -> bool:
 	var adapter := FileAccess.get_file_as_string("res://src/narrative/NarrativeAdapter3D.gd")
 	var stage := FileAccess.get_file_as_string("res://src/ui/dialogue/DialoguePortraitStage.gd")
@@ -408,7 +445,7 @@ func _dialogue_ab_contract_wired() -> bool:
 
 func _camera_shot_contract_wired() -> bool:
 	var adapter := FileAccess.get_file_as_string("res://src/narrative/NarrativeAdapter3D.gd")
-	return adapter.contains("\"shot\":") and adapter.contains("looking_at(target, Vector3.UP)") and adapter.contains("_camera_rest_fov")
+	return adapter.contains("\"shot\":") and adapter.contains("looking_at(target, Vector3.UP)") and adapter.contains("_camera_rest_fov") and adapter.contains("_camera_return_channel") and adapter.contains("_advance_camera_return") and adapter.contains("_constrain_camera_pose")
 
 
 func _tower_camera_override_wired() -> bool:

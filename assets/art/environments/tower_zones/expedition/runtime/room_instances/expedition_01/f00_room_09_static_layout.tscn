@@ -647,43 +647,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="ceiling_deck_-1" parent="." unique_id=1288681120 instance=ExtResource("19_hprkp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4775, 2.5)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_deck_-2" parent="." unique_id=2145114025 instance=ExtResource("19_hprkp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4775, 7.5)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_deck_-3" parent="." unique_id=1057093696 instance=ExtResource("19_hprkp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4775, 12.5)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_deck_-4" parent="." unique_id=1720588672 instance=ExtResource("19_hprkp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4775, 17.5)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
-metadata/authored_slot_role = "room_type_component"
-
 [node name="ceiling_deck_0" parent="." unique_id=1465148952 instance=ExtResource("19_hprkp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4775, -2.5)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_deck_1" parent="." unique_id=601731701 instance=ExtResource("19_hprkp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4775, -7.5)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_deck_2" parent="." unique_id=582925743 instance=ExtResource("19_hprkp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4775, -12.5)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_deck_3" parent="." unique_id=1577842055 instance=ExtResource("19_hprkp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4775, -17.5)
+transform = Transform3D(1.3829618, 0, 0, 0, 1, 0, 0, 0, 10.931597, 0, 20.023994, -2.5)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/authored_slot_role = "room_type_component"
 
