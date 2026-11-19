@@ -5,6 +5,17 @@
 
 ## 执行历史
 
+### 2026-11-19 05:00 — **内容已上线，线上校验不通过（第十九天同一卡点：需登录门禁）**；一次过，无重试
+- 全流程一次过：导出 399.1 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档（**CHANGELOG 10 条**）→ 覆盖发布 3 files → **`verify_online` 判 302 失败，退出码 1**。5m55s。
+- 包：**418,448,464 B / 399.06 MiB**，SHA256 `a9724070723e31d16140a29a1952d9e00739da2cd35235c613e94c544899ef3d`，比 11-18 版 **+519,176 B（+507 KiB）**。exe mtime 05:05。工作区仅 4 项（`_probe_loop.txt` + `assets/art` 3 个 `.TMP`），HEAD `7cca50e7`（11-19 04:06，86 项）。
+- 线上已被本版覆盖：`Files: 3` / `Bytes: 418,464,109` ＝ 本地三件（418,448,464 + 9,215 + 6,430）**逐字节相等，差 0**；`server-sites` 本站 **399.1 MiB / 需登录 / 私有 / 2 人 2 次**，全站仍 6 资源、Site ID 不变 ⇒ 未新建。
+- **卡点不变**：直链 / 更新页 / `index.html` 三条全部 302 → `/oauth/feishu?rd=…&src=site`。未改策略、未删校验。
+- **11-18 的「导出与源码编辑赛跑」本轮未复现**：导出前后 `src/scenes/assets/data` 最新 mtime 均 `11-19 02:19:21`（导出窗口 05:02—05:05 无写入）⇒ 无需重建。**快照比对法可复用**（导出前记录、导出后复查，变了就重建）。
+- **10 条全为真新增**：3 条 11-19（Boss02-B v024/v023/机械臂显示屏平台）+ 7 条 11-18（UI 排版与模态收放、钥匙返航段落录制+安全信标落点、3.2 怒吼震屏同帧、3.2 还镜停 1.5s、Boss 房去随从、塔楼引导卡撤除、叙事 A/B 文档收口）。核对法：`git diff 33ff1bf0 -- CHANGELOG.md` 得 +23/−1 行，7 条 11-18 关联记录 mtime 全在 11-18 09:31—16:55（晚于昨日 05:04）⇒ 无重复计数。唯一删除行是 11-17「拉远五次」被改写为「逐步拉远（累计13次）」。
+- 合规：`config/name="弹壳风暴2"` 未动（`git diff project.godot` 空）；未 commit/push；未新建站点；`scripts/web_release.py` 不存在、未跑；发布目录仅 3 件；真实存档 mtime 05:08 晚于流水线结束 ⇒ 外部 Godot 实例（4.7.2 PID 311548 @02:07 等 3 个）所致。
+- 报告：`ShellStorm2-work\_logs\发布报告_2026-11-19.md`；日志 `_logs\daily_release_2026-11-19.log`。环境：C 盘 37 G 空闲，未用外挂 TMP（仍按惯例指 I 盘 `_tmp`）。
+- **待业主（连续第十九天）**：①请管理员把本站 `access` 改 `public`；②建议给 `daily_release.py` 加导出前后源码 mtime 比对；③清理 `assets/.../expedition_01/` 下 3 个 `.tscn~RF*.TMP`（共 228,550 B，未跟踪）。
+
 ### 2026-11-18 05:00 — **内容已上线，线上校验不通过（第十八天同一卡点：需登录门禁）**；首轮因**导出与源码编辑赛跑**取到半写脚本假红中止
 - 首轮（05:01—05:17，16m18s）：导出 398.6 MiB 一次过 → 两道静态门禁绿 → **第 3 道冒烟退出码 1 ⇒ 按硬约束中止，未发布**。真因不是代码缺陷：另一会话在导出编译脚本期间（05:10—05:14）正在写 `src/world3d/TowerDescent3D.gd`，包内取到写一半的版本 ⇒ `SCRIPT ERROR: Parse Error: Expected indented block after "if" block. (TowerDescent3D.gd:1674)` + 级联 `RooftopExpeditionEntrance3D.gd`（依赖 `TowerDescent3D` 类注册）⇒ 共 2 行 ERROR。**判据：包内报 Parse Error 而现场源码第 1674 行缩进正常（4 层 tab）+ 源码 mtime 05:14:10 落在导出窗口内。**
 - 处置：不动源码、不放宽门禁。先跑全项目解析证明工作区干净（`--headless --editor --quit` + 隔离 APPDATA ⇒ **Parse Error 0 / SCRIPT ERROR 0**），再**重建一次** → 三道真跑全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）。第二轮 1m44s（`.godot/exported` 缓存已热，导出仅约 40s）。

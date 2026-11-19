@@ -97,9 +97,17 @@ func units() -> void:
 	enemy._process(0.5)
 	check(visual.position.distance_to(shake_a) > 0.001 and enemy.global_transform == origin, "实际表现根颤抖而物理原点不动")
 	check(is_equal_approx(visual._materials[0].emission_energy_multiplier, 0.196875), "四分之三秒二次曲线实际材质渐亮")
-	for mesh in visual._meshes:
+	var meshes: Array[Node] = visual.find_children("*", "MeshInstance3D", true, false)
+	var skinned_surfaces := 0
+	for node in meshes:
+		var mesh := node as MeshInstance3D
+		# 骨骼下还有强化怪的程序眼球；只检查应当受预爆材质驱动的蒙皮本体。
+		if mesh.skin == null or mesh.mesh == null:
+			continue
 		for index in mesh.mesh.get_surface_count():
-			check(mesh.get_surface_override_material(index) in visual._materials, "渐亮材质确实绑定实际网格surface")
+			skinned_surfaces += 1
+			check(mesh.get_active_material(index) in visual._materials, "渐亮材质确实绑定实际蒙皮表面")
+	check(skinned_surfaces > 0, "正式表现包含实际蒙皮表面")
 	if OS.get_cmdline_user_args().has("--render"):
 		await capture(enemy, "warning_075.png")
 	var saved := enemy.export_runtime_state()

@@ -1,3 +1,5 @@
+- 2026-11-19 · ENEMY-AI / ASSET-PIPELINE · [胖子僵尸2.1恢复v006](2026-11-19_fat_zombie21_v006_rollback.md)。复现v007锁脚拉扯，普通和强化胖子恢复步态协调前的动作及播放，敌人账本v0.1.60同步。
+
 - 2026-11-19 · NARRATIVE-TRIGGER / DIALOGUE-UI · [剧情镜头回归检查](2026-11-19_narrative_camera_review.md)。复现旧剧情回镜位移和全息入场景深突变，核对 3.2 八镜基准及平台字幕时序。完整场景验收超时。
 
 - 2026-11-19 · PLAYER-STATE / WORLD-PLAN · [远征01顶棚遮挡与08房刷怪区域](2026-11-19_exp01_ceiling_room08.md)。02/03/09房遮挡盒对齐顶棚，08房两个刷怪盒移至连通主路。

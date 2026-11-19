@@ -547,6 +547,8 @@ manual_scenes=(
   # 2026-11-16：只能经各自持久外部Runner在Autoload前隔离，登记不等于验收。
   verify_fat_death_warning
   verify_fat_entry_breach_vfx
+  # v007历史对照仅在带原版本及对照资源的隔离项目中运行。
+  verify_fat_zombie21_gait
   # Autoload前隔离APPDATA；专用runner包含真实renderer双套截图与回滚专项。
   verify_expedition_entry_hologram_ceremonies
   # 2026-11-11：须由 run_expedition01_flow_integration.py 在 Autoload 前隔离；登记不代表通过。
@@ -589,6 +591,7 @@ renderer_scenes=(
   # 专用外部Runner场景：full及aggregate full目录裸扫均排除。
   verify_fat_death_warning
   verify_fat_entry_breach_vfx
+  verify_fat_zombie21_gait
   verify_expedition_entry_hologram_ceremonies
   "${visual_scenes[@]}"
   # 专用隔离Runner专项仅登记，禁止full目录扫描误收进普通无头批跑。
