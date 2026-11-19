@@ -1,14 +1,16 @@
 # Boss02-B 机械臂显示屏平台
 
+本篇为早期原型记录。当前资产已独立登记为武装平台首领，旧源及原 AssetID 对照见 [源沿革](../../../art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/source_lineage.json)。
+
 FeatureID：ASSET-PIPELINE / WORLD-BLOCKS。游戏 0.1.0，制作源 v022。日期 2026-11-19。依据为用户参考图和 [Boss房02装配契约](../design/远征关卡01_Boss房02装配.md)。
 
 ## 交付
 
-- 通过 MCP 在业主开启的 Blender 4.5 会话内建模并保存 [平台母版](../../../art_source/environments/tower_zones/expedition/source/common_components/v022/env_boss02b_mechanical_platform_source_v022.blend)。会话改动前已另存启动文件副本。
-- [组件计划](../../../art_source/environments/tower_zones/expedition/source/common_components/v022/component_plan.json) 首次冻结 8 个定义，首轮渲染后在新增几何前冻结承重框。最终 9 个定义、125 个 Collection Instance，显示屏系列 2 个，剩余定义预算 41。每个定义有独立 Blend、相机、灯光、AssetID、来源哈希和几何指纹。现阶段确认的使用范围为 Boss02-B。
+- 通过 MCP 在业主开启的 Blender 4.5 会话内建模并保存 平台母版。会话改动前已另存启动文件副本。
+- 组件计划 首次冻结 8 个定义，首轮渲染后在新增几何前冻结承重框。最终 9 个定义、125 个 Collection Instance，显示屏系列 2 个，剩余定义预算 41。每个定义有独立 Blend、相机、灯光、AssetID、来源哈希和几何指纹。现阶段确认的使用范围为 Boss02-B。
 - 走面 25×25 米、Z=0。24 块系统监测屏围绕一块主控屏。保留三条 5 米通行槽。裙壁包含机柜阵列、信标和护栏。格构承重框将上方甲板和下沉机腹连起来。两张屏幕图由 Blender 生成并随源打包，硬表面使用项目公共色盘和 `PaletteUV`。
 - 大臂分离肩、肘、腕、掌和两根爪指，提供可编辑的局部转轴和行程。枪臂轴心标高 −0.82 米，距最近沿边平面外 1.09 米。后移安装座结合加长支撑，把旋转件和机柜外壳分开。枪口与轴线各有标记。
-- [实例清单](../../../art_source/environments/tower_zones/expedition/source/common_components/v022/component_instances.json) 保持 Blender Z 轴角度与单位缩放。场景账本资产主表第 1026–1035 行登记总资产和九个组件，统一状态为「Blender源已完成」。域日志 v0.1.97，源索引和新行基线同步，原资产登记值经重读对照。
+- 实例清单 保持 Blender Z 轴角度与单位缩放。场景账本资产主表第 1026–1035 行登记总资产和九个组件，统一状态为「Blender源已完成」。域日志 v0.1.97，源索引和新行基线同步，原资产登记值经重读对照。
 
 ## Blender 验收
 

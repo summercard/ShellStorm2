@@ -187,15 +187,11 @@ func resolve_active_hit() -> void:
 		var target_id := target.get_instance_id()
 		if _hit_target_ids.has(target_id):
 			continue
-		var offset := target.global_position - player.global_position
-		offset.y = 0.0
-		var distance := offset.length()
-		if distance <= 0.001 or distance > reach:
-			continue
-		var direction := offset / distance
-		if forward.dot(direction) < half_arc_cos:
-			continue
-		if _is_wall_occluded(origin, target.global_position + Vector3.UP * 0.65):
+		var points: Array[Vector3] = [target.global_position]
+		if target.has_method("get_melee_hit_points"):
+			points = target.call("get_melee_hit_points")
+		var direction := _find_melee_contact(points, origin, forward, reach, half_arc_cos)
+		if direction == Vector3.ZERO:
 			continue
 		_hit_target_ids[target_id] = true
 		var result := _apply_hit(target, direction)
@@ -213,6 +209,18 @@ func resolve_active_hit() -> void:
 			_combo_index + 1
 		)
 	action_changed.emit(get_snapshot())
+
+
+func _find_melee_contact(points: Array[Vector3], origin: Vector3, forward: Vector3, reach: float, half_arc_cos: float) -> Vector3:
+	for point in points:
+		var offset := (point - origin).slide(Vector3.UP)
+		var distance := offset.length()
+		if distance <= 0.001 or distance > reach:
+			continue
+		var direction := offset / distance
+		if forward.dot(direction) >= half_arc_cos and not _is_wall_occluded(origin, point + Vector3.UP * 0.65):
+			return direction
+	return Vector3.ZERO
 
 
 func get_phase_progress() -> float:

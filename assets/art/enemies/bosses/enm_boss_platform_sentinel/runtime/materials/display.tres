@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/screen.gdshader" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/screen_atlas.png" id="2"]
+
+[resource]
+resource_name = "05_平台拼接显示屏"
+shader = ExtResource("1")
+shader_parameter/screen_atlas = ExtResource("2")

@@ -118,7 +118,13 @@ def main():
         wanted = dict(old['encounter'], stages=[{'boxes': list(range(len(room['spawn_placements'])))}])
         check(encounter == wanted and encounter['spawn_mode'] == 'preplaced' and encounter['min_player_distance_m'] == 6.0 and encounter['intermission_sec'] == 0.0, f'单波预摆/6m契约变化:{key}')
         if key == 'room_08':
-            check([(p['center_m'], p.get('size_m')) for p in room['spawn_placements']] == [([0.0, -12.5], [35.0, 5.0]), ([15.0, 2.5], [5.0, 25.0])], '08必须沿横纵路径保留可避让6m安全圈的分离实例域')
+            placements = room['spawn_placements']
+            for i, placement in enumerate(placements):
+                check(placement.get('rotation_deg', 0) == 0, f'08盒{i}预期为轴对齐')
+                clearance = min(room_size / 2 - abs(center) - box_size / 2
+                                for room_size, center, box_size in zip(room['size_m'], placement['center_m'], placement['size_m']))
+                check(clearance >= 5.0, f'08盒{i}边缘至外墙{clearance:.2f}m，不足5m')
+            check([(p['center_m'], p.get('size_m')) for p in placements] == [([-5.0, -7.5], [24.0, 11.0]), ([10.0, 7.5], [15.0, 15.0])], '08必须沿横纵路径保留分离实例域')
             check(room['spawn_placements'][0]['spawn_overrides'] == [{'type':'melee_chaser','count':10,'delay_sec':0.0}, {'type':'exploder','count':2,'delay_sec':0.0}] and room['spawn_placements'][1]['spawn_overrides'] == [{'type':'melee_chaser','count':10,'delay_sec':0.0}, {'type':'ranged_caster','count':2,'delay_sec':0.0}, {'type':'exploder','count':1,'delay_sec':0.0}], '08总数25及M20/R2/X3不得改变')
         else:
             check(len(room['spawn_placements']) > len(old['spawn_placements']), f'未新增分散盒:{key}')

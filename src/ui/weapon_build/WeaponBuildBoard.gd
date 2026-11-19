@@ -60,6 +60,7 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	_disconnect_owner()
 	_bind_tree(null)
+	_discard_preview()
 	_animation_epoch += 1
 
 func _build() -> void:
@@ -155,6 +156,7 @@ func set_weapon_owner(owner: Node) -> void:
 	if _owner != owner:
 		_disconnect_owner()
 		_cancel_install()
+		_discard_preview()
 		_owner = owner
 		_bind_tree(null)
 		if is_instance_valid(_owner):
@@ -165,26 +167,39 @@ func set_weapon_owner(owner: Node) -> void:
 
 ## 只读浏览另一把装备武器；不调用切枪，不改 active_weapon_slot，也不改变购买目标。
 func set_preview_item(item: Dictionary, slot_index: int = -1) -> void:
-	if _preview_tree != null and is_instance_valid(_preview_tree):
-		_preview_tree.free()
+	if _pending_slot > 0:
+		return
+	_discard_preview()
 	_preview_item_override = item.duplicate(true)
 	_preview_slot = slot_index
-	_preview_tree = null
 	var instance := WeaponInstance.from_item(_preview_item_override)
 	if instance != null:
 		_preview_tree = instance.build_runtime_tree()
-	_cancel_install()
+	_reset_preview_inspection()
 	refresh_from_owner()
 
 func clear_preview_item() -> void:
-	if _preview_item_override.is_empty() and _preview_tree == null:
+	if _preview_slot < 0:
 		return
-	if _preview_tree != null and is_instance_valid(_preview_tree):
+	_discard_preview()
+	_reset_preview_inspection()
+	refresh_from_owner()
+
+func _discard_preview() -> void:
+	if is_instance_valid(_preview_tree):
+		if _weapon_tree == _preview_tree:
+			_bind_tree(null)
 		_preview_tree.free()
-	_preview_item_override = {}
+	_preview_item_override.clear()
 	_preview_slot = -1
 	_preview_tree = null
-	refresh_from_owner()
+
+func _reset_preview_inspection() -> void:
+	_dragging = false
+	_inspected_slot = 0
+	_scroll.scroll_horizontal = 0
+	_detail.text = "悬停或聚焦卡巢查看刻印详情"
+	_detail.tooltip_text = ""
 
 func get_preview_slot() -> int:
 	return _preview_slot
@@ -514,13 +529,13 @@ func _update_root_connection() -> void:
 		var first := _socket_art_rect(_sockets[0], _root_track)
 		var card_entry := Vector2(first.position.x, first.get_center().y)
 		var boundary := Vector2(viewport_start.x, clampf(card_entry.y, viewport_start.y, viewport_end.y))
-		# 根线从枪械区与卡巢区之间的中线起步，不再穿过枪身模型。
-		# 这样第一根线只表达“枪械区 -> 卡巢区”的关系，和后续卡巢连线同一层级。
-		var midline_anchor := Vector2(viewport_start.x, clampf(card_entry.y, viewport_start.y, viewport_end.y))
+		# 与 _draw 使用同一条实际分隔线；不能从右侧卡巢视口的左缘冒出。
+		var divider_x := _local_point(self, Vector2(_divider_x(), 0), _root_track).x
+		var midline_anchor := Vector2(divider_x, boundary.y)
 		# 只有真实左中接点仍在视口内才接卡，滚出后不跨层追踪隐藏卡。
 		var reaches_first := card_entry.x >= viewport_start.x and card_entry.x <= viewport_end.x and card_entry.y >= viewport_start.y and card_entry.y <= viewport_end.y
 		var entry_anchor := card_entry if reaches_first else boundary
-		var bend := maxf(midline_anchor.x + 24.0, viewport_start.x + 16.0)
+		var bend := (midline_anchor.x + entry_anchor.x) * 0.5
 		var points := PackedVector2Array([midline_anchor, Vector2(bend, midline_anchor.y), Vector2(bend, entry_anchor.y), entry_anchor])
 		var active := _records.has(1) and _pending_slot != 1
 		_root_connection = {"points": points, "weapon_anchor": midline_anchor, "preview_center": preview_center, "entry_anchor": entry_anchor, "active": active, "destination_slot": 1 if reaches_first else 0, "scroll_boundary": boundary, "clipped": not reaches_first, "coordinate_space": "board_local", "start_semantics": "weapon_area_midline"}
@@ -535,9 +550,12 @@ func _update_root_connection() -> void:
 			segments[0]["render"] = false
 	_root_track.call("set_segments", root_segments)
 
+func _divider_x() -> float:
+	return clampf(size.x * 0.235, 180.0, 268.0) + 12.0
+
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, size), UIPalette.PRISM_SURFACE)
-	var divider := clampf(size.x * 0.235, 180.0, 268.0) + 12.0
+	var divider := _divider_x()
 	draw_line(Vector2(divider, 15), Vector2(divider, size.y - 15), UIPalette.PRISM_LINE_SOFT)
 	draw_line(Vector2(divider + 16, 46), Vector2(size.x - 18, 46), UIPalette.PRISM_LINE_SOFT)
 	var detail_rule_y := size.y - (48 if _compact else 67)

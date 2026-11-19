@@ -5,7 +5,7 @@ func _ready() -> void:
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(AudioManager.CATALOG_PATH))
 	var report: Dictionary = AudioManager.validate_sound_library()
 	_verify_world_style_policy(catalog, failures)
-	if report.asset_count != 172 or report.sound_set_count != 114 or not report.missing.is_empty():
+	if report.asset_count != 177 or report.sound_set_count != 119 or not report.missing.is_empty():
 		failures.append("Library coverage or resource presence failed")
 	for asset in catalog.assets:
 		var stream := load(str(asset.runtime_path)) as AudioStreamOggVorbis
@@ -61,7 +61,7 @@ func _ready() -> void:
 			failures.append("Playback nodes leaked after explicit stop")
 	AudioManager.reset_feedback_debug()
 	if failures.is_empty():
-		print("AUDIO_LIBRARY_FLOW_OK: 172 OGGs, 114 sets, 9 gun IDs / 7 families, 57 natural world sets, 9 ambient loops, preserved system/weapon hashes; mode=", DisplayServer.get_name())
+		print("AUDIO_LIBRARY_FLOW_OK: 177 OGGs, 119 sets, 9 gun IDs / 7 families, 57 natural world sets, 9 ambient loops, preserved system/weapon hashes; mode=", DisplayServer.get_name())
 	else:
 		for failure in failures:
 			push_error(failure)
@@ -203,10 +203,11 @@ func _verify_world_style_policy(catalog: Dictionary, failures: Array[String]) ->
 	var world: Array = policy.get("natural_world_sets", [])
 	var systems: Array = policy.get("system_sets", [])
 	var weapons: Array = policy.get("weapon_sets", [])
-	if world.size() != 57 or systems.size() != 29 or weapons.size() != 28:
-		failures.append("World/system/weapon style coverage changed")
+	var voice: Array = policy.get("narrative_voice_sets", [])
+	if world.size() != 57 or systems.size() != 29 or weapons.size() != 28 or voice.size() != 5:
+		failures.append("World/system/weapon/narrative style coverage changed")
 	var seen: Array[String] = []
-	for group in [world, systems, weapons]:
+	for group in [world, systems, weapons, voice]:
 		for key in group:
 			if str(key) in seen or not catalog.sound_sets.has(key):
 				failures.append("Style policy overlap or unregistered set: " + str(key))
@@ -224,6 +225,9 @@ func _verify_world_style_policy(catalog: Dictionary, failures: Array[String]) ->
 				loops += 1
 				if not bool(asset.loop) or not bool(catalog.sound_sets[asset.key].loop):
 					failures.append("Ambient asset lost loop ownership: " + str(asset.key))
+		elif str(asset.key) in voice:
+			if str(asset.get("production_revision", "")) != "platform-takeover-v001" or bool(asset.loop):
+				failures.append("Narrative voice asset has an invalid production route: " + str(asset.asset_id))
 		else:
 			var original := str((policy.get("preserved_asset_hashes", {}) as Dictionary).get(asset.asset_id, ""))
 			if original.is_empty() or original != str(asset.sha256):

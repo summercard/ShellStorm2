@@ -930,6 +930,7 @@ var _elite_attack_counter := 0
 var _elite_behavior_trigger_count := 0
 var _absorb_cooldown := 0.0
 var boss_phase := 1
+var boss_defeat_handoff := Callable()
 var _ambush_triggered := false
 var _strafe_sign := 1.0
 var _bypass_shield_once := false
@@ -5656,6 +5657,11 @@ func _die() -> void:
 
 func _commit_death() -> void:
 	if ai_state in ["dead", "defeated"] or _elite_defeat_active:
+		return
+	if boss_defeat_handoff.is_valid() and bool(boss_defeat_handoff.call(self)):
+		_clear_fate_visuals()
+		transition_to("dead")
+		queue_free()
 		return
 	# —— 「消失」不是「死亡」（逃跑超时的钥匙小子 / 运气小子）——
 	# 仍然必须走完清房记账（`killed.emit`），但**不喷死亡特效、不掉掉落**：

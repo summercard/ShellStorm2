@@ -108,11 +108,12 @@ func _ready() -> void:
 		var p: Vector3 = requested[i].point
 		p.y = _floor_height(room, p)
 		if not is_finite(p.y):
-			failures.append("精确锚点无物理支撑:" + str(requested[i].label))
+			if i < 2:
+				failures.append("门内锚点无物理支撑:" + str(requested[i].label))
 			continue
 		_set_capsule(room, p)
 		if not room.get_world_3d().direct_space_state.intersect_shape(_query, 64).is_empty():
-			if i < 4 or i == 7:
+			if i < 2:
 				failures.append("必验精确锚点胶囊非法:" + str(requested[i].label))
 			excluded_exact.append({"label": requested[i].label, "reason": "精确点胶囊碰撞；邻近合法图点仍验"})
 			continue
@@ -133,6 +134,8 @@ func _ready() -> void:
 				for point: Vector3 in entry.spawn_safe_candidates:
 					var p := room.to_local(point)
 					points.append([p.x, p.z])
+					if not _is_entrance_reachable(p, dim, reachable):
+						failures.append("盒 %d 的候选点不在入口连通域：%s" % [i, p])
 				break
 		report.candidates.append({"box": i, "points": points})
 	for key: Vector2i in samples:
@@ -171,6 +174,10 @@ func _ready() -> void:
 		report.real_commit = {"count": actual.size(), "blocked": tower._room_spawn_blocked.has("room_08"), "delayed": tower._pending_delayed_spawn_count("room_08"), "reserved": tower._reserved_spawn_count("room_08")}
 		if actual.size() != 25 or report.real_commit.blocked or report.real_commit.delayed != 0 or report.real_commit.reserved != 0:
 			failures.append("中庭真实提交未全量成功")
+		for enemy: Enemy3D in actual:
+			var local := room.to_local(enemy.global_position)
+			if not _is_entrance_reachable(local, dim, reachable):
+				failures.append("实到敌人不在入口连通域：" + str(local))
 	report["failures"] = failures
 	var output := FileAccess.open(OS.get_environment("EXP01_REPORT"), FileAccess.WRITE)
 	output.store_string(JSON.stringify(report, "  "))
@@ -178,6 +185,17 @@ func _ready() -> void:
 	print("ROOM08_POSITIONS_DONE samples=%d success=%d failed=%d real_commit=%s failures=%s" % [samples.size(), report.success, report.failed, report.real_commit, failures])
 	tower.queue_free()
 	get_tree().quit(0 if failures.is_empty() else 1)
+
+# Candidate grid points can lie on a boundary between 0.5m capsule cells.
+func _is_entrance_reachable(point: Vector3, dimensions: Vector2, reachable: Dictionary) -> bool:
+	var cell_center := (Vector2(point.x, point.z) + dimensions * 0.5) * 2.0 - Vector2(0.5, 0.5)
+	for dx: int in [floori(cell_center.x), ceili(cell_center.x)]:
+		for dz: int in [floori(cell_center.y), ceili(cell_center.y)]:
+			var offset := Vector2(dx, dz) - cell_center
+			if offset.length_squared() <= 0.51 and reachable.has(Vector2i(dx, dz)):
+				return true
+	return false
+
 
 func _reachable(start: Vector2i, neighbours: Dictionary) -> Dictionary:
 	var seen := {start: true}

@@ -59,12 +59,10 @@ var equipment_weapon_label: Label
 var equipment_weapon_slots: Array[Control] = []
 var equipment_weapon_labels: Array[Label] = []
 var equipment_attachment_slots: Array = []
-var equipment_fate_rows: Array[Control] = []
+var equipment_fate_rows: Array[ScrollContainer] = []
 var equipment_moon_fate_row: Control = null
-## 每把武器下面那一行「弹药」的只读格子与名字标签。弹药槽不是配件槽
-## （`AssemblyNode.PUBLIC_ATTACHMENT_SLOTS` 不含 BULLET），所以单独一套控件。
 var equipment_bullet_slots: Array[Control] = []
-var equipment_bullet_labels: Array[Label] = []
+var _sun_fate_status: MenuButton
 var special_equipment_slot: SpecialItemEquipmentSlot
 var equipment_backpack_slot: Control
 var equipment_backpack_label: Label
@@ -98,6 +96,23 @@ var close_button: Button
 var _drag_cancelled := false
 
 const SLOT_SIZE := 78
+const FATE_SOCKET := preload("res://src/ui/weapon_build/WeaponBuildSocket.gd")
+const FATE_TRACK := preload("res://src/ui/weapon_build/WeaponBuildTrack.gd")
+# 月牌专用页脚：依实际正逆效果取简述，完整规则留在悬停和读屏说明。
+const MOON_FATE_BRIEFS := {
+	"fate_moon_vitality": ["生命上限增", "降上限回血"],
+	"fate_moon_stride": ["移速提升", "慢行延无敌"],
+	"fate_moon_dash": ["冲刺快冷却", "长冲刺慢冷"],
+	"fate_moon_guard": ["受伤减免", "增伤并反弹"],
+	"fate_moon_power": ["枪伤提升", "枪弱暴击多"],
+	"fate_moon_room_heal": ["进房回血", "进扣清回"],
+	"fate_moon_elite_heal": ["杀精英回血", "战精英得盾"],
+	"fate_moon_first_hit": ["首伤减半", "首伤后减伤"],
+	"fate_moon_last_stand": ["致命留命", "耗金续命"],
+	"fate_moon_ammo": ["进房补弹", "进房快换弹"],
+	"fate_mark_enemy": ["击杀抽牌", "十杀扣金抽"],
+	"fate_bless_dead": ["低血熬增伤", "高血熬增伤"],
+}
 const BASE_INVENTORY_CAPACITY := 40
 const SLOT_SCENE: PackedScene = preload("res://scenes/ItemSlot.tscn")
 const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root.tscn")
@@ -217,30 +232,15 @@ func _setup_standalone_panels() -> void:
 	inventory_shell.add_child(shell_margin)
 	var columns := HBoxContainer.new()
 	columns.name = "InventoryColumns"
-	columns.add_theme_constant_override("separation", 18)
+	columns.add_theme_constant_override("separation", 0)
 	shell_margin.add_child(columns)
 
 	equipment_panel = PanelContainer.new()
 	equipment_panel.name = "CharacterEquipmentPanel"
-	equipment_panel.custom_minimum_size = Vector2(610, 0)
-	equipment_panel.size_flags_horizontal = Control.SIZE_FILL
-	equipment_panel.size_flags_stretch_ratio = 1.45
-	equipment_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	equipment_panel.add_theme_stylebox_override(
-		"panel", UIStyleFactory.make_panel_with_border(1, Color(0.32, 0.50, 0.68), 7, 1)
-	)
+	equipment_panel.custom_minimum_size = Vector2(550, 0)
+	equipment_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	equipment_panel.size_flags_stretch_ratio = 0.65
 	columns.add_child(equipment_panel)
-	# 中央区域故意保留给游戏世界：不拦截鼠标，不放置 UI 面板。
-	drop_zone = _create_slot()
-	drop_zone.name = "CenterGameplaySpace"
-	drop_zone.custom_minimum_size = Vector2(24, 0)
-	drop_zone.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	drop_zone.size_flags_stretch_ratio = 0.18
-	drop_zone.set_meta("slot_kind", "drop")
-	drop_zone.set_meta("invisible_drop_zone", true)
-	drop_zone.get_node("CountLabel").hide()
-	_connect_slot_signals(drop_zone, -1, false)
-	columns.add_child(drop_zone)
 	var equipment_margin := MarginContainer.new()
 	equipment_margin.add_theme_constant_override("margin_left", 12)
 	equipment_margin.add_theme_constant_override("margin_top", 10)
@@ -253,7 +253,21 @@ func _setup_standalone_panels() -> void:
 	equipment_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	equipment_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	equipment_scroll.mouse_filter = Control.MOUSE_FILTER_PASS
-	equipment_margin.add_child(equipment_scroll)
+	equipment_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	var equipment_stack := VBoxContainer.new()
+	equipment_stack.add_theme_constant_override("separation", 0)
+	equipment_margin.add_child(equipment_stack)
+	equipment_stack.add_child(equipment_scroll)
+	# 丢弃位是内容区下方的独立兄弟节点，不是装备控件的父级或背衬。
+	drop_zone = _create_slot()
+	drop_zone.name = "EquipmentBottomDropZone"
+	drop_zone.custom_minimum_size = Vector2(0, 46)
+	drop_zone.set_meta("slot_kind", "drop")
+	drop_zone.set_meta("invisible_drop_zone", true)
+	drop_zone.accessibility_name = "丢弃物品"
+	drop_zone.get_node("CountLabel").hide()
+	_connect_slot_signals(drop_zone, -1, false)
+	equipment_stack.add_child(drop_zone)
 	var equipment_vbox := VBoxContainer.new()
 	equipment_vbox.name = "EquipmentVBox"
 	equipment_vbox.add_theme_constant_override("separation", 6)
@@ -265,12 +279,15 @@ func _setup_standalone_panels() -> void:
 	equipment_title.text = "装备"
 	equipment_title.add_theme_font_size_override("font_size", 22)
 	equipment_title.add_theme_color_override("font_color", Color(0.86, 0.94, 1.0))
-	equipment_vbox.add_child(equipment_title)
-	var attribute_label := Label.new()
-	attribute_label.text = "当前状态"
-	attribute_label.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
-	attribute_label.visible = false
-	equipment_vbox.add_child(attribute_label)
+	var equipment_header := HBoxContainer.new()
+	equipment_vbox.add_child(equipment_header)
+	equipment_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	equipment_header.add_child(equipment_title)
+	_sun_fate_status = MenuButton.new()
+	_sun_fate_status.name = "SunFateStatus"
+	_sun_fate_status.focus_mode = Control.FOCUS_ALL
+	UIStyleFactory.apply_prism_button(_sun_fate_status, "ghost", 1, 12, 1, "none")
+	equipment_header.add_child(_sun_fate_status)
 	equipment_hp_label = Label.new()
 	equipment_hp_label.name = "EquipmentHPLabel"
 	equipment_hp_label.text = "生命 100 / 100"
@@ -285,28 +302,20 @@ func _setup_standalone_panels() -> void:
 	equipment_hp_bar.add_theme_stylebox_override("background", UIStyleFactory.make_progress_fill(Color(0.12, 0.04, 0.05)))
 	equipment_hp_bar.add_theme_stylebox_override("fill", UIStyleFactory.make_progress_fill(Color(0.88, 0.22, 0.25)))
 	equipment_vbox.add_child(equipment_hp_bar)
-	var weapon_title := Label.new()
-	weapon_title.text = "随身装备"
-	weapon_title.add_theme_color_override("font_color", UIPalette.TEXT_GOLD)
-	equipment_vbox.add_child(weapon_title)
 	var weapon_slots_row := HBoxContainer.new()
-	weapon_slots_row.add_theme_constant_override("separation", 10)
+	weapon_slots_row.name = "EquipmentThreeColumns"
+	weapon_slots_row.add_theme_constant_override("separation", 12)
+	weapon_slots_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	equipment_vbox.add_child(weapon_slots_row)
 	for weapon_slot_index in range(2):
 		var slot_box := VBoxContainer.new()
-		slot_box.custom_minimum_size.x = 176
+		slot_box.name = "MainWeaponColumn" if weapon_slot_index == 0 else "SecondaryWeaponColumn"
 		slot_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		weapon_slots_row.add_child(slot_box)
-		var slot_caption := Label.new()
-		slot_caption.text = "[1] 主武器" if weapon_slot_index == 0 else "[2] 副武器"
-		slot_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		slot_caption.add_theme_font_size_override("font_size", 12)
-		slot_caption.visible = false
-		slot_box.add_child(slot_caption)
+		_add_equipment_caption(slot_box, "[1] 主武器" if weapon_slot_index == 0 else "[2] 副武器")
 		var weapon_slot := _create_slot()
 		weapon_slot.name = "MainWeaponEquipmentSlot" if weapon_slot_index == 0 else "SecondaryWeaponEquipmentSlot"
-		weapon_slot.custom_minimum_size = Vector2(168, 116)
-		weapon_slot.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		weapon_slot.custom_minimum_size = Vector2(158, 116)
 		if weapon_slot.has_method("set_slot_index"):
 			weapon_slot.call("set_slot_index", weapon_slot_index)
 		weapon_slot.set_meta("slot_kind", "weapon_%d" % weapon_slot_index)
@@ -316,62 +325,30 @@ func _setup_standalone_panels() -> void:
 		equipment_weapon_slots.append(weapon_slot)
 		var weapon_label := Label.new()
 		weapon_label.name = "MainWeaponEquipmentLabel" if weapon_slot_index == 0 else "SecondaryWeaponEquipmentLabel"
-		weapon_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		weapon_label.custom_minimum_size.y = 32
-		weapon_label.add_theme_font_size_override("font_size", 11)
-		weapon_label.text = "未装备"
-		weapon_label.visible = false
+		weapon_label.hide()
 		slot_box.add_child(weapon_label)
 		equipment_weapon_labels.append(weapon_label)
-		var fate_row := HBoxContainer.new()
-		fate_row.name = "Weapon%dFateCardRow" % weapon_slot_index
-		fate_row.add_theme_constant_override("separation", 4)
-		fate_row.alignment = BoxContainer.ALIGNMENT_CENTER
-		fate_row.custom_minimum_size.y = 74
-		slot_box.add_child(fate_row)
-		equipment_fate_rows.append(fate_row)
-		# 弹药行：显示这把枪实际装的子弹模块。玩家在背包里换了弹种，
-		# 这里必须立刻能看出来 —— 否则「我明明换了弹，怎么没变化」会反复被当成 bug。
-		var bullet_row := HBoxContainer.new()
-		bullet_row.name = "Weapon%dBulletRow" % weapon_slot_index
-		bullet_row.add_theme_constant_override("separation", 6)
-		bullet_row.alignment = BoxContainer.ALIGNMENT_CENTER
-		slot_box.add_child(bullet_row)
+
 		var bullet_slot := _create_slot()
 		bullet_slot.name = "Weapon%dBulletSlot" % weapon_slot_index
-		bullet_slot.custom_minimum_size = Vector2(38, 38)
-		# 只读展示格：不吃拖放（slot_kind 不在任何可接收分支里），也不可拖出。
+		bullet_slot.custom_minimum_size = Vector2(50, 50)
 		bullet_slot.set_meta("slot_kind", "bullet_display_%d" % weapon_slot_index)
 		bullet_slot.set_meta("drag_disabled", true)
-		if bullet_slot.has_method("set_slot_index"):
-			bullet_slot.call("set_slot_index", weapon_slot_index)
+		# PASS 保留弹药悬停详情，也可把合规的整枪拖放交回父级枪格。
+		bullet_slot.ready.connect(func() -> void: bullet_slot.mouse_filter = Control.MOUSE_FILTER_PASS)
+		bullet_slot.get_node("CountLabel").hide()
 		_connect_slot_signals(bullet_slot, weapon_slot_index, false)
-		bullet_row.add_child(bullet_slot)
-		# 文字竖排（标题 + 弹名）而不是横排：武器列只有 108px 宽，横排会被挤成省略号。
-		var bullet_text_col := VBoxContainer.new()
-		bullet_text_col.name = "Weapon%dBulletText" % weapon_slot_index
-		bullet_text_col.add_theme_constant_override("separation", 0)
-		bullet_text_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		bullet_text_col.visible = false
-		bullet_row.add_child(bullet_text_col)
-		var bullet_caption := Label.new()
-		# 2026-10-19：手动更换总闸关闭 —— 标题直接写「锁定」，玩家不用点开悬浮卡
-		# 才知道这个槽动不了。宽度只有 72px 左右，所以只加两个字，详细原因在悬浮卡里。
-		bullet_caption.text = "弹药（锁定）" if not WeaponBulletDrop.is_manual_swap_enabled() else "弹药"
-		bullet_caption.add_theme_font_size_override("font_size", 10)
-		bullet_caption.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
-		bullet_text_col.add_child(bullet_caption)
-		var bullet_label := Label.new()
-		bullet_label.name = "Weapon%dBulletLabel" % weapon_slot_index
-		bullet_label.text = "未装填"
-		bullet_label.autowrap_mode = TextServer.AUTOWRAP_OFF
-		bullet_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		bullet_label.add_theme_font_size_override("font_size", 10)
-		bullet_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		bullet_label.add_theme_color_override("font_color", UIPalette.TEXT_DISABLED)
-		bullet_text_col.add_child(bullet_label)
+		weapon_slot.add_child(bullet_slot)
+		bullet_slot.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+		bullet_slot.offset_left = -56
+		bullet_slot.offset_right = -6
+		bullet_slot.offset_top = 6
+		bullet_slot.offset_bottom = 56
 		equipment_bullet_slots.append(bullet_slot)
-		equipment_bullet_labels.append(bullet_label)
+
+		var fate_row := _new_fate_scroll("Weapon%dFateCardRow" % weapon_slot_index, 118)
+		slot_box.add_child(fate_row)
+		equipment_fate_rows.append(fate_row)
 		var attachment_title := Label.new()
 		attachment_title.text = "配件"
 		attachment_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -380,7 +357,7 @@ func _setup_standalone_panels() -> void:
 		slot_box.add_child(attachment_title)
 		var attachment_grid := GridContainer.new()
 		attachment_grid.name = "WeaponAttachmentGrid_%d" % weapon_slot_index
-		attachment_grid.columns = 4
+		attachment_grid.columns = 3
 		attachment_grid.add_theme_constant_override("h_separation", 4)
 		attachment_grid.add_theme_constant_override("v_separation", 4)
 		attachment_grid.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -392,7 +369,7 @@ func _setup_standalone_panels() -> void:
 				weapon_slot_index,
 				AssemblyNode.get_attachment_slot_key(attachment_slot_type).capitalize(),
 			]
-			attachment_slot.custom_minimum_size = Vector2(32, 32)
+			attachment_slot.custom_minimum_size = Vector2(50, 50)
 			attachment_slot.set_meta("slot_kind", "attachment_%d_%d" % [weapon_slot_index, attachment_slot_type])
 			attachment_slot.set_meta("weapon_slot_index", weapon_slot_index)
 			attachment_slot.set_meta("attachment_slot_type", attachment_slot_type)
@@ -416,92 +393,19 @@ func _setup_standalone_panels() -> void:
 			attachment_grid.add_child(attachment_slot)
 			weapon_attachment_slots.append(attachment_slot)
 		equipment_attachment_slots.append(weapon_attachment_slots)
-	character_preview = ITEM_MODEL_ICON_SCENE.instantiate() as ItemModelIcon3D
-	character_preview.name = "CharacterPreview"
-	character_preview.custom_minimum_size = Vector2(210, 300)
-	character_preview.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	character_preview.icon_resolution = 384
-	character_preview.configure_custom_model(_create_character_preview, "avatar_full")
-	weapon_slots_row.add_child(character_preview)
-	weapon_slots_row.move_child(character_preview, 1)
 	equipment_weapon_slot = equipment_weapon_slots[0]
 	equipment_weapon_label = equipment_weapon_labels[0]
-	# 装备栏加宽后，将背包装备与快捷栏并排，避免底部内容被纵向裁切。
-	var equipment_support_row := HBoxContainer.new()
-	equipment_support_row.name = "EquipmentSupportRow"
-	equipment_support_row.add_theme_constant_override("separation", 18)
-	equipment_support_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	equipment_vbox.add_child(equipment_support_row)
-	var backpack_section := VBoxContainer.new()
-	backpack_section.name = "BackpackEquipmentSection"
-	backpack_section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	backpack_section.size_flags_stretch_ratio = 0.48
-	equipment_support_row.add_child(backpack_section)
-	var backpack_title := Label.new()
-	backpack_title.text = "背包装备"
-	backpack_title.add_theme_color_override("font_color", Color(0.52, 0.88, 1.0))
-	backpack_title.add_theme_font_size_override("font_size", 12)
-	backpack_section.add_child(backpack_title)
-	var backpack_row := HBoxContainer.new()
-	backpack_row.add_theme_constant_override("separation", 10)
-	backpack_section.add_child(backpack_row)
-	equipment_backpack_slot = _create_slot()
-	equipment_backpack_slot.name = "BackpackEquipmentSlot"
-	equipment_backpack_slot.custom_minimum_size = Vector2(50, 50)
-	equipment_backpack_slot.set_meta("slot_kind", "backpack")
-	if equipment_backpack_slot.has_method("set_slot_index"):
-		equipment_backpack_slot.call("set_slot_index", 0)
-	_connect_slot_signals(equipment_backpack_slot, 0, false)
-	backpack_row.add_child(equipment_backpack_slot)
-	equipment_backpack_label = Label.new()
-	equipment_backpack_label.name = "BackpackEquipmentLabel"
-	equipment_backpack_label.text = "未装备\n基础容量 %d格" % BASE_INVENTORY_CAPACITY
-	equipment_backpack_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	equipment_backpack_label.add_theme_font_size_override("font_size", 13)
-	equipment_backpack_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	backpack_row.add_child(equipment_backpack_label)
-	equipment_backpack_label.hide()
-	var quick_section := VBoxContainer.new()
-	quick_section.name = "QuickItemEquipmentSection"
-	quick_section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	quick_section.size_flags_stretch_ratio = 0.52
-	equipment_support_row.add_child(quick_section)
-	var quick_title := Label.new()
-	quick_title.text = "快捷物品"
-	quick_title.add_theme_color_override("font_color", Color(0.44, 0.90, 0.76))
-	quick_title.add_theme_font_size_override("font_size", 12)
-	quick_section.add_child(quick_title)
-	var quick_row := HBoxContainer.new()
-	quick_row.add_theme_constant_override("separation", 10)
-	quick_section.add_child(quick_row)
-	for quick_index in range(2):
-		var quick_slot := _create_slot()
-		quick_slot.name = "QuickItemSlot_%d" % quick_index
-		quick_slot.custom_minimum_size = Vector2(50, 50)
-		quick_slot.set_meta("slot_kind", "quick_%d" % quick_index)
-		quick_slot.set_meta("drag_disabled", true)
-		if quick_slot.has_method("set_slot_index"):
-			quick_slot.call("set_slot_index", quick_index)
-		_connect_slot_signals(quick_slot, quick_index, false)
-		quick_row.add_child(quick_slot)
-		quick_item_slots.append(quick_slot)
-	special_equipment_slot = preload("res://assets/art/ui/special_items/ui_special_item_equipment_slot_root.tscn").instantiate() as SpecialItemEquipmentSlot
-	equipment_support_row.add_child(special_equipment_slot)
-	var reserved := Label.new()
-	reserved.text = "防具 / 战术 / 护符　·　尚未开放"
-	reserved.add_theme_color_override("font_color", UIPalette.TEXT_DISABLED)
-	reserved.add_theme_font_size_override("font_size", 13)
-	equipment_vbox.add_child(reserved)
-	reserved.hide()
-	var moon_fate_title := Label.new()
-	moon_fate_title.text = "月亮命运"
-	moon_fate_title.add_theme_color_override("font_color", Color(0.72, 0.80, 1.0))
-	moon_fate_title.add_theme_font_size_override("font_size", 12)
-	equipment_vbox.add_child(moon_fate_title)
-	equipment_moon_fate_row = HBoxContainer.new()
-	equipment_moon_fate_row.name = "MoonFateCardRow"
-	equipment_moon_fate_row.add_theme_constant_override("separation", 6)
-	equipment_vbox.add_child(equipment_moon_fate_row)
+	_build_character_equipment_column(weapon_slots_row)
+
+	var moon_fate_title := _add_equipment_caption(equipment_vbox, "月亮命运")
+	moon_fate_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	var moon_scroll := _new_fate_scroll("MoonFateScroll", 116)
+	equipment_vbox.add_child(moon_scroll)
+	var moon_row := HBoxContainer.new()
+	moon_row.name = "MoonFateCardRow"
+	moon_row.add_theme_constant_override("separation", 8)
+	moon_scroll.add_child(moon_row)
+	equipment_moon_fate_row = moon_row
 	equipment_fate_label = Label.new()
 	equipment_fate_label.name = "RunFateStateLabel"
 	equipment_fate_label.visible = false
@@ -518,8 +422,8 @@ func _setup_standalone_panels() -> void:
 		UIStyleFactory.make_panel_with_border(1, UIPalette.BORDER_NORMAL, 6, 1),
 	)
 	inventory_panel.custom_minimum_size = Vector2(432, 0)
-	inventory_panel.size_flags_horizontal = Control.SIZE_FILL
-	inventory_panel.size_flags_stretch_ratio = 0.92
+	inventory_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inventory_panel.size_flags_stretch_ratio = 0.35
 	inventory_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	inventory_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	columns.add_child(inventory_panel)
@@ -603,6 +507,86 @@ func _setup_standalone_panels() -> void:
 	close_button.custom_minimum_size.y = 36
 	close_button.pressed.connect(func() -> void: set_inventory_panel_open(false))
 	vbox.add_child(close_button)
+
+
+func _add_equipment_caption(parent: Control, text: String) -> Label:
+	var caption := Label.new()
+	caption.text = text
+	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	caption.add_theme_font_size_override("font_size", 12)
+	caption.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
+	parent.add_child(caption)
+	return caption
+
+
+func _build_character_equipment_column(columns: HBoxContainer) -> void:
+	var center := VBoxContainer.new()
+	center.name = "CharacterEquipmentColumn"
+	center.add_theme_constant_override("separation", 6)
+	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	columns.add_child(center)
+	columns.move_child(center, 1)
+	character_preview = ITEM_MODEL_ICON_SCENE.instantiate() as ItemModelIcon3D
+	character_preview.name = "CharacterPreview"
+	character_preview.custom_minimum_size = Vector2(158, 204)
+	character_preview.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	character_preview.icon_resolution = 384
+	character_preview.configure_custom_model(_create_character_preview, "avatar_full")
+	center.add_child(character_preview)
+
+	var support := HBoxContainer.new()
+	support.name = "EquipmentSupportRow"
+	support.add_theme_constant_override("separation", 12)
+	center.add_child(support)
+	var backpack := VBoxContainer.new()
+	backpack.name = "BackpackEquipmentSection"
+	backpack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	support.add_child(backpack)
+	_add_equipment_caption(backpack, "背包装备")
+	equipment_backpack_slot = _create_slot()
+	equipment_backpack_slot.name = "BackpackEquipmentSlot"
+	equipment_backpack_slot.custom_minimum_size = Vector2(50, 50)
+	equipment_backpack_slot.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	equipment_backpack_slot.set_meta("slot_kind", "backpack")
+	equipment_backpack_slot.call("set_slot_index", 0)
+	_connect_slot_signals(equipment_backpack_slot, 0, false)
+	backpack.add_child(equipment_backpack_slot)
+	equipment_backpack_label = Label.new()
+	equipment_backpack_label.name = "BackpackEquipmentLabel"
+	equipment_backpack_label.hide()
+	backpack.add_child(equipment_backpack_label)
+	special_equipment_slot = preload("res://assets/art/ui/special_items/ui_special_item_equipment_slot_root.tscn").instantiate() as SpecialItemEquipmentSlot
+	special_equipment_slot.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	support.add_child(special_equipment_slot)
+	_bind_special_equipment()
+
+	_add_equipment_caption(center, "快捷物品")
+	var quick_row := HBoxContainer.new()
+	quick_row.name = "QuickItemEquipmentSection"
+	quick_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	quick_row.add_theme_constant_override("separation", 12)
+	center.add_child(quick_row)
+	for quick_index in range(2):
+		var quick_slot := _create_slot()
+		quick_slot.name = "QuickItemSlot_%d" % quick_index
+		quick_slot.custom_minimum_size = Vector2(50, 50)
+		quick_slot.set_meta("slot_kind", "quick_%d" % quick_index)
+		quick_slot.set_meta("drag_disabled", true)
+		quick_slot.call("set_slot_index", quick_index)
+		_connect_slot_signals(quick_slot, quick_index, false)
+		quick_row.add_child(quick_slot)
+		quick_item_slots.append(quick_slot)
+
+
+func _new_fate_scroll(scroll_name: String, height: float) -> ScrollContainer:
+	var scroll := ScrollContainer.new()
+	scroll.name = scroll_name
+	scroll.custom_minimum_size.y = height
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.follow_focus = true
+	scroll.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	return scroll
 
 
 func _setup_interaction_feedback() -> void:
@@ -701,8 +685,7 @@ func set_weapon_owner(owner: Node) -> void:
 		if _weapon_owner.hp_changed.is_connected(_on_owner_hp_changed):
 			_weapon_owner.hp_changed.disconnect(_on_owner_hp_changed)
 	_weapon_owner = owner
-	if special_equipment_slot != null and owner != null and owner.has_method("get_special_item_controller"):
-		special_equipment_slot.configure(owner.call("get_special_item_controller") as SpecialItemController3D)
+	_bind_special_equipment()
 	if _weapon_owner != null and _weapon_owner.has_signal("weapon_instance_changed"):
 		if not _weapon_owner.weapon_instance_changed.is_connected(_on_equipped_weapon_instance_changed):
 			_weapon_owner.weapon_instance_changed.connect(_on_equipped_weapon_instance_changed)
@@ -714,6 +697,15 @@ func set_weapon_owner(owner: Node) -> void:
 		)
 	_refresh_equipment_ui()
 	_refresh_inventory_ui()
+
+
+func _bind_special_equipment() -> void:
+	if special_equipment_slot == null:
+		return
+	var controller: SpecialItemController3D
+	if is_instance_valid(_weapon_owner) and _weapon_owner.has_method("get_special_item_controller"):
+		controller = _weapon_owner.call("get_special_item_controller") as SpecialItemController3D
+	special_equipment_slot.configure(controller)
 
 
 func set_backpack_owner(owner: Node) -> void:
@@ -1421,20 +1413,18 @@ func _refresh_equipment_ui() -> void:
 		if item.is_empty():
 			_clear_slot(slot)
 			equipment_weapon_labels[weapon_slot_index].text = "未装备"
-			_refresh_weapon_fate_cards(weapon_slot_index, [])
-			_refresh_weapon_fate_cards(weapon_slot_index, [])
+			_refresh_weapon_fate_cards(weapon_slot_index, 0, [])
 			_refresh_weapon_attachment_slots(weapon_slot_index, [])
 			_refresh_weapon_bullet_display(weapon_slot_index, {})
 			continue
 		_update_slot_with_item(slot, {"item": item, "count": 1, "slot": weapon_slot_index})
-		var instance_id := str(item.get("weapon_instance_id", ""))
-		var upgrades: Variant = item.get("fate_upgrades", [])
-		var used: int = upgrades.size() if upgrades is Array else 0
-		_refresh_weapon_fate_cards(weapon_slot_index, upgrades as Array if upgrades is Array else [])
+		# Player3D 从对应的 WeaponInstance 导出这两个永久槽字段，不从当前持枪推导副枪。
+		var capacity := maxi(0, int(item.get("fate_slot_capacity", 0)))
+		var upgrades := item.get("fate_upgrades", []) as Array
+		_refresh_weapon_fate_cards(weapon_slot_index, capacity, upgrades)
 		equipment_weapon_labels[weapon_slot_index].text = "%s%s\n命运 %d/%d" % [
 			"▶ " if weapon_slot_index == active_slot else "",
-			item.get("name", "武器"), used,
-			int(item.get("fate_slot_capacity", 8)),
+			item.get("name", "武器"), upgrades.size(), capacity,
 		]
 		var layout: Array[Dictionary] = []
 		if _weapon_owner.has_method("get_weapon_attachment_layout_for_slot"):
@@ -1447,25 +1437,74 @@ func _refresh_equipment_ui() -> void:
 	_refresh_quick_item_ui()
 
 
-func _refresh_weapon_fate_cards(weapon_slot_index: int, upgrades: Array) -> void:
-	if weapon_slot_index < 0 or weapon_slot_index >= equipment_fate_rows.size():
+func _refresh_weapon_fate_cards(weapon_slot_index: int, capacity: int, upgrades: Array) -> void:
+	var scroll := equipment_fate_rows[weapon_slot_index]
+	var track_state := [capacity, upgrades]
+	if scroll.get_meta("track_state", []) == track_state:
 		return
-	var row := equipment_fate_rows[weapon_slot_index]
-	for child in row.get_children():
-		row.remove_child(child)
+	scroll.set_meta("track_state", track_state.duplicate(true))
+	_clear_fate_children(scroll)
+	var records := {}
+	for entry: Dictionary in upgrades:
+		records[int(entry.get("slot_index", 0))] = entry
+
+	var canvas := Control.new()
+	canvas.name = "FateTrackCanvas"
+	canvas.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	canvas.custom_minimum_size = Vector2(12 + capacity * 88, 118)
+	scroll.add_child(canvas)
+	var track := FATE_TRACK.new()
+	track.name = "WeaponFateTrack"
+	canvas.add_child(track)
+	var segments: Array[Dictionary] = []
+	var previous_end := Vector2(2, 0)
+	var active := true
+	for index in range(1, capacity + 1):
+		var entry := records.get(index, {}) as Dictionary
+		var card := _read_weapon_fate_card(entry)
+		var socket := _add_compact_fate_socket(canvas, index, entry, card, index == records.size() + 1)
+		socket.position = Vector2(10 + (index - 1) * 88, 2 + (index - 1) % 2 * 12)
+		socket.size = Vector2(66, 103)
+		var art := socket.get("_art") as Control
+		var texture := FateCardView.art_for(card) if card != null else FateCardView.back_texture()
+		var face_rect := FateCardView.contained_texture_rect(art.size, texture)
+		face_rect.position += socket.position + art.position
+		var end := Vector2(face_rect.position.x, face_rect.get_center().y)
+		if index == 1:
+			previous_end.y = end.y
+		var turn := (previous_end.x + end.x) * 0.5
+		active = active and not entry.is_empty()
+		segments.append({"to_slot": index, "active": active, "points": PackedVector2Array([
+			previous_end, Vector2(turn, previous_end.y), Vector2(turn, end.y), end,
+		])})
+		previous_end = Vector2(face_rect.end.x, end.y)
+	track.set_segments(segments)
+
+
+func _read_weapon_fate_card(entry: Dictionary) -> FateCard:
+	if entry.is_empty():
+		return null
+	var card := FateCardPresets.get_by_card_id(str(entry.get("stable_card_id", "")))
+	if card == null:
+		card = FateCard.new(str(entry.get("display_name", "未识别刻印")))
+		card.description = "当前牌库无此刻印；永久槽已占用。"
+	card.set_orientation(FateCard.Orientation.REVERSED if str(entry.get("orientation", "")) == "REVERSED" else FateCard.Orientation.UPRIGHT)
+	return card
+
+
+func _add_compact_fate_socket(host: Control, index: int, entry: Dictionary, card: FateCard, is_next := false, brief := "") -> Control:
+	var socket := FATE_SOCKET.new()
+	socket.name = "FateSocket%02d" % index
+	socket.compact_display = true
+	host.add_child(socket)
+	socket.configure(index, entry, card, false, is_next, [], brief)
+	return socket
+
+
+func _clear_fate_children(host: Control) -> void:
+	for child in host.get_children():
+		host.remove_child(child)
 		child.queue_free()
-	for index in range(4):
-		var host := Control.new()
-		host.custom_minimum_size = Vector2(42, 62)
-		host.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		if index < upgrades.size() and upgrades[index] is Dictionary:
-			var card_data := upgrades[index] as Dictionary
-			var card := FateCardPresets.get_by_card_id(str(card_data.get("stable_card_id", "")))
-			if card != null:
-				var art := FateCardView.art_for(card)
-				if art != null:
-					FateCardView.build_art_layer(host, art, str(card_data.get("orientation", "UPRIGHT")) == "REVERSED", "WeaponFateCard")
-		row.add_child(host)
 
 func _refresh_weapon_attachment_slots(weapon_slot_index: int, layout: Array[Dictionary]) -> void:
 	if weapon_slot_index < 0 or weapon_slot_index >= equipment_attachment_slots.size():
@@ -1511,25 +1550,15 @@ func _refresh_weapon_attachment_slots(weapon_slot_index: int, layout: Array[Dict
 		_apply_attachment_slot_frame(slot, true, false)
 
 
-## 弹药行刷新：空 → 「未装填」灰字；有 → 图标 + 模块名。
-## 只读展示，不接拖放/点击。2026-10-19 起手动更换总闸关闭，弹药槽本身也不提供
-## 拆卸（拆掉会留下一把没有弹种映射的枪，比不显示更容易出事故）。
+## 弹药槽只读：图标留在枪格里，名字与说明在悬停时显示。
 func _refresh_weapon_bullet_display(weapon_slot_index: int, bullet_item: Dictionary) -> void:
-	if weapon_slot_index < 0 or weapon_slot_index >= equipment_bullet_slots.size():
-		return
 	var slot := equipment_bullet_slots[weapon_slot_index]
-	var label := equipment_bullet_labels[weapon_slot_index]
-	slot.set_meta("drag_disabled", true)
 	if bullet_item.is_empty():
 		_clear_slot(slot)
-		slot.set_meta("drag_disabled", true)
-		label.text = "未装填"
-		label.add_theme_color_override("font_color", UIPalette.TEXT_DISABLED)
-		return
-	_update_slot_with_item(slot, {"item": bullet_item, "count": 1, "slot": weapon_slot_index})
-	slot.set_meta("drag_disabled", true)
-	label.text = str(bullet_item.get("name", "子弹模块"))
-	label.add_theme_color_override("font_color", UIPalette.ITEM_BULLET)
+	else:
+		_update_slot_with_item(slot, {"item": bullet_item, "count": 1, "slot": weapon_slot_index})
+	slot.visible = not bullet_item.is_empty()
+	slot.accessibility_name = str(bullet_item.get("name", "未装填"))
 
 
 func _apply_attachment_slot_frame(slot: Control, filled: bool, disabled: bool) -> void:
@@ -1626,43 +1655,36 @@ func _refresh_run_fate_ui() -> void:
 	var snapshot := FateCardGameBridge.get_scope_state_snapshot()
 	var moon_cards := snapshot.get("character", []) as Array
 	var sun_cards := snapshot.get("world", []) as Array
-	var lines: Array[String] = ["月亮命运 %d张 · 角色本局" % moon_cards.size(), "太阳命运 %d张 · 世界规则"]
-	equipment_fate_label.text = "\n".join(lines)
-	if equipment_moon_fate_row == null:
+	var sun_lines: Array[String] = []
+	for entry: Dictionary in sun_cards:
+		sun_lines.append("%s · %s｜%s" % [entry.name, entry.orientation, entry.short_description])
+	if sun_lines.is_empty():
+		sun_lines.append("尚未获得")
+	_sun_fate_status.text = "太阳命运 %d" % sun_cards.size()
+	_sun_fate_status.accessibility_name = _sun_fate_status.text
+	_sun_fate_status.accessibility_description = "\n".join(sun_lines)
+	_sun_fate_status.tooltip_text = _sun_fate_status.accessibility_description
+	var sun_menu := _sun_fate_status.get_popup()
+	sun_menu.clear()
+	for line in sun_lines:
+		sun_menu.add_item(line)
+	equipment_fate_label.text = "月亮命运 %d张 · 角色本局\n%s · 世界规则\n%s" % [moon_cards.size(), _sun_fate_status.text, _sun_fate_status.accessibility_description]
+
+	if equipment_moon_fate_row.has_meta("moon_state") and equipment_moon_fate_row.get_meta("moon_state") == moon_cards:
 		return
-	for child in equipment_moon_fate_row.get_children():
-		equipment_moon_fate_row.remove_child(child)
-		child.queue_free()
-	for card_data: Variant in moon_cards:
-		if not card_data is Dictionary:
-			continue
-		var card_id := str((card_data as Dictionary).get("stable_card_id", ""))
-		var card := FateCardPresets.get_by_card_id(card_id)
-		if card == null:
-			continue
-		var host := Control.new()
-		host.custom_minimum_size = Vector2(72, 104)
-		host.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var art := FateCardView.art_for(card)
-		if art != null:
-			FateCardView.build_art_layer(host, art, str((card_data as Dictionary).get("orientation", "UPRIGHT")) == "REVERSED", "MoonFateCard")
-		equipment_moon_fate_row.add_child(host)
-	for index in range(moon_cards.size(), 4):
-		var empty := Control.new()
-		empty.custom_minimum_size = Vector2(72, 104)
-		equipment_moon_fate_row.add_child(empty)
-
-
-func _format_run_fate_cards(cards: Array) -> Array[String]:
-	if cards.is_empty():
-		return ["  尚未获得"]
-	var lines: Array[String] = []
-	for index in range(mini(cards.size(), 4)):
-		var card := cards[index] as Dictionary
-		lines.append("  %s·%s｜%s" % [card.get("name", "未知"), card.get("orientation", "正位"), card.get("short_description", "")])
-	if cards.size() > 4:
-		lines.append("  另有 %d 张…" % (cards.size() - 4))
-	return lines
+	equipment_moon_fate_row.set_meta("moon_state", moon_cards.duplicate(true))
+	_clear_fate_children(equipment_moon_fate_row)
+	if moon_cards.is_empty():
+		var empty := _add_equipment_caption(equipment_moon_fate_row, "尚未获得")
+		empty.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		return
+	# 月牌直接读取本局应用实例，保留同名牌的各自正逆位和实际说明。
+	var applied := FateCardGameBridge.get_scope_cards(FateCard.Scope.CHARACTER)
+	for i in applied.size():
+		var card := applied[i]
+		var briefs: Array = MOON_FATE_BRIEFS.get(card.get_stable_card_id(), ["效果待查", "效果待查"])
+		var socket := _add_compact_fate_socket(equipment_moon_fate_row, i + 1, moon_cards[i], card, false, briefs[int(card.is_reversed())])
+		socket.custom_minimum_size = Vector2(66, 103)
 
 
 func _on_sort_pressed() -> void:
@@ -1773,10 +1795,10 @@ func _on_slot_drag_started(source_index: int, source_kind: String, item: Diction
 	if source_kind == "inventory" and inventory_grid != null:
 		inventory_grid.call("set_grid_drag_preview", _drag_item, _drag_source_index, _drag_rotation, true)
 	if drag_status_panel != null and drag_status_label != null:
-		drag_status_label.text = "正在移动「%s」　拖到中央丢弃 · Esc 取消" % item.get("name", "快捷物品") if source_kind.begins_with("quick_") else "正在移动「%s」　拖到中央丢弃 · Esc 取消" % item.get("name", "保险物品") if source_kind == "insurance" else (
-			"正在卸下「%s」　拖到中央丢弃 · Esc 取消" % item.get("name", "武器")
+		drag_status_label.text = "正在移动「%s」　拖到装备页底部丢弃 · Esc 取消" % item.get("name", "快捷物品") if source_kind.begins_with("quick_") else "正在移动「%s」　拖到装备页底部丢弃 · Esc 取消" % item.get("name", "保险物品") if source_kind == "insurance" else (
+			"正在卸下「%s」　拖到装备页底部丢弃 · Esc 取消" % item.get("name", "武器")
 			if source_kind.begins_with("weapon_") or source_kind.begins_with("attachment_") or source_kind == "backpack"
-			else "正在拖拽「%s」　R 旋转 · 拖到中央丢弃 · Esc 取消" % item.get("name", "物品")
+			else "正在拖拽「%s」　R 旋转 · 拖到装备页底部丢弃 · Esc 取消" % item.get("name", "物品")
 		)
 		drag_status_panel.visible = true
 		drag_status_panel.move_to_front()

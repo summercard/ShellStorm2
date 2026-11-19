@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_boss_room_02_static_layout.tscn" id="1_room02"]
+[ext_resource type="Script" path="res://src/world3d/PlatformSentinelEncounter3D.gd" id="2_encounter"]
+[ext_resource type="Script" path="res://src/world3d/PlatformSentinelDeck3D.gd" id="3_deck"]
+[ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/enm_boss_platform_sentinel_root_top3d.tscn" id="4_platform"]
 
 [node name="Expedition01BossRoom02" type="Node3D"]
 metadata/schema = "shellstorm2.expedition.room_static_layout.v001"
@@ -10,7 +13,8 @@ metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-ROOM-02"
 metadata/asset_version = "v027"
 metadata/authored_layout_shell = true
 metadata/component_owned_support = true
-metadata/layout_instance_total = 652
+metadata/layout_instance_total = 597
+metadata/walk_surface_owner = "platform_sentinel"
 metadata/authored_layout_asset_id = "ENV-EXPEDITION-L01-BOSS-ROOM-02"
 metadata/authored_layout_version = "v027"
 metadata/authored_layout_room_id = "boss"
@@ -23,3 +27,12 @@ metadata/authored_room_light_switch = false
 ; （P1 南门 +z=50、P2 东门 +x=40），而本次实测确认加 180° 会把美术镜像
 ; （高位门扇落到 z=-50、Gate_StairNorth 落到 +10.28），与 99 相反 ⇒ 门会开在实墙上。
 [node name="BossRoom02" parent="." instance=ExtResource("1_room02")]
+
+[node name="PlatformSentinelEncounter" type="Node3D" parent="."]
+position = Vector3(0, 0, -22.5)
+script = ExtResource("2_encounter")
+
+[node name="Deck" type="Node3D" parent="PlatformSentinelEncounter"]
+script = ExtResource("3_deck")
+
+[node name="PlatformSentinel" parent="PlatformSentinelEncounter/Deck" instance=ExtResource("4_platform")]

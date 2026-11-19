@@ -17,7 +17,8 @@
         "docs/v0.1/development/2026-11-02_feedback_revision.md",
         "docs/v0.1/development/2026-11-06_camera_lower_wall_mouse_look.md",
         "docs/v0.1/development/2026-11-10_camera_wall_stability.md",
-        "docs/v0.1/development/2026-11-17_expedition01_camera_distance.md"
+        "docs/v0.1/development/2026-11-17_expedition01_camera_distance.md",
+        "docs/v0.1/development/2026-11-19_exp01_ceiling_room08.md"
       ],
       "verification": [
         {
@@ -371,7 +372,8 @@
         "docs/v0.1/development/2026-11-06_expedition03_workshop_layouts.md",
         "docs/v0.1/development/2026-11-11_expedition01_flow.md",
         "docs/v0.1/development/2026-11-17_room07_08_layout_fix.md",
-        "docs/v0.1/development/2026-11-17_room08_equipment_enclosures.md"
+        "docs/v0.1/development/2026-11-17_room08_equipment_enclosures.md",
+        "docs/v0.1/development/2026-11-19_exp01_ceiling_room08.md"
       ],
       "verification": [
         {
@@ -909,12 +911,13 @@
     },
     {
       "feature_id": "BOSS-STAGES",
-      "owner": "BossContentCatalog；真实激活进度Enemy3D/MonitorBossCombat",
+      "owner": "BossContentCatalog；显示器激活由 Enemy3D/MonitorBossCombat 持有，武装平台遭遇由 PlatformSentinelEncounter3D 持有",
       "design_docs": [
         "docs/v0.1/design/主线剧情3.1至3.3与四钥匙设计.md",
         "docs/v0.1/06_技术施工_怪物精英与Boss.md",
         "docs/v0.1/design/Boss002显示器技能设计.md",
-        "docs/v0.1/design/Boss002显示器动画设计.md"
+        "docs/v0.1/design/Boss002显示器动画设计.md",
+        "docs/v0.1/design/远征01武装平台首领设计.md"
       ],
       "development_records": [
         "docs/v0.1/development/2026-10-08_boss002_restore_v031.md",
@@ -927,7 +930,8 @@
         "docs/v0.1/development/2026-10-14_boss002_monitor_hit_volume.md",
         "docs/v0.1/development/2026-11-02_expedition03_monitor_boss.md",
         "docs/v0.1/development/2026-11-10_main_story_031_033.md",
-        "docs/v0.1/development/2026-11-11_expedition01_flow.md"
+        "docs/v0.1/development/2026-11-11_expedition01_flow.md",
+        "docs/v0.1/development/2026-11-19_platform_sentinel_combat_tuning.md"
       ],
       "verification": [
         {
@@ -943,6 +947,10 @@
         {
           "kind": "scene",
           "id": "verify_expedition_monitor_boss_flow"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition01_platform_sentinel"
         },
         {
           "kind": "scene",

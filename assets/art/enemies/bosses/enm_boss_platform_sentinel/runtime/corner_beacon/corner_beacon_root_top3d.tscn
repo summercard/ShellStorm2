@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/components/corner_beacon/corner_beacon_visual_top3d.glb" id="1_visual"]
+
+[node name="corner_beacon" type="Node3D"]
+metadata/asset_id = "ENM-BOSS-PLATFORM-SENTINEL-CORNER-BEACON"
+metadata/asset_version = "v001"
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]

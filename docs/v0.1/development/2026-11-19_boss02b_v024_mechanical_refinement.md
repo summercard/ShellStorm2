@@ -1,17 +1,19 @@
 # Boss02-B v024 三节枪臂、砸台与四路断件
 
-游戏 0.1.0。FeatureID 为 ASSET-PIPELINE / WORLD-BLOCKS。制作资产为 `ENV-EXP01-BOSS02B-MECHANICAL-PLATFORM`。用户参考截图及其哈希见 [组件计划](../../../art_source/environments/tower_zones/expedition/source/common_components/v024/component_plan.json)。
+本篇为早期原型记录。当前资产已独立登记为武装平台首领，旧源及原 AssetID 对照见 [源沿革](../../../art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/source_lineage.json)。
+
+游戏 0.1.0。FeatureID 为 ASSET-PIPELINE / WORLD-BLOCKS。制作资产为 `ENV-EXP01-BOSS02B-MECHANICAL-PLATFORM`。用户参考截图及其哈希见 组件计划。
 
 ## 制作
 
-- 在业主开启的 Blender 会话中完成 [v024 平台母版](../../../art_source/environments/tower_zones/expedition/source/common_components/v024/env_boss02b_mechanical_platform_source_v024.blend)。枪臂增加 1.38 米下摆承力节、独立转轴和刚性权重，在台外完成举升、翻转和瞄准。枪头在转盘和俯仰叉内独立转动。
+- 在业主开启的 Blender 会话中完成 v024 平台母版。枪臂增加 1.38 米下摆承力节、独立转轴和刚性权重，在台外完成举升、翻转和瞄准。枪头在转盘和俯仰叉内独立转动。
 - 大臂加深抬高蓄力和下砸行程，接触后有短停、回弹与回收。出舱加入制动回摆，解体具备更强外抛与翻转。大臂头部回转环和枪臂横摆环各有独立扫描剪辑。
 - 甲板下的格构和下沉机腹按四个承力段拆分。掉落时各段错时脱开、向不同方向甩出和翻滚，每格保留自己的屏幕顶板。外环 16 格先落，内环 8 格随后，中央框架与屏幕保留。
 - 继续使用 v023 的整面屏幕图集和 5×5 平台 UV。蓝、黄、红的阶段切换全屏同步，故障时由各区块独立熄黑。
 
 ## 动作与观察点
 
-共 14 段动作，30 fps，Blender 剪辑第 1 帧为 F0。新增 `scan_grapple`、`servo_pause_grapple`、`scan_sentry`、`servo_pause_sentry`，均可单独调配。时间和事件见 [动画清单](../../../art_source/environments/tower_zones/expedition/source/common_components/v024/animation_manifest.json)。
+共 14 段动作，30 fps，Blender 剪辑第 1 帧为 F0。新增 `scan_grapple`、`servo_pause_grapple`、`scan_sentry`、`servo_pause_sentry`，均可单独调配。时间和事件见 动画清单。
 
 | 主时间轴帧 | 观察点 |
 |---:|---|

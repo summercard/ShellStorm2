@@ -1,0 +1,543 @@
+{
+  "schema": "shellstorm2.boss.component_plan",
+  "schema_version": 1,
+  "library": "v001",
+  "asset_id": "ENM-BOSS-PLATFORM-SENTINEL-3D",
+  "block_id": "expedition",
+  "level_id": "expedition_01",
+  "room_type": null,
+  "status": "frozen_before_formal_geometry",
+  "delivery_scope": "standalone enemy visual source and individually playable skeletal actions",
+  "reference": {
+    "supplied_attachment": "codex-clipboard-fd7097bd-f911-4923-8aa2-dee7354299f1.png",
+    "sha256": "462bcdad53216be1a68d8757b74893fba7e796f91a2e36614c6b3b90c0e4ca23",
+    "revision_attachments": [
+      {
+        "attachment": "codex-clipboard-1333cafe-4bb1-4fe5-b433-31cda1e29f44.png",
+        "sha256": "f5d45e2e1009c97462bcd6be90c296a1aef49f854d2f038034994aa069b8b5c8"
+      },
+      {
+        "attachment": "codex-clipboard-02beda7b-495e-4f52-9406-b085276cd10b.png",
+        "sha256": "3716bc83eb97e82ae392b8d54d6c917691d319d809994df2e0e97acbd425b260"
+      },
+      {
+        "attachment": "codex-clipboard-e3faa25b-ee50-4962-8394-2851fb01a026.png",
+        "sha256": "794a2c5fdf93aed82b82d348116749414e376e59854632c703784d131a656f7b"
+      }
+    ],
+    "latest_attachments": [
+      {
+        "name": "codex-clipboard-860140fe-54f0-4860-a2bf-540d6f00b2e5.png",
+        "sha256": "849de1d2dc50e44c1de2777e25d99b1f880feeaabc721504e980838d821a6d94"
+      },
+      {
+        "name": "codex-clipboard-0b0e7a38-4da4-427f-8282-07cb757a74c9.png",
+        "sha256": "d9830c95b5897ebd747f8f6c20f83341dca9d47566f675d9eb698b4ad2fe24b4"
+      },
+      {
+        "name": "codex-clipboard-cfcea668-b6ce-4b8d-9541-10083537d247.png",
+        "sha256": "ced7183f09ca5377c9bb70f68860728bb0da764151ca1ad5796cfc4fd321ee4e"
+      }
+    ]
+  },
+  "whitebox": {
+    "nominal_walk_footprint_m": [
+      25,
+      25
+    ],
+    "source": "User platform profile and v024 prototype"
+  },
+  "coordinate_contract": {
+    "origin": "platform_footprint_center_at_walk_plane",
+    "nominal_xy_bounds_m": [
+      [
+        -12.5,
+        -12.5
+      ],
+      [
+        12.5,
+        12.5
+      ]
+    ],
+    "walk_plane_z_m": 0,
+    "blender_plane": "XY",
+    "blender_up": "+Z",
+    "godot_mapping": "(bx, by, bz) -> (bx, bz, -by)",
+    "rotation_y_deg_semantics": "rotation_about_blender_Z"
+  },
+  "component_budget": {
+    "limit": 50,
+    "planned": 9,
+    "remaining": 41
+  },
+  "interface_notes": {
+    "platform_walk_surface": "25 flush 5m tiles, display glass plus narrow flush structural joints at Z=0",
+    "articulated_envelope": "external to nominal 25m deck when stowed; large arm pose check and sentry raised sight line in Blender",
+    "reuse": "Standalone Expedition 01 enemy-model component library."
+  },
+  "components": [
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-DISPLAY-TILE-5M",
+      "slug": "display_tile_5m",
+      "name_zh": "铺地显示器 5 米",
+      "component_family": "display_deck",
+      "category": "structure",
+      "description": "四角铆接的标准监测屏；三阶段警报贴图、UV滚动、失效熄屏",
+      "variant_axis": "interface_role",
+      "variant_value": "telemetry",
+      "variant_reason": "四角铆接的标准监测屏",
+      "bounds_target_xyz_m": [
+        5,
+        5,
+        0.44
+      ],
+      "front_axis": "+Z",
+      "front_axis_space": "godot_y_up",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "origin_contract": "bottom_center_at_rest_bbox",
+      "module_pitch_m": 5,
+      "scope": "boss_local",
+      "serves_room_types": [],
+      "collision_owner": "godot_wrapper",
+      "has_emissive": true,
+      "instance_count": 24,
+      "collection": "OUT_display_tile_5m",
+      "root_object": "ROOT_display_tile_5m",
+      "decorative_armature": false,
+      "materials": [
+        "paint",
+        "metal",
+        "seal",
+        "emissive"
+      ],
+      "belongs_to_asset": "ENM-BOSS-PLATFORM-SENTINEL-3D"
+    },
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-DISPLAY-COMMAND-5M",
+      "slug": "display_command_5m",
+      "name_zh": "中央主控显示器 5 米",
+      "component_family": "display_deck",
+      "category": "structure",
+      "description": "不同边框分割与角部护甲的中央主控屏；三阶段警报贴图、UV滚动、失效熄屏",
+      "variant_axis": "interface_role",
+      "variant_value": "command",
+      "variant_reason": "不同边框分割与角部护甲的中央主控屏",
+      "bounds_target_xyz_m": [
+        5,
+        5,
+        0.44
+      ],
+      "front_axis": "+Z",
+      "front_axis_space": "godot_y_up",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "origin_contract": "bottom_center_at_rest_bbox",
+      "module_pitch_m": 5,
+      "scope": "boss_local",
+      "serves_room_types": [],
+      "collision_owner": "godot_wrapper",
+      "has_emissive": true,
+      "instance_count": 1,
+      "collection": "OUT_display_command_5m",
+      "root_object": "ROOT_display_command_5m",
+      "decorative_armature": false,
+      "materials": [
+        "paint",
+        "metal",
+        "seal",
+        "emissive"
+      ],
+      "belongs_to_asset": "ENM-BOSS-PLATFORM-SENTINEL-3D"
+    },
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-REACTOR-FASCIA-5M",
+      "slug": "reactor_fascia_5m",
+      "name_zh": "算力舱外沿 5 米",
+      "component_family": "reactor_fascia",
+      "category": "structure",
+      "description": "外沿承重梁与灯，算力机柜面后收0.46m形成凹入式散热带",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "bounds_target_xyz_m": [
+        5,
+        1.2,
+        4.35
+      ],
+      "front_axis": "+Z",
+      "front_axis_space": "godot_y_up",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "origin_contract": "bottom_center_at_rest_bbox",
+      "module_pitch_m": 5,
+      "scope": "boss_local",
+      "serves_room_types": [],
+      "collision_owner": "godot_wrapper",
+      "has_emissive": true,
+      "instance_count": 20,
+      "collection": "OUT_reactor_fascia_5m",
+      "root_object": "ROOT_reactor_fascia_5m",
+      "decorative_armature": false,
+      "materials": [
+        "paint",
+        "metal",
+        "seal",
+        "emissive"
+      ],
+      "belongs_to_asset": "ENM-BOSS-PLATFORM-SENTINEL-3D"
+    },
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-GUARDRAIL-5M",
+      "slug": "guardrail_5m",
+      "name_zh": "信号护栏 5 米",
+      "component_family": "guardrail",
+      "category": "structure",
+      "description": "双横杆、警示条、立柱发光节点",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "bounds_target_xyz_m": [
+        5,
+        0.42,
+        1.18
+      ],
+      "front_axis": "+Z",
+      "front_axis_space": "godot_y_up",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "origin_contract": "bottom_center_at_rest_bbox",
+      "module_pitch_m": 5,
+      "scope": "boss_local",
+      "serves_room_types": [],
+      "collision_owner": "godot_wrapper",
+      "has_emissive": true,
+      "instance_count": 17,
+      "collection": "OUT_guardrail_5m",
+      "root_object": "ROOT_guardrail_5m",
+      "decorative_armature": false,
+      "materials": [
+        "paint",
+        "metal",
+        "seal",
+        "emissive"
+      ],
+      "belongs_to_asset": "ENM-BOSS-PLATFORM-SENTINEL-3D"
+    },
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-CORNER-BEACON",
+      "slug": "corner_beacon",
+      "name_zh": "边角装甲与信标",
+      "component_family": "edge_beacon",
+      "category": "support",
+      "description": "防撞角甲、信标、转角接口",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "bounds_target_xyz_m": [
+        0.9,
+        0.9,
+        1.8
+      ],
+      "front_axis": "+Z",
+      "front_axis_space": "godot_y_up",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "origin_contract": "bottom_center_at_rest_bbox",
+      "module_pitch_m": null,
+      "scope": "boss_local",
+      "serves_room_types": [],
+      "collision_owner": "godot_wrapper",
+      "has_emissive": true,
+      "instance_count": 4,
+      "collection": "OUT_corner_beacon",
+      "root_object": "ROOT_corner_beacon",
+      "decorative_armature": false,
+      "materials": [
+        "paint",
+        "metal",
+        "seal",
+        "emissive"
+      ],
+      "belongs_to_asset": "ENM-BOSS-PLATFORM-SENTINEL-3D"
+    },
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-DECK-GIRDER-5M",
+      "slug": "deck_girder_5m",
+      "name_zh": "走面至机腹承重框 5 米",
+      "component_family": "deck_girder",
+      "category": "structure",
+      "description": "螺接甲板与底舱的5米格构承重框及停机状态检修灯；下部按四个独立承力与断裂区段建模",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "bounds_target_xyz_m": [
+        5,
+        5,
+        4.1
+      ],
+      "front_axis": "+Z",
+      "front_axis_space": "godot_y_up",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "origin_contract": "bottom_center_at_rest_bbox",
+      "module_pitch_m": 5,
+      "scope": "boss_local",
+      "serves_room_types": [],
+      "collision_owner": "godot_wrapper",
+      "has_emissive": true,
+      "instance_count": 25,
+      "collection": "OUT_deck_girder_5m",
+      "root_object": "ROOT_deck_girder_5m",
+      "decorative_armature": false,
+      "materials": [
+        "paint",
+        "metal",
+        "seal",
+        "emissive"
+      ],
+      "belongs_to_asset": "ENM-BOSS-PLATFORM-SENTINEL-3D"
+    },
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-KEEL-CRADLE-5M",
+      "slug": "keel_cradle_5m",
+      "name_zh": "底部承重舱 5 米",
+      "component_family": "keel_cradle",
+      "category": "structure",
+      "description": "中央下沉机腹、加强肋和通风夹层；下部按四个独立承力与断裂区段建模",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "bounds_target_xyz_m": [
+        5,
+        5,
+        1.95
+      ],
+      "front_axis": "+Z",
+      "front_axis_space": "godot_y_up",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "origin_contract": "bottom_center_at_rest_bbox",
+      "module_pitch_m": 5,
+      "scope": "boss_local",
+      "serves_room_types": [],
+      "collision_owner": "godot_wrapper",
+      "has_emissive": true,
+      "instance_count": 9,
+      "collection": "OUT_keel_cradle_5m",
+      "root_object": "ROOT_keel_cradle_5m",
+      "decorative_armature": false,
+      "materials": [
+        "paint",
+        "metal",
+        "seal",
+        "emissive"
+      ],
+      "belongs_to_asset": "ENM-BOSS-PLATFORM-SENTINEL-3D"
+    },
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-ARTICULATED-GRAPPLE",
+      "slug": "articulated_grapple",
+      "name_zh": "大型机械触手",
+      "component_family": "arm_grapple",
+      "category": "facility",
+      "description": "1.5倍大型机械掌，粗腕回转座、宽掌及两块平头指腹、持拍与爆裂骨",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "bounds_target_xyz_m": [
+        5.7,
+        8.0,
+        12.2
+      ],
+      "front_axis": "+Z",
+      "front_axis_space": "godot_y_up",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "origin_contract": "bottom_center_at_rest_bbox",
+      "module_pitch_m": null,
+      "scope": "boss_local",
+      "serves_room_types": [],
+      "collision_owner": "godot_wrapper",
+      "has_emissive": true,
+      "instance_count": 4,
+      "collection": "OUT_articulated_grapple",
+      "root_object": "ROOT_articulated_grapple",
+      "decorative_armature": true,
+      "materials": [
+        "paint",
+        "metal",
+        "seal",
+        "emissive"
+      ],
+      "belongs_to_asset": "ENM-BOSS-PLATFORM-SENTINEL-3D"
+    },
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-PERIMETER-SENTRY",
+      "slug": "perimeter_sentry",
+      "name_zh": "周界机械枪臂",
+      "component_family": "arm_sentry",
+      "category": "facility",
+      "description": "每侧4座枪架。出舱后保持水平架起，枪身在台外，可单独横摆与后坐",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "bounds_target_xyz_m": [
+        2.3,
+        8.3,
+        4.2
+      ],
+      "front_axis": "+Z",
+      "front_axis_space": "godot_y_up",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "origin_contract": "bottom_center_at_rest_bbox",
+      "module_pitch_m": null,
+      "scope": "boss_local",
+      "serves_room_types": [],
+      "collision_owner": "godot_wrapper",
+      "has_emissive": true,
+      "instance_count": 16,
+      "collection": "OUT_perimeter_sentry",
+      "root_object": "ROOT_perimeter_sentry",
+      "decorative_armature": true,
+      "materials": [
+        "paint",
+        "metal",
+        "seal",
+        "emissive"
+      ],
+      "belongs_to_asset": "ENM-BOSS-PLATFORM-SENTINEL-3D"
+    }
+  ],
+  "revision_history": [
+    {
+      "previous_plan_sha256": "c44e492c1031044e64cfdaa48eef24edaee0a6f24b8adbf6b2be4850865861a8",
+      "reason": "Blender 首轮整体验看后，在二次建模前冻结独立承重框，连接走面、裙壁和下沉机腹。",
+      "added_component_id": "ENV-EXP01-BOSS02B-DECK-GIRDER-5M"
+    },
+    {
+      "previous_plan_sha256": "605bd218eeec9694db7b1ce7e7142162fc68a79514a64183b58e2da7b93bb3d4",
+      "reason": "放大机械臂与枪臂，显示屏赋予三阶段切图，格构、边缘设施和枪臂按25个台面区块随骨骼逐环坍塌。"
+    },
+    {
+      "previous_plan_sha256": "506213f935988c820b8c607e16e893a73d96bed3f7f4589fa0bd918651e1fd2f",
+      "reason": "业主确认25块屏幕拼接为整块大画面。统一平台UV、全局正常滚动和故障前亮度。"
+    },
+    {
+      "previous_plan_sha256": "3c5ed3c0fc09166dd0a5fa6a1a938fc730dc0e87b39ecfb9d7e3d6770e15155f",
+      "reference": {
+        "attachment": "codex-clipboard-19bb3fae-3dcb-4ed5-b513-db932b917d44.png",
+        "sha256": "82b8cd1bbd8ad842b27e98ae12c3b381c0303a3ecf721a50ef0374d1d98348e8"
+      },
+      "reason": "周界枪臂新增独立下摆承力节，枪身完整包络留在平台外，大臂加重敲击与头部转动，台面每格下部四路断件。"
+    },
+    {
+      "previous_plan_sha256": "0e375343c2625ac724b7bfadfee064a27201b0f87f50e8994353ce60a5ed79a4",
+      "reason": "业主确认远征01独立首领，迁出环境资产。大臂整体×1.5并改掌拍，每侧四枪和一大臂。"
+    }
+  ],
+  "articulation": {
+    "fps": 30,
+    "frame_origin": 1,
+    "naming": "lower_snake_case, per role names on pose action",
+    "collision_aim_interpretation": "The sentry muzzle path during firing is a horizontal visual plane at Z=1.30m above the nominal walk surface.",
+    "unit_axes": "Blender +Z up, each mount points local -Y outward, rigid link pivots and sockets",
+    "debris": "Each large arm has part bones for authored fragmentation, one-shot detaches independently.",
+    "collapse": "Outer 16 then inner 8. Each failed tile has four physical underframe chunks which move separately from the deck plate and each other. Central tile stays.",
+    "studio_verification": "Gameplay actions and screen choreography are represented in Blender. Device collision policy and gameplay triggers are out of this source delivery.",
+    "display_canvas": "25 glass panels form one continuous 25 by 25 m canvas. Per-tile UV breakup and blackout occur on damage.",
+    "gun_clearance": "All vertices of the main gun body, yoke, receiver and barrel remain outside their corresponding undeformed deck side while mounted and operating.",
+    "interleaves": "Separate short scan and servo pause clips for both mechanical unit roles.",
+    "sentries_per_side": 4,
+    "grapples_per_side": 1,
+    "scale_from_prototype": 1.5,
+    "sentry_deploy_terminal_state": "persistent horizontal inward guard outside the deck",
+    "strike": "flat three-pad palm at contact, same pose held 12 frames, rebound",
+    "lower_greys": "pale→titan, alloy→titan, steel→frame and titan→frame only on the lower structure"
+  },
+  "integrity_scope": "player-supplied revisions to the visual prototype now assigned to an independent Boss",
+  "boss_content_id": "boss_exp01_platform_sentinel",
+  "standalone_boss": true
+}

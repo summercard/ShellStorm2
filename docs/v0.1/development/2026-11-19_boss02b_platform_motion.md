@@ -1,17 +1,19 @@
 # Boss02-B v023 骨骼、战斗动作与台面坍塌
 
+本篇为早期原型记录。当前资产已独立登记为武装平台首领，旧源及原 AssetID 对照见 [源沿革](../../../art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/source_lineage.json)。
+
 游戏 0.1.0。FeatureID 为 ASSET-PIPELINE / WORLD-BLOCKS。交付对象为 `ENV-EXP01-BOSS02B-MECHANICAL-PLATFORM`。参考图校验值见组件计划。
 
 ## 模型与绑定
 
-- [Blender 平台母版](../../../art_source/environments/tower_zones/expedition/source/common_components/v023/env_boss02b_mechanical_platform_source_v023.blend) 含可编辑的组件拼装场景和战斗回放场景。9 个定义、125 个组件实例登记在 [组件目录](../../../art_source/environments/tower_zones/expedition/source/common_components/v023/component_catalog.json)。
+- Blender 平台母版 含可编辑的组件拼装场景和战斗回放场景。9 个定义、125 个组件实例登记在 组件目录。
 - 大臂底部主转鼓直径由 2.36 米增至 3.20 米，外加加厚法兰、承座、泵缸与护甲。露出肩、肘、腕和独立指爪轴。每臂有 12 根断件骨，对应主体和发光几何。机柜面内收 0.46 米，凹入裙板。
 - 枪臂两段长度由 1.85/1.60 米增至 2.64/2.18 米。从转轴到枪口的模型长度由约 2.48 米增至约 3.98 米。枪座有独立横摆圈、俯仰叉、后坐滑轨、伸缩枪管及枪口标记。
 - 运动件以 1.0 单骨权重绑定。甲板有 25 个独立区块骨，护栏、灯、格架、裙壁与枪臂依附对应骨骼。四个大臂挂座随相邻区块下坠，爆裂部分先独立散开。
 
 ## 剪辑
 
-使用 30 fps，Blender 第 1 帧对应 F0。末帧为单次交接或循环首尾对齐，时长和动作事件见 [动画清单](../../../art_source/environments/tower_zones/expedition/source/common_components/v023/animation_manifest.json)。
+使用 30 fps，Blender 第 1 帧对应 F0。末帧为单次交接或循环首尾对齐，时长和动作事件见 动画清单。
 
 | 归属 | 剪辑 |
 |---|---|

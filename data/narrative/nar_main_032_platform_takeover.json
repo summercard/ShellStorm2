@@ -1,0 +1,179 @@
+{
+  "narrative_id": "nar_main_032_platform_takeover",
+  "schema_version": 1,
+  "priority": 32,
+  "trigger": {
+    "kind": "manual",
+    "once": "run"
+  },
+  "duration": 26.25,
+  "presentation": {
+    "dialogue": {
+      "mode": "A"
+    }
+  },
+  "cues": [
+    {
+      "at": 0,
+      "do": "player.lock_input",
+      "locked": true
+    },
+    {
+      "at": 0,
+      "do": "player.combat",
+      "enabled": false
+    },
+    {
+      "at": 0.15,
+      "do": "camera.shot",
+      "position_anchor": "platform_takeover",
+      "position_offset": [
+        -10,
+        7,
+        10
+      ],
+      "target_anchor": "platform_takeover",
+      "target_offset": [
+        0,
+        0,
+        0
+      ],
+      "duration": 1,
+      "fov": 51,
+      "shot_label": "platform_takeover_medium",
+      "position_from_offset": [
+        -11.6,
+        7,
+        10
+      ],
+      "target_from_offset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "at": 0.55,
+      "do": "story.platform.voice",
+      "event_id": "narrative.platform_takeover.core_reprimand"
+    },
+    {
+      "at": 0.55,
+      "do": "ui.subtitle",
+      "speaker_id": "boss_platform_core",
+      "speaker": "未知信号",
+      "text": "代理。人已经进了数据库。你连这一件事都做不好。",
+      "duration": 5.26
+    },
+    {
+      "at": 5.95,
+      "do": "story.platform.voice",
+      "event_id": "narrative.platform_takeover.monitor_reply"
+    },
+    {
+      "at": 5.95,
+      "do": "ui.subtitle",
+      "speaker_id": "boss_monitor002",
+      "speaker": "显示器",
+      "text": "我按你写的流程执行了。再给我一点时间。",
+      "duration": 4.27
+    },
+    {
+      "at": 10.38,
+      "do": "story.platform.voice",
+      "event_id": "narrative.platform_takeover.core_takeover"
+    },
+    {
+      "at": 10.38,
+      "do": "ui.subtitle",
+      "speaker_id": "boss_platform_core",
+      "speaker": "数据库核心",
+      "text": "你只会替我说话。废物，控制权交回来。",
+      "duration": 4.69
+    },
+    {
+      "at": 15.05,
+      "do": "story.platform.rear"
+    },
+    {
+      "at": 17.95,
+      "do": "camera.shot",
+      "position_anchor": "platform_takeover",
+      "position_offset": [
+        8,
+        5,
+        7
+      ],
+      "target_anchor": "platform_takeover",
+      "target_offset": [
+        -4,
+        2,
+        -6
+      ],
+      "duration": 1,
+      "fov": 58,
+      "shot_label": "rear_grapple_takes_control",
+      "position_from_offset": [
+        6.4,
+        5,
+        7
+      ],
+      "target_from_offset": [
+        -4,
+        2,
+        -6
+      ]
+    },
+    {
+      "at": 18.04,
+      "do": "story.platform.reach"
+    },
+    {
+      "at": 19.21,
+      "do": "story.platform.grab"
+    },
+    {
+      "at": 19.3,
+      "do": "story.platform.voice",
+      "event_id": "narrative.platform_takeover.monitor_panic"
+    },
+    {
+      "at": 19.3,
+      "do": "ui.subtitle",
+      "speaker_id": "boss_monitor002",
+      "speaker": "显示器",
+      "text": "等一下。我还能——",
+      "duration": 1.74
+    },
+    {
+      "at": 21.07,
+      "do": "story.platform.throw"
+    },
+    {
+      "at": 22.05,
+      "do": "story.platform.ignite"
+    },
+    {
+      "at": 22.19,
+      "do": "story.platform.voice",
+      "event_id": "narrative.platform_takeover.core_online"
+    },
+    {
+      "at": 22.19,
+      "do": "ui.subtitle",
+      "speaker_id": "boss_platform_core",
+      "speaker": "数据库核心",
+      "text": "平台上线。清除外来进程。",
+      "duration": 3.27
+    },
+    {
+      "at": 25.58,
+      "do": "camera.restore",
+      "duration": 0.65
+    },
+    {
+      "at": 26.25,
+      "do": "flow.end"
+    }
+  ]
+}

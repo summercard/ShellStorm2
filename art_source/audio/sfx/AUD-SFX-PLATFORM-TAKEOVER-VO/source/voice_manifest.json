@@ -1,0 +1,32 @@
+{
+  "asset_id": "AUD-SFX-PLATFORM-TAKEOVER-VO",
+  "version": "v001",
+  "source": "Local Microsoft Speech synthesizer, Chinese Huihui and Kangkang; original game dialogue. No external recording.",
+  "files": {
+    "core_reprimand": {
+      "master": "art_source/audio/sfx/AUD-SFX-PLATFORM-TAKEOVER-VO/source/platform_takeover_core_reprimand_master.wav",
+      "runtime": "src/assets/audio/sfx/platform_takeover_core_reprimand_v001.ogg",
+      "sha256": "04512e975c68fc93d8930e0738a71159149ef190927ad845925e0952ef2e1097"
+    },
+    "monitor_reply": {
+      "master": "art_source/audio/sfx/AUD-SFX-PLATFORM-TAKEOVER-VO/source/platform_takeover_monitor_reply_master.wav",
+      "runtime": "src/assets/audio/sfx/platform_takeover_monitor_reply_v001.ogg",
+      "sha256": "95a333bfb5ba1d695da595864e8bba09bc2922db8db7f2bad4381489e865c7ab"
+    },
+    "core_takeover": {
+      "master": "art_source/audio/sfx/AUD-SFX-PLATFORM-TAKEOVER-VO/source/platform_takeover_core_takeover_master.wav",
+      "runtime": "src/assets/audio/sfx/platform_takeover_core_takeover_v001.ogg",
+      "sha256": "341c887138df31fde90b5f47c4018f8ae34a48f96a9904bd1512bf5baf561a1e"
+    },
+    "monitor_panic": {
+      "master": "art_source/audio/sfx/AUD-SFX-PLATFORM-TAKEOVER-VO/source/platform_takeover_monitor_panic_master.wav",
+      "runtime": "src/assets/audio/sfx/platform_takeover_monitor_panic_v001.ogg",
+      "sha256": "071009e39ef30a68c11f3e51b5b6e652165d2ef3a047b9d4ff36d3d88328d616"
+    },
+    "core_online": {
+      "master": "art_source/audio/sfx/AUD-SFX-PLATFORM-TAKEOVER-VO/source/platform_takeover_core_online_master.wav",
+      "runtime": "src/assets/audio/sfx/platform_takeover_core_online_v001.ogg",
+      "sha256": "4ea828f291a393453669da581c59f6a3913031840d83aff6748c184b40f6fc85"
+    }
+  }
+}

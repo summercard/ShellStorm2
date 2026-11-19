@@ -338,3 +338,6 @@ art_source/**/*.blend1
 
 # Godot 临时文件
 project.godot~RF*
+
+# Platform Sentinel canonical material import bindings
+!/assets/art/enemies/bosses/enm_boss_platform_sentinel/components/**/*.glb.import

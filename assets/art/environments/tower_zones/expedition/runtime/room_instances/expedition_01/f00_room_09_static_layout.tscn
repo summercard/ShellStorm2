@@ -657,6 +657,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.15, 0)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_RING_BEAM"
 metadata/authored_slot_role = "room_type_component"
 
+[node name="CollisionBody" parent="ceiling_ring_beam" index="1"]
+position = Vector3(0, 8.873994, 0)
+
 [node name="corner_guard" parent="." unique_id=2051915423 instance=ExtResource("25_p61qp")]
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CORNER_GUARD"
 metadata/authored_slot_role = "room_type_component"
@@ -671,6 +674,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.2, 0)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE"
 metadata/authored_slot_role = "room_type_component"
+
+[node name="CollisionBody" parent="wall_top_service" index="1"]
+position = Vector3(0, 8.823994, 0)
 
 [node name="ConnectionPorts" type="Node3D" parent="." unique_id=1328787450]
 metadata/connection_port_count = 2
@@ -697,3 +703,7 @@ metadata/connected = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07392943, 3.4097147, -0.23207903)
 light_color = Color(0.17921922, 0.31672853, 1, 1)
 light_energy = 5.764
+
+[editable path="ceiling_ring_beam"]
+
+[editable path="wall_top_service"]

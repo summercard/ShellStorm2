@@ -10,16 +10,17 @@ var _shown_id := "?"
 
 func _ready() -> void:
 	name = "SpecialItemEquipmentSlot"
-	custom_minimum_size = Vector2(100, 112)
 	var title := Label.new()
-	title.text = "特殊道具 · 右键"
+	title.text = "特殊道具"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_color_override("font_color", UIPalette.TEXT_GOLD)
 	title.add_theme_font_size_override("font_size", 12)
 	add_child(title)
 	_button = Button.new()
-	_button.custom_minimum_size = Vector2(84, 58)
+	_button.name = "SpecialItemButton"
+	_button.custom_minimum_size = Vector2(50, 50)
+	_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_button.add_theme_stylebox_override("normal", UIStyleFactory.make_inventory_surface(true))
-	_button.tooltip_text = "拖入背包中的特殊道具装备；点击此格解除绑定。数量仍由背包管理。"
 	_button.set_drag_forwarding(Callable(), _accepts, _receive)
 	_button.pressed.connect(_unequip)
 	add_child(_button)
@@ -28,9 +29,15 @@ func _ready() -> void:
 	_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_button.add_child(_icon)
 	_label = Label.new()
+	_label.name = "SpecialItemCount"
+	_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
 	_label.add_theme_font_size_override("font_size", 11)
-	_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	add_child(_label)
+	_button.add_child(_label)
+	_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_label.offset_right = -3
+	_label.offset_bottom = -2
 	_refresh()
 
 func configure(value: SpecialItemController3D) -> void:
@@ -69,4 +76,8 @@ func _refresh() -> void:
 			_icon.clear_model()
 		else:
 			_icon.configure(SpecialItemCatalog.get_item(content_id))
-	_label.text = "拖入道具 / 点击背包道具" if content_id.is_empty() else "%s ×%d" % [state.name, state.count]
+	var binding := "未绑定" if content_id.is_empty() else "%s ×%d" % [state.name, state.count]
+	_label.text = "" if content_id.is_empty() else "×%d" % state.count
+	_button.tooltip_text = "%s\n拖入背包中的特殊道具装备；点击此格解除绑定。数量仍由背包管理。" % binding
+	_button.accessibility_name = "特殊道具：%s" % binding
+	_button.accessibility_description = "绑定不转移物品；激活此格可解除绑定。"

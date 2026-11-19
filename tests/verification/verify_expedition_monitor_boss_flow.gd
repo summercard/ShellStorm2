@@ -110,6 +110,24 @@ func _ready() -> void:
 			if enemy != boss and enemy.ai_state != "dead":
 				remaining_guard += 1
 		check(remaining_guard == 0, "Boss 房无护场随从，Boss 阵亡后场上无残留活物")
+	# 与平台首领接力的数据库房：显示器死亡不能触发原来的最终奖励。
+	var sentinel := tower._platform_sentinel(room)
+	if sentinel != null:
+		check(not room.cleared and not tower.is_room_boss_defeated(room.room_id), "显示器首胜只进入接管")
+		var deploy_deadline := Time.get_ticks_msec() + 14000
+		while sentinel.stage != PlatformSentinelEncounter3D.Stage.COMBAT and Time.get_ticks_msec() < deploy_deadline:
+			await get_tree().process_frame
+		check(sentinel.stage == PlatformSentinelEncounter3D.Stage.COMBAT, "已出舱到达平台战斗")
+		if sentinel.stage == PlatformSentinelEncounter3D.Stage.COMBAT:
+			tower.player.global_position = sentinel.to_global(Vector3(0.0, 0.1, 0.0))
+			for relay in sentinel._arm_targets:
+				relay.take_damage(PlatformSentinelEncounter3D.ARM_HP)
+			sentinel._clock = PlatformSentinelDeck3D.FINISH
+			await get_tree().physics_frame
+			await get_tree().physics_frame
+			tower.player.global_position = sentinel.to_global(Vector3(0, 0.08, 0.65))
+			tower.player.velocity = Vector3.ZERO
+			check(tower.player.request_interaction_for_test(), "央区通过普通交互关闭核心")
 	# 无随从可补杀；仍保留等待窗口，覆盖清房信号延迟到达的情况。
 	var deadline := Time.get_ticks_msec() + 18000
 	while not room.cleared and Time.get_ticks_msec() < deadline:
@@ -139,6 +157,7 @@ func _ready() -> void:
 	# 首领箱挂在「首领阵亡」上：Boss 倒下时就该在，不等随从与后续波次清完。
 	check(room.find_chest_by_id("drop_boss") != null, "首领阵亡掉落一只宝箱")
 	check(tower._try_open_room_door("extraction"), "清房后无需钥匙即可开启撤离方向门")
+	await get_tree().create_timer(0.22, false).timeout
 	check(bool(tower._open_edges.get(tower._edge_key(room.room_id, "extraction"), false)), "撤离连接实际开启")
 	finish()
 

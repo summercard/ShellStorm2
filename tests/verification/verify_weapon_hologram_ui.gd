@@ -78,6 +78,7 @@ func _ready() -> void:
 	_dungeon.add_child(light)
 	_evidence["background_fixture"] = "正式Dungeon3D、Player3D、游戏相机；专项额外地板与照明"
 	_check_effect_brief_catalog()
+	await _check_hud_corners()
 	await _check_board_and_k()
 	await _check_purchases()
 	await _check_compatibility_panels()
@@ -135,8 +136,9 @@ func _check_root_connection(board: Control, label: String) -> void:
 	for point: Vector2 in points:
 		finite = finite and point.is_finite()
 	_check(finite, label + "根连线无NaN/Inf")
-	var expected_midline := Vector2(viewport_start.x, clampf(card_entry.y, viewport_start.y, viewport_end.y))
-	_check(points[0].distance_to(expected_midline) < 0.1 and points[0].y < board.size.y - 30, label + "根起点位于枪械区与卡巢区中线而非枪身模型")
+	var divider_x := clampf(board.size.x * 0.235, 180.0, 268.0) + 12.0
+	var expected_midline := Vector2(divider_x, expected_entry.y)
+	_check(points[0].distance_to(expected_midline) < 0.1 and absf(points[0].x - viewport_start.x) > 12.0 and points[0].distance_to(center) > 30.0, label + "根起点接在实际绘制的分隔线，不是视口边或枪身中心")
 	_check(points[1].x > points[0].x and is_equal_approx(points[1].y, points[0].y), label + "根第一段向右水平")
 	_check(points[3].distance_to(expected_entry) < 0.1 and bool(connection.get("clipped", false)) == not visible_entry, label + "终点为首卡实际左中或滚出后的viewport边")
 	_check(bool(connection.get("active", false)) == bool((snapshot.cards as Array)[0].occupied), label + "根线仅已刻印active")
@@ -186,6 +188,96 @@ func _check_inactive_back_palette(board: Control, label: String) -> void:
 	_check(empty_count > 0 and dark_palette_ok, label + "空巢含下一槽使用低亮度灰蓝卡背")
 	_check(occupied_unchanged, label + "已刻印卡面不附加压暗材质")
 
+func _hud_rects() -> Dictionary:
+	var result := {}
+	for node_name: String in ["PlayerStatusBlock", "DungeonMinimap3D", "HudDashCooldownRing", "CurrentWeaponPanel", "QuickItemHUD_0", "QuickItemHUD_1", "RunLootReadout"]:
+		var node := _dungeon.find_child(node_name, true, false) as Control
+		result[node_name] = node.get_global_rect()
+	return result
+
+func _hud_settled(obscured: bool, coin_obscured: bool) -> bool:
+	return is_equal_approx(float(_dungeon.get("_hud_corner_progress")), float(obscured)) and is_equal_approx(float(_dungeon.get("_hud_coin_progress")), float(coin_obscured))
+
+func _check_hud_offscreen(balance_exempt: bool, label: String) -> void:
+	var viewport := get_viewport().get_visible_rect()
+	var rects := _hud_rects()
+	for key: String in rects:
+		var visible := viewport.intersects(rects[key])
+		_check(visible == (balance_exempt and key == "RunLootReadout"), "%s %s" % [label, key])
+
+func _check_hud_corners() -> void:
+	_set_stage("HUD四角与背包模态")
+	var inventory := _dungeon.get("_inventory_ui") as Control
+	var rest := _hud_rects()
+	inventory.call("set_inventory_panel_open", true)
+	await _wait(func() -> bool: return _hud_settled(true, true), "背包打开时HUD退到四角")
+	_check_hud_offscreen(false, "背包不豁免余额")
+	for i in range(3):
+		inventory.call("set_inventory_panel_open", false)
+		await get_tree().process_frame
+		inventory.call("set_inventory_panel_open", true)
+		await get_tree().process_frame
+	inventory.call("set_inventory_panel_open", false)
+	await _wait(func() -> bool: return _hud_settled(false, false), "背包快关后HUD归位")
+	_check(_hud_rects() == rest, "背包快开关后四角精确复位")
+	var reduced: Variant = ProjectSettings.get_setting("accessibility/reduce_motion", false)
+	ProjectSettings.set_setting("accessibility/reduce_motion", true)
+	inventory.call("set_inventory_panel_open", true)
+	_check(_hud_settled(true, true), "减少动效：背包打开立即退场")
+	inventory.call("set_inventory_panel_open", false)
+	_check(_hud_settled(false, false) and _hud_rects() == rest, "减少动效：背包关闭立即无漂移归位")
+	ProjectSettings.set_setting("accessibility/reduce_motion", reduced)
+	_evidence["hud_rest_rects"] = rest
+	await _capture("hud_restored")
+
+func _preview_id(board: Control) -> String:
+	return str(_board_snapshot(board).get("weapon_instance_id", ""))
+
+func _slide_idle(presentation: Control) -> bool:
+	return int(presentation.get("_slide").get("requested_slot")) < 0
+
+func _press_arrow(presentation: Control, next: bool) -> void:
+	var button := presentation.find_child("PreviewNextWeapon" if next else "PreviewPreviousWeapon", true, false) as Button
+	_check(button != null and not button.disabled, "正式翻页箭头可用")
+	if button != null:
+		button.pressed.emit()
+
+func _check_preview_slide(presentation: Control, moving_page: Control, board: Control, label: String) -> void:
+	var origin := moving_page.position
+	var active := _player.get_active_weapon_slot()
+	var current := _player.get_equipped_weapon_item_for_slot(active)
+	var alternate := _player.get_equipped_weapon_item_for_slot(1 - active)
+	var primary_id := _player.get_equipped_weapon_instance_id()
+	var secondary_id := _player.get_equipped_weapon_instance_id_for_slot(1 - active)
+	_press_arrow(presentation, true)
+	if await _wait(func() -> bool: return moving_page.position.x < origin.x - 4.0 and _preview_id(board) == primary_id, label + "旧页向左退场且暂不换枪"):
+		_check(is_equal_approx(moving_page.position.y, origin.y), label + "退场只移动水平方向")
+		await _capture(label + "_outgoing")
+	if await _wait(func() -> bool: return moving_page.position.x > origin.x + 4.0 and _preview_id(board) == secondary_id, label + "新页从右侧进场"):
+		await _capture(label + "_incoming")
+	await _wait(func() -> bool: return _slide_idle(presentation), label + "进场结束")
+	_check(moving_page.position.is_equal_approx(origin) and _preview_id(board) == secondary_id, label + "新页归位")
+	# 模拟视口改变和方向反转；旧 tween 不得留下离屏终点。
+	_press_arrow(presentation, false)
+	await get_tree().process_frame
+	var window := get_window()
+	var initial := window.size
+	window.size = initial + Vector2i(100, 0)
+	await get_tree().process_frame
+	for i in range(4):
+		_press_arrow(presentation, i % 2 == 0)
+		await get_tree().process_frame
+	window.size = initial
+	await _wait(func() -> bool: return _slide_idle(presentation), label + "快切与resize后结束")
+	_check(moving_page.is_visible_in_tree() and moving_page.position.is_equal_approx(origin) and _preview_id(board) == primary_id, label + "快切后在原点显示当前枪")
+	_check(_player.get_active_weapon_slot() == active and _player.get_equipped_weapon_item_for_slot(active) == current and _player.get_equipped_weapon_item_for_slot(1 - active) == alternate, label + "只读预览不切枪或改写任一实例")
+	var previous: Variant = ProjectSettings.get_setting("accessibility/reduce_motion", false)
+	ProjectSettings.set_setting("accessibility/reduce_motion", true)
+	_press_arrow(presentation, true)
+	_check(_slide_idle(presentation) and moving_page.position.is_equal_approx(origin) and _preview_id(board) == secondary_id, label + "减少动效即时换页，无水平位移")
+	_press_arrow(presentation, false)
+	ProjectSettings.set_setting("accessibility/reduce_motion", previous)
+
 func _check_board_and_k() -> void:
 	_set_stage("正式K页与通用步枪8/10/12巢")
 	var rifle := WeaponInstance.from_item(ItemRegistry.get_instance().get_item("weapon_rifle"))
@@ -208,6 +300,10 @@ func _check_board_and_k() -> void:
 		var source: AssemblyNode = _player.get_weapon_tree().get_root() if FateCardGameBridge.requires_source_selection(card) else null
 		var result := FateCardGameBridge.apply_card(card, source)
 		_check(bool(result.get("success", false)), "领域应用四种不同卡：" + card.get_stable_card_id())
+	var alternate := WeaponInstance.from_item(ItemRegistry.get_instance().get_item("weapon_shotgun"))
+	var alternate_slot := 1 - _player.get_active_weapon_slot()
+	_check(alternate != null and bool(_player.equip_weapon_item_to_slot(alternate.to_item_dictionary(), alternate_slot).get("success", false)), "副槽真实装备仅作只读浏览夹具")
+	var hud_rest := _hud_rects()
 	var key := InputEventKey.new()
 	key.keycode = KEY_K
 	key.physical_keycode = KEY_K
@@ -295,8 +391,17 @@ func _check_board_and_k() -> void:
 	panel.show_panel()
 	await _wait(func() -> bool: return _panel_idle(panel), "快速开闭最终展开")
 	_check(panel.visible and panel.scale.is_equal_approx(Vector2.ONE) and panel.get_global_rect().get_center().distance_to(center) < 1.0, "快速开闭无缩放累积及布局漂移")
+	await _wait(func() -> bool: return _hud_settled(true, true), "K页四角退场")
+	_check_hud_offscreen(false, "K页不豁免余额")
+	_dungeon.call("_start_player_status_shake")
+	_dungeon.call("_tick_player_status_shake", 0.03)
+	var shaken := _hud_rects()
+	_dungeon.call("_end_player_status_shake")
+	_check(shaken["PlayerStatusBlock"].position.distance_to(_hud_rects()["PlayerStatusBlock"].position) > 0.1, "受击震动仍叠加到已退场的状态块")
+	_check_hud_offscreen(false, "震动结束不归还模态位移")
+	await _check_preview_slide(panel, panel, board, "k_preview")
 	var original := _player.get_equipped_weapon_item().duplicate(true)
-	var candidate := WeaponInstance.from_item(ItemRegistry.get_instance().get_item("weapon_shotgun"))
+	var candidate := WeaponInstance.from_item(ItemRegistry.get_instance().get_item("weapon_pistol"))
 	var other := candidate.to_item_dictionary() if candidate != null else {}
 	var switched := _player.equip_weapon_item(other)
 	_evidence["weapon_switch_result"] = switched
@@ -307,9 +412,13 @@ func _check_board_and_k() -> void:
 	_check(bool(_player.equip_weapon_item(original).get("success", false)), "恢复原武器")
 	await _wait(func() -> bool: return int(_board_snapshot(board).used) == 4, "原枪重绑恢复四槽")
 	_evidence["k_board"] = _board_snapshot(board)
+	_press_arrow(panel, true)
+	await get_tree().process_frame
 	panel.hide_panel()
 	await _wait(func() -> bool: return not panel.visible, "K关闭完整动画")
 	_check(not _player.input_locked, "K完全关闭后释放输入")
+	await _wait(func() -> bool: return _hud_settled(false, false), "K页关闭后HUD归位")
+	_check(_hud_rects() == hud_rest and _slide_idle(panel), "K页翻页中退出后四角精确复位、无悬挂翻页")
 
 func _check_effect_brief_catalog() -> void:
 	var expected := {
@@ -429,6 +538,7 @@ func _not_busy() -> bool:
 func _check_purchases() -> void:
 	_set_stage("三卡稳定态与默认否确认")
 	_currency(9999)
+	var hud_rest := _hud_rects()
 	await _open_offer([FateCardPresets.overclock(), FateCardPresets.fate_extra_loot(), FateCardPresets.fate_bless_dead()])
 	var board := _dungeon.get("_fate_board") as Control
 	var overlay := _dungeon.get("_fate_overlay") as Control
@@ -445,6 +555,17 @@ func _check_purchases() -> void:
 	_check_socket_captions(board, "购卡页")
 	_check_root_connection(board, "purchase_stable")
 	await _capture("purchase_stable")
+	await _wait(func() -> bool: return _hud_settled(true, false), "购卡HUD退场但唯一余额保留")
+	_check_hud_offscreen(true, "购卡仅豁免RunLootReadout")
+	var presentation := _dungeon.get("_fate_presentation") as Control
+	var row := presentation.get("row") as Control
+	var row_rect := row.get_global_rect()
+	var offers: Dictionary = _dungeon.call("_export_door_fate_snapshot")
+	await _check_preview_slide(presentation, board, board, "purchase_preview")
+	_check(row.is_visible_in_tree() and row.get_global_rect().is_equal_approx(row_rect) and _offers_ready(), "浏览不移动、隐藏或冻结上方候选")
+	_check(offers == _dungeon.call("_export_door_fate_snapshot"), "浏览不改候选、方位、报价与已购状态")
+	_press_arrow(presentation, true)
+	await _wait(func() -> bool: return _slide_idle(presentation), "购卡停在另一把枪")
 	var money := GameManager.currency
 	var item := _player.get_equipped_weapon_item().duplicate(true)
 	_press(0)
@@ -453,17 +574,22 @@ func _check_purchases() -> void:
 	var focus := get_viewport().gui_get_focus_owner() as Button
 	_check(focus != null and focus.text == "否", "确认默认焦点否")
 	_check(GameManager.currency == money and _player.get_equipped_weapon_item() == item, "确认前不扣款不刻槽")
+	_check(_slide_idle(presentation) and _preview_id(board) == _player.get_equipped_weapon_instance_id() and board.position.is_equal_approx(presentation.call("_board_destination")), "从副枪开始星卡购买，确认前即归回真正目标与布局")
 	await _capture("confirmation")
 	_answer(false)
 	await _wait(_not_busy, "否取消事务完成")
 	_check(GameManager.currency == money and _player.get_equipped_weapon_item() == item, "否取消保持领域和金币")
 	_set_stage("成功提交一次与飞卡")
+	_press_arrow(presentation, false)
+	await get_tree().process_frame
 	_press(0)
 	if not await _wait(_confirm_ready, "再次确认"):
 		return
 	_answer(true)
 	await _wait(func() -> bool: return int(_board_snapshot(board).get("pending_slot", -1)) > 0, "成功飞卡pending阶段")
 	_check(bool(_dungeon.get("_fate_purchase_busy")), "提交期间保持忙锁")
+	var arrow := presentation.find_child("PreviewNextWeapon", true, false) as Button
+	_check(arrow.disabled and _slide_idle(presentation) and _preview_id(board) == _player.get_equipped_weapon_instance_id(), "飞卡期间不允许切预览，pending属于真实目标")
 	_check_socket_captions(board, "在途")
 	var deducted := GameManager.currency
 	var used := _player.get_equipped_weapon_instance().fate_upgrades.size()
@@ -537,10 +663,15 @@ func _check_purchases() -> void:
 			_check(GameManager.currency == money and item == _player.get_equipped_weapon_item(), "来源取消全额退款且不刻槽")
 			_check(not bool((_dungeon.get("_door_fate_purchased") as Array)[0]), "来源取消不标记已购")
 	_set_stage("购卡完整退场")
+	presentation = _dungeon.get("_fate_presentation") as Control
+	_press_arrow(presentation, true)
+	await get_tree().process_frame
 	_dungeon.call("_cancel_door_fate_selection")
 	_check(_player.input_locked, "购卡退场动画结束前输入仍锁")
 	await _wait(func() -> bool: return not bool(_dungeon.get("_door_fate_active")) and _dungeon.get("_fate_overlay") == null, "购卡退场与节点清理")
 	_check(not _player.input_locked, "购卡退场结束解锁")
+	await _wait(func() -> bool: return _hud_settled(false, false), "购卡关闭后HUD归位")
+	_check(_hud_rects() == hud_rest, "购卡多次重开并在翻页中退出，HUD四角精确复位")
 
 func _profile_diff(before: Variant, after: Variant, path := "") -> Array[Dictionary]:
 	var changes: Array[Dictionary] = []

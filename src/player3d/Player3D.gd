@@ -1029,6 +1029,19 @@ func _collect_aim_assist_candidates(aim_dir: Vector3) -> Array[Dictionary]:
 		if not eligible:
 			continue
 		candidates.append({AimAssist3D.KEY_DIRECTION: direction, AimAssist3D.KEY_DISTANCE: distance})
+	for node in tree.get_nodes_in_group("aim_assist_target_3d"):
+		if not node.has_method("get_aim_assist_points"):
+			continue
+		for point: Vector3 in node.call("get_aim_assist_points"):
+			var offset := (point - origin).slide(Vector3.UP)
+			var distance := offset.length()
+			var direction := offset.normalized()
+			var angle_deg := rad_to_deg(absf(flat_aim.angle_to(Vector2(direction.x, direction.z))))
+			if not AimAssist3D.is_eligible(true, EnemyIllumination3D.STATE_ARTIFICIAL_LIGHT, distance, angle_deg):
+				continue
+			var ray := PhysicsRayQueryParameters3D.create(origin + Vector3.UP * 0.82, point, 1, [get_rid()])
+			if get_world_3d().direct_space_state.intersect_ray(ray).is_empty():
+				candidates.append({AimAssist3D.KEY_DIRECTION: direction, AimAssist3D.KEY_DISTANCE: distance})
 	return candidates
 
 

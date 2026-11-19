@@ -45,6 +45,7 @@ const ENTRIES := {
 	"nar_main_031_green_briefing": ROOT + "nar_main_031_green_briefing.json",
 	# 主线 3.2：数据库显示器首领 audience / activation。
 	"nar_main_032_monitor_audience": ROOT + "nar_main_032_monitor_audience.json",
+	"nar_main_032_platform_takeover": ROOT + "nar_main_032_platform_takeover.json",
 	# 主线 3.2 返航通讯：稀土钥匙领取后主动安全信标待办。
 	"nar_main_032_key_return_call": ROOT + "nar_main_032_key_return_call.json",
 	# 主线 3.3：稀土钥匙交接与安装。

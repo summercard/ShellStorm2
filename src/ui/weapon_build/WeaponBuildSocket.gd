@@ -25,6 +25,7 @@ var record: Dictionary = {}
 var pending := false
 var occupied := false
 var next_slot := false
+var compact_display := false
 var _art: Control
 var _face: TextureRect
 var _number: Label
@@ -48,7 +49,7 @@ func _ready() -> void:
 	focus_exited.connect(queue_redraw)
 	resized.connect(_layout)
 
-func configure(index: int, entry: Dictionary, card: FateCard, is_pending: bool, is_next: bool, branches: Array) -> void:
+func configure(index: int, entry: Dictionary, card: FateCard, is_pending: bool, is_next: bool, branches: Array, compact_brief: String = "") -> void:
 	slot_index = index
 	record = entry.duplicate(true)
 	pending = is_pending
@@ -61,6 +62,11 @@ func configure(index: int, entry: Dictionary, card: FateCard, is_pending: bool, 
 	_number = Label.new()
 	_number.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_number.text = "%02d / %s" % [index, "同步中" if pending else ("已刻印" if occupied else ("下一槽" if next_slot else "未激活"))]
+	if compact_display:
+		_number.text = "%02d · %s" % [index, card.orientation_name() if occupied and card != null else ("可用" if next_slot else "空槽")]
+		_number.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		accessibility_name = "%s · %s" % [_number.text, card.card_name] if card != null else _number.text
+		accessibility_description = card.description if card != null else ""
 	_number.clip_text = true
 	_number.add_theme_font_size_override("font_size", 11)
 	_number.add_theme_color_override("font_color", UIPalette.PRISM_ACCENT if next_slot else UIPalette.PRISM_LABEL)
@@ -90,7 +96,7 @@ func configure(index: int, entry: Dictionary, card: FateCard, is_pending: bool, 
 		if back != null:
 			back.material = _get_inactive_back_material()
 	# 压暗来自去色后的灰蓝墨色，而非只把亮绿卡背变透明。
-	_art.modulate.a = 1.0 if occupied or pending or next_slot else 0.72
+	_art.modulate.a = 0.66 if compact_display and not occupied else (1.0 if occupied or pending or next_slot else 0.72)
 	_effect_brief = Label.new()
 	_effect_brief.name = "EffectBrief"
 	_effect_brief.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -99,9 +105,11 @@ func configure(index: int, entry: Dictionary, card: FateCard, is_pending: bool, 
 	_effect_brief.autowrap_mode = TextServer.AUTOWRAP_OFF
 	_effect_brief.max_lines_visible = 1
 	_effect_brief.clip_text = true
-	_effect_brief.add_theme_font_size_override("font_size", 13)
+	_effect_brief.add_theme_font_size_override("font_size", 11 if compact_display else 13)
 	_effect_brief.add_theme_color_override("font_color", Color(0.95, 0.97, 0.99))
-	_effect_brief.text = GameText.fate_effect_brief(card.get_stable_card_id(), card.is_reversed()) if occupied and card != null else ""
+	if occupied:
+		var brief := GameText.fate_effect_brief(card.get_stable_card_id(), card.is_reversed()) if card != null else ""
+		_effect_brief.text = compact_brief if not compact_brief.is_empty() else brief
 	_effect_brief.visible = not _effect_brief.text.is_empty()
 	add_child(_effect_brief)
 	_branch = Label.new()
@@ -137,6 +145,12 @@ func _layout() -> void:
 		return
 	_number.position = Vector2(0, 0)
 	_number.size = Vector2(size.x, 18)
+	if compact_display:
+		_art.position = Vector2(5, 19)
+		_art.size = Vector2(maxf(1, size.x - 10), maxf(1, size.y - 36))
+		_effect_brief.position = Vector2(0, _art.position.y + _art.size.y + 1)
+		_effect_brief.size = Vector2(size.x, 16)
+		return
 	_art.position = Vector2(6, 22)
 	var module_space := 22.0 if _branch != null and not _branch.text.is_empty() else 0.0
 	# 20px 独立页脚留给作用短句，暖色分支计数再接在下面。

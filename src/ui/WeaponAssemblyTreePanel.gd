@@ -6,6 +6,7 @@ signal panel_shown()
 signal panel_hidden()
 const TRANSITION := preload("res://src/ui/weapon_build/WeaponHologramTransition.gd")
 const BOARD_PATH := "res://assets/art/ui/weapon_build/weapon_build_board.tscn"
+const PREVIEW_SLIDE := preload("res://src/ui/weapon_build/WeaponPreviewSlide.gd")
 var _weapon_tree: WeaponAssemblyTree = null
 var _owner: Node = null
 var _weapon_owner: Node = null
@@ -20,8 +21,8 @@ var _hint: Label
 var _close_button: Button
 var _prev_button: Button
 var _next_button: Button
-var _preview_slot := -1
-var _page_tween: Tween
+var _slide: PREVIEW_SLIDE
+var _layout_origin := Vector2.ZERO
 var _animation: Tween
 var _previous_focus: WeakRef
 
@@ -30,6 +31,7 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_meta("ui_prism_exempt", true)
 	_build_panel()
+	_slide = PREVIEW_SLIDE.new(self, _apply_page_offset, _show_preview_slot)
 	resized.connect(_layout)
 	visible = false
 	if is_instance_valid(_owner):
@@ -71,6 +73,7 @@ func _build_panel() -> void:
 	_board = scene.instantiate() as Control
 	_board.name = "WeaponBuildBoard"
 	add_child(_board)
+	move_child(_board, _prev_button.get_index())
 	_board.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	_board.connect("presentation_changed", _on_presentation_changed)
 	# 保留旧探针可读 Label，不再把整棵树输出成文本表格。
@@ -90,6 +93,19 @@ func _make_page_button(symbol: String) -> Button:
 	button.add_theme_font_size_override("font_size", 28)
 	UIStyleFactory.apply_prism_button(button, "ghost", 0, 26, 1, "none")
 	return button
+
+func set_layout_origin(origin: Vector2) -> void:
+	_layout_origin = origin
+	_apply_page_offset()
+
+func _apply_page_offset() -> void:
+	var offset := _slide.offset if _slide != null else 0.0
+	var displacement := Vector2(offset * (get_viewport_rect().size.x + 8.0), 0.0)
+	position = _layout_origin + displacement
+	# 导航热区固定，鼠标连续点击不会追着翻页内容跑。
+	_prev_button.position.x = 8.0 - displacement.x
+	_next_button.position.x = maxf(0.0, size.x - 52.0) - displacement.x
+	_close_button.position.x = maxf(0.0, size.x - 94.0) - displacement.x
 
 func _layout() -> void:
 	if _board == null:
@@ -136,8 +152,11 @@ func show_panel() -> void:
 	if focused != null and not is_ancestor_of(focused):
 		_previous_focus = weakref(focused)
 	show()
-	_board.call("refresh_from_owner")
+	_board.call("clear_preview_item")
+	refresh_from_owner()
 	_animation = TRANSITION.open(self, _owner)
+	_update_preview_buttons()
+	_animation.finished.connect(_update_preview_buttons)
 	_close_button.grab_focus()
 	panel_shown.emit()
 
@@ -145,6 +164,8 @@ func hide_panel() -> void:
 	if not _is_visible or _closing or not is_node_ready():
 		return
 	_closing = true
+	_slide.reset()
+	_update_preview_buttons()
 	_transition_serial += 1
 	var serial := _transition_serial
 	_animation = TRANSITION.close(self, _owner)
@@ -188,34 +209,32 @@ func _weapon_item_for_slot(slot_index: int) -> Dictionary:
 	return _owner.call("get_equipped_weapon_item_for_slot", slot_index) as Dictionary
 
 func _update_preview_buttons() -> void:
-	var has_owner := is_instance_valid(_owner)
-	var alternate_slot := 1 - (_preview_slot if _preview_slot >= 0 else (int(_owner.call("get_active_weapon_slot")) if has_owner and _owner.has_method("get_active_weapon_slot") else 0))
-	var can_switch := has_owner and not _weapon_item_for_slot(alternate_slot).is_empty()
+	var can_switch := _is_visible and not _closing and not has_meta(TRANSITION.TWEEN_KEY) and not _weapon_item_for_slot(1 - _shown_slot()).is_empty()
 	_prev_button.disabled = not can_switch
 	_next_button.disabled = not can_switch
 
+func _shown_slot() -> int:
+	var slot := int(_board.call("get_preview_slot"))
+	if slot >= 0:
+		return slot
+	return int(_owner.call("get_active_weapon_slot")) if is_instance_valid(_owner) and _owner.has_method("get_active_weapon_slot") else 0
+
 func _shift_preview(direction: int) -> void:
-	if not is_instance_valid(_owner):
+	if _prev_button.disabled or not is_visible_in_tree():
 		return
-	var current := _preview_slot
-	if current < 0:
-		current = int(_owner.call("get_active_weapon_slot")) if _owner.has_method("get_active_weapon_slot") else 0
-	var target := 1 - current
-	var item := _weapon_item_for_slot(target)
-	if item.is_empty():
-		return
-	var from_x := -size.x if direction < 0 else size.x
-	# 不复制运行态节点：页面滑动只使用同一个只读 Board，事务与焦点不分叉。
-	var old_position := _board.position
-	_preview_slot = target
-	_board.call("set_preview_item", item, target)
-	_board.position = old_position + Vector2(-from_x, 0)
-	if _page_tween != null and _page_tween.is_valid():
-		_page_tween.kill()
-	_page_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	_page_tween.set_parallel(true).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
-	_page_tween.tween_property(_board, "position:x", old_position.x, 0.26)
-	_page_tween.tween_callback(func() -> void: _update_preview_buttons())
+	var shown := _shown_slot()
+	var target := 1 - (_slide.requested_slot if _slide.requested_slot >= 0 else shown)
+	if not _weapon_item_for_slot(target).is_empty():
+		_slide.request(target, shown, direction)
+
+func _show_preview_slot(slot: int) -> void:
+	var active := int(_owner.call("get_active_weapon_slot")) if is_instance_valid(_owner) and _owner.has_method("get_active_weapon_slot") else 0
+	var item := _weapon_item_for_slot(slot)
+	if slot == active or item.is_empty():
+		_board.call("clear_preview_item")
+	else:
+		_board.call("set_preview_item", item, slot)
+	_update_preview_buttons()
 
 func _on_presentation_changed(snapshot: Dictionary) -> void:
 	_weapon_tree = _board.get("_weapon_tree") as WeaponAssemblyTree

@@ -584,7 +584,7 @@ func _ensure_main_story_controller() -> void:
 
 
 func _on_main_story_controller_exiting() -> void:
-	if NarrativeDirector.is_playing() and NarrativeDirector.active_id() in [MAIN_STORY_SCRIPT.BRIEFING_ID, MAIN_STORY_SCRIPT.BOSS_ID, MAIN_STORY_SCRIPT.KEY_RETURN_CALL_ID, MAIN_STORY_SCRIPT.DEPOSIT_ID]:
+	if NarrativeDirector.is_playing() and NarrativeDirector.active_id() in [MAIN_STORY_SCRIPT.BRIEFING_ID, MAIN_STORY_SCRIPT.BOSS_ID, MAIN_STORY_SCRIPT.KEY_RETURN_CALL_ID, MAIN_STORY_SCRIPT.DEPOSIT_ID, PlatformSentinelEncounter3D.TAKEOVER]:
 		NarrativeDirector.abort("main_story_host_unloaded")
 
 
@@ -708,6 +708,8 @@ func resolve_main_story_anchor(id: String) -> Variant:
 
 
 func _configure_story_enemy(enemy: Enemy3D) -> void:
+	if enemy.enemy_kind == "boss" and _platform_sentinel(_room_by_id.get(enemy.room_id) as DungeonRoom3D) != null:
+		enemy.boss_defeat_handoff = try_handoff_boss_death
 	if _main_story_run_profile() != "database" or get_main_story_controller() == null:
 		return
 	if str(enemy.enemy_data.get("boss_content_id", "")) != "boss_monitor002":
@@ -719,6 +721,137 @@ func _configure_story_enemy(enemy: Enemy3D) -> void:
 	if not bool(activation.get("started", false)) or not bool(_main_story_controller.get_snapshot().get("activation_requested", false)):
 		if not bool(activation.get("held", false)):
 			_main_story_controller.configure_enemy(enemy)
+
+
+func _platform_sentinel(room: DungeonRoom3D) -> PlatformSentinelEncounter3D:
+	if room == null or room.room_id != "boss" or not is_expedition() or get_expedition_level_id() != "expedition_01":
+		return null
+	return room.get_node_or_null("AuthoredLayoutArtRoot/PlatformSentinelEncounter") as PlatformSentinelEncounter3D
+
+
+func _bind_platform_sentinel(room: DungeonRoom3D) -> PlatformSentinelEncounter3D:
+	var sentinel := _platform_sentinel(room)
+	if sentinel == null or sentinel.has_meta("encounter_bound"):
+		return sentinel
+	sentinel.set_meta("encounter_bound", true)
+	sentinel.health_changed.connect(_on_platform_health_changed.bind(room))
+	sentinel.defeated.connect(_on_platform_defeated.bind(room))
+	sentinel.checkpoint.connect(_queue_runtime_autosave)
+	var story := get_main_story_controller()
+	var rematch := BaseManager.has_narrative_completed(PlatformSentinelEncounter3D.TAKEOVER) or not _main_story_key_pending()
+	sentinel.bind(player, NarrativeDirector if story != null else null, rematch)
+	return sentinel
+
+
+func try_handoff_boss_death(enemy: Enemy3D) -> bool:
+	if str(enemy.enemy_data.get("boss_content_id", "")) != "boss_monitor002":
+		return false
+	var room := _room_by_id.get(enemy.room_id) as DungeonRoom3D
+	var sentinel := _bind_platform_sentinel(room)
+	if sentinel == null or sentinel.stage != PlatformSentinelEncounter3D.Stage.DORMANT:
+		return false
+	if not _claim_enemy_departure(enemy):
+		return false
+	_hide_boss_hud()
+	for value in (_enemy_nodes_by_room.get(room.room_id, []) as Array).duplicate():
+		var reinforcement := value as Enemy3D
+		if is_instance_valid(reinforcement) and bool(reinforcement.enemy_data.get("boss_reinforcement_spawned", false)):
+			if _claim_enemy_departure(reinforcement):
+				reinforcement.queue_free()
+	_reserved_room_spawns.erase(room.room_id)
+	_alive_by_room[room.room_id] = 0
+	sentinel.monitor_defeated(enemy)
+	return true
+
+
+func play_platform_takeover_cue(cue: String, params: Dictionary) -> bool:
+	var sentinel := _platform_sentinel(get_main_story_room("boss") as DungeonRoom3D)
+	return sentinel != null and sentinel.run_cue(cue, params)
+
+
+func get_platform_takeover_anchor() -> Variant:
+	var sentinel := _platform_sentinel(get_main_story_room("boss") as DungeonRoom3D)
+	if sentinel == null:
+		return null
+	return {"position": sentinel.to_global(Vector3(0.0, 0.3, -6.0)), "basis": sentinel.global_basis}
+
+
+func _on_platform_health_changed(current: int, maximum: int, phase: int, room: DungeonRoom3D) -> void:
+	if room.room_id != _current_room_id:
+		return
+	var sentinel := _platform_sentinel(room)
+	if sentinel == null or phase >= 2 or sentinel.stage == PlatformSentinelEncounter3D.Stage.WON:
+		_hide_boss_hud()
+		return
+	var entering := _active_boss != null or _boss_panel == null or not _boss_panel.visible
+	_active_boss = null
+	_present_boss_hud("武装平台首领", current, maximum, true, entering)
+	_boss_bar.hide()
+	_boss_delayed_bar.hide()
+	var stack := _boss_bar.get_parent() as Control
+	var parts := stack.get_node_or_null("PlatformArmSegments") as HBoxContainer
+	if parts == null:
+		parts = HBoxContainer.new()
+		parts.name = "PlatformArmSegments"
+		parts.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		parts.add_theme_constant_override("separation", 7)
+		stack.add_child(parts)
+		parts.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		for side in PlatformSentinelEncounter3D.SIDE_LABELS:
+			var bar := ProgressBar.new()
+			bar.max_value = PlatformSentinelEncounter3D.ARM_HP
+			bar.show_percentage = false
+			bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			bar.add_theme_stylebox_override("fill", _boss_bar.get_theme_stylebox("fill"))
+			bar.add_theme_stylebox_override("background", _boss_bar.get_theme_stylebox("background"))
+			parts.add_child(bar)
+			var label := Label.new()
+			label.text = side
+			label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			label.add_theme_font_size_override("font_size", 11)
+			bar.add_child(label)
+	parts.visible = phase == 1
+	var hp := sentinel.arm_health()
+	for i in range(hp.size()):
+		(parts.get_child(i) as ProgressBar).value = hp[i]
+
+
+func _on_platform_defeated(room: DungeonRoom3D) -> void:
+	_kills += 1
+	last_killed_enemy_data = {"name": "武装平台首领", "enemy_type": "boss", "boss_content_id": "boss_exp01_platform_sentinel"}
+	kill_recorded.emit()
+	_mark_room_boss_defeated(room.room_id)
+	_mark_room_cleared(room, true)
+
+
+func _clear_drop_offset(room: DungeonRoom3D) -> Vector2:
+	var sentinel := _platform_sentinel(room)
+	if sentinel != null and sentinel.stage == PlatformSentinelEncounter3D.Stage.WON:
+		var center := room.to_local(sentinel.to_global(Vector3(-1.1, 0.0, 0.8)))
+		return Vector2(center.x, center.z)
+	return super(room)
+
+
+func _capture_room_runtime_state(room_id: String) -> void:
+	super(room_id)
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	var sentinel := _platform_sentinel(room)
+	if sentinel != null and _segment_runtime_state.has(room_id):
+		_segment_runtime_state[room_id]["platform_sentinel"] = sentinel.export_state()
+
+
+func _restore_room_runtime_state(room_id: String) -> void:
+	super(room_id)
+	if not _segment_runtime_state.has(room_id):
+		return
+	var sentinel := _bind_platform_sentinel(_room_by_id.get(room_id) as DungeonRoom3D)
+	if sentinel != null:
+		var saved: Dictionary = _segment_runtime_state[room_id]
+		sentinel.restore_state(saved.get("platform_sentinel", {}), bool(saved.get("boss_defeated", false)))
 
 
 func _legacy_boss_reward_claimed() -> bool:
@@ -834,7 +967,11 @@ func _local_story_extraction_position() -> Array:
 	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
 	if room == null or player == null:
 		return []
-	var point := room.to_local(player.global_position)
+	var sentinel := _platform_sentinel(room)
+	var requested := player.global_position
+	if sentinel != null and sentinel.stage == PlatformSentinelEncounter3D.Stage.WON:
+		requested = sentinel.to_global(Vector3(1.1, 0.10, -1.35))
+	var point := room.to_local(requested)
 	return [point.x, point.y, point.z]
 
 
@@ -6295,6 +6432,9 @@ func _stage_flow_room_entry(room: DungeonRoom3D) -> void:
 ## 这是**覆盖**基类的同名方法：`Dungeon3D._on_room_entered()` 里对
 ## `HOSTILE_ROOM_TYPES` 的调用会动态派发到这里。
 func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
+	var sentinel := _bind_platform_sentinel(room)
+	if sentinel != null and sentinel.is_pending():
+		return true
 	if (
 		_flow_rules_active
 		and room != null
@@ -7841,6 +7981,9 @@ func generate_through_floor_for_test(target_floor_number: int) -> bool:
 
 
 func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
+	var sentinel := _platform_sentinel(room)
+	if sentinel != null and sentinel.stage != PlatformSentinelEncounter3D.Stage.WON:
+		return
 	var was_cleared := room != null and room.cleared
 	super(room, spawn_key)
 	if room != null and room.room_type == "BOSS" and not was_cleared:

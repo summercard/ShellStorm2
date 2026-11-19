@@ -566,11 +566,8 @@ var _player_health_bar_initialized := false
 var _player_hp_track: HudHealthBarTrack = null
 var _player_heal_bar: HudHealthBarHeal = null
 var _hud_dash_ring: HudDashCooldownRing = null
-## 受击震动的运行时状态。`_player_status_base_position` 在首帧布局完成后抓一次，
-## 之后每次振动都以它为原点（绝不累加），震完必须精确复位。
+## 受击震动只提供瞬时偏移，和模态位移一起应用到原始锚点。
 var _player_status_block: Control = null
-var _player_status_base_position := Vector2.ZERO
-var _player_status_base_captured := false
 var _player_shake_elapsed := 0.0
 var _player_shake_active := false
 var _player_shake_offset := Vector2.ZERO
@@ -584,7 +581,12 @@ var _dot_anchor_cache := Vector3.ZERO
 var _dot_visible_cache := false
 var _reference_hud_root: Control = null
 var _hud_corner_transition_tween: Tween = null
-var _hud_corner_transition_open := true
+var _hud_corners: Dictionary = {}
+var _hud_corner_progress := 0.0
+var _hud_corners_obscured := false
+var _hud_coin_progress := 0.0
+var _hud_coin_obscured := false
+var _hud_coin_transition_tween: Tween
 var _hud_weapon_meta_label: Label = null
 var _hud_weapon_fate_label: Label = null
 var _hud_weapon_model_icon: ItemModelIcon3D = null
@@ -2444,8 +2446,6 @@ func _ensure_weapon_presentation_panel() -> WeaponAssemblyTreePanel:
 			get_viewport().size_changed.connect(_layout_weapon_presentation_panel)
 		_weapon_panel.panel_shown.connect(_sync_player_input_lock)
 		_weapon_panel.panel_hidden.connect(_sync_player_input_lock)
-		_weapon_panel.panel_shown.connect(func() -> void: _set_hud_corner_transition(false))
-		_weapon_panel.panel_hidden.connect(func() -> void: _set_hud_corner_transition(true))
 		_weapon_panel.z_index = 420
 		_weapon_panel.set_weapon_tree(player.get_weapon_tree())
 		_weapon_panel.set_weapon_owner(player)
@@ -2457,7 +2457,7 @@ func _layout_weapon_presentation_panel() -> void:
 		return
 	var canvas_size := get_viewport().get_visible_rect().size
 	_weapon_panel.size = Vector2(minf(1120, canvas_size.x - 48), minf(500, canvas_size.y - 48))
-	_weapon_panel.position = (canvas_size - _weapon_panel.size) * 0.5
+	_weapon_panel.set_layout_origin((canvas_size - _weapon_panel.size) * 0.5)
 
 
 func _accepts_pending_insurance_return_at_spawn() -> bool:
@@ -2880,6 +2880,20 @@ func _build_reference_main_hud() -> void:
 		_outline_labels([quick_label])
 	_refresh_quick_item_hud()
 
+	# 从布局原始锚点登记一次。迟装的世界时钟在模态同步时补登记。
+	var upper_left := Vector2(-540, -300)
+	var upper_right := Vector2(420, -300)
+	var lower_left := Vector2(-420, 260)
+	var lower_right := Vector2(420, 260)
+	for node: Control in [identity, player_panel, seed_label]:
+		_register_hud_corner(node, upper_left)
+	for node: Control in [minimap, _hud_floor_label]:
+		_register_hud_corner(node, upper_right)
+	for node: Control in [_hud_dash_ring, _reference_hud_root.get_node("QuickItemHUD_0")]:
+		_register_hud_corner(node, lower_left)
+	for node: Control in [weapon_panel, special_hud, loot_label, _reference_hud_root.get_node("QuickItemHUD_1")]:
+		_register_hud_corner(node, lower_right)
+
 	# 右下角不再放 R/SHIFT/F/E 四个动作键图标：动作本身仍走 InputMap（键盘与手柄照常），
 	# 这里只去掉 HUD 上的可视 + 点击入口。
 
@@ -3149,40 +3163,71 @@ func _hud_int(value: int) -> int:
 	return maxi(1, int(round(float(value) * HUD_UI_SCALE)))
 
 
-func _set_hud_corner_transition(opened: bool) -> void:
-	if _reference_hud_root == null or not is_instance_valid(_reference_hud_root):
+func _register_hud_corner(node: Control, retreat: Vector2) -> void:
+	if not is_instance_valid(node) or _hud_corners.has(node):
 		return
-	if _hud_corner_transition_tween != null and _hud_corner_transition_tween.is_valid():
-		_hud_corner_transition_tween.kill()
-	_hud_corner_transition_open = opened
-	var corners: Array[Control] = []
-	for node_name in ["PlayerStatusBlock", "HudDashCooldownRing", "CurrentWeaponPanel", "QuickItemHUD_0", "QuickItemHUD_1"]:
-		var node := _reference_hud_root.find_child(node_name, true, false) as Control
-		if node != null:
-			corners.append(node)
-	var minimap_corner := get_node_or_null("HUD/DungeonMinimap3D") as Control
-	if minimap_corner != null:
-		corners.append(minimap_corner)
-	if not opened:
-		for node in corners:
-			node.set_meta("hud_corner_rest_position", node.position)
+	_hud_corners[node] = {
+		"offsets": Vector4(node.offset_left, node.offset_top, node.offset_right, node.offset_bottom),
+		"retreat": retreat,
+	}
+
+
+func _apply_hud_corner(node: Control) -> void:
+	if not is_instance_valid(node) or not _hud_corners.has(node):
+		return
+	var entry: Dictionary = _hud_corners[node]
+	var original: Vector4 = entry["offsets"]
+	var progress := _hud_coin_progress if node == loot_label else _hud_corner_progress
+	var offset: Vector2 = entry["retreat"] * progress
+	if node == _player_status_block:
+		offset += _player_shake_offset
+	# 成对平移锚偏移，不用动画中的 position 重建锚框。
+	node.offset_left = original.x + offset.x
+	node.offset_right = original.z + offset.x
+	node.offset_top = original.y + offset.y
+	node.offset_bottom = original.w + offset.y
+
+
+func _set_hud_corner_progress(progress: float) -> void:
+	_hud_corner_progress = progress
+	for node: Control in _hud_corners:
+		if node != loot_label:
+			_apply_hud_corner(node)
+
+
+func _set_hud_coin_progress(progress: float) -> void:
+	_hud_coin_progress = progress
+	_apply_hud_corner(loot_label)
+
+
+func _sync_hud_corners(inventory_open: bool) -> void:
+	if _hud_corners.is_empty():
+		return
+	var world_clock := _reference_hud_root.get_node_or_null("WorldDateTimeHUD") as Control
+	if is_instance_valid(world_clock) and not _hud_corners.has(world_clock):
+		_register_hud_corner(world_clock, Vector2(420, -300))
+		_apply_hud_corner(world_clock)
+	var obscured := inventory_open or _has_exclusive_modal()
+	var coin_obscured := obscured and not _door_fate_active
 	var reduced := bool(ProjectSettings.get_setting("accessibility/reduce_motion", false))
-	var duration := 0.01 if reduced else 0.28
-	_hud_corner_transition_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	for node in corners:
-		var rest: Vector2 = node.get_meta("hud_corner_rest_position", node.position)
-		var viewport := get_viewport().get_visible_rect().size
-		var direction := Vector2(-1, -1)
-		if node.name in ["DungeonMinimap3D"]:
-			direction = Vector2(1, -1)
-		elif node.name in ["CurrentWeaponPanel", "QuickItemHUD_0", "QuickItemHUD_1"]:
-			direction = Vector2(1, 1)
-		elif node.name == "HudDashCooldownRing":
-			direction = Vector2(-1, 1)
-		var target := rest if opened else rest + direction * Vector2(420, 260)
-		if opened:
-			node.position = rest + direction * Vector2(420, 260)
-		_hud_corner_transition_tween.parallel().tween_property(node, "position", target, duration).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	if obscured != _hud_corners_obscured or (reduced and not is_equal_approx(_hud_corner_progress, float(obscured))):
+		_hud_corners_obscured = obscured
+		if _hud_corner_transition_tween != null and _hud_corner_transition_tween.is_valid():
+			_hud_corner_transition_tween.kill()
+		if reduced:
+			_set_hud_corner_progress(float(obscured))
+		else:
+			_hud_corner_transition_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+			_hud_corner_transition_tween.tween_method(_set_hud_corner_progress, _hud_corner_progress, float(obscured), 0.28).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	if coin_obscured != _hud_coin_obscured or (_door_fate_active and not is_zero_approx(_hud_coin_progress)) or (reduced and not is_equal_approx(_hud_coin_progress, float(coin_obscured))):
+		_hud_coin_obscured = coin_obscured
+		if _hud_coin_transition_tween != null and _hud_coin_transition_tween.is_valid():
+			_hud_coin_transition_tween.kill()
+		if reduced or _door_fate_active:
+			_set_hud_coin_progress(float(coin_obscured))
+		else:
+			_hud_coin_transition_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+			_hud_coin_transition_tween.tween_method(_set_hud_coin_progress, _hud_coin_progress, float(coin_obscured), 0.28).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 
 func _on_inventory_open_changed(opened: bool) -> void:
 	if opened and _has_exclusive_modal():
@@ -3190,7 +3235,6 @@ func _on_inventory_open_changed(opened: bool) -> void:
 		status_label.text = "先完成当前交互，再打开背包"
 		return
 	_sync_player_input_lock()
-	_set_hud_corner_transition(opened)
 	if opened:
 		status_label.text = "背包已打开 · 左键使用/装备，右键存入保险格"
 		_ensure_inventory_close_button()
@@ -3222,6 +3266,7 @@ func _sync_player_input_lock() -> void:
 	if player == null:
 		return
 	var inventory_open := _inventory_ui != null and _inventory_ui.is_inventory_open()
+	_sync_hud_corners(inventory_open)
 	# 主页面/开场影片是塔楼层的进程级覆盖层，不属于 Dungeon3D 的普通模态 UI。
 	# 但它们仍然占有真实 Player3D 的相机与展示期输入；若不纳入这里的唯一
 	# 锁裁决，MainEntryScreen3D.present() 写入的 true 会在下一帧被覆盖回 false，
@@ -7855,6 +7900,19 @@ func _tick_boss_health_bar_delay(delta: float) -> void:
 func _show_boss_hud(enemy: Enemy3D) -> void:
 	var is_new_boss := enemy != _active_boss
 	_active_boss = enemy
+	_present_boss_hud(
+		"%s  ·  阶段 %d" % [enemy.get_enemy_data().get("name", "废土首领"), enemy.boss_phase],
+		enemy.current_hp, enemy.max_hp,
+		enemy.monitor_combat == null or enemy.monitor_combat.activation_completed, is_new_boss
+	)
+	_boss_bar.show()
+	_boss_delayed_bar.show()
+	var segmented := _boss_bar.get_parent().get_node_or_null("PlatformArmSegments") as Control
+	if segmented != null:
+		segmented.hide()
+
+
+func _present_boss_hud(title: String, current: int, maximum: int, shown: bool, reset_delay: bool) -> void:
 	if _boss_panel == null:
 		# 简约首领条：透明外壳只负责布局，不再使用厚重面板、霓虹边框或投影。
 		_boss_panel = _make_bare_hud_panel()
@@ -7925,14 +7983,17 @@ func _show_boss_hud(enemy: Enemy3D) -> void:
 		bar_fill.set_corner_radius_all(_hud_int(2))
 		_boss_bar.add_theme_stylebox_override("fill", bar_fill)
 		bar_stack.add_child(_boss_bar)
-	# 有正式出场流程的 Boss 必须等动画完成；没有该流程的旧 Boss 保持即时显示。
-	_boss_panel.visible = enemy.monitor_combat == null or enemy.monitor_combat.activation_completed
-	if is_new_boss and AudioManager != null:
+	_boss_panel.visible = shown
+	_boss_label.text = title
+	_boss_bar.max_value = maxi(1, maximum)
+	_boss_bar.value = current
+	_boss_delayed_bar.max_value = _boss_bar.max_value
+	var ratio := clampf(float(current) / float(maxi(1, maximum)), 0.0, 1.0)
+	if reset_delay or ratio >= _boss_delayed_value:
+		_boss_delayed_value = ratio
+		_boss_delayed_bar.value = ratio * _boss_delayed_bar.max_value
+	if reset_delay and AudioManager != null:
 		AudioManager.play_sfx("boss_intro", -1.5)
-	_boss_label.text = "%s  ·  阶段 %d" % [enemy.get_enemy_data().get("name", "废土首领"), enemy.boss_phase]
-	if is_new_boss:
-		_boss_delayed_value = clampf(float(enemy.current_hp) / float(maxi(1, enemy.max_hp)), 0.0, 1.0)
-	_on_enemy_health_changed(enemy, enemy.current_hp, enemy.max_hp)
 
 
 func _hide_boss_hud() -> void:
@@ -10177,7 +10238,7 @@ func _build_door_fate_overlay() -> void:
 		_fate_overlay_closing = false
 		_fate_overlay.get_parent().remove_child(_fate_overlay)
 		_fate_overlay.queue_free()
-	_set_hud_corner_transition(false)
+	_sync_hud_corners(_inventory_ui != null and _inventory_ui.is_inventory_open())
 	_fate_overlay = Control.new()
 	_fate_overlay.name = "DoorFateOverlay3D"
 	_fate_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -10912,6 +10973,10 @@ func _purchase_fate_card(choice_index: int) -> void:
 		_report_fate_block(choice_index, block_reason)
 		return
 	_fate_purchase_busy = true
+	if is_instance_valid(_fate_presentation):
+		_fate_presentation.call("set_purchase_in_progress", true)
+		if _door_fate_choices[choice_index].occupies_weapon_slot():
+			_fate_presentation.call("return_to_purchase_target")
 	_fate_feedback_selected_index = choice_index
 	_set_fate_feedback_buttons_disabled(true)
 	var overlay := _fate_overlay
@@ -10991,6 +11056,8 @@ func _finish_fate_purchase_ui(overlay: Control) -> void:
 	if overlay != _fate_overlay:
 		return
 	_fate_purchase_busy = false
+	if is_instance_valid(_fate_presentation):
+		_fate_presentation.call("set_purchase_in_progress", false)
 	if _door_fate_active and not _fate_overlay_closing:
 		_reset_fate_feedback()
 		_refresh_door_fate_prices()
@@ -11528,7 +11595,6 @@ func _close_door_fate_overlay() -> void:
 			overlay_parent.remove_child(_fate_overlay)
 		_fate_overlay.queue_free()
 	_fate_overlay = null
-	_set_hud_corner_transition(true)
 	_fate_feedback_label = null
 	# 反馈 tween 的宿主已经销毁，引用一并清掉，免得下一轮弹窗拿到失效对象。
 	_fate_shake_tweens.clear()
@@ -13407,16 +13473,12 @@ func _tick_player_vitals_fx(delta: float) -> void:
 
 
 ## 受击震动。两个位移分量取不互为整数倍的频率 ⇒ 看不出规律的往复；
-## 振幅随进度衰减，到点**精确复位**到 `_player_status_base_position`（绝不累加，
-## 否则长时间战斗后整块状态会慢慢漂走）。
+## 振幅随进度衰减；结束只归零震动分量，不改变模态位移。
 func _tick_player_status_shake(delta: float) -> void:
-	if _player_status_block == null or not is_instance_valid(_player_status_block):
+	if not is_instance_valid(_player_status_block) or not _player_shake_active:
 		return
-	if not _player_status_base_captured:
-		# 首帧布局完成后抓一次原点（此时 `_anchor_control` 的偏移已生效）。
-		_player_status_base_position = _player_status_block.position
-		_player_status_base_captured = true
-	if not _player_shake_active:
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+		_end_player_status_shake()
 		return
 	_player_shake_elapsed = minf(
 		HUD_PLAYER_SHAKE_DURATION, _player_shake_elapsed + maxf(0.0, delta)
@@ -13431,7 +13493,7 @@ func _tick_player_status_shake(delta: float) -> void:
 	_player_shake_offset = Vector2(
 		sin(phase) * amplitude.x, sin(phase * 1.37 + 1.7) * amplitude.y
 	) * decay
-	_player_status_block.position = _player_status_base_position + _player_shake_offset
+	_apply_hud_corner(_player_status_block)
 	# 冲击放大：只放大、不回弹（棱镜规范 §6 禁止 TRANS_BACK / 弹性）。
 	var punch := 1.0 + (HUD_PLAYER_SHAKE_PUNCH_SCALE - 1.0) * pow(1.0 - progress, 3.0)
 	_player_status_block.pivot_offset = _player_status_block.size * 0.5
@@ -13468,7 +13530,7 @@ func _end_player_status_shake() -> void:
 	_player_shake_offset = Vector2.ZERO
 	_player_shake_decay = 0.0
 	if _player_status_block != null and is_instance_valid(_player_status_block):
-		_player_status_block.position = _player_status_base_position
+		_apply_hud_corner(_player_status_block)
 		_player_status_block.scale = Vector2.ONE
 		_player_status_block.modulate = Color.WHITE
 

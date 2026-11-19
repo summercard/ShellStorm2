@@ -388,6 +388,7 @@ core_scenes=(
   verify_dungeon_wave_intermission
   verify_expedition_wave_chain
   verify_expedition_monitor_boss_flow
+  verify_expedition01_platform_sentinel
   verify_expedition03_monitor_boss_flow
   verify_expedition03_special_room_relayout
   verify_expedition03_room_interactions

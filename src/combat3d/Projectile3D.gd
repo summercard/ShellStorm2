@@ -1308,6 +1308,10 @@ func get_orientation_snapshot() -> Dictionary:
 	return snapshot
 
 
+func cancel() -> void:
+	_retire()
+
+
 func _retire() -> void:
 	_enchant_attributes.clear()
 	if _enchantment_visuals != null:

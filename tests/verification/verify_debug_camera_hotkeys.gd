@@ -252,6 +252,8 @@ func _run_camera_owner_checks(failures: Array[String]) -> void:
 		if str(case["path"]).ends_with("ExpeditionLevel01_3D.tscn"):
 			await _verify_expedition01_input(owner, player, failures)
 			await _verify_expedition01_avoidance(owner, player, failures)
+			for room_id in ["02", "03", "06", "09", "10"]:
+				await _verify_expedition01_ceiling(owner, player, room_id, failures)
 		else:
 			player._unhandled_input(_make_key(KEY_APOSTROPHE))
 			player._unhandled_input(_make_key(KEY_F12))
@@ -423,6 +425,24 @@ func _verify_expedition01_avoidance(owner: TowerDescent3D, player: Player3D, fai
 		owner.call("_apply_indoor_camera_pose")
 	_owner_check(player.camera.position.distance_to(_expected_default_camera_position(2.6)) < 0.0001,
 		failures, "解除避障后必须恢复01新默认")
+
+
+func _verify_expedition01_ceiling(owner: TowerDescent3D, player: Player3D, room_id: String, failures: Array[String]) -> void:
+	var layout_path := "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_room_%s_static_layout.tscn" % room_id
+	var room_scene := load(layout_path) as PackedScene
+	var layout := room_scene.instantiate() as Node3D
+	owner.add_child(layout)
+	owner.call("_apply_indoor_camera_pose")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	owner.call("_update_camera_occlusion_silhouette")
+	_owner_check(not bool(owner.get("_player_occluded")), failures, "%s房默认机位在顶棚下，角色不应显示透视轮廓" % room_id)
+	player.camera.global_position.y = player.global_position.y + 23.0
+	owner.call("_update_camera_occlusion_silhouette")
+	_owner_check(bool(owner.get("_player_occluded")), failures, "%s房机位移到顶棚上方后仍须检测真实遮挡" % room_id)
+	layout.queue_free()
+	await get_tree().process_frame
+	owner.call("_apply_indoor_camera_pose")
 
 
 func _camera_test_box(size: Vector3, location: Vector3, tag: String) -> StaticBody3D:

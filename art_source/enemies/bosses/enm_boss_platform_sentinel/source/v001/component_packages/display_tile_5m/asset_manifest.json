@@ -1,0 +1,100 @@
+{
+  "component_id": "ENM-BOSS-PLATFORM-SENTINEL-DISPLAY-TILE-5M",
+  "slug": "display_tile_5m",
+  "name_zh": "铺地显示器 5 米",
+  "component_family": "display_deck",
+  "category": "structure",
+  "description": "四角铆接的标准监测屏；三阶段警报贴图、UV滚动、失效熄屏",
+  "variant_axis": "interface_role",
+  "variant_value": "telemetry",
+  "variant_reason": "四角铆接的标准监测屏",
+  "bounds_target_xyz_m": [
+    5,
+    5,
+    0.44
+  ],
+  "front_axis": "+Z",
+  "front_axis_space": "godot_y_up",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "origin_contract": "bottom_center_at_rest_bbox",
+  "module_pitch_m": 5,
+  "scope": "boss_local",
+  "serves_room_types": [],
+  "collision_owner": "godot_wrapper",
+  "has_emissive": true,
+  "instance_count": 24,
+  "collection": "OUT_display_tile_5m",
+  "root_object": "ROOT_display_tile_5m",
+  "decorative_armature": false,
+  "materials": [
+    "paint",
+    "metal",
+    "seal",
+    "emissive"
+  ],
+  "belongs_to_asset": "ENM-BOSS-PLATFORM-SENTINEL-3D",
+  "standalone_boss": true,
+  "boss_content_id": "boss_exp01_platform_sentinel",
+  "level_id": "expedition_01",
+  "block_id": "expedition",
+  "source_room_type_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/enm_boss_platform_sentinel_animation_v001.blend",
+  "source_room_type_sha256": "c0a286975637a07253e99bd647f296fbd04fefa73b48e6d92535eaa3048a7de1",
+  "component_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/display_tile_5m/enm_platform_sentinel_display_tile_5m_source_v001.blend",
+  "component_blend_sha256": "e80bf8b9f09b2ffaa6005d309d3def2e7492b1da19b3e2679b74f1d9d0668c93",
+  "bounds_size_m": [
+    5.0,
+    5.0,
+    0.44
+  ],
+  "local_bounds_m": [
+    [
+      -2.5,
+      -2.5,
+      0.0
+    ],
+    [
+      2.5,
+      2.5,
+      0.44
+    ]
+  ],
+  "vertex_count": 740,
+  "geometry_fingerprint": "99a04f8e991c0cec599734e4aa24dde15c0ea738c8d6eea58ad2a135f6925ff1",
+  "bounds_pose": "unanimated bind pose",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "resolved_by_ledger_index",
+  "boss_production_ledger": "assets/registry/boss_ledgers/ShellStorm2_武装平台首领账本_v001.xlsx",
+  "asset_version": "v001",
+  "package_status": "active",
+  "runtime_path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/display_tile_5m/display_tile_5m_root_top3d.tscn",
+  "room_owned_geometry": false,
+  "master_origin_offset_from_mount_coordinates_m": [
+    0.0,
+    0.0,
+    -0.44
+  ],
+  "skeleton_id": null,
+  "bones": [],
+  "actions": [],
+  "display_shader": "Platform Sentinel Stage Texture / ScreenUV / packed generated atlas",
+  "sockets": [],
+  "runtime_glb": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/display_tile_5m/display_tile_5m_visual_top3d.glb",
+  "runtime_collision_owner": "src/world3d/PlatformSentinelDeck3D.gd",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "shared_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
+}

@@ -1,0 +1,100 @@
+{
+  "component_id": "ENM-BOSS-PLATFORM-SENTINEL-REACTOR-FASCIA-5M",
+  "slug": "reactor_fascia_5m",
+  "name_zh": "算力舱外沿 5 米",
+  "component_family": "reactor_fascia",
+  "category": "structure",
+  "description": "外沿承重梁与灯，算力机柜面后收0.46m形成凹入式散热带",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "bounds_target_xyz_m": [
+    5,
+    1.2,
+    4.35
+  ],
+  "front_axis": "+Z",
+  "front_axis_space": "godot_y_up",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "origin_contract": "bottom_center_at_rest_bbox",
+  "module_pitch_m": 5,
+  "scope": "boss_local",
+  "serves_room_types": [],
+  "collision_owner": "godot_wrapper",
+  "has_emissive": true,
+  "instance_count": 20,
+  "collection": "OUT_reactor_fascia_5m",
+  "root_object": "ROOT_reactor_fascia_5m",
+  "decorative_armature": false,
+  "materials": [
+    "paint",
+    "metal",
+    "seal",
+    "emissive"
+  ],
+  "belongs_to_asset": "ENM-BOSS-PLATFORM-SENTINEL-3D",
+  "standalone_boss": true,
+  "boss_content_id": "boss_exp01_platform_sentinel",
+  "level_id": "expedition_01",
+  "block_id": "expedition",
+  "source_room_type_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/enm_boss_platform_sentinel_animation_v001.blend",
+  "source_room_type_sha256": "c0a286975637a07253e99bd647f296fbd04fefa73b48e6d92535eaa3048a7de1",
+  "component_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/reactor_fascia_5m/enm_platform_sentinel_reactor_fascia_5m_source_v001.blend",
+  "component_blend_sha256": "7ce3ea23369bc96601785150b34d89aa6baa629cd61e76e7f4e47630d629d5bc",
+  "bounds_size_m": [
+    5.0,
+    2.116,
+    4.69181
+  ],
+  "local_bounds_m": [
+    [
+      -2.5,
+      -1.058,
+      0.0
+    ],
+    [
+      2.5,
+      1.058,
+      4.69181
+    ]
+  ],
+  "vertex_count": 10400,
+  "geometry_fingerprint": "dc1e1cf2ea285648c2e1f1f70231edbfffd44358400559678fac5362ae998408",
+  "bounds_pose": "unanimated bind pose",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "resolved_by_ledger_index",
+  "boss_production_ledger": "assets/registry/boss_ledgers/ShellStorm2_武装平台首领账本_v001.xlsx",
+  "asset_version": "v001",
+  "package_status": "active",
+  "runtime_path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/reactor_fascia_5m/reactor_fascia_5m_root_top3d.tscn",
+  "room_owned_geometry": false,
+  "master_origin_offset_from_mount_coordinates_m": [
+    0.0,
+    0.647,
+    -4.82181
+  ],
+  "skeleton_id": null,
+  "bones": [],
+  "actions": [],
+  "display_shader": null,
+  "sockets": [],
+  "runtime_glb": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/reactor_fascia_5m/reactor_fascia_5m_visual_top3d.glb",
+  "runtime_collision_owner": "src/world3d/PlatformSentinelDeck3D.gd",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "shared_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
+}

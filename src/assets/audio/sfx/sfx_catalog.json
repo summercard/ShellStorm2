@@ -3,6 +3,61 @@
   "revision": "world-environment-r6 + natural-world-r5 + gun-families-r4 + system cues + special-items-r1",
   "sample_rate": 44100,
   "sound_sets": {
+    "platform_takeover_core_reprimand": {
+      "id": "SFXSET-PLATFORM-TAKEOVER-CORE-REPRIMAND",
+      "paths": [
+        "res://src/assets/audio/sfx/platform_takeover_core_reprimand_v001.ogg"
+      ],
+      "loop": false,
+      "spatial_mode": "non_spatial",
+      "bus": "SFX",
+      "max_voices": 1,
+      "priority": "P0"
+    },
+    "platform_takeover_monitor_reply": {
+      "id": "SFXSET-PLATFORM-TAKEOVER-MONITOR-REPLY",
+      "paths": [
+        "res://src/assets/audio/sfx/platform_takeover_monitor_reply_v001.ogg"
+      ],
+      "loop": false,
+      "spatial_mode": "non_spatial",
+      "bus": "SFX",
+      "max_voices": 1,
+      "priority": "P0"
+    },
+    "platform_takeover_core_takeover": {
+      "id": "SFXSET-PLATFORM-TAKEOVER-CORE-TAKEOVER",
+      "paths": [
+        "res://src/assets/audio/sfx/platform_takeover_core_takeover_v001.ogg"
+      ],
+      "loop": false,
+      "spatial_mode": "non_spatial",
+      "bus": "SFX",
+      "max_voices": 1,
+      "priority": "P0"
+    },
+    "platform_takeover_monitor_panic": {
+      "id": "SFXSET-PLATFORM-TAKEOVER-MONITOR-PANIC",
+      "paths": [
+        "res://src/assets/audio/sfx/platform_takeover_monitor_panic_v001.ogg"
+      ],
+      "loop": false,
+      "spatial_mode": "non_spatial",
+      "bus": "SFX",
+      "max_voices": 1,
+      "priority": "P0"
+    },
+    "platform_takeover_core_online": {
+      "id": "SFXSET-PLATFORM-TAKEOVER-CORE-ONLINE",
+      "paths": [
+        "res://src/assets/audio/sfx/platform_takeover_core_online_v001.ogg"
+      ],
+      "loop": false,
+      "spatial_mode": "non_spatial",
+      "bus": "SFX",
+      "max_voices": 1,
+      "priority": "P0"
+    },
     "pistol_fire": {
       "id": "SFXSET-PISTOL-FIRE",
       "paths": [
@@ -1317,6 +1372,56 @@
     }
   },
   "events": {
+    "narrative.platform_takeover.core_reprimand": {
+      "sound_set": "platform_takeover_core_reprimand",
+      "cue_id": "CUE-PLATFORM-TAKEOVER-CORE-REPRIMAND",
+      "owner": "PlatformSentinelEncounter3D",
+      "trigger_fact": "takeover timeline dispatch",
+      "ai_signal": "none",
+      "fallback_policy": "silence_and_report_once",
+      "acceptance_case": "verify_expedition01_platform_sentinel",
+      "binding_status": "active"
+    },
+    "narrative.platform_takeover.monitor_reply": {
+      "sound_set": "platform_takeover_monitor_reply",
+      "cue_id": "CUE-PLATFORM-TAKEOVER-MONITOR-REPLY",
+      "owner": "PlatformSentinelEncounter3D",
+      "trigger_fact": "takeover timeline dispatch",
+      "ai_signal": "none",
+      "fallback_policy": "silence_and_report_once",
+      "acceptance_case": "verify_expedition01_platform_sentinel",
+      "binding_status": "active"
+    },
+    "narrative.platform_takeover.core_takeover": {
+      "sound_set": "platform_takeover_core_takeover",
+      "cue_id": "CUE-PLATFORM-TAKEOVER-CORE-TAKEOVER",
+      "owner": "PlatformSentinelEncounter3D",
+      "trigger_fact": "takeover timeline dispatch",
+      "ai_signal": "none",
+      "fallback_policy": "silence_and_report_once",
+      "acceptance_case": "verify_expedition01_platform_sentinel",
+      "binding_status": "active"
+    },
+    "narrative.platform_takeover.monitor_panic": {
+      "sound_set": "platform_takeover_monitor_panic",
+      "cue_id": "CUE-PLATFORM-TAKEOVER-MONITOR-PANIC",
+      "owner": "PlatformSentinelEncounter3D",
+      "trigger_fact": "takeover timeline dispatch",
+      "ai_signal": "none",
+      "fallback_policy": "silence_and_report_once",
+      "acceptance_case": "verify_expedition01_platform_sentinel",
+      "binding_status": "active"
+    },
+    "narrative.platform_takeover.core_online": {
+      "sound_set": "platform_takeover_core_online",
+      "cue_id": "CUE-PLATFORM-TAKEOVER-CORE-ONLINE",
+      "owner": "PlatformSentinelEncounter3D",
+      "trigger_fact": "takeover timeline dispatch",
+      "ai_signal": "none",
+      "fallback_policy": "silence_and_report_once",
+      "acceptance_case": "verify_expedition01_platform_sentinel",
+      "binding_status": "active"
+    },
     "combat.weapon.fire.pistol": {
       "sound_set": "pistol_fire",
       "cue_id": "CUE-COMBAT-WEAPON-FIRE-PISTOL",
@@ -2375,6 +2480,136 @@
     "flashlight_depleted": "flashlight_depleted"
   },
   "assets": [
+    {
+      "asset_id": "AUD-SFX-PLATFORM-TAKEOVER-CORE-REPRIMAND",
+      "key": "platform_takeover_core_reprimand",
+      "variant": 0,
+      "sound_set_id": "SFXSET-PLATFORM-TAKEOVER-CORE-REPRIMAND",
+      "spatial_mode": "non_spatial",
+      "event_ids": [
+        "narrative.platform_takeover.core_reprimand"
+      ],
+      "source_path": "art_source/audio/sfx/AUD-SFX-PLATFORM-TAKEOVER-VO/source/platform_takeover_core_reprimand_master.wav",
+      "runtime_path": "res://src/assets/audio/sfx/platform_takeover_core_reprimand_v001.ogg",
+      "version": 1,
+      "duration_sec": 5.257483,
+      "source_format": "PCM24 WAV",
+      "runtime_format": "OGG Vorbis q4",
+      "sample_rate_hz": 44100,
+      "source_channels": 1,
+      "runtime_channels": 1,
+      "sha256": "04512e975c68fc93d8930e0738a71159149ef190927ad845925e0952ef2e1097",
+      "source_sha256": "13169cba955828f6d78aca5e960541c11270d64912fd74dc6bc36ec484d9c37b",
+      "license_source": "Local Chinese speech synthesis and authored game text",
+      "license_scope": "Local production VO",
+      "status": "active",
+      "production_revision": "platform-takeover-v001",
+      "loop": false
+    },
+    {
+      "asset_id": "AUD-SFX-PLATFORM-TAKEOVER-MONITOR-REPLY",
+      "key": "platform_takeover_monitor_reply",
+      "variant": 0,
+      "sound_set_id": "SFXSET-PLATFORM-TAKEOVER-MONITOR-REPLY",
+      "spatial_mode": "non_spatial",
+      "event_ids": [
+        "narrative.platform_takeover.monitor_reply"
+      ],
+      "source_path": "art_source/audio/sfx/AUD-SFX-PLATFORM-TAKEOVER-VO/source/platform_takeover_monitor_reply_master.wav",
+      "runtime_path": "res://src/assets/audio/sfx/platform_takeover_monitor_reply_v001.ogg",
+      "version": 1,
+      "duration_sec": 4.261179,
+      "source_format": "PCM24 WAV",
+      "runtime_format": "OGG Vorbis q4",
+      "sample_rate_hz": 44100,
+      "source_channels": 1,
+      "runtime_channels": 1,
+      "sha256": "95a333bfb5ba1d695da595864e8bba09bc2922db8db7f2bad4381489e865c7ab",
+      "source_sha256": "360135ad6094f6491ed74851062d902aa444f1ac8af1559c8f9468442ae37096",
+      "license_source": "Local Chinese speech synthesis and authored game text",
+      "license_scope": "Local production VO",
+      "status": "active",
+      "production_revision": "platform-takeover-v001",
+      "loop": false
+    },
+    {
+      "asset_id": "AUD-SFX-PLATFORM-TAKEOVER-CORE-TAKEOVER",
+      "key": "platform_takeover_core_takeover",
+      "variant": 0,
+      "sound_set_id": "SFXSET-PLATFORM-TAKEOVER-CORE-TAKEOVER",
+      "spatial_mode": "non_spatial",
+      "event_ids": [
+        "narrative.platform_takeover.core_takeover"
+      ],
+      "source_path": "art_source/audio/sfx/AUD-SFX-PLATFORM-TAKEOVER-VO/source/platform_takeover_core_takeover_master.wav",
+      "runtime_path": "res://src/assets/audio/sfx/platform_takeover_core_takeover_v001.ogg",
+      "version": 1,
+      "duration_sec": 4.683061,
+      "source_format": "PCM24 WAV",
+      "runtime_format": "OGG Vorbis q4",
+      "sample_rate_hz": 44100,
+      "source_channels": 1,
+      "runtime_channels": 1,
+      "sha256": "341c887138df31fde90b5f47c4018f8ae34a48f96a9904bd1512bf5baf561a1e",
+      "source_sha256": "030f2ccecbddecb02bee1d33bab015f6a24fa14274a899f78650bf7b1b1b68da",
+      "license_source": "Local Chinese speech synthesis and authored game text",
+      "license_scope": "Local production VO",
+      "status": "active",
+      "production_revision": "platform-takeover-v001",
+      "loop": false
+    },
+    {
+      "asset_id": "AUD-SFX-PLATFORM-TAKEOVER-MONITOR-PANIC",
+      "key": "platform_takeover_monitor_panic",
+      "variant": 0,
+      "sound_set_id": "SFXSET-PLATFORM-TAKEOVER-MONITOR-PANIC",
+      "spatial_mode": "non_spatial",
+      "event_ids": [
+        "narrative.platform_takeover.monitor_panic"
+      ],
+      "source_path": "art_source/audio/sfx/AUD-SFX-PLATFORM-TAKEOVER-VO/source/platform_takeover_monitor_panic_master.wav",
+      "runtime_path": "res://src/assets/audio/sfx/platform_takeover_monitor_panic_v001.ogg",
+      "version": 1,
+      "duration_sec": 1.728163,
+      "source_format": "PCM24 WAV",
+      "runtime_format": "OGG Vorbis q4",
+      "sample_rate_hz": 44100,
+      "source_channels": 1,
+      "runtime_channels": 1,
+      "sha256": "071009e39ef30a68c11f3e51b5b6e652165d2ef3a047b9d4ff36d3d88328d616",
+      "source_sha256": "0cd24d40e0f0d42be7829c77256b8be36d6add9b7a23b18f7997dd6335c99603",
+      "license_source": "Local Chinese speech synthesis and authored game text",
+      "license_scope": "Local production VO",
+      "status": "active",
+      "production_revision": "platform-takeover-v001",
+      "loop": false
+    },
+    {
+      "asset_id": "AUD-SFX-PLATFORM-TAKEOVER-CORE-ONLINE",
+      "key": "platform_takeover_core_online",
+      "variant": 0,
+      "sound_set_id": "SFXSET-PLATFORM-TAKEOVER-CORE-ONLINE",
+      "spatial_mode": "non_spatial",
+      "event_ids": [
+        "narrative.platform_takeover.core_online"
+      ],
+      "source_path": "art_source/audio/sfx/AUD-SFX-PLATFORM-TAKEOVER-VO/source/platform_takeover_core_online_master.wav",
+      "runtime_path": "res://src/assets/audio/sfx/platform_takeover_core_online_v001.ogg",
+      "version": 1,
+      "duration_sec": 3.26585,
+      "source_format": "PCM24 WAV",
+      "runtime_format": "OGG Vorbis q4",
+      "sample_rate_hz": 44100,
+      "source_channels": 1,
+      "runtime_channels": 1,
+      "sha256": "4ea828f291a393453669da581c59f6a3913031840d83aff6748c184b40f6fc85",
+      "source_sha256": "63a915139e02eb834cbe351088a02136849b0c82f2f3a288cb1efd5420035e7f",
+      "license_source": "Local Chinese speech synthesis and authored game text",
+      "license_scope": "Local production VO",
+      "status": "active",
+      "production_revision": "platform-takeover-v001",
+      "loop": false
+    },
     {
       "asset_id": "AUD-SFX-PISTOL-FIRE",
       "key": "pistol_fire",
@@ -7178,6 +7413,13 @@
     }
   },
   "world_style_policy": {
+    "narrative_voice_sets": [
+      "platform_takeover_core_reprimand",
+      "platform_takeover_monitor_reply",
+      "platform_takeover_core_takeover",
+      "platform_takeover_monitor_panic",
+      "platform_takeover_core_online"
+    ],
     "revision": "natural-world-r5 + world-environment-r6 + special-items-r1",
     "system_sets": [
       "fate_card",

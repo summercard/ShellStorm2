@@ -1,8 +1,16 @@
+- 2026-11-19 · NARRATIVE-TRIGGER / DIALOGUE-UI · [剧情镜头回归检查](2026-11-19_narrative_camera_review.md)。复现旧剧情回镜位移和全息入场景深突变，核对 3.2 八镜基准及平台字幕时序。完整场景验收超时。
+
+- 2026-11-19 · PLAYER-STATE / WORLD-PLAN · [远征01顶棚遮挡与08房刷怪区域](2026-11-19_exp01_ceiling_room08.md)。02/03/09房遮挡盒对齐顶棚，08房两个刷怪盒移至连通主路。
+
+- 2026-11-19 · BOSS-STAGES / ASSET-PIPELINE · [远征01武装平台首领独立登记](2026-11-19_platform_sentinel_independent.md)。大臂放大 1.5 倍，宽掌持续拍台。每边四座常驻枪架。下部冷灰加深。独立模型、动画和专账，原型分类留档。
+
 - 2026-11-19 · ASSET-PIPELINE / WORLD-BLOCKS · [Boss02-B v024 三节枪臂、砸台与四路断件](2026-11-19_boss02b_v024_mechanical_refinement.md)。完整枪身在台外，新增转头扫描和伺服停顿，强化下砸与爆裂，外围区块下部 96 个实体断件独立掉落。场景账本源更新至 v024。
 
 - 2026-11-19 · ASSET-PIPELINE / WORLD-BLOCKS · [Boss02-B v023 骨骼、战斗动作与台面坍塌](2026-11-19_boss02b_platform_motion.md)。放大大臂和枪臂，完成 30 fps 独立剪辑与区块动作。25 屏三阶段警报，外 16 格到内 8 格掉落，留中心格。Blender 实测 342 次射击脉冲和 487 个机构样本。场景账本 10 项更新到 v023。
 
 - 2026-11-19 · ASSET-PIPELINE / WORLD-BLOCKS · [Boss02-B 机械臂显示屏平台](2026-11-19_boss02b_mechanical_platform.md)。25×25 米走面由 25 块显示屏组成，四组大机械臂和 21 组周界枪臂可在 Blender 时间轴演示。9 个组件、125 个实例独立重放通过，场景账本登记 10 行。待运行导入。
+
+- 2026-11-19 · UI-HUD / INVENTORY-SLOTS / WEAPON-COMBAT / FATE-RULES · [装备双窗与全息界面返修](2026-11-19_ui_layout_followup.md)。HUD 按原锚复位，构建页快速切换可收口；装备双窗贴合、三列对齐、统一槽位并复用 K 页缩略卡轨。已做 Forward+ 双分辨率布局实拍及专项回归。
 
 - 2026-11-18 · UI-HUD / INVENTORY / WEAPON-COMBAT / FATE-RULES · [界面排版与模态收放](2026-11-18_ui_layout_revision.md)：K页与购卡页根连线改从枪械区与卡巢区中线接入；新增主副手只读预览箭头与横向滑动；装备页扩宽左区并重排武器/卡牌/配件/角色支持区；模态打开时四角HUD向屏幕四边展开，关闭后归位。仅改显示与转场，不改玩法逻辑、事务、存档或输入契约。Godot无头解析exit0，专项真实渲染待执行。
 

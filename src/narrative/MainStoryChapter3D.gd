@@ -99,6 +99,8 @@ func resolve_actor(actor_id: String) -> Node3D:
 func resolve_anchor(anchor_id: String) -> Variant:
 	if _host == null or not is_instance_valid(_host):
 		return null
+	if anchor_id == "platform_takeover" and _host.has_method("get_platform_takeover_anchor"):
+		return _host.call("get_platform_takeover_anchor")
 	if anchor_id in ["boss_frame", "boss_room_frame", "player_frame"]:
 		var boss := _boss()
 		var player := _player()
@@ -238,6 +240,10 @@ func claim_main_story_key(source: Dictionary, checkpoint: Dictionary = {}) -> Di
 
 
 func call_instruction(action: String, params: Dictionary) -> Dictionary:
+	if action.begins_with("platform.") and _host != null and _host.has_method("play_platform_takeover_cue"):
+		if bool(_host.call("play_platform_takeover_cue", action.trim_prefix("platform."), params)):
+			return _ok()
+		return _failed("武装平台接管指令无法执行。")
 	match action:
 		"briefing.prepare":
 			return _prepare_briefing()

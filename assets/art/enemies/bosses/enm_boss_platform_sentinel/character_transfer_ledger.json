@@ -1,0 +1,611 @@
+{
+  "schema_version": 1,
+  "asset_id": "ENM-BOSS-PLATFORM-SENTINEL-3D",
+  "version": "v001",
+  "classification": "replacement",
+  "fps": 30,
+  "frame_origin": 1,
+  "components": [
+    {
+      "asset_id": "ENM-BOSS-PLATFORM-SENTINEL-DISPLAY-TILE-5M",
+      "slug": "display_tile_5m",
+      "source_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/display_tile_5m/enm_platform_sentinel_display_tile_5m_source_v001.blend",
+      "source_sha256": "e80bf8b9f09b2ffaa6005d309d3def2e7492b1da19b3e2679b74f1d9d0668c93",
+      "glb": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/display_tile_5m/display_tile_5m_visual_top3d.glb",
+      "sha256": "3d41034699aa8d14af6bfe5dd72ab564db6a4df280cb84676545af017e09c550",
+      "clips": [],
+      "bone_count": 0,
+      "skeleton_signature": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "nodes": [
+        "display_tile_5m__Corner indicators_Emissive",
+        "display_tile_5m__Frame",
+        "display_tile_5m__Screen_Emissive",
+        "ROOT_display_tile_5m"
+      ],
+      "prefab": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/display_tile_5m/display_tile_5m_root_top3d.tscn"
+    },
+    {
+      "asset_id": "ENM-BOSS-PLATFORM-SENTINEL-DISPLAY-COMMAND-5M",
+      "slug": "display_command_5m",
+      "source_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/display_command_5m/enm_platform_sentinel_display_command_5m_source_v001.blend",
+      "source_sha256": "ca2289f80403f67ff5d3dba521481a43e1a2a21670c08384d2c167fd1dd44420",
+      "glb": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/display_command_5m/display_command_5m_visual_top3d.glb",
+      "sha256": "3099f1ab0871cdfee92784934544210642f3552d014bcfc02aa1942d412d8ce0",
+      "clips": [],
+      "bone_count": 0,
+      "skeleton_signature": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "nodes": [
+        "display_command_5m__Corner indicators_Emissive",
+        "display_command_5m__Frame",
+        "display_command_5m__Screen_Emissive",
+        "ROOT_display_command_5m"
+      ],
+      "prefab": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/display_command_5m/display_command_5m_root_top3d.tscn"
+    },
+    {
+      "asset_id": "ENM-BOSS-PLATFORM-SENTINEL-REACTOR-FASCIA-5M",
+      "slug": "reactor_fascia_5m",
+      "source_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/reactor_fascia_5m/enm_platform_sentinel_reactor_fascia_5m_source_v001.blend",
+      "source_sha256": "7ce3ea23369bc96601785150b34d89aa6baa629cd61e76e7f4e47630d629d5bc",
+      "glb": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/reactor_fascia_5m/reactor_fascia_5m_visual_top3d.glb",
+      "sha256": "a34718ef9839e06f23e8e8890edf064f0fa375a193a32688c9970f2667d363b9",
+      "clips": [],
+      "bone_count": 0,
+      "skeleton_signature": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "nodes": [
+        "reactor_fascia_5m__Recess jambs",
+        "reactor_fascia_5m__Server and edge light_Emissive",
+        "reactor_fascia_5m__Steel structure",
+        "ROOT_reactor_fascia_5m"
+      ],
+      "prefab": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/reactor_fascia_5m/reactor_fascia_5m_root_top3d.tscn"
+    },
+    {
+      "asset_id": "ENM-BOSS-PLATFORM-SENTINEL-GUARDRAIL-5M",
+      "slug": "guardrail_5m",
+      "source_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/guardrail_5m/enm_platform_sentinel_guardrail_5m_source_v001.blend",
+      "source_sha256": "67a83714782e93c07aea96ec4e6e634024683bddcec35068235f69fdb165d246",
+      "glb": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/guardrail_5m/guardrail_5m_visual_top3d.glb",
+      "sha256": "713544f89d4bfebc8ab5321c1a6950c62dd8404e4f51a61009d0b38222419713",
+      "clips": [],
+      "bone_count": 0,
+      "skeleton_signature": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "nodes": [
+        "guardrail_5m__Balustrade",
+        "guardrail_5m__Post indicators_Emissive",
+        "ROOT_guardrail_5m"
+      ],
+      "prefab": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/guardrail_5m/guardrail_5m_root_top3d.tscn"
+    },
+    {
+      "asset_id": "ENM-BOSS-PLATFORM-SENTINEL-CORNER-BEACON",
+      "slug": "corner_beacon",
+      "source_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/corner_beacon/enm_platform_sentinel_corner_beacon_source_v001.blend",
+      "source_sha256": "da110cf10ac9f8bb0b032b4d95727f48dba451891259e14855b815faa12fd064",
+      "glb": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/corner_beacon/corner_beacon_visual_top3d.glb",
+      "sha256": "ae7c84edadcf456b3ff5652d4fe58bb0a3c7dcbd9dfd7b107a13398a5e185e2e",
+      "clips": [],
+      "bone_count": 0,
+      "skeleton_signature": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "nodes": [
+        "corner_beacon__Corner shield",
+        "corner_beacon__Tower lamp_Emissive",
+        "ROOT_corner_beacon"
+      ],
+      "prefab": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/corner_beacon/corner_beacon_root_top3d.tscn"
+    },
+    {
+      "asset_id": "ENM-BOSS-PLATFORM-SENTINEL-DECK-GIRDER-5M",
+      "slug": "deck_girder_5m",
+      "source_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/deck_girder_5m/enm_platform_sentinel_deck_girder_5m_source_v001.blend",
+      "source_sha256": "f88b8bb00f64aaf0dd9f82ebd18029365e29214bd5ba02be8a80e98b74e1669d",
+      "glb": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/deck_girder_5m/deck_girder_5m_visual_top3d.glb",
+      "sha256": "25afa20ef58b6ffcd830fdf008b8dea1da8b1e59e914c3ef49186d0d43e6b20f",
+      "clips": [],
+      "bone_count": 0,
+      "skeleton_signature": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "nodes": [
+        "deck_girder_5m__Permanent deck seat",
+        "deck_girder_5m__Sector_01_cage",
+        "deck_girder_5m__Sector_01_cage_Emissive",
+        "deck_girder_5m__Sector_02_cage",
+        "deck_girder_5m__Sector_02_cage_Emissive",
+        "deck_girder_5m__Sector_03_cage",
+        "deck_girder_5m__Sector_03_cage_Emissive",
+        "deck_girder_5m__Sector_04_cage",
+        "deck_girder_5m__Sector_04_cage_Emissive",
+        "ROOT_deck_girder_5m"
+      ],
+      "prefab": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/deck_girder_5m/deck_girder_5m_root_top3d.tscn"
+    },
+    {
+      "asset_id": "ENM-BOSS-PLATFORM-SENTINEL-KEEL-CRADLE-5M",
+      "slug": "keel_cradle_5m",
+      "source_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/keel_cradle_5m/enm_platform_sentinel_keel_cradle_5m_source_v001.blend",
+      "source_sha256": "0669b669dfbabfb6c4678fa50ce9a184aba8ceed00279105026a71e4d03660fd",
+      "glb": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/keel_cradle_5m/keel_cradle_5m_visual_top3d.glb",
+      "sha256": "239c19ea1883134cebb10b2a11970c11c96b3a06c1cdff0a364e3ed10b47c16a",
+      "clips": [],
+      "bone_count": 0,
+      "skeleton_signature": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "nodes": [
+        "keel_cradle_5m__Sector_01_keel",
+        "keel_cradle_5m__Sector_01_keel_Emissive",
+        "keel_cradle_5m__Sector_02_keel",
+        "keel_cradle_5m__Sector_02_keel_Emissive",
+        "keel_cradle_5m__Sector_03_keel",
+        "keel_cradle_5m__Sector_03_keel_Emissive",
+        "keel_cradle_5m__Sector_04_keel",
+        "keel_cradle_5m__Sector_04_keel_Emissive",
+        "ROOT_keel_cradle_5m"
+      ],
+      "prefab": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/keel_cradle_5m/keel_cradle_5m_root_top3d.tscn"
+    },
+    {
+      "asset_id": "ENM-BOSS-PLATFORM-SENTINEL-ARTICULATED-GRAPPLE",
+      "slug": "articulated_grapple",
+      "source_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/articulated_grapple/enm_platform_sentinel_articulated_grapple_source_v001.blend",
+      "source_sha256": "e83ff4865e187cb1091fd182c36468dc02a3dd5f393906bc9cb48e8c8d8622b4",
+      "glb": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/articulated_grapple/articulated_grapple_visual_top3d.glb",
+      "sha256": "e800b3d499fd1b5c0d4475e9d0a13b9531df26a001fe48fd748305a41a619ce7",
+      "clips": [
+        {
+          "clip_id": "activate_grapple",
+          "fps": 30,
+          "duration_frames": 88,
+          "duration_s": 2.933333333333333,
+          "first_frame": 1,
+          "last_frame": 89,
+          "loop": false,
+          "tracks": 111,
+          "events": {
+            "unlatch": 17,
+            "reach": 69,
+            "ready": 89
+          }
+        },
+        {
+          "clip_id": "idle_grapple",
+          "fps": 30,
+          "duration_frames": 84,
+          "duration_s": 2.8,
+          "first_frame": 1,
+          "last_frame": 85,
+          "loop": true,
+          "tracks": 111,
+          "events": {}
+        },
+        {
+          "clip_id": "scan_grapple",
+          "fps": 30,
+          "duration_frames": 42,
+          "duration_s": 1.4,
+          "first_frame": 1,
+          "last_frame": 43,
+          "loop": false,
+          "tracks": 111,
+          "events": {
+            "look_left": 10,
+            "stop": 15,
+            "look_right": 30
+          }
+        },
+        {
+          "clip_id": "servo_pause_grapple",
+          "fps": 30,
+          "duration_frames": 27,
+          "duration_s": 0.9,
+          "first_frame": 1,
+          "last_frame": 28,
+          "loop": false,
+          "tracks": 111,
+          "events": {
+            "load": 8,
+            "brake": 11,
+            "release": 21
+          }
+        },
+        {
+          "clip_id": "attack_grapple_slam",
+          "fps": 30,
+          "duration_frames": 80,
+          "duration_s": 2.6666666666666665,
+          "first_frame": 1,
+          "last_frame": 81,
+          "loop": false,
+          "tracks": 111,
+          "events": {
+            "windup": 9,
+            "release": 29,
+            "impact": 36,
+            "hold_end": 48,
+            "recover": 63
+          }
+        },
+        {
+          "clip_id": "death_grapple",
+          "fps": 30,
+          "duration_frames": 65,
+          "duration_s": 2.1666666666666665,
+          "first_frame": 1,
+          "last_frame": 66,
+          "loop": false,
+          "tracks": 111,
+          "events": {
+            "separate": 14,
+            "flash": 16,
+            "debris_fall": 30
+          }
+        }
+      ],
+      "bone_count": 23,
+      "skeleton_signature": "2991c4ac6eb22cc4b605add57f3d7bbfce9f24ba74a8378e9dc0174881698413",
+      "nodes": [
+        "piece_claw_jaw_l",
+        "articulated_grapple__grip_contact_l",
+        "jaw_l",
+        "piece_claw_jaw_r",
+        "articulated_grapple__grip_contact_r",
+        "jaw_r",
+        "piece_claw_block",
+        "piece_main_palm_impact_pad",
+        "articulated_grapple__palm_contact_ll",
+        "articulated_grapple__palm_contact_lr",
+        "articulated_grapple__palm_contact_ul",
+        "articulated_grapple__palm_contact_ur",
+        "palm",
+        "piece_head_slew_race",
+        "piece_head_slew_index",
+        "head_yaw",
+        "piece_curved_wrist",
+        "piece_curved_wrist_back_plate",
+        "piece_curved_wrist_axle",
+        "wrist",
+        "piece_upper_casing",
+        "piece_upper_casing_back_plate",
+        "piece_upper_casing_axle",
+        "elbow",
+        "piece_shoulder_rotor",
+        "piece_lift_casing",
+        "piece_lift_casing_back_plate",
+        "shoulder",
+        "root",
+        "articulated_grapple__Claw block",
+        "articulated_grapple__Claw block_Emissive",
+        "articulated_grapple__Claw jaw l",
+        "articulated_grapple__Claw jaw l_Emissive",
+        "articulated_grapple__Claw jaw r",
+        "articulated_grapple__Claw jaw r_Emissive",
+        "articulated_grapple__Curved wrist",
+        "articulated_grapple__Curved wrist axle",
+        "articulated_grapple__Curved wrist axle_Emissive",
+        "articulated_grapple__Curved wrist back plate",
+        "articulated_grapple__Curved wrist back plate_Emissive",
+        "articulated_grapple__Curved wrist slots_Emissive",
+        "articulated_grapple__Head slew index_Emissive",
+        "articulated_grapple__Head slew race",
+        "articulated_grapple__Lift casing",
+        "articulated_grapple__Lift casing back plate",
+        "articulated_grapple__Lift casing back plate_Emissive",
+        "articulated_grapple__Lift casing slots_Emissive",
+        "articulated_grapple__Main palm impact pad",
+        "articulated_grapple__Saddle core",
+        "articulated_grapple__Saddle status_Emissive",
+        "articulated_grapple__Shoulder rotor",
+        "articulated_grapple__Shoulder rotor_Emissive",
+        "articulated_grapple__Upper casing",
+        "articulated_grapple__Upper casing axle",
+        "articulated_grapple__Upper casing axle_Emissive",
+        "articulated_grapple__Upper casing back plate",
+        "articulated_grapple__Upper casing back plate_Emissive",
+        "articulated_grapple__Upper casing slots_Emissive",
+        "RIG_articulated_grapple",
+        "ROOT_articulated_grapple"
+      ],
+      "prefab": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/articulated_grapple/articulated_grapple_root_top3d.tscn"
+    },
+    {
+      "asset_id": "ENM-BOSS-PLATFORM-SENTINEL-PERIMETER-SENTRY",
+      "slug": "perimeter_sentry",
+      "source_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/perimeter_sentry/enm_platform_sentinel_perimeter_sentry_source_v001.blend",
+      "source_sha256": "ceaf561b812210107b8343cc01f3378e1a7dfb544ed9dcf33aa59022a67de115",
+      "glb": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/perimeter_sentry/perimeter_sentry_visual_top3d.glb",
+      "sha256": "a377774b3d1e03b408f6aa472b649c23bbbdbdb397819dabd85430487954e80b",
+      "clips": [
+        {
+          "clip_id": "activate_sentry",
+          "fps": 30,
+          "duration_frames": 80,
+          "duration_s": 2.6666666666666665,
+          "first_frame": 1,
+          "last_frame": 81,
+          "loop": false,
+          "tracks": 27,
+          "events": {
+            "unlatch": 13,
+            "barrel_extend": 50,
+            "ready": 81
+          }
+        },
+        {
+          "clip_id": "idle_sentry",
+          "fps": 30,
+          "duration_frames": 81,
+          "duration_s": 2.7,
+          "first_frame": 1,
+          "last_frame": 82,
+          "loop": true,
+          "tracks": 27,
+          "events": {}
+        },
+        {
+          "clip_id": "scan_sentry",
+          "fps": 30,
+          "duration_frames": 36,
+          "duration_s": 1.2,
+          "first_frame": 1,
+          "last_frame": 37,
+          "loop": false,
+          "tracks": 27,
+          "events": {
+            "sweep_left": 8,
+            "detent": 13,
+            "sweep_right": 26
+          }
+        },
+        {
+          "clip_id": "servo_pause_sentry",
+          "fps": 30,
+          "duration_frames": 27,
+          "duration_s": 0.9,
+          "first_frame": 1,
+          "last_frame": 28,
+          "loop": false,
+          "tracks": 27,
+          "events": {
+            "servo_stop": 11,
+            "release": 20
+          }
+        },
+        {
+          "clip_id": "attack_sentry",
+          "fps": 30,
+          "duration_frames": 63,
+          "duration_s": 2.1,
+          "first_frame": 1,
+          "last_frame": 64,
+          "loop": false,
+          "tracks": 27,
+          "events": {
+            "burst_01": 21,
+            "burst_02": 33,
+            "burst_03": 45
+          }
+        },
+        {
+          "clip_id": "death_sentry",
+          "fps": 30,
+          "duration_frames": 51,
+          "duration_s": 1.7,
+          "first_frame": 1,
+          "last_frame": 52,
+          "loop": false,
+          "tracks": 27,
+          "events": {
+            "loosening": 9,
+            "rack_fold": 24
+          }
+        }
+      ],
+      "bone_count": 10,
+      "skeleton_signature": "03d41490e04373c0f1a706f01598ee3aa269dec1c894bc221027c04bb413bd84",
+      "nodes": [
+        "perimeter_sentry__muzzle_exit",
+        "perimeter_sentry__muzzle_forward",
+        "barrel_rotor",
+        "barrel_slide",
+        "recoil",
+        "gimbal_pitch",
+        "gimbal_yaw",
+        "trunnion",
+        "forearm",
+        "lift",
+        "base_rocker",
+        "perimeter_sentry__sentry_mount_axis",
+        "root",
+        "perimeter_sentry__Barrel extension bearing",
+        "perimeter_sentry__Barrel extension ring_Emissive",
+        "perimeter_sentry__Energy conduits_Emissive",
+        "perimeter_sentry__Forearm link",
+        "perimeter_sentry__Forearm link_Emissive",
+        "perimeter_sentry__Gun health strips_Emissive",
+        "perimeter_sentry__Independent gun pitch shaft",
+        "perimeter_sentry__Large receiver and recoil rails",
+        "perimeter_sentry__Lift link",
+        "perimeter_sentry__Lift link_Emissive",
+        "perimeter_sentry__Lower articulating rocker",
+        "perimeter_sentry__Lower articulating rocker_Emissive",
+        "perimeter_sentry__Outrigger indicator_Emissive",
+        "perimeter_sentry__Outrigger mount",
+        "perimeter_sentry__Rotating energy barrel",
+        "perimeter_sentry__Trunnion bearings_Emissive",
+        "perimeter_sentry__Trunnion pitch block",
+        "perimeter_sentry__Yaw race and cheek fork",
+        "perimeter_sentry__Yaw race and cheek fork_Emissive",
+        "RIG_perimeter_sentry",
+        "ROOT_perimeter_sentry"
+      ],
+      "prefab": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/perimeter_sentry/perimeter_sentry_root_top3d.tscn"
+    }
+  ],
+  "source_sha256": {
+    "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/enm_boss_platform_sentinel_animation_v001.blend": "c0a286975637a07253e99bd647f296fbd04fefa73b48e6d92535eaa3048a7de1",
+    "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/enm_boss_platform_sentinel_model_v001.blend": "1dc1f0c0f400088bc397ecd590148ca41b3d4b831541eeb09e9fd6875324e932"
+  },
+  "files": [
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/display_tile_5m/display_tile_5m_visual_top3d.glb",
+      "sha256": "3d41034699aa8d14af6bfe5dd72ab564db6a4df280cb84676545af017e09c550"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/display_tile_5m/display_tile_5m_root_top3d.tscn",
+      "sha256": "b20d5b6f125d8ef75bf9e72ffd7bc13f3bd64328bbe5ebd91ed20fe58546d7a5"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/display_command_5m/display_command_5m_visual_top3d.glb",
+      "sha256": "3099f1ab0871cdfee92784934544210642f3552d014bcfc02aa1942d412d8ce0"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/display_command_5m/display_command_5m_root_top3d.tscn",
+      "sha256": "2c86df7e0d7f261d9c498bc0947e4c34a769ca8645b5600f0a832ae18e1e3165"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/reactor_fascia_5m/reactor_fascia_5m_visual_top3d.glb",
+      "sha256": "a34718ef9839e06f23e8e8890edf064f0fa375a193a32688c9970f2667d363b9"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/reactor_fascia_5m/reactor_fascia_5m_root_top3d.tscn",
+      "sha256": "ac023818fbf283b77f29fa41eba5fe627ccc5a77d8b8f1ea8d3f406c29f07adb"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/guardrail_5m/guardrail_5m_visual_top3d.glb",
+      "sha256": "713544f89d4bfebc8ab5321c1a6950c62dd8404e4f51a61009d0b38222419713"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/guardrail_5m/guardrail_5m_root_top3d.tscn",
+      "sha256": "f6c4ede9d4f0cbb8e0115d4b8e9c0c86527324505999bb6a8826364261897990"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/corner_beacon/corner_beacon_visual_top3d.glb",
+      "sha256": "ae7c84edadcf456b3ff5652d4fe58bb0a3c7dcbd9dfd7b107a13398a5e185e2e"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/corner_beacon/corner_beacon_root_top3d.tscn",
+      "sha256": "d64b190fff54cf92ef489d2f3a1ab914abd630d3bc58ddbf283d94453c929bf4"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/deck_girder_5m/deck_girder_5m_visual_top3d.glb",
+      "sha256": "25afa20ef58b6ffcd830fdf008b8dea1da8b1e59e914c3ef49186d0d43e6b20f"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/deck_girder_5m/deck_girder_5m_root_top3d.tscn",
+      "sha256": "aaf848ef79a193044a0f754793482fc47c34eadeb257eaf6e6cab3a392417ad5"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/keel_cradle_5m/keel_cradle_5m_visual_top3d.glb",
+      "sha256": "239c19ea1883134cebb10b2a11970c11c96b3a06c1cdff0a364e3ed10b47c16a"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/keel_cradle_5m/keel_cradle_5m_root_top3d.tscn",
+      "sha256": "bdcaacaefb03c1b51bafdadd9b2fd6ee5cfb56637a504ef8bedfd8706493750d"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/articulated_grapple/articulated_grapple_visual_top3d.glb",
+      "sha256": "e800b3d499fd1b5c0d4475e9d0a13b9531df26a001fe48fd748305a41a619ce7"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/articulated_grapple/articulated_grapple_root_top3d.tscn",
+      "sha256": "462524feaaa7394689d6046b3a0eafc058f182cdfe37fa61a60a78857e35518d"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/perimeter_sentry/perimeter_sentry_visual_top3d.glb",
+      "sha256": "a377774b3d1e03b408f6aa472b649c23bbbdbdb397819dabd85430487954e80b"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/perimeter_sentry/perimeter_sentry_root_top3d.tscn",
+      "sha256": "0f55609b91291a2fb76affa7d430979c13dc9f138360d42912616f670bd4d0e5"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/enm_boss_platform_sentinel_root_top3d.tscn",
+      "sha256": "44030968b6ba7ee925fa03d7ecca4ac146fae087baca7976cf3d3715f4aa455a"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/screen_atlas.png",
+      "sha256": "3af5953d0002b788ccc9f6935ec4caa9467e9d338c09da06f6bf5110edf53142"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/deck_clips.json",
+      "sha256": "a95f9643f23e84820df258c7f7a83757549558bd01c24b5d83964c16cb5291ac"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/room_alloy.gdshader",
+      "sha256": "f3577d904425c9380519a266dc1c5851072b8e44bedfdefff7f3838ab849155b"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/screen.gdshader",
+      "sha256": "0c12a779d1fa13a574426d14e3b98020f6d975e2675382e6ed5feb7453ec7cc6"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/materials/clearcoat.tres",
+      "sha256": "ca5d3b7bdff7b61f76fbed1dfd1332902d6be1f834172586adaf790087f1e5ba"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/materials/display.tres",
+      "sha256": "9a836b69980b035acb9d62f16a3bb8ce1dea5e404f66fba5b9b8db300907a05b"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/materials/machined_metal.tres",
+      "sha256": "237a842c1cf40c66660ecb6e9635d645ea57135070799aac0b87aaf1013c880f"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/materials/matte.tres",
+      "sha256": "a7710d68d171337798bd73ecd5c69958b1325235e25b8fc6dbe9a869f3484aaa"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/materials/soft_emission.tres",
+      "sha256": "898f6a1bb32b7148c36b4ef5eb8ab090440e36adce24323f2fad81776c79928b"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/articulated_grapple/articulated_grapple_visual_top3d.glb.import",
+      "sha256": "43209db930e3658b418fa21d344d5265913b83c27da7090b9fb94dbb9e5ff204"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/corner_beacon/corner_beacon_visual_top3d.glb.import",
+      "sha256": "e89ed0e7f437f22d6c069bdda3016e5ee672f4dba3938c07d5c5ce70cecd207c"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/deck_girder_5m/deck_girder_5m_visual_top3d.glb.import",
+      "sha256": "4f8b23bfb5144b206bc1bd9041b71425ee88696393db3f6c202b1466c91bb2de"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/display_command_5m/display_command_5m_visual_top3d.glb.import",
+      "sha256": "4f8f6274b64392bb0193fa91107b515e6f044717d54cd023da46aa02b48d611d"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/display_tile_5m/display_tile_5m_visual_top3d.glb.import",
+      "sha256": "16b9672e0e7910b6a16cd68914ec795231baadbbcdedb9ebec009d5e8bf35884"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/guardrail_5m/guardrail_5m_visual_top3d.glb.import",
+      "sha256": "adf62a7a94ad0dd4ca0c535c6f44c253a3c808fb174cfa2efd7d8962c63618c3"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/keel_cradle_5m/keel_cradle_5m_visual_top3d.glb.import",
+      "sha256": "2ba51e7259c4ec3cc27d41a617bf1775a8e5d1b529a1fc53f33e59645d0b1f0c"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/perimeter_sentry/perimeter_sentry_visual_top3d.glb.import",
+      "sha256": "37d02684e4b7d34db5a959858bf5bddfec1310fcc0d41e895db8072e28280f57"
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/reactor_fascia_5m/reactor_fascia_5m_visual_top3d.glb.import",
+      "sha256": "eb05d97a1ae23ef57008e3517e3f400e4c882a6e71ffe7087ac2c70093c1f570"
+    }
+  ],
+  "prefab_path": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/enm_boss_platform_sentinel_root_top3d.tscn",
+  "shared_materials": {
+    "01_精工金属_紫色骨架": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/materials/machined_metal.tres",
+    "02_细腻哑光_青绿大面": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/materials/matte.tres",
+    "03_清漆反光_紫粉点缀": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/materials/clearcoat.tres",
+    "04_柔和自发光_UI灯光": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/materials/soft_emission.tres",
+    "05_平台拼接显示屏": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/materials/display.tres"
+  },
+  "embedded_texture_count": 0,
+  "duplicate_gate": {
+    "classification": "replacement",
+    "passed": true,
+    "report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\asset_guard\\ENM-BOSS-PLATFORM-SENTINEL-3D_enm_boss_platform_sentinel.json",
+    "same_asset_id_count": 0,
+    "identical_registered_file_count": 0
+  }
+}

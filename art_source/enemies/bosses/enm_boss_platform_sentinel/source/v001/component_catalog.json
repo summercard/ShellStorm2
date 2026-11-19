@@ -1,0 +1,84 @@
+{
+  "asset_id": "ENM-BOSS-PLATFORM-SENTINEL-3D",
+  "source": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/enm_boss_platform_sentinel_animation_v001.blend",
+  "source_sha256": "c0a286975637a07253e99bd647f296fbd04fefa73b48e6d92535eaa3048a7de1",
+  "assembly_scene": "Platform Sentinel | Model Assembly",
+  "animation_scene": "Platform Sentinel | Battle Review",
+  "boss_content_id": "boss_exp01_platform_sentinel",
+  "model_master": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/enm_boss_platform_sentinel_model_v001.blend",
+  "model_sha256": "1dc1f0c0f400088bc397ecd590148ca41b3d4b831541eeb09e9fd6875324e932",
+  "components": [
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-DISPLAY-TILE-5M",
+      "slug": "display_tile_5m",
+      "collection": "OUT_display_tile_5m",
+      "manifest": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/display_tile_5m/asset_manifest.json",
+      "component_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/display_tile_5m/enm_platform_sentinel_display_tile_5m_source_v001.blend",
+      "instance_count": 24
+    },
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-DISPLAY-COMMAND-5M",
+      "slug": "display_command_5m",
+      "collection": "OUT_display_command_5m",
+      "manifest": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/display_command_5m/asset_manifest.json",
+      "component_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/display_command_5m/enm_platform_sentinel_display_command_5m_source_v001.blend",
+      "instance_count": 1
+    },
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-REACTOR-FASCIA-5M",
+      "slug": "reactor_fascia_5m",
+      "collection": "OUT_reactor_fascia_5m",
+      "manifest": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/reactor_fascia_5m/asset_manifest.json",
+      "component_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/reactor_fascia_5m/enm_platform_sentinel_reactor_fascia_5m_source_v001.blend",
+      "instance_count": 20
+    },
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-GUARDRAIL-5M",
+      "slug": "guardrail_5m",
+      "collection": "OUT_guardrail_5m",
+      "manifest": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/guardrail_5m/asset_manifest.json",
+      "component_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/guardrail_5m/enm_platform_sentinel_guardrail_5m_source_v001.blend",
+      "instance_count": 17
+    },
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-CORNER-BEACON",
+      "slug": "corner_beacon",
+      "collection": "OUT_corner_beacon",
+      "manifest": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/corner_beacon/asset_manifest.json",
+      "component_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/corner_beacon/enm_platform_sentinel_corner_beacon_source_v001.blend",
+      "instance_count": 4
+    },
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-DECK-GIRDER-5M",
+      "slug": "deck_girder_5m",
+      "collection": "OUT_deck_girder_5m",
+      "manifest": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/deck_girder_5m/asset_manifest.json",
+      "component_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/deck_girder_5m/enm_platform_sentinel_deck_girder_5m_source_v001.blend",
+      "instance_count": 25
+    },
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-KEEL-CRADLE-5M",
+      "slug": "keel_cradle_5m",
+      "collection": "OUT_keel_cradle_5m",
+      "manifest": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/keel_cradle_5m/asset_manifest.json",
+      "component_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/keel_cradle_5m/enm_platform_sentinel_keel_cradle_5m_source_v001.blend",
+      "instance_count": 9
+    },
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-ARTICULATED-GRAPPLE",
+      "slug": "articulated_grapple",
+      "collection": "OUT_articulated_grapple",
+      "manifest": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/articulated_grapple/asset_manifest.json",
+      "component_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/articulated_grapple/enm_platform_sentinel_articulated_grapple_source_v001.blend",
+      "instance_count": 4
+    },
+    {
+      "component_id": "ENM-BOSS-PLATFORM-SENTINEL-PERIMETER-SENTRY",
+      "slug": "perimeter_sentry",
+      "collection": "OUT_perimeter_sentry",
+      "manifest": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/perimeter_sentry/asset_manifest.json",
+      "component_blend": "art_source/enemies/bosses/enm_boss_platform_sentinel/source/v001/component_packages/perimeter_sentry/enm_platform_sentinel_perimeter_sentry_source_v001.blend",
+      "instance_count": 16
+    }
+  ]
+}

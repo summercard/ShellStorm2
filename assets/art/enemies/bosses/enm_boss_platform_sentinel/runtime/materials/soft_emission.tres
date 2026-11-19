@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/room_alloy.gdshader" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png" id="2"]
+
+[resource]
+resource_name = "04_柔和自发光_UI灯光"
+shader = ExtResource("1")
+shader_parameter/palette = ExtResource("2")
+shader_parameter/role = 4

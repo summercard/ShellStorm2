@@ -1352,12 +1352,12 @@
         {
           "box": "box_corner_ambush",
           "center_m": [
-            0.0,
-            -12.5
+            -5.0,
+            -7.5
           ],
           "size_m": [
-            35.0,
-            5.0
+            24.0,
+            11.0
           ],
           "spawn_overrides": [
             {
@@ -1375,12 +1375,12 @@
         {
           "box": "box_corner_ambush",
           "center_m": [
-            15.0,
-            2.5
+            10.0,
+            7.5
           ],
           "size_m": [
-            5.0,
-            25.0
+            15.0,
+            15.0
           ],
           "spawn_overrides": [
             {
