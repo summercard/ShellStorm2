@@ -256,9 +256,9 @@ func _verify_catalog_and_menu(failures: Array[String]) -> void:
 		failures.append("默认目标不是远征01")
 	if not menu.find_children("*", "Control", true, false).is_empty():
 		failures.append("全息城市残留平面UI")
-	if menu._city == null or menu._city.markers.size() != 2:
-		failures.append("缺少两个立体入口")
-	elif menu._city.labels[0].text != "远征关卡01":
+	if menu._city == null or menu._city.markers.size() != 4 or menu.LEVEL_IDS.has("99"):
+		failures.append("情报室应保留四个正式立体入口，并隐藏99")
+	elif menu._city.labels[0].text != GameDesignConfig.expedition_level_display_name("expedition_01"):
 		failures.append("默认入口未从关卡目录读取名称")
 	menu.request_close()
 	await get_tree().create_timer(0.15).timeout

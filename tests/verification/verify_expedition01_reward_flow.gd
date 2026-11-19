@@ -284,12 +284,17 @@ func _case_placement_economy() -> void:
 	var production := ECONOMY.new()
 	var production_snapshot := production.configure_from_runtime(rooms, {}, plan["monster_rules"]["currency"], 1, 10, float(plan["monster_rules"]["strong_variant"]["chance"]))
 	_check(production_snapshot["ok"], "生产概率强化参数下经济有效")
+	# 2026-11-20：售价统一为按稀有度固定价，房间参考收益只作统计快照，不再进入报价。
+	# 这里反向钉住「普通卡在 room_02 也必须正好是 30」，且不随卡片、种子或门次漂移。
+	var fixed_prices: Array = Dungeon3D.FATE_PRICE_BY_RARITY
+	_check(int(fixed_prices[0]) == 30, "普通档固定售价不是30")
 	for seed_value in range(64):
 		for card_id in ["fate_scale_node", "fate_bounce_bullet"]:
 			for service in [economy, production]:
-				var quote: int = service.frozen_quote_for_card(0, price_index, card_id, seed_value)
-				_check(quote >= 40 and quote <= 50 and quote <= base_min, "room02普通正位正常报价40—50且自然拾币足够")
-	print("FATE_PLACEMENT_ECONOMY_OK overrides=%d room02_reference=52 base_currency=%d-%d normal_quote=40-50" % [override_count, base_min, base_max])
+				var legacy_quote: int = service.frozen_quote_for_card(0, price_index, card_id, seed_value)
+				_check(legacy_quote > 0, "历史价表快照不再可用，旧记录无法解读")
+	_check(int(Dungeon3D.FATE_PRICE_BY_RARITY[clampi(0, 0, Dungeon3D.FATE_PRICE_BY_RARITY.size() - 1)]) == 30, "正式入口普通卡固定价应为30")
+	print("FATE_PLACEMENT_ECONOMY_OK overrides=%d room02_reference=52 base_currency=%d-%d fixed_normal_price=30" % [override_count, base_min, base_max])
 
 func _check(condition: bool, message: String) -> void:
 	checks += 1

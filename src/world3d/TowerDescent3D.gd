@@ -568,7 +568,10 @@ func _main_story_run_profile() -> String:
 	if main_story_profile == "disabled" or (test_mode and not force_main_story_for_test):
 		return "disabled"
 	if is_expedition():
-		return "database" if get_expedition_level_id() == "expedition_01" else "disabled"
+		match get_expedition_level_id():
+			"expedition_01": return "database"
+			"99": return "boss_test"
+		return "disabled"
 	return "base" if main_story_profile == "base" else "disabled"
 
 
@@ -600,7 +603,7 @@ func _setup_main_story_host() -> void:
 		if _main_story_pedestal != null:
 			_facility_art_layout.add_child(_main_story_pedestal)
 			_main_story_pedestal.call("setup", self)
-	_main_story_controller.setup(self)
+	_main_story_controller.setup(self, _main_story_run_profile() == "boss_test")
 	_main_story_controller.set_process(false)
 	_main_story_host_ready = true
 
@@ -656,7 +659,7 @@ func get_main_story_floor_y() -> float:
 
 
 func get_main_story_boss() -> Node3D:
-	if _main_story_run_profile() != "database":
+	if _main_story_run_profile() not in ["database", "boss_test"]:
 		return null
 	for value in _enemy_nodes_by_room.get("boss", []):
 		if is_instance_valid(value) and value is Enemy3D:
@@ -710,12 +713,17 @@ func resolve_main_story_anchor(id: String) -> Variant:
 func _configure_story_enemy(enemy: Enemy3D) -> void:
 	if enemy.enemy_kind == "boss" and _platform_sentinel(_room_by_id.get(enemy.room_id) as DungeonRoom3D) != null:
 		enemy.boss_defeat_handoff = try_handoff_boss_death
-	if _main_story_run_profile() != "database" or get_main_story_controller() == null:
+		if str(enemy.enemy_data.get("boss_content_id", "")) == "boss_monitor002" and is_instance_valid(enemy._overhead_health_root):
+			enemy._overhead_health_root.hide()
+	if _main_story_run_profile() not in ["database", "boss_test"] or get_main_story_controller() == null:
 		return
 	if str(enemy.enemy_data.get("boss_content_id", "")) != "boss_monitor002":
 		return
 	var activation := enemy.get_story_activation_snapshot()
-	if BaseManager.has_narrative_completed(MAIN_STORY_SCRIPT.BOSS_ID) or bool(activation.get("completed", false)):
+	if (
+		(_main_story_run_profile() == "database" and BaseManager.has_narrative_completed(MAIN_STORY_SCRIPT.BOSS_ID))
+		or bool(activation.get("completed", false))
+	):
 		enemy.set_story_activation_hold(false)
 		return
 	if not bool(activation.get("started", false)) or not bool(_main_story_controller.get_snapshot().get("activation_requested", false)):
@@ -724,7 +732,7 @@ func _configure_story_enemy(enemy: Enemy3D) -> void:
 
 
 func _platform_sentinel(room: DungeonRoom3D) -> PlatformSentinelEncounter3D:
-	if room == null or room.room_id != "boss" or not is_expedition() or get_expedition_level_id() != "expedition_01":
+	if room == null or room.room_id != "boss" or not is_expedition():
 		return null
 	return room.get_node_or_null("AuthoredLayoutArtRoot/PlatformSentinelEncounter") as PlatformSentinelEncounter3D
 
@@ -736,11 +744,20 @@ func _bind_platform_sentinel(room: DungeonRoom3D) -> PlatformSentinelEncounter3D
 	sentinel.set_meta("encounter_bound", true)
 	sentinel.health_changed.connect(_on_platform_health_changed.bind(room))
 	sentinel.defeated.connect(_on_platform_defeated.bind(room))
-	sentinel.checkpoint.connect(_queue_runtime_autosave)
+	sentinel.checkpoint.connect(_on_platform_checkpoint)
+	sentinel.tree_exiting.connect(func() -> void: set_scripted_input_hold(false, false, "platform_deploy"))
 	var story := get_main_story_controller()
-	var rematch := BaseManager.has_narrative_completed(PlatformSentinelEncounter3D.TAKEOVER) or not _main_story_key_pending()
+	var rematch := get_expedition_level_id() == "expedition_01" and (
+		BaseManager.has_narrative_completed(PlatformSentinelEncounter3D.TAKEOVER) or not _main_story_key_pending()
+	)
 	sentinel.bind(player, NarrativeDirector if story != null else null, rematch)
 	return sentinel
+
+
+func _on_platform_checkpoint(reason: String) -> void:
+	if reason == "platform_deploy" or reason == "platform_combat":
+		set_scripted_input_hold(reason == "platform_deploy", false, "platform_deploy")
+	_queue_runtime_autosave(reason)
 
 
 func try_handoff_boss_death(enemy: Enemy3D) -> bool:
@@ -828,10 +845,27 @@ func _on_platform_defeated(room: DungeonRoom3D) -> void:
 	_mark_room_cleared(room, true)
 
 
+func _ensure_boss_chest_drop(room_id: String) -> void:
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if not (get_expedition_level_id() == "99" and _platform_sentinel(room) != null):
+		super(room_id)
+		return
+	if _clear_drop_settled.has(room_id):
+		return
+	# 99 does not enable 01's economy for any other room.
+	var rewards := CLEAR_DROP_SERVICE_SCRIPT.new()
+	var source := LEVEL_PLAN_LOADER.load_level_plan(SHARED_DATABASE_BOSS_LEVEL)
+	var configured := rewards.configure(source.get("clear_drops", {}))
+	if not bool(configured.get("ok", false)) or not rewards.is_configured():
+		push_error("Shared database boss reward configuration is unavailable")
+		return
+	_apply_clear_drop(room, rewards.roll_room_drop(room_id, "boss", run_seed), "boss_drop:%s" % room_id)
+
+
 func _clear_drop_offset(room: DungeonRoom3D) -> Vector2:
 	var sentinel := _platform_sentinel(room)
 	if sentinel != null and sentinel.stage == PlatformSentinelEncounter3D.Stage.WON:
-		var center := room.to_local(sentinel.to_global(Vector3(-1.1, 0.0, 0.8)))
+		var center := room.to_local(sentinel.global_position)
 		return Vector2(center.x, center.z)
 	return super(room)
 
@@ -2431,7 +2465,8 @@ func _update_base_fog_transition(delta: float, immediate := false) -> void:
 
 ## 关卡装配专属基准，不写入Player3D调试状态；F12仍回到各关自己的默认机位。
 func _camera_default_distance_offset_m() -> float:
-	if is_expedition() and get_expedition_level_id() == "expedition_01":
+	if is_expedition() and (get_expedition_level_id() == SHARED_DATABASE_BOSS_LEVEL
+		or _platform_sentinel(_room_by_id.get(_current_room_id) as DungeonRoom3D) != null):
 		return CAMERA_EXPEDITION_01_DISTANCE_OFFSET_M
 	return 0.0
 
@@ -3707,9 +3742,15 @@ func _expedition_02_camera_profile_for_spec(spec: Dictionary) -> Dictionary:
 ##
 ## 抽成**公开静态函数**是为了让验证探针直接调它，而不是各自复刻一遍拼接规则
 ## （复刻的探针测不到真身，这正是那条 bug 溜过去的原因）。
+const SHARED_DATABASE_BOSS_LEVEL := "expedition_01"
+const SHARED_DATABASE_BOSS_FIELDS := ["boss_content_id", "boss_reinforcement_plan", "spawn_placements", "encounter"]
+
+
 static func expedition_static_layout_path(
 	level_id: String, runtime_room_id: String
 ) -> String:
+	if level_id == "99" and runtime_room_id == "boss":
+		level_id = SHARED_DATABASE_BOSS_LEVEL
 	return (
 		"res://assets/art/environments/tower_zones/expedition/runtime/"
 		+ "room_instances/%s/" % level_id
@@ -3750,7 +3791,43 @@ static func has_runtime_room_art(layout_path: String) -> bool:
 	return found
 
 
+static func shared_database_boss_content() -> Dictionary:
+	var floor := LEVEL_PLAN_LOADER.load_floor_plan(SHARED_DATABASE_BOSS_LEVEL, 0)
+	for value: Dictionary in floor.get("rooms", []):
+		if str(value.get("key", "")) == "boss":
+			var content := {}
+			for field: String in SHARED_DATABASE_BOSS_FIELDS:
+				if value.has(field):
+					content[field] = value[field]
+			return content
+	push_error("Shared database boss content is missing from expedition 01")
+	return {}
+
+
+func _make_box_enemy(
+	type_id: String, floor: int, floor_level: int, room: DungeonRoom3D, elite_encounter_id: String = ""
+) -> Dictionary:
+	var config := super(type_id, floor, floor_level, room, elite_encounter_id)
+	if (is_expedition() and get_expedition_level_id() == "99" and room.room_id == "boss"
+		and str(config.get("boss_content_id", "")) == "boss_monitor002"):
+		# 99 inherits only the shared first encounter's HP, not 01's other monster rules.
+		var source := LEVEL_PLAN_LOADER.load_level_plan(SHARED_DATABASE_BOSS_LEVEL)
+		var rules := source.get("monster_rules", {}) as Dictionary
+		var stats := rules.get("stats", {}) as Dictionary
+		var kinds := stats.get("per_kind", {}) as Dictionary
+		var boss := kinds.get("boss", {}) as Dictionary
+		if boss.has("hp"):
+			config["override_max_hp"] = maxi(1, int(boss["hp"]))
+	return config
+
+
 func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: String) -> void:
+	if is_expedition() and get_expedition_level_id() == "99" and str(spec.get("id", "")) == "boss":
+		# Preserve 99's geometry, graph, and run identity; only the encounter is shared.
+		spec = spec.duplicate()
+		for field: String in SHARED_DATABASE_BOSS_FIELDS:
+			spec.erase(field)
+		spec.merge(shared_database_boss_content(), true)
 	var plan_dimensions: Vector2 = spec.get("dimensions", Vector2(30.0, 25.0)) as Vector2
 	# 档位：**flow 房间按真实尺寸取档，其余继续 `tower_cell`**。
 	#
@@ -4115,6 +4192,9 @@ func _declare_edge(
 
 
 func _door_policy_for_edge(from_room_id: String, target_room_id: String) -> Dictionary:
+	if is_expedition() and get_expedition_level_id() == "99" and from_room_id == "boss" and target_room_id == "extraction":
+		var source := LEVEL_PLAN_LOADER.load_level_plan(SHARED_DATABASE_BOSS_LEVEL)
+		return (source.get("door_policy", {}) as Dictionary).duplicate(true)
 	var edge := _edge_key(from_room_id, target_room_id)
 	# 楼顶→99层和99层→98层属于固定交通接口：不检查清房、
 	# 不消耗房间钥匙，也不弹命运卡，确保基地动线不会被局内经济锁死。
@@ -9150,6 +9230,14 @@ func get_physical_location_snapshot() -> Dictionary:
 
 func _current_floor_number() -> int:
 	return _floor_number_from_index(_physical_floor_index())
+
+
+## The pause test shortcut must not leave a live run or a scene handoff.
+func can_launch_expedition_test_from_pause() -> bool:
+	return (not is_expedition() and not _completed and not _expedition_bootstrap_failed
+		and not _expedition_loading_active and not bool(get_meta("loading_bootstrap_pending", false))
+		and _active_transition_edge.is_empty() and not _is_player_dead()
+		and is_player_inside_facility() and _is_player_on_facility_ground_level())
 
 
 func get_return_to_base_context() -> Dictionary:

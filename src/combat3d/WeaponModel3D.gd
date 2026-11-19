@@ -748,6 +748,10 @@ func cancel_charge() -> void:
 	_charge_shooter = null
 
 
+func _debug_shot_multiplier(shooter: Node3D) -> float:
+	return (shooter as Player3D).get_debug_gun_damage_multiplier() if not _firing_hostile and shooter is Player3D else 1.0
+
+
 func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: float) -> bool:
 	_firing_shooter = shooter
 	if display_only or gun_id.is_empty() or _cooldown > 0.0 or _reload_remaining > 0.0 or current_ammo <= 0:
@@ -791,7 +795,7 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 			angle = randf_range(-spread * 0.5, spread * 0.5)
 		var shot_direction := base_direction.rotated(Vector3.UP, angle).normalized()
 		var is_critical := forced_critical or randf() < _critical_chance + _character_critical_bonus(shooter)
-		var projectile_damage := maxi(1, int(damage * shot_damage_multiplier))
+		var projectile_damage := maxi(1, int(damage * shot_damage_multiplier * _debug_shot_multiplier(shooter)))
 		if is_critical:
 			# Enemy3D 的通用暴击入口会乘 1.5；在这里补齐命运卡的实际倍率差额。
 			projectile_damage = maxi(1, int(projectile_damage * _critical_damage_multiplier / 1.5))
@@ -987,7 +991,7 @@ func _fire_copy_wave(
 		configs.append({
 			"direction": (-aim_direction if backward else aim_direction).rotated(Vector3.UP, angle),
 			"speed": bullet_speed,
-			"damage": maxi(1, int(damage * damage_scale * (_critical_damage_multiplier / 1.5 if is_critical else 1.0))),
+			"damage": maxi(1, int(damage * damage_scale * _debug_shot_multiplier(shooter) * (_critical_damage_multiplier / 1.5 if is_critical else 1.0))),
 			"critical": is_critical,
 			"hostile": _firing_hostile,
 			"target_group": _firing_target_group,

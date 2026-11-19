@@ -1,9 +1,17 @@
 extends RefCounted
 ## 远征命运卡经济纯服务。
-## 只接受运行时已经解析出的编成、货币规则和实际击杀收入；不读取钱包决定价格，
-## 不读取未来收益解锁稀有度。每次门后报价在生成时冻结，直到该门后事务关闭。
+##
+## **2026-11-20 定价口径**：售价不再由本服务计算。命运卡只按稀有度取固定售价
+## （`FATE_PRICE_BY_RARITY = [30, 60, 110, 180, 270]`，唯一价格源在 `Dungeon3D`），
+## 同稀有度同价，不随来源房、参考收益、门序号、种子、卡片或余额变化。
+##
+## 本服务保留的是**统计与核对**能力：按真实编成算参考收益、累计实际击杀收入、
+## 给出稀有度解锁阈值与逐门价表快照。这些数字只用于核对与解锁，
+## 不参与任何报价分支。
 
+## 存档 schema 不变：本轮只改报价来源，`export_snapshot` 的字段与语义都没动。
 const SCHEMA_VERSION := 3
+## 以下常数只服务历史价表快照（`door_price_table`）与旧档解释，**不再参与报价**。
 const PRICE_FLOOR_RATIO := 0.85
 const PRICE_CEILING_RATIO := 1.15
 ## 门后报价基准 = **刚清完那间内容房的参考收益**（不是整关平均、不是钱包）。
@@ -155,6 +163,9 @@ static func ensure_common_offer(offer: Array[FateCard], allowed_pool: Array[Fate
 	return out
 
 
+## ⚠️ 以下三个查询是 2026-11-20 前的**报价接口**，售价统一为按稀有度固定价后
+## 它们**不再被任何生产代码调用**（`Dungeon3D` 的展示、实扣、存档都取 `FATE_PRICE_BY_RARITY`）。
+## 保留签名只为让旧探针/旧记录仍可解读历史价表；不要在新代码里用它们定价。
 func price_for_rarity(rarity: int, door_index: int = 1) -> int:
 	if not _configured:
 		return 0
@@ -238,7 +249,7 @@ func budget_snapshot(wallet: int) -> Dictionary:
 		"wallet": maxi(0, wallet),
 		"earned_kill_income": _actual_kill_income,
 		"spendable_budget": maxi(0, wallet),
-		"formula": "spendable_budget = current_run_wallet; rarity_unlock_income = cumulative_actual_kill_income; cheapest_quote = 0.70 x just_cleared_room_reference_income",
+		"formula": "spendable_budget = current_run_wallet; rarity_unlock_income = cumulative_actual_kill_income; card price = fixed_by_rarity",
 	}
 
 
@@ -280,11 +291,16 @@ func get_snapshot() -> Dictionary:
 		"actual_kill_events": _actual_kill_events,
 		"max_unlocked_rarity": max_unlocked_rarity(),
 		"segment_income_expected": _segment_income_expected.duplicate(),
+		# 以下两项是**历史价表快照**（2026-11-20 前的参考收益定价），仅供核对与旧记录解读；
+		# 现行售价不读它们，见 `pricing_mode` / `fixed_prices`。
 		"price_bounds": _price_bounds_snapshot(1),
 		"door_price_table": _door_price_table(),
+		# 现行售价是固定价；价格表本身只有一份，在 `Dungeon3D.FATE_PRICE_BY_RARITY`，
+		# 这里不再复制第二份数字，避免两处漂移。
+		"pricing_mode": "fixed_by_rarity",
 		"min_card_price": MIN_CARD_PRICE,
 		"rarity_unlock_thresholds": _unlock_thresholds(),
-		"budget_formula": "spendable_budget = current_run_wallet; actual_kill_income is not future income and never changes a frozen quote; cheapest_quote = 0.70 x just_cleared_room_reference_income",
+		"budget_formula": "spendable_budget = current_run_wallet; actual_kill_income only unlocks rarity and is not future income; card price = fixed_by_rarity (no wallet, room, seed or discount adjustment)",
 	}
 
 

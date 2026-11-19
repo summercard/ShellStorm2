@@ -12,6 +12,10 @@ signal game_save_reset_resolved(result: Dictionary)
 const ReturnAction = preload("res://src/ui/unstuck/ReturnToBaseAction.gd")
 const TRAINING_RANGE_SCENE_PATH := "res://scenes/TrainingRange3D.tscn"
 
+const TEST_EXPEDITION_ID := "99"
+const EXPEDITION_LOADING_SCENE := "res://scenes/ExpeditionLoadingScreen.tscn"
+const EXPEDITION_99_LABEL := "远征99（测试）"
+
 const AA_MODES := ["off", "fxaa", "msaa_2x", "msaa_4x", "msaa_8x", "taa"]
 const AA_LABELS := ["关闭", "FXAA（快速）", "MSAA 2×", "MSAA 4×", "MSAA 8×", "TAA（高档推荐）"]
 const SHADOW_MODES := ["low", "medium", "high"]
@@ -31,6 +35,7 @@ const PRISM_RAIL_WIDTH := 820.0
 @onready var reset_game_save_button: Button = $Center/Panel/Margin/MainPage/ResetGameSaveButton
 @onready var reset_game_save_hint: Label = $Center/Panel/Margin/MainPage/ResetGameSaveHint
 @onready var training_range_button: Button = $Center/Panel/Margin/MainPage/TrainingRangeButton
+@onready var expedition_99_button: Button = $Center/Panel/Margin/MainPage/Expedition99Button
 @onready var training_range_hint: Label = $Center/Panel/Margin/MainPage/TrainingRangeHint
 @onready var reset_game_save_dialog: ConfirmationDialog = $ResetGameSaveDialog
 @onready var main_page: VBoxContainer = $Center/Panel/Margin/MainPage
@@ -67,6 +72,7 @@ var _toggle_nodes: Dictionary = {}
 var _syncing_controls := false
 var _reset_in_progress := false
 var _return_to_base_request_in_progress := false
+var _expedition_99_departing := false
 var _main_entry_request_id := -1
 ## 是否以「主页设置」上下文复用本覆盖层（主代理临时 reparent 到主页 CanvasLayer）。
 var _entry_settings_context := false
@@ -87,6 +93,7 @@ func _ready() -> void:
 	# 失败态返城会替换整个场景；等 GUI 输入派发结束后再执行。
 	return_to_base_button.pressed.connect(_request_return_to_base, CONNECT_DEFERRED)
 	training_range_button.pressed.connect(_request_training_range, CONNECT_DEFERRED)
+	expedition_99_button.pressed.connect(_request_expedition_99, CONNECT_DEFERRED)
 	reset_game_save_button.pressed.connect(_request_game_save_reset)
 	reset_game_save_dialog.confirmed.connect(_confirm_game_save_reset)
 	back_button.pressed.connect(_show_main_page)
@@ -95,6 +102,7 @@ func _ready() -> void:
 	_setup_graphics_controls()
 	_setup_input_controls()
 	_apply_prism_pause_style()
+	_refresh_expedition_99_action()
 	_main_page_title_default_text = main_page_title.text
 	_resume_button_default_text = resume_button.text
 
@@ -173,6 +181,7 @@ func _apply_entry_settings_overrides() -> void:
 	return_to_base_hint.visible = false
 	training_range_button.visible = false
 	training_range_hint.visible = false
+	_set_expedition_99_visible(false)
 	reset_game_save_button.visible = false
 	reset_game_save_hint.visible = false
 	main_page_title.text = "设置"
@@ -316,6 +325,7 @@ func _style_prism_main_page() -> void:
 		[graphics_button, "ghost"],
 		[controls_button, "ghost"],
 		[training_range_button, "ghost"],
+		[expedition_99_button, "ghost"],
 		[return_to_base_button, "muted"],
 		[reset_game_save_button, "danger"],
 	]
@@ -372,7 +382,7 @@ func _style_prism_main_page() -> void:
 ## 挂在"每次打开"而不是 _ready：首次构建时控件尺寸还是 0，第一帧没有意义。
 func _stagger_main_page_rows() -> void:
 	UIFX.prism_fade_stagger([
-		graphics_button, controls_button, training_range_button,
+		graphics_button, controls_button, training_range_button, expedition_99_button,
 		return_to_base_button, reset_game_save_button, resume_button,
 	], 0.028, 0.14)
 
@@ -652,6 +662,7 @@ func _show_main_page() -> void:
 	UIFX.switch_page_fade(main_page)
 	_refresh_return_to_base_action()
 	_refresh_training_range_action()
+	_refresh_expedition_99_action()
 	if center.visible:
 		graphics_button.grab_focus()
 		_stagger_main_page_rows()
@@ -992,6 +1003,76 @@ func _request_training_range() -> void:
 	if change_error != OK:
 		training_range_hint.text = "进入训练靶场失败：%s" % error_string(change_error)
 		training_range_hint.modulate = Color(1.0, 0.40, 0.30)
+
+
+func _expedition_99_host() -> Node:
+	if not OS.has_feature("editor") or _entry_settings_context:
+		return null
+	var host := _get_game_root()
+	if host == null or host != get_tree().current_scene or not host.has_method("can_launch_expedition_test_from_pause"):
+		return null
+	return host if bool(host.call("can_launch_expedition_test_from_pause")) else null
+
+
+func _set_expedition_99_visible(available: bool) -> void:
+	expedition_99_button.visible = available
+	var rule := expedition_99_button.get_meta("prism_row_rule", null) as Control
+	if is_instance_valid(rule):
+		rule.visible = available
+
+
+func _refresh_expedition_99_action() -> void:
+	_set_expedition_99_visible(_expedition_99_host() != null)
+	expedition_99_button.disabled = _expedition_99_departing
+	expedition_99_button.text = EXPEDITION_99_LABEL
+
+
+func _request_expedition_99() -> void:
+	var host := _expedition_99_host()
+	if host == null or not is_pause_open() or not main_page.visible or _expedition_99_departing:
+		return
+	if (
+		not Global.is_only_pause_reason("manual") or NarrativeDirector.is_playing()
+		or IrisTransition.is_loading_active() or IrisTransition.is_covered()
+		or not IrisTransition.loading_destination_scene.is_empty()
+		or not GameEntryFlow.peek_pending_entry().is_empty()
+		or not GameDesignConfig.pending_expedition_level_id.is_empty()
+	):
+		_expedition_99_error("当前有演出或场景切换，不能出发。")
+		return
+	var target := GameDesignConfig.expedition_level_scene(TEST_EXPEDITION_ID)
+	if (
+		target.is_empty() or not BaseManager.is_expedition_level_unlocked(TEST_EXPEDITION_ID)
+		or not ResourceLoader.exists(target, "PackedScene")
+		or not ResourceLoader.exists(EXPEDITION_LOADING_SCENE, "PackedScene")
+	):
+		_expedition_99_error("远征99无法加载。")
+		return
+	_expedition_99_departing = true
+	expedition_99_button.disabled = true
+	var ticket := ExpeditionDepartureService.prepare(host, ExpeditionEntryContext.BASE)
+	if not bool(ticket.get("success", false)):
+		_expedition_99_error(str(ticket.get("message", "出发失败。")))
+		return
+	if not GameDesignConfig.select_expedition_level(TEST_EXPEDITION_ID):
+		var restored := ExpeditionDepartureService.rollback(ticket)
+		_expedition_99_error("远征99未登记。" if restored else "出发失败，原行动存档未能恢复。")
+		return
+	var request_id := GameEntryFlow.request_gameplay_entry(GameEntryFlow.REASON_MISSION_OPERATIONS_TELEPORT)
+	set_paused(false)
+	if not get_tree().paused and get_tree().change_scene_to_file(EXPEDITION_LOADING_SCENE) == OK:
+		return
+	GameEntryFlow.cancel_request(request_id)
+	var restored := ExpeditionDepartureService.rollback(ticket)
+	set_paused(true)
+	_expedition_99_error("读取界面加载失败，请重试。" if restored else "读取失败，原行动存档未能恢复。")
+
+
+func _expedition_99_error(message: String) -> void:
+	_expedition_99_departing = false
+	expedition_99_button.disabled = false
+	expedition_99_button.text = EXPEDITION_99_LABEL + " · " + message
+	expedition_99_button.grab_focus()
 
 
 func _restore_high_defaults() -> void:

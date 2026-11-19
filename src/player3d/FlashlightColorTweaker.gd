@@ -696,6 +696,21 @@ func _build_reserved_page(parent: Container) -> void:
 	relock_btn.text = "恢复远征关卡02为未解锁"
 	relock_btn.pressed.connect(_on_relock_expedition02_pressed)
 	page.add_child(relock_btn)
+	if OS.has_feature("editor"):
+		page.add_child(HSeparator.new())
+		var slider := _add_slider_row(page, "枪支伤害倍率（本场景）", 1.0, 10.0, 0.5)
+		var value_label := _find_value_label_for(slider)
+		slider.value = 1.0
+		slider.value_changed.connect(func(value: float) -> void:
+			value_label.text = "%.1f×" % value
+			if is_instance_valid(_player3d):
+				_player3d.set_debug_gun_damage_multiplier(value)
+		)
+		var reset := Button.new()
+		reset.name = "ResetDebugGunDamage"
+		reset.text = "恢复枪支默认伤害（1×）"
+		reset.pressed.connect(func() -> void: slider.value = 1.0)
+		page.add_child(reset)
 
 
 func _refresh_reserved_status() -> void:

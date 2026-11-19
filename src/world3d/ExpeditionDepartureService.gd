@@ -27,13 +27,15 @@ static func prepare(provider: Node, source := ExpeditionEntryContext.BASE) -> Di
 		return {"success": false, "message": "出发交接失败，请重试"}
 	return {"success": true, "previous": previous, "provider": provider, "carried": true}
 
-static func rollback(ticket: Dictionary) -> void:
+static func rollback(ticket: Dictionary) -> bool:
 	var previous := ticket.get("previous", {}) as Dictionary
+	var restored: bool
 	if previous.is_empty():
-		BaseManager.clear_active_run_checkpoint("mission_operations_departure_rollback")
+		restored = BaseManager.clear_active_run_checkpoint("mission_operations_departure_rollback")
 	else:
-		BaseManager.set_active_run_checkpoint(previous, "mission_operations_departure_rollback")
+		restored = BaseManager.set_active_run_checkpoint(previous, "mission_operations_departure_rollback")
 	var provider := ticket.get("provider") as Node
 	if is_instance_valid(provider):
 		BaseManager.register_runtime_checkpoint_provider(provider)
 	GameDesignConfig.pending_expedition_level_id = ""
+	return restored

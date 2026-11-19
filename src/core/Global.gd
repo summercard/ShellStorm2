@@ -65,6 +65,9 @@ func clear_pause_reasons() -> void:
 func has_pause_reason(reason: String) -> bool:
 	return _pause_reasons.has(reason)
 
+func is_only_pause_reason(reason: String) -> bool:
+	return _pause_reasons.size() == 1 and has_pause_reason(reason)
+
 func _sync_pause_state() -> void:
 	var should_pause := not _pause_reasons.is_empty()
 	var changed := is_paused != should_pause

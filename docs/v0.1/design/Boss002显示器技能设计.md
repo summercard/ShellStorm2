@@ -8,11 +8,11 @@ FeatureID：BOSS-STAGES / ENEMY-AI / ASSET-PIPELINE；游戏版本0.1.0；设计
 
 ### 远征01正式投放
 
-`floor_00.json` 的 `boss` 房间通过 `boss_content_id=boss_monitor002` 指派身份。现行 `spawn_placements` 只有 1 个实例、`encounter.stages` 只有 1 波（2026-11-18 起）：`box_boss_arena` 的 `spawn_overrides` 只保留 boss 一条，经 MonsterInjector 生成 1 只显示器 Boss；原随从（强化小僵尸／强化远程／召唤者）、原第二波（`box_room_spread` ＋ `box_corner_ambush`）与第三波（`box_wall_arc`）已全部移除。身份、数值和技能仍取唯一内容目录。未进入不提前激活，死亡走 Enemy3D.killed 及房间存活账；本房摆位只有 Boss，Boss 死亡即满足清房条件、结算一次清房奖励，并按既有门策略离开；Boss 激活后 `boss_reinforcement_plan` 的两侧增援不受影响。重进已清房不得重复刷新或重复发奖。
+`floor_00.json` 的 `boss` 房间通过 `boss_content_id=boss_monitor002` 指派身份。现行 `spawn_placements` 只有 1 个实例、`encounter.stages` 只有 1 波（2026-11-18 起）：`box_boss_arena` 的 `spawn_overrides` 只保留 boss 一条，经 MonsterInjector 生成 1 只显示器 Boss；原随从（强化小僵尸／强化远程／召唤者）、原第二波（`box_room_spread` ＋ `box_corner_ambush`）与第三波（`box_wall_arc`）已全部移除。身份、数值和技能仍取唯一内容目录。未进入不提前激活，首败走 Enemy3D 的伤害与击败入口，再由正式房交给武装平台；不在显示器倒下时清房或发奖。01 与 99 首战仅使用现有 HUD 首领条，不显示该实体的头顶血条。Boss 激活后的 `boss_reinforcement_plan` 不变，切入接管时才结束增援。重进已清房不得重复刷新或重复发奖。
 
-远征为单层行动，清 Boss 房不增加塔楼下行权限，也不生成 BOSS_KILL 信标；终点继续使用 STANDARD 撤离。独立验收入口 `verify_expedition_monitor_boss_flow` 使用正式远征场景、进房生命周期、触发盒、死亡信号及自动续波；不得以直接实例化 Boss 替代投放验收。
+远征为单层行动，清 Boss 房不增加塔楼下行权限，也不生成 BOSS_KILL 信标。01 首次正常领取稀土钥匙后走原安全返航通讯和信标；99 不写正式主线，终点仍使用 STANDARD 撤离。武装平台的共享接管和最终结算另见[武装平台设计](远征01武装平台首领设计.md)。独立验收入口 `verify_expedition_monitor_boss_flow` 使用正式远征场景、进房生命周期、触发盒、死亡信号及自动续波；不得以直接实例化 Boss 替代投放验收。
 
-初始生命52000、基础伤害24、移动3.612m/s、根尺寸倍率1.05（沿用Enemy3D Boss口径），碰撞沿用Boss圆柱1.92m半径、2.30m高度并受根倍率影响；**圆柱之上再叠一组跟骨走的动画受击盒**，见下节。攻击朝向在前摇结束前锁定；命中要求同一地面、无遮挡，不能穿墙或跨楼板。
+全局初始生命52000；远征01及测试99的显示器首战共用01配置的8000 HP。基础伤害24、移动3.612m/s、根尺寸倍率1.05（沿用Enemy3D Boss口径），碰撞沿用Boss圆柱1.92m半径、2.30m高度并受根倍率影响；**圆柱之上再叠一组跟骨走的动画受击盒**，见下节。攻击朝向在前摇结束前锁定；命中要求同一地面、无遮挡，不能穿墙或跨楼板。
 
 ### 动画受击体积（2026-10-14 业主：子弹要打在模型实体上）
 
@@ -108,4 +108,4 @@ FeatureID：BOSS-STAGES / ENEMY-AI / ASSET-PIPELINE；游戏版本0.1.0；设计
 
 ### 远征03复用（2026-11-02）
 
-用户要求复用01显示器Boss及战斗阶段。03同样指派`boss_monitor002`、引用同一Prefab与MonitorBossCombat；三个阶段与首波/后两波、出场后递增增援沿01现行配置。03局部出生锚点统一平移到50×40竞技场中心，生命覆盖取01同口径绝对值（01 自 2026-11-08 起为 18000，原 32000；03 的 `level_plan.json` 尚未同步、仍写 32000），不沿用本页历史初始52000。清房仍保留03无钥匙感应门策略，终点STANDARD撤离；部署与验收见[独立记录](../development/2026-11-02_expedition03_monitor_boss.md)。
+用户要求复用01显示器Boss及战斗阶段。03同样指派`boss_monitor002`、引用同一Prefab与MonitorBossCombat；三个阶段与首波/后两波、出场后递增增援沿01现行配置。03局部出生锚点统一平移到50×40竞技场中心，生命覆盖使用本关 `level_plan.json` 的独立绝对值32000，不受01/99共享首战调参影响，不沿用本页历史初始52000。清房仍保留03无钥匙感应门策略，终点STANDARD撤离；部署与验收见[独立记录](../development/2026-11-02_expedition03_monitor_boss.md)。

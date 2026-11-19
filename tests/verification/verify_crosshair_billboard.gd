@@ -195,9 +195,6 @@ func _cursor_screen_px(player: Player3D, camera: Camera3D, pos: Vector3) -> floa
 
 ## D. 敌方子弹 billboard（通用弹体路由 —— 绝大多数敌人走这条）。
 func _check_enemy_bullet_billboard(player: Player3D, stage: Node3D) -> void:
-	# D0. **缺省口径**：不传 `billboard` 时必须走 3D 弹体。
-	# 这是 2026-11-10 业主回退后的主路径，必须有断言盯着 —— 否则总开关被谁改回 true
-	# 也不会有任何用例变红（11-10 之前正是这种状态：公告板是唯一路径，没有反向哨兵）。
 	var defaults := Projectile3D.new()
 	stage.add_child(defaults)
 	defaults.activate({
@@ -206,20 +203,7 @@ func _check_enemy_bullet_billboard(player: Player3D, stage: Node3D) -> void:
 		"visual_scale": 2.0, "shooter": player,
 	}, Vector3(0.0, 0.75, -3.0))
 	await get_tree().process_frame
-	var dsnap := defaults.get_orientation_snapshot()
-	_samples += 3
-	_expect(
-		not bool(dsnap.get("billboard", true)),
-		"敌弹缺省必须走 3D 弹体（`ENEMY_BULLET_BILLBOARD = false`），实测 billboard=true"
-	)
-	_expect(
-		bool(dsnap.get("body_visible", false)),
-		"敌弹缺省时 3D 弹体必须可见（回退后不应只剩一个不可见的图标）"
-	)
-	_expect(
-		not bool(dsnap.get("icon_visible", true)),
-		"敌弹缺省时不得显示公告板图标"
-	)
+	_check_billboard_snapshot(defaults.get_orientation_snapshot(), "enemy default", 2.0)
 	defaults.queue_free()
 
 	# D1. 显式 `billboard = true`：走公告板分支（实现保留，随时可切回）。
@@ -240,7 +224,7 @@ func _check_enemy_bullet_billboard(player: Player3D, stage: Node3D) -> void:
 
 ## 两条路由都要过同一套判据：关卡点名 `visual_id` 时走八弹种 `VfxBulletBody3D`。
 func _check_bullet_routes(player: Player3D, stage: Node3D) -> void:
-	for visual_id in ["mod_bullet_piercing", "mod_bullet_electric"]:
+	for visual_id in ["mod_bullet_standard", "mod_bullet_sticky", "mod_bullet_bounce", "mod_bullet_piercing", "mod_bullet_explosive", "mod_bullet_homing", "mod_bullet_blackhole", "mod_bullet_balloon", VfxPool3D.FX01_BULLET_ELECTRIC]:
 		var projectile := Projectile3D.new()
 		stage.add_child(projectile)
 		projectile.activate({
@@ -264,11 +248,7 @@ func _check_bullet_routes(player: Player3D, stage: Node3D) -> void:
 		"target_group": "enemy_3d", "projectile_collision_mask": 5, "shooter": player,
 	}, Vector3(0.0, 0.75, -4.0))
 	await get_tree().process_frame
-	var snap := friendly.get_orientation_snapshot()
-	_samples += 3
-	_expect(not bool(snap.get("billboard", true)), "玩家子弹不得开启 billboard")
-	_expect(not bool(snap.get("icon_visible", true)), "玩家子弹不得显示 billboard 图标")
-	_expect(bool(snap.get("body_visible", false)), "玩家子弹的 3D 弹体必须可见")
+	_check_billboard_snapshot(friendly.get_orientation_snapshot(), "player default", 1.0)
 	friendly.queue_free()
 
 
@@ -329,7 +309,7 @@ func _report() -> void:
 	if not ResourceLoader.exists(ENEMY_ICON_SHADER_PATH):
 		_failures.append("敌方子弹 shader 不存在：%s" % ENEMY_ICON_SHADER_PATH)
 	if _failures.is_empty():
-		print("CROSSHAIR_BILLBOARD_OK: crosshair-icon / camera-facing / screen-ratio / enemy-bullet-icon / player-bullet-3d pass (samples=%d)" % _samples)
+		print("CROSSHAIR_BILLBOARD_OK: crosshair-icon / camera-facing / screen-ratio / enemy-bullet-icon / player-bullet-icon pass (samples=%d)" % _samples)
 	else:
 		for failure in _failures:
 			push_error(failure)

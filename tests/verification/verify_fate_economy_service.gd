@@ -83,50 +83,24 @@ func _check_boundaries(service: RefCounted) -> void:
 	_expect(service.max_unlocked_rarity() == 0, "零实际收入提前解锁")
 
 
-func _check_one_card_per_door(formal: Dictionary) -> void:
-	var segments: Array = formal["segment_income_expected"]
+## 2026-11-20 定价口径：售价只按稀有度取固定值，与门次、该门参考收益、钱包都无关。
+##
+## 历史价表 `door_price_table` 仍然生成（供核对与旧记录解读），但**它不再是报价**：
+## 这里逐门核对它是「历史快照」而不是「现行价」，并钉死五档数字与顺序。
+func _check_fixed_price_contract(formal: Dictionary) -> void:
+	var expected: Array = Dungeon3D.FATE_PRICE_BY_RARITY
+	_expect(expected == [30, 60, 110, 180, 270], "固定售价五档被改动：%s" % str(expected))
+	_expect(str(formal.get("pricing_mode", "")) == "fixed_by_rarity", "经济快照未声明现行定价口径为固定价")
 	var table: Array = formal["door_price_table"]
-	_expect(table.size() == int(formal["door_count"]), "逐门价表没有覆盖全部构筑门")
-	var spent := 0
-	var first_purchase_slot := -1
-	var floor_price := int(formal.get("min_card_price", 40))
+	_expect(table.size() == int(formal["door_count"]), "历史价表没有覆盖全部构筑门")
 	for row: Dictionary in table:
 		var door := int(row["door"])
-		var segment_index := int(row["segment_index"])
 		var segment_income := int(row["segment_income"])
 		var base := int(row["base"])
-		var prices: Array = row["prices"]
-		var cheapest := int(prices[0])
-		var cumulative := 0
-		# 第 door 门打开时已清完的房间 = 序号 0..door（0 是收益为 0 的安全屋，
-		# 1..door 是 room_01..room_door）。安全屋→room_01 是入口交通门、不弹命运卡，
-		# 所以第 1 次命运门出现在清完 room_01 之后，门序号 k 对应 segment k。
-		for cursor in range(mini(door + 1, segments.size())):
-			cumulative += int(round(float(segments[cursor])))
-		print("FATE_DOOR_PRICE door=%d segment_index=%d segment=%d base=%d cumulative=%d common=%d rare=%d epic=%d legend=%d mystic=%d" % [
-			door, segment_index, segment_income, base, cumulative,
-			int(prices[0]), int(prices[1]), int(prices[2]), int(prices[3]), int(prices[4]),
+		print("FATE_HISTORICAL_PRICE_TABLE door=%d segment=%d base=%d legacy_prices=%s" % [
+			door, segment_income, base, JSON.stringify(row["prices"]),
 		])
-		if segment_income <= 0:
-			continue
-		# 一间房的参考收益：买得下一张普通卡，但**买不下三张**。
-		_expect(cheapest <= maxi(base, floor_price), "第%d门普通卡贵过该门基准（%d>%d）" % [door, cheapest, base])
-		_expect(cheapest * 3 > segment_income, "第%d门同一间房收益就能买三张（%d×3<=%d）" % [door, cheapest, segment_income])
-		_expect(int(prices[2]) > segment_income, "第%d门史诗卡不高于一间房收益（%d<=%d）" % [door, prices[2], segment_income])
-		# 按「有钱就买最便宜一张」模拟整条主路，检查保底与"不能三张"。
-		var wallet := cumulative - spent
-		var affordable := 0
-		for price in prices:
-			if int(price) <= wallet:
-				affordable += 1
-		_expect(affordable >= 1 or wallet <= 0, "第%d门连一张普通卡都买不起（钱包%d，最低%d）" % [door, wallet, cheapest])
-		_expect(affordable < 3, "第%d门同一间房收益可买三张（钱包%d）" % [door, wallet])
-		if first_purchase_slot < 0 and affordable >= 1:
-			first_purchase_slot = affordable
-		if wallet >= cheapest:
-			spent += cheapest
-	_expect(first_purchase_slot == 1, "首次买得起的门不是只够一张（%d）" % first_purchase_slot)
-	print("FATE_ONE_CARD_PER_DOOR first_slot=%d spent=%d" % [first_purchase_slot, spent])
+	print("FATE_FIXED_PRICE expected=%s mode=%s" % [str(expected), str(formal.get("pricing_mode", ""))])
 
 
 func _spawn_expedition(snapshot: Dictionary = {}) -> TowerDescent3D:
@@ -155,7 +129,7 @@ func _check_formal_expedition() -> void:
 	print("FATE_FORMAL_Y seed=%d floor=%d doors=%d min=%d expected=%d max=%d" % [SEED, formal["floor"], formal["door_count"], income["min"], income["expected"], income["max"]])
 	for row: Dictionary in formal["price_bounds"]:
 		print("FATE_FORMAL_PRICE rarity=%d min=%d centre=%d max=%d threshold=%d" % [row["rarity"], row["min"], row["quote"], row["max"], formal["rarity_unlock_thresholds"][int(row["rarity"])]])
-	_check_one_card_per_door(formal)
+	_check_fixed_price_contract(formal)
 	_check_boundaries(economy)
 	var stages := {"stages": [{"boxes": [0, 0]}, {"boxes": [1]}]}
 	var production: Array = dungeon.call("_resolve_encounter_stages", stages, 3)
@@ -407,15 +381,14 @@ func _quote_phase_with_reward_fixture(dungeon: TowerDescent3D, phase: String, ta
 	dungeon.set("_fate_door_offer_id", saved_id)
 	_expect(high_seen, "全池随机抽牌连续40门未见传奇卡，抽池未真正打开")
 	print("FATE_FORMAL_HIGH_POOL phase=%s high_rarity_seen=%s samples=40" % [phase, high_seen])
+	# 正式入口的每一张候选都必须恰好等于其稀有度的固定售价：不看该门收益、不看钱包。
+	var fixed_prices: Array = Dungeon3D.FATE_PRICE_BY_RARITY
 	for card: FateCard in dungeon.get("_door_fate_choices"):
 		var price: int = dungeon.call("_fate_price", card)
+		var expected := int(fixed_prices[clampi(int(card.card_rarity), 0, fixed_prices.size() - 1)])
 		var bounds: Dictionary = dungeon.call("_fate_price_bounds", card)
-		# 保底价是本门唯一允许低于下界的报价：它被压到当前余额，且全场只有一张。
-		var is_guarantee := price < int(bounds["min"]) and price == maxi(0, GameManager.currency)
-		_expect(
-			is_guarantee or (price >= int(bounds["min"]) and price <= int(bounds["max"])),
-			"正式%s报价越界" % phase
-		)
+		_expect(price == expected, "正式%s阶段报价不等于固定售价：%s rarity=%d price=%d expected=%d" % [phase, card.get_stable_card_id(), int(card.card_rarity), price, expected])
+		_expect(int(bounds["min"]) == price and int(bounds["max"]) == price, "正式%s阶段区间与固定价不一致：min=%d quote=%d max=%d" % [phase, int(bounds["min"]), int(bounds["quote"]), int(bounds["max"])])
 	dungeon.call("_close_door_fate_overlay")
 
 

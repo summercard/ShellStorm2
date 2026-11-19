@@ -24,32 +24,32 @@
       "enabled": false
     },
     {
-      "at": 0.15,
+      "at": 0,
       "do": "camera.shot",
       "position_anchor": "platform_takeover",
       "position_offset": [
-        -10,
-        7,
-        10
+        5,
+        9,
+        14
       ],
       "target_anchor": "platform_takeover",
       "target_offset": [
-        0,
-        0,
-        0
+        -4,
+        2,
+        -4
       ],
-      "duration": 1,
-      "fov": 51,
-      "shot_label": "platform_takeover_medium",
+      "duration": 0,
+      "fov": 60,
+      "shot_label": "platform_takeover_fixed",
       "position_from_offset": [
-        -11.6,
-        7,
-        10
+        5,
+        9,
+        14
       ],
       "target_from_offset": [
-        0,
-        0,
-        0
+        -4,
+        2,
+        -4
       ]
     },
     {
@@ -94,35 +94,6 @@
     {
       "at": 15.05,
       "do": "story.platform.rear"
-    },
-    {
-      "at": 17.95,
-      "do": "camera.shot",
-      "position_anchor": "platform_takeover",
-      "position_offset": [
-        8,
-        5,
-        7
-      ],
-      "target_anchor": "platform_takeover",
-      "target_offset": [
-        -4,
-        2,
-        -6
-      ],
-      "duration": 1,
-      "fov": 58,
-      "shot_label": "rear_grapple_takes_control",
-      "position_from_offset": [
-        6.4,
-        5,
-        7
-      ],
-      "target_from_offset": [
-        -4,
-        2,
-        -6
-      ]
     },
     {
       "at": 18.04,

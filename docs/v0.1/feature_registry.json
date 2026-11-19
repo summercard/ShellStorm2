@@ -513,9 +513,16 @@
         "docs/v0.1/development/2026-11-07_loading_warmup_gate.md",
         "docs/v0.1/development/2026-11-11_expedition_entry_hologram_ceremonies.md",
         "docs/v0.1/development/2026-11-10_main_story_031_033.md",
-        "docs/v0.1/development/2026-11-11_expedition01_flow.md"
+        "docs/v0.1/development/2026-11-11_expedition01_flow.md",
+        "docs/v0.1/development/2026-11-19_esc_expedition99.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_pause_expedition99",
+          "suite": "manual",
+          "requires": "编辑器引擎真实窗口；启动前隔离用户目录；默认键盘，-- --pad 验手柄"
+        },
         {
           "kind": "command",
           "path": "scripts/run_expedition_entry_qa.py",
@@ -931,7 +938,10 @@
         "docs/v0.1/development/2026-11-02_expedition03_monitor_boss.md",
         "docs/v0.1/development/2026-11-10_main_story_031_033.md",
         "docs/v0.1/development/2026-11-11_expedition01_flow.md",
-        "docs/v0.1/development/2026-11-19_platform_sentinel_combat_tuning.md"
+        "docs/v0.1/development/2026-11-19_platform_sentinel_combat_tuning.md",
+        "docs/v0.1/development/2026-11-19_platform_sentinel_refit.md",
+        "docs/v0.1/development/2026-11-19_shared_expedition_boss.md",
+        "docs/v0.1/development/2026-11-19_shared_monitor_hp.md"
       ],
       "verification": [
         {
@@ -951,6 +961,9 @@
         {
           "kind": "scene",
           "id": "verify_expedition01_platform_sentinel"
+        },
+        {
+          "id": "verify_expedition99_shared_boss"
         },
         {
           "kind": "scene",

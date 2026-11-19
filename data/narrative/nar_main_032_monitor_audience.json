@@ -6,7 +6,7 @@
     "kind": "manual",
     "once": "run"
   },
-  "duration": 69.183,
+  "duration": 68.333,
   "presentation": {
     "dialogue": {
       "mode": "A"
@@ -365,14 +365,14 @@
       "duration": 1.0
     },
     {
-      "at": 59.18,
+      "at": 58.33,
       "do": "actor.say",
       "who": "player",
       "text": "你一句我也没听懂…",
       "hold": 2.701
     },
     {
-      "at": 62.432,
+      "at": 61.582,
       "do": "ui.subtitle",
       "speaker": "系统",
       "speaker_id": "boss_monitor002",
@@ -380,7 +380,7 @@
       "auto": 2.901
     },
     {
-      "at": 63.683,
+      "at": 62.833,
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
@@ -414,7 +414,7 @@
       ]
     },
     {
-      "at": 65.684,
+      "at": 64.834,
       "do": "ui.subtitle",
       "speaker": "系统",
       "speaker_id": "boss_monitor002",
@@ -422,22 +422,22 @@
       "auto": 2.834
     },
     {
-      "at": 65.684,
+      "at": 64.834,
       "do": "camera.shake",
       "duration": 0.65,
       "amplitude": 0.12
     },
     {
-      "at": 68.936,
+      "at": 68.086,
       "do": "story.boss.control_hold",
       "held": true
     },
     {
-      "at": 68.936,
+      "at": 68.086,
       "do": "story.boss.activate"
     },
     {
-      "at": 69.183,
+      "at": 68.333,
       "do": "flow.end"
     }
   ]

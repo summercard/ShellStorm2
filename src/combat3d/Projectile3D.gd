@@ -11,6 +11,9 @@ const PROJECTILE_ENCHANT_VISUALS = preload("res://src/vfx/projectile_enchant/Pro
 ## 敌人本体 / 受击体积所在的碰撞层（第 3 层，值 4）。与玩家子弹的 `mask = 5` 同口径。
 ## 只用于「敌弹敌我通吃」（`hits_allies`）时把敌人层并进 mask，不改任何层的分配。
 const COLLISION_LAYER_ENEMY := 4
+## At unit scale, the 0.12 m native sphere plus this enemy-only allowance is 0.20 m.
+const ENEMY_GRAZE_ALLOWANCE_M := 0.08
+var _enemy_graze_sphere := SphereShape3D.new()
 ## 弹种专属弹体视觉路由（落地 04 §6.2「子弹模块必填 visual_id」）。
 ## 键 = 子弹模块 content_id（mod_bullet_*）；查不到即回落通用弹体 BULLET_VISUAL_SCENE。
 ## 八个弹种一条 Prefab 一个类，见 src/vfx/VfxBullet<Type>3D.gd 与账本「子弹特效」大类。
@@ -318,6 +321,13 @@ func _physics_process(delta: float) -> void:
 			_retire()
 			return
 	var previous_position := global_position
+	var graze := _enemy_graze(step)
+	if not graze.is_empty():
+		global_position += step * float(graze["fraction"])
+		for oil_world: Node in get_tree().get_nodes_in_group("special_item_world_3d"):
+			oil_world.call("ignite_bullet_segment", previous_position, global_position)
+		_hit_target(graze["collider"], graze)
+		return
 	var collision := move_and_collide(step)
 	if damage > 0:
 		for oil_world: Node in get_tree().get_nodes_in_group("special_item_world_3d"):
@@ -357,6 +367,58 @@ func _physics_process(delta: float) -> void:
 				_hit_surface(ground_collision.get_normal())
 		return
 	_hit_surface(collision.get_normal(), hit_context)
+
+
+## Extra contact tolerance is a query, never a larger wall/player collision body.
+func _enemy_graze(step: Vector3) -> Dictionary:
+	if damage <= 0 or step.is_zero_approx() or not _is_round_bullet() or fate_behavior.has("floor_burst"):
+		return {}
+	if (collision_mask & COLLISION_LAYER_ENEMY) == 0 or _collision_shape == null:
+		return {}
+	var native := _collision_shape.shape as SphereShape3D
+	if native == null:
+		return {}
+	var space := get_world_3d().direct_space_state
+	_enemy_graze_sphere.radius = native.radius + ENEMY_GRAZE_ALLOWANCE_M
+	var q := PhysicsShapeQueryParameters3D.new()
+	q.shape = _enemy_graze_sphere
+	q.transform = _collision_shape.global_transform
+	q.collision_mask = COLLISION_LAYER_ENEMY
+	var excluded: Array[RID] = [get_rid()]
+	if is_instance_valid(shooter) and shooter is PhysicsBody3D:
+		excluded.append(shooter.get_rid())
+	for body in _tracked_collision_exceptions:
+		if is_instance_valid(body):
+			excluded.append(body.get_rid())
+	q.exclude = excluded
+	var hit := space.get_rest_info(q)
+	var fraction := 0.0
+	if hit.is_empty():
+		q.motion = step
+		var span := space.cast_motion(q)
+		if span.size() < 2 or span[1] >= 1.0:
+			return {}
+		fraction = minf(1.0, span[1] + 0.001 / step.length())
+		q.motion = Vector3.ZERO
+		q.transform.origin += step * fraction
+		hit = space.get_rest_info(q)
+	if hit.is_empty():
+		return {}
+	var target := instance_from_id(int(hit.get("collider_id", 0))) as Node3D
+	if not is_instance_valid(target) or not target.has_method("take_damage") or (_returning and _return_hit_ids.has(target.get_instance_id())):
+		return {}
+	var owner: Node3D = ((target as EnemyHitVolume3D).owner_enemy as Node3D) if target is EnemyHitVolume3D else target
+	if _target_is_dead(owner):
+		return {}
+	# Native collision wins ties, including thin cover in front of a grazing shot.
+	if move_and_collide(step * fraction, true) != null:
+		return {}
+	var ray := PhysicsRayQueryParameters3D.create(q.transform.origin, hit["point"], collision_mask & ~COLLISION_LAYER_ENEMY)
+	ray.exclude = excluded
+	ray.hit_from_inside = true
+	if not space.intersect_ray(ray).is_empty():
+		return {}
+	return {"collider": target, "fraction": fraction, "position": hit["point"], "normal": hit["normal"]}
 
 
 func _hit_target(collider: Node, hit_context: Dictionary = {}) -> void:
@@ -829,6 +891,8 @@ func _ensure_visual(scene: PackedScene) -> void:
 
 ## visual_id → 弹体视觉 Prefab；未登记的 id 一律回落通用弹体（不报错、不中断开火）。
 func _visual_scene_for(visual_id: String) -> PackedScene:
+	if visual_id == VfxPool3D.FX01_BULLET_ELECTRIC:
+		return BULLET_VISUAL_SCENE
 	if BULLET_VISUAL_REGISTRY.has(visual_id):
 		return BULLET_VISUAL_REGISTRY[visual_id] as PackedScene
 	return BULLET_VISUAL_SCENE
@@ -875,11 +939,11 @@ func _base_scale_factor() -> float:
 
 
 func _uses_enchantment_body_visual() -> bool:
-	return _visual_id == "mod_bullet_standard" and not _enchant_attributes.is_empty() and not (hostile and _hostile_billboard_enabled())
+	return false # Standard enchantments no longer replace the circular body.
 
 
 func _has_enchantment_body_tint() -> bool:
-	return _visual_id == "mod_bullet_standard" and _uses_enchantment_body_visual()
+	return _visual_id == "mod_bullet_standard" and not _enchant_attributes.is_empty()
 
 
 func _bullet_visual_color() -> Color:
@@ -906,21 +970,14 @@ func _bullet_visual_context() -> Dictionary:
 		"suppress_body_light": not _enchant_attributes.is_empty(),
 		"enchantment_body_enabled": _uses_enchantment_body_visual(),
 		"base_body_color": bullet_color,
-		# 敌方子弹**默认 3D 弹体**（2026-11-10 业主：「我只要求把接触体积和模型（被放大）的
-		# 体积做成一致，没有要求做成公告板」）。公告板实现完整保留，由
-		# `GameDesignConfig.ENEMY_BULLET_BILLBOARD` 或单发 `projectile_config["billboard"]` 切换。
-		# 玩家子弹恒为 3D 弹体：它要表达「我的弹道往哪飞」，方向感是信息本身；
-		# 敌方子弹若切公告板，要表达的是「这里有个威胁」，形状与颜色恒定才读得快。
-		"billboard": hostile and _hostile_billboard_enabled(),
+		"billboard": _is_round_bullet(),
 	}
 
 
-## 敌弹呈现方式：单发覆盖（`billboard` 配置项）优先，其次总开关。
-## 与 `_bullet_visual_context()` 共用同一出口，不允许在别处再判一次。
-func _hostile_billboard_enabled() -> bool:
-	if _billboard_override >= 0:
-		return _billboard_override == 1
-	return GameDesignConfig.ENEMY_BULLET_BILLBOARD
+func _is_round_bullet() -> bool:
+	return not bool(fate_behavior.get("rock_projectile", false)) and (
+		_visual_id.is_empty() or _visual_id.begins_with("mod_bullet_") or _visual_id == VfxPool3D.FX01_BULLET_ELECTRIC
+	)
 
 
 ## 子投射物继承母弹的**形态覆盖**：母弹显式指定过 `billboard` 就照抄，否则留空

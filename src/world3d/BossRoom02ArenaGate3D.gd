@@ -80,6 +80,8 @@ var _gates: Array[Node3D] = []
 var _camera_armed := true
 var _camera_started := false
 var _arena_sealed := false
+@export var use_stair_camera_override := true
+var _platform_barriers_enabled := true
 
 
 func _ready() -> void:
@@ -108,7 +110,8 @@ func _physics_process(_delta: float) -> void:
 	# 本节点与三个槽位都是美术的子节点，故 `affine_inverse() * 世界点` 恒得美术帧坐标。
 	var local := global_transform.affine_inverse() * player.global_position
 	var inside := _room.contains_world_position(player.global_position)
-	_tick_camera(player, local, inside)
+	if use_stair_camera_override:
+		_tick_camera(player, local, inside)
 	_tick_arena(local, inside)
 
 
@@ -168,6 +171,8 @@ func _arena_resolved() -> bool:
 
 
 func _tick_arena(local: Vector3, inside: bool) -> void:
+	if not _platform_barriers_enabled:
+		return
 	if _arena_sealed:
 		if _arena_resolved():
 			_set_gates_raised(false, GATE_LOWER_SECONDS)
@@ -182,6 +187,18 @@ func _tick_arena(local: Vector3, inside: bool) -> void:
 	)
 	if past_line and within_platform:
 		_set_gates_raised(true, GATE_RISE_SECONDS)
+
+
+func set_platform_barriers_enabled(enabled: bool) -> void:
+	if enabled == _platform_barriers_enabled:
+		return
+	_platform_barriers_enabled = enabled
+	if not enabled:
+		_set_gates_raised(false, 0.0)
+	for gate in _gates:
+		gate.visible = enabled
+		if not enabled:
+			_set_gate_collision(gate, false)
 
 
 func _set_gates_raised(raised: bool, duration: float) -> void:

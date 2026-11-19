@@ -192,11 +192,13 @@ const HUD_PLAYER_SHAKE_TINT_STRENGTH := 0.55
 const HUD_DASH_RING_DIAMETER_DESIGN := 60.0
 const HUD_DASH_RING_LEFT_DESIGN := 18.0
 const HUD_DASH_RING_BOTTOM_DESIGN := 26.0
-## 非远征门后购卡的历史稀有度基准；远征01改由 FateEconomyService 的真实收益区间冻结报价。
+## 命运卡**唯一价格源**：按稀有度五档固定售价（普通/稀有/史诗/传说/禁忌）。
+## 正式远征拾取入口与其它入口都只读这张表，同稀有度同价。
 ## 只由 `GameManager.currency`（本局金币）支付；局外总池 `BaseManager.get_extraction_points()` 永不参与。
 const FATE_PRICE_BY_RARITY := [30, 60, 110, 180, 270]
 
-## 远征命运经济由纯服务持有；门后报价只从该服务读冻结快照。
+## 命运经济纯服务仍持有远征参考收益与击杀统计，供稀有度解锁与核对快照使用；
+## 它**不再参与任何报价**（2026-11-20 定价口径改为按稀有度固定售价）。
 var _fate_economy = FATE_ECONOMY_SERVICE_SCRIPT.new()
 var _fate_door_quote: Dictionary = {}
 var _fate_door_offer_id := 0
@@ -1367,9 +1369,17 @@ func _import_door_fate_snapshot(value: Variant) -> bool:
 	_door_fate_choices.assign(restored_cards)
 	_door_fate_purchased.assign(restored_purchased)
 	_fate_door_offer_id = maxi(0, int(snapshot.get("offer_id", 0)))
-	# 旧档没有这一项 ⇒ 0 ⇒ 报价序号退回「用门序号」（历史口径，报价本身仍是冻结值）。
+	# 旧档没有这一项 ⇒ 0 ⇒ 报价序号退回「用门序号」（历史口径；固定价下该序号已不影响价格）。
 	_fate_offer_price_index = maxi(0, int(snapshot.get("price_index", 0)))
 	_fate_door_quote = (snapshot.get("quotes", {}) as Dictionary).duplicate(true)
+	# 2026-11-20：恢复到正式入口后，**未购**候选一律按当前固定售价重新报价，
+	# 旧档里的参考收益价/保底压价不得把报价带回旧口径。已购位的报价属于已成交记录，
+	# 保持原值不重写（该位本来就不可再购买）。
+	for index in range(restored_cards.size()):
+		if bool(restored_purchased[index]) if index < restored_purchased.size() else false:
+			continue
+		var restored_card: FateCard = restored_cards[index]
+		_fate_door_quote[restored_card.get_stable_card_id()] = _fate_fixed_price(restored_card)
 	_fate_pickup_claimed = (snapshot.get("claimed_pickups", {}) as Dictionary).duplicate(true)
 	# 过渡档可能已有 pickup offer 而尚未写 claimed_pickups；冻结候选就是已认领证据。
 	if _fate_offer_source == "pickup" and not _fate_offer_pickup_id.is_empty() and not restored_cards.is_empty():
@@ -2226,16 +2236,16 @@ func set_monster_rules(rules: Dictionary) -> void:
 		)
 
 
-## 远征命运经济只从当前关卡设计源的真实刷怪盒/遭遇编成建模。
-## 这里不触碰商人、背包或训练 UI；纯服务只接收数据并冻结报价。
+## 远征命运经济仍从当前关卡设计源的真实刷怪盒/遭遇编成建模，
+## 但它**只服务稀有度解锁与核对快照**，不参与报价（2026-11-20：售价统一为按稀有度固定价）。
 ##
 ## **关卡无关**：本函数不判断 `level_id` 是否等于某个具体关卡。
 ## 任何远征关卡只要 `plan` 非空、能从中读出真实编成，就会被建模并置 `_configured = true`；
-## 读不出（空 plan / 缺编成）时 `configure_from_runtime` 会保持未配置，
-## 消费方统一经 `uses_dynamic_fate_economy()` 回退到历史固定价格表。
+## 读不出（空 plan / 缺编成）时保持未配置，此时 `uses_dynamic_fate_economy()` 为假。
+## 两条分支的**售价完全相同**（都取 `FATE_PRICE_BY_RARITY`），差别只在统计快照是否存在。
 ##
 ## ⚠️ 历史上这里写的是 `level_id != "expedition_01" → return`，那会造成自锁：
-## 新增关卡永远不配置经济 ⇒ `is_configured()` 恒假 ⇒ 永远拿不到逐门定价。
+## 新增关卡永远不配置经济 ⇒ `is_configured()` 恒假 ⇒ 永远拿不到稀有度统计。
 ## 新增关卡时**不要**在这里补 `== "expedition_0N"`，见
 ## [关卡接入规范](../../docs/v0.1/关卡接入规范.md) §3。
 func configure_expedition_fate_economy(plan: Dictionary) -> void:
@@ -2257,13 +2267,16 @@ func configure_expedition_fate_economy(plan: Dictionary) -> void:
 	)
 
 
-## **唯一判据**：本局是否使用「关卡级动态命运经济」（逐门定价 / 稀有度解锁 / 报价区间）。
+## **唯一判据**：本局是否已建立「关卡级命运经济统计」（稀有度解锁 / 核对快照 / 正式候选池）。
+##
+## 2026-11-20 起**它不再决定售价**：无论真假，报价都取 `FATE_PRICE_BY_RARITY` 固定售价。
+## 它仍决定候选池来源与统计快照是否存在，因此保留这条唯一判据。
 ##
 ## 只看能力，不看关卡 ID：
-## - 为真 ⇒ 报价取 `_fate_economy` 的冻结快照，同门同价、可恢复；
-## - 为假 ⇒ 回退历史固定价格表 `FATE_PRICE_BY_RARITY`（塔楼与非远征路径）。
+## - 为真 ⇒ 候选走 `_gate_expedition_fate_offer()`，并持有参考收益/击杀统计快照；
+## - 为假 ⇒ 候选走 `FateCardPresets.draw_offer()`（塔楼与非远征路径）。
 ##
-## ❗ 这是全文件**唯一**允许判断"要不要用动态经济"的地方。
+## ❗ 这是全文件**唯一**允许判断"要不要用关卡经济统计"的地方。
 ## 新增关卡时不要在别处再写 `get_runtime_map_id() == "expedition_0N"`：
 ## 那个写法会让新关卡在配置环节被挡掉、在消费环节却以为已配置，
 ## 形成"永远走不到"的死分支。见 [关卡接入规范](../../docs/v0.1/关卡接入规范.md) §3。
@@ -10206,22 +10219,16 @@ func _show_door_fate_choices(source := "", pickup_id := "", metadata: Dictionary
 		var offered_card := card_value as FateCard
 		if offered_card == null:
 			continue
-		_fate_door_quote[offered_card.get_stable_card_id()] = (
-			_fate_economy.frozen_quote_for_card(
-				int(offered_card.card_rarity), _fate_offer_price_index,
-				offered_card.get_stable_card_id(), run_seed
-			)
-			if _fate_economy.is_configured()
-			else int(FATE_PRICE_BY_RARITY[clampi(int(offered_card.card_rarity), 0, FATE_PRICE_BY_RARITY.size() - 1)])
-		)
+		# 2026-11-20：报价只按稀有度取固定售价，不看来源房、参考收益、门序号、种子与余额。
+		_fate_door_quote[offered_card.get_stable_card_id()] = _fate_fixed_price(offered_card)
 	var rules := preload("res://src/weapons/FateOfferPolicy.gd").policy(get_runtime_map_id())
 	_fate_offer_policy_snapshot = {"policy_id": rules.get("policy_id", "global"), "revision": rules.get("revision", 0)}
 	_door_fate_choices.assign(offer)
 	# 三张卡全部出现在场上，买与不买由玩家决定 ⇒ 每个卡位都要有独立的购买状态。
 	for _choice_index in range(_door_fate_choices.size()):
 		_door_fate_purchased.append(false)
-	# 报价填完之后才有价可判：三张全买不起时把最低那张压到当前余额。
-	_ensure_affordable_fate_choice()
+	# 2026-11-20：取消「三张全买不起就把最低价压到余额」的保底降价 ——
+	# 同一张卡在任何时候都必须是同一个价，玩家靠攒钱而不是靠压价买到卡。
 	_door_fate_active = true
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
@@ -11071,63 +11078,35 @@ func _is_weapon_fate_target_full(card: FateCard) -> bool:
 	return capacity > 0 and int(target.get("fate_slot_used", 0)) >= capacity
 
 
-## 单张卡价格只读本门打开时冻结的报价。
-## 远征公式见 FateEconomyService：真实编成参考收益 → 明示上下界；实际击杀收入只解锁稀有度，
-## 不改已经冻结的报价，也不按剩余余额动态宰价。非远征专项继续使用历史价格表。
+## 单张卡的固定售价：**唯一价格源** `FATE_PRICE_BY_RARITY`。
+##
+## 2026-11-20 定价口径：同稀有度同价，不因来源房、参考收益、门序号、种子、
+## 卡片特判封顶或当前余额而变化。正/逆位同价（售价只看稀有度，不看方位）。
+func _fate_fixed_price(card: FateCard) -> int:
+	if card == null:
+		return 0
+	var rarity := clampi(int(card.card_rarity), 0, FATE_PRICE_BY_RARITY.size() - 1)
+	return int(FATE_PRICE_BY_RARITY[rarity])
+
+
+## 单张卡报价 = 固定售价。展示（价格行/悬停）、实扣（`_purchase_fate_card`）与
+## 存档快照取的都是这一条，因此三者恒等。
+##
+## 本门冻结表 `_fate_door_quote` 仍然优先：它保存的是打开这一门时写下的同一组固定价，
+## 恢复旧快照时也不会与当前售价规则打架（旧档里的旧式报价会被 `_import_door_fate_snapshot`
+## 统一改写成固定价，见该函数）。
 func _fate_price(card: FateCard) -> int:
 	if card == null:
 		return 0
 	var stable_id := card.get_stable_card_id()
 	if _fate_door_quote.has(stable_id):
 		return int(_fate_door_quote[stable_id])
-	var rarity := clampi(int(card.card_rarity), 0, FATE_PRICE_BY_RARITY.size() - 1)
-	if uses_dynamic_fate_economy():
-		return _fate_economy.frozen_quote_for_card(
-			rarity, _fate_price_door_index(), stable_id, run_seed
-		)
-	return int(FATE_PRICE_BY_RARITY[rarity])
-
-
-## 报价用的「进度序号」。0 = 沿用本门序号（门后历史口径，旧档恢复也走这条）。
-## 宝箱入口在 `_show_door_fate_choices()` 里显式填「已清内容房数」。
-func _fate_price_door_index() -> int:
-	return _fate_offer_price_index if _fate_offer_price_index > 0 else _fate_door_offer_id
+	return _fate_fixed_price(card)
 
 
 func _fate_price_bounds(card: FateCard) -> Dictionary:
-	if card == null:
-		return {"min": 0, "quote": 0, "max": 0}
-	if uses_dynamic_fate_economy():
-		return _fate_economy.price_bounds_for_card(
-			int(card.card_rarity), card.get_stable_card_id(), _fate_price_door_index()
-		)
 	var price := _fate_price(card)
 	return {"min": price, "quote": price, "max": price}
-
-
-## 门后保底：每次三张里至少一张买得起。
-##
-## 命运门总是在清完一间房之后才开（安全屋→room_01 是入口交通门，不弹卡），所以玩家
-## 手里通常有钱；但三张是稀有度全开随机，仍可能整手都是高价卡，或者前面几门把钱花光。
-## 这里把**报价最低的那张**下调到当前余额：只降不升、只动一张、且只在三张全买不起时生效。
-##
-## 这是「冻结报价」的唯一例外 —— 冻结价仍由门序号 / 基准房收益 / 种子决定，
-## 保底只做兜底压价；压价结果写进 `_fate_door_quote`，随快照恢复，不重算、不随余额涨回去。
-## 非远征入口（塔楼等）继续用历史固定价，不参与保底。
-func _ensure_affordable_fate_choice() -> void:
-	if not uses_dynamic_fate_economy() or _door_fate_choices.is_empty():
-		return
-	var wallet := maxi(0, GameManager.currency)
-	var cheapest: FateCard = null
-	for card in _door_fate_choices:
-		if card == null:
-			continue
-		if cheapest == null or _fate_price(card) < _fate_price(cheapest):
-			cheapest = card
-	if cheapest == null:
-		return
-	if _fate_price(cheapest) > wallet:
-		_fate_door_quote[cheapest.get_stable_card_id()] = wallet
 
 
 func _gate_expedition_fate_offer() -> Array[FateCard]:

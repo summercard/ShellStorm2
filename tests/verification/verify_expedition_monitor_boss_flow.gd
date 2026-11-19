@@ -54,7 +54,7 @@ func _ready() -> void:
 	check(not tower._try_open_room_door("extraction"), "战斗未清时撤离方向门拒绝开启")
 	if not bosses.is_empty():
 		var boss := bosses[0]
-		check(boss.max_hp == 52000, "正式刷怪生命为52000")
+		check(boss.max_hp == 8000 and boss.current_hp == 8000, "正式首战显示器满血8000 HP")
 		check(Vector2(boss.global_position.x, boss.global_position.z).distance_to(Vector2(room.global_position.x, room.global_position.z)) < 0.01, "Boss出生在房间中心")
 		check((-boss.global_basis.z).dot(Vector3.BACK) > 0.999, "Boss初始面向南边+Z")
 		check(is_equal_approx(boss.move_speed, 3.612), "Boss移速为原1.204的三倍")

@@ -389,6 +389,7 @@ core_scenes=(
   verify_expedition_wave_chain
   verify_expedition_monitor_boss_flow
   verify_expedition01_platform_sentinel
+  verify_expedition99_shared_boss
   verify_expedition03_monitor_boss_flow
   verify_expedition03_special_room_relayout
   verify_expedition03_room_interactions
@@ -528,6 +529,8 @@ visual_scenes=(
 
 # 必须由人工操控/观察才能得出可靠结论；登记但不进入自动套件。
 manual_scenes=(
+  # Editor window and isolated save directory required; run with keyboard and -- --pad.
+  verify_pause_expedition99
   # 新容量guard仅经 run_fate_tutorial_qa.py --scene tests/verification/verify_pistol_fate_capacity.tscn --logic；Autoload前隔离。
   verify_pistol_fate_capacity
   # 仅经 scripts/run_fate_tutorial_qa.py 复用已导入的工程外副本，Autoload前隔离。

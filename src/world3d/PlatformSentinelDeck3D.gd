@@ -11,14 +11,22 @@ const REMOVED := [
 ]
 const DECK_PROPS := ["equipment_cluster", "damaged_cabinet_open", "damaged_cabinet_crushed"]
 const OUTER_START := 3.8
-const INNER_START := 9.0
-const FINISH := 13.1
+const OUTER_FALL_DURATION := 4.1
+const FINISH := OUTER_START + OUTER_FALL_DURATION
 const BRIDGE_TRAVEL := 3.6
+const FEED_COLOR_SECONDS := 3.6
+const FEED_TEAR_SECONDS := 0.24
+const FEED_COLOR_COUNT := 3
 const BRIDGE_SLUGS := [
 	"bridge_deck_5m", "bridge_rail_5m", "bridge_truss_5m", "bridge_belly_5m",
 ]
 
+enum SignalPicture { LEGACY, MONITOR, LINK_LOST, RISING, ONLINE, OUTER_WARNING, OUTER_RELEASE, SAFE }
+
 @export var red_black := true
+@export var rear_screen_travel := 0.0
+@export var rear_screen_parts: Array[NodePath] = []
+@export var rear_screen_chassis: Array[NodePath] = []
 
 var tiles: Array[Node3D] = []
 var grapples: Array[Node3D] = []
@@ -30,6 +38,15 @@ var _exit_bridge: StaticBody3D
 var _side_bridges: Array[StaticBody3D] = []
 var _bridge_visuals: Array[Node3D] = []
 var _collapse: Dictionary
+var _rails: Array[Node3D] = []
+var _rail_shapes: Array[CollisionShape3D] = []
+var _rear_rest: Dictionary[Node3D, Vector3] = {}
+var _rear_tween: Tween
+var _rear_displays: Array[Node3D] = []
+var _feed_faces: Array[MeshInstance3D] = []
+var _feed := Vector2.ZERO
+var _lift_fascias: Dictionary[Node3D, Vector3] = {}
+var _arena_gate: BossRoom02ArenaGate3D
 
 func _enter_tree() -> void:
 	var arena := get_parent().get_parent().get_node("BossRoom02")
@@ -53,6 +70,28 @@ func _is_moving_bridge_piece(piece: Node3D, slug: String) -> bool:
 
 
 func _ready() -> void:
+	var arena := get_parent().get_parent().get_node("BossRoom02")
+	_arena_gate = arena.get_node("ArenaGate") as BossRoom02ArenaGate3D
+	for path in rear_screen_parts + rear_screen_chassis:
+		var node := arena.get_node(path) as Node3D
+		_rear_rest[node] = node.position
+		if node.has_method("set_signal_picture") and node.get("screen_material") != null:
+			_rear_displays.append(node)
+	set_rear_signal(SignalPicture.MONITOR)
+	for path in rear_screen_chassis:
+		# The v027 screen shells were visual-only; keep their new physical backing
+		# attached to the same transform as the visual (including the authored tilt).
+		var chassis := arena.get_node(path) as Node3D
+		var body := StaticBody3D.new()
+		body.name = "MovingScreenBacking"
+		body.collision_mask = 0
+		var bounds := BoxShape3D.new()
+		bounds.size = Vector3(11.0, 7.0, 1.68)
+		var shape := CollisionShape3D.new()
+		shape.position = Vector3(0, 3.5, 0)
+		shape.shape = bounds
+		body.add_child(shape)
+		chassis.add_child(body)
 	# One palette selection for this boss's four shared resources. The slot is
 	# changed only when its arena is loaded, and keeps the source meshes shared.
 	for material in [BRIDGE_METAL, MATTE, CLEARCOAT, BRIDGE_LAMP]:
@@ -88,7 +127,7 @@ func _ready() -> void:
 			tile.add_child(sector)
 			sectors.append(sector)
 		tile.set_meta("sectors", sectors)
-		for part in tile.get_children():
+		for part: Node3D in tile.get_children():
 			if part.name.begins_with("Grapple_"):
 				grapples.append(part)
 				play(part, "activate_grapple", 0.0, 0.0)
@@ -105,11 +144,16 @@ func _ready() -> void:
 				collider.position.y = 0.54
 				rail.add_child(collider)
 				part.add_child(rail)
+				_rails.append(part)
+				_rail_shapes.append(collider)
+			if part.name.begins_with("Fascia_"):
+				_lift_fascias[part] = part.position
 			for value in part.find_children("*", "MeshInstance3D", true, false):
 				var mesh := value as MeshInstance3D
 				if mesh.name.ends_with("Screen_Emissive"):
 					mesh.set_instance_shader_parameter("canvas_center", Vector2(tile.position.x, tile.position.z) / 25.0 + Vector2(0.5, 0.5))
 					tile.set_meta("screen", mesh)
+					_feed_faces.append(mesh)
 				if mesh.name.contains("Sector_"):
 					var id := int(str(mesh.name).get_slice("Sector_", 1).left(2)) - 1
 					if id >= 0 and id < 4:
@@ -117,6 +161,39 @@ func _ready() -> void:
 						mesh.reparent(sectors[id])
 	grapples.sort_custom(func(a: Node3D, b: Node3D) -> bool: return str(a.name) < str(b.name))
 	sentries.sort_custom(func(a: Node3D, b: Node3D) -> bool: return str(a.name) < str(b.name))
+
+func set_platform_rails(enabled: bool) -> void:
+	for i in range(_rails.size()):
+		_rails[i].visible = enabled
+		_rail_shapes[i].set_deferred("disabled", not enabled)
+	_arena_gate.set_platform_barriers_enabled(enabled)
+
+
+func set_rear_signal(picture: SignalPicture, burst := false) -> void:
+	for slot in range(_rear_displays.size()):
+		_rear_displays[slot].call("set_signal_picture", picture, slot, burst)
+
+
+func set_rear_screen_retraction(retracted: bool, animate := false) -> void:
+	if _rear_tween != null:
+		_rear_tween.kill()
+		_rear_tween = null
+	if animate:
+		_rear_tween = create_tween().set_parallel().set_trans(Tween.TRANS_SINE)
+	for node in _rear_rest:
+		var destination := _rear_rest[node] + Vector3.FORWARD * (rear_screen_travel if retracted else 0.0)
+		if animate:
+			_rear_tween.tween_property(node, "position", destination, 1.45)
+		else:
+			node.position = destination
+
+
+# Cosmetic outer lift housings follow the launch, not the walkable deck or its colliders.
+func sample_launch_lift(elapsed: float) -> void:
+	var lift := 1.25 * smoothstep(0.18, 2.65, elapsed)
+	for fascia in _lift_fascias:
+		fascia.position = _lift_fascias[fascia] + Vector3.UP * lift
+
 
 func play(unit: Node3D, clip: StringName, speed := 1.0, at := 0.0) -> void:
 	var anim := unit.find_child("AnimationPlayer", true, false) as AnimationPlayer
@@ -160,6 +237,27 @@ func sync_skeleton(unit: Node3D) -> void:
 func socket(unit: Node3D, key: String) -> Node3D:
 	return unit.find_child("*__" + key, true, false) as Node3D
 
+# The existing encounter clock gates the presentation; it never reads this material back.
+func sample_combat_feed(elapsed: float) -> void:
+	var within := fposmod(elapsed, FEED_COLOR_SECONDS)
+	var progress := clampf((within - FEED_COLOR_SECONDS + FEED_TEAR_SECONDS) / FEED_TEAR_SECONDS, 0.0, 1.0)
+	var burst := smoothstep(0.0, 0.38, progress)
+	var palette := posmod(floori(elapsed / FEED_COLOR_SECONDS), FEED_COLOR_COUNT)
+	_set_combat_feed(Vector2(palette, burst))
+
+
+func clear_combat_feed() -> void:
+	_set_combat_feed(Vector2.ZERO)
+
+
+func _set_combat_feed(value: Vector2) -> void:
+	if _feed == value:
+		return
+	_feed = value
+	for face in _feed_faces:
+		face.set_instance_shader_parameter("deck_feed", value)
+
+
 func set_screens(phase: float, power := 1.0) -> void:
 	for tile in tiles:
 		_set_screen(tile, phase, power, 0.0, 0.0)
@@ -201,27 +299,26 @@ func wake_screens(elapsed: float) -> void:
 		_set_screen(tile, 0.0, clampf((elapsed - delay) * 2.75, 0.0, 1.0), 0.0, 0.0)
 
 
-func sample_collapse(elapsed: float, outer_start := OUTER_START, inner_start := INNER_START) -> Array[Vector3]:
+func sample_collapse(elapsed: float, outer_start := OUTER_START) -> Array[Vector3]:
 	var releases: Array[Vector3] = []
 	for tile in tiles:
 		var original: Transform3D = tile.get_meta("rest")
 		var side := maxf(absf(original.origin.x), absf(original.origin.z))
-		if side < 0.1:
+		if side <= 7.5:
 			continue
-		var outer := side > 7.5
-		var offset := outer_start if outer else inner_start
+		var offset := outer_start
 		if elapsed < offset:
 			var blink := 0.77 + 0.22 * sin(elapsed * 13.0 + side)
 			var shake := smoothstep(offset - 2.1, offset - 0.12, elapsed)
 			var phase := elapsed * 37.0 + original.origin.x * 1.41 + original.origin.z * 0.83
 			tile.transform = original * Transform3D(Basis.from_euler(Vector3(sin(phase), 0.0, cos(phase * 1.13)) * shake * 0.019), Vector3(0.0, sin(phase * 1.76) * shake * 0.06, 0.0))
-			_set_screen(tile, 1.0 if outer else 2.0, blink, 0.018 + shake * 0.06, elapsed * 0.012)
+			_set_screen(tile, 1.0, blink, 0.018 + shake * 0.06, elapsed * 0.012)
 			continue
 		var clip: Dictionary = _collapse.get(str(tile.name).to_lower(), {})
 		var frames: Array = clip.get("frames", [])
 		if frames.is_empty():
 			continue
-		var sample := clampf((elapsed - offset) * 15.0 + (0.0 if outer else 40.0), 0.0, frames.size() - 1.0)
+		var sample := clampf((elapsed - offset) * 15.0, 0.0, frames.size() - 1.0)
 		var i := floori(sample)
 		var at: Array = frames[i]
 		var next: Array = frames[mini(i + 1, frames.size() - 1)]
@@ -253,14 +350,14 @@ func open_return_bridge() -> void:
 	if is_instance_valid(_exit_bridge):
 		return
 	set_bridge_retraction(1.0, 0.0)
-	_exit_bridge = _ramp(2.48, 12.52, -1.40, 1.40, 0.0, 0.0)
-	for i in range(5):
+	_exit_bridge = _ramp(7.49, 12.52, -1.40, 1.40, 0.0, 0.0)
+	for i in range(3):
 		var mesh := MeshInstance3D.new()
 		var slab := BoxMesh.new()
-		slab.size = Vector3(2.025, 0.27, 2.8)
+		slab.size = Vector3(1.69, 0.27, 2.8)
 		mesh.mesh = palette_mesh(slab, Vector2(0.95, 0.85))
 		mesh.material_override = BRIDGE_METAL
-		mesh.position = Vector3(3.5 + 2.0 * i, -0.135, 0.0)
+		mesh.position = Vector3(8.33 + 1.67 * i, -0.135, 0.0)
 		_exit_bridge.add_child(mesh)
 		for edge in [-1.36, 1.36]:
 			var lamp := MeshInstance3D.new()
@@ -268,7 +365,7 @@ func open_return_bridge() -> void:
 			strip.size = Vector3(1.7, 0.025, 0.055)
 			lamp.mesh = palette_mesh(strip, Vector2(0.45, 0.25))
 			lamp.material_override = BRIDGE_LAMP
-			lamp.position = Vector3(3.5 + 2.0 * i, 0.0125, edge)
+			lamp.position = Vector3(8.33 + 1.67 * i, 0.0125, edge)
 			_exit_bridge.add_child(lamp)
 
 static func palette_mesh(primitive: PrimitiveMesh, swatch: Vector2) -> ArrayMesh:

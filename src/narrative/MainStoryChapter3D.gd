@@ -38,11 +38,17 @@ var _performance_fault := ""
 var _player_meet_anchor: Variant = null
 
 
-func setup(host: Node) -> void:
+var _boss_test_only := false
+
+
+func setup(host: Node, boss_test_only := false) -> void:
 	_host = host
+	_boss_test_only = boss_test_only
 	set_process(host != null)
 	var director := _director()
 	if director != null:
+		if _boss_test_only:
+			return
 		director.call("arm", BRIEFING_ID)
 		director.call("arm", BOSS_ID)
 		director.call("arm", KEY_RETURN_CALL_ID)
@@ -65,6 +71,10 @@ func _process(_delta: float) -> void:
 	if director == null or bool(director.call("is_playing")):
 		return
 	if _is_modal_or_unavailable():
+		return
+	if _boss_test_only:
+		if _is_boss_ready():
+			director.call("play", BOSS_ID, {"priority": 30})
 		return
 	if _is_briefing_ready():
 		if bool(director.call("play", BRIEFING_ID, {"priority": 30})):
@@ -240,6 +250,8 @@ func claim_main_story_key(source: Dictionary, checkpoint: Dictionary = {}) -> Di
 
 
 func call_instruction(action: String, params: Dictionary) -> Dictionary:
+	if _boss_test_only and not (action.begins_with("boss.") or action.begins_with("platform.")):
+		return _failed("测试关卡仅允许首领演出指令。")
 	if action.begins_with("platform.") and _host != null and _host.has_method("play_platform_takeover_cue"):
 		if bool(_host.call("play_platform_takeover_cue", action.trim_prefix("platform."), params)):
 			return _ok()
@@ -356,6 +368,8 @@ func should_end_narrative(narrative_id: String) -> bool:
 
 
 func can_commit_narrative(narrative_id: String, _reason: String) -> bool:
+	if _boss_test_only:
+		return false
 	match narrative_id:
 		BRIEFING_ID:
 			return _briefing_succeeded
@@ -692,7 +706,7 @@ func _is_briefing_ready() -> bool:
 
 
 func _is_boss_ready() -> bool:
-	if _completed(BOSS_ID) or not _is_boss_room():
+	if (not _boss_test_only and _completed(BOSS_ID)) or not _is_boss_room():
 		return false
 	var boss := _boss()
 	if boss == null or not is_instance_valid(boss):

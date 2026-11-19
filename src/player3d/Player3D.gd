@@ -295,6 +295,15 @@ var _base_collision_radius := 0.0
 var _base_collision_height := 0.0
 var _debug_scale_initialized := false
 ## 仅作用于镜头姿态的临时偏移量；玩家朝向/移动方向/战斗数据完全不受影响。
+var _debug_gun_damage_multiplier := 1.0
+
+func set_debug_gun_damage_multiplier(multiplier: float) -> void:
+	if OS.has_feature("editor"):
+		_debug_gun_damage_multiplier = clampf(multiplier, 1.0, 10.0)
+
+func get_debug_gun_damage_multiplier() -> float:
+	return _debug_gun_damage_multiplier if OS.has_feature("editor") else 1.0
+
 var _debug_camera_trailing_offset_m := 0.0
 var _debug_camera_yaw_offset_deg := 0.0
 ## 俯仰圆轴偏移（度，绕角色水平轴，正值=抬高镜头/更俯视）与世界空间整体平移（米）。

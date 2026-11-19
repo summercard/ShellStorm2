@@ -28,14 +28,16 @@ const CROSS_SPREAD := [-5.0, 0.0, 5.0]
 const GUN_YAW_LIMIT := 0.48
 const GUN_COOLDOWN := 5.0
 const AUTHORED_FIRE := 20.0 / 30.0
-const PORT_OFFLINE := 5.0
-const PORT_REARM := 7.0
 const SHUTDOWN_TIME := 0.6
 const SIDE_LABELS := ["入口", "东", "后", "西"]
 const MONITOR_VISUAL := preload("res://assets/art/enemies/bosses/enm_boss_monitor002/runtime/enm_boss_monitor002/enm_boss_monitor002_root_top3d.tscn")
 const IMPACT := 35.0 / 30.0
 const REAR := 2
 const FULL_DEPLOY := 3.15
+const DEFEAT_BEAT := 0.55
+const GRAB_POSE := 1.145
+const MONITOR_MARK := Vector3(-7.15, 0.08, -8.55)
+const THROW_DURATION := 0.85
 
 enum Stage { DORMANT, TAKEOVER, DEPLOY, COMBAT, COLLAPSE, CORE, WON }
 enum Barrage { NONE, BURST, CROSS, VOLLEY }
@@ -46,15 +48,12 @@ var _player: Player3D
 var _director: Node
 var _arm_targets: Array[PlatformSentinelWeakPoint3D] = []
 var _core: MeshInstance3D
-var _ports: Array[PlatformSentinelWeakPoint3D] = []
-var _side_lamps: Array[Node3D] = []
 var _arm_slots: Array[Array] = []
 var _gun_rest_lanes: Array[Array] = []
 var _arm_ready: Array[float] = [0.0, 0.0, 0.0, 0.0]
 var _gun_ready: Array[float] = [0.0, 0.0, 0.0, 0.0]
 var _armor: Array[StaticBody3D] = []
 var _screen_wake_at := -1.0
-var _port_ready: Array[float] = [0.0, 0.0, 0.0, 0.0]
 var _route_markers: Array[Node3D] = []
 var _barrage := Barrage.NONE
 var _barrage_lanes: Dictionary = {}
@@ -64,7 +63,6 @@ var _cross_at := 12.0
 var _volley_at := 22.0
 var _cross_side := 0
 var _next_cross_side := 0
-var _gun_markers: Array[MeshInstance3D] = []
 var _projectiles: ProjectilePool3D
 var _grapple_meshes: Array[Array] = []
 var _bridges_releasing := false
@@ -75,7 +73,6 @@ var _prefer_palm := true
 var _shutdown_clock := -1.0
 var _bridge_wait := -1.0
 var _outer_start := PlatformSentinelDeck3D.OUTER_START
-var _inner_start := PlatformSentinelDeck3D.INNER_START
 var _clock := 0.0
 var _arm_clock := 0.0
 var _gun_clock := 0.0
@@ -91,24 +88,22 @@ var _stairs_broken := false
 var _sent_racks := false
 var _proxy: Node3D
 var _proxy_attached := false
+var _proxy_grip_offset := Transform3D.IDENTITY
+var _arm_motion: Tween
+var _proxy_motion: Tween
 var _voice: Node
-var _last_broken := 0
+var _deployment_started_at := -1.0
 
 func _ready() -> void:
 	set_physics_process(false)
 	for i in range(deck.grapples.size()):
-		var arm := deck.grapples[i]
-		var target := _new_target(ARM_HP, 0.98)
-		var arm_local := deck.to_local(arm.global_position)
-		var radial := Basis(Vector3.UP, arm.rotation.y) * Vector3.FORWARD
-		var point := arm_local + radial * 7.1
-		target.position = Vector3(clampf(point.x, -10.25, 10.25), 1.02, clampf(point.z, -10.25, 10.25))
-		target.name = "GrappleRelay_%02d" % (i + 1)
+		var target := PlatformSentinelWeakPoint3D.new()
+		target.name = "GrappleTarget_%02d" % (i + 1)
+		add_child(target)
+		target.configure(ARM_HP, deck.skeleton_for(deck.grapples[i]))
 		target.damaged.connect(_on_target_damaged.bind(target))
 		target.destroyed.connect(_on_arm_destroyed.bind(i))
-		target.add_wrist()
 		_arm_targets.append(target)
-		_add_side_controls(i, target, radial)
 	_prepare_attack_poses()
 	var switch_mesh := BoxMesh.new()
 	switch_mesh.size = Vector3(0.62, 0.96, 0.42)
@@ -136,11 +131,12 @@ func is_pending() -> bool:
 func monitor_defeated(enemy: Enemy3D) -> void:
 	if stage != Stage.DORMANT:
 		return
-	var pose := enemy.avatar.global_transform
-	_proxy = enemy.avatar.duplicate(0) as Node3D
-	add_child(_proxy)
-	_proxy.global_transform = pose
+	var visual := enemy.avatar.get_animated_boss_root() as Node3D
+	_spawn_proxy(visual.global_basis.get_scale() if visual != null else Vector3.ONE)
+	AudioManager.play_sfx("melee_impact", -3.0, 0.72)
+	_fx(VfxPool3D.FX01_METAL_SPARK_HIT, to_global(MONITOR_MARK + Vector3.UP * 1.2), 1.8)
 	stage = Stage.TAKEOVER
+	deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.LINK_LOST, true)
 	_clock = 0.0
 	_takeover_requested = false
 	_takeover_safe_position()
@@ -164,22 +160,26 @@ func run_cue(cue: String, params: Dictionary) -> bool:
 		"reach":
 			_start_rear()
 			AudioManager.play_sfx("door_open", -8.0, 0.71)
-			var rear := deck.grapples[REAR]
-			deck.play(rear, "attack_grapple_slam", 0.0, IMPACT)
-			var contact := _palm_world(REAR)
-			deck.play(rear, "attack_grapple_slam")
-			if is_instance_valid(_proxy):
-				var tween := create_tween()
-				tween.tween_property(_proxy, "global_position", contact, IMPACT).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+			_sample_rear_pose(0.0)
+			_arm_motion = create_tween()
+			_arm_motion.tween_method(_sample_rear_pose, 0.0, GRAB_POSE, 1.17).set_trans(Tween.TRANS_SINE)
 		"grab":
+			if _arm_motion != null:
+				_arm_motion.kill()
+			_sample_rear_pose(GRAB_POSE)
 			AudioManager.play_sfx("melee_impact", -9.0, 0.78)
-			_proxy_attached = true
-			deck.play(deck.grapples[REAR], "attack_grapple_slam", -0.95, IMPACT + 0.36)
+			if is_instance_valid(_proxy):
+				_proxy_grip_offset = _grip_frame().affine_inverse() * _proxy.global_transform
+				_proxy_attached = true
+			_arm_motion = create_tween()
+			_arm_motion.tween_method(_sample_rear_pose, GRAB_POSE, 1.02, 0.77).set_trans(Tween.TRANS_SINE).set_delay(0.17)
+			_arm_motion.tween_method(_sample_rear_pose, 1.02, 0.86, 0.91).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 		"throw":
 			_throw_monitor()
 		"ignite":
 			_screen_wake_at = _clock
 			deck.wake_screens(0.0)
+			_start_deploy_motion()
 		_:
 			return false
 	return true
@@ -188,34 +188,96 @@ func _start_rear() -> void:
 	if _rear_started:
 		return
 	_rear_started = true
-	deck.play(deck.grapples[REAR], "activate_grapple")
+	deck.set_rear_screen_retraction(true, true)
+	deck.play(deck.grapples[REAR], "activate_grapple", 1.10)
 	_fx(VfxPool3D.FX01_METAL_SPARK_HIT, deck.grapples[REAR].global_position + Vector3.UP * 5.0, 2.5)
 
+func _spawn_proxy(proxy_scale := Vector3.ONE) -> void:
+	_clear_proxy()
+	_proxy = MONITOR_VISUAL.instantiate() as MonitorBossPresentation
+	add_child(_proxy)
+	_proxy.position = MONITOR_MARK
+	_proxy.scale = proxy_scale
+	(_proxy as MonitorBossPresentation).sync_context({"action_id": "stun_loop", "time": 0.22}, false)
+
+
+func _sample_rear_pose(at: float) -> void:
+	deck.play(deck.grapples[REAR], "attack_grapple_slam", 0.0, at)
+	if _proxy_attached and is_instance_valid(_proxy):
+		_proxy.global_transform = _grip_frame() * _proxy_grip_offset
+
+
+func _grip_frame() -> Transform3D:
+	var arm := deck.grapples[REAR]
+	var left := deck.socket(arm, "grip_contact_l")
+	var right := deck.socket(arm, "grip_contact_r")
+	var palm := deck.socket(arm, "palm_contact_ll")
+	return Transform3D(palm.global_basis.orthonormalized(), (left.global_position + right.global_position) * 0.5)
+
+
 func _throw_monitor() -> void:
+	if not is_instance_valid(_proxy) or _proxy_motion != null:
+		return
+	if not _proxy_attached:
+		_clear_proxy() # Skip/fallback does not show a throw from a stationary actor.
+		return
+	_arm_motion.kill()
+	_sample_rear_pose(0.86)
 	_proxy_attached = false
-	if not is_instance_valid(_proxy):
-		return
-	if _proxy.is_queued_for_deletion() or _proxy.has_meta("falling"):
-		return
-	_proxy.set_meta("falling", true)
-	var tween := create_tween().set_parallel()
-	var out := deck.to_global(Vector3(-5.5, -15.0, -24.0))
-	tween.tween_property(_proxy, "global_position", out, 0.85).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.tween_property(_proxy, "rotation", _proxy.rotation + Vector3(2.4, 1.2, 2.8), 0.85)
-	tween.chain().tween_callback(_proxy.queue_free)
+	var from := _proxy.position
+	var start_basis := _proxy.basis
+	var out := Vector3(-9.8, -14.0, -22.0)
+	_proxy_motion = create_tween()
+	_proxy_motion.tween_method(func(t: float) -> void:
+		_proxy.position = from.lerp(out, t)
+		_proxy.position.y = lerpf(from.y, out.y, t * t) + 4.0 * t * (1.0 - t)
+		_proxy.basis = Basis.from_euler(Vector3(2.4, -0.8, 2.0) * t) * start_basis,
+		0.0, 1.0, THROW_DURATION)
+	_proxy_motion.tween_callback(_clear_proxy)
+	_arm_motion = create_tween()
+	_arm_motion.tween_method(_sample_rear_pose, 0.86, 0.30, 0.44).set_trans(Tween.TRANS_SINE)
+	_arm_motion.tween_callback(func() -> void: deck.play(deck.grapples[REAR], "idle_grapple"))
+
+
+func _clear_proxy() -> void:
+	if _proxy_motion != null:
+		_proxy_motion.kill()
+		_proxy_motion = null
+	_proxy_attached = false
+	if is_instance_valid(_proxy):
+		_proxy.queue_free()
+	_proxy = null
+
+
+func _reset_takeover() -> void:
+	var proxy_scale := _proxy.scale if is_instance_valid(_proxy) else Vector3.ONE
+	if _arm_motion != null:
+		_arm_motion.kill()
+	_arm_motion = null
+	_rear_started = false
+	_takeover_requested = false
+	_screen_wake_at = -1.0
+	_deployment_started_at = -1.0
+	_clock = 0.0
+	for arm in deck.grapples:
+		deck.play(arm, "activate_grapple", 0.0)
+	for rack in deck.sentries:
+		deck.play(rack, "activate_sentry", 0.0)
+	deck.set_screens(0.0, 0.0)
+	deck.sample_launch_lift(0.0)
+	deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.LINK_LOST)
+	deck.set_rear_screen_retraction(false)
+	_spawn_proxy(proxy_scale)
+
 
 func _on_narrative_finished(id: String, reason: String) -> void:
 	if id != TAKEOVER or stage != Stage.TAKEOVER:
 		return
 	_stop_voice()
 	if reason in ["flow.end", "duration", "skip"]:
-		_throw_monitor()
 		_deploy()
 	else:
-		_takeover_requested = false
-		_screen_wake_at = -1.0
-		deck.set_screens(0.0, 0.0)
-		_clock = 0.0
+		_reset_takeover()
 
 func _stop_voice() -> void:
 	if is_instance_valid(_voice):
@@ -237,13 +299,29 @@ func _takeover_safe_position() -> void:
 		_player.velocity = Vector3.ZERO
 
 func _deploy() -> void:
+	_clear_proxy()
+	if _arm_motion != null:
+		_arm_motion.kill()
+		_arm_motion = null
+	var elapsed := 0.0 if _deployment_started_at < 0.0 else _clock - _deployment_started_at
+	if _deployment_started_at < 0.0:
+		_start_deploy_motion()
 	_takeover_safe_position()
+	deck.set_platform_rails(false)
 	stage = Stage.DEPLOY
-	_clock = 0.0
-	if _screen_wake_at < 0.0:
-		deck.wake_screens(0.0)
-	else:
-		deck.set_screens(0.0)
+	_clock = elapsed
+	_screen_wake_at = -1.0
+	_emit_health()
+	checkpoint.emit("platform_deploy")
+
+
+func _start_deploy_motion() -> void:
+	if _deployment_started_at >= 0.0:
+		return
+	_deployment_started_at = _clock
+	deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.RISING, true)
+	deck.set_rear_screen_retraction(true)
+	AudioManager.play_sfx("door_open", -5.0, 0.63)
 	for i in range(deck.grapples.size()):
 		var clip := "idle_grapple" if i == REAR and _rear_started else "activate_grapple"
 		deck.play(deck.grapples[i], clip)
@@ -252,8 +330,6 @@ func _deploy() -> void:
 		var rack := deck.sentries[i]
 		deck.play(rack, "activate_sentry")
 		deck.delay_animation(rack, floori(float(i) / RACKS_PER_SIDE) * 0.14)
-	_emit_health()
-	checkpoint.emit("platform_deploy")
 
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(_player) or _player.current_hp <= 0:
@@ -273,31 +349,36 @@ func _physics_process(delta: float) -> void:
 	_clock += delta
 	match stage:
 		Stage.TAKEOVER:
+			if is_instance_valid(_proxy) and _clock < DEFEAT_BEAT:
+				(_proxy as MonitorBossPresentation).sync_context({"action_id": "hurt", "time": _clock}, false)
+			elif is_instance_valid(_proxy) and (_proxy as MonitorBossPresentation).action_id == "hurt":
+				(_proxy as MonitorBossPresentation).sync_context({"action_id": "stun_loop", "time": 0.22}, false)
+			if _deployment_started_at >= 0.0:
+				deck.sample_launch_lift(_clock - _deployment_started_at)
 			if _screen_wake_at >= 0.0:
 				deck.wake_screens(_clock - _screen_wake_at)
-			if _proxy_attached and is_instance_valid(_proxy):
-				_proxy.global_position = _palm_world(REAR) + Vector3.DOWN * 0.25
 			if not _takeover_requested and _clock > 0.25:
 				if is_instance_valid(_director):
 					_takeover_requested = _director.play(TAKEOVER, {"priority": 32})
 					if not _takeover_requested and _clock > 8.0:
 						push_warning("Platform Sentinel takeover could not start; continuing encounter.")
-						_throw_monitor()
 						_deploy()
 				elif _clock > 1.0:
-					_throw_monitor()
 					_deploy()
 		Stage.DEPLOY:
 			if _screen_wake_at < 0.0:
 				deck.wake_screens(_clock)
-			if _clock >= 0.72:
-				_deck_link_release()
-			if not _stairs_broken and _clock > 1.75:
-				_break_stairs(true)
+			deck.sample_launch_lift(_clock)
+			_tick_deploy_geometry(_clock)
 			if _clock >= FULL_DEPLOY:
 				_arm_combat()
 		Stage.COMBAT:
+			if _arms_alive() > 2:
+				deck.sample_combat_feed(_clock)
 			_tick_combat(delta, here)
+			for target in _arm_targets:
+				if target.current_hp > 0:
+					target.sync_pose()
 		Stage.COLLAPSE:
 			_tick_collapse()
 		Stage.CORE:
@@ -313,22 +394,32 @@ func _break_stairs(animate: bool) -> void:
 		_fx(VfxPool3D.FX01_EXPLOSION, to_global(Vector3(0, 0.45, 14.5)), 2.9)
 
 
-func _deck_link_release() -> void:
+func _tick_deploy_geometry(elapsed: float) -> void:
+	if elapsed >= 0.72:
+		_deck_link_release(elapsed)
+	if not _stairs_broken and elapsed > 1.75:
+		_break_stairs(true)
+
+
+func _deck_link_release(elapsed: float) -> void:
 	if not _bridges_releasing:
 		_bridges_releasing = true
 		for side in [-1.0, 1.0]:
 			_fx(VfxPool3D.FX01_METAL_SPARK_HIT, to_global(Vector3(side * 12.54, 0.38, 0.0)), 1.25)
 		AudioManager.play_sfx("door_open", -7.0, 0.68)
-	var motion := smoothstep(0.95, 2.65, _clock)
+	var motion := smoothstep(0.95, 2.65, elapsed)
 	deck.set_bridge_retraction(motion, motion)
 
 
 func _arm_combat() -> void:
 	deck.set_bridge_retraction(1.0, 1.0)
 	stage = Stage.COMBAT
+	deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.ONLINE)
 	_clock = 0.0
 	_next_attack_at = 1.15
 	_next_scan_at = 0.0
+	_standby_end = 0.0
+	_next_standby_at = 0.0
 	_active_arm = -1
 	_active_gun = -1
 	_cross_at = 12.0
@@ -337,28 +428,57 @@ func _arm_combat() -> void:
 	_prefer_palm = true
 	_arm_ready.fill(0.0)
 	_gun_ready.fill(0.0)
-	_port_ready.fill(0.0)
 	for i in range(deck.grapples.size()):
 		var alive := _arm_targets[i].current_hp > 0
 		deck.play(deck.grapples[i], "idle_grapple" if alive else "death_grapple", 1.0 if alive else 0.0, 0.0 if alive else 2.16)
 		_arm_targets[i].set_open(alive)
-		_side_lamps[i].visible = alive
-		_arm_targets[i].get_node("SideMark").visible = alive
+		_arm_targets[i].sync_pose()
 	for rack in deck.sentries:
 		deck.play(rack, "idle_sentry")
 	for shell in _armor:
 		shell.set_deferred("collision_layer", 4)
 	deck.set_screens(0.0 if _arms_alive() > 2 else 1.0, 0.62)
+	if _arms_alive() > 2:
+		deck.sample_combat_feed(0.0)
 	_emit_health()
 	checkpoint.emit("platform_combat")
 
 
+var _standby_arm: Node3D
+var _standby_rack: Node3D
+var _standby_end := 0.0
+var _next_standby_at := 0.0
+var _standby_rng := RandomNumberGenerator.new()
+
+func _finish_standby() -> void:
+	if is_instance_valid(_standby_arm):
+		deck.play(_standby_arm, "idle_grapple")
+	if is_instance_valid(_standby_rack):
+		deck.play(_standby_rack, "idle_sentry")
+	_standby_arm = null
+	_standby_rack = null
+
+func _tick_standby() -> void:
+	if _clock < _standby_end:
+		return
+	_finish_standby()
+	if _clock < _next_standby_at:
+		return
+	var living: Array[Node3D] = []
+	for i in range(_arm_targets.size()):
+		if _arm_targets[i].current_hp > 0:
+			living.append(deck.grapples[i])
+	if not living.is_empty():
+		_standby_arm = living[_standby_rng.randi_range(0, living.size() - 1)]
+		deck.play(_standby_arm, "scan_grapple" if _standby_rng.randi_range(0, 1) == 0 else "servo_pause_grapple")
+	if not deck.sentries.is_empty():
+		_standby_rack = deck.sentries[_standby_rng.randi_range(0, deck.sentries.size() - 1)]
+		deck.play(_standby_rack, "scan_sentry" if _standby_rng.randi_range(0, 1) == 0 else "servo_pause_sentry")
+	_standby_end = _clock + 1.4
+	_next_standby_at = _clock + _standby_rng.randf_range(2.4, 3.7)
+
+
 func _tick_combat(delta: float, here: Vector3) -> void:
-	for i in range(_ports.size()):
-		if _ports[i].current_hp == 0 and _clock >= _port_ready[i] - PORT_REARM:
-			_ports[i].current_hp = 1
-			for rack in _side_racks(i):
-				deck.play(rack, "idle_sentry")
 	if _active_arm >= 0:
 		_tick_slam(delta, here)
 		return
@@ -366,6 +486,7 @@ func _tick_combat(delta: float, here: Vector3) -> void:
 		_tick_gun(delta)
 		return
 	if not _rounds.is_empty() or _clock < _next_attack_at or maxf(absf(here.x), absf(here.z)) >= 12.48 or absf(here.y) > 1.6:
+		_tick_standby()
 		return
 	if _projectiles != null:
 		if _arms_alive() <= 2 and _clock >= _volley_at and _start_pattern(Barrage.VOLLEY):
@@ -378,13 +499,10 @@ func _tick_combat(delta: float, here: Vector3) -> void:
 		return
 	if not _prefer_palm and _start_slam():
 		return
+	_tick_standby()
 	if _clock >= _next_scan_at:
-		for i in range(_arm_targets.size()):
-			if _arm_targets[i].current_hp > 0:
-				deck.play(deck.grapples[i], "scan_grapple")
-				break
 		_next_scan_at = _clock + 1.4
-	_next_attack_at = _clock + 0.18
+		_next_attack_at = _clock + 0.18
 
 
 func _next_attack_gap() -> float:
@@ -404,6 +522,7 @@ func _start_slam() -> bool:
 			best_age = _arm_ready[i]
 	if _active_arm < 0:
 		return false
+	_finish_standby()
 	_arm_ready[_active_arm] = _clock + ARM_COOLDOWN
 	_next_attack_at = _clock + _next_attack_gap()
 	_prefer_palm = false
@@ -489,11 +608,6 @@ func _tick_slam(delta: float, here: Vector3) -> void:
 		_resolve_slam(here)
 	if _active_arm < 0:
 		return
-	if _arm_clock >= IMPACT and _arm_clock <= IMPACT + SLAM_RESPONSE:
-		var point := _palm_world(_active_arm) + Vector3.UP * 0.82
-		_arm_targets[_active_arm].expose_wrist(point)
-	elif before <= IMPACT + SLAM_RESPONSE and _arm_clock > IMPACT + SLAM_RESPONSE:
-		_arm_targets[_active_arm].hide_wrist()
 	if _arm_clock >= SLAM_END:
 		_finish_slam(true)
 
@@ -503,7 +617,6 @@ func _finish_slam(standby: bool) -> void:
 		return
 	var arm := deck.grapples[_active_arm]
 	deck.skeleton_for(arm).clear_bones_global_pose_override()
-	_arm_targets[_active_arm].hide_wrist()
 	for mesh: GeometryInstance3D in _grapple_meshes[_active_arm]:
 		mesh.transparency = 0.0
 	if standby:
@@ -537,7 +650,7 @@ func _start_gun() -> bool:
 	var choice := -1
 	for i in range(deck.sentries.size()):
 		var side := floori(float(i) / RACKS_PER_SIDE)
-		if _gun_ready[side] > _clock or _ports[side].current_hp == 0:
+		if _gun_ready[side] > _clock:
 			continue
 		var lane := _gun_rest_lanes[i]
 		var base := to_global(lane[0])
@@ -567,7 +680,7 @@ func _start_pattern(pattern: Barrage) -> bool:
 	_cross_side = _next_cross_side
 	for index in range(deck.sentries.size()):
 		var side := _side_of(index)
-		if _ports[side].current_hp == 0 or (pattern == Barrage.CROSS and side != _cross_side and side != (_cross_side + 2) % 4):
+		if pattern == Barrage.CROSS and side != _cross_side and side != (_cross_side + 2) % 4:
 			continue
 		var base := to_global(_gun_rest_lanes[index][0])
 		var offset := to_local(base)
@@ -585,6 +698,7 @@ func _start_pattern(pattern: Barrage) -> bool:
 
 
 func _prime_rack(index: int, target: Vector3) -> bool:
+	_finish_standby()
 	var rack := deck.sentries[index]
 	deck.play(rack, "attack_sentry", 0.0, AUTHORED_FIRE)
 	_aim_sentry(rack, target)
@@ -609,42 +723,23 @@ func _begin_barrage(pattern: Barrage) -> void:
 	_next_attack_at = _clock + _next_attack_gap()
 	for index: int in _barrage_lanes:
 		_gun_ready[_side_of(index)] = _clock + GUN_COOLDOWN
-	_warn_barrage()
+	_cue_barrage_audio()
 
 
 func _side_of(index: int) -> int:
 	return floori(float(index) / RACKS_PER_SIDE)
 
 
-func _warn_barrage() -> void:
-	_clear_gun_warning()
+func _cue_barrage_audio() -> void:
 	var announced: Array[int] = []
 	for index: int in _barrage_lanes:
 		var side := _side_of(index)
 		if _barrage == Barrage.CROSS and side != (_cross_side + 2 * _shot_index) % 4:
 			continue
-		if _ports[side].current_hp == 0:
-			continue
 		var lane: Array[Vector3] = _barrage_lanes[index]
-		if _barrage == Barrage.BURST and _shot_index == 3:
-			for angle in [-7.0, 7.0]:
-				var edge := lane[0] + (lane[1] - lane[0]).rotated(Vector3.UP, deg_to_rad(angle))
-				_gun_markers.append(_gun_warning([lane[0], edge], true))
-		else:
-			_gun_markers.append(_gun_warning(lane, _barrage != Barrage.BURST))
 		if not announced.has(side):
 			announced.append(side)
-			if _clock >= _port_ready[side]:
-				_ports[side].set_open(true)
 			AudioManager.emit_event("combat.weapon.reload_start", {"gun_id": "bp_rifle", "source_position": lane[0], "max_distance": 32.0, "unit_size": 7.0, "volume_db": -10.0})
-
-
-func _clear_gun_warning() -> void:
-	for marker in _gun_markers:
-		marker.queue_free()
-	_gun_markers.clear()
-	for port in _ports:
-		port.set_open(false)
 
 
 func _aim_sentry(rack: Node3D, target: Vector3) -> void:
@@ -675,14 +770,14 @@ func _tick_gun(delta: float) -> void:
 		if elapsed < 0.16 + delta:
 			for index: int in _barrage_lanes:
 				var side := _side_of(index)
-				if _ports[side].current_hp == 0 or (_barrage == Barrage.CROSS and side != (_cross_side + 2 * (_shot_index - 1)) % 4):
+				if _barrage == Barrage.CROSS and side != (_cross_side + 2 * (_shot_index - 1)) % 4:
 					continue
 				_set_recoil(index, maxf(0.0, 1.0 - elapsed / 0.16))
 	while _shot_index < times.size() and _gun_clock >= times[_shot_index]:
 		_fire_pulse()
 		_shot_index += 1
 		if (_barrage != Barrage.BURST and _shot_index < times.size()) or (_barrage == Barrage.BURST and _shot_index == 3):
-			_warn_barrage()
+			_cue_barrage_audio()
 	if _gun_clock >= float(times.back()) + 0.42:
 		_finish_gun(true)
 		_next_attack_at = maxf(_next_attack_at, _clock + 0.85)
@@ -705,11 +800,9 @@ func _fire_pulse() -> void:
 		spread = CROSS_SPREAD
 	elif _barrage == Barrage.VOLLEY or _shot_index == BURST_TIMES.size() - 1:
 		spread = SPREAD
-	if _barrage != Barrage.BURST or _shot_index == 0 or _shot_index == BURST_TIMES.size() - 1:
-		_clear_gun_warning()
 	for index: int in _barrage_lanes:
 		var side := _side_of(index)
-		if _ports[side].current_hp == 0 or (_barrage == Barrage.CROSS and side != (_cross_side + 2 * _shot_index) % 4):
+		if _barrage == Barrage.CROSS and side != (_cross_side + 2 * _shot_index) % 4:
 			continue
 		_set_recoil(index, 0.0)
 		var lane: Array[Vector3] = _barrage_lanes[index]
@@ -771,7 +864,7 @@ func _reset_gun_pose(rack: Node3D) -> void:
 func _finish_gun(standby: bool) -> void:
 	for index: int in _barrage_lanes:
 		var rack := deck.sentries[index]
-		if standby and _ports[_side_of(index)].current_hp > 0:
+		if standby:
 			_reset_gun_pose(rack)
 		else:
 			deck.skeleton_for(rack).clear_bones_global_pose_override()
@@ -779,39 +872,18 @@ func _finish_gun(standby: bool) -> void:
 	_barrage = Barrage.NONE
 	_barrage_lanes.clear()
 	_recoil_poses.clear()
-	_clear_gun_warning()
-
-
-func _side_racks(side: int) -> Array[Node3D]:
-	return deck.sentries.slice(side * RACKS_PER_SIDE, (side + 1) * RACKS_PER_SIDE)
-
-
-func _suppress_side(side: int) -> void:
-	if stage != Stage.COMBAT or _barrage == Barrage.NONE:
-		return
-	_port_ready[side] = _clock + PORT_OFFLINE + PORT_REARM
-	_gun_ready[side] = maxf(_gun_ready[side], _clock + PORT_OFFLINE)
-	for rack in _side_racks(side):
-		deck.skeleton_for(rack).clear_bones_global_pose_override()
-		deck.play(rack, "servo_pause_sentry", 0.0, 0.41)
-	if _barrage == Barrage.BURST:
-		_finish_gun(false)
-		_shot_index = 0
-	else:
-		_warn_barrage()
-	_fx(VfxPool3D.FX01_METAL_SPARK_HIT, _ports[side].global_position, 1.6)
-	AudioManager.play_sfx("door_locked", -6.0)
 
 
 func _on_arm_destroyed(index: int) -> void:
+	_finish_standby()
 	if _active_arm == index:
 		_finish_slam(false)
 	deck.play(deck.grapples[index], "death_grapple")
-	_fx(VfxPool3D.FX01_EXPLOSION, _arm_targets[index].global_position, 2.65)
-	_side_lamps[index].hide()
-	_arm_targets[index].get_node("SideMark").hide()
+	_fx(VfxPool3D.FX01_EXPLOSION, _arm_targets[index].last_hit_position, 2.65)
 	var live := _arms_alive()
 	deck.set_screens(0.0 if live > 2 else 1.0, 0.62)
+	if live <= 2:
+		deck.clear_combat_feed()
 	if live == 0:
 		_begin_collapse()
 	else:
@@ -820,22 +892,22 @@ func _on_arm_destroyed(index: int) -> void:
 
 
 func _begin_collapse(announce := true) -> void:
+	_finish_standby()
 	_finish_slam(false)
 	_finish_gun(false)
 	_cancel_rounds()
 	for shell in _armor:
 		shell.set_deferred("collision_layer", 0)
 	stage = Stage.COLLAPSE
+	deck.clear_combat_feed()
+	deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.OUTER_WARNING)
 	_clock = 0.0
 	_outer_start = PlatformSentinelDeck3D.OUTER_START
-	_inner_start = PlatformSentinelDeck3D.INNER_START
 	if is_instance_valid(_player):
 		var slow_speed := _player.get_move_speed()
 		# 角到下一圈内侧留出胶囊和步行余量，普通配置沿用源时轴。
 		var walk_budget := 5.45 * sqrt(2.0) / maxf(0.5, slow_speed) + 0.5
 		_outer_start = maxf(_outer_start, walk_budget)
-		_inner_start = maxf(_inner_start + _outer_start - PlatformSentinelDeck3D.OUTER_START, _outer_start + walk_budget)
-	_last_broken = 0
 	_sent_racks = false
 	for rack in deck.sentries:
 		deck.play(rack, "servo_pause_sentry")
@@ -847,26 +919,19 @@ func _begin_collapse(announce := true) -> void:
 
 
 func _tick_collapse() -> void:
-	for motor in deck.sample_collapse(_clock, _outer_start, _inner_start):
+	var releases := deck.sample_collapse(_clock, _outer_start)
+	for motor in releases:
 		_fx(VfxPool3D.FX01_METAL_SPARK_HIT, motor, 1.7)
 		_fx(VfxPool3D.FX01_EXPLOSION, motor, 1.26)
-	if not _sent_racks and _clock >= _outer_start + 0.12:
-		_sent_racks = true
-		for rack in deck.sentries:
-			deck.play(rack, "death_sentry")
-		_fx(VfxPool3D.FX01_EXPLOSION, to_global(Vector3(9.0, 0.5, -8.0)), 3.6)
-		AudioManager.play_sfx("door_locked", -3.0, 0.73)
-		_collapse_jolt(0.58)
-	if _clock >= _inner_warning_at() and _last_broken == 0:
-		_last_broken = 1
-		_show_safe_route(2.18)
-		AudioManager.play_sfx("door_locked", -10.0, 0.84)
-	if _clock >= _inner_start and _last_broken == 1:
-		_last_broken = 2
-		_fx(VfxPool3D.FX01_EXPLOSION, to_global(Vector3(-5.0, 0.25, 5.0)), 3.2)
-		AudioManager.play_sfx("door_locked", -3.0, 0.69)
-		_collapse_jolt(0.70)
-		checkpoint.emit("platform_inner_ring")
+	if not releases.is_empty():
+		_collapse_jolt(0.58 if not _sent_racks else 0.22)
+		if not _sent_racks:
+			_sent_racks = true
+			deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.OUTER_RELEASE, true)
+			for rack in deck.sentries:
+				deck.play(rack, "death_sentry")
+			AudioManager.play_sfx("door_locked", -3.0, 0.73)
+			checkpoint.emit("platform_outer_ring")
 	if _clock >= _collapse_finish():
 		_activate_core()
 
@@ -876,12 +941,8 @@ func _collapse_jolt(strength: float) -> void:
 		_player.camera_feedback.request_environment_impact(strength, 0.25)
 
 
-func _inner_warning_at() -> float:
-	return _outer_start
-
-
 func _collapse_finish() -> float:
-	return _inner_start + (PlatformSentinelDeck3D.FINISH - PlatformSentinelDeck3D.INNER_START)
+	return _outer_start + PlatformSentinelDeck3D.OUTER_FALL_DURATION
 
 
 func _show_safe_route(half: float) -> void:
@@ -907,6 +968,7 @@ func _clear_safe_route() -> void:
 
 func _activate_core() -> void:
 	stage = Stage.CORE
+	deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.SAFE)
 	_clock = 0.0
 	_shutdown_clock = -1.0
 	_bridge_wait = -1.0
@@ -994,27 +1056,37 @@ func export_state() -> Dictionary:
 	var result := {"schema": 2, "stage": int(stage), "arm_hp": hp, "clock": _clock}
 	if stage == Stage.COLLAPSE:
 		result["outer_start"] = _outer_start
-		result["inner_start"] = _inner_start
 		result["outer_started"] = _sent_racks
-		result["inner_started"] = _last_broken == 2
 	if stage == Stage.TAKEOVER and is_instance_valid(_proxy):
-		var p := to_local(_proxy.global_position)
-		result["proxy_position"] = [p.x, p.y, p.z]
+		result["proxy_scale"] = _proxy.scale.x
 	return result
 
 func restore_state(state: Dictionary, already_cleared: bool) -> void:
+	deck.clear_combat_feed()
+	_finish_standby()
+	_standby_end = 0.0
 	_finish_slam(false)
 	_finish_gun(false)
 	_cancel_rounds()
+	for target in _arm_targets:
+		target.set_open(false)
 	if state.is_empty():
 		if already_cleared:
 			stage = Stage.WON
+			deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.SAFE)
+			deck.set_rear_screen_retraction(true)
+			deck.set_platform_rails(false)
+			deck.sample_launch_lift(FULL_DEPLOY)
+			deck.sample_collapse(PlatformSentinelDeck3D.FINISH)
 			deck.open_return_bridge()
 		return
 	var hp: Array = state.get("arm_hp", [])
 	for i in range(mini(hp.size(), _arm_targets.size())):
 		_arm_targets[i].current_hp = clampi(int(hp[i]), 0, ARM_HP)
 	var saved_stage := clampi(int(state.get("stage", Stage.DORMANT)), Stage.DORMANT, Stage.WON)
+	deck.set_platform_rails(saved_stage <= Stage.TAKEOVER)
+	deck.set_rear_screen_retraction(saved_stage >= Stage.DEPLOY)
+	deck.sample_launch_lift(FULL_DEPLOY if saved_stage >= Stage.COMBAT else 0.0)
 	if saved_stage >= Stage.COMBAT:
 		_break_stairs(false)
 		deck.set_bridge_retraction(1.0, 1.0)
@@ -1026,64 +1098,34 @@ func restore_state(state: Dictionary, already_cleared: bool) -> void:
 	match saved_stage:
 		Stage.TAKEOVER:
 			stage = Stage.TAKEOVER
-			_clock = 0.0
-			_takeover_requested = false
-			if not is_instance_valid(_proxy):
-				_proxy = MONITOR_VISUAL.instantiate() as Node3D
-				add_child(_proxy)
-				var p: Array = state.get("proxy_position", [-6.5, 0.12, -5.0])
-				_proxy.position = Vector3(p[0], p[1], p[2])
+			_reset_takeover()
+			_proxy.scale = Vector3.ONE * float(state.get("proxy_scale", 1.0))
 		Stage.DEPLOY:
-			stage = Stage.DORMANT
-			_returning_visit = true
+			_deploy()
+			deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.RISING)
 		Stage.COMBAT:
 			_arm_combat()
 		Stage.COLLAPSE:
 			_begin_collapse(false)
 			_outer_start = maxf(PlatformSentinelDeck3D.OUTER_START, float(state.get("outer_start", PlatformSentinelDeck3D.OUTER_START)))
-			_inner_start = maxf(_outer_start + 0.5, float(state.get("inner_start", PlatformSentinelDeck3D.INNER_START)))
 			_clock = clampf(float(state.get("clock", 0.0)), 0.0, _collapse_finish())
 			_sent_racks = bool(state.get("outer_started", _clock >= _outer_start + 0.12))
 			if _sent_racks:
+				deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.OUTER_RELEASE)
 				for rack in deck.sentries:
 					deck.play(rack, "death_sentry", 0.0, 1.68)
-			var inner := _clock >= _inner_warning_at()
-			_last_broken = 2 if bool(state.get("inner_started", _clock >= _inner_start)) else 1 if inner else 0
-			deck.sample_collapse(_clock, _outer_start, _inner_start)
-			_show_safe_route(2.18 if inner else 7.12)
+			deck.sample_collapse(_clock, _outer_start)
+			_show_safe_route(7.12)
 		Stage.CORE:
 			deck.sample_collapse(PlatformSentinelDeck3D.FINISH)
 			_activate_core()
 		Stage.WON:
 			stage = Stage.WON
+			deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.SAFE)
 			deck.sample_collapse(PlatformSentinelDeck3D.FINISH)
 			deck.set_center_screen(2.0, 0.0)
 			deck.open_return_bridge()
 	_emit_health()
-
-func _add_side_controls(index: int, target: PlatformSentinelWeakPoint3D, inward: Vector3) -> void:
-	var edge := target.position - inward * 3.04
-	edge.y = 0.075
-	var start := Vector3(target.position.x, edge.y, target.position.z)
-	var signal_strip := _line(to_global(start), to_global(edge), 0.14, Color(0.34, 0.83, 1.0, 0.80))
-	signal_strip.hide()
-	var label := Label3D.new()
-	label.name = "SideMark"
-	label.hide()
-	label.text = SIDE_LABELS[index]
-	label.position = Vector3(0.0, 1.05, 0.0)
-	label.pixel_size = 0.013
-	label.font_size = 50
-	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	target.add_child(label)
-	_side_lamps.append(signal_strip)
-	var port := _new_target(1, 0.57)
-	port.name = "GunFeed_%02d" % (index + 1)
-	port.position = -inward * 10.9 + Vector3.UP * 1.0
-	port.position += inward.rotated(Vector3.UP, PI / 2.0) * -2.75
-	port.destroyed.connect(_suppress_side.bind(index))
-	_ports.append(port)
-
 
 func _prepare_attack_poses() -> void:
 	for index in range(deck.grapples.size()):
@@ -1131,15 +1173,9 @@ func _add_sentry_armor(rack: Node3D) -> void:
 	_armor.append(shell)
 
 
-func _new_target(hp: int, radius: float) -> PlatformSentinelWeakPoint3D:
-	var target := PlatformSentinelWeakPoint3D.new()
-	add_child(target)
-	target.configure(hp, radius)
-	return target
-
 func _on_target_damaged(_current: int, target: PlatformSentinelWeakPoint3D) -> void:
 	_emit_health()
-	_fx(VfxPool3D.FX01_METAL_SPARK_HIT, target.global_position, 0.85)
+	_fx(VfxPool3D.FX01_METAL_SPARK_HIT, target.last_hit_position, 0.85)
 
 func arm_health() -> Array[int]:
 	var values: Array[int] = []
@@ -1170,7 +1206,7 @@ func _palm_world(index: int) -> Vector3:
 		if socket != null:
 			point += socket.global_position
 			count += 1
-	return point / float(count) if count > 0 else _arm_targets[index].global_position
+	return point / float(count) if count > 0 else arm.global_position
 
 func _hit_player(amount: int, direction: Vector3, kick: float) -> void:
 	_player.notify_attacked_by(self)
@@ -1201,31 +1237,6 @@ func _circle_warning(point: Vector3) -> MeshInstance3D:
 	material.no_depth_test = true
 	material.render_priority = 6
 	return ring
-
-
-func _gun_warning(lane: Array[Vector3], local_warning: bool) -> MeshInstance3D:
-	var from := to_local(lane[0])
-	var to := to_local(lane[1])
-	var edge := 12.48
-	var start := Vector2(from.x, from.z)
-	var finish := Vector2(to.x, to.z)
-	var corners := [Vector2(-edge, -edge), Vector2(edge, -edge), Vector2(edge, edge), Vector2(-edge, edge)]
-	var visible: Array[Vector2] = []
-	for point in [start, finish]:
-		if maxf(absf(point.x), absf(point.y)) <= edge:
-			visible.append(point)
-	for i in range(4):
-		var intersection: Variant = Geometry2D.segment_intersects_segment(start, finish, corners[i], corners[(i + 1) % 4])
-		if intersection is Vector2:
-			visible.append(intersection)
-	if visible.size() >= 2:
-		visible.sort_custom(func(a: Vector2, b: Vector2) -> bool: return a.distance_squared_to(start) < b.distance_squared_to(start))
-		start = visible.front()
-		finish = visible.back()
-	if local_warning:
-		finish = start.move_toward(finish, 4.8)
-	var color := Color(1.0, 0.56, 0.14, 0.76) if local_warning else Color(1.0, 0.32, 0.16, 0.74)
-	return _line(to_global(Vector3(start.x, 0.037, start.y)), to_global(Vector3(finish.x, 0.037, finish.y)), 0.63, color)
 
 
 func _marker(mesh: Mesh, point: Vector3, color: Color) -> MeshInstance3D:

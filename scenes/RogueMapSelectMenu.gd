@@ -418,7 +418,7 @@ func confirm_selection() -> void:
 		_enter_level(LEVEL_IDS[_selection])
 
 func _enter_level(level_id: String) -> void:
-	if _departing or _state == "closing":
+	if _departing or _state == "closing" or GameDesignConfig.expedition_level(level_id).get("nav_visibility", "") == "hidden":
 		return
 	var display_name := GameDesignConfig.expedition_level_display_name(level_id)
 	# 入口状态先判权限，再判场景存在：未解锁的未知区域必须保持红锁，不能被 coming_soon 文案吞掉。

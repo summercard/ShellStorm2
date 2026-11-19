@@ -1,3 +1,19 @@
+- 2026-11-20 · FATE-RULES / REWARD-SERVICE · [命运卡正式入口改按稀有度固定售价](2026-11-20_fate_card_fixed_price.md)。业主确认：正式远征拾取命运卡专用掉落物后的三选一，用本局金币按稀有度固定价购买，五档 30/60/110/180/270，同稀有度同价。下线参考编成收益定价、`run_seed+offer_id+card` 区间浮动、星币七 100 上限与「三张全买不起压到余额」保底；展示与实扣同取一个固定值。候选随机、稀有度解锁统计、购买事务/退款/余额不足禁购未改。`verify_fate_economy_service --pure-only` 115 项、`verify_fate_level01_pool` 2259 项、`verify_fate_card_purchase_flow` 全绿；正式远征全量段在本机无头挂住未取证，`verify_expedition01_reward_flow` 3 项既有红（关卡编成变化，非定价）。
+
+- 2026-11-20 · BOSS-STAGES / ASSET-PIPELINE · [共享地面屏恢复原图](2026-11-20_shared_boss_floor_original.md)：取消放大图样，保留 3.6 秒色偏节奏和真实战斗警示。
+
+- 2026-11-20 · BOSS-STAGES / ASSET-PIPELINE · [武装平台地面屏独立轮换](2026-11-20_shared_boss_floor_display.md)：复用原图集，普通战斗 3.6 秒轮换，保留后壁三屏和黄红危险提示。
+
+- 2026-11-20 · BOSS-STAGES / ASSET-PIPELINE · [远征01/99共用后壁大屏](2026-11-20_shared_boss_displays.md)：原纹理和材质加入四组轮换、分屏干扰及主屏状态提示，不改变镜头与玩法。
+
+- 2026-11-19 · BOSS-STAGES / WORLD-PLAN · [远征01与99显示器首战生命下调](2026-11-19_shared_monitor_hp.md)：共享首战 18000 → 8000 HP，两关正式刷怪专项各 16/16。
+
+- WORLD-ENTRY / UI-HUD：[远征99测试入口迁至 Esc](2026-11-19_esc_expedition99.md)。仅编辑器运行的基地安全区可见，复用原远征读取流程。
+
+- BOSS-STAGES / WORLD-PLAN：[远征01与99共享最终首领](2026-11-19_shared_expedition_boss.md)。两个入口加载同一完整场景和两段演出；99 仅保留地图连接及测试进度隔离。
+
+- BOSS-STAGES / WORLD-PLAN / NARRATIVE-TRIGGER：[远征01武装平台二阶段返修](2026-11-19_platform_sentinel_refit.md)。显示器北侧定点退场、后墙及巨屏后移、二阶段撤栏、四臂实体受击。
+
 - 2026-11-19 · ENEMY-AI / ASSET-PIPELINE · [胖子僵尸2.1恢复v006](2026-11-19_fat_zombie21_v006_rollback.md)。复现v007锁脚拉扯，普通和强化胖子恢复步态协调前的动作及播放，敌人账本v0.1.60同步。
 
 - 2026-11-19 · NARRATIVE-TRIGGER / DIALOGUE-UI · [剧情镜头回归检查](2026-11-19_narrative_camera_review.md)。复现旧剧情回镜位移和全息入场景深突变，核对 3.2 八镜基准及平台字幕时序。完整场景验收超时。

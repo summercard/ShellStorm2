@@ -76,6 +76,7 @@ func _ready() -> void:
 	_check_ballistic_through_crosshair(player, weapon, camera)
 	_check_legacy_off_axis_reference(player, weapon, camera)
 	_check_collision_follows_visual()
+	await _check_enemy_graze(stage)
 
 	_report()
 
@@ -205,6 +206,45 @@ func _check_collision_follows_visual() -> void:
 			"%s：碰撞半径应为 %.3f，实测 %.3f" % [String(entry["label"]), expected, radius]
 		)
 		projectile.free()
+
+
+class GrazeTarget extends StaticBody3D:
+	var current_hp := 100
+	func take_damage(amount: int, _critical: bool, _direction: Vector3, _knockback: float) -> void:
+		current_hp -= amount
+
+
+func _check_enemy_graze(stage: Node3D) -> void:
+	# Target radius 0.50 m: 0.695 m is just inside the 0.20 m query, 0.705 m is outside.
+	for i in range(4):
+		var z := -10.0 - i * 4.0
+		var enemy := GrazeTarget.new()
+		enemy.position = Vector3(1.0, 2.0, z)
+		enemy.collision_layer = 1 if i == 3 else 4
+		var volume := CollisionShape3D.new()
+		var sphere := SphereShape3D.new()
+		sphere.radius = 0.5
+		volume.shape = sphere
+		enemy.add_child(volume)
+		stage.add_child(enemy)
+		if i == 2:
+			var cover := StaticBody3D.new()
+			cover.position = Vector3(0.3, 2.0, z)
+			var cover_shape := CollisionShape3D.new()
+			var box := BoxShape3D.new()
+			box.size = Vector3(0.04, 2.0, 2.0)
+			cover_shape.shape = box
+			cover.add_child(cover_shape)
+			stage.add_child(cover)
+		var shot := Projectile3D.new()
+		stage.add_child(shot)
+		shot.activate({"direction": Vector3.RIGHT, "speed": 120.0, "damage": 7, "range": 8.0,
+			"projectile_collision_mask": 1 if i == 3 else 5},
+			Vector3(0.0, 2.0, z + (0.705 if i == 1 else 0.695)))
+		for frame in range(4):
+			await get_tree().physics_frame
+		_expect(enemy.current_hp == (93 if i == 0 else 100), "graze lane %d: HP=%d" % [i, enemy.current_hp])
+		_samples += 1
 
 
 func _expect(condition: bool, message: String) -> void:

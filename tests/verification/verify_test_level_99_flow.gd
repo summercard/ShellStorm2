@@ -24,7 +24,6 @@ const MENU_SCENE := "res://scenes/RogueMapSelectMenu.tscn"
 const TOWER_SCENE := "res://scenes/TowerDescent3D.tscn"
 ## 未指定关卡时的默认终点（远征关卡01）。新增关卡不得改变这条回退行为。
 const DEFAULT_SCENE := "res://scenes/ExpeditionLevel01_3D.tscn"
-const DEFAULT_DISPLAY_NAME := "远征关卡01"
 const LEVEL_DISPLAY_NAME := "测试关卡99"
 ## 内置房表里远征恒为 5 间内容房。99 只有 1 间内容房 + 1 间 Boss 房，因此
 ## 「没有回退到内置房表」本身就是一个可断言的事实 —— 见 _verify_design_source。
@@ -175,8 +174,8 @@ func _verify_level_plan_rooms(failures: Array[String]) -> void:
 		var boss_room := by_key.get("boss") as Dictionary
 		if str(boss_room.get("room_type", "")) != "BOSS_ROOM":
 			failures.append("测试关卡99 的 boss 房 room_type 不是 BOSS_ROOM：%s" % str(boss_room.get("room_type", "")))
-		if str(boss_room.get("boss_content_id", "")) != "boss_monitor002":
-			failures.append("测试关卡99 的 boss 房首领指派不是 boss_monitor002：%s" % str(boss_room.get("boss_content_id", "")))
+		if not str(boss_room.get("boss_content_id", "")).is_empty():
+			failures.append("测试关卡99 不应再独立指派首领：%s" % str(boss_room.get("boss_content_id", "")))
 	var main_path: Array = normalized.get("main_path", []) as Array
 	if main_path != EXPECTED_MAIN_KEYS.duplicate():
 		failures.append("测试关卡99 的 L2 主路不是 01 号房：%s" % [main_path])
@@ -197,14 +196,16 @@ func _verify_menu_entry(failures: Array[String]) -> void:
 	var fixture: Dictionary = preload("res://tests/verification/helpers/hologram_city_fixture.gd").create(self)
 	var menu: RogueMapSelectMenu = fixture.menu
 	await get_tree().process_frame
-	if menu.LEVEL_IDS != ["expedition_01", "99"]:
-		failures.append("两座楼的目的关卡ID映射错误")
-	if menu._city == null or menu._city.labels.size() != 2:
-		failures.append("城市缺少两座入口楼")
-	elif menu._city.labels[1].text != LEVEL_DISPLAY_NAME:
-		failures.append("99入口名称未读取关卡清单")
+	var expected := ["expedition_01", "expedition_03", "expedition_02", "expedition_04"]
+	if menu.LEVEL_IDS != expected or menu._city == null or menu._city.labels.size() != expected.size():
+		failures.append("情报室必须只显示四个正式目标，不显示99")
+	if menu.entry_state("expedition_01") != menu.ENTRY_OPEN:
+		failures.append("情报室远征01不可出发")
+	menu._on_alternate_level_pressed(LEVEL_ID)
+	if menu._departing or not GameDesignConfig.pending_expedition_level_id.is_empty():
+		failures.append("旧入口仍可从情报室启动99")
 	if not menu.find_children("*", "Control", true, false).is_empty():
-		failures.append("99入口仍使用平面按钮")
+		failures.append("情报室残留旧平面按钮")
 
 	# 待进入态契约：菜单登记 → 读取界面取值。这里只验机制，不真的点按钮
 	# （点了会 change_scene_to_file，把本验收场景整个换掉）。
@@ -265,7 +266,7 @@ func _verify_loading_destination(failures: Array[String]) -> void:
 	var fallback := packed.instantiate() as CanvasLayer
 	fallback.call("_build_ui")
 	var fallback_title := fallback.get_node_or_null("Root/Center/Title") as Label
-	if fallback_title == null or fallback_title.text != DEFAULT_DISPLAY_NAME:
+	if fallback_title == null or fallback_title.text != GameDesignConfig.expedition_level_display_name(GameDesignConfig.default_expedition_level_id()):
 		failures.append("未指定关卡时读取界面标题被改变：%s" % (
 			fallback_title.text if fallback_title != null else "<缺失>"
 		))
@@ -774,51 +775,14 @@ func _verify_boss_reinforcements(
 	if room == null:
 		failures.append("Boss增援验收取不到 boss 房")
 		return
-	var expected_plan := {
-		"enabled": true,
-		"boss_spawn_local_m": [0.0, -22.5],
-		"activation_delay_sec": 10.0,
-		"spawn_rows": [
-			{"side": "west", "x_m": -10.0, "z_m": [-32.5, -27.5, -22.5, -17.5, -12.5], "height_m": 3.0},
-			{"side": "east", "x_m": 10.0, "z_m": [-32.5, -27.5, -22.5, -17.5, -12.5], "height_m": 3.0},
-		],
-		"enemy_request_type": "ambush",
-		"initial_count": 3.0,
-		"count_step": 1.0,
-		"max_count_per_round": 8.0,
-		"initial_interval_sec": 6.0,
-		"interval_step_sec": -0.35,
-		"min_interval_sec": 2.5,
-		"max_reinforcement_alive": 18.0,
-		"launch_speed_mps": 8.5,
-		"launch_duration_sec": 0.38,
-	}
-
-	# —— 四段白名单：L2规范化 → 计划 → record → 房实例 ——
+	var expected_plan := TowerDescent3D.shared_database_boss_content().get("boss_reinforcement_plan", {}) as Dictionary
 	var normalized := LevelPlanLoader.normalize_floor(LEVEL_ID, 0)
-	var normalized_boss := {}
-	for value in normalized.get("rooms", []):
-		var candidate := value as Dictionary
-		if str(candidate.get("key", "")) == "boss":
-			normalized_boss = candidate
-			break
-	if normalized_boss.is_empty():
-		failures.append("规范化层取不到 boss 房，增援计划入口验收无法成立")
-	elif (normalized_boss.get("boss_reinforcement_plan", {}) as Dictionary) != expected_plan:
-		failures.append("L2规范化后的 boss_reinforcement_plan 与设计源不一致：%s" % [
-			normalized_boss.get("boss_reinforcement_plan", {}),
-		])
-	var plan_snapshot := tower._floor_plan_snapshots.get(0, {}) as Dictionary
-	var planned_boss := {}
-	for value in plan_snapshot.get("rooms", []):
-		var candidate := value as Dictionary
-		if str(candidate.get("id", "")) == "boss":
-			planned_boss = candidate
-			break
-	if (planned_boss.get("boss_reinforcement_plan", {}) as Dictionary) != expected_plan:
-		failures.append("生成器计划丢失或改写 boss_reinforcement_plan：%s" % [
-			planned_boss.get("boss_reinforcement_plan", {}),
-		])
+	if expected_plan.is_empty():
+		failures.append("共享增援配置为空")
+		return
+	for candidate: Dictionary in normalized.get("rooms", []):
+		if str(candidate.get("key", "")) == "boss" and not (candidate.get("boss_reinforcement_plan", {}) as Dictionary).is_empty():
+			failures.append("99 的 Boss 不应在 L2 重复声明增援")
 	var record_plan := {}
 	for record in tower._records:
 		if str(record.get("id", "")) == "boss":
@@ -944,12 +908,12 @@ func _verify_boss_reinforcements(
 	var state := tower._boss_reinforcement_states.get(room.room_id, {}) as Dictionary
 	if not bool(state.get("armed", false)) or not is_zero_approx(float(state.get("elapsed", -1.0))):
 		failures.append("Boss激活完成后没有从0秒武装增援状态：%s" % [state])
-	tower._tick_boss_reinforcements(9.99)
+	tower._tick_boss_reinforcements(11.99)
 	if tower._boss_reinforcement_alive(room.room_id) != 0:
-		failures.append("Boss激活完成未满10秒就生成了增援")
+		failures.append("Boss激活完成未满12秒就生成了增援")
 	tower._tick_boss_reinforcements(0.01)
 	if tower._boss_reinforcement_alive(room.room_id) != 3:
-		failures.append("第10秒第一轮应预约3只增援，实为 %d" % tower._boss_reinforcement_alive(room.room_id))
+		failures.append("第12秒第一轮应预约3只增援，实为 %d" % tower._boss_reinforcement_alive(room.room_id))
 	if int((tower._boss_reinforcement_states[room.room_id] as Dictionary).get("round", -1)) != 1:
 		failures.append("第一轮后round未推进到1：%s" % [tower._boss_reinforcement_states[room.room_id]])
 	# 私有抛射参数必须随预约保留到实例化前；实到后必须从enemy_data移除，但速度朝房心。
@@ -976,14 +940,14 @@ func _verify_boss_reinforcements(
 		if enemy.get_enemy_data().has("spawn_launch_target"):
 			failures.append("出生抛射私有字段污染了敌人配置/存档数据")
 
-	# 第一轮后间隔=6-0.35=5.65秒；边界前不刷，跨界刷4只。
-	tower._tick_boss_reinforcements(5.64)
+	# 第一轮后间隔=9.0秒；边界前不刷，跨界刷4只。
+	tower._tick_boss_reinforcements(8.99)
 	if tower._boss_reinforcement_alive(room.room_id) != 3:
-		failures.append("第二轮间隔未满5.65秒就刷怪")
-	# 明确跨过5.65秒边界：5.64 + 0.01 在二进制浮点下可能略小于5.65，不能拿它做越界样本。
+		failures.append("第二轮间隔未满9.0秒就刷怪")
+	# 明确跨过9.0秒边界：8.99 + 0.01 在二进制浮点下可能略小于9.0，不能拿它做越界样本。
 	tower._tick_boss_reinforcements(0.02)
-	if tower._boss_reinforcement_alive(room.room_id) != 7:
-		failures.append("第二轮应递增4只、累计7只，实为%d" % tower._boss_reinforcement_alive(room.room_id))
+	if tower._boss_reinforcement_alive(room.room_id) != 6:
+		failures.append("第二轮仍为3只、累计6只，实为%d" % tower._boss_reinforcement_alive(room.room_id))
 	if int((tower._boss_reinforcement_states[room.room_id] as Dictionary).get("round", -1)) != 2:
 		failures.append("第二轮后round未推进到2")
 	tower._flush_reserved_room_spawns(room.room_id)
@@ -1022,47 +986,19 @@ func _verify_boss_reinforcements(
 	):
 		failures.append("Boss增援快照恢复后轮次/游标/倒计时被重置：%s" % [restored])
 
-	# 存活上限同时计算实体与预约：当前7只，从高轮次先约8、再约3到18，第三次必须拒绝。
 	var cap_state := {"armed": true, "stopped": false, "elapsed": 0.0, "round": 5, "cursor": 0}
-	var cap_first := int(tower._spawn_boss_reinforcement_round(room, cap_state))
-	var cap_second := int(tower._spawn_boss_reinforcement_round(room, cap_state))
-	var cap_third := int(tower._spawn_boss_reinforcement_round(room, cap_state))
-	if [cap_first, cap_second, cap_third] != [8, 3, 0]:
-		failures.append("18只上限未同时计入实体与预约：%s（期望[8,3,0]）" % [[cap_first, cap_second, cap_third]])
-	if tower._boss_reinforcement_alive(room.room_id) != 18:
-		failures.append("Boss增援存活上限应锁在18，实为%d" % tower._boss_reinforcement_alive(room.room_id))
-	tower._flush_reserved_room_spawns(room.room_id)
-	if _boss_reinforcement_enemies(tower, room.room_id).size() != 18:
-		failures.append("18只上限的预约实到后实体数不为18")
-
-	# Boss死亡后停止新轮次；但18只增援仍在时房间不能提前清除。
+	if int(tower._spawn_boss_reinforcement_round(room, cap_state)) != 0:
+		failures.append("共享增援存活上限6不应再预约")
 	boss.take_damage(1000000)
 	tower._tick_boss_reinforcements(100.0)
-	if not bool((tower._boss_reinforcement_states[room.room_id] as Dictionary).get("stopped", false)):
-		failures.append("Boss死亡后增援控制器未停止")
-	if room.cleared:
-		failures.append("Boss死亡但剩余增援未清完时房间提前清除")
-	var alive_before_stop := tower._boss_reinforcement_alive(room.room_id)
-	tower._tick_boss_reinforcements(100.0)
-	if tower._boss_reinforcement_alive(room.room_id) != alive_before_stop:
-		failures.append("Boss死亡后仍继续生成增援")
-	for enemy in _boss_reinforcement_enemies(tower, room.room_id):
-		enemy.take_damage(1000000)
-	# Boss房还可能有正式精英随从；全部清除后才应清房。
-	for value in (tower._enemy_nodes_by_room.get(room.room_id, []) as Array).duplicate():
-		if value is Enemy3D and is_instance_valid(value) and (value as Enemy3D).ai_state != "dead":
-			(value as Enemy3D).take_damage(1000000)
-	await get_tree().process_frame
-	if not room.cleared:
-		failures.append("Boss与剩余增援全部清除后房间仍未清除")
-
+	var sentinel := tower._platform_sentinel(room)
+	if sentinel == null or sentinel.stage != PlatformSentinelEncounter3D.Stage.TAKEOVER or room.cleared:
+		failures.append("显示器失败后必须交接平台，不可提前清房")
+	if tower._boss_reinforcement_alive(room.room_id) != 0:
+		failures.append("接管必须清除首战的增援")
 	tower.set_process(true)
 	if failures.size() == failures_before:
-		print(
-			"TEST_LEVEL_99_BOSS_REINFORCEMENT_OK 计划四段透传/layout_id隔离/中心Boss/"
-			+ "双排3米挂点/10秒延迟/3→4递增/朝中心抛射/18只上限/离房暂停/"
-			+ "快照恢复/Boss死亡停止/剩余敌人清房门禁 全绿"
-		)
+		print("TEST_LEVEL_99_BOSS_REINFORCEMENT_OK shared source, 12s / 9s / cap 6, snapshot and handoff")
 
 
 func _boss_reinforcement_enemies(
@@ -1304,7 +1240,7 @@ func _report(failures: Array[String]) -> void:
 			+ "standalone single-layer scene on Dungeon3D base with Blocks/Expedition only, "
 			+ "content bounds shrunk to the 4-room footprint with real raycast floor/walls, "
 			+ "free entry gate, STANDARD extraction beacon in the extraction room, "
-			+ "99F mission-operations menu exposes the test-level-99 entry button, "
+			+ "99F mission-operations lists four official targets and blocks the old test entry, "
 			+ "room_01 stays on the global formula while the boss room is authored "
 			+ "boss_content_id=boss_monitor002, "
 			+ "boss rooms excluded from spawn-plan authoring at both validator and runtime, "

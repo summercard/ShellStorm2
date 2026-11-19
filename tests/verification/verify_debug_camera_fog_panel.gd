@@ -54,6 +54,16 @@ func _run() -> void:
 		_finish("panel_missing")
 		return
 
+	if OS.has_feature("editor"):
+		var row := panel.find_child("SliderRow_枪支伤害倍率（本场景）", true, false)
+		var reset := panel.find_child("ResetDebugGunDamage", true, false) as Button
+		_expect_true(row != null and reset != null, "debug_gun_damage_controls")
+		if row != null and reset != null:
+			var slider := row.get_node("Slider") as HSlider
+			slider.value = 3.0
+			_expect_float(player.get_debug_gun_damage_multiplier(), 3.0, 0.001, "debug_gun_damage_set")
+			reset.pressed.emit()
+			_expect_float(player.get_debug_gun_damage_multiplier(), 1.0, 0.001, "debug_gun_damage_reset")
 	_run_tab_checks(panel)
 	_run_step_constant_checks()
 	_run_camera_panel_checks(panel, player)

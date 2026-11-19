@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_boss_room_02_static_layout.tscn" id="1_room02"]
 [ext_resource type="Script" path="res://src/world3d/PlatformSentinelEncounter3D.gd" id="2_encounter"]
 [ext_resource type="Script" path="res://src/world3d/PlatformSentinelDeck3D.gd" id="3_deck"]
 [ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/enm_boss_platform_sentinel_root_top3d.tscn" id="4_platform"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/wall_standard_5m_h12/wall_standard_5m_h12_root_top3d.tscn" id="5_return"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/floor_base_5m/floor_base_5m_root_top3d.tscn" id="6_closure"]
 
 [node name="Expedition01BossRoom02" type="Node3D"]
 metadata/schema = "shellstorm2.expedition.room_static_layout.v001"
@@ -28,11 +30,632 @@ metadata/authored_room_light_switch = false
 ; （高位门扇落到 z=-50、Gate_StairNorth 落到 +10.28），与 99 相反 ⇒ 门会开在实墙上。
 [node name="BossRoom02" parent="." instance=ExtResource("1_room02")]
 
+[node name="外壳_后墙" parent="BossRoom02/Components"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -36, -70)
+
+[node name="NorthShellClosure" type="Node3D" parent="."]
+
+[node name="WestReturn1" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, -36.0, -52.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="WestReturn2" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, -24.11, -52.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="WestReturn3" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, -12.22, -52.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="WestReturn4" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, -0.33, -52.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="WestReturn5" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, 11.56, -52.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="WestReturn6" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, 23.45, -52.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="WestReturn7" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40.10, 24.1, -52.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="EastReturn1" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, -36.0, -52.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="EastReturn2" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, -24.11, -52.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="EastReturn3" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, -12.22, -52.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="EastReturn4" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, -0.33, -52.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="EastReturn5" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, 11.56, -52.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="EastReturn6" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, 23.45, -52.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="EastReturn7" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40.10, 24.1, -52.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="BottomClosure01" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-37.5, -36.4, -52.5)
+
+[node name="BottomClosure02" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-32.5, -36.4, -52.5)
+
+[node name="BottomClosure03" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-27.5, -36.4, -52.5)
+
+[node name="BottomClosure04" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-22.5, -36.4, -52.5)
+
+[node name="BottomClosure05" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-17.5, -36.4, -52.5)
+
+[node name="BottomClosure06" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-12.5, -36.4, -52.5)
+
+[node name="BottomClosure07" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-7.5, -36.4, -52.5)
+
+[node name="BottomClosure08" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-2.5, -36.4, -52.5)
+
+[node name="BottomClosure09" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(2.5, -36.4, -52.5)
+
+[node name="BottomClosure10" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(7.5, -36.4, -52.5)
+
+[node name="BottomClosure11" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(12.5, -36.4, -52.5)
+
+[node name="BottomClosure12" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(17.5, -36.4, -52.5)
+
+[node name="BottomClosure13" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(22.5, -36.4, -52.5)
+
+[node name="BottomClosure14" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(27.5, -36.4, -52.5)
+
+[node name="BottomClosure15" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(32.5, -36.4, -52.5)
+
+[node name="BottomClosure16" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(37.5, -36.4, -52.5)
+
+[node name="TopClosure01" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-37.5, 36, -52.5)
+
+[node name="TopClosure02" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-32.5, 36, -52.5)
+
+[node name="TopClosure03" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-27.5, 36, -52.5)
+
+[node name="TopClosure04" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-22.5, 36, -52.5)
+
+[node name="TopClosure05" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-17.5, 36, -52.5)
+
+[node name="TopClosure06" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-12.5, 36, -52.5)
+
+[node name="TopClosure07" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-7.5, 36, -52.5)
+
+[node name="TopClosure08" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-2.5, 36, -52.5)
+
+[node name="TopClosure09" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(2.5, 36, -52.5)
+
+[node name="TopClosure10" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(7.5, 36, -52.5)
+
+[node name="TopClosure11" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(12.5, 36, -52.5)
+
+[node name="TopClosure12" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(17.5, 36, -52.5)
+
+[node name="TopClosure13" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(22.5, 36, -52.5)
+
+[node name="TopClosure14" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(27.5, 36, -52.5)
+
+[node name="TopClosure15" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(32.5, 36, -52.5)
+
+[node name="TopClosure16" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(37.5, 36, -52.5)
+
+[node name="Bay2_WestReturn1" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, -36.0, -57.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay2_WestReturn2" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, -24.11, -57.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay2_WestReturn3" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, -12.22, -57.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay2_WestReturn4" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, -0.33, -57.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay2_WestReturn5" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, 11.56, -57.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay2_WestReturn6" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, 23.45, -57.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay2_WestReturn7" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40.10, 24.1, -57.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay2_EastReturn1" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, -36.0, -57.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay2_EastReturn2" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, -24.11, -57.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay2_EastReturn3" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, -12.22, -57.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay2_EastReturn4" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, -0.33, -57.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay2_EastReturn5" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, 11.56, -57.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay2_EastReturn6" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, 23.45, -57.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay2_EastReturn7" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40.10, 24.1, -57.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay2_BottomClosure01" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-37.5, -36.4, -57.5)
+
+[node name="Bay2_BottomClosure02" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-32.5, -36.4, -57.5)
+
+[node name="Bay2_BottomClosure03" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-27.5, -36.4, -57.5)
+
+[node name="Bay2_BottomClosure04" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-22.5, -36.4, -57.5)
+
+[node name="Bay2_BottomClosure05" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-17.5, -36.4, -57.5)
+
+[node name="Bay2_BottomClosure06" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-12.5, -36.4, -57.5)
+
+[node name="Bay2_BottomClosure07" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-7.5, -36.4, -57.5)
+
+[node name="Bay2_BottomClosure08" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-2.5, -36.4, -57.5)
+
+[node name="Bay2_BottomClosure09" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(2.5, -36.4, -57.5)
+
+[node name="Bay2_BottomClosure10" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(7.5, -36.4, -57.5)
+
+[node name="Bay2_BottomClosure11" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(12.5, -36.4, -57.5)
+
+[node name="Bay2_BottomClosure12" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(17.5, -36.4, -57.5)
+
+[node name="Bay2_BottomClosure13" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(22.5, -36.4, -57.5)
+
+[node name="Bay2_BottomClosure14" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(27.5, -36.4, -57.5)
+
+[node name="Bay2_BottomClosure15" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(32.5, -36.4, -57.5)
+
+[node name="Bay2_BottomClosure16" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(37.5, -36.4, -57.5)
+
+[node name="Bay2_TopClosure01" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-37.5, 36, -57.5)
+
+[node name="Bay2_TopClosure02" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-32.5, 36, -57.5)
+
+[node name="Bay2_TopClosure03" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-27.5, 36, -57.5)
+
+[node name="Bay2_TopClosure04" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-22.5, 36, -57.5)
+
+[node name="Bay2_TopClosure05" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-17.5, 36, -57.5)
+
+[node name="Bay2_TopClosure06" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-12.5, 36, -57.5)
+
+[node name="Bay2_TopClosure07" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-7.5, 36, -57.5)
+
+[node name="Bay2_TopClosure08" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-2.5, 36, -57.5)
+
+[node name="Bay2_TopClosure09" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(2.5, 36, -57.5)
+
+[node name="Bay2_TopClosure10" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(7.5, 36, -57.5)
+
+[node name="Bay2_TopClosure11" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(12.5, 36, -57.5)
+
+[node name="Bay2_TopClosure12" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(17.5, 36, -57.5)
+
+[node name="Bay2_TopClosure13" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(22.5, 36, -57.5)
+
+[node name="Bay2_TopClosure14" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(27.5, 36, -57.5)
+
+[node name="Bay2_TopClosure15" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(32.5, 36, -57.5)
+
+[node name="Bay2_TopClosure16" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(37.5, 36, -57.5)
+
+[node name="Bay3_WestReturn1" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, -36.0, -62.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay3_WestReturn2" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, -24.11, -62.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay3_WestReturn3" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, -12.22, -62.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay3_WestReturn4" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, -0.33, -62.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay3_WestReturn5" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, 11.56, -62.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay3_WestReturn6" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, 23.45, -62.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay3_WestReturn7" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40.10, 24.1, -62.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay3_EastReturn1" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, -36.0, -62.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay3_EastReturn2" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, -24.11, -62.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay3_EastReturn3" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, -12.22, -62.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay3_EastReturn4" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, -0.33, -62.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay3_EastReturn5" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, 11.56, -62.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay3_EastReturn6" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, 23.45, -62.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay3_EastReturn7" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40.10, 24.1, -62.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay3_BottomClosure01" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-37.5, -36.4, -62.5)
+
+[node name="Bay3_BottomClosure02" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-32.5, -36.4, -62.5)
+
+[node name="Bay3_BottomClosure03" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-27.5, -36.4, -62.5)
+
+[node name="Bay3_BottomClosure04" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-22.5, -36.4, -62.5)
+
+[node name="Bay3_BottomClosure05" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-17.5, -36.4, -62.5)
+
+[node name="Bay3_BottomClosure06" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-12.5, -36.4, -62.5)
+
+[node name="Bay3_BottomClosure07" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-7.5, -36.4, -62.5)
+
+[node name="Bay3_BottomClosure08" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-2.5, -36.4, -62.5)
+
+[node name="Bay3_BottomClosure09" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(2.5, -36.4, -62.5)
+
+[node name="Bay3_BottomClosure10" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(7.5, -36.4, -62.5)
+
+[node name="Bay3_BottomClosure11" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(12.5, -36.4, -62.5)
+
+[node name="Bay3_BottomClosure12" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(17.5, -36.4, -62.5)
+
+[node name="Bay3_BottomClosure13" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(22.5, -36.4, -62.5)
+
+[node name="Bay3_BottomClosure14" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(27.5, -36.4, -62.5)
+
+[node name="Bay3_BottomClosure15" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(32.5, -36.4, -62.5)
+
+[node name="Bay3_BottomClosure16" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(37.5, -36.4, -62.5)
+
+[node name="Bay3_TopClosure01" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-37.5, 36, -62.5)
+
+[node name="Bay3_TopClosure02" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-32.5, 36, -62.5)
+
+[node name="Bay3_TopClosure03" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-27.5, 36, -62.5)
+
+[node name="Bay3_TopClosure04" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-22.5, 36, -62.5)
+
+[node name="Bay3_TopClosure05" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-17.5, 36, -62.5)
+
+[node name="Bay3_TopClosure06" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-12.5, 36, -62.5)
+
+[node name="Bay3_TopClosure07" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-7.5, 36, -62.5)
+
+[node name="Bay3_TopClosure08" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-2.5, 36, -62.5)
+
+[node name="Bay3_TopClosure09" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(2.5, 36, -62.5)
+
+[node name="Bay3_TopClosure10" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(7.5, 36, -62.5)
+
+[node name="Bay3_TopClosure11" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(12.5, 36, -62.5)
+
+[node name="Bay3_TopClosure12" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(17.5, 36, -62.5)
+
+[node name="Bay3_TopClosure13" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(22.5, 36, -62.5)
+
+[node name="Bay3_TopClosure14" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(27.5, 36, -62.5)
+
+[node name="Bay3_TopClosure15" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(32.5, 36, -62.5)
+
+[node name="Bay3_TopClosure16" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(37.5, 36, -62.5)
+
+[node name="Bay4_WestReturn1" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, -36.0, -67.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay4_WestReturn2" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, -24.11, -67.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay4_WestReturn3" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, -12.22, -67.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay4_WestReturn4" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, -0.33, -67.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay4_WestReturn5" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, 11.56, -67.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay4_WestReturn6" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40, 23.45, -67.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay4_WestReturn7" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(-40.10, 24.1, -67.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay4_EastReturn1" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, -36.0, -67.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay4_EastReturn2" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, -24.11, -67.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay4_EastReturn3" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, -12.22, -67.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay4_EastReturn4" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, -0.33, -67.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay4_EastReturn5" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, 11.56, -67.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay4_EastReturn6" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40, 23.45, -67.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay4_EastReturn7" parent="NorthShellClosure" instance=ExtResource("5_return")]
+position = Vector3(40.10, 24.1, -67.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="Bay4_BottomClosure01" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-37.5, -36.4, -67.5)
+
+[node name="Bay4_BottomClosure02" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-32.5, -36.4, -67.5)
+
+[node name="Bay4_BottomClosure03" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-27.5, -36.4, -67.5)
+
+[node name="Bay4_BottomClosure04" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-22.5, -36.4, -67.5)
+
+[node name="Bay4_BottomClosure05" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-17.5, -36.4, -67.5)
+
+[node name="Bay4_BottomClosure06" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-12.5, -36.4, -67.5)
+
+[node name="Bay4_BottomClosure07" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-7.5, -36.4, -67.5)
+
+[node name="Bay4_BottomClosure08" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-2.5, -36.4, -67.5)
+
+[node name="Bay4_BottomClosure09" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(2.5, -36.4, -67.5)
+
+[node name="Bay4_BottomClosure10" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(7.5, -36.4, -67.5)
+
+[node name="Bay4_BottomClosure11" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(12.5, -36.4, -67.5)
+
+[node name="Bay4_BottomClosure12" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(17.5, -36.4, -67.5)
+
+[node name="Bay4_BottomClosure13" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(22.5, -36.4, -67.5)
+
+[node name="Bay4_BottomClosure14" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(27.5, -36.4, -67.5)
+
+[node name="Bay4_BottomClosure15" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(32.5, -36.4, -67.5)
+
+[node name="Bay4_BottomClosure16" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(37.5, -36.4, -67.5)
+
+[node name="Bay4_TopClosure01" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-37.5, 36, -67.5)
+
+[node name="Bay4_TopClosure02" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-32.5, 36, -67.5)
+
+[node name="Bay4_TopClosure03" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-27.5, 36, -67.5)
+
+[node name="Bay4_TopClosure04" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-22.5, 36, -67.5)
+
+[node name="Bay4_TopClosure05" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-17.5, 36, -67.5)
+
+[node name="Bay4_TopClosure06" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-12.5, 36, -67.5)
+
+[node name="Bay4_TopClosure07" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-7.5, 36, -67.5)
+
+[node name="Bay4_TopClosure08" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(-2.5, 36, -67.5)
+
+[node name="Bay4_TopClosure09" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(2.5, 36, -67.5)
+
+[node name="Bay4_TopClosure10" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(7.5, 36, -67.5)
+
+[node name="Bay4_TopClosure11" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(12.5, 36, -67.5)
+
+[node name="Bay4_TopClosure12" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(17.5, 36, -67.5)
+
+[node name="Bay4_TopClosure13" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(22.5, 36, -67.5)
+
+[node name="Bay4_TopClosure14" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(27.5, 36, -67.5)
+
+[node name="Bay4_TopClosure15" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(32.5, 36, -67.5)
+
+[node name="Bay4_TopClosure16" parent="NorthShellClosure" instance=ExtResource("6_closure")]
+position = Vector3(37.5, 36, -67.5)
+
+[node name="ArenaGate" parent="BossRoom02"]
+use_stair_camera_override = false
+
 [node name="PlatformSentinelEncounter" type="Node3D" parent="."]
 position = Vector3(0, 0, -22.5)
 script = ExtResource("2_encounter")
 
 [node name="Deck" type="Node3D" parent="PlatformSentinelEncounter"]
 script = ExtResource("3_deck")
+rear_screen_travel = 6.0
+rear_screen_parts = Array[NodePath]([NodePath("Components/诊断遥测屏幕_内容实例"), NodePath("Components/数据核心屏幕_内容实例"), NodePath("Components/波形监测屏幕_内容实例"), NodePath("RoomLighting/屏幕红光反射_left"), NodePath("RoomLighting/屏幕红光反射_center"), NodePath("RoomLighting/屏幕红光反射_right")])
+rear_screen_chassis = Array[NodePath]([NodePath("Components/草稿巨屏_246"), NodePath("Components/草稿巨屏_247"), NodePath("Components/草稿巨屏_248")])
 
 [node name="PlatformSentinel" parent="PlatformSentinelEncounter/Deck" instance=ExtResource("4_platform")]
+
+[editable path="BossRoom02"]
