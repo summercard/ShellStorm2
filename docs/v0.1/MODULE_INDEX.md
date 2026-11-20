@@ -1,3 +1,7 @@
+- ENEMY-AI / NARRATIVE-TRIGGER / VFX-POOL：[僵尸表现、炸弹果与剧情停战](development/2026-11-20_enemy_narrative_hold.md)。胖子移除外挂红点，小僵尸抬头，绿滩受光；炸弹果速度与步频翻倍，强化生命 ×4。验证结果与边界见开发记录。
+
+- BOSS-STAGES / WORLD-PLAN / ASSET-PIPELINE · [武装平台独立武装与回程装配](development/2026-11-20_platform_sentinel_units.md)。01、99 共用四个独立大臂、十六个独立枪架、完整回程格栅节段以及齐射联动屏幕。
+
 - BOSS-STAGES / WORLD-PLAN：[01／99显示器首战共享8000 HP](development/2026-11-19_shared_monitor_hp.md)；不改全局模板、其他关卡或平台四臂。
 
 - WORLD-ENTRY / UI-HUD：[远征99测试入口迁至 Esc](development/2026-11-19_esc_expedition99.md)。仅编辑器运行的基地安全区可见，复用原远征读取流程。

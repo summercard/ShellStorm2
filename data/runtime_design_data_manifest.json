@@ -99,7 +99,7 @@
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/level_plan.json",
       "runtime": "data/level_plans/expedition_01/level_plan.json",
-      "sha256": "7731c9250607f3c34db2b167f880ca59dca3847245bd2e849addf52d682340ad"
+      "sha256": "a2ecb18b29acf66cff48d8fe2ce7b43f9b055a3df1b94f9f79f6051f94216c90"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/boss_50x40.json",

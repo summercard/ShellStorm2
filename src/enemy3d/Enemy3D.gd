@@ -295,7 +295,7 @@ const PROFILES := {
 	"summoner": {"hp": 72, "speed": 1.65, "damage": 8, "range": 7.2, "cooldown": 4.8},
 	"shielded": {"hp": 112, "speed": 2.0, "damage": 17, "range": 2.05, "cooldown": 1.55},
 	# 2026-11-16 用户：本体移动/实际速度驱动步频同步 +30%；不改代理怪或蓄爆时长。
-	"exploder": {"hp": 42, "speed": 4.03, "damage": 30, "range": 2.85, "cooldown": 3.0},
+	"exploder": {"hp": 42, "speed": 8.06, "damage": 30, "range": 2.85, "cooldown": 3.0},
 	"ambusher": {"hp": 50, "speed": 4.65, "damage": 18, "range": 2.15, "cooldown": 1.9},
 	# Boss 基础生命 = hp × BOSS_HP_MULTIPLIER(10) = 5200 × 10 = 52000（第1层实测值）；
 	# 更高楼层由 MonsterInjector 的 FLOOR_SCALING.hp_mult 与 boss_scale 通过
@@ -1030,7 +1030,10 @@ var _last_attack_result := "none"
 var _last_state_reason := "spawned"
 var _ambush_reburrow_cooldown := 0.0
 var _ambush_unseen_time := 0.0
+enum DeathCause { OTHER, LETHAL_DAMAGE, ACTIVE_EXPLOSION }
+const EXPLODER_SPLIT_COUNT := 3
 var _active_explosion_committed := false
+var _death_cause := DeathCause.OTHER
 ## 关卡级死亡自爆规格（远征01 `monster_rules.death_explosion.<kind>`）。
 ## 空字典 = 本怪不自爆（缺省，塔楼与其余关卡恒为空）。
 var _death_explosion: Dictionary = {}
@@ -1323,6 +1326,8 @@ func _reset_egt_state() -> void:
 	_egt_interrupt_flee = 0.0
 	_egt_hurt_window = 0.0
 	_explode_pending = 0.0
+	_active_explosion_committed = false
+	_death_cause = DeathCause.OTHER
 	_grab_miss_count = 0
 	var blink_spec: Variant = _active_profile.get("blink", null)
 	_blink_timer = (
@@ -1752,6 +1757,7 @@ func export_runtime_state() -> Dictionary:
 		"state_time": _state_time,
 		"death_warning_remaining_sec": _death_warning_remaining_sec,
 		"death_warning_duration_sec": _death_warning_duration_sec,
+		"death_cause": int(_death_cause),
 		"state_reason": _last_state_reason,
 		"last_known_target_position": [
 			_last_known_target_position.x,
@@ -1888,6 +1894,7 @@ func import_runtime_state(state: Dictionary) -> bool:
 	if saved_ai_state == "death_warning" and _death_warning_seconds() > 0.0:
 		var duration := maxf(0.001, float(state.get("death_warning_duration_sec", _death_warning_seconds())))
 		var remaining := clampf(float(state.get("death_warning_remaining_sec", 0.0)), 0.0, duration)
+		_death_cause = clampi(int(state.get("death_cause", DeathCause.OTHER)), DeathCause.OTHER, DeathCause.ACTIVE_EXPLOSION) as DeathCause
 		_begin_death_warning(remaining, duration)
 	elif saved_ai_state in VALID_STATES and saved_ai_state not in ["dead", "death_warning"]:
 		transition_to(saved_ai_state, "runtime_restore")
@@ -1938,6 +1945,8 @@ func is_concealed_in_world() -> bool:
 
 func _process(delta: float) -> void:
 	if ai_state == "death_warning":
+		if _narrative_holds_combat():
+			return
 		_death_warning_remaining_sec = maxf(0.0, _death_warning_remaining_sec - delta)
 		_state_time = _death_warning_duration_sec - _death_warning_remaining_sec
 		if avatar != null:
@@ -1961,7 +1970,7 @@ func _process(delta: float) -> void:
 	_tick_overhead_health_bar_delay(delta)
 	# 已加载但尚未进入近距离 AI 圈的怪物仍需低成本监听真实受光刺激。
 	# 否则其 physics_process 被暂停后，探照灯永远不可能将它唤醒。
-	if _runtime_ai_active or ai_state == "dead" or illumination_sensor == null:
+	if _runtime_ai_active or ai_state == "dead" or illumination_sensor == null or _narrative_holds_combat():
 		return
 	illumination_sensor.tick(delta)
 
@@ -2114,7 +2123,51 @@ func _can_tick_elite_equipment() -> bool:
 	return true
 
 
+func _narrative_holds_combat() -> bool:
+	return NarrativeDirector != null and NarrativeDirector.holds_enemy_combat()
+
+
+## Cancel ordinary orders rather than banking them. Do not change room activation,
+## SceneTree pause, fate freeze or the monitor's explicit story activation.
+func interrupt_for_narrative() -> void:
+	if ai_state in ["dead", "defeated"]:
+		return
+	if ai_state == "death_warning":
+		return
+	var was_attacking := ai_state in ["telegraph", "attack", "recovery"] or not _pending_volleys.is_empty() or not _pending_eggs.is_empty() or _orbit_active or _explode_pending > 0.0 or _suicide_rush_active or _grab_state != "idle"
+	_pending_volleys.clear()
+	_pending_eggs.clear()
+	_explode_pending = 0.0
+	_suicide_rush_active = false
+	_orbit_active = false
+	_orbit_emit_accumulator = 0.0
+	_blink_telegraph = 0.0
+	_blink_after_attack = 0.0
+	if _grab_state != "idle":
+		_grab_state = "idle"
+		_grab_timer = attack_cooldown
+	_external_velocity = Vector3.ZERO
+	_external_timer = 0.0
+	velocity = Vector3.ZERO
+	if was_attacking:
+		_attack_timer = maxf(_attack_timer, attack_cooldown)
+		if monitor_combat != null:
+			monitor_combat.cancel()
+		if arms_taker_combat != null:
+			arms_taker_combat.cancel()
+		if ai_state in ["telegraph", "attack", "recovery"]:
+			transition_to("idle", "narrative_combat_hold")
+	if _runtime_ai_active and avatar != null and not bool(enemy_data.get("narrative_stationary", false)):
+		avatar.sync_presentation("idle", 0.0, 0.0, _telegraph_duration(), _recovery_duration(), get_effective_move_speed())
+
+
 func _physics_process(delta: float) -> void:
+	if _narrative_holds_combat():
+		if monitor_combat != null and monitor_combat.story_activation_requested and not monitor_combat.activation_completed:
+			monitor_combat.tick_activation(delta)
+			if monitor_combat.activation_completed:
+				boss_activation_completed.emit(self)
+		return
 	if ai_state == "death_warning":
 		return
 	_tick_fate_statuses(delta)
@@ -2833,6 +2886,8 @@ func _resolve_attack_cooldown() -> float:
 
 
 func _perform_attack(to_target: Vector3, distance: float) -> void:
+	if _narrative_holds_combat():
+		return
 	# 自动化与技能预演允许传入显式方向而不绑定目标；实际近战命中仍要求
 	# 当前目标有效，避免悬空引用造成重复结算。
 	_attack_timer = _resolve_attack_cooldown()
@@ -4335,6 +4390,8 @@ func receive_healing(amount: int) -> void:
 
 
 func _explode() -> void:
+	if _narrative_holds_combat():
+		return
 	_active_explosion_committed = true
 	_spawn_effect("VFX-EXPLOSION-3D", 1.75)
 	if MonsterAIManager != null:
@@ -4344,7 +4401,7 @@ func _explode() -> void:
 			if player.has_method("notify_attacked_by"):
 				player.call("notify_attacked_by", self)
 			player.call("take_damage", contact_damage, false, ((player as Node3D).global_position - global_position).normalized())
-	_die()
+	_die(DeathCause.ACTIVE_EXPLOSION)
 
 
 ## 死亡自爆（远征01 `monster_rules.death_explosion.<kind>`，业主 2026-10-14：胖子僵尸 180）。
@@ -4406,6 +4463,8 @@ func _damage_allies_in_blast(damage: int, radius: float) -> void:
 
 ## 自爆对**玩家**的伤害。距离口径与 `_explode()` 一致（3D 球距离）。
 func _damage_players_in_blast(damage: int, radius: float) -> void:
+	if _narrative_holds_combat():
+		return
 	for player in get_tree().get_nodes_in_group("player_3d"):
 		var body := player as Node3D
 		if body == null or not is_instance_valid(body):
@@ -4430,6 +4489,8 @@ func _damage_players_in_blast(damage: int, radius: float) -> void:
 ## 场地是**独立玩法节点**（`DeathBlastZone3D`），自己按周期结算，
 ## 死亡怪本帧后续被回收也不影响它 —— 它在场景树上、不依赖本怪存活。
 func _spawn_ground_blast_zone(radius: float) -> void:
+	if _narrative_holds_combat():
+		return
 	var zone_cfg := _death_explosion.get("zone", {}) as Dictionary
 	if zone_cfg.is_empty() or not bool(zone_cfg.get("enabled", false)):
 		return
@@ -4500,7 +4561,7 @@ func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, 
 		current_hp = maxi(1, current_hp)
 		_begin_elite_defeat()
 	elif current_hp <= 0:
-		_die()
+		_die(DeathCause.LETHAL_DAMAGE)
 	else:
 		if AudioManager != null:
 			if critical:
@@ -4663,7 +4724,7 @@ func _tick_fate_statuses(delta: float) -> void:
 			_spawn_damage_number(applied, false, "poison" if str(key).begins_with("poison") else "fire")
 			if current_hp <= 0:
 				var source: Variant = state["source"]
-				_die()
+				_die(DeathCause.LETHAL_DAMAGE)
 				if is_instance_valid(source):
 					source.record_projectile_kill(false)
 				return
@@ -4697,7 +4758,7 @@ func _tick_damage_over_time(delta: float) -> void:
 	avatar.flash_hit()
 	_spawn_damage_number(applied, false)
 	if current_hp <= 0:
-		_die()
+		_die(DeathCause.LETHAL_DAMAGE)
 
 
 func transition_to(state_id: String, reason := "") -> bool:
@@ -5399,7 +5460,7 @@ func _recovery_duration() -> float:
 		return float(_active_profile["recovery"])
 	if _is_egt_kind():
 		return _egt_recovery_seconds()
-	return 0.62 if enemy_kind == "boss" else 0.48 if enemy_kind in ["shielded", "exploder"] else 0.34
+	return 0.62 if enemy_kind == "boss" else 0.48 if _table_kind() in ["shielded", "exploder"] else 0.34
 
 
 func _next_boss_skill() -> String:
@@ -5525,7 +5586,7 @@ func _behavior_role() -> String:
 		"exploder": "proximity_charge_and_fragments",
 		"ambusher": "buried_trigger_and_lunge",
 		"boss": "phased_volley_and_summon",
-	}.get(enemy_kind, "rush_melee"))
+	}.get(_table_kind(), "rush_melee"))
 
 
 func _telegraph_duration() -> float:
@@ -5533,7 +5594,7 @@ func _telegraph_duration() -> float:
 		return float(_active_profile["telegraph"])
 	if _is_egt_kind():
 		return _egt_telegraph_seconds()
-	if enemy_kind == "exploder":
+	if _table_kind() == "exploder":
 		return 0.9
 	if enemy_kind == "ambusher":
 		return 0.46
@@ -5645,9 +5706,10 @@ func _begin_death_warning(remaining: float, duration: float) -> void:
 		avatar.sync_death_warning(duration - remaining, duration)
 
 
-func _die() -> void:
+func _die(cause := DeathCause.OTHER) -> void:
 	if ai_state in ["dead", "defeated", "death_warning"] or _elite_defeat_active:
 		return
+	_death_cause = cause
 	var warning := _death_warning_seconds()
 	if warning > 0.0 and not _vanish_requested:
 		_begin_death_warning(warning, warning)
@@ -5688,9 +5750,10 @@ func _commit_death() -> void:
 		summon_requested.emit(self, 3)
 	elif elite_modifier_id == "Elite.Parasite":
 		_strengthen_nearest_enemy()
-	if enemy_kind == "exploder":
-		if not _active_explosion_committed:
-			_spawn_death_fragments()
+	if _table_kind() == "exploder" and not _active_explosion_committed:
+		_spawn_death_fragments()
+		if enemy_kind == MonsterVariants.EXPLODER_STRONG and _death_cause == DeathCause.LETHAL_DAMAGE:
+			split_requested.emit(self, "exploder", EXPLODER_SPLIT_COUNT)
 	# 关卡级死亡自爆（远征01 胖子僵尸）。放在 `killed.emit` 之前 —— 自爆炸死的怪
 	# 也必须各自走完自己的 `_die()` + `killed`（掉落不能因为「死于自爆」而漏结算）。
 	# 规格非空 ⇒ 表现 + 伤害结算一起走；规格为空但本怪是胖子僵尸 ⇒ 只留**表现**

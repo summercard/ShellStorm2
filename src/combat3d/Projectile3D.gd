@@ -107,6 +107,7 @@ var hit_knockback := 0.0
 ## 射程上限（米），由枪身 base_stats 的 `range` 下发；`<= 0` 表示不启用（退回旧的「按存活时间」口径）。
 ## 与 `speed` 独立：改弹速只改飞行时间，不再连带改射程。
 var range_m := 0.0
+var _level_flight_y := NAN
 var _lifetime := 0.0
 ## 实际飞行路径长度（含反弹折线），用于判定射程上限。
 var _traveled := 0.0
@@ -194,6 +195,7 @@ func configure(config: Dictionary) -> void:
 	hit_knockback = float(config.get("hit_knockback", hit_knockback))
 	# 射程上限（米）。0/缺省 = 不启用，保持旧行为（敌弹与旧内容不受影响）。
 	range_m = maxf(0.0, float(config.get("range", 0.0)))
+	_level_flight_y = float(config.get("level_flight_y", NAN))
 	_bounces_left = int(fate_behavior.get("bounce_count", 2 if bullet_tags.has("bounce") else 0))
 	_pierces_left = int(fate_behavior.get("pierce_level", 2 if bullet_tags.has("piercing") else 0))
 	_lifetime = 0.0
@@ -228,6 +230,7 @@ func activate(config: Dictionary, world_position: Vector3) -> void:
 	if is_instance_valid(ignored) and ignored is PhysicsBody3D and ignored != shooter:
 		_add_tracked_collision_exception(ignored)
 	_active = true
+	_sync_hostile_group()
 	visible = true
 	process_mode = Node.PROCESS_MODE_INHERIT
 	global_position = world_position
@@ -243,7 +246,13 @@ func activate(config: Dictionary, world_position: Vector3) -> void:
 		_collision_shape.set_deferred("disabled", false)
 
 
+func _sync_hostile_group() -> void:
+	if hostile and not is_in_group("hostile_projectile_3d"):
+		add_to_group("hostile_projectile_3d")
+
+
 func _ready() -> void:
+	_sync_hostile_group()
 	collision_layer = 8
 	collision_mask = projectile_collision_mask
 	if shooter is PhysicsBody3D:
@@ -261,6 +270,9 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if not _active:
+		return
+	if hostile and NarrativeDirector != null and NarrativeDirector.holds_enemy_combat():
+		_retire()
 		return
 	if _turret_active:
 		_tick_turret(delta)
@@ -309,6 +321,8 @@ func _physics_process(delta: float) -> void:
 		if is_instance_valid(_visual):
 			_visual.call("roll", speed * delta / 0.18)
 	var step := velocity * delta
+	if is_finite(_level_flight_y):
+		step.y = move_toward(global_position.y, _level_flight_y, speed * delta * 0.36) - global_position.y
 	# 射程上限：按实际飞行路径长度累计（含反弹折线）。榴弹类到点自动引爆，其余直接消失。
 	# 回旋镖返航（_returning）不受射程限制，否则会被掐在半路。
 	if not _returning and range_m > 0.0:
@@ -1381,6 +1395,8 @@ func _retire() -> void:
 	if not _active:
 		return
 	_active = false
+	if is_in_group("hostile_projectile_3d"):
+		remove_from_group("hostile_projectile_3d")
 	if not _hit_any and is_instance_valid(source_weapon_tree):
 		source_weapon_tree.record_growth_result(false, fate_behavior)
 	velocity = Vector3.ZERO

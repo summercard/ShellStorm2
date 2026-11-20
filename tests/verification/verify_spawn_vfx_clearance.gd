@@ -118,7 +118,7 @@ func _ready() -> void:
 				row["actual_circle_clearance_m"] = host._spawn_vfx_landing_distance(room,strong.global_position)
 				row["refined_candidate_count"] = host._refined_spawn_vfx_candidates(room,{"trigger_port_id":port_id,"remote_spawn_policy":"opposite_entry"},candidates).size()
 				check(snapshot.landing_distance_m >= EncounterEventHost3D.SPAWN_VFX_MIN_DISTANCE_M or snapshot.layout == "safe_fan", "不足整圆净空必须使用已校验逐家具轨迹")
-				check(strong.current_hp == 396, "空间修复不改强化HP")
+				check(strong.current_hp == 792, "空间修复不改强化HP")
 				check(room._safe_spawn_distances_valid(strong.global_position, tower.player.global_position, 6.0, []), "实际怪位满足玩家6m")
 				var allowed := host._refined_spawn_vfx_candidates(room, {"trigger_port_id":port_id,"remote_spawn_policy":"opposite_entry"}, candidates)
 				check(allowed.any(func(p: Vector3): return p.is_equal_approx(strong.global_position)), "实际怪位仍在反入口候选半区")

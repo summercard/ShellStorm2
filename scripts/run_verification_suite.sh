@@ -529,6 +529,7 @@ visual_scenes=(
 
 # 必须由人工操控/观察才能得出可靠结论；登记但不进入自动套件。
 manual_scenes=(
+  verify_enemy_narrative_hold
   # Editor window and isolated save directory required; run with keyboard and -- --pad.
   verify_pause_expedition99
   # 新容量guard仅经 run_fate_tutorial_qa.py --scene tests/verification/verify_pistol_fate_capacity.tscn --logic；Autoload前隔离。
@@ -580,6 +581,7 @@ retired_scenes=(
 )
 
 renderer_scenes=(
+  verify_enemy_narrative_hold
   # 新容量guard排除full/aggregate full目录裸扫；只由专用隔离runner调用。
   verify_pistol_fate_capacity
   # 命运教程专用隔离runner：排除full及aggregate full目录裸扫。

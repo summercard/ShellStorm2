@@ -8,6 +8,7 @@ instance uniform float tear = 0.0;
 instance uniform float scroll = 0.0;
 // x: 0 original cyan, 1 cool blue, 2 blue-violet. y: transient signal tear.
 instance uniform vec2 deck_feed = vec2(0.0);
+instance uniform float gun_alert = 0.0;
 
 void fragment() {
 	vec2 canvas_uv = canvas_center + (UV2 - 0.5) * 0.2;
@@ -40,5 +41,8 @@ void fragment() {
 			glow = vec3(glow.r * 0.90 + glow.b * 0.18, glow.g * 0.70, glow.b);
 		}
 	}
-	EMISSION = glow * power * 1.5;
+	vec3 alarm = vec3(1.0, 0.24, 0.045);
+	float scan = 0.80 + 0.20 * sin(canvas_uv.y * 26.0);
+	glow = mix(glow, alarm * (0.25 + max(glow.r, max(glow.g, glow.b))), gun_alert * 0.68);
+	EMISSION = glow * power * (1.5 + 0.65 * gun_alert * scan);
 }

@@ -2,11 +2,7 @@ class_name MonsterVariants
 extends RefCounted
 ## 普通怪变种（「-强化怪」）的**唯一定义源**。
 ##
-## 业主口径（2026-10-16）：
-##   小僵尸-强化怪   体型 ×1.5、生命 ×2、攻击 ×2
-##   胖子僵尸-强化怪 体型 ×1.5、生命 ×2、攻击 ×2、自爆范围 ×1.5
-##   保安僵尸-强化怪 体型 ×1.5、生命 ×1.5、弹速 ×1.3、射程 ×2（子弹伤害不变）
-## 换算口径为**乘法**：写「×2」就是 ×2，不是 ×3。
+## 强化层生命统一 ×4；伤害、体型、范围和弹道仍按各自规格。
 ##
 ## ## 为什么单独成文件
 ## 「强化怪」要同时被 12 处查表认识（PROFILES / 体型表 / 血量基线 / 外观表 / 血条表 /
@@ -18,8 +14,7 @@ extends RefCounted
 ##
 ## ## 只存倍率，绝不存绝对数值
 ## 变种的一切绝对数值（生命 / 伤害 / 射程 / 自爆半径）都由**原怪的最终值**实时派生
-## （见 `MonsterInjector._apply_strong_variant`）。以后把小僵尸 350 调成 400，
-## 强化怪自动变 800 —— 不存在「两份数值各自漂移」的可能。
+## （见 `Enemy3D.profile_for` 和 `MonsterInjector._derive_stat_override`）。
 ## 唯一的例外是 `scale_mult`：体型是变种自己的身份，不跟随原怪改动。
 ##
 ## 本文件只提供**纯计算**：不持有节点、不读场景树、不认识 Enemy3D 实例。
@@ -30,6 +25,8 @@ const VARIANT_SUFFIX := "_strong"
 
 ## 中文显示名的后缀（正式名称 = 原怪名 + 此后缀）。
 const DISPLAY_SUFFIX := "-强化怪"
+const STRONG_HP_MULTIPLIER := 4.0
+const EXPLODER_STRONG := "exploder_strong"
 
 
 # ── 眼睛绑点配方（2026-10-16）────────────────────────────────────────────────
@@ -55,9 +52,9 @@ const DISPLAY_SUFFIX := "-强化怪"
 ## 基类 → 眼位配方。
 const EYE_SOCKETS := {
 	"melee_chaser": {
-		# 2026-10-17：按原贴图两瞳中心射线命中蒙皮表面，再反算 Head 骨空间。
-		# 两眼贴图并非关于模型根对称；直接跟骨，避免全身高度配方漂移。
-		"bone_offsets": [Vector3(0.133553, 0.207281, 0.241197), Vector3(-0.166665, 0.203328, 0.249580)],
+		# v006：按贴图双瞳中心、GLB 三角面 UV 和 Head 逆绑定矩阵重新标定。
+		# 局部 +Z 向脸外留约 8 mm，保留既有光效而不改模型。
+		"bone_offsets": [Vector3(0.189065, 0.087930, 0.449892), Vector3(-0.168118, 0.079885, 0.473035)],
 		# 下方比例只供旧标定工具取景；正式定位优先使用骨空间双眼锚点。
 		# 眼睛高度 / 模型总高。
 		"y_ratio": 0.550,
@@ -76,12 +73,6 @@ const EYE_SOCKETS := {
 		"front_offset": -0.015,
 		"radius": 0.040,
 	},
-	"fat_zombie03": {
-		"y_ratio": 0.880,
-		"half_x": 0.195,
-		"front_offset": -0.015,
-		"radius": 0.050,
-	},
 }
 
 ## 旧头部带探针参数，仅保留给历史标定工具；正式眼位改用双眼附近窄带。
@@ -90,7 +81,7 @@ const EYE_HEAD_BAND_FROM_TOP := 0.45
 const EYE_HEAD_HALF_X_LIMIT := 0.45
 
 
-## 三类僵尸普通版与强化版共用眼位配方（2026-10-17 用户修订）。
+## 有红眼的普通版与强化版共用眼位配方。
 static func eye_socket_for(variant_kind: String) -> Dictionary:
 	var base_kind := base_of(variant_kind)
 	return eye_socket_for_base(base_kind if not base_kind.is_empty() else variant_kind)
@@ -111,7 +102,7 @@ const VARIANTS := {
 	"melee_chaser": {
 		"variant_id": "melee_chaser_strong",
 		"display_name": "小僵尸" + DISPLAY_SUFFIX,
-		"hp_mult": 2.0,
+		"hp_mult": STRONG_HP_MULTIPLIER,
 		"damage_mult": 2.0,
 		"scale_mult": 1.5,
 		"attack_range_mult": 1.5,
@@ -119,7 +110,7 @@ const VARIANTS := {
 	"fat_zombie03": {
 		"variant_id": "fat_zombie03_strong",
 		"display_name": "胖子僵尸" + DISPLAY_SUFFIX,
-		"hp_mult": 2.0,
+		"hp_mult": STRONG_HP_MULTIPLIER,
 		"damage_mult": 2.0,
 		"scale_mult": 1.5,
 		"attack_range_mult": 1.5,
@@ -130,13 +121,19 @@ const VARIANTS := {
 	"ranged_caster": {
 		"variant_id": "ranged_caster_strong",
 		"display_name": "保安僵尸" + DISPLAY_SUFFIX,
-		"hp_mult": 1.5,
+		"hp_mult": STRONG_HP_MULTIPLIER,
 		# 业主只指定了 hp / 体型 / 弹速 / 射程，子弹伤害**明确保持不变**。
 		"damage_mult": 1.0,
 		"scale_mult": 1.5,
 		"attack_range_mult": 1.5,
 		"projectile_speed_mult": 1.3,
 		"projectile_range_mult": 2.0,
+	},
+	"exploder": {
+		"variant_id": EXPLODER_STRONG,
+		"display_name": "炸弹果" + DISPLAY_SUFFIX,
+		"hp_mult": STRONG_HP_MULTIPLIER,
+		"scale_mult": 1.5,
 	},
 }
 

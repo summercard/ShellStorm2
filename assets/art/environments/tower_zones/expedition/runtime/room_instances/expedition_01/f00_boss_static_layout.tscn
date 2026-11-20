@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_boss_room_02_static_layout.tscn" id="1_room02"]
 [ext_resource type="Script" path="res://src/world3d/PlatformSentinelEncounter3D.gd" id="2_encounter"]
@@ -6,6 +6,9 @@
 [ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/enm_boss_platform_sentinel_root_top3d.tscn" id="4_platform"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/wall_standard_5m_h12/wall_standard_5m_h12_root_top3d.tscn" id="5_return"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/floor_base_5m/floor_base_5m_root_top3d.tscn" id="6_closure"]
+[ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/articulated_grapple/articulated_grapple_root_top3d.tscn" id="7_grapple"]
+[ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/perimeter_sentry/perimeter_sentry_root_top3d.tscn" id="8_sentry"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_boss_return_bridge_segment.tscn" id="9_extension"]
 
 [node name="Expedition01BossRoom02" type="Node3D"]
 metadata/schema = "shellstorm2.expedition.room_static_layout.v001"
@@ -659,3 +662,110 @@ rear_screen_chassis = Array[NodePath]([NodePath("Components/草稿巨屏_246"), 
 [node name="PlatformSentinel" parent="PlatformSentinelEncounter/Deck" instance=ExtResource("4_platform")]
 
 [editable path="BossRoom02"]
+
+[node name="Arms" type="Node3D" parent="PlatformSentinelEncounter"]
+
+[node name="Sentries" type="Node3D" parent="PlatformSentinelEncounter"]
+
+[node name="Grapple_01" parent="PlatformSentinelEncounter/Arms" instance=ExtResource("7_grapple")]
+position = Vector3(7.1500001,-7.6584749,16.1218548)
+rotation_degrees = Vector3(0, 0, 0)
+mount_tile = &"Tile_04_01"
+
+[node name="Grapple_02" parent="PlatformSentinelEncounter/Arms" instance=ExtResource("7_grapple")]
+position = Vector3(16.1218548,-7.6584749,-7.1499987)
+rotation_degrees = Vector3(0, 90, 0)
+mount_tile = &"Tile_05_04"
+
+[node name="Grapple_03" parent="PlatformSentinelEncounter/Arms" instance=ExtResource("7_grapple")]
+position = Vector3(-7.1499987,-7.6584749,-16.1218548)
+rotation_degrees = Vector3(0, 180, 0)
+mount_tile = &"Tile_02_05"
+
+[node name="Grapple_04" parent="PlatformSentinelEncounter/Arms" instance=ExtResource("7_grapple")]
+position = Vector3(-16.1218548,-7.6584749,7.1500015)
+rotation_degrees = Vector3(0, 270, 0)
+mount_tile = &"Tile_01_02"
+
+[node name="Sentry_01_01" parent="PlatformSentinelEncounter/Sentries" instance=ExtResource("8_sentry")]
+position = Vector3(-10.1499996,-1.3250000,18.1930008)
+rotation_degrees = Vector3(0, 0, 0)
+mount_tile = &"Tile_01_01"
+
+[node name="Sentry_01_02" parent="PlatformSentinelEncounter/Sentries" instance=ExtResource("8_sentry")]
+position = Vector3(-6.7700000,-1.3250000,18.1930008)
+rotation_degrees = Vector3(0, 0, 0)
+mount_tile = &"Tile_02_01"
+
+[node name="Sentry_01_03" parent="PlatformSentinelEncounter/Sentries" instance=ExtResource("8_sentry")]
+position = Vector3(-3.3800001,-1.3250000,18.1930008)
+rotation_degrees = Vector3(0, 0, 0)
+mount_tile = &"Tile_02_01"
+
+[node name="Sentry_01_04" parent="PlatformSentinelEncounter/Sentries" instance=ExtResource("8_sentry")]
+position = Vector3(0.9400000,-1.3250000,18.1930008)
+rotation_degrees = Vector3(0, 0, 0)
+mount_tile = &"Tile_03_01"
+
+[node name="Sentry_02_01" parent="PlatformSentinelEncounter/Sentries" instance=ExtResource("8_sentry")]
+position = Vector3(18.1929989,-1.3250000,10.1500006)
+rotation_degrees = Vector3(0, 90, 0)
+mount_tile = &"Tile_05_01"
+
+[node name="Sentry_02_02" parent="PlatformSentinelEncounter/Sentries" instance=ExtResource("8_sentry")]
+position = Vector3(18.1929989,-1.3250000,6.7700014)
+rotation_degrees = Vector3(0, 90, 0)
+mount_tile = &"Tile_05_02"
+
+[node name="Sentry_02_03" parent="PlatformSentinelEncounter/Sentries" instance=ExtResource("8_sentry")]
+position = Vector3(18.1930008,-1.3250000,3.3800013)
+rotation_degrees = Vector3(0, 90, 0)
+mount_tile = &"Tile_05_02"
+
+[node name="Sentry_02_04" parent="PlatformSentinelEncounter/Sentries" instance=ExtResource("8_sentry")]
+position = Vector3(18.1930008,-1.3250000,-0.9399986)
+rotation_degrees = Vector3(0, 90, 0)
+mount_tile = &"Tile_05_03"
+
+[node name="Sentry_03_01" parent="PlatformSentinelEncounter/Sentries" instance=ExtResource("8_sentry")]
+position = Vector3(10.1500006,-1.3250000,-18.1929989)
+rotation_degrees = Vector3(0, 180, 0)
+mount_tile = &"Tile_05_05"
+
+[node name="Sentry_03_02" parent="PlatformSentinelEncounter/Sentries" instance=ExtResource("8_sentry")]
+position = Vector3(6.7700019,-1.3250000,-18.1929989)
+rotation_degrees = Vector3(0, 180, 0)
+mount_tile = &"Tile_04_05"
+
+[node name="Sentry_03_03" parent="PlatformSentinelEncounter/Sentries" instance=ExtResource("8_sentry")]
+position = Vector3(3.3800018,-1.3250000,-18.1930008)
+rotation_degrees = Vector3(0, 180, 0)
+mount_tile = &"Tile_04_05"
+
+[node name="Sentry_03_04" parent="PlatformSentinelEncounter/Sentries" instance=ExtResource("8_sentry")]
+position = Vector3(-0.9399984,-1.3250000,-18.1930008)
+rotation_degrees = Vector3(0, 180, 0)
+mount_tile = &"Tile_03_05"
+
+[node name="Sentry_04_01" parent="PlatformSentinelEncounter/Sentries" instance=ExtResource("8_sentry")]
+position = Vector3(-18.1930008,-1.3250000,-10.1499987)
+rotation_degrees = Vector3(0, 270, 0)
+mount_tile = &"Tile_01_05"
+
+[node name="Sentry_04_02" parent="PlatformSentinelEncounter/Sentries" instance=ExtResource("8_sentry")]
+position = Vector3(-18.1930008,-1.3250000,-6.7699986)
+rotation_degrees = Vector3(0, 270, 0)
+mount_tile = &"Tile_01_04"
+
+[node name="Sentry_04_03" parent="PlatformSentinelEncounter/Sentries" instance=ExtResource("8_sentry")]
+position = Vector3(-18.1930008,-1.3250000,-3.3799989)
+rotation_degrees = Vector3(0, 270, 0)
+mount_tile = &"Tile_01_04"
+
+[node name="Sentry_04_04" parent="PlatformSentinelEncounter/Sentries" instance=ExtResource("8_sentry")]
+position = Vector3(-18.1930008,-1.3250000,0.9400014)
+rotation_degrees = Vector3(0, 270, 0)
+mount_tile = &"Tile_01_03"
+
+[node name="EastBridgeExtension" parent="PlatformSentinelEncounter/Deck" instance=ExtResource("9_extension")]
+position = Vector3(10, 0, 0)

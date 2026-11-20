@@ -240,7 +240,7 @@ func production() -> void:
 	for enemy: Enemy3D in actors(room):
 		if enemy.enemy_kind == "fat_zombie03_strong":
 			strong = enemy
-	check(strong != null and strong.max_hp == 396 and strong.current_hp == 396, "生产强化胖子396HP")
+	check(strong != null and strong.max_hp == 792 and strong.current_hp == 792, "生产强化胖子792HP")
 	var effects: Array = VfxPool._active.get(FX, [])
 	check(effects.size() == 1 and effects[0].scene_file_path.ends_with("vfx_fat_entry_breach_root_top3d.tscn"), "池实际实例来自独立正式Prefab")
 	if strong != null and effects.size() == 1:
@@ -311,7 +311,7 @@ func damage_hits(room: DungeonRoom3D) -> void:
 	weapon.set_damage_multiplier(1.0)
 	check(weapon.damage == 33 and tree.get_computed_stats().damage == 25 and tree.get_computed_stats().bullet_damage == 8, "生产伤害计算25+8=33无配件无命运")
 	weapon.projectile_spawned.connect(func(projectile: Projectile3D): projectiles.append(projectile))
-	for entry in [["melee_chaser", 99, 3], ["fat_zombie03", 198, 6], ["fat_zombie03_strong", 396, 12]]:
+	for entry in [["melee_chaser", 99, 3], ["fat_zombie03", 198, 6], ["fat_zombie03_strong", 792, 24]]:
 		var data := tower._make_box_enemy(entry[0], 1, 0, room)
 		var enemy := (load("res://scenes/enemies/fat_zombie03.tscn") as PackedScene).instantiate() as Enemy3D
 		add_child(enemy)

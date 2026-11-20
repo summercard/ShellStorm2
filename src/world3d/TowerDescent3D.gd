@@ -1315,6 +1315,15 @@ func _ready() -> void:
 		return_scene_path = GameDesignConfig.MAIN_SCENE
 	_entry_context = GameEntryFlow.consume_main_scene_entry()
 	var entry_checkpoint := BaseManager.get_active_run_checkpoint() if BaseManager != null else {}
+	var entry_reason := str(_entry_context.get("reason", ""))
+	# VfxPool is an autoload, so active effects can survive the outgoing expedition
+	# scene. Clear them at the 99F destination too: death-return/rescue does not pass
+	# through the successful expedition settlement path below.
+	if not is_expedition() and entry_reason in [
+		GameEntryFlow.REASON_DEATH_RETURN_99F,
+		GameEntryFlow.REASON_SUCCESSFUL_RETURN_99F,
+	]:
+		_clear_active_vfx_for_scene_exit()
 	if is_expedition():
 		_expedition_entry_source = ExpeditionEntryContext.normalize(str(entry_checkpoint.get(ExpeditionEntryContext.SOURCE_KEY, "")))
 	else:
@@ -1882,6 +1891,25 @@ func _process(delta: float) -> void:
 		_refresh_tower_hud()
 
 
+## 结束本局时把**正在播的**特效收口。
+##
+## 父类 `Dungeon3D._finish_run()` 在开头做同一件事，但 `TowerDescent3D` 的两条
+## 「带物返航」成功路径都在父类之前就 `return` 了（远征成功撤离、塔楼撤离回 99F），
+## 因此这两条路上一发都没清过。
+##
+## 为什么必须清：`VfxPool` 是全局 autoload，特效实例挂在它自己名下，**不随关卡场景
+## 树一起销毁**。典型后果是远征里遭遇事件出怪借出的 `VFX-FAT-ENTRY-BREACH-3D`
+## （3.65s 的破门团块：白烟 + 橙色火焰，尺寸按 1.0 缩放，粒子 scale 2.4~3.6m 级）
+## 在返航落地后仍 `visible = true`，正好糊在 99F 归航点前方的镜头里 ——
+## 表现上就是「刚回基地、绿苔还没说话，画面中央一大团白烟配橙圈」。
+##
+## 语义与父类逐字一致：`clear_active()` 只结束 active 实例，**保留 inactive 预热池**
+## 给后续场景复用，所以不会把下一局的冷启动代价加回来。
+func _clear_active_vfx_for_scene_exit() -> void:
+	if VfxPool != null and VfxPool.has_method("clear_active"):
+		VfxPool.clear_active()
+
+
 func _finish_run(success: bool) -> void:
 	if not success:
 		_cancel_main_story_extraction()
@@ -1893,6 +1921,11 @@ func _finish_run(success: bool) -> void:
 		if not success:
 			super(success)
 			return
+		# 成功返航不走父类，所以要自己补上父类 `_finish_run()` 开头那一发清理：
+		# 战局里还在播的 VFX（典型是遭遇事件出怪时的 `VFX-FAT-ENTRY-BREACH-3D`，
+		# 3.65s 的破门烟雾+火焰）由全局 autoload `VfxPool` 持有，**不随场景卸载消失**。
+		# 不清就带回 99F：玩家刚落地、绿苔还没开口，画面正中就是一整团白烟。
+		_clear_active_vfx_for_scene_exit()
 		_finish_expedition_successful_extraction()
 		return
 	# 塔楼成功撤离是“带物返航99F”，不是重新加载塔楼。父类的成功路径会把

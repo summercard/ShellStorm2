@@ -30,21 +30,23 @@ const EXPEDITION_PLAN_PATH := "res://data/level_plans/expedition_01/level_plan.j
 ## 业主 2026-10-16 口径，在这里**再写一遍**：改了 MonsterVariants 就会在此红。
 ## 换算口径为乘法（「×2」即 ×2，不是 ×3）。
 const DOC_RATIOS := {
+	"exploder": {"hp_mult": 4.0, "scale_mult": 1.5, "damage_mult": 1.0},
 	"melee_chaser": {
-		"hp_mult": 2.0, "damage_mult": 2.0, "scale_mult": 1.5, "attack_range_mult": 1.5,
+		"hp_mult": 4.0, "damage_mult": 2.0, "scale_mult": 1.5, "attack_range_mult": 1.5,
 	},
 	"fat_zombie03": {
-		"hp_mult": 2.0, "damage_mult": 2.0, "scale_mult": 1.5, "attack_range_mult": 1.5,
+		"hp_mult": 4.0, "damage_mult": 2.0, "scale_mult": 1.5, "attack_range_mult": 1.5,
 		"death_explosion_radius_mult": 1.5,
 	},
 	"ranged_caster": {
-		"hp_mult": 1.5, "damage_mult": 1.0, "scale_mult": 1.5, "attack_range_mult": 1.5,
+		"hp_mult": 4.0, "damage_mult": 1.0, "scale_mult": 1.5, "attack_range_mult": 1.5,
 		"projectile_speed_mult": 1.3, "projectile_range_mult": 2.0,
 	},
 }
 
 ## 文档侧写死的中文名（正式名称 = 原怪名 + 后缀）。
 const DOC_NAMES := {
+	"exploder_strong": "炸弹果-强化怪",
 	"melee_chaser_strong": "小僵尸-强化怪",
 	"fat_zombie03_strong": "胖子僵尸-强化怪",
 	"ranged_caster_strong": "保安僵尸-强化怪",
@@ -85,7 +87,7 @@ func _ready() -> void:
 # ① 定义表本身自洽：变种 ID 规范、基类反查可逆。
 func _check_definition_table() -> void:
 	var ids := MonsterVariants.all_variant_ids()
-	_expect(ids.size() == 3, "变种数量应为 3，实为 %d：%s" % [ids.size(), str(ids)])
+	_expect(ids.size() == 4, "变种数量应为 4，实为 %d：%s" % [ids.size(), str(ids)])
 	for base_kind in MonsterVariants.all_base_kinds():
 		var variant_id := MonsterVariants.variant_of(base_kind)
 		_expect(
@@ -143,11 +145,11 @@ func _check_registration_everywhere() -> void:
 	var ids := MonsterVariants.all_variant_ids()
 	for variant_id in ids:
 		_expect(
-			MonsterInjector.BASE_ENEMY_TYPES.has(variant_id),
+			MonsterInjector.BASE_ENEMY_TYPES.has(MonsterVariants.base_of(variant_id)),
 			"MonsterInjector.BASE_ENEMY_TYPES 未登记 %s ⇒ 盒子/设计源点名时刷不出来" % variant_id
 		)
 		_expect(
-			MonsterInjector.ENEMY_PRESENTATION.has(variant_id),
+			MonsterInjector.ENEMY_PRESENTATION.has(MonsterVariants.base_of(variant_id)),
 			"MonsterInjector.ENEMY_PRESENTATION 未登记 %s ⇒ 表现回落成默认配色" % variant_id
 		)
 		_expect(
@@ -172,10 +174,11 @@ func _check_names() -> void:
 			"%s 的 MonsterVariants 显示名应为 %s，实为 %s"
 			% [variant_id, want, MonsterVariants.display_name_of(variant_id)]
 		)
+		var data := MonsterInjector.new().generate_box_enemy(variant_id, 1, 1)
 		_expect(
-			str(MonsterInjector.BASE_ENEMY_TYPES[variant_id]["name"]) == want,
+			str(data.get("name", "")) == want,
 			"%s 的编成表名应为 %s，实为 %s"
-			% [variant_id, want, str(MonsterInjector.BASE_ENEMY_TYPES[variant_id]["name"])]
+			% [variant_id, want, str(data.get("name", ""))]
 		)
 		_samples += 1
 	# 守卫：显示名必须带后缀，且带后缀的必须真的是变种。

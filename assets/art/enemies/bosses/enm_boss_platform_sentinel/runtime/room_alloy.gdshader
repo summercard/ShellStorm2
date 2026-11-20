@@ -3,8 +3,18 @@ shader_type spatial;
 uniform sampler2D palette : source_color, filter_nearest, repeat_disable;
 uniform int role = 1;
 uniform float red_black = 0.0;
+uniform float camera_cutaway = 0.0;
 
 void fragment() {
+	if (camera_cutaway > 0.0) {
+		vec2 pixel = mod(floor(FRAGCOORD.xy), 4.0);
+		vec2 low = mod(pixel, 2.0);
+		vec2 high = floor(pixel * 0.5);
+		float bayer = 4.0 * mod(dot(low, vec2(2.0, 3.0)), 4.0) + mod(dot(high, vec2(2.0, 3.0)), 4.0);
+		if (bayer < camera_cutaway * 16.0) {
+			discard;
+		}
+	}
 	vec3 original = texture(palette, UV).rgb;
 	float grade = dot(original, vec3(0.2126, 0.7152, 0.0722));
 	float warning = smoothstep(0.04, 0.35, original.r - original.b);

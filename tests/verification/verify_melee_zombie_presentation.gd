@@ -103,6 +103,7 @@ func _ready() -> void:
 	e.avatar.sync_presentation("idle", 0.0, 0.0, 0.38, 0.34)
 	check(visual.get_presentation_snapshot().clip == "hurt", "non-stagger hurt overlay missing")
 	check(absf(before - 1.7 * 0.48) < 0.0001, "attack must sample 48 percent")
+	await _check_head_lift(e)
 	var scale_before: Vector3 = e.scale
 	e._die()
 	check(not e.is_in_group("enemy_3d"), "dead still in enemy group")
@@ -126,3 +127,86 @@ func _ready() -> void:
 	else:
 		for failure in failures: push_error(failure)
 	get_tree().quit(0 if failures.is_empty() else 1)
+
+
+func _check_head_lift(normal: Enemy3D) -> void:
+	var strong := _spawn_head_sample("melee_chaser_strong")
+	var borrowed := _spawn_head_sample("egt_blobulon")
+	normal.avatar.set_process(true)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	check(borrowed.avatar.has_formal_normal(), "borrowed model must exercise the same visual asset")
+	if borrowed.avatar.has_formal_normal():
+		check(not borrowed.avatar._formal_normal_root._player.has_animation_library(&"head_lift"), "borrowed model must keep authored pose")
+	borrowed.free()
+	var expected := {"idle": 10.0, "walking": 12.0, "running": 14.0, "attack": 8.0}
+	var comparisons := 0
+	for enemy: Enemy3D in [normal, strong]:
+		var visual := enemy.avatar._formal_normal_root
+		var player := visual._player as AnimationPlayer
+		var skeleton := visual.find_child("Skeleton3D", true, false) as Skeleton3D
+		var socket := enemy.avatar.find_child("StrongEyeSocket3D", true, false) as BoneAttachment3D
+		var glow := socket.find_child("StrongEyeGlow3D", true, false) as StrongVariantEyeGlow3D if socket != null else null
+		check(glow != null, enemy.enemy_kind + " pupil attachment was not finalized")
+		if glow == null:
+			continue
+		var head := skeleton.find_bone("Head")
+		var original_offsets: Array[Vector3] = [Vector3(0.189065, 0.087930, 0.449892), Vector3(-0.168118, 0.079885, 0.473035)]
+		for clip: String in expected:
+			var original := player.get_animation(clip)
+			var lifted_name := "head_lift/" + clip
+			check(player.has_animation(lifted_name), enemy.enemy_kind + " missing " + lifted_name)
+			if not player.has_animation(lifted_name):
+				continue
+			var lifted := player.get_animation(lifted_name)
+			check(is_equal_approx(original.length, lifted.length) and original.loop_mode == lifted.loop_mode, clip + " playback timing changed")
+			for phase: float in ([0.12, 0.48, 0.55, 0.92] if clip == "attack" else [0.12, 0.49, 0.8]):
+				var degrees := 0.0 if clip == "attack" and phase in [0.48, 0.55] else float(expected[clip])
+				var sampled_at := original.length * phase
+				player.play(clip)
+				player.seek(sampled_at, true)
+				var poses: Array[Transform3D] = []
+				for index in skeleton.get_bone_count():
+					poses.append(skeleton.get_bone_pose(index))
+				enemy.rotation.y = -1.1 + phase
+				player.play(lifted_name)
+				player.seek(sampled_at, true)
+				for index in skeleton.get_bone_count():
+					var actual := skeleton.get_bone_pose(index)
+					if index == head:
+						var target := poses[index].basis.get_rotation_quaternion() * Quaternion(Vector3.LEFT, deg_to_rad(degrees))
+						check(rad_to_deg(actual.basis.get_rotation_quaternion().angle_to(target.normalized())) < 0.25, clip + " unexpected head pitch at " + str(phase))
+						check(actual.origin.is_equal_approx(poses[index].origin), "Head translation changed")
+					else:
+						check(actual.is_equal_approx(poses[index]), clip + " changed a non-Head bone")
+				# Do not move the attachments here: the production bone signal must update them.
+				await get_tree().process_frame
+				await get_tree().process_frame
+				var head_world := skeleton.global_transform * skeleton.get_bone_global_pose(head)
+				var eyes := glow.get_eyes()
+				check(eyes.size() == 2, "expected both pupil lights")
+				if eyes.size() == 2:
+					for index in 2:
+						check(eyes[index].position.is_equal_approx(original_offsets[index]), "pupil moved in Head local space")
+						check(eyes[index].global_position.distance_to(head_world * original_offsets[index]) < 0.001, "pupil did not follow corrected Head")
+				comparisons += 1
+		visual._blend_left = 0.0
+		visual._hurt_time = 10.0
+		visual.sync_state("attack", 0.0, 0.0, 0.38, 0.34, 2.45)
+		check(player.current_animation == &"head_lift/attack" and is_equal_approx(player.current_animation_position, 0.816), "actual contact frame must still sample 48 percent")
+		visual.sync_state("idle", 0.0, 0.0, 0.38, 0.34, 2.45)
+		visual.sync_state("chase", 0.0, 2.45, 0.38, 0.34, 2.45)
+		visual._process(0.08)
+		check(player.current_animation == &"head_lift/running" and visual._blend_left > 0.0, "native locomotion blend no longer active")
+		check(not player.has_animation("head_lift/hurt") and not player.has_animation("head_lift/dead"), "hurt/dead must not be lifted")
+	strong.free()
+	print("SMALL_ZOMBIE_HEAD_LIFT_SAMPLES=", comparisons, " kinds=normal,strong borrow_unchanged=true")
+
+
+func _spawn_head_sample(kind: String) -> Enemy3D:
+	var enemy := ENEMY.instantiate() as Enemy3D
+	add_child(enemy)
+	enemy.apply_profile(kind)
+	enemy.set_physics_process(false)
+	enemy.set_process(false)
+	return enemy

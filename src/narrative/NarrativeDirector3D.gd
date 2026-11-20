@@ -55,6 +55,7 @@ var _dispatching := false
 var _advancing_dialogue := false
 var _play_generation := 0
 var _dialogue_waiting := false
+var _enemy_combat_held := false
 
 
 func _ready() -> void:
@@ -440,6 +441,13 @@ func _play_internal(narrative_id: String, context: Dictionary) -> bool:
 		"occupancy": [],
 		"auto_invulnerable": not _script_declares_invulnerable(script),
 	}
+	_enemy_combat_held = true
+	_occupy("scene.enemy_combat", _release_enemy_combat)
+	for enemy in get_tree().get_nodes_in_group("enemy_3d"):
+		if enemy.has_method("interrupt_for_narrative"):
+			enemy.call("interrupt_for_narrative")
+	get_tree().call_group("hostile_projectile_3d", "cancel")
+	get_tree().call_group("enemy_death_blast_zone_3d", "finish")
 	if entry_ceremony:
 		_pending_entry.clear()
 		_occupy("presentation.entry", Callable(_adapter, "restore_expedition_entry"))
@@ -683,6 +691,15 @@ func restore_main_story_camera(seconds: float) -> void:
 
 func release_main_story_control() -> void:
 	_adapter.release_main_story_control()
+	_release_enemy_combat()
+
+
+func holds_enemy_combat() -> bool:
+	return _enemy_combat_held
+
+
+func _release_enemy_combat() -> void:
+	_enemy_combat_held = false
 
 
 ## 演出是否正在独占玩家输入。Dungeon3D 每帧的 _sync_player_input_lock() 必须问这里，

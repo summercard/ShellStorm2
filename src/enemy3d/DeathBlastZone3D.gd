@@ -96,6 +96,8 @@ func activate_zone() -> void:
 	_elapsed = 0.0
 	_next_tick = tick_interval
 	_active = true
+	if not is_in_group("enemy_death_blast_zone_3d"):
+		add_to_group("enemy_death_blast_zone_3d")
 	set_process(true)
 
 
@@ -113,6 +115,9 @@ func _build_visual() -> void:
 
 func _process(delta: float) -> void:
 	if not _active:
+		return
+	if NarrativeDirector != null and NarrativeDirector.holds_enemy_combat():
+		finish()
 		return
 	_elapsed += delta
 	# ⚠ 跳次必须**夹在持续时长之内**（`_next_tick <= zone_duration`）。

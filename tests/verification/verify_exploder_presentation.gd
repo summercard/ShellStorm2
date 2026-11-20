@@ -169,7 +169,7 @@ func _ready() -> void:
 	var elite := _enemy("exploder", true)
 	check(not elite.avatar.has_formal_normal(), "精英与正式普通模型必须互斥")
 	elite.free()
-	await _check_speed30()
+	await _check_speed_double()
 	await _check_death(false)
 	await _check_death(true)
 	var pool := get_tree().get_first_node_in_group("vfx_pool_3d") as VfxPool3D
@@ -228,37 +228,37 @@ func _check_death(active: bool) -> void:
 
 
 ## 仅追加30%提速回归：冻结v002标定，不改源动画，不把移动倍率带入蓄爆。
-func _check_speed30() -> void:
+func _check_speed_double() -> void:
 	var initial_checks := checks
 	var initial_failures := failures.size()
 	var enemy := _enemy()
 	enemy.apply_profile("exploder", false)
-	near(enemy.move_speed, 2.39785, "apply_profile提速仅一次")
-	near(enemy.move_speed / 1.8445, 1.3, "profile相对v002速度比")
+	near(enemy.move_speed, 4.7957, "apply_profile提速仅一次")
+	near(enemy.move_speed / 2.39785, 2.0, "直接Profile翻倍")
 	var default_data := {"enemy_type": "exploder"}
 	for iteration in range(3):
 		enemy.configure_from_enemy_data(default_data)
-		near(enemy.move_speed, 2.39785, "无speed重复configure不得叠乘%d" % iteration)
+		near(enemy.move_speed, 4.7957, "无speed重复configure不得叠乘%d" % iteration)
 	var injector := MonsterInjector.new()
-	near(float(MonsterInjector.BASE_ENEMY_TYPES["exploder"]["speed"]), 91.0, "Injector基础字段")
+	near(float(MonsterInjector.BASE_ENEMY_TYPES["exploder"]["speed"]), 182.0, "Injector基础字段")
 	var injected := injector.generate_box_enemy("exploder", 1, 1)
-	near(float(injected["speed"]), 91.0, "Injector生成字段")
+	near(float(injected["speed"]), 182.0, "Injector生成字段")
 	for iteration in range(3):
 		enemy.configure_from_enemy_data(injected)
-		near(enemy.move_speed, 2.256041667, "注入重复configure不得叠乘%d" % iteration)
-	near(enemy.move_speed / 1.735416667, 1.3, "Injector相对v002速度比")
+		near(enemy.move_speed, 4.512083333, "注入重复configure不得叠乘%d" % iteration)
+	near(enemy.move_speed / 2.256041667, 2.0, "注入移速翻倍")
 	for multiplier in [0.8, 1.2]:
 		var source_data := injected.duplicate(true)
 		source_data["speed"] = float(injected["speed"]) * multiplier
 		enemy.configure_from_enemy_data(source_data)
-		near(enemy.move_speed, 2.256041667 * multiplier, "source速度倍率正常")
+		near(enemy.move_speed, 4.512083333 * multiplier, "source速度倍率正常")
 		var theme := MapThemeProfile.new()
 		theme.enemy_rules = {"speed_multiplier": multiplier}
 		injector.set_theme_profile(theme)
 		var themed := injector.generate_box_enemy("exploder", 1, 1)
-		near(float(themed["speed"]), 91.0 * multiplier, "主题只乘一次生成字段")
+		near(float(themed["speed"]), 182.0 * multiplier, "主题只乘一次生成字段")
 		enemy.configure_from_enemy_data(themed)
-		near(enemy.move_speed, 2.256041667 * multiplier, "主题注入速度正常")
+		near(enemy.move_speed, 4.512083333 * multiplier, "主题注入速度正常")
 	injector.set_theme_profile(null)
 	var unchanged_profiles := {
 		"fat_zombie03": 0.857142857, "melee_chaser": 3.7, "ranged_caster": 2.25,
@@ -298,14 +298,14 @@ func _check_speed30() -> void:
 	for kind in unchanged_injector:
 		near(float(MonsterInjector.BASE_ENEMY_TYPES[kind]["speed"]), float(unchanged_injector[kind]), "其它怪/7proxy的Injector不得改：" + kind)
 	enemy.free()
-	await _check_speed30_motion(default_data, 2.39785, 1.8445, "profile")
-	await _check_speed30_motion(injected, 2.256041667, 1.735416667, "injector")
-	await _check_speed30_explosion()
+	await _check_speed_double_motion(default_data, 4.7957, 2.39785, "profile")
+	await _check_speed_double_motion(injected, 4.512083333, 2.256041667, "injector")
+	await _check_speed_double_explosion()
 	if failures.size() == initial_failures:
-		print("EXPLODER_SPEED30_OK checks_added=%d profile=2.39785 injector=2.256041667 speed_ratio=1.3 gait_ratio=1.3 sample_0.1=0.13 light_ratio=0.4 stopped=0 telegraph=0.9" % (checks - initial_checks))
+		print("EXPLODER_SPEED_DOUBLE_OK checks_added=%d profile=4.7957 injector=4.512083333 speed_ratio=2.0 gait_ratio=2.0 sample_0.1=0.26 light_ratio=0.4 stopped=0 telegraph=0.9" % (checks - initial_checks))
 
 
-func _check_speed30_motion(data: Dictionary, expected: float, old_speed: float, label: String) -> void:
+func _check_speed_double_motion(data: Dictionary, expected: float, old_speed: float, label: String) -> void:
 	var enemy := _enemy()
 	enemy.configure_from_enemy_data(data)
 	enemy.avatar.set_process(false)
@@ -343,10 +343,10 @@ func _check_speed30_motion(data: Dictionary, expected: float, old_speed: float, 
 		var advance := fposmod(float(_presentation(enemy).get("sample_time", -1.0)) - before, 0.5)
 		advances.append(advance)
 		near(advance, 0.1 * speed / 1.8445, label + "实际步频采样", 0.0002)
-	near(distances[1] / distances[0], 1.3, label + "实际位移同比1.3", 0.002)
-	near(advances[1] / advances[0], 1.3, label + "实际步频同比1.3", 0.002)
+	near(distances[1] / distances[0], 2.0, label + "实际位移翻倍", 0.002)
+	near(advances[1] / advances[0], 2.0, label + "实际步频翻倍", 0.002)
 	if label == "profile":
-		near(advances[1], 0.13, "0.1秒推进0.13而非0.169", 0.0002)
+		near(advances[1], 0.26, "0.1秒推进0.26，不重复提速", 0.0002)
 	enemy.illumination_sensor.illumination_state = EnemyIllumination3D.STATE_ARTIFICIAL_LIGHT
 	near(enemy.get_effective_move_speed(), expected * 0.4, label + "光照速度40%")
 	enemy.velocity = Vector3(enemy.get_effective_move_speed(), 0.0, 0.0)
@@ -369,17 +369,17 @@ func _check_speed30_motion(data: Dictionary, expected: float, old_speed: float, 
 	enemy.set("_state_time", 0.45)
 	enemy.call("_process", 0.0)
 	visual.call("_process", 0.1)
-	near(float(_presentation(enemy).get("sample_time", -1.0)), 0.45, label + "explode不乘1.3也不随光照减速")
+	near(float(_presentation(enemy).get("sample_time", -1.0)), 0.45, label + "explode不乘移速倍数也不随光照减速")
 	near(float(enemy.call("_telegraph_duration")), 0.9, label + "前摇时长冻结")
 	near(enemy.attack_range, 2.85, label + "原攻击范围")
 	near(enemy.attack_cooldown, 3.0, label + "原攻击冷却")
 	check(enemy.contact_damage == 30, label + "原攻击伤害30")
-	print("EXPLODER_SPEED30_MOTION ", JSON.stringify({"source": label, "actual_speed": configured_speed, "distances": distances, "advances_0.1": advances, "speed_ratio": distances[1] / distances[0], "gait_ratio": advances[1] / advances[0]}))
+	print("EXPLODER_SPEED_DOUBLE_MOTION ", JSON.stringify({"source": label, "actual_speed": configured_speed, "distances": distances, "advances_0.1": advances, "speed_ratio": distances[1] / distances[0], "gait_ratio": advances[1] / advances[0]}))
 	enemy.free()
 	target.free()
 
 
-func _check_speed30_explosion() -> void:
+func _check_speed_double_explosion() -> void:
 	var player := (load("res://scenes/Player3D.tscn") as PackedScene).instantiate() as Player3D
 	player.start_with_weapon = false
 	player.position = Vector3(-100.0, 0.0, -101.5)

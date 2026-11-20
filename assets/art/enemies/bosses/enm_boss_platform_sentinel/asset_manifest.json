@@ -13,7 +13,9 @@
     "collision": "src/world3d/PlatformSentinelDeck3D.gd",
     "target": "src/enemy3d/PlatformSentinelWeakPoint3D.gd",
     "room": "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_boss_static_layout.tscn",
-    "narrative": "data/narrative/nar_main_032_platform_takeover.json"
+    "narrative": "data/narrative/nar_main_032_platform_takeover.json",
+    "unit": "src/enemy3d/PlatformSentinelUnit3D.gd",
+    "return_bridge": "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_boss_return_bridge_segment.tscn"
   },
   "variants": {
     "cool_alloy": "red_black=false",
@@ -35,14 +37,14 @@
     "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/keel_cradle_5m/keel_cradle_5m_visual_top3d.glb": "239c19ea1883134cebb10b2a11970c11c96b3a06c1cdff0a364e3ed10b47c16a",
     "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/keel_cradle_5m/keel_cradle_5m_root_top3d.tscn": "bdcaacaefb03c1b51bafdadd9b2fd6ee5cfb56637a504ef8bedfd8706493750d",
     "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/articulated_grapple/articulated_grapple_visual_top3d.glb": "e800b3d499fd1b5c0d4475e9d0a13b9531df26a001fe48fd748305a41a619ce7",
-    "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/articulated_grapple/articulated_grapple_root_top3d.tscn": "462524feaaa7394689d6046b3a0eafc058f182cdfe37fa61a60a78857e35518d",
+    "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/articulated_grapple/articulated_grapple_root_top3d.tscn": "9034c1dff8d09da98ebdf02631de1e949f9c22fc7e709ea156613816ed5ade18",
     "assets/art/enemies/bosses/enm_boss_platform_sentinel/components/perimeter_sentry/perimeter_sentry_visual_top3d.glb": "a377774b3d1e03b408f6aa472b649c23bbbdbdb397819dabd85430487954e80b",
-    "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/perimeter_sentry/perimeter_sentry_root_top3d.tscn": "0f55609b91291a2fb76affa7d430979c13dc9f138360d42912616f670bd4d0e5",
-    "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/enm_boss_platform_sentinel_root_top3d.tscn": "44030968b6ba7ee925fa03d7ecca4ac146fae087baca7976cf3d3715f4aa455a",
+    "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/perimeter_sentry/perimeter_sentry_root_top3d.tscn": "0f7b5ba445fbb3f70b7241cc9f0781ec02b5463d3858147295c7e998764c1105",
+    "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/enm_boss_platform_sentinel_root_top3d.tscn": "2dc9f65d96165d1d8bb75cbdbbb4eb3691d4e87afd056bd7f78806219780e342",
     "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/screen_atlas.png": "3af5953d0002b788ccc9f6935ec4caa9467e9d338c09da06f6bf5110edf53142",
     "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/deck_clips.json": "a95f9643f23e84820df258c7f7a83757549558bd01c24b5d83964c16cb5291ac",
-    "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/room_alloy.gdshader": "f3577d904425c9380519a266dc1c5851072b8e44bedfdefff7f3838ab849155b",
-    "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/screen.gdshader": "0c12a779d1fa13a574426d14e3b98020f6d975e2675382e6ed5feb7453ec7cc6",
+    "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/room_alloy.gdshader": "5dc9a8b1ff6af5f44855609a8c63589c6e1ece79a0e0dc298a75d7e1fd2d7d05",
+    "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/screen.gdshader": "fe5fa70bb6da17ecb11d541483cf1f7f911bddcad2dd621a5fec7d1fcbe2f22f",
     "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/materials/clearcoat.tres": "ca5d3b7bdff7b61f76fbed1dfd1332902d6be1f834172586adaf790087f1e5ba",
     "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/materials/display.tres": "9a836b69980b035acb9d62f16a3bb8ce1dea5e404f66fba5b9b8db300907a05b",
     "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/materials/machined_metal.tres": "237a842c1cf40c66660ecb6e9635d645ea57135070799aac0b87aaf1013c880f",
@@ -64,5 +66,11 @@
     "03_清漆反光_紫粉点缀": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/materials/clearcoat.tres",
     "04_柔和自发光_UI灯光": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/materials/soft_emission.tres",
     "05_平台拼接显示屏": "assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/materials/display.tres"
+  },
+  "runtime_assembly": {
+    "deck_parts": 83,
+    "grapple_instances": 4,
+    "sentry_instances": 16,
+    "room_platform_guardrail_instances": 0
   }
 }

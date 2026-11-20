@@ -43,7 +43,7 @@ func _run() -> void:
 	check(room.boss_reinforcement_plan == TowerDescent3D.shared_database_boss_content()["boss_reinforcement_plan"],
 		"running encounter shares the 01 reinforcement source")
 	var deck := fight.deck
-	check(deck.tiles.size() == 25 and deck.grapples.size() == 4 and deck.sentries.size() == 16, "formal room instantiates 25 floor tiles, four grapples, sixteen sentries")
+	check(deck.tiles.size() == 25 and fight.grapples.size() == 4 and fight.sentries.size() == 16, "formal room instantiates 25 floor tiles, four grapples, sixteen sentries")
 	check(deck.red_black and deck.tiles.all(func(tile: Node3D) -> bool: return tile.has_meta("screen")), "red-black room grade and 25 display materials")
 	var roles := {}
 	for value in deck.get_node("PlatformSentinel").find_children("*", "MeshInstance3D", true, false):
@@ -52,7 +52,7 @@ func _run() -> void:
 			var material := mesh.get_active_material(surface)
 			if material != null:
 				roles[material.get_rid()] = material.resource_name
-	check(roles.size() == 5 and roles.values().has("05_平台拼接显示屏"), "all 120 components share four canonical materials and one display resource")
+	check(roles.size() == 5 and roles.values().has("05_平台拼接显示屏"), "the deck uses four canonical materials and one display resource")
 	print("PLATFORM_MATERIAL_ROLES ", roles.values())
 	check(deck._collapse.size() == 25, "Blender baked collapse has 25 bone tracks")
 	var center := _floor(Vector3.ZERO)
@@ -61,21 +61,21 @@ func _run() -> void:
 	var foot := _floor(Vector3(0, 0.75, 15))
 	check(center and outer and inner and foot, "continuous floor and stair support before activation")
 	check(_floor(Vector3(-13.0, 0, 0)) and _floor(Vector3(13.0, 0, 0)), "both side bridges connect before combat")
-	var arm := deck.grapples[0]
-	deck.play(arm, "attack_grapple_slam", 0.0, 0.0)
+	var arm := fight.grapples[0]
+	arm.play("attack_grapple_slam", 0.0, 0.0)
 	var windup := fight._palm_world(0)
-	deck.play(arm, "attack_grapple_slam", 0.0, FIGHT.IMPACT)
+	arm.play("attack_grapple_slam", 0.0, FIGHT.IMPACT)
 	var contact := fight.to_local(fight._palm_world(0))
 	check(windup.distance_to(fight._palm_world(0)) > 1.3 and absf(contact.y) < 0.45 and absf(contact.z) < 12.5, "imported palm moves and lands on the platform")
 	print("PLATFORM_POSE ", fight.to_local(windup), " -> ", contact)
-	deck.play(arm, "activate_grapple", 0.0)
-	var rack := deck.sentries[0]
-	deck.play(rack, "attack_sentry", 0.0, FIGHT.AUTHORED_FIRE)
-	var muzzle := deck.socket(rack, "muzzle_exit")
+	arm.play("activate_grapple", 0.0)
+	var rack := fight.sentries[0]
+	rack.play("attack_sentry", 0.0, FIGHT.AUTHORED_FIRE)
+	var muzzle := rack.socket("muzzle_exit")
 	check(muzzle != null and absf(fight.to_local(muzzle.global_position).y - 1.3) < 0.15, "imported sentry socket is 1.3 m above deck")
 	if muzzle != null:
 		print("PLATFORM_MUZZLE ", fight.to_local(muzzle.global_position))
-	deck.play(rack, "activate_sentry", 0.0)
+	rack.play("activate_sentry", 0.0)
 
 	var monitor := tower.get_main_story_boss() as Enemy3D
 	check(monitor != null, "first challenge legally spawns a Monitor002")
@@ -85,7 +85,14 @@ func _run() -> void:
 	print("PLATFORM_MONITOR_HP level=%s current=%d max=%d" % [tower.get_expedition_level_id(), monitor.current_hp, monitor.max_hp])
 	check(monitor.current_hp == 8000 and monitor.max_hp == 8000, "shared first-stage Monitor spawns at 8000/8000 HP")
 	check(fight.arm_health() == [2200, 2200, 2200, 2200], "four platform arms retain 2200 HP each")
-	check(deck._rails.size() == 17 and deck._rails.all(func(rail: Node3D) -> bool: return rail.visible), "first phase has its 17 rails")
+	check(deck.find_children("Rail_*", "", true, false).is_empty(), "perimeter guardrails are absent before combat")
+	var indicators := deck.get_node("PlatformSentinel/Tile_03_03").find_child("*Corner*Emissive*", true, false) as MeshInstance3D
+	check(indicators != null and not indicators.visible, "central display's overlapping corner LEDs are suppressed")
+	var neighbor := deck.get_node("PlatformSentinel/Tile_02_03").find_child("*Corner*Emissive*", true, false) as MeshInstance3D
+	check(neighbor != null and neighbor.position.y >= 0.005, "adjacent indicators no longer share the screen plane")
+	check(fight.grapples.all(func(unit: PlatformSentinelUnit3D) -> bool: return unit.get_parent().name == &"Arms" and unit.hit_body.get_parent() == unit)
+		and fight.sentries.all(func(unit: PlatformSentinelUnit3D) -> bool: return unit.get_parent().name == &"Sentries" and unit.armor != null),
+		"twenty detached scene instances own their attack mechanics and colliders")
 	var north_wall := deck.get_node("../../BossRoom02/Components/外壳_后墙/CollisionBody") as StaticBody3D
 	check(is_equal_approx(fight.to_local(north_wall.global_position).z, -47.5) and _wall_ray(Vector3(0, 12, -44), Vector3(0, 12, -51), north_wall), "moved north wall retains its own actual collision")
 	check(_wall_ray(Vector3(38, 12, -30), Vector3(42, 12, -30)) and _wall_ray(Vector3(-38, 12, -30), Vector3(-42, 12, -30)), "both extension corners have side-wall collision")
@@ -99,7 +106,7 @@ func _run() -> void:
 		return
 	var screen := deck._rear_rest.keys()[0] as Node3D
 	var screen_rest := screen.position
-	check(await _rail_projectile(), "real projectile is stopped by phase-one rail")
+	check(not await _rail_projectile(), "old perimeter collision does not block a phase-one projectile")
 	var intro_deadline := Time.get_ticks_msec() + 150000
 	var intro_started := false
 	while Time.get_ticks_msec() < intro_deadline:
@@ -136,7 +143,11 @@ func _run() -> void:
 		await _capture("north_mark")
 		await get_tree().create_timer(18.1).timeout
 		await _capture("grapple_lift")
-		await get_tree().create_timer(1.15).timeout
+		for frame in range(165):
+			if fight._proxy_motion != null or fight.stage != FIGHT.Stage.TAKEOVER:
+				break
+			await get_tree().process_frame
+		await get_tree().create_timer(0.28).timeout
 		await _capture("grapple_release")
 		await get_tree().create_timer(2.0).timeout
 		await _capture("platform_lifting_fixed")
@@ -147,7 +158,12 @@ func _run() -> void:
 		check(BaseManager.has_narrative_completed(FIGHT.TAKEOVER), "takeover history committed")
 	check(await _wait_stage(FIGHT.Stage.COMBAT, 4.0), "sentries finish deployment and combat starts")
 	await get_tree().physics_frame
-	check(deck._rails.all(func(rail: Node3D) -> bool: return not rail.visible), "combat removes all rail visuals")
+	check(deck.find_children("Rail_*", "", true, false).is_empty(), "perimeter guardrails remain absent in combat")
+	var fascia_top := -INF
+	for fascia: Node3D in deck._lift_fascias:
+		for mesh: MeshInstance3D in fascia.find_children("*", "MeshInstance3D", true, false):
+			fascia_top = maxf(fascia_top, fight.to_local(mesh.to_global(mesh.get_aabb().end)).y)
+	check(fascia_top < 0.0, "the lifted outer shell stays below the walk surface")
 	check(screen.position.is_equal_approx(screen_rest + Vector3.FORWARD * 6.0), "three screen groups finish their authored retraction")
 	check(not await _rail_projectile(), "same real projectile passes the rail lane in phase two")
 	check(await _hit_arms_with_projectiles(), "four actual projectiles damage the four arms independently")
@@ -187,6 +203,7 @@ func _run() -> void:
 		if maxf(absf(origin.x), absf(origin.z)) <= 5.0 and tile.visible and _floor(origin):
 			retained += 1
 	check(fight.stage == FIGHT.Stage.CORE and retained == 9, "all nine inner tiles stay visible and physically supported")
+	check(fight._route_markers.is_empty(), "shutdown never draws the central safe-zone outline")
 	await _capture("inner_nine")
 	check(not room.cleared and not fight._core.has_method("take_damage"), "isolated core has no damageable phase")
 	fight.restore_state({"schema": 1, "stage": FIGHT.Stage.CORE, "arm_hp": [0, 0, 0, 0], "core_hp": 3600}, false)
@@ -208,6 +225,10 @@ func _run() -> void:
 	await get_tree().physics_frame
 	check(room.cleared and tower.is_room_boss_defeated(room.room_id), "phase two resolves through formal boss and room flags")
 	check(_floor(Vector3(6.0, 0, 0)) and _floor(Vector3(13.0, 0, 0)) and not _floor(Vector3(-13.0, 0, 0)), "shutdown connects the center to the east bridge while west stays open to the shaft")
+	check(fight.deck._exit_bridge.visible and (fight.deck._exit_bridge.get_node("Grating") as Node3D).scene_file_path.contains("bridge_deck_5m")
+		and fight.deck._exit_bridge.has_node("TrussNorth") and fight.deck._exit_bridge.has_node("RailSouth")
+		and _floor(Vector3(10, 0, 0)), "return bridge uses full structural corridor components and supports the gap")
+	await _capture("structural_return")
 	check(room.get_persistent_detail_state("treasure_chests").has("drop_boss"), "formal reward chest appears after final victory")
 	var chest := room.find_chest_by_id("drop_boss")
 	if chest != null:
@@ -341,7 +362,7 @@ func _verify_attack_rules() -> void:
 	if fight._active_gun >= 0:
 		var index := fight._active_gun
 		var original: Array[Vector3] = fight._barrage_lanes[index].duplicate()
-		var rack := fight.deck.sentries[index]
+		var rack := fight.sentries[index]
 		check(absf(fight.to_local(original[0]).y - 1.30) < 0.15 and is_equal_approx(original[0].y, original[1].y), "locked burst launches at 1.3 m from the real muzzle")
 		check(fight._shot_lane(rack)[0].distance_to(original[0]) < 0.05, "muzzle matches the locked firing lane")
 		check(fight.find_children("GunFeed_*", "", true, false).is_empty(), "gun feeds are no longer targets")
@@ -359,6 +380,8 @@ func _verify_attack_rules() -> void:
 				for i in range(18):
 					await get_tree().physics_frame
 				check(first.visible and first.global_position.distance_to(initial) > 1.0 and rider.current_hp == hp, "visible projectile travels for multiple frames before reaching the player")
+				check(absf(fight.to_local(first.global_position).y - FIGHT.GUN_FLIGHT_HEIGHT) <= 0.06 and first.shooter == rack,
+					"a real shot descends from the socket to the player's hit band and names its own rack")
 			fight._tick_gun(0.80)
 			check(fight._shot_index == 3 and fight._rounds.size() == 3, "first three shots spawn separately along the fixed axis")
 			fight._tick_gun(0.55)
@@ -370,9 +393,9 @@ func _verify_attack_rules() -> void:
 			fight._finish_gun(true)
 			fight._cancel_rounds()
 	await _verify_barrage_patterns()
-	for ref in fight._arm_slots:
-		check(ref.size() == 2, "each grapple has inward and outward choices")
-	var local: Vector3 = fight._arm_slots[0][1].point
+	for unit in fight.grapples:
+		check(unit.slam_slots.size() == 2, "each grapple has inward and outward choices")
+	var local: Vector3 = fight.grapples[0].slam_slots[1].point
 	rider.global_position = fight.to_global(Vector3(local.x, 0.08, local.z - 1.2))
 	rider.velocity = Vector3.ZERO
 	await get_tree().physics_frame
@@ -382,10 +405,10 @@ func _verify_attack_rules() -> void:
 		var target := fight._arm_targets[selected]
 		var contact := fight._slam_point
 		check(absf(fight._slam_angle) > 0.1, "inward pose uses the shoulder axis")
-		await _capture("palm_warning")
+		await _capture("palm_windup")
 		fight._tick_slam(FIGHT.IMPACT, fight.to_local(rider.global_position))
 		var actual := fight._palm_world(selected)
-		check((actual - contact).slide(Vector3.UP).length() < 0.065 and absf(fight.to_local(actual).y) < 0.10, "palm lands on the indicated circle")
+		check((actual - contact).slide(Vector3.UP).length() < 0.065 and absf(fight.to_local(actual).y) < 0.10, "palm lands at its actual authored contact without a ground marker")
 		target.sync_pose()
 		check(target.get_melee_hit_points().size() == 4 and target.get_shape_owners().size() == 3, "three arm volumes share a single damage body")
 		var was := fight._next_attack_at
@@ -432,7 +455,10 @@ func _verify_barrage_patterns() -> void:
 	check(fight._start_pattern(FIGHT.Barrage.VOLLEY), "volley prepares all four sides")
 	if fight._barrage == FIGHT.Barrage.VOLLEY:
 		check(fight._barrage_lanes.size() == 16 and _gun_strip_count() == 0, "sixteen racks prepare without strips")
-		for elapsed in [1.11, 1.50, 1.50]:
+		fight._tick_gun(0.98)
+		check(float(fight.deck._feed_faces[12].get_instance_shader_parameter("gun_alert")) > 0.2,
+			"full volley flashes the shared deck canvas before release")
+		for elapsed in [0.13, 1.50, 1.50]:
 			fight._tick_gun(elapsed)
 			check(fight._rounds.size() == 80, "volley emits five pellets from each of 16 racks per pulse")
 			if fight._shot_index == 1:
@@ -609,9 +635,13 @@ func _capture(label: String) -> void:
 	if folder.is_empty() or DisplayServer.get_name() == "headless":
 		return
 	await get_tree().process_frame
-	await RenderingServer.frame_post_draw
-	var image := get_viewport().get_texture().get_image()
-	print("PLATFORM_CAPTURE ", label, " ", image.save_png(folder.path_join(label + ".png")))
+	var viewport := get_viewport()
+	RenderingServer.viewport_set_update_mode(viewport.get_viewport_rid(), RenderingServer.VIEWPORT_UPDATE_ALWAYS)
+	RenderingServer.force_draw(false)
+	var image := viewport.get_texture().get_image()
+	var saved := image.save_png(folder.path_join(label + ".png")) if image != null and not image.is_empty() else ERR_UNAVAILABLE
+	check(saved == OK, "rendered frame saved for " + label)
+	print("PLATFORM_CAPTURE ", label, " ", saved)
 
 
 func _verify_fall() -> void:
@@ -693,7 +723,10 @@ func _floor(local: Vector3) -> bool:
 	var from := fight.to_global(local + Vector3.UP * 0.7)
 	var to := fight.to_global(local - Vector3.UP * 0.7)
 	var query := PhysicsRayQueryParameters3D.create(from, to, 1, [tower.player.get_rid()])
-	return not fight.get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+	var hit := fight.get_world_3d().direct_space_state.intersect_ray(query)
+	if fight.stage == FIGHT.Stage.COMBAT and absf(local.x) == 13.0 and not hit.is_empty():
+		print("PLATFORM_BRIDGE_UNEXPECTED_SUPPORT ", hit["collider"].get_path())
+	return not hit.is_empty()
 
 func _wait_stage(stage: int, seconds: float) -> bool:
 	for i in range(roundi(seconds * 60.0)):

@@ -29,24 +29,22 @@ enum SignalPicture { LEGACY, MONITOR, LINK_LOST, RISING, ONLINE, OUTER_WARNING, 
 @export var rear_screen_chassis: Array[NodePath] = []
 
 var tiles: Array[Node3D] = []
-var grapples: Array[Node3D] = []
-var sentries: Array[Node3D] = []
 var stairs: Array[Node3D] = []
 var _stair_surfaces: Array[StaticBody3D] = []
 var _walk: Node3D
-var _exit_bridge: StaticBody3D
+@onready var _exit_bridge: AnimatableBody3D = $EastBridgeExtension
+var _extension_rails: Array[StaticBody3D] = []
+var _tile_mounts: Dictionary[StringName, Node3D] = {}
 var _side_bridges: Array[StaticBody3D] = []
 var _bridge_visuals: Array[Node3D] = []
 var _collapse: Dictionary
-var _rails: Array[Node3D] = []
-var _rail_shapes: Array[CollisionShape3D] = []
 var _rear_rest: Dictionary[Node3D, Vector3] = {}
 var _rear_tween: Tween
 var _rear_displays: Array[Node3D] = []
 var _feed_faces: Array[MeshInstance3D] = []
 var _feed := Vector2.ZERO
 var _lift_fascias: Dictionary[Node3D, Vector3] = {}
-var _arena_gate: BossRoom02ArenaGate3D
+var _gun_alert := 0.0
 
 func _enter_tree() -> void:
 	var arena := get_parent().get_parent().get_node("BossRoom02")
@@ -71,7 +69,7 @@ func _is_moving_bridge_piece(piece: Node3D, slug: String) -> bool:
 
 func _ready() -> void:
 	var arena := get_parent().get_parent().get_node("BossRoom02")
-	_arena_gate = arena.get_node("ArenaGate") as BossRoom02ArenaGate3D
+	(arena.get_node("ArenaGate") as BossRoom02ArenaGate3D).set_platform_barriers_enabled(false)
 	for path in rear_screen_parts + rear_screen_chassis:
 		var node := arena.get_node(path) as Node3D
 		_rear_rest[node] = node.position
@@ -106,6 +104,14 @@ func _ready() -> void:
 	_ramp(32.5, 40.0, -2.5, 2.5, 0.0, 0.0)
 	for piece in _bridge_visuals:
 		piece.reparent(_side_bridges[0 if to_local(piece.global_position).x < 0.0 else 1], true)
+	_exit_bridge.reparent(_side_bridges[1], true)
+	# The room can reactivate imported shapes during streaming. This extension
+	# already has its own walk surface, so discard the inherited duplicate.
+	_exit_bridge.get_node("Grating/CollisionBody").free()
+	for name in ["RailNorth", "RailSouth"]:
+		var rail := _exit_bridge.get_node(name + "/CollisionBody") as StaticBody3D
+		rail.collision_layer = 0
+		_extension_rails.append(rail)
 	_stair_surfaces.append(_ramp(-2.5, 2.5, 12.06, 12.5, 0.0, 0.105))
 	_stair_surfaces.append(_ramp(-2.5, 2.5, 12.5, 17.5, 0.105, 1.305))
 	_stair_surfaces.append(_ramp(-2.5, 2.5, 17.5, 22.5, 1.305, 2.505))
@@ -117,6 +123,7 @@ func _ready() -> void:
 		_collapse = parsed.get("tiles", {})
 	for tile: Node3D in $PlatformSentinel.get_children():
 		tiles.append(tile)
+		_tile_mounts[tile.name] = tile
 		tile.set_meta("rest", tile.transform)
 		var floor := _ramp(tile.position.x - 2.5, tile.position.x + 2.5, tile.position.z - 2.5, tile.position.z + 2.5, 0.0, 0.0)
 		tile.set_meta("floor", floor)
@@ -128,28 +135,16 @@ func _ready() -> void:
 			sectors.append(sector)
 		tile.set_meta("sectors", sectors)
 		for part: Node3D in tile.get_children():
-			if part.name.begins_with("Grapple_"):
-				grapples.append(part)
-				play(part, "activate_grapple", 0.0, 0.0)
-			elif part.name.begins_with("Sentry_"):
-				sentries.append(part)
-				play(part, "activate_sentry", 0.0, 0.0)
-			elif part.name.begins_with("Rail_"):
-				var rail := StaticBody3D.new()
-				rail.collision_mask = 0
-				var collider := CollisionShape3D.new()
-				var box := BoxShape3D.new()
-				box.size = Vector3(4.72, 1.08, 0.16)
-				collider.shape = box
-				collider.position.y = 0.54
-				rail.add_child(collider)
-				part.add_child(rail)
-				_rails.append(part)
-				_rail_shapes.append(collider)
 			if part.name.begins_with("Fascia_"):
 				_lift_fascias[part] = part.position
 			for value in part.find_children("*", "MeshInstance3D", true, false):
 				var mesh := value as MeshInstance3D
+				if mesh.name.contains("Corner") and mesh.name.ends_with("_Emissive"):
+					if tile.name == &"Tile_03_03":
+						mesh.hide()
+					else:
+						# Adjacent indicators also meet at the four center seams.
+						mesh.position.y += 0.006
 				if mesh.name.ends_with("Screen_Emissive"):
 					mesh.set_instance_shader_parameter("canvas_center", Vector2(tile.position.x, tile.position.z) / 25.0 + Vector2(0.5, 0.5))
 					tile.set_meta("screen", mesh)
@@ -159,14 +154,7 @@ func _ready() -> void:
 					if id >= 0 and id < 4:
 						id = posmod(id + roundi(part.rotation.y / (PI * 0.5)), 4)
 						mesh.reparent(sectors[id])
-	grapples.sort_custom(func(a: Node3D, b: Node3D) -> bool: return str(a.name) < str(b.name))
-	sentries.sort_custom(func(a: Node3D, b: Node3D) -> bool: return str(a.name) < str(b.name))
-
-func set_platform_rails(enabled: bool) -> void:
-	for i in range(_rails.size()):
-		_rails[i].visible = enabled
-		_rail_shapes[i].set_deferred("disabled", not enabled)
-	_arena_gate.set_platform_barriers_enabled(enabled)
+	sample_launch_lift(0.0)
 
 
 func set_rear_signal(picture: SignalPicture, burst := false) -> void:
@@ -190,52 +178,10 @@ func set_rear_screen_retraction(retracted: bool, animate := false) -> void:
 
 # Cosmetic outer lift housings follow the launch, not the walkable deck or its colliders.
 func sample_launch_lift(elapsed: float) -> void:
-	var lift := 1.25 * smoothstep(0.18, 2.65, elapsed)
+	var lift := -1.25 * (1.0 - smoothstep(0.18, 2.65, elapsed))
 	for fascia in _lift_fascias:
 		fascia.position = _lift_fascias[fascia] + Vector3.UP * lift
 
-
-func play(unit: Node3D, clip: StringName, speed := 1.0, at := 0.0) -> void:
-	var anim := unit.find_child("AnimationPlayer", true, false) as AnimationPlayer
-	if anim == null or not anim.has_animation(clip):
-		push_error("Platform Sentinel missing clip %s/%s" % [unit.name, clip])
-		return
-	if str(clip).begins_with("idle_"):
-		anim.get_animation(clip).loop_mode = Animation.LOOP_LINEAR
-	anim.play(clip, 0.12 if speed > 0.0 else 0.0, speed)
-	anim.seek(at, true)
-	anim.advance(0.0)
-	sync_skeleton(unit)
-
-
-func skeleton_for(unit: Node3D) -> Skeleton3D:
-	var found := unit.find_child("Skeleton3D", true, false) as Skeleton3D
-	if found != null:
-		return found
-	for child in unit.find_children("*", "Skeleton3D", true, false):
-		return child as Skeleton3D
-	return null
-
-
-func delay_animation(unit: Node3D, seconds: float) -> void:
-	if seconds <= 0.0:
-		return
-	var anim := unit.find_child("AnimationPlayer", true, false) as AnimationPlayer
-	anim.speed_scale = 0.0
-	create_tween().tween_callback(func() -> void: anim.speed_scale = 1.0).set_delay(seconds)
-
-
-func sync_skeleton(unit: Node3D) -> void:
-	var skeleton := skeleton_for(unit)
-	if skeleton == null:
-		return
-	skeleton.force_update_all_bone_transforms()
-	for attachment in skeleton.get_children():
-		if attachment is BoneAttachment3D and attachment.bone_idx >= 0:
-			attachment.transform = skeleton.get_bone_global_pose(attachment.bone_idx)
-
-func socket(unit: Node3D, key: String) -> Node3D:
-	return unit.find_child("*__" + key, true, false) as Node3D
 
 # The existing encounter clock gates the presentation; it never reads this material back.
 func sample_combat_feed(elapsed: float) -> void:
@@ -346,27 +292,36 @@ func set_bridge_retraction(west: float, east: float) -> void:
 func _frame_transform(row: Array) -> Transform3D:
 	return Transform3D(Basis(Quaternion(row[3], row[4], row[5], row[6]).normalized()), Vector3(row[0], row[1], row[2]))
 
+func sample_return_bridge(amount: float) -> void:
+	var progress := clampf(amount, 0.0, 1.0)
+	set_bridge_retraction(1.0, 1.0 - progress)
+	_exit_bridge.show()
+	_exit_bridge.position = Vector3(10.0 + 5.0 * (1.0 - progress), -0.52 * (1.0 - progress), 0.0)
+	var layer := 1 if progress >= 1.0 else 0
+	_exit_bridge.collision_layer = layer
+	for rail in _extension_rails:
+		rail.collision_layer = layer
+
+
 func open_return_bridge() -> void:
-	if is_instance_valid(_exit_bridge):
+	sample_return_bridge(1.0)
+
+
+func sample_sentry_mounts(sentries: Array[PlatformSentinelUnit3D]) -> void:
+	for rack in sentries:
+		var tile := _tile_mounts[rack.mount_tile]
+		var rest: Transform3D = tile.get_meta("rest")
+		rack.transform = tile.transform * rest.affine_inverse() * rack.installed_transform
+		rack.visible = tile.visible
+
+
+func set_gun_alert(strength: float) -> void:
+	if is_equal_approx(_gun_alert, strength):
 		return
-	set_bridge_retraction(1.0, 0.0)
-	_exit_bridge = _ramp(7.49, 12.52, -1.40, 1.40, 0.0, 0.0)
-	for i in range(3):
-		var mesh := MeshInstance3D.new()
-		var slab := BoxMesh.new()
-		slab.size = Vector3(1.69, 0.27, 2.8)
-		mesh.mesh = palette_mesh(slab, Vector2(0.95, 0.85))
-		mesh.material_override = BRIDGE_METAL
-		mesh.position = Vector3(8.33 + 1.67 * i, -0.135, 0.0)
-		_exit_bridge.add_child(mesh)
-		for edge in [-1.36, 1.36]:
-			var lamp := MeshInstance3D.new()
-			var strip := BoxMesh.new()
-			strip.size = Vector3(1.7, 0.025, 0.055)
-			lamp.mesh = palette_mesh(strip, Vector2(0.45, 0.25))
-			lamp.material_override = BRIDGE_LAMP
-			lamp.position = Vector3(8.33 + 1.67 * i, 0.0125, edge)
-			_exit_bridge.add_child(lamp)
+	_gun_alert = strength
+	for face in _feed_faces:
+		face.set_instance_shader_parameter("gun_alert", strength)
+
 
 static func palette_mesh(primitive: PrimitiveMesh, swatch: Vector2) -> ArrayMesh:
 	var arrays := primitive.get_mesh_arrays()

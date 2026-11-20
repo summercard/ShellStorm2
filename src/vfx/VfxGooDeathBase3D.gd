@@ -303,6 +303,11 @@ func _build() -> void:
 	# 观感不受影响：下沉 0.30m 会穿过地板被地面吃掉，本来就读作「渗下去」。
 	for index in PUDDLE_COUNT:
 		var mat := ToonVfx.toon_texture_material(PUDDLE_TEXTURE)
+		# Only the floor residue responds to scene light. Keep the original texture,
+		# alpha and depth settings; the transient particles still use unshaded toon materials.
+		mat.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
+		mat.disable_receive_shadows = false
+		mat.specular_mode = BaseMaterial3D.SPECULAR_DISABLED
 		var plate := _add_plate("Puddle%d" % index, mat)
 		_puddle_mats.append(mat)
 		_puddle.append(plate)

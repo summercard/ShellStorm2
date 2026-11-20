@@ -2,7 +2,11 @@
 
 [ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/components/articulated_grapple/articulated_grapple_visual_top3d.glb" id="1_visual"]
 
+[ext_resource type="Script" path="res://src/enemy3d/PlatformSentinelUnit3D.gd" id="2_unit"]
+
 [node name="articulated_grapple" type="Node3D"]
+script = ExtResource("2_unit")
+grapple = true
 metadata/asset_id = "ENM-BOSS-PLATFORM-SENTINEL-ARTICULATED-GRAPPLE"
 metadata/asset_version = "v001"
 

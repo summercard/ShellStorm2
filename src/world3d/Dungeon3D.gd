@@ -6920,11 +6920,13 @@ func narrative_spawn_enemies(
 	var spawn_key := str(options.get("spawn_key", ""))
 	if not spawn_key.is_empty() and _narrative_spawned_keys.has(spawn_key):
 		return count # 已刷/已死均视作已完成，镜头仍可按该锚点复演。
-	var base_type: Dictionary = MonsterInjector.BASE_ENEMY_TYPES.get(kind, {})
+	var variant_base := MonsterVariants.base_of(kind)
+	var base_kind := variant_base if not variant_base.is_empty() else kind
+	var base_type: Dictionary = MonsterInjector.BASE_ENEMY_TYPES.get(base_kind, {})
 	if base_type.is_empty():
 		push_warning("[Dungeon3D] 剧情刷怪：未知怪物 kind『%s』。" % kind)
 		return 0
-	var presentation: Dictionary = MonsterInjector.ENEMY_PRESENTATION.get(kind, {})
+	var presentation: Dictionary = MonsterInjector.ENEMY_PRESENTATION.get(base_kind, {})
 	var flat_axis := Vector3(axis.x, 0.0, axis.z)
 	flat_axis = flat_axis.normalized() if flat_axis.length_squared() > 0.000001 else Vector3.RIGHT
 	var row := float(count - 1) * 0.5
@@ -6933,7 +6935,7 @@ func narrative_spawn_enemies(
 	for index in range(count):
 		configs.append({
 			"enemy_type": kind,
-			"name": str(base_type.get("name", kind)),
+			"name": MonsterVariants.display_name_of(kind) if not variant_base.is_empty() else str(base_type.get("name", kind)),
 			"emoji": str(presentation.get("emoji", "\u5c38")),
 			"hp": int(base_type.get("hp_base", 20)),
 			"max_hp": int(base_type.get("hp_base", 20)),
@@ -7360,7 +7362,10 @@ func _on_split_requested(source: Enemy3D, child_kind: String, count: int) -> voi
 	for value in _enemy_nodes_by_room.get(room_id, []):
 		if is_instance_valid(value) and value is Enemy3D and value.ai_state != "dead" and _counts_for_room_clear(value.enemy_data):
 			live_count += 1
-	var spawn_count := mini(mini(3, count), maxi(0, 8 - live_count))
+	# An exploder split is a committed death outcome, not an optional summon.
+	# It still shares room placement, reservations, accounting and activation.
+	var exact_exploder_split := source.enemy_kind == MonsterVariants.EXPLODER_STRONG and child_kind == "exploder"
+	var spawn_count := count if exact_exploder_split else mini(mini(3, count), maxi(0, 8 - live_count))
 	if spawn_count <= 0:
 		return
 	var floor_value := maxi(1, visual_theme.difficulty_rank)
@@ -7383,6 +7388,18 @@ func _on_split_requested(source: Enemy3D, child_kind: String, count: int) -> voi
 		positions.append(
 			source.global_position + Vector3(cos(angle) * 1.4, 0.0, sin(angle) * 1.4)
 		)
+	if exact_exploder_split:
+		var room := _room_by_id.get(room_id) as DungeonRoom3D
+		if is_instance_valid(room) and room.is_streamed():
+			var preferred: Array[Vector3] = []
+			preferred.assign(positions)
+			var occupied: Array[Vector3] = []
+			for actor in _enemy_nodes_by_room.get(room_id, []):
+				if actor is Enemy3D and is_instance_valid(actor) and actor.ai_state != "dead":
+					occupied.append(actor.global_position)
+			var safe := room.resolve_narrative_floor_positions(preferred, occupied, 12.0)
+			if safe.size() == configs.size():
+				positions.assign(safe)
 	_reserve_room_spawn(room_id, configs, positions)
 
 

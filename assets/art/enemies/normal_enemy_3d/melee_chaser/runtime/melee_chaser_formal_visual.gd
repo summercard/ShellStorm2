@@ -11,6 +11,11 @@ const HitFlash := preload("res://src/enemy3d/HitFlashMaterial3D.gd")
 const Keeper := preload("res://src/enemy3d/MaterialPipelineKeeper.gd")
 const DEATH_DURATION := 2.4
 const VISUAL_HEIGHT := 1.857143
+# Only the formal small zombie and its strong variant opt in; borrowed models keep their original pose.
+const HEAD_LIFT_DEGREES := {"idle": 10.0, "walking": 12.0, "running": 14.0, "attack": 8.0}
+const ATTACK_CONTACT_PHASE := 0.48
+static var _head_lift_library: AnimationLibrary
+var use_small_zombie_head_lift := false
 ## 走路动画只服务巡逻；只要朝玩家方向移动（追击、搜寻、归位）一律用跑步，不按速度切档。
 const CLIP_BY_STATE := {
 	"dormant": "idle", "idle": "idle", "patrol": "walking", "alert": "idle",
@@ -96,6 +101,10 @@ func _ready() -> void:
 	for clip_name in _player.get_animation_list():
 		if str(clip_name) in BLENDABLE_CLIPS:
 			_player.get_animation(clip_name).loop_mode = Animation.LOOP_LINEAR
+	if use_small_zombie_head_lift:
+		if _head_lift_library == null:
+			_head_lift_library = _make_head_lift_library()
+		_player.add_animation_library(&"head_lift", _head_lift_library)
 	for node in find_children("*", "MeshInstance3D", true, false):
 		var mesh := node as MeshInstance3D
 		for index in range(mesh.mesh.get_surface_count()):
@@ -209,15 +218,60 @@ func sync_state(
 		# 时会按旧相位把姿势弹回去（又变成一次硬切）。
 		_phase = 0.0
 		_sample = 0.0
-		_player.play(_clip, CLIP_BLEND_SEC)
+		_player.play(_playable_clip(), CLIP_BLEND_SEC)
 	elif _clip != previous_clip or _blend_left <= 0.0:
 		# 战斗/死亡/受击打断移动淡化时，必须当帧取消淡化并采样权威进度。
 		_blend_left = 0.0
 		# 淡化结束后回到"每帧 play + seek"。⚠ 这两句不能只留 seek：
 		# `callback_mode_process = MANUAL` 下单独 `seek()` **不会驱动骨架**
 		# （本轮实测踩过：以为已经修好，实际画面定格，髋部高度恒定 0.3980）。
-		_player.play(_clip)
+		_player.play(_playable_clip())
 		_player.seek(_sample, true)
+
+
+func _playable_clip() -> StringName:
+	if use_small_zombie_head_lift and _head_lift_library.has_animation(_clip):
+		return StringName("head_lift/" + _clip)
+	return StringName(_clip)
+
+
+## Reuse native animation blending. Create a shared, presentation-only copy of each
+## affected clip once; change only the authored Head rotation keys, not the source GLB.
+func _make_head_lift_library() -> AnimationLibrary:
+	var library := AnimationLibrary.new()
+	for clip: String in HEAD_LIFT_DEGREES:
+		var source := _player.get_animation(clip)
+		var adjusted := source.duplicate() as Animation
+		for track in adjusted.get_track_count():
+			var path := adjusted.track_get_path(track)
+			if adjusted.track_get_type(track) != Animation.TYPE_ROTATION_3D or path.get_concatenated_subnames() != &"Head":
+				continue
+			if clip == "attack":
+				# Import may collapse long holds to sparse keys. Sample the pitch envelope
+				# explicitly so it cannot interpolate a raised head across the contact beat.
+				var steps := ceili(source.length * 120.0)
+				for key in range(adjusted.track_get_key_count(track) - 1, -1, -1):
+					adjusted.track_remove_key(track, key)
+				for key in range(steps + 1):
+					_insert_attack_head_key(source, adjusted, track, float(key) / steps)
+				_insert_attack_head_key(source, adjusted, track, ATTACK_CONTACT_PHASE)
+			else:
+				var lift := Quaternion(Vector3.LEFT, deg_to_rad(float(HEAD_LIFT_DEGREES[clip])))
+				for key in adjusted.track_get_key_count(track):
+					var authored: Quaternion = adjusted.track_get_key_value(track, key)
+					adjusted.track_set_key_value(track, key, (authored * lift).normalized())
+			break
+		library.add_animation(clip, adjusted)
+	return library
+
+
+func _insert_attack_head_key(source: Animation, adjusted: Animation, track: int, phase: float) -> void:
+	var time := source.length * phase
+	var authored := source.rotation_track_interpolate(track, time)
+	var weight := 1.0 - smoothstep(0.20, ATTACK_CONTACT_PHASE, phase) + smoothstep(0.62, 0.88, phase)
+	var lift := Quaternion(Vector3.LEFT, deg_to_rad(float(HEAD_LIFT_DEGREES["attack"]) * weight))
+	adjusted.rotation_track_insert_key(track, time, (authored * lift).normalized())
+
 
 ## 受击。闪白一定给（0.12 s，纯 uniform 能量，不重建管线）；
 ## 受击姿态由 `play_hit_pose` 决定，且**还要过速度闸门**才真的播。
@@ -330,7 +384,7 @@ func flash_hit(play_hit_pose := true) -> void:
 func get_presentation_snapshot() -> Dictionary:
 	return {"state": _state, "clip": _clip, "sample_time": _sample,
 		"visual_height": VISUAL_HEIGHT, "death_duration": DEATH_DURATION,
-		"animations": Array(_player.get_animation_list()) if _player != null else [],
+		"animations": Array(_player.get_animation_library(&"").get_animation_list()) if _player != null else [],
 		"source": "blender_v006", "collision_owned": false, "procedural_pose": false,
 		# 受击姿态的三条闸门逐条暴露，验收才能断言"跑动中不播 hurt"而不是只看 clip 名。
 		"hurt_pose_allowed": _hurt_pose_allowed,

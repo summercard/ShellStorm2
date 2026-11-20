@@ -4,7 +4,7 @@ extends RefCounted
 
 ## 怪物基础类型配置
 ##
-## 带 `_strong` 后缀的三个是「普通怪变种（-强化怪）」，倍率定义见 `MonsterVariants`。
+## 已有 `_strong` 后缀的三行兼容旧表调用，对应的怪是「普通怪变种（-强化怪）」，倍率定义见 `MonsterVariants`。
 ## 它们的 `hp_base` / `damage_base` / `speed` **逐值照抄原怪**，倍率不在这里乘：
 ## 倍率由 `Enemy3D.PROFILES` 的派生层（`_profile_for`）作用**一次**。
 ## 若此处也乘一遍，Enemy3D 的「原怪基线 → 实际值」比例还原会把倍率算两遍
@@ -15,8 +15,8 @@ const BASE_ENEMY_TYPES := {
 	"melee_chaser": { "name": "小僵尸", "hp_base": 25, "damage_base": 5, "speed": 80 },
 	"ranged_caster": { "name": "孢子射手", "hp_base": 15, "damage_base": 8, "speed": 50 },
 	"summoner": { "name": "蜂巢怪", "hp_base": 30, "damage_base": 0, "speed": 40 },
-	# 与 Enemy3D 独立Profile入口同步 +30%：70 × 1.30；此值不会再乘Profile速度。
-	"exploder": { "name": "炸弹果", "hp_base": 10, "damage_base": 15, "speed": 91 },
+	# 与 Enemy3D 的独立 Profile 入口分别提速 ×2，不叠乘。
+	"exploder": { "name": "炸弹果", "hp_base": 10, "damage_base": 15, "speed": 182 },
 	"ambusher": { "name": "地刺虫", "hp_base": 18, "damage_base": 7, "speed": 90 },
 	"boss": { "name": "准首领", "hp_base": 100, "damage_base": 12, "speed": 42 },
 	"melee_chaser_strong": { "name": "小僵尸-强化怪", "hp_base": 25, "damage_base": 5, "speed": 80 },
@@ -212,7 +212,7 @@ func _stat_override(kind: String) -> Dictionary:
 	)
 	if MonsterVariants.is_variant(kind):
 		# 强化怪的数值**从原怪那一行实时派生**，绝不要求关卡再抄一份强化怪的数。
-		# 于是把 `per_kind.melee_chaser.hp` 从 350 调成 400，强化怪自动变 800。
+		# 于是把 `per_kind.melee_chaser.hp` 从 350 调成 400，强化怪自动变 1600。
 		return _derive_stat_override(MonsterVariants.base_of(kind), per_kind)
 	var entry: Variant = per_kind.get(kind, null)
 	if not (entry is Dictionary):
@@ -593,7 +593,7 @@ func _roll_pool_wave(wave: Dictionary, rng: RandomNumberGenerator) -> Array:
 ## 走本通道会以普通外壳出场，绕过 Boss 逻辑，故设计源禁用。
 ## static：校验器需要在不构造实例的前提下复用同一判据（单一实现，禁止复刻）。
 static func is_authorable_enemy_type(type_id: String) -> bool:
-	return BASE_ENEMY_TYPES.has(type_id) and type_id != "boss"
+	return type_id != "boss" and (BASE_ENEMY_TYPES.has(type_id) or MonsterVariants.is_variant(type_id))
 
 
 ## 生成随机敌人
@@ -668,9 +668,11 @@ func _generate_basic_enemy(
 	# 强化怪升级走**出口**而不是池子：刷怪盒 / 设计源 / 房型公式三条编成来源
 	# 全部汇到这里，做在这里才不会漏掉刷怪盒（远征01 正是盒子驱动）。
 	var resolved_type := _roll_strong_kind(enemy_type) if allow_strong else enemy_type
-	var base: Dictionary = BASE_ENEMY_TYPES.get(resolved_type, BASE_ENEMY_TYPES["melee_chaser"])
+	var variant_base := MonsterVariants.base_of(resolved_type)
+	var base_kind := variant_base if not variant_base.is_empty() else resolved_type
+	var base: Dictionary = BASE_ENEMY_TYPES.get(base_kind, BASE_ENEMY_TYPES["melee_chaser"])
 	var scaling: Dictionary = FLOOR_SCALING.get(floor, FLOOR_SCALING[1])
-	var presentation: Dictionary = ENEMY_PRESENTATION.get(resolved_type, ENEMY_PRESENTATION["melee_chaser"])
+	var presentation: Dictionary = ENEMY_PRESENTATION.get(base_kind, ENEMY_PRESENTATION["melee_chaser"])
 	
 	var hp: float = base["hp_base"] * scaling["hp_mult"]
 	var damage: float = base["damage_base"] * scaling["damage_mult"]
@@ -682,7 +684,7 @@ func _generate_basic_enemy(
 	
 	var result := {
 		"enemy_type": resolved_type,
-		"name": base["name"],
+		"name": MonsterVariants.display_name_of(resolved_type) if not variant_base.is_empty() else base["name"],
 		"hp": int(hp),
 		"max_hp": int(hp),
 		"damage": int(damage),

@@ -281,6 +281,19 @@ func _check_puddle_texture(fx: VfxEffectBase3D) -> void:
 			% [index, mat.depth_draw_mode])
 		_expect(mat.transparency == BaseMaterial3D.TRANSPARENCY_ALPHA,
 			"Puddle%d 未开启 alpha 混合，贴图的透明边缘会变成黑边" % index)
+		_expect(mat.shading_mode == BaseMaterial3D.SHADING_MODE_PER_PIXEL and not mat.disable_receive_shadows,
+			"Puddle%d 必须接受场景光和阴影，不能在暗房保持原亮度" % index)
+		_expect(not mat.emission_enabled and mat.blend_mode == BaseMaterial3D.BLEND_MODE_MIX,
+			"Puddle%d 不得自发光或使用加法混合" % index)
+		_expect(mat.specular_mode == BaseMaterial3D.SPECULAR_DISABLED,
+			"Puddle%d 应保留贴图高光，不添加镜面高光" % index)
+
+	for name in ["Burst0", "Splat0", "Shockwave0"]:
+		var piece := fx.get_node_or_null(name) as MeshInstance3D
+		if piece != null:
+			var material := piece.material_override as StandardMaterial3D
+			_expect(material != null and material.shading_mode == BaseMaterial3D.SHADING_MODE_UNSHADED,
+				"%s 不应跟随地面液体更改着色" % name)
 
 	# ③ 四块共用同一张贴图
 	for index in textures.size():
@@ -1011,6 +1024,7 @@ func _check_shockwave_rhythm() -> void:
 	add_child(fat)
 	fat.set_process(false)
 	fat.activate(Vector3(2.0, FLOOR_DEEP + SPAWN_LIFT, 1.0), Color(0.38, 0.43, 0.26), SIZE_A, {"floor_y": FLOOR_DEEP})
+	_check_puddle_texture(fat)
 	_samples += 1
 	var fat_total := float((fat.call("get_presentation_snapshot") as Dictionary).get("lifetime", 1.35))
 	_expect(int((fat.call("get_presentation_snapshot") as Dictionary).get("shockwave_count", 0)) == 3,

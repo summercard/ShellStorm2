@@ -6,9 +6,9 @@ signal defeated
 signal checkpoint(reason: String)
 
 const TAKEOVER := "nar_main_032_platform_takeover"
-const ARM_HP := 2200
+const ARM_HP := PlatformSentinelUnit3D.ARM_HP
 const TOTAL_HP := ARM_HP * 4
-const SLAM_RADIUS := 3.05
+const SLAM_RADIUS := PlatformSentinelUnit3D.SLAM_RADIUS
 const SLAM_CLIP_END := 80.0 / 30.0
 const SLAM_HOLD_POSE := 47.0 / 30.0
 const SLAM_RESPONSE := 1.2
@@ -18,6 +18,7 @@ const RACKS_PER_SIDE := 4
 const GUN_RANGE := 33.0
 const BULLET_SPEED := 8.4
 const PELLET_SPEED := 7.4
+const GUN_FLIGHT_HEIGHT := 0.75
 const BURST_TIMES := [0.90, 1.30, 1.70, 2.25]
 const CROSS_TIMES := [1.05, 2.55]
 const VOLLEY_TIMES := [1.10, 2.60, 4.10]
@@ -37,34 +38,33 @@ const FULL_DEPLOY := 3.15
 const DEFEAT_BEAT := 0.55
 const GRAB_POSE := 1.145
 const MONITOR_MARK := Vector3(-7.15, 0.08, -8.55)
-const THROW_DURATION := 0.85
+const THROW_DURATION := 0.78
+const CARRY_LIFT_POSE := 1.075
+const THROW_LOAD_POSE := 1.09
 
 enum Stage { DORMANT, TAKEOVER, DEPLOY, COMBAT, COLLAPSE, CORE, WON }
 enum Barrage { NONE, BURST, CROSS, VOLLEY }
 
 @onready var deck: PlatformSentinelDeck3D = $Deck
+var grapples: Array[PlatformSentinelUnit3D] = []
+var sentries: Array[PlatformSentinelUnit3D] = []
 var stage := Stage.DORMANT
 var _player: Player3D
 var _director: Node
 var _arm_targets: Array[PlatformSentinelWeakPoint3D] = []
 var _core: MeshInstance3D
-var _arm_slots: Array[Array] = []
 var _gun_rest_lanes: Array[Array] = []
-var _arm_ready: Array[float] = [0.0, 0.0, 0.0, 0.0]
 var _gun_ready: Array[float] = [0.0, 0.0, 0.0, 0.0]
-var _armor: Array[StaticBody3D] = []
 var _screen_wake_at := -1.0
 var _route_markers: Array[Node3D] = []
 var _barrage := Barrage.NONE
 var _barrage_lanes: Dictionary = {}
-var _recoil_poses: Dictionary = {}
 var _rounds: Array[Projectile3D] = []
 var _cross_at := 12.0
 var _volley_at := 22.0
 var _cross_side := 0
 var _next_cross_side := 0
 var _projectiles: ProjectilePool3D
-var _grapple_meshes: Array[Array] = []
 var _bridges_releasing := false
 var _slam_angle := 0.0
 var _next_attack_at := 0.0
@@ -79,7 +79,6 @@ var _gun_clock := 0.0
 var _active_arm := -1
 var _active_gun := -1
 var _slam_point := Vector3.ZERO
-var _slam_marker: MeshInstance3D
 var _shot_index := 0
 var _returning_visit := false
 var _takeover_requested := false
@@ -96,11 +95,10 @@ var _deployment_started_at := -1.0
 
 func _ready() -> void:
 	set_physics_process(false)
-	for i in range(deck.grapples.size()):
-		var target := PlatformSentinelWeakPoint3D.new()
-		target.name = "GrappleTarget_%02d" % (i + 1)
-		add_child(target)
-		target.configure(ARM_HP, deck.skeleton_for(deck.grapples[i]))
+	grapples.assign($Arms.get_children())
+	sentries.assign($Sentries.get_children())
+	for i in range(grapples.size()):
+		var target := grapples[i].hit_body
 		target.damaged.connect(_on_target_damaged.bind(target))
 		target.destroyed.connect(_on_arm_destroyed.bind(i))
 		_arm_targets.append(target)
@@ -172,8 +170,9 @@ func run_cue(cue: String, params: Dictionary) -> bool:
 				_proxy_grip_offset = _grip_frame().affine_inverse() * _proxy.global_transform
 				_proxy_attached = true
 			_arm_motion = create_tween()
-			_arm_motion.tween_method(_sample_rear_pose, GRAB_POSE, 1.02, 0.77).set_trans(Tween.TRANS_SINE).set_delay(0.17)
-			_arm_motion.tween_method(_sample_rear_pose, 1.02, 0.86, 0.91).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+			_arm_motion.tween_method(_sample_rear_pose, GRAB_POSE, CARRY_LIFT_POSE, 0.78).set_trans(Tween.TRANS_SINE).set_delay(0.10)
+			_arm_motion.tween_interval(0.18)
+			_arm_motion.tween_method(_sample_rear_pose, CARRY_LIFT_POSE, THROW_LOAD_POSE, 0.79).set_trans(Tween.TRANS_SINE)
 		"throw":
 			_throw_monitor()
 		"ignite":
@@ -189,8 +188,8 @@ func _start_rear() -> void:
 		return
 	_rear_started = true
 	deck.set_rear_screen_retraction(true, true)
-	deck.play(deck.grapples[REAR], "activate_grapple", 1.10)
-	_fx(VfxPool3D.FX01_METAL_SPARK_HIT, deck.grapples[REAR].global_position + Vector3.UP * 5.0, 2.5)
+	grapples[REAR].play("activate_grapple", 1.10)
+	_fx(VfxPool3D.FX01_METAL_SPARK_HIT, grapples[REAR].global_position + Vector3.UP * 5.0, 2.5)
 
 func _spawn_proxy(proxy_scale := Vector3.ONE) -> void:
 	_clear_proxy()
@@ -202,16 +201,17 @@ func _spawn_proxy(proxy_scale := Vector3.ONE) -> void:
 
 
 func _sample_rear_pose(at: float) -> void:
-	deck.play(deck.grapples[REAR], "attack_grapple_slam", 0.0, at)
+	grapples[REAR].play("attack_grapple_slam", 0.0, at)
 	if _proxy_attached and is_instance_valid(_proxy):
 		_proxy.global_transform = _grip_frame() * _proxy_grip_offset
+		_proxy.position.y = maxf(_proxy.position.y, MONITOR_MARK.y)
 
 
 func _grip_frame() -> Transform3D:
-	var arm := deck.grapples[REAR]
-	var left := deck.socket(arm, "grip_contact_l")
-	var right := deck.socket(arm, "grip_contact_r")
-	var palm := deck.socket(arm, "palm_contact_ll")
+	var arm := grapples[REAR]
+	var left := arm.socket("grip_contact_l")
+	var right := arm.socket("grip_contact_r")
+	var palm := arm.socket("palm_contact_ll")
 	return Transform3D(palm.global_basis.orthonormalized(), (left.global_position + right.global_position) * 0.5)
 
 
@@ -221,8 +221,22 @@ func _throw_monitor() -> void:
 	if not _proxy_attached:
 		_clear_proxy() # Skip/fallback does not show a throw from a stationary actor.
 		return
-	_arm_motion.kill()
-	_sample_rear_pose(0.86)
+	if _arm_motion != null:
+		_arm_motion.kill()
+	var attack_time := grapples[REAR].animation.current_animation_position
+	_arm_motion = create_tween()
+	_arm_motion.tween_method(_sample_rear_pose, attack_time, IMPACT, 0.16).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	_arm_motion.tween_callback(_release_monitor)
+	_arm_motion.tween_method(_sample_rear_pose, IMPACT, SLAM_HOLD_POSE, 0.15)
+	_arm_motion.tween_method(_sample_rear_pose, SLAM_HOLD_POSE, SLAM_CLIP_END, 0.52).set_trans(Tween.TRANS_SINE)
+	_arm_motion.tween_callback(func() -> void: grapples[REAR].play("idle_grapple"))
+
+
+func _release_monitor() -> void:
+	if not is_instance_valid(_proxy) or not _proxy_attached:
+		return
+	AudioManager.play_sfx("melee_impact", -2.0, 0.69)
+	_fx(VfxPool3D.FX01_METAL_SPARK_HIT, _proxy.global_position + Vector3.UP, 1.8)
 	_proxy_attached = false
 	var from := _proxy.position
 	var start_basis := _proxy.basis
@@ -234,9 +248,6 @@ func _throw_monitor() -> void:
 		_proxy.basis = Basis.from_euler(Vector3(2.4, -0.8, 2.0) * t) * start_basis,
 		0.0, 1.0, THROW_DURATION)
 	_proxy_motion.tween_callback(_clear_proxy)
-	_arm_motion = create_tween()
-	_arm_motion.tween_method(_sample_rear_pose, 0.86, 0.30, 0.44).set_trans(Tween.TRANS_SINE)
-	_arm_motion.tween_callback(func() -> void: deck.play(deck.grapples[REAR], "idle_grapple"))
 
 
 func _clear_proxy() -> void:
@@ -259,10 +270,10 @@ func _reset_takeover() -> void:
 	_screen_wake_at = -1.0
 	_deployment_started_at = -1.0
 	_clock = 0.0
-	for arm in deck.grapples:
-		deck.play(arm, "activate_grapple", 0.0)
-	for rack in deck.sentries:
-		deck.play(rack, "activate_sentry", 0.0)
+	for arm in grapples:
+		arm.play("activate_grapple", 0.0)
+	for rack in sentries:
+		rack.play("activate_sentry", 0.0)
 	deck.set_screens(0.0, 0.0)
 	deck.sample_launch_lift(0.0)
 	deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.LINK_LOST)
@@ -307,7 +318,7 @@ func _deploy() -> void:
 	if _deployment_started_at < 0.0:
 		_start_deploy_motion()
 	_takeover_safe_position()
-	deck.set_platform_rails(false)
+
 	stage = Stage.DEPLOY
 	_clock = elapsed
 	_screen_wake_at = -1.0
@@ -322,14 +333,14 @@ func _start_deploy_motion() -> void:
 	deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.RISING, true)
 	deck.set_rear_screen_retraction(true)
 	AudioManager.play_sfx("door_open", -5.0, 0.63)
-	for i in range(deck.grapples.size()):
+	for i in range(grapples.size()):
 		var clip := "idle_grapple" if i == REAR and _rear_started else "activate_grapple"
-		deck.play(deck.grapples[i], clip)
+		grapples[i].play(clip)
 	_rear_started = true
-	for i in range(deck.sentries.size()):
-		var rack := deck.sentries[i]
-		deck.play(rack, "activate_sentry")
-		deck.delay_animation(rack, floori(float(i) / RACKS_PER_SIDE) * 0.14)
+	for i in range(sentries.size()):
+		var rack := sentries[i]
+		rack.play("activate_sentry")
+		rack.delay_motion(floori(float(i) / RACKS_PER_SIDE) * 0.14)
 
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(_player) or _player.current_hp <= 0:
@@ -354,7 +365,9 @@ func _physics_process(delta: float) -> void:
 			elif is_instance_valid(_proxy) and (_proxy as MonitorBossPresentation).action_id == "hurt":
 				(_proxy as MonitorBossPresentation).sync_context({"action_id": "stun_loop", "time": 0.22}, false)
 			if _deployment_started_at >= 0.0:
-				deck.sample_launch_lift(_clock - _deployment_started_at)
+				var deploying := _clock - _deployment_started_at
+				deck.sample_launch_lift(deploying)
+				_tick_deploy_geometry(deploying)
 			if _screen_wake_at >= 0.0:
 				deck.wake_screens(_clock - _screen_wake_at)
 			if not _takeover_requested and _clock > 0.25:
@@ -426,17 +439,17 @@ func _arm_combat() -> void:
 	_volley_at = 22.0
 	_next_cross_side = 0
 	_prefer_palm = true
-	_arm_ready.fill(0.0)
 	_gun_ready.fill(0.0)
-	for i in range(deck.grapples.size()):
+	for i in range(grapples.size()):
+		grapples[i].ready_at = 0.0
 		var alive := _arm_targets[i].current_hp > 0
-		deck.play(deck.grapples[i], "idle_grapple" if alive else "death_grapple", 1.0 if alive else 0.0, 0.0 if alive else 2.16)
+		grapples[i].play("idle_grapple" if alive else "death_grapple", 1.0 if alive else 0.0, 0.0 if alive else 2.16)
 		_arm_targets[i].set_open(alive)
 		_arm_targets[i].sync_pose()
-	for rack in deck.sentries:
-		deck.play(rack, "idle_sentry")
-	for shell in _armor:
-		shell.set_deferred("collision_layer", 4)
+	for rack in sentries:
+		rack.play("idle_sentry")
+	for rack in sentries:
+		rack.armor.set_deferred("collision_layer", 4)
 	deck.set_screens(0.0 if _arms_alive() > 2 else 1.0, 0.62)
 	if _arms_alive() > 2:
 		deck.sample_combat_feed(0.0)
@@ -444,36 +457,45 @@ func _arm_combat() -> void:
 	checkpoint.emit("platform_combat")
 
 
-var _standby_arm: Node3D
-var _standby_rack: Node3D
+var _standby_arm: PlatformSentinelUnit3D
+var _standby_rack: PlatformSentinelUnit3D
 var _standby_end := 0.0
+var _standby_started := 0.0
 var _next_standby_at := 0.0
 var _standby_rng := RandomNumberGenerator.new()
 
 func _finish_standby() -> void:
 	if is_instance_valid(_standby_arm):
-		deck.play(_standby_arm, "idle_grapple")
+		_standby_arm.rig.clear_bones_global_pose_override()
+		_standby_arm.play("idle_grapple")
 	if is_instance_valid(_standby_rack):
-		deck.play(_standby_rack, "idle_sentry")
+		_standby_rack.rig.clear_bones_global_pose_override()
+		_standby_rack.play("idle_sentry")
 	_standby_arm = null
 	_standby_rack = null
 
 func _tick_standby() -> void:
-	if _clock < _standby_end:
+	if _clock < _standby_end and is_instance_valid(_player):
+		var weight := inverse_lerp(_standby_started, _standby_end, _clock)
+		if is_instance_valid(_standby_arm):
+			_standby_arm.sample_standby(weight, _player.global_position, global_position)
+		if is_instance_valid(_standby_rack):
+			_standby_rack.sample_standby(weight, _player.global_position, global_position)
 		return
 	_finish_standby()
 	if _clock < _next_standby_at:
 		return
-	var living: Array[Node3D] = []
+	var living: Array[PlatformSentinelUnit3D] = []
 	for i in range(_arm_targets.size()):
 		if _arm_targets[i].current_hp > 0:
-			living.append(deck.grapples[i])
+			living.append(grapples[i])
 	if not living.is_empty():
 		_standby_arm = living[_standby_rng.randi_range(0, living.size() - 1)]
-		deck.play(_standby_arm, "scan_grapple" if _standby_rng.randi_range(0, 1) == 0 else "servo_pause_grapple")
-	if not deck.sentries.is_empty():
-		_standby_rack = deck.sentries[_standby_rng.randi_range(0, deck.sentries.size() - 1)]
-		deck.play(_standby_rack, "scan_sentry" if _standby_rng.randi_range(0, 1) == 0 else "servo_pause_sentry")
+		_standby_arm.play("scan_grapple" if _standby_rng.randi_range(0, 1) == 0 else "servo_pause_grapple")
+	if not sentries.is_empty():
+		_standby_rack = sentries[_standby_rng.randi_range(0, sentries.size() - 1)]
+		_standby_rack.play("scan_sentry" if _standby_rng.randi_range(0, 1) == 0 else "servo_pause_sentry")
+	_standby_started = _clock
 	_standby_end = _clock + 1.4
 	_next_standby_at = _clock + _standby_rng.randf_range(2.4, 3.7)
 
@@ -513,24 +535,22 @@ func _start_slam() -> bool:
 	var best_age := INF
 	var best: Dictionary = {}
 	for i in range(_arm_targets.size()):
-		if _arm_targets[i].current_hp <= 0 or _arm_ready[i] > _clock:
-			continue
-		var candidate := _closest_slam_slot(i, _player.global_position)
-		if not candidate.is_empty() and _arm_ready[i] < best_age:
+		var arm := grapples[i]
+		var candidate := arm.choose_slam(self, _player.global_position, _clock)
+		if not candidate.is_empty() and arm.ready_at < best_age:
 			_active_arm = i
 			best = candidate
-			best_age = _arm_ready[i]
+			best_age = arm.ready_at
 	if _active_arm < 0:
 		return false
 	_finish_standby()
-	_arm_ready[_active_arm] = _clock + ARM_COOLDOWN
+	grapples[_active_arm].ready_at = _clock + ARM_COOLDOWN
 	_next_attack_at = _clock + _next_attack_gap()
 	_prefer_palm = false
 	_arm_clock = 0.0
 	_slam_angle = float(best.angle)
 	_slam_point = _predicted_palm(_active_arm, _slam_angle)
 	_slam_point.y = global_position.y + 0.036
-	_slam_marker = _circle_warning(_slam_point)
 	_play_slam_pose()
 	var windup := _palm_world(_active_arm)
 	_fx(VfxPool3D.FX01_METAL_SPARK_HIT, windup, 0.75)
@@ -538,71 +558,53 @@ func _start_slam() -> bool:
 	return true
 
 
-func _closest_slam_slot(index: int, where: Vector3) -> Dictionary:
-	var best := SLAM_RADIUS - 0.12
-	var match_slot: Dictionary = {}
-	for slot in _arm_slots[index]:
-		var point: Vector3 = slot.point
-		var distance := (where - to_global(point)).slide(Vector3.UP).length()
-		if distance <= best:
-			best = distance
-			match_slot = slot
-	return match_slot
+
 
 
 func _predicted_palm(index: int, angle: float) -> Vector3:
-	var outer: Dictionary = _arm_slots[index][0]
+	var outer := grapples[index].slam_slots[0]
 	var pivot: Vector3 = outer.pivot
 	var point: Vector3 = outer.point
 	return to_global(pivot + (point - pivot).rotated(Vector3.UP, angle))
 
 
 func _play_slam_pose() -> void:
-	var arm := deck.grapples[_active_arm]
-	var rig := deck.skeleton_for(arm)
+	var arm := grapples[_active_arm]
+	var rig := arm.rig
 	rig.clear_bones_global_pose_override()
 	var time := _arm_clock
 	if time > SLAM_HOLD_POSE:
 		var release := IMPACT + SLAM_RESPONSE
 		var blend := clampf(inverse_lerp(release, SLAM_END, time), 0.0, 1.0)
 		time = lerpf(SLAM_HOLD_POSE, SLAM_CLIP_END, blend)
-	deck.play(arm, "attack_grapple_slam", 0.0, time)
-	_yaw_arm(arm, _slam_angle)
+	arm.play("attack_grapple_slam", 0.0, time)
+	arm.slew(_slam_angle)
 	_update_grapple_visibility()
 
 
-func _yaw_arm(arm: Node3D, angle: float) -> void:
-	var rig := deck.skeleton_for(arm)
-	var shoulder := rig.find_bone("shoulder")
-	var pose := rig.get_bone_global_pose(shoulder)
-	var axis := rig.global_basis.inverse() * Vector3.UP
-	pose.basis = Basis(axis.normalized(), angle) * pose.basis
-	rig.set_bone_global_pose_override(shoulder, pose, 1.0, true)
-	deck.sync_skeleton(arm)
+
 
 
 func _update_grapple_visibility() -> void:
 	var camera := get_viewport().get_camera_3d()
 	if camera == null:
 		return
-	var anchor := deck.grapples[_active_arm].global_position
+	var anchor := grapples[_active_arm].global_position
 	var outward := (anchor - global_position).slide(Vector3.UP).normalized()
 	var foreground := (camera.global_position - _player.global_position).slide(Vector3.UP).dot(outward) > 0.5
 	var near := (anchor - _player.global_position).slide(Vector3.UP).length() < 8.5
-	for mesh: GeometryInstance3D in _grapple_meshes[_active_arm]:
-		mesh.transparency = 0.77 if foreground and near else 0.0
+	grapples[_active_arm].set_fade(0.77 if foreground and near else 0.0)
 
 
 func _tick_slam(delta: float, here: Vector3) -> void:
 	var before := _arm_clock
 	_arm_clock = minf(_arm_clock + delta, SLAM_END)
 	if _arm_clock < IMPACT - 0.35:
-		var desired := _closest_slam_slot(_active_arm, _player.global_position)
+		var desired := grapples[_active_arm].choose_slam(self, _player.global_position, INF)
 		if not desired.is_empty():
 			_slam_angle = move_toward(_slam_angle, float(desired.angle), 1.6 * delta)
 		_slam_point = _predicted_palm(_active_arm, _slam_angle)
 		_slam_point.y = global_position.y + 0.036
-		_slam_marker.global_position = _slam_point
 	_play_slam_pose()
 	if before < IMPACT and _arm_clock >= IMPACT:
 		_resolve_slam(here)
@@ -615,24 +617,15 @@ func _tick_slam(delta: float, here: Vector3) -> void:
 func _finish_slam(standby: bool) -> void:
 	if _active_arm < 0:
 		return
-	var arm := deck.grapples[_active_arm]
-	deck.skeleton_for(arm).clear_bones_global_pose_override()
-	for mesh: GeometryInstance3D in _grapple_meshes[_active_arm]:
-		mesh.transparency = 0.0
+	var arm := grapples[_active_arm]
+	arm.rig.clear_bones_global_pose_override()
+	arm.set_fade(0.0)
 	if standby:
-		deck.play(arm, "idle_grapple")
+		arm.play("idle_grapple")
 	_active_arm = -1
-	if is_instance_valid(_slam_marker):
-		_slam_marker.queue_free()
-	_slam_marker = null
 
 
 func _resolve_slam(here: Vector3) -> void:
-	if is_instance_valid(_slam_marker):
-		_slam_marker.queue_free()
-	_slam_marker = null
-	_fx(VfxPool3D.FX01_MELEE_IMPACT, _slam_point + Vector3.UP * 0.1, 3.8)
-	_fx(VfxPool3D.FX01_IMPACT, _slam_point + Vector3.UP * 0.38, 2.15)
 	AudioManager.play_sfx("melee_impact", -2.0, 0.76)
 	if _player.camera_feedback != null:
 		var strength := clampf(1.0 - _player.global_position.distance_to(_slam_point) / 17.0, 0.0, 1.0)
@@ -648,7 +641,7 @@ func _start_gun() -> bool:
 	var best := INF
 	var target := _player.global_position
 	var choice := -1
-	for i in range(deck.sentries.size()):
+	for i in range(sentries.size()):
 		var side := floori(float(i) / RACKS_PER_SIDE)
 		if _gun_ready[side] > _clock:
 			continue
@@ -678,7 +671,7 @@ func _start_gun() -> bool:
 
 func _start_pattern(pattern: Barrage) -> bool:
 	_cross_side = _next_cross_side
-	for index in range(deck.sentries.size()):
+	for index in range(sentries.size()):
 		var side := _side_of(index)
 		if pattern == Barrage.CROSS and side != _cross_side and side != (_cross_side + 2) % 4:
 			continue
@@ -699,9 +692,9 @@ func _start_pattern(pattern: Barrage) -> bool:
 
 func _prime_rack(index: int, target: Vector3) -> bool:
 	_finish_standby()
-	var rack := deck.sentries[index]
-	deck.play(rack, "attack_sentry", 0.0, AUTHORED_FIRE)
-	_aim_sentry(rack, target)
+	var rack := sentries[index]
+	rack.play("attack_sentry", 0.0, AUTHORED_FIRE)
+	rack.aim_sentry(target)
 	var lane := _shot_lane(rack)
 	if lane.is_empty():
 		_reset_gun_pose(rack)
@@ -710,8 +703,6 @@ func _prime_rack(index: int, target: Vector3) -> bool:
 		_reset_gun_pose(rack)
 		return false
 	_barrage_lanes[index] = lane
-	var rig := deck.skeleton_for(rack)
-	_recoil_poses[index] = rig.get_bone_global_pose(rig.find_bone("recoil"))
 	return true
 
 
@@ -742,21 +733,6 @@ func _cue_barrage_audio() -> void:
 			AudioManager.emit_event("combat.weapon.reload_start", {"gun_id": "bp_rifle", "source_position": lane[0], "max_distance": 32.0, "unit_size": 7.0, "volume_db": -10.0})
 
 
-func _aim_sentry(rack: Node3D, target: Vector3) -> void:
-	var rig := deck.skeleton_for(rack)
-	var aim_bone := rig.find_bone("gimbal_pitch")
-	var pose := rig.get_bone_global_pose(aim_bone)
-	var pivot := rig.to_global(pose.origin)
-	var muzzle := deck.socket(rack, "muzzle_exit")
-	var forward := deck.socket(rack, "muzzle_forward")
-	var axis := muzzle.global_position.direction_to(forward.global_position)
-	var aim := (target - pivot).slide(Vector3.UP).normalized()
-	var correction := Basis(Quaternion(axis, aim))
-	pose.basis = rig.global_basis.inverse() * correction * rig.global_basis * pose.basis
-	rig.set_bone_global_pose_override(aim_bone, pose, 1.0, true)
-	deck.sync_skeleton(rack)
-
-
 func _tick_gun(delta: float) -> void:
 	_gun_clock += delta
 	var times: Array = BURST_TIMES
@@ -773,6 +749,12 @@ func _tick_gun(delta: float) -> void:
 				if _barrage == Barrage.CROSS and side != (_cross_side + 2 * (_shot_index - 1)) % 4:
 					continue
 				_set_recoil(index, maxf(0.0, 1.0 - elapsed / 0.16))
+	if _barrage == Barrage.VOLLEY:
+		var since_last := 1.0 if _shot_index == 0 else _gun_clock - float(times[_shot_index - 1])
+		var until_next := 1.0 if _shot_index >= times.size() else float(times[_shot_index]) - _gun_clock
+		var flash := maxf(0.0, 1.0 - since_last / 0.19)
+		var charge := 0.55 * (1.0 - smoothstep(0.0, 0.36, until_next))
+		deck.set_gun_alert(maxf(flash, charge))
 	while _shot_index < times.size() and _gun_clock >= times[_shot_index]:
 		_fire_pulse()
 		_shot_index += 1
@@ -784,13 +766,8 @@ func _tick_gun(delta: float) -> void:
 
 
 func _set_recoil(index: int, kick: float) -> void:
-	var rack := deck.sentries[index]
-	var rig := deck.skeleton_for(rack)
 	var lane: Array[Vector3] = _barrage_lanes[index]
-	var pose: Transform3D = _recoil_poses[index]
-	pose.origin -= (rig.global_basis.inverse() * lane[0].direction_to(lane[1])) * kick * 0.23
-	rig.set_bone_global_pose_override(rig.find_bone("recoil"), pose, 1.0, true)
-	deck.sync_skeleton(rack)
+	sentries[index].set_recoil(lane[0].direction_to(lane[1]), kick)
 
 
 func _fire_pulse() -> void:
@@ -814,13 +791,14 @@ func _fire_pulse() -> void:
 			context["weapon_audio_profile"] = "rifle" if spread.size() == 1 else "shotgun"
 			AudioManager.emit_event("combat.weapon.fire", context)
 		for angle: float in spread:
-			_spawn_round(lane[0], axis.rotated(Vector3.UP, deg_to_rad(angle)), spread.size() > 1)
+			_spawn_round(sentries[index], lane[0], axis.rotated(Vector3.UP, deg_to_rad(angle)), spread.size() > 1)
 
 
-func _spawn_round(origin: Vector3, direction: Vector3, pellet: bool) -> void:
+func _spawn_round(rack: PlatformSentinelUnit3D, origin: Vector3, direction: Vector3, pellet: bool) -> void:
 	var flight_range := 29.0 if _barrage == Barrage.BURST else 15.8 if _barrage == Barrage.VOLLEY else 22.0
 	var round := _projectiles.acquire({
-		"shooter": self, "direction": direction, "speed": PELLET_SPEED if pellet else BULLET_SPEED,
+		"shooter": rack, "direction": direction,
+		"level_flight_y": global_position.y + GUN_FLIGHT_HEIGHT, "speed": PELLET_SPEED if pellet else BULLET_SPEED,
 		"range": flight_range, "damage": (5 if _barrage == Barrage.VOLLEY else 6) if pellet else 8,
 		"hostile": true, "target_group": "player_3d", "projectile_collision_mask": 1,
 		"visual_scale": 1.60 if not pellet else 1.43, "billboard": false, "hit_knockback": 0.0,
@@ -841,9 +819,9 @@ func _cancel_rounds() -> void:
 	_rounds.clear()
 
 
-func _shot_lane(rack: Node3D) -> Array[Vector3]:
-	var muzzle := deck.socket(rack, "muzzle_exit")
-	var forward := deck.socket(rack, "muzzle_forward")
+func _shot_lane(rack: PlatformSentinelUnit3D) -> Array[Vector3]:
+	var muzzle := rack.socket("muzzle_exit")
+	var forward := rack.socket("muzzle_forward")
 	if muzzle == null or forward == null:
 		return []
 	var from := muzzle.global_position
@@ -856,29 +834,29 @@ func _obstruction(from: Vector3, to: Vector3) -> Dictionary:
 	return get_world_3d().direct_space_state.intersect_ray(ray)
 
 
-func _reset_gun_pose(rack: Node3D) -> void:
-	deck.skeleton_for(rack).clear_bones_global_pose_override()
-	deck.play(rack, "idle_sentry")
+func _reset_gun_pose(rack: PlatformSentinelUnit3D) -> void:
+	rack.rig.clear_bones_global_pose_override()
+	rack.play("idle_sentry")
 
 
 func _finish_gun(standby: bool) -> void:
+	deck.set_gun_alert(0.0)
 	for index: int in _barrage_lanes:
-		var rack := deck.sentries[index]
+		var rack := sentries[index]
 		if standby:
 			_reset_gun_pose(rack)
 		else:
-			deck.skeleton_for(rack).clear_bones_global_pose_override()
+			rack.rig.clear_bones_global_pose_override()
 	_active_gun = -1
 	_barrage = Barrage.NONE
 	_barrage_lanes.clear()
-	_recoil_poses.clear()
 
 
 func _on_arm_destroyed(index: int) -> void:
 	_finish_standby()
 	if _active_arm == index:
 		_finish_slam(false)
-	deck.play(deck.grapples[index], "death_grapple")
+	grapples[index].play("death_grapple")
 	_fx(VfxPool3D.FX01_EXPLOSION, _arm_targets[index].last_hit_position, 2.65)
 	var live := _arms_alive()
 	deck.set_screens(0.0 if live > 2 else 1.0, 0.62)
@@ -896,8 +874,8 @@ func _begin_collapse(announce := true) -> void:
 	_finish_slam(false)
 	_finish_gun(false)
 	_cancel_rounds()
-	for shell in _armor:
-		shell.set_deferred("collision_layer", 0)
+	for rack in sentries:
+		rack.armor.set_deferred("collision_layer", 0)
 	stage = Stage.COLLAPSE
 	deck.clear_combat_feed()
 	deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.OUTER_WARNING)
@@ -909,8 +887,8 @@ func _begin_collapse(announce := true) -> void:
 		var walk_budget := 5.45 * sqrt(2.0) / maxf(0.5, slow_speed) + 0.5
 		_outer_start = maxf(_outer_start, walk_budget)
 	_sent_racks = false
-	for rack in deck.sentries:
-		deck.play(rack, "servo_pause_sentry")
+	for rack in sentries:
+		rack.play("servo_pause_sentry")
 	deck.set_screens(2.0, 0.62)
 	if announce:
 		_show_safe_route(7.12)
@@ -920,6 +898,7 @@ func _begin_collapse(announce := true) -> void:
 
 func _tick_collapse() -> void:
 	var releases := deck.sample_collapse(_clock, _outer_start)
+	deck.sample_sentry_mounts(sentries)
 	for motor in releases:
 		_fx(VfxPool3D.FX01_METAL_SPARK_HIT, motor, 1.7)
 		_fx(VfxPool3D.FX01_EXPLOSION, motor, 1.26)
@@ -928,8 +907,8 @@ func _tick_collapse() -> void:
 		if not _sent_racks:
 			_sent_racks = true
 			deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.OUTER_RELEASE, true)
-			for rack in deck.sentries:
-				deck.play(rack, "death_sentry")
+			for rack in sentries:
+				rack.play("death_sentry")
 			AudioManager.play_sfx("door_locked", -3.0, 0.73)
 			checkpoint.emit("platform_outer_ring")
 	if _clock >= _collapse_finish():
@@ -962,6 +941,7 @@ func _show_safe_route(half: float) -> void:
 
 func _clear_safe_route() -> void:
 	for node in _route_markers:
+		node.hide()
 		node.queue_free()
 	_route_markers.clear()
 
@@ -974,7 +954,7 @@ func _activate_core() -> void:
 	_bridge_wait = -1.0
 	_core.show()
 	deck.set_center_screen(2.0, 0.34)
-	_show_safe_route(2.18)
+	_clear_safe_route()
 	_emit_health()
 	checkpoint.emit("platform_core")
 
@@ -1020,7 +1000,7 @@ func _can_shutdown(actor: Player3D) -> bool:
 func _tick_core(delta: float) -> void:
 	if _bridge_wait >= 0.0:
 		_bridge_wait -= delta
-		deck.set_bridge_retraction(1.0, smoothstep(0.0, 0.8, _bridge_wait))
+		deck.sample_return_bridge(1.0 - smoothstep(0.0, 0.8, _bridge_wait))
 		if _bridge_wait <= 0.0:
 			_win()
 		return
@@ -1075,26 +1055,27 @@ func restore_state(state: Dictionary, already_cleared: bool) -> void:
 			stage = Stage.WON
 			deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.SAFE)
 			deck.set_rear_screen_retraction(true)
-			deck.set_platform_rails(false)
+
 			deck.sample_launch_lift(FULL_DEPLOY)
 			deck.sample_collapse(PlatformSentinelDeck3D.FINISH)
+			deck.sample_sentry_mounts(sentries)
 			deck.open_return_bridge()
 		return
 	var hp: Array = state.get("arm_hp", [])
 	for i in range(mini(hp.size(), _arm_targets.size())):
 		_arm_targets[i].current_hp = clampi(int(hp[i]), 0, ARM_HP)
 	var saved_stage := clampi(int(state.get("stage", Stage.DORMANT)), Stage.DORMANT, Stage.WON)
-	deck.set_platform_rails(saved_stage <= Stage.TAKEOVER)
+
 	deck.set_rear_screen_retraction(saved_stage >= Stage.DEPLOY)
 	deck.sample_launch_lift(FULL_DEPLOY if saved_stage >= Stage.COMBAT else 0.0)
 	if saved_stage >= Stage.COMBAT:
 		_break_stairs(false)
 		deck.set_bridge_retraction(1.0, 1.0)
 	if saved_stage >= Stage.COLLAPSE:
-		for i in range(deck.grapples.size()):
-			deck.play(deck.grapples[i], "death_grapple", 0.0, 2.16)
-		for rack in deck.sentries:
-			deck.play(rack, "death_sentry", 0.0, 1.68)
+		for i in range(grapples.size()):
+			grapples[i].play("death_grapple", 0.0, 2.16)
+		for rack in sentries:
+			rack.play("death_sentry", 0.0, 1.68)
 	match saved_stage:
 		Stage.TAKEOVER:
 			stage = Stage.TAKEOVER
@@ -1112,65 +1093,35 @@ func restore_state(state: Dictionary, already_cleared: bool) -> void:
 			_sent_racks = bool(state.get("outer_started", _clock >= _outer_start + 0.12))
 			if _sent_racks:
 				deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.OUTER_RELEASE)
-				for rack in deck.sentries:
-					deck.play(rack, "death_sentry", 0.0, 1.68)
+				for rack in sentries:
+					rack.play("death_sentry", 0.0, 1.68)
 			deck.sample_collapse(_clock, _outer_start)
+			deck.sample_sentry_mounts(sentries)
 			_show_safe_route(7.12)
 		Stage.CORE:
 			deck.sample_collapse(PlatformSentinelDeck3D.FINISH)
+			deck.sample_sentry_mounts(sentries)
 			_activate_core()
 		Stage.WON:
 			stage = Stage.WON
 			deck.set_rear_signal(PlatformSentinelDeck3D.SignalPicture.SAFE)
 			deck.sample_collapse(PlatformSentinelDeck3D.FINISH)
+			deck.sample_sentry_mounts(sentries)
 			deck.set_center_screen(2.0, 0.0)
 			deck.open_return_bridge()
 	_emit_health()
 
 func _prepare_attack_poses() -> void:
-	for index in range(deck.grapples.size()):
-		var arm := deck.grapples[index]
-		_grapple_meshes.append(arm.find_children("*", "GeometryInstance3D", true, false))
-		deck.play(arm, "attack_grapple_slam", 0.0, IMPACT)
-		var rig := deck.skeleton_for(arm)
-		var pivot := rig.to_global(rig.get_bone_global_pose(rig.find_bone("shoulder")).origin)
-		var point := _palm_world(index)
-		var slots := [{"angle": 0.0, "point": to_local(point), "pivot": to_local(pivot)}]
-		var best := to_local(point).slide(Vector3.UP).length()
-		for angle in [deg_to_rad(18.0), deg_to_rad(-18.0)]:
-			var candidate := pivot + (point - pivot).rotated(Vector3.UP, angle)
-			var local := to_local(candidate)
-			if local.slide(Vector3.UP).length() < best - 0.35 and maxf(absf(local.x), absf(local.z)) < 10.9:
-				best = local.slide(Vector3.UP).length()
-				if slots.size() > 1:
-					slots.pop_back()
-				slots.append({"angle": angle, "point": local, "pivot": to_local(pivot)})
-		_arm_slots.append(slots)
-		deck.play(arm, "activate_grapple", 0.0, 0.0)
-	for rack in deck.sentries:
-		deck.play(rack, "attack_sentry", 0.0, AUTHORED_FIRE)
+	for arm in grapples:
+		arm.prepare_slam_slots(self, IMPACT)
+	for rack in sentries:
+		rack.play("attack_sentry", 0.0, AUTHORED_FIRE)
 		var lane := _shot_lane(rack)
 		_gun_rest_lanes.append([to_local(lane[0]), to_local(lane[1])])
-		_add_sentry_armor(rack)
-		deck.play(rack, "activate_sentry", 0.0, 0.0)
+		rack.play("activate_sentry", 0.0, 0.0)
 
 
-func _add_sentry_armor(rack: Node3D) -> void:
-	var rig := deck.skeleton_for(rack)
-	var holder := BoneAttachment3D.new()
-	holder.bone_name = "trunnion"
-	rig.add_child(holder)
-	var shell := StaticBody3D.new()
-	shell.name = "SentryArmor"
-	shell.collision_layer = 0
-	shell.collision_mask = 0
-	var shield := SphereShape3D.new()
-	shield.radius = 0.54
-	var shape := CollisionShape3D.new()
-	shape.shape = shield
-	shell.add_child(shape)
-	holder.add_child(shell)
-	_armor.append(shell)
+
 
 
 func _on_target_damaged(_current: int, target: PlatformSentinelWeakPoint3D) -> void:
@@ -1197,16 +1148,8 @@ func _arms_alive() -> int:
 	return count
 
 func _palm_world(index: int) -> Vector3:
-	var arm := deck.grapples[index]
-	deck.sync_skeleton(arm)
-	var point := Vector3.ZERO
-	var count := 0
-	for key in ["palm_contact_ll", "palm_contact_lr", "palm_contact_ul", "palm_contact_ur"]:
-		var socket := deck.socket(arm, key)
-		if socket != null:
-			point += socket.global_position
-			count += 1
-	return point / float(count) if count > 0 else arm.global_position
+	return grapples[index].palm_position()
+
 
 func _hit_player(amount: int, direction: Vector3, kick: float) -> void:
 	_player.notify_attacked_by(self)
@@ -1224,19 +1167,7 @@ func _line(from: Vector3, to: Vector3, width: float, color: Color) -> MeshInstan
 	node.look_at(to)
 	return node
 
-func _circle_warning(point: Vector3) -> MeshInstance3D:
-	var mesh := ImmediateMesh.new()
-	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
-	for i in range(49):
-		var outward := Vector3.FORWARD.rotated(Vector3.UP, TAU * i / 48.0)
-		mesh.surface_add_vertex(outward * (SLAM_RADIUS - 0.075))
-		mesh.surface_add_vertex(outward * SLAM_RADIUS)
-	mesh.surface_end()
-	var ring := _marker(mesh, point, Color(1.0, 0.67, 0.26, 0.95))
-	var material := ring.material_override as StandardMaterial3D
-	material.no_depth_test = true
-	material.render_priority = 6
-	return ring
+
 
 
 func _marker(mesh: Mesh, point: Vector3, color: Color) -> MeshInstance3D:

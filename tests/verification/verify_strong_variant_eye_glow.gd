@@ -43,7 +43,6 @@ const MIRROR_TOLERANCE_M := 0.01
 const DOC_EYE_SOCKETS := {
 	"melee_chaser": {"y_ratio": 0.550, "half_x": 0.160, "radius": 0.040},
 	"ranged_caster": {"y_ratio": 0.630, "half_x": 0.155, "radius": 0.040},
-	"fat_zombie03": {"y_ratio": 0.880, "half_x": 0.195, "radius": 0.050},
 }
 ## 头部带判定与横向上限也必须钉住：改动它们会整体平移所有眼位。
 const DOC_HEAD_BAND_FROM_TOP := 0.45
@@ -62,6 +61,10 @@ const POLICE_ANCHOR_TOLERANCE := 0.001
 
 var _failures: Array[String] = []
 var _samples := 0
+
+
+func _glowing_variants() -> Array[String]:
+	return ["melee_chaser_strong", "ranged_caster_strong"]
 
 
 func _ready() -> void:
@@ -139,7 +142,7 @@ func _check_doc_contract() -> void:
 
 ## ① 三个变种各一对红眼。
 func _check_strong_variants_have_glow() -> void:
-	for variant_id in MonsterVariants.all_variant_ids():
+	for variant_id in _glowing_variants():
 		var enemy := await _spawn(variant_id)
 		var eyes := _eyes_of(enemy)
 		_expect(eyes.size() == 2, "%s 应有一对发光眼，实得 %d 只" % [variant_id, eyes.size()])
@@ -153,14 +156,14 @@ func _check_strong_variants_have_glow() -> void:
 
 ## ② 2026-10-17：普通僵尸也有双眼红光，其余无配方怪种不变。
 func _check_normal_monsters_have_glow() -> void:
-	for base_kind in MonsterVariants.all_base_kinds():
+	for base_kind in DOC_EYE_SOCKETS:
 		var enemy := await _spawn(base_kind)
 		var eyes := _eyes_of(enemy)
 		_expect(eyes.size() == 2, "普通僵尸 %s 应有两只发光眼，实得 %d 只" % [base_kind, eyes.size()])
 		_samples += 1
 		enemy.free()
 	# 没配方的怪同样不长。
-	for plain in ["exploder", "ambusher", "summoner"]:
+	for plain in ["fat_zombie03", "fat_zombie03_strong", "exploder", "exploder_strong", "ambusher", "summoner"]:
 		var enemy := await _spawn(plain)
 		_expect(
 			_eyes_of(enemy).size() == 0,
@@ -172,7 +175,7 @@ func _check_normal_monsters_have_glow() -> void:
 
 ## ③ 挂点必须是 BoneAttachment3D；新警察匹配实际 mixamorig 头骨，其它仍为 Head。
 func _check_socket_is_bone_attachment() -> void:
-	var kinds := MonsterVariants.all_variant_ids().duplicate()
+	var kinds := _glowing_variants().duplicate()
 	kinds.append("ranged_caster")
 	for variant_id in kinds:
 		var enemy := await _spawn(variant_id)
@@ -213,7 +216,7 @@ func _check_socket_is_bone_attachment() -> void:
 
 ## ④ 材质真发红光。
 func _check_material_really_glows() -> void:
-	for variant_id in MonsterVariants.all_variant_ids():
+	for variant_id in _glowing_variants():
 		var enemy := await _spawn(variant_id)
 		for eye in _eyes_of(enemy):
 			var material := (eye as MeshInstance3D).get_active_material(0) as StandardMaterial3D
@@ -242,7 +245,7 @@ func _check_material_really_glows() -> void:
 
 ## ⑤ 眼位：左右对称 + 与配方比例一致。**按怪自身局部坐标量**。
 func _check_eye_positions_match_socket() -> void:
-	var kinds := MonsterVariants.all_variant_ids().duplicate()
+	var kinds := _glowing_variants().duplicate()
 	kinds.append("ranged_caster")
 	for variant_id in kinds:
 		var base_kind := "ranged_caster" if variant_id == "ranged_caster" else MonsterVariants.base_of(variant_id)
@@ -264,7 +267,7 @@ func _check_eye_positions_match_socket() -> void:
 		if base_kind == "melee_chaser":
 			# 原贴图两瞳非根坐标镜像：改按独立标定的 Head 骨空间锚点验收，
 			# 不再要求发光眼对齐一个与原瞳孔无关的对称轴。
-			var expected := [Vector3(0.133553, 0.207281, 0.241197), Vector3(-0.166665, 0.203328, 0.249580)]
+			var expected := [Vector3(0.189065, 0.087930, 0.449892), Vector3(-0.168118, 0.079885, 0.473035)]
 			for index in range(2):
 				_expect(eyes[index].position.distance_to(expected[index]) < 0.001, "melee eye must match calibrated pupil anchor")
 			_samples += 1
@@ -319,7 +322,7 @@ func _check_eye_positions_match_socket() -> void:
 ## 同一帧内 seek 完立刻读，拿到的是上一帧的旧值 —— 实测会得出「骨动 0.27m、
 ## 绑点动 0.000m」的假故障，把正确的实现判成红的。
 func _check_follows_head_animation() -> void:
-	var kinds := MonsterVariants.all_variant_ids().duplicate()
+	var kinds := _glowing_variants().duplicate()
 	kinds.append("ranged_caster")
 	for variant_id in kinds:
 		var enemy := await _spawn(variant_id)
@@ -441,7 +444,7 @@ func _head_travel_of_clip(
 
 ## ⑦ 纯表现：零碰撞体，且不改玩法数值。
 func _check_no_gameplay_impact() -> void:
-	for variant_id in MonsterVariants.all_variant_ids():
+	for variant_id in _glowing_variants():
 		var enemy := await _spawn(variant_id)
 		var glow_root := enemy.avatar.find_child("StrongEyeGlow3D", true, false)
 		_expect(glow_root != null, "%s 找不到眼特效根" % variant_id)
@@ -459,7 +462,7 @@ func _check_no_gameplay_impact() -> void:
 
 ## ⑧ `dismiss()` 真能撤掉，且幂等。
 func _check_dismiss() -> void:
-	var enemy := await _spawn(MonsterVariants.all_variant_ids()[0])
+	var enemy := await _spawn(_glowing_variants()[0])
 	var glow_root := enemy.avatar.find_child("StrongEyeGlow3D", true, false) as StrongVariantEyeGlow3D
 	if glow_root == null:
 		_fail("找不到眼特效根，无法验证 dismiss")
@@ -628,8 +631,11 @@ func _report() -> void:
 # 颜色贴图被按法线压缩时会丢蓝通道，身体变黄绿；对比导入前后的实际像素。
 func _check_fat_basecolor() -> void:
 	var enemy := await _spawn("fat_zombie03")
-	var visual = enemy.avatar._formal_normal_root
-	for mesh in visual._meshes:
+	var visual := enemy.avatar._formal_normal_root
+	var meshes := visual.find_children("*", "MeshInstance3D", true, false)
+	_expect(not meshes.is_empty(), "fat formal basecolor mesh must exist")
+	for item in meshes:
+		var mesh := item as MeshInstance3D
 		for surface in mesh.mesh.get_surface_count():
 			var material := mesh.get_active_material(surface) as StandardMaterial3D
 			# 判「不发亮」用能量，不用 `emission_enabled`：开关只是 shader 变体，

@@ -41,7 +41,7 @@ const ALLOWED_BOX_TYPES: Array[String] = [
 	"fat_zombie03",
 	"melee_chaser", "ranged_caster", "summoner",
 	"exploder", "ambusher",
-	"fat_zombie03_strong", "melee_chaser_strong", "ranged_caster_strong",
+	"fat_zombie03_strong", "melee_chaser_strong", "ranged_caster_strong", MonsterVariants.EXPLODER_STRONG,
 	"elite", "boss",
 	# —— 远征03 复刻怪（逐只列出，不用前缀通配）——
 	"egt_bullet_kin", "egt_bandana_kin", "egt_veteran_kin",

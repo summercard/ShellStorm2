@@ -3,12 +3,9 @@
 [ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/display_tile_5m/display_tile_5m_root_top3d.tscn" id="display_tile_5m"]
 [ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/display_command_5m/display_command_5m_root_top3d.tscn" id="display_command_5m"]
 [ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/reactor_fascia_5m/reactor_fascia_5m_root_top3d.tscn" id="reactor_fascia_5m"]
-[ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/guardrail_5m/guardrail_5m_root_top3d.tscn" id="guardrail_5m"]
 [ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/corner_beacon/corner_beacon_root_top3d.tscn" id="corner_beacon"]
 [ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/deck_girder_5m/deck_girder_5m_root_top3d.tscn" id="deck_girder_5m"]
 [ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/keel_cradle_5m/keel_cradle_5m_root_top3d.tscn" id="keel_cradle_5m"]
-[ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/articulated_grapple/articulated_grapple_root_top3d.tscn" id="articulated_grapple"]
-[ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/runtime/perimeter_sentry/perimeter_sentry_root_top3d.tscn" id="perimeter_sentry"]
 
 [node name="PlatformSentinel" type="Node3D"]
 metadata/asset_id = "ENM-BOSS-PLATFORM-SENTINEL-3D"
@@ -29,20 +26,8 @@ rotation_degrees = Vector3(0, 0, 0)
 position = Vector3(0.0000000, -4.8218079, 1.8529997)
 rotation_degrees = Vector3(0, 0, 0)
 
-[node name="Rail_01_01" parent="Tile_01_01" instance=ExtResource("guardrail_5m")]
-position = Vector3(0.0000000, 0.0000000, 2.2299995)
-rotation_degrees = Vector3(0, 0, 0)
-
-[node name="Sentry_01_01" parent="Tile_01_01" instance=ExtResource("perimeter_sentry")]
-position = Vector3(-0.1499996, -1.3250000, 8.1930008)
-rotation_degrees = Vector3(0, 0, 0)
-
 [node name="Fascia_04_05" parent="Tile_01_01" instance=ExtResource("reactor_fascia_5m")]
 position = Vector3(-1.8529987, -4.8218079, 0.0000010)
-rotation_degrees = Vector3(0, 270, 0)
-
-[node name="Rail_04_05" parent="Tile_01_01" instance=ExtResource("guardrail_5m")]
-position = Vector3(-2.2299986, 0.0000000, 0.0000010)
 rotation_degrees = Vector3(0, 270, 0)
 
 [node name="Beacon_04" parent="Tile_01_01" instance=ExtResource("corner_beacon")]
@@ -64,14 +49,6 @@ rotation_degrees = Vector3(0, 90, 0)
 position = Vector3(-1.8529997, -4.8218079, 0.0000010)
 rotation_degrees = Vector3(0, 270, 0)
 
-[node name="Rail_04_04" parent="Tile_01_02" instance=ExtResource("guardrail_5m")]
-position = Vector3(-2.2299995, 0.0000000, 0.0000010)
-rotation_degrees = Vector3(0, 270, 0)
-
-[node name="Grapple_04" parent="Tile_01_02" instance=ExtResource("articulated_grapple")]
-position = Vector3(-6.1218548, -7.6584749, 2.1500015)
-rotation_degrees = Vector3(0, 270, 0)
-
 [node name="Tile_01_03" type="Node3D" parent="."]
 position = Vector3(-10, 0, 0)
 
@@ -85,10 +62,6 @@ rotation_degrees = Vector3(0, 0, 0)
 
 [node name="Fascia_04_03" parent="Tile_01_03" instance=ExtResource("reactor_fascia_5m")]
 position = Vector3(-1.8529997, -4.8218079, 0.0000009)
-rotation_degrees = Vector3(0, 270, 0)
-
-[node name="Sentry_04_04" parent="Tile_01_03" instance=ExtResource("perimeter_sentry")]
-position = Vector3(-8.1930008, -1.3250000, 0.9400014)
 rotation_degrees = Vector3(0, 270, 0)
 
 [node name="Tile_01_04" type="Node3D" parent="."]
@@ -106,18 +79,6 @@ rotation_degrees = Vector3(0, 90, 0)
 position = Vector3(-1.8529997, -4.8218079, 0.0000010)
 rotation_degrees = Vector3(0, 270, 0)
 
-[node name="Rail_04_02" parent="Tile_01_04" instance=ExtResource("guardrail_5m")]
-position = Vector3(-2.2299995, 0.0000000, 0.0000010)
-rotation_degrees = Vector3(0, 270, 0)
-
-[node name="Sentry_04_02" parent="Tile_01_04" instance=ExtResource("perimeter_sentry")]
-position = Vector3(-8.1930008, -1.3250000, -1.7699986)
-rotation_degrees = Vector3(0, 270, 0)
-
-[node name="Sentry_04_03" parent="Tile_01_04" instance=ExtResource("perimeter_sentry")]
-position = Vector3(-8.1930008, -1.3250000, 1.6200011)
-rotation_degrees = Vector3(0, 270, 0)
-
 [node name="Tile_01_05" type="Node3D" parent="."]
 position = Vector3(-10, 0, -10)
 
@@ -133,24 +94,12 @@ rotation_degrees = Vector3(0, 0, 0)
 position = Vector3(0.0000010, -4.8218079, -1.8530006)
 rotation_degrees = Vector3(0, 180, 0)
 
-[node name="Rail_03_05" parent="Tile_01_05" instance=ExtResource("guardrail_5m")]
-position = Vector3(0.0000010, 0.0000000, -2.2300005)
-rotation_degrees = Vector3(0, 180, 0)
-
 [node name="Beacon_03" parent="Tile_01_05" instance=ExtResource("corner_beacon")]
 position = Vector3(-2.1099987, -1.0799999, -2.1100006)
 rotation_degrees = Vector3(0, 180, 0)
 
 [node name="Fascia_04_01" parent="Tile_01_05" instance=ExtResource("reactor_fascia_5m")]
 position = Vector3(-1.8530006, -4.8218079, 0.0000010)
-rotation_degrees = Vector3(0, 270, 0)
-
-[node name="Rail_04_01" parent="Tile_01_05" instance=ExtResource("guardrail_5m")]
-position = Vector3(-2.2300005, 0.0000000, 0.0000010)
-rotation_degrees = Vector3(0, 270, 0)
-
-[node name="Sentry_04_01" parent="Tile_01_05" instance=ExtResource("perimeter_sentry")]
-position = Vector3(-8.1930008, -1.3250000, -0.1499987)
 rotation_degrees = Vector3(0, 270, 0)
 
 [node name="Tile_02_01" type="Node3D" parent="."]
@@ -166,18 +115,6 @@ rotation_degrees = Vector3(0, 90, 0)
 
 [node name="Fascia_01_02" parent="Tile_02_01" instance=ExtResource("reactor_fascia_5m")]
 position = Vector3(0.0000000, -4.8218079, 1.8529997)
-rotation_degrees = Vector3(0, 0, 0)
-
-[node name="Rail_01_02" parent="Tile_02_01" instance=ExtResource("guardrail_5m")]
-position = Vector3(0.0000000, 0.0000000, 2.2299995)
-rotation_degrees = Vector3(0, 0, 0)
-
-[node name="Sentry_01_02" parent="Tile_02_01" instance=ExtResource("perimeter_sentry")]
-position = Vector3(-1.7700000, -1.3250000, 8.1930008)
-rotation_degrees = Vector3(0, 0, 0)
-
-[node name="Sentry_01_03" parent="Tile_02_01" instance=ExtResource("perimeter_sentry")]
-position = Vector3(1.6199999, -1.3250000, 8.1930008)
 rotation_degrees = Vector3(0, 0, 0)
 
 [node name="Tile_02_02" type="Node3D" parent="."]
@@ -240,14 +177,6 @@ rotation_degrees = Vector3(0, 90, 0)
 position = Vector3(0.0000010, -4.8218079, -1.8529997)
 rotation_degrees = Vector3(0, 180, 0)
 
-[node name="Rail_03_04" parent="Tile_02_05" instance=ExtResource("guardrail_5m")]
-position = Vector3(0.0000010, 0.0000000, -2.2299995)
-rotation_degrees = Vector3(0, 180, 0)
-
-[node name="Grapple_03" parent="Tile_02_05" instance=ExtResource("articulated_grapple")]
-position = Vector3(-2.1499987, -7.6584749, -6.1218548)
-rotation_degrees = Vector3(0, 180, 0)
-
 [node name="Tile_03_01" type="Node3D" parent="."]
 position = Vector3(0, 0, 10)
 
@@ -261,10 +190,6 @@ rotation_degrees = Vector3(0, 0, 0)
 
 [node name="Fascia_01_03" parent="Tile_03_01" instance=ExtResource("reactor_fascia_5m")]
 position = Vector3(0.0000000, -4.8218079, 1.8529997)
-rotation_degrees = Vector3(0, 0, 0)
-
-[node name="Sentry_01_04" parent="Tile_03_01" instance=ExtResource("perimeter_sentry")]
-position = Vector3(0.9400000, -1.3250000, 8.1930008)
 rotation_degrees = Vector3(0, 0, 0)
 
 [node name="Tile_03_02" type="Node3D" parent="."]
@@ -327,14 +252,6 @@ rotation_degrees = Vector3(0, 0, 0)
 position = Vector3(0.0000010, -4.8218079, -1.8529997)
 rotation_degrees = Vector3(0, 180, 0)
 
-[node name="Rail_03_03" parent="Tile_03_05" instance=ExtResource("guardrail_5m")]
-position = Vector3(0.0000011, 0.0000000, -2.2299995)
-rotation_degrees = Vector3(0, 180, 0)
-
-[node name="Sentry_03_04" parent="Tile_03_05" instance=ExtResource("perimeter_sentry")]
-position = Vector3(-0.9399984, -1.3250000, -8.1930008)
-rotation_degrees = Vector3(0, 180, 0)
-
 [node name="Tile_04_01" type="Node3D" parent="."]
 position = Vector3(5, 0, 10)
 
@@ -348,14 +265,6 @@ rotation_degrees = Vector3(0, 90, 0)
 
 [node name="Fascia_01_04" parent="Tile_04_01" instance=ExtResource("reactor_fascia_5m")]
 position = Vector3(0.0000000, -4.8218079, 1.8529997)
-rotation_degrees = Vector3(0, 0, 0)
-
-[node name="Rail_01_04" parent="Tile_04_01" instance=ExtResource("guardrail_5m")]
-position = Vector3(0.0000000, 0.0000000, 2.2299995)
-rotation_degrees = Vector3(0, 0, 0)
-
-[node name="Grapple_01" parent="Tile_04_01" instance=ExtResource("articulated_grapple")]
-position = Vector3(2.1500001, -7.6584749, 6.1218548)
 rotation_degrees = Vector3(0, 0, 0)
 
 [node name="Tile_04_02" type="Node3D" parent="."]
@@ -418,18 +327,6 @@ rotation_degrees = Vector3(0, 90, 0)
 position = Vector3(0.0000010, -4.8218079, -1.8529997)
 rotation_degrees = Vector3(0, 180, 0)
 
-[node name="Rail_03_02" parent="Tile_04_05" instance=ExtResource("guardrail_5m")]
-position = Vector3(0.0000010, 0.0000000, -2.2299995)
-rotation_degrees = Vector3(0, 180, 0)
-
-[node name="Sentry_03_02" parent="Tile_04_05" instance=ExtResource("perimeter_sentry")]
-position = Vector3(1.7700019, -1.3250000, -8.1929989)
-rotation_degrees = Vector3(0, 180, 0)
-
-[node name="Sentry_03_03" parent="Tile_04_05" instance=ExtResource("perimeter_sentry")]
-position = Vector3(-1.6199982, -1.3250000, -8.1930008)
-rotation_degrees = Vector3(0, 180, 0)
-
 [node name="Tile_05_01" type="Node3D" parent="."]
 position = Vector3(10, 0, 10)
 
@@ -445,24 +342,12 @@ rotation_degrees = Vector3(0, 0, 0)
 position = Vector3(0.0000000, -4.8218079, 1.8529997)
 rotation_degrees = Vector3(0, 0, 0)
 
-[node name="Rail_01_05" parent="Tile_05_01" instance=ExtResource("guardrail_5m")]
-position = Vector3(0.0000000, 0.0000000, 2.2299995)
-rotation_degrees = Vector3(0, 0, 0)
-
 [node name="Beacon_01" parent="Tile_05_01" instance=ExtResource("corner_beacon")]
 position = Vector3(2.1099997, -1.0799999, 2.1099997)
 rotation_degrees = Vector3(0, 0, 0)
 
 [node name="Fascia_02_01" parent="Tile_05_01" instance=ExtResource("reactor_fascia_5m")]
 position = Vector3(1.8529987, -4.8218079, 0.0000010)
-rotation_degrees = Vector3(0, 90, 0)
-
-[node name="Rail_02_01" parent="Tile_05_01" instance=ExtResource("guardrail_5m")]
-position = Vector3(2.2299986, 0.0000000, 0.0000010)
-rotation_degrees = Vector3(0, 90, 0)
-
-[node name="Sentry_02_01" parent="Tile_05_01" instance=ExtResource("perimeter_sentry")]
-position = Vector3(8.1929989, -1.3250000, 0.1500006)
 rotation_degrees = Vector3(0, 90, 0)
 
 [node name="Tile_05_02" type="Node3D" parent="."]
@@ -480,18 +365,6 @@ rotation_degrees = Vector3(0, 90, 0)
 position = Vector3(1.8529997, -4.8218079, 0.0000010)
 rotation_degrees = Vector3(0, 90, 0)
 
-[node name="Rail_02_02" parent="Tile_05_02" instance=ExtResource("guardrail_5m")]
-position = Vector3(2.2299995, 0.0000000, 0.0000010)
-rotation_degrees = Vector3(0, 90, 0)
-
-[node name="Sentry_02_02" parent="Tile_05_02" instance=ExtResource("perimeter_sentry")]
-position = Vector3(8.1929989, -1.3250000, 1.7700014)
-rotation_degrees = Vector3(0, 90, 0)
-
-[node name="Sentry_02_03" parent="Tile_05_02" instance=ExtResource("perimeter_sentry")]
-position = Vector3(8.1930008, -1.3250000, -1.6199987)
-rotation_degrees = Vector3(0, 90, 0)
-
 [node name="Tile_05_03" type="Node3D" parent="."]
 position = Vector3(10, 0, 0)
 
@@ -505,10 +378,6 @@ rotation_degrees = Vector3(0, 0, 0)
 
 [node name="Fascia_02_03" parent="Tile_05_03" instance=ExtResource("reactor_fascia_5m")]
 position = Vector3(1.8529997, -4.8218079, 0.0000009)
-rotation_degrees = Vector3(0, 90, 0)
-
-[node name="Sentry_02_04" parent="Tile_05_03" instance=ExtResource("perimeter_sentry")]
-position = Vector3(8.1930008, -1.3250000, -0.9399986)
 rotation_degrees = Vector3(0, 90, 0)
 
 [node name="Tile_05_04" type="Node3D" parent="."]
@@ -526,14 +395,6 @@ rotation_degrees = Vector3(0, 90, 0)
 position = Vector3(1.8529997, -4.8218079, 0.0000010)
 rotation_degrees = Vector3(0, 90, 0)
 
-[node name="Rail_02_04" parent="Tile_05_04" instance=ExtResource("guardrail_5m")]
-position = Vector3(2.2299995, 0.0000000, 0.0000010)
-rotation_degrees = Vector3(0, 90, 0)
-
-[node name="Grapple_02" parent="Tile_05_04" instance=ExtResource("articulated_grapple")]
-position = Vector3(6.1218548, -7.6584749, -2.1499987)
-rotation_degrees = Vector3(0, 90, 0)
-
 [node name="Tile_05_05" type="Node3D" parent="."]
 position = Vector3(10, 0, -10)
 
@@ -549,22 +410,10 @@ rotation_degrees = Vector3(0, 0, 0)
 position = Vector3(1.8530006, -4.8218079, 0.0000010)
 rotation_degrees = Vector3(0, 90, 0)
 
-[node name="Rail_02_05" parent="Tile_05_05" instance=ExtResource("guardrail_5m")]
-position = Vector3(2.2300005, 0.0000000, 0.0000010)
-rotation_degrees = Vector3(0, 90, 0)
-
 [node name="Beacon_02" parent="Tile_05_05" instance=ExtResource("corner_beacon")]
 position = Vector3(2.1100006, -1.0799999, -2.1099987)
 rotation_degrees = Vector3(0, 90, 0)
 
 [node name="Fascia_03_01" parent="Tile_05_05" instance=ExtResource("reactor_fascia_5m")]
 position = Vector3(0.0000010, -4.8218079, -1.8529987)
-rotation_degrees = Vector3(0, 180, 0)
-
-[node name="Rail_03_01" parent="Tile_05_05" instance=ExtResource("guardrail_5m")]
-position = Vector3(0.0000010, 0.0000000, -2.2299986)
-rotation_degrees = Vector3(0, 180, 0)
-
-[node name="Sentry_03_01" parent="Tile_05_05" instance=ExtResource("perimeter_sentry")]
-position = Vector3(0.1500006, -1.3250000, -8.1929989)
 rotation_degrees = Vector3(0, 180, 0)

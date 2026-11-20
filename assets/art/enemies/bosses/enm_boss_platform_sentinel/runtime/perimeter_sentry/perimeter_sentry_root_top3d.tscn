@@ -2,7 +2,10 @@
 
 [ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_platform_sentinel/components/perimeter_sentry/perimeter_sentry_visual_top3d.glb" id="1_visual"]
 
+[ext_resource type="Script" path="res://src/enemy3d/PlatformSentinelUnit3D.gd" id="2_unit"]
+
 [node name="perimeter_sentry" type="Node3D"]
+script = ExtResource("2_unit")
 metadata/asset_id = "ENM-BOSS-PLATFORM-SENTINEL-PERIMETER-SENTRY"
 metadata/asset_version = "v001"
 

@@ -350,7 +350,7 @@ func configure_elite_content(content_id: String, asset_id: String, scene_path: S
 
 func set_ai_state(state_id: String) -> void:
 	ai_state = state_id
-	if enemy_kind == "exploder" and has_formal_normal() and state_id == "dead":
+	if _base_kind == "exploder" and has_formal_normal() and state_id == "dead":
 		# 只读玩法已提交标志；通知发生在死亡当帧，不等下一次 _process。
 		var enemy := get_parent()
 		var exploded: bool = enemy != null and enemy.get("_active_explosion_committed") == true
@@ -750,7 +750,9 @@ func _find_formal_normal_skeleton() -> Skeleton3D:
 
 func _uses_formal_normal_model() -> bool:
 	# 七个借 exploder 的代理怪仍走旧程序壳；其它已正式化家族保留原路由。
-	return FORMAL_NORMAL_SCENES.has(_base_kind) and (_base_kind != "exploder" or enemy_kind == "exploder")
+	return FORMAL_NORMAL_SCENES.has(_base_kind) and (
+		_base_kind != "exploder" or enemy_kind in ["exploder", MonsterVariants.EXPLODER_STRONG]
+	)
 
 
 func _load_formal_normal_model() -> void:
@@ -764,6 +766,8 @@ func _load_formal_normal_model() -> void:
 	assert(scene != null, "Formal normal scene missing for %s" % enemy_kind)
 	_formal_normal_root = scene.instantiate() as Node3D
 	_formal_normal_root.name = "FormalNormal_%s" % enemy_kind
+	if enemy_kind in ["melee_chaser", "melee_chaser_strong"]:
+		_formal_normal_root.set("use_small_zombie_head_lift", true)
 	_root.add_child(_formal_normal_root)
 	_formal_normal_scene_path = scene_path
 	_shell.hide()

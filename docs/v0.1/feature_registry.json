@@ -757,6 +757,7 @@
         "docs/v0.1/design/胖子僵尸03运行配置.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-20_enemy_narrative_hold.md",
         "docs/v0.1/development/2026-11-16_exploder_speed30.md",
         "docs/v0.1/development/2026-11-16_exploder_mech_animation_import.md",
         "docs/v0.1/development/2026-11-16_police_zombie25_import.md",
@@ -940,6 +941,7 @@
         "docs/v0.1/development/2026-11-11_expedition01_flow.md",
         "docs/v0.1/development/2026-11-19_platform_sentinel_combat_tuning.md",
         "docs/v0.1/development/2026-11-19_platform_sentinel_refit.md",
+        "docs/v0.1/development/2026-11-20_platform_sentinel_units.md",
         "docs/v0.1/development/2026-11-19_shared_expedition_boss.md",
         "docs/v0.1/development/2026-11-19_shared_monitor_hp.md"
       ],
@@ -1371,6 +1373,7 @@
         "docs/v0.1/design/关卡进入与冷启动预热设计.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-20_enemy_narrative_hold.md",
         "docs/v0.1/development/CHANGELOG.md",
         "docs/v0.1/development/2026-10-12_main_story_documentation.md",
         "docs/v0.1/development/2026-09-23_new_save_handoff_and_scene_isolation.md",
@@ -1384,6 +1387,13 @@
         "docs/v0.1/development/2026-11-17_weapon_link_aftercare.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_enemy_narrative_hold",
+          "suite": "manual",
+          "runner": "scripts/run_enemy_narrative_hold_qa.py",
+          "requires": "Autoload 前隔离；真塔楼与 authored point/实体刷怪/F 键，程序化驱动，不代表人工全流程。"
+        },
         {
           "kind": "scene",
           "id": "verify_pistol_fate_capacity",

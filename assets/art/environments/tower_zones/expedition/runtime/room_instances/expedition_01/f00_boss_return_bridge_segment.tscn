@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/bridge_deck_5m/env_boss_room02_bridge_deck_5m_root_top3d.tscn" id="7_2maj4"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/bridge_truss_5m/env_boss_room02_bridge_truss_5m_root_top3d.tscn" id="8_mibqw"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/bridge_rail_5m/env_boss_room02_bridge_rail_5m_root_top3d.tscn" id="9_4r435"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/bridge_belly_5m/env_boss_room02_bridge_belly_5m_root_top3d.tscn" id="49_hdc8f"]
+
+[sub_resource type="BoxShape3D" id="Box_walk"]
+size = Vector3(5.02, 0.32, 5)
+
+[node name="EastBridgeExtension" type="AnimatableBody3D"]
+visible = false
+collision_layer = 0
+collision_mask = 0
+sync_to_physics = false
+
+[node name="GratingWalkSurface" type="CollisionShape3D" parent="."]
+position = Vector3(0, -0.16, 0)
+shape = SubResource("Box_walk")
+
+[node name="Grating" parent="." instance=ExtResource("7_2maj4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4415, 0.0000000)
+
+[node name="TrussSouth" parent="." instance=ExtResource("8_mibqw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.62, 2.2400000)
+
+[node name="RailSouth" parent="." instance=ExtResource("9_4r435")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0, 2.2400000)
+
+[node name="TrussNorth" parent="." instance=ExtResource("8_mibqw")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -1.62, -2.2400000)
+
+[node name="RailNorth" parent="." instance=ExtResource("9_4r435")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0, -2.2400000)
+
+[node name="Belly" parent="." instance=ExtResource("49_hdc8f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.2797687, 0.0000000)
