@@ -950,6 +950,8 @@
         "docs/v0.1/development/2026-11-19_platform_sentinel_combat_tuning.md",
         "docs/v0.1/development/2026-11-19_platform_sentinel_refit.md",
         "docs/v0.1/development/2026-11-20_platform_sentinel_units.md",
+        "docs/v0.1/development/2026-11-20_platform_sentinel_quadrants.md",
+        "docs/v0.1/development/2026-11-20_platform_sentinel_live_motion.md",
         "docs/v0.1/development/2026-11-19_shared_expedition_boss.md",
         "docs/v0.1/development/2026-11-19_shared_monitor_hp.md"
       ],
@@ -973,7 +975,9 @@
           "id": "verify_expedition01_platform_sentinel"
         },
         {
-          "id": "verify_expedition99_shared_boss"
+          "kind": "command",
+          "path": "scripts/run_verification_suite.sh",
+          "args": ["scene", "verify_expedition99_shared_boss"]
         },
         {
           "kind": "scene",

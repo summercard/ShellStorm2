@@ -4,6 +4,8 @@
 
 - ENEMY-AI / NARRATIVE-TRIGGER / VFX-POOL：[僵尸表现、炸弹果与剧情停战](development/2026-11-20_enemy_narrative_hold.md)。胖子移除外挂红点，小僵尸抬头，绿滩受光；炸弹果速度与步频翻倍，强化生命 ×4。验证结果与边界见开发记录。
 
+- BOSS-STAGES / WORLD-PLAN · [武装平台枪架屈伸与掌拍冲击](development/2026-11-20_platform_sentinel_live_motion.md)。01／99 共享表现修复，验收在动画帧完成后读枪口、连杆和镜头位移。
+- BOSS-STAGES / WORLD-PLAN · [武装平台错峰待机与分区掌拍](development/2026-11-20_platform_sentinel_quadrants.md)。四臂分区及锁定攻势、整台索敌和更宽的机械臂受击体。
 - BOSS-STAGES / WORLD-PLAN / ASSET-PIPELINE · [武装平台独立武装与回程装配](development/2026-11-20_platform_sentinel_units.md)。01、99 共用四个独立大臂、十六个独立枪架、完整回程格栅节段以及齐射联动屏幕。
 
 - BOSS-STAGES / WORLD-PLAN：[01／99显示器首战共享8000 HP](development/2026-11-19_shared_monitor_hp.md)；不改全局模板、其他关卡或平台四臂。

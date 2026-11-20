@@ -44,13 +44,13 @@ func request_hit(damage: int, maximum: int) -> void:
 ## `duration` 缺省等于旧的 `SHAKE_DURATION`，所以既有调用方（`ReactiveProp3D`）行为逐字不变。
 ## 短促的一次性动作要传更短的时长 —— 开箱的弹开只有 0.14s，
 ## 若还按 0.5s 抖下去，玩家会读到"地震"而不是"箱子弹开"。
-func request_environment_impact(strength: float = 1.0, duration: float = SHAKE_DURATION) -> void:
-	if suspended or _player == null or _player.current_hp <= 0:
+func request_environment_impact(strength: float = 1.0, duration: float = SHAKE_DURATION, peak_offset: float = 0.035) -> void:
+	if suspended or _player == null or _player.current_hp <= 0 or strength <= 0.0:
 		return
 	var span := clampf(duration, 0.05, SHAKE_DURATION)
-	_shake_amplitude = maxf(_shake_amplitude, 0.035 * clampf(strength, 0, 1))
+	_shake_amplitude = maxf(_shake_amplitude, clampf(peak_offset, 0.0, 0.35) * minf(strength, 1.0))
 	# 时长取两者较大：正在挨打的震动不该被一次开箱截短。
-	_shake_duration = maxf(_shake_duration, span)
+	_shake_duration = maxf(_shake_duration, span) if _shake_remaining > 0.0 else span
 	_shake_remaining = maxf(_shake_remaining, span)
 	_shake_clock = 0.0
 

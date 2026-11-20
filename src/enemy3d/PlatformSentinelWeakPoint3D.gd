@@ -12,6 +12,9 @@ var _enabled := false
 var _rig: Skeleton3D
 var _segments: Array[CollisionShape3D] = []
 var _bones: Array[int] = []
+var _palm: CollisionShape3D
+var aim_height := NAN
+var _deck_aim := Vector3.INF
 
 func configure(hp: int, rig: Skeleton3D) -> void:
 	max_hp = hp
@@ -23,13 +26,19 @@ func configure(hp: int, rig: Skeleton3D) -> void:
 		var index := rig.find_bone(bone)
 		assert(index >= 0, "Missing Platform Sentinel arm bone: " + bone)
 		_bones.append(index)
-	for radius in [0.72, 0.68, 0.72]:
+	for radius in [1.40, 1.24, 1.32]:
 		var segment := CollisionShape3D.new()
 		var capsule := CapsuleShape3D.new()
 		capsule.radius = radius
 		segment.shape = capsule
 		_segments.append(segment)
 		add_child(segment)
+	_palm = CollisionShape3D.new()
+	_palm.name = "PalmHitShape"
+	var palm_shape := SphereShape3D.new()
+	palm_shape.radius = 1.60
+	_palm.shape = palm_shape
+	add_child(_palm)
 	add_to_group("damageable_3d")
 	add_to_group("aim_assist_target_3d")
 
@@ -39,6 +48,14 @@ func sync_pose() -> void:
 	for index in _bones:
 		joints.append(_rig.to_global(_rig.get_bone_global_pose(index).origin))
 	global_position = (joints[2] + joints[3]) * 0.5
+	_palm.global_position = joints[3]
+	_deck_aim = Vector3.INF
+	if is_finite(aim_height):
+		var low := joints[0]
+		if not is_equal_approx(joints[0].y, joints[1].y):
+			low = low.lerp(joints[1], clampf(inverse_lerp(joints[0].y, joints[1].y, aim_height), 0.0, 1.0))
+		if absf(low.y - aim_height) < 0.8:
+			_deck_aim = Vector3(low.x, aim_height, low.z)
 	for i in range(_segments.size()):
 		var axis := joints[i + 1] - joints[i]
 		var capsule := _segments[i].shape as CapsuleShape3D
@@ -64,7 +81,10 @@ func get_melee_hit_points() -> Array[Vector3]:
 
 
 func get_aim_assist_points() -> Array[Vector3]:
-	return get_melee_hit_points()
+	var points := get_melee_hit_points()
+	if _enabled and _deck_aim.is_finite():
+		points.append(_deck_aim)
+	return points
 
 
 func take_damage(amount: int, _critical := false, _direction := Vector3.ZERO, _knockback := 0.0) -> void:
@@ -75,7 +95,7 @@ func take_projectile_damage(amount: int, _critical: bool, direction: Vector3, _t
 	var point := global_position
 	if is_instance_valid(attacker):
 		var nearest := INF
-		for sample in get_melee_hit_points():
+		for sample in get_aim_assist_points():
 			var offset := sample - attacker.global_position
 			var distance := offset.cross(direction).length_squared()
 			if offset.dot(direction) > 0.0 and distance < nearest:

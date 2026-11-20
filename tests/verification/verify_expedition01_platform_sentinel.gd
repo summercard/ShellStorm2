@@ -64,7 +64,7 @@ func _run() -> void:
 	var arm := fight.grapples[0]
 	arm.play("attack_grapple_slam", 0.0, 0.0)
 	var windup := fight._palm_world(0)
-	arm.play("attack_grapple_slam", 0.0, FIGHT.IMPACT)
+	arm.play("attack_grapple_slam", 0.0, FIGHT.SLAM_CONTACT_POSE)
 	var contact := fight.to_local(fight._palm_world(0))
 	check(windup.distance_to(fight._palm_world(0)) > 1.3 and absf(contact.y) < 0.45 and absf(contact.z) < 12.5, "imported palm moves and lands on the platform")
 	print("PLATFORM_POSE ", fight.to_local(windup), " -> ", contact)
@@ -166,7 +166,7 @@ func _run() -> void:
 	check(fascia_top < 0.0, "the lifted outer shell stays below the walk surface")
 	check(screen.position.is_equal_approx(screen_rest + Vector3.FORWARD * 6.0), "three screen groups finish their authored retraction")
 	check(not await _rail_projectile(), "same real projectile passes the rail lane in phase two")
-	check(await _hit_arms_with_projectiles(), "four actual projectiles damage the four arms independently")
+	check(await _hit_arms_with_projectiles(), "four deck-height grazing shots damage their own widened arm volumes")
 	_verify_boss_camera("combat")
 	await _capture("combat_no_rails")
 	check(not _floor(Vector3(0, 0.75, 15)) and _floor(Vector3(0, 4, 29)), "only lower staircase segments fall")
@@ -333,36 +333,29 @@ func _load_expedition() -> void:
 	await get_tree().physics_frame
 
 func _verify_attack_rules() -> void:
-	fight.set_physics_process(false)
-	fight._finish_standby()
-	var saved_clock := fight._clock
-	var saved_attack := fight._next_attack_at
-	fight._standby_rng.seed = 179
-	var variants := {"arm": {}, "rack": {}}
-	for sample in range(20):
-		fight._clock += 5.0
-		fight._tick_standby()
-		var arm_anim := fight._standby_arm.find_child("AnimationPlayer", true, false) as AnimationPlayer
-		var rack_anim := fight._standby_rack.find_child("AnimationPlayer", true, false) as AnimationPlayer
-		variants.arm[arm_anim.current_animation] = true
-		variants.rack[rack_anim.current_animation] = true
-	check(variants.arm.size() == 2 and variants.rack.size() == 2 and fight._next_attack_at == saved_attack,
-		"both authored standby variants per family leave attack timing untouched")
-	fight._clock = saved_clock
-	fight._next_standby_at = 0.0
-	fight._standby_end = 0.0
+	await _verify_standby_and_regions()
 	var rider := tower.player
 	rider.global_position = fight.to_global(Vector3(0.1, 0.08, 0.2))
 	rider.velocity = Vector3.ZERO
 	await get_tree().physics_frame
+	await _verify_gun_deck_awareness(rider)
+	rider.global_position = fight.to_global(Vector3(0.1, 0.08, 0.2))
+	rider.velocity = Vector3.ZERO
+	await get_tree().physics_frame
 	fight._clock = 2.0
+	fight._prefer_palm = false
 	fight._tick_combat(0.0, fight.to_local(rider.global_position))
-	check(fight._active_arm < 0 and fight._active_gun >= 0, "central target gets a gun burst instead of an out-of-range slam")
-	check(fight._standby_arm == null and fight._standby_rack == null, "gun attack interrupts both standby clips")
+	check(fight._active_arm < 0 and fight._active_gun >= 0, "the normal rotation can still choose a gun burst in the center")
 	if fight._active_gun >= 0:
 		var index := fight._active_gun
 		var original: Array[Vector3] = fight._barrage_lanes[index].duplicate()
 		var rack := fight.sentries[index]
+		var spectator := fight.sentries[(index + 1) % fight.sentries.size()]
+		var previous := spectator.rig.get_bone_pose_rotation(spectator.rig.find_bone("gimbal_pitch"))
+		fight._clock += 0.30
+		fight._tick_standby()
+		var next := spectator.rig.get_bone_pose_rotation(spectator.rig.find_bone("gimbal_pitch"))
+		check(rack._standby_rest.is_empty() and previous.angle_to(next) > 0.025, "the launching rack owns its fire pose while a neighboring rack continues scanning")
 		check(absf(fight.to_local(original[0]).y - 1.30) < 0.15 and is_equal_approx(original[0].y, original[1].y), "locked burst launches at 1.3 m from the real muzzle")
 		check(fight._shot_lane(rack)[0].distance_to(original[0]) < 0.05, "muzzle matches the locked firing lane")
 		check(fight.find_children("GunFeed_*", "", true, false).is_empty(), "gun feeds are no longer targets")
@@ -371,20 +364,21 @@ func _verify_attack_rules() -> void:
 			var hp := rider.current_hp
 			check(_gun_strip_count() == 0 and fight._rounds.is_empty(), "burst charges without long strip or early projectile")
 			await _capture("gun_charge_no_strips")
-			fight._tick_gun(0.91)
+			fight._tick_gun(FIGHT.BURST_TIMES[0] + 0.01)
 			check(fight._rounds.size() == 1 and rider.current_hp == hp, "first shot spawns a projectile without instant damage")
 			if not fight._rounds.is_empty():
 				var first := fight._rounds[0]
 				check(is_equal_approx(first.speed, FIGHT.BULLET_SPEED) and first.direction.dot(locked[0].direction_to(locked[1])) > 0.999, "first projectile has slow speed and matches the locked firing line")
+				check(first.range_m == 40.0 and first.range_m / first.speed > 4.7 and fight._has_deck_rounds(), "normal shot remains live along the full platform crossing")
 				var initial := first.global_position
 				for i in range(18):
 					await get_tree().physics_frame
 				check(first.visible and first.global_position.distance_to(initial) > 1.0 and rider.current_hp == hp, "visible projectile travels for multiple frames before reaching the player")
 				check(absf(fight.to_local(first.global_position).y - FIGHT.GUN_FLIGHT_HEIGHT) <= 0.06 and first.shooter == rack,
 					"a real shot descends from the socket to the player's hit band and names its own rack")
-			fight._tick_gun(0.80)
+			fight._tick_gun(FIGHT.BURST_TIMES[2] - FIGHT.BURST_TIMES[0])
 			check(fight._shot_index == 3 and fight._rounds.size() == 3, "first three shots spawn separately along the fixed axis")
-			fight._tick_gun(0.55)
+			fight._tick_gun(FIGHT.BURST_TIMES[3] - FIGHT.BURST_TIMES[2])
 			var pellets := fight._rounds.filter(func(round: Projectile3D) -> bool: return is_equal_approx(round.speed, FIGHT.PELLET_SPEED))
 			check(fight._shot_index == 4 and pellets.size() == 5 and _gun_strip_count() == 0, "fourth shot creates a five-pellet fan without strips")
 			for i in range(144):
@@ -393,40 +387,155 @@ func _verify_attack_rules() -> void:
 			fight._finish_gun(true)
 			fight._cancel_rounds()
 	await _verify_barrage_patterns()
-	for unit in fight.grapples:
-		check(unit.slam_slots.size() == 2, "each grapple has inward and outward choices")
-	var local: Vector3 = fight.grapples[0].slam_slots[1].point
-	rider.global_position = fight.to_global(Vector3(local.x, 0.08, local.z - 1.2))
+	rider.global_position = fight.to_global(Vector3(0.24, 0.08, 0.27))
 	rider.velocity = Vector3.ZERO
 	await get_tree().physics_frame
-	check(fight._start_slam(), "eligible grapple starts its actual inward strike")
+	check(fight._start_slam(), "the entrance arm can commit a strike toward the center of its quadrant")
 	if fight._active_arm >= 0:
 		var selected := fight._active_arm
 		var target := fight._arm_targets[selected]
 		var contact := fight._slam_point
-		check(absf(fight._slam_angle) > 0.1, "inward pose uses the shoulder axis")
+		var hp := rider.current_hp
+		check(selected == 0 and fight.grapples[selected].global_position.distance_to(contact) > 14.0, "center coverage uses a long real reach from the correct arm")
+		rider.global_position = fight.to_global(Vector3(-8.0, 0.08, -8.0))
+		fight._tick_slam(FIGHT.SLAM_LOAD_END, fight.to_local(rider.global_position))
+		var raised := fight._palm_world(selected)
+		check(fight._active_arm == selected and fight._slam_point == contact, "crossing the quarter boundary does not retarget or cancel a committed windup")
 		await _capture("palm_windup")
-		fight._tick_slam(FIGHT.IMPACT, fight.to_local(rider.global_position))
+		rider.camera_feedback.reset()
+		fight._tick_slam(FIGHT.IMPACT - FIGHT.SLAM_LOAD_END + 0.01, fight.to_local(rider.global_position))
 		var actual := fight._palm_world(selected)
-		check((actual - contact).slide(Vector3.UP).length() < 0.065 and absf(fight.to_local(actual).y) < 0.10, "palm lands at its actual authored contact without a ground marker")
+		check(actual.distance_to(contact) < 0.065 and rider.current_hp == hp, "extended palm lands on its locked point and the player who left avoids damage")
+		check(raised.y - actual.y > 1.5, "loaded palm drops visibly during the short powered downstroke")
+		var shake_peak := 0.0
+		for sample in range(6):
+			await get_tree().physics_frame
+			var camera := rider.camera
+			shake_peak = maxf(shake_peak, Vector2(camera.h_offset, camera.v_offset).length())
+		check(shake_peak > 0.08, "a dodged palm strike still displaces the active gameplay camera")
+		print("PLATFORM_SLAM_DROP ", raised.y - actual.y, " m, shake offset ", shake_peak, " m")
+		await _capture("palm_impact")
 		target.sync_pose()
-		check(target.get_melee_hit_points().size() == 4 and target.get_shape_owners().size() == 3, "three arm volumes share a single damage body")
+		check(target.get_melee_hit_points().size() == 4 and target.get_shape_owners().size() == 4, "three wider links and the palm share one damage body")
 		var was := fight._next_attack_at
-		check(was >= fight._clock + 1.19, "recovery reserves 1.2 seconds of response time")
-		fight._tick_slam(FIGHT.SLAM_RESPONSE - 0.01, fight.to_local(rider.global_position))
+		check(was >= fight._clock + FIGHT.SLAM_RESPONSE, "recovery reserves one second of response time")
+		fight._tick_slam(FIGHT.SLAM_RESPONSE - 0.02, fight.to_local(rider.global_position))
 		target.sync_pose()
 		var points := target.get_melee_hit_points()
 		check(points.size() == 4 and (points[3] - actual).length() < 1.8, "wrist stays reachable throughout the response window")
-		fight._tick_slam(0.08, fight.to_local(rider.global_position))
+		fight._tick_slam(0.22, fight.to_local(rider.global_position))
 		target.sync_pose()
 		check(target.get_melee_hit_points()[3].distance_to(points[3]) > 0.03, "wrist target follows the returning arm")
-		fight._finish_slam(true)
+		fight._tick_slam(1.0, fight.to_local(rider.global_position))
 		target.sync_pose()
-		check(target.get_melee_hit_points().size() == 4, "arm remains targetable after recovery")
+		check(fight._active_arm < 0 and target.get_melee_hit_points().size() == 4, "even a missed swing completes recovery and returns the arm to standby")
 	rider.global_position = fight.to_global(Vector3(0.1, 0.08, 0.8))
 	rider.velocity = Vector3.ZERO
 	fight.set_physics_process(true)
 	await get_tree().physics_frame
+
+
+func _verify_gun_deck_awareness(rider: Player3D) -> void:
+	var anchor := fight.to_global(Vector3(-11.6, 0.08, 11.6))
+	var cover := StaticBody3D.new()
+	var shape := CollisionShape3D.new()
+	var plate := BoxShape3D.new()
+	plate.size = Vector3(2.4, 0.12, 2.4)
+	shape.shape = plate
+	cover.add_child(shape)
+	fight.add_child(cover)
+	cover.global_position = Vector3(anchor.x, fight.global_position.y + 1.30, anchor.z)
+	rider.global_position = anchor
+	rider.velocity = Vector3.ZERO
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	var saved_ready := fight._gun_ready.duplicate()
+	var saved_attack := fight._next_attack_at
+	fight._gun_ready.fill(INF)
+	fight._gun_ready[2] = 0.0
+	var chosen := fight._start_gun()
+	check(chosen and fight._side_of(fight._active_gun) == 2, "a distant ready bank can acquire the opposite corner when nearby banks are cooling")
+	if chosen:
+		var lane: Array[Vector3] = fight._barrage_lanes[fight._active_gun]
+		var eye := Vector3(anchor.x, lane[0].y, anchor.z)
+		check(fight._obstruction(lane[0], eye).get("collider") == cover, "cover blocks the old sight ray but does not prevent deck-wide acquisition")
+		fight._tick_gun(FIGHT.BURST_TIMES[0] + 0.01)
+		if not fight._rounds.is_empty():
+			var shot := fight._rounds[0]
+			shot.global_position = lane[0] + shot.direction * 39.7
+		check(not fight._rounds.is_empty() and not fight._has_deck_rounds(), "long flight beyond the deck remains visible without blocking the scheduler")
+	fight._finish_gun(true)
+	fight._cancel_rounds()
+	fight._gun_ready.assign(saved_ready)
+	fight._next_attack_at = saved_attack
+	cover.queue_free()
+
+
+func _verify_standby_and_regions() -> void:
+	var saved_clock := fight._clock
+	var saved_attack := fight._next_attack_at
+	fight._finish_slam(true)
+	fight._finish_gun(true)
+	fight._cancel_rounds()
+	tower.player.global_position = fight.to_global(Vector3(-9.1, 0.08, -5.0))
+	tower.player.velocity = Vector3.ZERO
+	fight._next_attack_at = INF
+	fight.set_physics_process(true)
+	var units: Array[PlatformSentinelUnit3D] = []
+	units.append_array(fight.grapples)
+	units.append_array(fight.sentries)
+	var starts: Array[Quaternion] = []
+	var changes := PackedFloat32Array()
+	var muzzles := PackedVector3Array()
+	var muzzle_changes: Array[float] = []
+	var separation := 0.0
+	await get_tree().create_timer(0.12).timeout
+	for unit in units:
+		var bone := unit._standby_bones[1 if unit.grapple else 3]
+		starts.append(unit.rig.get_bone_pose_rotation(bone))
+		changes.append(0.0)
+	for rack in fight.sentries:
+		muzzles.append(rack.socket(&"muzzle_exit").global_position)
+		muzzle_changes.append(0.0)
+	for sample in range(24):
+		# SceneTreeTimer runs after AnimationPlayer's frame, including its normal pose writes.
+		await get_tree().create_timer(0.10).timeout
+		for i in range(units.size()):
+			var unit := units[i]
+			var bone := unit._standby_bones[1 if unit.grapple else 3]
+			var pose := unit.rig.get_bone_pose_rotation(bone)
+			changes[i] = maxf(changes[i], starts[i].angle_to(pose))
+		for i in range(fight.sentries.size()):
+			var muzzle := fight.sentries[i].socket(&"muzzle_exit").global_position
+			muzzle_changes[i] = maxf(muzzle_changes[i], muzzles[i].distance_to(muzzle))
+		var first := fight.sentries[13].rig.get_bone_pose_rotation(fight.sentries[13]._standby_bones[3])
+		var second := fight.sentries[14].rig.get_bone_pose_rotation(fight.sentries[14]._standby_bones[3])
+		separation = maxf(separation, first.angle_to(second))
+		if sample in [4, 10, 16]:
+			await _capture("west_sentry_standby_%02d" % sample)
+	fight.set_physics_process(false)
+	var moving := 0
+	for changed in changes:
+		moving += int(changed > 0.17)
+	check(moving == 20 and separation > 0.19, "20 idle joints keep moving past frame evaluation and west forearms are out of phase")
+	check(muzzle_changes.min() > 0.85, "every sentry muzzle moves visibly during live standby")
+	print("PLATFORM_STANDBY ", moving, " units, min muzzle travel ", muzzle_changes.min(), " m, west forearm difference ", rad_to_deg(separation), " degrees")
+	check(is_inf(fight._next_attack_at) and fight._rounds.is_empty(), "standby has no damage or attack scheduling effects")
+	fight._clock = saved_clock
+	fight._next_attack_at = saved_attack
+	var coverage := [0, 0, 0, 0]
+	var gaps := 0
+	for x in range(-12, 13):
+		for z in range(-12, 13):
+			var who := 0
+			for i in range(fight.grapples.size()):
+				var target := fight.to_global(Vector3(float(x) * 1.037, 0.08, float(z) * 1.037))
+				if not fight.grapples[i].choose_slam(fight, target, INF).is_empty():
+					who += 1
+					coverage[i] += 1
+			gaps += int(who != 1)
+	check(gaps == 0 and coverage.min() >= 144, "625 deck samples each have exactly one correct arm, including center and edge")
+	print("PLATFORM_QUADRANTS ", coverage, " gaps=", gaps)
 
 
 # The retired ground strips were direct children, with 0.63 m × 0.028 m cross-sections.
@@ -445,8 +554,9 @@ func _verify_barrage_patterns() -> void:
 	check(fight._start_pattern(FIGHT.Barrage.CROSS), "cross pattern selects two opposite gun banks")
 	if fight._barrage == FIGHT.Barrage.CROSS:
 		check(fight._barrage_lanes.size() == 8 and _gun_strip_count() == 0, "first cross bank locks lanes without strips")
-		fight._tick_gun(1.06)
+		fight._tick_gun(FIGHT.CROSS_TIMES[0] + 0.01)
 		check(fight._rounds.size() == 12 and _gun_strip_count() == 0, "cross launches 12 pellets without next-bank strips")
+		check(fight._rounds.all(func(pellet: Projectile3D) -> bool: return pellet.range_m == 34.0), "cross pellets travel up to 34 meters")
 		fight._cancel_rounds()
 		fight._tick_gun(1.50)
 		check(fight._rounds.size() == 12 and fight._cross_at == 24.0 + FIGHT.CROSS_COOLDOWN, "second cross bank follows after 1.5s with a skill cooldown")
@@ -455,13 +565,14 @@ func _verify_barrage_patterns() -> void:
 	check(fight._start_pattern(FIGHT.Barrage.VOLLEY), "volley prepares all four sides")
 	if fight._barrage == FIGHT.Barrage.VOLLEY:
 		check(fight._barrage_lanes.size() == 16 and _gun_strip_count() == 0, "sixteen racks prepare without strips")
-		fight._tick_gun(0.98)
+		fight._tick_gun(FIGHT.VOLLEY_TIMES[0] - 0.12)
 		check(float(fight.deck._feed_faces[12].get_instance_shader_parameter("gun_alert")) > 0.2,
 			"full volley flashes the shared deck canvas before release")
 		for elapsed in [0.13, 1.50, 1.50]:
 			fight._tick_gun(elapsed)
 			check(fight._rounds.size() == 80, "volley emits five pellets from each of 16 racks per pulse")
 			if fight._shot_index == 1:
+				check(fight._rounds.all(func(pellet: Projectile3D) -> bool: return pellet.range_m == 29.5 and pellet.range_m / pellet.speed > 3.9), "volley pellets stay live across the opposite half")
 				for i in range(28):
 					await get_tree().physics_frame
 				check(fight._rounds.size() >= 72, "most volley pellets clear the mount and enter the deck")
@@ -667,20 +778,32 @@ func _verify_fall() -> void:
 
 
 func _hit_arms_with_projectiles() -> bool:
+	fight.set_physics_process(false)
 	var ok := true
 	for index in range(fight._arm_targets.size()):
 		var target := fight._arm_targets[index]
+		target.sync_pose()
+		var points := target.get_aim_assist_points()
+		if points.size() < 5:
+			ok = false
+			continue
+		var center: Vector3 = points.back()
+		var toward := (center - fight.global_position).slide(Vector3.UP).normalized()
+		var center_line := center - toward * 6.5
+		var edge_offset := toward.cross(Vector3.UP) * 0.98
 		var before := fight.arm_health()
-		var point := target.get_melee_hit_points()[1]
-		var from := point + Vector3.UP * 2.4
-		var shot := fight._projectiles.acquire({"shooter": tower.player, "direction": Vector3.DOWN,
-			"speed": 20.0, "range": 4.0, "damage": 17, "projectile_collision_mask": 5}, from)
-		for frame in range(12):
+		var from := center_line + edge_offset
+		var shot := fight._projectiles.acquire({"shooter": tower.player, "direction": toward,
+			"speed": 30.0, "range": 12.0, "damage": 17, "projectile_collision_mask": 5}, from)
+		for frame in range(22):
 			await get_tree().physics_frame
 		if shot._active:
-			shot._retire()
+			shot.cancel()
 		before[index] -= 17
-		ok = ok and fight.arm_health() == before
+		var hit := fight.arm_health() == before
+		print("PLATFORM_ARM_GRAZE ", index, " y=", fight.to_local(from).y, " hit=", hit)
+		ok = ok and hit
+	fight.set_physics_process(true)
 	return ok
 
 
