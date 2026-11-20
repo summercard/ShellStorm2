@@ -14,3 +14,4 @@ metadata/collision_owner = "Enemy3D"
 metadata/godot_forward = "-Z"
 
 [node name="VisualGLB" parent="." instance=ExtResource("2_glb")]
+position = Vector3(0, -0.003, 0)

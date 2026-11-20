@@ -17,5 +17,6 @@ metadata/weapon_mode = "embedded_skin"
 metadata/source_blend = "art_source/enemies/normal_enemy_3d/police_zombie25/source/animation/police_zombie_25_animation_v002.blend"
 
 [node name="VisualGLB" parent="." instance=ExtResource("2_glb")]
+position = Vector3(0, -0.003, 0)
 rotation = Vector3(0, 3.14159265, 0)
 scale = Vector3(1.85804992, 1.85804992, 1.85804992)
