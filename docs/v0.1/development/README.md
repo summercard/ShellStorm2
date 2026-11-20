@@ -1,3 +1,5 @@
+- WORLD-ENTRY / VFX-POOL · [99F 返航火球修复](2026-11-20_return_vfx_cleanup.md)。记录开圈时的破门特效复现、回收时序及回归结果。
+
 - ENEMY-AI / NARRATIVE-TRIGGER / VFX-POOL：[僵尸表现、炸弹果与剧情停战](2026-11-20_enemy_narrative_hold.md)。胖子移除外挂红点，小僵尸抬头，绿滩受光；炸弹果速度与步频翻倍，强化生命 ×4。验证结果与边界见开发记录。
 
 - [武装平台独立武装与回程装配](2026-11-20_platform_sentinel_units.md)。完整桥段、机械搜索、落掌夺权、角色高度弹道和独立装配。

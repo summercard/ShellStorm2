@@ -126,8 +126,7 @@ static func has_effect(asset_id: StringName) -> bool:
 @export var max_per_kind: int = 32
 @export var spawn_parent_path: NodePath
 
-## 预热件的尺寸（世界米）。**亚像素**：1.5 m 处约 0.8 mm，任何分辨率下都不足一个像素，
-## 所以哪怕遮挡没跟上也出不了可见的闪点。见 `prewarm()`。
+## 预热传给特效的尺寸。实际渲染还受场景相机和材质影响。
 const PREWARM_SIZE := 0.0008
 ## 预热件摆在相机前多远。必须**在视锥内** —— 视锥外会被裁掉，裁掉就不绘制，
 ## 不绘制就不编译管线，预热等于没做（这是本函数唯一容易写错的地方）。
@@ -139,6 +138,7 @@ var _spawn_parent: Node3D
 ## 待预热队列。每帧只取一个 —— 单个特效的首次绘制要 20~65 ms，
 ## 一次全做等于在加载末尾塞一个 120 ms 的硬冻结。
 var _prewarm_queue: Array[StringName] = []
+var _prewarm_active: Array[VfxEffectBase3D] = []
 
 func _ready() -> void:
 	add_to_group("vfx_pool_3d")
@@ -185,8 +185,7 @@ func _ready() -> void:
 ##
 ## ## 为什么尺寸是 0.0008
 ##
-## 亚像素（1.5 m 处约 0.8 mm）。预热发生在加载过场背后，玩家看不到；万一遮挡没跟上，
-## 这个尺寸也出不了可见的闪点。**它是"以防万一"，不是"必需"**。
+## 尽量缩小预热件的绘制范围。读取页负责在移除遮罩前结束预热。
 ##
 ## ## 队列而不是一把梭
 ##
@@ -212,7 +211,9 @@ func _process(_delta: float) -> void:
 	var camera := get_viewport().get_camera_3d()
 	if camera != null:
 		origin = camera.global_position - camera.global_basis.z * PREWARM_DISTANCE
-	acquire(asset_id, origin, Color.WHITE, PREWARM_SIZE)
+	var effect := acquire(asset_id, origin, Color.WHITE, PREWARM_SIZE)
+	if effect != null:
+		_prewarm_active.append(effect)
 	if _prewarm_queue.is_empty():
 		set_process(false)
 
@@ -226,6 +227,17 @@ func has_pending_prewarm() -> bool:
 ## 「还剩 0 件」和「还剩 9 件」在只有 bool 时是同一个 `true`，看不出差多少。
 func pending_prewarm_count() -> int:
 	return _prewarm_queue.size()
+
+
+## 停止本轮预热，已装配的实例通过正常回收信号归还。
+func finish_prewarm() -> void:
+	_prewarm_queue.clear()
+	set_process(false)
+	# finish() 同步触发 retire()，因此遍历快照。
+	for effect in _prewarm_active.duplicate():
+		if is_instance_valid(effect):
+			effect.finish()
+	_prewarm_active.clear()
 
 
 ## 进关卡后第一批战斗反馈会用到的那批。顺序按"最先被撞上"的概率排。
@@ -282,6 +294,7 @@ func retire(asset_id: StringName, effect: VfxEffectBase3D) -> void:
 	if not _active.has(asset_id):
 		return
 	_active[asset_id].erase(effect)
+	_prewarm_active.erase(effect)
 	if not _inactive.has(asset_id):
 		_inactive[asset_id] = []
 	if _inactive[asset_id].size() >= max_per_kind:
@@ -295,6 +308,7 @@ func clear_kind(asset_id: StringName) -> void:
 	if not _active.has(asset_id):
 		return
 	for eff in _active[asset_id]:
+		_prewarm_active.erase(eff)
 		if is_instance_valid(eff):
 			eff.queue_free()
 	_active[asset_id].clear()
@@ -302,6 +316,7 @@ func clear_kind(asset_id: StringName) -> void:
 ## 只结束当前正在播放的特效，保留 inactive 预热池供后续场景复用。
 ## 场景切换/本局结束时调用，避免 active VFX 跨场景残留。
 func clear_active() -> void:
+	finish_prewarm()
 	for asset_id in _active.keys():
 		# finish() 会同步发出 retired，不能直接遍历原数组。
 		var active_effects: Array = _active[asset_id].duplicate()

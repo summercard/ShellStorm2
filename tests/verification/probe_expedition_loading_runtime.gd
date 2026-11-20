@@ -67,6 +67,7 @@ func _observe_loading(screen: ExpeditionLoadingScreen, label: String) -> void:
 	var visible_frame_gaps: Array[int] = []
 	var previous_content_visible := true
 	var assembly_frames := 0
+	var return_prewarm_sampled := false
 	while is_instance_valid(screen) and Time.get_ticks_msec() < deadline:
 		await get_tree().process_frame
 		var now_msec := Time.get_ticks_msec()
@@ -81,6 +82,11 @@ func _observe_loading(screen: ExpeditionLoadingScreen, label: String) -> void:
 		if elapsed > 0.4 and elapsed < 1.98:
 			_check(screen._content.modulate.a > 0.95, "%s 兔子/文字在2秒前淡出" % label)
 		var target := get_tree().current_scene as TowerDescent3D
+		if label == "return" and target != null and not screen.visible and DisplayServer.get_name() != "headless":
+			var warmup: Dictionary = target.get_meta("loading_warmup_report", {})
+			return_prewarm_sampled = int(warmup.get("vfx_total", 0)) > 0
+			_check(not VfxPool.has_pending_prewarm(), "99F 开圈时仍有预热特效排队")
+			_check(VfxPool.active_count(VfxPool3D.FX01_FAT_ENTRY_BREACH) == 0, "99F 开圈时破门特效仍在池中播放")
 		if label == "entry" and target != null:
 			if screen._content.modulate.a > 0.01:
 				_check(not target.visible, "远征装配期间提前显示世界")
@@ -114,6 +120,8 @@ func _observe_loading(screen: ExpeditionLoadingScreen, label: String) -> void:
 	_check(not is_instance_valid(screen), "%s 读取页超时" % label)
 	if label == "entry":
 		_check(assembly_frames > 1, "远征装配未分帧推进")
+	elif DisplayServer.get_name() != "headless":
+		_check(return_prewarm_sampled, "未采样到完成特效预热后的 99F 开圈")
 	var seconds := float(Time.get_ticks_msec() - started) / 1000.0
 	_check(seconds >= 2.0, "%s 读取页不足2秒：%.3f" % [label, seconds])
 	if label == "entry":

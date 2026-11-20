@@ -24,6 +24,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	if pool.active_count(asset_id) != 0 or pool.inactive_count(asset_id) != 0:
 		failures.append("场景清理后特效池仍保留active或inactive引用")
+	_check_prewarm_cleanup(pool, failures)
 	pool.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
@@ -33,3 +34,29 @@ func _ready() -> void:
 	for failure in failures:
 		push_error(failure)
 	get_tree().quit(1)
+
+
+func _check_prewarm_cleanup(pool: VfxPool3D, failures: Array[String]) -> void:
+	var id := VfxPool3D.FX01_IMPACT
+	var other_id := VfxPool3D.FX01_EXPLOSION
+	pool.prewarm([id])
+	pool._process(0.0)
+	var expired: VfxEffectBase3D = pool._active[id][0]
+	expired.finish()
+	var playing := pool.acquire(id, Vector3.ZERO, Color.WHITE)
+	if playing != expired:
+		failures.append("预热结束的实例无法用于正式播放")
+	pool.prewarm([id, other_id])
+	pool._process(0.0)
+	var warming: VfxEffectBase3D = pool._active[id].back()
+	pool.finish_prewarm()
+	pool.finish_prewarm()
+	if pool.has_pending_prewarm() or pool.is_processing() or pool.active_count(other_id) != 0:
+		failures.append("取消预热后仍有待执行的预热")
+	if warming.is_visible_in_tree() or pool.inactive_count(id) != 1:
+		failures.append("已装配的预热实例仍可见或未回池")
+	if not playing.is_visible_in_tree() or pool.active_count(id) != 1:
+		failures.append("清理预热误停已复借的正式特效")
+	var reused := pool.acquire(id, Vector3.ONE, Color.RED)
+	if reused != warming or not reused.is_visible_in_tree():
+		failures.append("关闭预热后无法继续复用预热实例")

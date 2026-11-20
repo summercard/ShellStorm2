@@ -1316,10 +1316,9 @@ func _ready() -> void:
 	_entry_context = GameEntryFlow.consume_main_scene_entry()
 	var entry_checkpoint := BaseManager.get_active_run_checkpoint() if BaseManager != null else {}
 	var entry_reason := str(_entry_context.get("reason", ""))
-	# VfxPool is an autoload, so active effects can survive the outgoing expedition
-	# scene. Clear them at the 99F destination too: death-return/rescue does not pass
-	# through the successful expedition settlement path below.
+	# 全局池独立于战局场景。主动退出、战败和成功撤离都在返航落点收尾。
 	if not is_expedition() and entry_reason in [
+		GameEntryFlow.REASON_ABORT_RETURN_99F,
 		GameEntryFlow.REASON_DEATH_RETURN_99F,
 		GameEntryFlow.REASON_SUCCESSFUL_RETURN_99F,
 	]:

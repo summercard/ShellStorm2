@@ -1,3 +1,5 @@
+- WORLD-ENTRY / VFX-POOL · [99F 返航火球修复](development/2026-11-20_return_vfx_cleanup.md)。读取页开圈前回收预热实例并取消余队列，主动退出返航也清理战局特效。专项结果见开发记录。
+
 - ENEMY-AI / NARRATIVE-TRIGGER / VFX-POOL：[僵尸表现、炸弹果与剧情停战](development/2026-11-20_enemy_narrative_hold.md)。胖子移除外挂红点，小僵尸抬头，绿滩受光；炸弹果速度与步频翻倍，强化生命 ×4。验证结果与边界见开发记录。
 
 - BOSS-STAGES / WORLD-PLAN / ASSET-PIPELINE · [武装平台独立武装与回程装配](development/2026-11-20_platform_sentinel_units.md)。01、99 共用四个独立大臂、十六个独立枪架、完整回程格栅节段以及齐射联动屏幕。

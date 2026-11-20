@@ -172,6 +172,7 @@ var _target_name := ""
 var _resource_request_active := false
 var _resource_warmup_active := false
 var _event_audio_streams_ready := 0
+var _owns_vfx_prewarm := false
 var _warm_resources: Array[Resource] = []
 var _resource_poll_after_frame := 0
 var _scene_change_started: bool = false
@@ -524,6 +525,7 @@ func _drain_warmup(target: Node) -> Dictionary:
 	var first_frame_ms := 0
 	if vfx_enabled:
 		VfxPool.prewarm(VfxPool3D.COMBAT_PREWARM)
+		_owns_vfx_prewarm = true
 		if VfxPool.has_method("pending_prewarm_count"):
 			report["vfx_total"] = int(VfxPool.pending_prewarm_count())
 	var frames := 0
@@ -673,6 +675,7 @@ func _finish_loaded_scene(target: Node) -> void:
 	if tree.current_scene != target or not _target_is_ready(target):
 		_finalizing = false
 		return
+	_finish_vfx_prewarm()
 	_disconnect_scene_changed()
 	# 通过统一交接点恢复目标处理并清理读取契约；通知会让 Tower 恢复输入/子树。
 	if IrisTransition != null:
@@ -1169,4 +1172,12 @@ func _restore_world_render() -> void:
 
 
 func _exit_tree() -> void:
+	_finish_vfx_prewarm()
 	_restore_world_render()
+
+
+func _finish_vfx_prewarm() -> void:
+	if _owns_vfx_prewarm:
+		_owns_vfx_prewarm = false
+		if is_instance_valid(VfxPool):
+			VfxPool.finish_prewarm()

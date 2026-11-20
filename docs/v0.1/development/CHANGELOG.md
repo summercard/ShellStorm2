@@ -1,3 +1,5 @@
+- 2026-11-20 · WORLD-ENTRY / VFX-POOL · [99F 返航火球修复](2026-11-20_return_vfx_cleanup.md)。读取页开圈前回收预热借出的战斗特效，主动退出入口清理上一局特效。
+
 - ENEMY-AI / NARRATIVE-TRIGGER / VFX-POOL：[僵尸表现、炸弹果与剧情停战](2026-11-20_enemy_narrative_hold.md)。胖子移除外挂红点，小僵尸抬头，绿滩受光；炸弹果速度与步频翻倍，强化生命 ×4。验证结果与边界见开发记录。
 
 - 2026-11-20 · FATE-RULES / REWARD-SERVICE · [命运卡正式入口改按稀有度固定售价](2026-11-20_fate_card_fixed_price.md)。业主确认：正式远征拾取命运卡专用掉落物后的三选一，用本局金币按稀有度固定价购买，五档 30/60/110/180/270，同稀有度同价。下线参考编成收益定价、`run_seed+offer_id+card` 区间浮动、星币七 100 上限与「三张全买不起压到余额」保底；展示与实扣同取一个固定值。候选随机、稀有度解锁统计、购买事务/退款/余额不足禁购未改。`verify_fate_economy_service --pure-only` 115 项、`verify_fate_level01_pool` 2259 项、`verify_fate_card_purchase_flow` 全绿；正式远征全量段在本机无头挂住未取证，`verify_expedition01_reward_flow` 3 项既有红（关卡编成变化，非定价）。
