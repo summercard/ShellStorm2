@@ -6,6 +6,7 @@ const BOARD_PATH := "res://assets/art/ui/weapon_build/weapon_build_board.tscn"
 const PREVIEW_SLIDE := preload("res://src/ui/weapon_build/WeaponPreviewSlide.gd")
 var row: HBoxContainer
 var board: Control
+var expedition_purchase_layout := false
 var _owner: Node
 var _prev_button: Button
 var _next_button: Button
@@ -115,7 +116,9 @@ func _board_destination() -> Vector2:
 func _layout() -> void:
 	if board == null:
 		return
-	row.position = Vector2(24, maxf(12, size.y * 0.025))
+	var row_top := maxf(12, size.y * 0.025)
+	# The expedition layout spends the old caption/button gap, not the lower weapon board.
+	row.position = Vector2(24, row_top + (8.0 if expedition_purchase_layout else 0.0))
 	row.size = Vector2(maxf(1, size.x - 48), 320)
 	_prev_button.position = Vector2(8, size.y * 0.50 - 24)
 	_prev_button.size = Vector2(44, 48)

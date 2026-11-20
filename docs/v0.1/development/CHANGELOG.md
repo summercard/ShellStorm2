@@ -1,3 +1,5 @@
+- 2026-11-20 · FATE-RULES / UI-HUD · [正式远征购卡上半区](2026-11-20_expedition_purchase_layout.md)。保留主树既有布局，新增几何与购买断言；当前真渲染复验未完成。
+- 2026-11-20 · WORLD-INTERACTIVE-CLUTTER / WORLD-PLAN · [远征 01／99 入口安全屋](2026-11-20_exp01_99_safe_room_clutter.md)。仅关闭固定五件，两关设计源与运行投影同步，保留共享场景资源。
 - 2026-11-20 · WORLD-ENTRY / VFX-POOL · [99F 返航火球修复](2026-11-20_return_vfx_cleanup.md)。读取页开圈前回收预热借出的战斗特效，主动退出入口清理上一局特效。
 
 - ENEMY-AI / NARRATIVE-TRIGGER / VFX-POOL：[僵尸表现、炸弹果与剧情停战](2026-11-20_enemy_narrative_hold.md)。胖子移除外挂红点，小僵尸抬头，绿滩受光；炸弹果速度与步频翻倍，强化生命 ×4。验证结果与边界见开发记录。

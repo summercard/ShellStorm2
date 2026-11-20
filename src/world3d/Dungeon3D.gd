@@ -2716,7 +2716,7 @@ func _build_reference_main_hud() -> void:
 	_hud_countdown_ring.name = "EncounterCountdownRing"
 	_hud_countdown_ring.visible = false
 	_hud_countdown_ring.z_index = 120
-	_anchor_control(_hud_countdown_ring, 0.0, 1.0, 0.0, 1.0, 100, -148, 208, -40)
+	_anchor_control(_hud_countdown_ring, 0.0, 1.0, 0.0, 1.0, 220, -148, 328, -40)
 	_reference_hud_root.add_child(_hud_countdown_ring)
 	# 中间那行时间「用下方金币的字体」= 与右下 `RunLootReadout` **同一个** `_make_hud_label`。
 	var countdown_label := _make_hud_label("1:00", 26, RUN_COIN_READOUT_COLOR)
@@ -2780,7 +2780,6 @@ func _build_reference_main_hud() -> void:
 	# 2026-09-28 主人要求（第五轮）：武器栏精简并**挪到右下角**。只保留三项有效信息 ——
 	# 枪械模型图标、当前子弹数 · N备弹、命运卡槽占用（0/4）；武器名与「实例 #… · K 详情」
 	# 两行不再显示；字号放大。背板口径不变：仍是全透明外壳（_make_bare_hud_panel），
-	# 下方 QuickItemHUD_0/1 两块保持原位不动。
 	var weapon_panel := _make_bare_hud_panel()
 	weapon_panel.name = "CurrentWeaponPanel"
 	# 2026-10-17 主人要求：右下武器栏同样撤掉背框（`_make_bare_hud_panel` 已是全透明外壳，
@@ -2866,10 +2865,14 @@ func _build_reference_main_hud() -> void:
 	for quick_index in range(2):
 		var quick_panel := _make_bare_hud_panel()
 		quick_panel.name = "QuickItemHUD_%d" % quick_index
-		# 2026-10-17：快捷物品槽的背框一并撤掉（内容只有一枚图标 + 一行小字，框纯属占用）。
-		var left := -220.0 if quick_index == 0 else 162.0
-		var right := -162.0 if quick_index == 0 else 220.0
-		_anchor_control(quick_panel, 0.5, 1.0, 0.5, 1.0, left, -75, right, -20)
+		var backing := _make_bare_hud_style()
+		backing.bg_color = Color(UIPalette.PRISM_INK, 0.48)
+		backing.set_corner_radius_all(_hud_int(4))
+		quick_panel.add_theme_stylebox_override("panel", backing)
+		# Position both beside the dash portrait, in the same lower-left modal group.
+		var left := HUD_DASH_RING_LEFT_DESIGN + HUD_DASH_RING_DIAMETER_DESIGN + 8.0 + 65.0 * quick_index
+		var bottom := -HUD_DASH_RING_BOTTOM_DESIGN
+		_anchor_control(quick_panel, 0.0, 1.0, 0.0, 1.0, left, bottom - 55.0, left + 58.0, bottom)
 		_reference_hud_root.add_child(quick_panel)
 		# 快捷物品槽：[3]/[4] 直接 tap 使用，对应键位 use_quick_item_1/2
 		quick_panel.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -2877,6 +2880,7 @@ func _build_reference_main_hud() -> void:
 		quick_panel.gui_input.connect(_on_quick_item_gui_input.bind(quick_index, quick_panel))
 		var quick_box := VBoxContainer.new()
 		quick_box.alignment = BoxContainer.ALIGNMENT_CENTER
+		quick_box.add_theme_constant_override("separation", _hud_int(2))
 		quick_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		quick_panel.add_child(quick_box)
 		var quick_icon_host := Control.new()
@@ -2885,7 +2889,7 @@ func _build_reference_main_hud() -> void:
 		quick_icon_host.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		quick_box.add_child(quick_icon_host)
 		_hud_quick_item_icon_hosts.append(quick_icon_host)
-		var quick_label := _make_hud_label("[%d] 空" % (quick_index + 3), 8, Color(0.92, 0.96, 1.0))
+		var quick_label := _make_hud_label("[%d] 空" % (quick_index + 3), 13, Color(0.92, 0.96, 1.0))
 		quick_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		quick_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		quick_box.add_child(quick_label)
@@ -2902,9 +2906,9 @@ func _build_reference_main_hud() -> void:
 		_register_hud_corner(node, upper_left)
 	for node: Control in [minimap, _hud_floor_label]:
 		_register_hud_corner(node, upper_right)
-	for node: Control in [_hud_dash_ring, _reference_hud_root.get_node("QuickItemHUD_0")]:
+	for node: Control in [_hud_dash_ring, _reference_hud_root.get_node("QuickItemHUD_0"), _reference_hud_root.get_node("QuickItemHUD_1")]:
 		_register_hud_corner(node, lower_left)
-	for node: Control in [weapon_panel, special_hud, loot_label, _reference_hud_root.get_node("QuickItemHUD_1")]:
+	for node: Control in [weapon_panel, special_hud, loot_label]:
 		_register_hud_corner(node, lower_right)
 
 	# 右下角不再放 R/SHIFT/F/E 四个动作键图标：动作本身仍走 InputMap（键盘与手柄照常），
@@ -4972,7 +4976,7 @@ func apply_encounter_hud_snapshot(snapshot: Dictionary) -> void:
 	if bool(alert.modern):
 		_anchor_control(_hud_countdown_ring, 0.5, 0.20, 0.5, 0.20, -270, -44, 270, 44)
 	else:
-		_anchor_control(_hud_countdown_ring, 0.0, 1.0, 0.0, 1.0, 100, -148, 208, -40)
+		_anchor_control(_hud_countdown_ring, 0.0, 1.0, 0.0, 1.0, 220, -148, 328, -40)
 	# 反馈由本次apply集中消费，避免旧信号回调重复蜂鸣，也不改装配或输入链。
 	var old_feedback := Callable(self, "_on_encounter_countdown_pulse")
 	if _hud_countdown_ring.presentation_pulse_requested.is_connected(old_feedback):
@@ -10305,6 +10309,8 @@ func _build_door_fate_overlay() -> void:
 	# 三张卡是本弹窗的主体，占据余额行与退出按钮之间的全部纵向空间。
 	_fate_presentation = load("res://src/ui/weapon_build/FateHologramPresentation.gd").new() as Control
 	_fate_presentation.name = "FateHologramPresentation"
+	var expedition_purchase := _fate_offer_source == "pickup" and has_method("is_expedition") and bool(call("is_expedition"))
+	_fate_presentation.set("expedition_purchase_layout", expedition_purchase)
 	_fate_overlay.add_child(_fate_presentation)
 	_fate_presentation.call("set_player", player)
 	var row := _fate_presentation.get("row") as HBoxContainer
@@ -10313,7 +10319,7 @@ func _build_door_fate_overlay() -> void:
 	var card_buttons: Array[Button] = []
 	for choice_index in range(_door_fate_choices.size()):
 		var card := _door_fate_choices[choice_index]
-		var card_view := _create_reference_fate_card_view(card, choice_index)
+		var card_view := _create_reference_fate_card_view(card, choice_index, expedition_purchase)
 		row.add_child(card_view)
 		# 列交给紧凑布局，避免漂浮 tween 抢写容器坐标。
 		var card_button := card_view.get_meta("tarot_button") as Button
@@ -10372,7 +10378,7 @@ func _build_door_fate_overlay() -> void:
 ## 供焦点导航与翻转动画复用。卡面图片本身已带边框与圆角，因此不再叠加程序绘制的
 ## 品质描边、作用域标签、方位三角、目标预览与页脚。
 ## 有对应塔罗美术时用贴图层；缺图时回退到程序卡面，保证补图落地前仍可玩。
-func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Control:
+func _create_reference_fate_card_view(card: FateCard, choice_index: int, expedition_purchase := false) -> Control:
 	var accent := FateCard.scope_color(card.scope)
 	var column := VBoxContainer.new()
 	column.name = "FateChoiceColumn_%d" % choice_index
@@ -10384,7 +10390,7 @@ func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Cont
 
 	var button := Button.new()
 	button.name = "FateChoiceCard_%d" % choice_index
-	button.custom_minimum_size = Vector2(135, 210)
+	button.custom_minimum_size = Vector2(143, 222) if expedition_purchase else Vector2(135, 210)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	button.text = ""
 	button.clip_contents = false
@@ -10452,8 +10458,8 @@ func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Cont
 	button.focus_exited.connect(_on_reference_fate_card_focus.bind(button, false))
 	button.pressed.connect(_on_reference_fate_card_pressed.bind(button, choice_index))
 
-	var caption := FateCardView.build_caption(card, 18, 230, "", false)
-	caption.custom_minimum_size = Vector2(230, 70)
+	var caption := FateCardView.build_caption(card, 20 if expedition_purchase else 18, 230, "", false)
+	caption.custom_minimum_size = Vector2(230, 64 if expedition_purchase else 70)
 	caption.clip_text = true
 	caption.max_lines_visible = 3
 	caption.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -10474,7 +10480,9 @@ func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Cont
 	# 状态（可买 / 金币不足 / 命运槽已满 / 已购买）也由这一行承载，卡片本体不额外加角标。
 	var purchase := Button.new()
 	purchase.name = "FatePurchase_%d" % choice_index
-	purchase.custom_minimum_size = Vector2(230, 44)
+	purchase.custom_minimum_size = Vector2(184, 34) if expedition_purchase else Vector2(230, 44)
+	if expedition_purchase:
+		purchase.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	purchase.text = ""
 	purchase.disabled = true
 	UIStyleFactory.apply_prism_button(purchase, "primary", 0, 24, 1, "none")
@@ -10486,11 +10494,12 @@ func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Cont
 	price_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	price_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	price_label.add_theme_font_size_override("font_size", 24)
-	var bold := FontVariation.new()
-	bold.base_font = ThemeDB.fallback_font
-	bold.variation_embolden = 0.8
-	price_label.add_theme_font_override("font", bold)
+	price_label.add_theme_font_size_override("font_size", 21 if expedition_purchase else 24)
+	if not expedition_purchase:
+		var bold := FontVariation.new()
+		bold.base_font = ThemeDB.fallback_font
+		bold.variation_embolden = 0.8
+		price_label.add_theme_font_override("font", bold)
 	price_label.add_theme_color_override("font_color", UIPalette.PRISM_INK)
 	purchase.add_child(price_label)
 	button.set_meta("tarot_purchase_button", purchase)
@@ -12656,11 +12665,14 @@ func _refresh_quick_item_hud() -> void:
 		return
 	for quick_index in range(2):
 		var slot := _quick_inventory.get_slot(quick_index) if _quick_inventory != null else {}
+		var label := _hud_quick_item_labels[quick_index]
+		var panel := label.get_parent().get_parent() as PanelContainer
 		if slot.is_empty():
 			var empty_icon := _hud_quick_item_icons[quick_index] as ItemModelIcon3D
 			if empty_icon != null:
 				empty_icon.clear_model()
-			_hud_quick_item_labels[quick_index].text = "[%d] 空" % (quick_index + 3)
+			label.text = "[%d] 空" % (quick_index + 3)
+			panel.tooltip_text = "快捷物品 [键%d] · 空" % (quick_index + 3)
 			continue
 		var item := slot.get("item", {}) as Dictionary
 		var item_id := str(item.get("id", ""))
@@ -12668,9 +12680,8 @@ func _refresh_quick_item_hud() -> void:
 		var quick_icon := _ensure_hud_quick_item_icon(quick_index)
 		if quick_icon != null:
 			quick_icon.configure(item)
-		_hud_quick_item_labels[quick_index].text = "[%d] %s ×%d" % [
-			quick_index + 3, item.get("name", item_id), count,
-		]
+		label.text = "[%d] ×%d" % [quick_index + 3, count]
+		panel.tooltip_text = "点击使用 [键%d] · %s ×%d" % [quick_index + 3, item.get("name", item_id), count]
 
 
 func _ensure_hud_quick_item_icon(quick_index: int) -> ItemModelIcon3D:

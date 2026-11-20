@@ -67,6 +67,10 @@ export_presets.cfg
 *.import~RF*.TMP
 # Godot 导入被中断时留下的临时文件（形如 xxx_512.png.import88383379.tmp）
 *.import[0-9]*.tmp
+# Godot 保存被中断时留下的临时副本（形如 f00_room_08.tscn~RF504ea35a.TMP）。
+# 2026-11-20 补：上面两条只拦 *.import 后缀，.tscn / .gd 的同类残留会漏进 git add -A，
+# 然后被当成新场景文件提交（曾让 4b775f29 专门做一次清理提交）。
+*~RF*.[Tt][Mm][Pp]
 
 # Python 编译缓存（不该入库；已有 39 个 .pyc 被误提交，2026-09-17 已从索引移除）
 __pycache__/

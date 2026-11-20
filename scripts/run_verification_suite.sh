@@ -529,6 +529,8 @@ visual_scenes=(
 
 # 必须由人工操控/观察才能得出可靠结论；登记但不进入自动套件。
 manual_scenes=(
+  # Only via run_expedition_layout_qa.py; isolates user:// before Autoload.
+  verify_exp01_99_safe_room_clutter
   verify_enemy_narrative_hold
   # Editor window and isolated save directory required; run with keyboard and -- --pad.
   verify_pause_expedition99
@@ -581,6 +583,8 @@ retired_scenes=(
 )
 
 renderer_scenes=(
+  # Exclude the separately isolated probe from full's bare directory scan.
+  verify_exp01_99_safe_room_clutter
   verify_enemy_narrative_hold
   # 新容量guard排除full/aggregate full目录裸扫；只由专用隔离runner调用。
   verify_pistol_fate_capacity

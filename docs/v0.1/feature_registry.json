@@ -232,9 +232,17 @@
         "docs/v0.1/development/2026-11-11_expedition01_flow.md",
         "docs/v0.1/development/2026-11-16_weapon_hologram_ui.md",
         "docs/v0.1/development/2026-11-16_fate_tutorial_galgame.md",
-        "docs/v0.1/development/2026-11-17_weapon_link_aftercare.md"
+        "docs/v0.1/development/2026-11-17_weapon_link_aftercare.md",
+        "docs/v0.1/development/2026-11-20_expedition_purchase_layout.md"
       ],
       "verification": [
+        {
+          "kind": "command",
+          "path": "scripts/run_expedition_layout_qa.py",
+          "args": ["fate"],
+          "suite": "manual",
+          "requires": "须传 --godot 到已导入的主工程所用版本；先隔离用户目录，再在窗口中验正式远征拾取购卡及实扣；不替代全息板全量回归"
+        },
         {
           "kind": "scene",
           "id": "verify_pistol_fate_capacity",
@@ -2214,9 +2222,17 @@
         "docs/v0.1/development/2026-11-03_reactive_manor_props.md",
         "docs/v0.1/development/2026-11-03_lamp_furniture_chain.md",
         "docs/v0.1/development/2026-11-03_lamp_flower_layout_shake.md",
-        "docs/v0.1/development/2026-11-03_bookcase_dust_tabletop_scale.md"
+        "docs/v0.1/development/2026-11-03_bookcase_dust_tabletop_scale.md",
+        "docs/v0.1/development/2026-11-20_exp01_99_safe_room_clutter.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_exp01_99_safe_room_clutter",
+          "suite": "manual",
+          "runner": "scripts/run_expedition_layout_qa.py",
+          "requires": "safe-room --godot <Godot console>；Autoload 前隔离，排除 full 裸扫；两关正式入口结构，不代签真渲染"
+        },
         {
           "kind": "scene",
           "id": "verify_battle_breakable_clutter"

@@ -49,6 +49,9 @@
     "extraction_25x25",
     "std_25x25"
   ],
+  "furnishing": {
+    "fixed_lobby_clutter_enabled": false
+  },
   "generation_policy": {
     "min_main_content_rooms": 10,
     "branch_count_range": [
