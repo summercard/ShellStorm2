@@ -89,7 +89,7 @@ func _ready() -> void:
 		var id := "mod_bullet_" + (String(MODULES[i % 7]) if modules else "standard")
 		var shot := rounds.acquire({"behavior":behavior, "direction":Vector3.FORWARD, "speed":23.0,
 			"damage":10, "visual_id":id, "color": WeaponModel3D.BULLET_COLORS[id],
-			"tags":ItemRegistry.get_item(id).get("tags", []), "range":15.0, "projectile_collision_mask":targets[i].collision_layer,
+			"tags":ItemRegistry.get_instance().get_item(id).get("tags", []), "range":15.0, "projectile_collision_mask":targets[i].collision_layer,
 			"gun_bullet_geometry":{"scale":1.8}}, targets[i].position + Vector3(0, 0.15, 1.8 if pairs else 5.7))
 		var state := shot.get_enchantment_snapshot()
 		var expected: Array[String] = []

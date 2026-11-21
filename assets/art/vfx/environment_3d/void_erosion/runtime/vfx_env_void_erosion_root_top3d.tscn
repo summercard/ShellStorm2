@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/vfx/VfxVoidErosion3D.gd" id="1"]
+
+[node name="VoidErosion" type="Node3D"]
+script = ExtResource("1")
+metadata/asset_id = "VFX-ENV-VOID-EROSION-3D"
+metadata/asset_version = "v005"
+metadata/display_name_zh = "赛博虚空"

@@ -1729,9 +1729,17 @@
       "owner": "VfxPool3D",
       "design_docs": [
         "docs/v0.1/14.6_特效系统与制作规范.md",
-        "docs/v0.1/design/outdoor_cloud_sea.md"
+        "docs/v0.1/design/outdoor_cloud_sea.md",
+        "docs/v0.1/design/scene_void_erosion.md",
+        "docs/v0.1/design/scene_cyber_space.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-21_cyber_space.md",
+        "docs/v0.1/development/2026-11-21_cyber_void_component_scope.md",
+        "docs/v0.1/development/2026-11-21_cyber_void_wall.md",
+        "docs/v0.1/development/2026-11-21_cyber_void.md",
+        "docs/v0.1/development/2026-11-21_scene_void_erosion_depth.md",
+        "docs/v0.1/development/2026-11-21_scene_void_erosion.md",
         "docs/v0.1/development/2026-11-16_expedition01_combat_feel.md",
         "docs/v0.1/development/history/14.6_特效系统与制作规范_历史记录.md",
         "docs/v0.1/development/2026-09-30_outdoor_cloud_sea.md",
@@ -1743,6 +1751,20 @@
         "docs/v0.1/development/2026-11-16_weapon_hologram_ui.md"
       ],
       "verification": [
+        {
+          "kind": "command",
+          "path": "scripts/run_scene_void_erosion_qa.py",
+          "args": [],
+          "suite": "manual",
+          "requires": "GODOT_BIN 或 --godot 指定 4.7.2 渲染器；独立墙地预览、体素断面、近远方块、空间星屑和覆盖恢复对照；--movie 可录制动态机位"
+        },
+        {
+          "kind": "command",
+          "path": "scripts/run_scene_void_erosion_qa.py",
+          "args": ["--cyber-space"],
+          "suite": "manual",
+          "requires": "GODOT_BIN 或 --godot 指定 4.7.2 渲染器；紫绿蓝、全息扫描边、虚空交界、双 Shader 混用与关闭还原"
+        },
         {
           "kind": "scene",
           "id": "verify_projectile_enchant_visuals",

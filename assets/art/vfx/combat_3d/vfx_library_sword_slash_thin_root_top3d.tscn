@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/vfx/LibraryVfxAdapter3D.gd" id="1_adapter"]
+[ext_resource type="PackedScene" path="res://assets/art/vfx/library/UnityOneToOne_exact_v1/Prefabs/Combat/Sword/Slash/SwordSlashThin/SwordSlashThinYellow.tscn" id="2_library"]
+
+[node name="VfxLibrarySwordSlashThin3D" type="Node3D"]
+script = ExtResource("1_adapter")
+source_lifetime = 2.0
+source_to_game_scale = 0.62
+align_forward = true
+mirror_second_swing = true
+
+[node name="LibraryEffect" parent="." instance=ExtResource("2_library")]
+auto_play = false

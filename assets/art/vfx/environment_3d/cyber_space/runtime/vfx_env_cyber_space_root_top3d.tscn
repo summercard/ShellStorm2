@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/vfx/VfxCyberSpace3D.gd" id="1"]
+
+[node name="CyberSpacePurple" type="Node3D"]
+script = ExtResource("1")
+metadata/asset_id = "VFX-ENV-CYBER-SPACE-3D"
+metadata/asset_version = "v001"
+metadata/display_name_zh = "赛博空间"

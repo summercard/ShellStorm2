@@ -1,5 +1,23 @@
 class_name VfxDeathBlast3D
 extends VfxGooDeathBase3D
+
+@onready var _library_burst: Node3D = $LibraryBurst
+
+func _enter_tree() -> void:
+	LibraryVfxAdapter3D.prepare_visual($LibraryBurst, false)
+
+func _on_activate(world_pos: Vector3, color: Color, size: float, context: Dictionary) -> void:
+	super._on_activate(world_pos, color, size, context)
+	LibraryVfxAdapter3D.play_visual(_library_burst, size * 0.85, 1703)
+
+func _on_lifetime_expired() -> void:
+	LibraryVfxAdapter3D.stop_visual(_library_burst)
+	super._on_lifetime_expired()
+
+func _burst_cube_count() -> int:
+	return 0
+## FX01-17 v003：库内绿浆爆点替换 v002 胸口方块；飞溅、绿环、地贴和灯继续使用原实现。
+## 下方为历史设计说明；持续伤害仍由 DeathBlastZone3D 单独处理。
 ## FX01-17 / VFX-DEATH-BLAST-3D 胖子僵尸死亡自爆特效
 ##
 ## 用途：`Enemy3D._detonate_death_explosion()` / `_spawn_fat_death_burst()` 在胖子僵尸
@@ -34,7 +52,7 @@ func _asset_id() -> String:
 
 
 func _asset_version() -> String:
-	return "v002"
+	return "v003"
 
 
 ## 业主指定：只有胖子僵尸死亡带绿色冲击波

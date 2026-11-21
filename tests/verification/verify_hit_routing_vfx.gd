@@ -116,6 +116,7 @@ func _ready() -> void:
 		_check_collision_free,
 		_check_routing_predicate,
 		_check_projectile_routing,
+		_check_projectile_explosion_routing,
 		_check_enchant_hits,
 		_check_melee_routing,
 		_check_size_linearity,
@@ -916,6 +917,35 @@ func _check_projectile_routing() -> void:
 	projectile.queue_free()
 
 
+func _check_projectile_explosion_routing() -> void:
+	var pool := _pool()
+	if pool == null:
+		_failures.append("VfxPool 缺失，投射物爆炸路由用例未执行")
+		return
+	var legacy := CombatEffectPool3D.new()
+	add_child(legacy)
+	var projectile := PROJECTILE_SCRIPT.new() as Projectile3D
+	add_child(projectile)
+	projectile.set_physics_process(false)
+	projectile.target_group = &"verify_explosion_vfx_no_targets"
+	projectile.global_position = Vector3(2.0, 0.7, -3.0)
+	var asset_id := VfxPool3D.FX01_EXPLOSION
+	var before := pool.active_count(asset_id)
+	projectile._explode()
+	_samples += 1
+	_expect(pool.active_count(asset_id) == before + 1, "爆炸弹必须借出一个 FX01-03")
+	_expect(int(legacy.get_snapshot().acquire_counts.get("explosion", 0)) == 0, "爆炸弹不应走旧 explosion 池")
+	if pool.active_count(asset_id) == before + 1:
+		var bucket: Array = pool._active[asset_id]
+		var effect := bucket.back() as VfxEffectBase3D
+		_expect(effect.scene_file_path == "res://assets/art/vfx/combat_3d/vfx_library_bullet_explosion_fire_root_top3d.tscn", "FX01-03 未加载库爆炸 Prefab")
+		_expect(effect.global_position.is_equal_approx(projectile.global_position), "爆炸特效未落在爆点")
+		_expect(is_equal_approx(effect.effect_size, 1.26), "默认 3m 爆炸的视觉尺寸应仍为 3 × 0.42")
+		effect.finish()
+	projectile.queue_free()
+	legacy.queue_free()
+
+
 # ---------------------------------------------------------------- C3 近战路由
 ## 业主追问后明确「枪击 + 近战都用」⇒ 近战打中同一只怪必须走到**同一件**特效。
 func _check_melee_routing() -> void:
@@ -1020,10 +1050,12 @@ func _enemy_death_case_begin() -> void:
 			_expect(absf(float(snapshot.get("floor_local_y", 0.0)) + 0.65) < 0.01,
 				"floor_y 未按脚底口径传入：floor_local_y=%.4f"
 				% float(snapshot.get("floor_local_y", 0.0)))
-			# 与 FX01-19 是同一段身体 ⇒ 件数必须一致；差别只在尺寸与冲击波
-			_expect(int(snapshot.get("burst_count", 0)) == 12,
-				"胖子僵尸死亡应有 12 枚爆炸粒子（与小僵尸死亡同一段身体）：%d"
-				% int(snapshot.get("burst_count", 0)))
+			# v003 只替换胖子胸口爆点，不叠播原方块；其余绿浆层继续沿用。
+			var library := fx.get_node_or_null("LibraryBurst") as Node3D
+			var playback: Dictionary = library.call("debug_exact") if library != null else {}
+			_expect(library != null and library.is_visible_in_tree() and bool(playback.get("running", false))
+				and playback.get("source_id", "") == "GreenBloodExplosionRound" and int(snapshot.get("burst_count", -1)) == 0,
+				"胖子僵尸死亡应实际启动库绿浆爆点，且不叠播原方块")
 			_expect(int(snapshot.get("splat_count", 0)) == 14, "胖子僵尸死亡应有 14 枚飞溅粒子")
 			_expect(int(snapshot.get("puddle_count", 0)) == 4, "胖子僵尸死亡应有 4 块地面液体")
 			_expect(int(snapshot.get("shockwave_count", 0)) == 3,

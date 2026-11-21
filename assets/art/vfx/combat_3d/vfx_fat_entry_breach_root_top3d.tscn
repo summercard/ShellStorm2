@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://src/vfx/VfxFatEntryBreach3D.gd" id="script"]
+[ext_resource type="PackedScene" path="res://assets/art/vfx/library/UnityVFXLibrary/Prefabs/Combat/Explosions/RoundExplosion/ExplosionRoundFire.tscn" id="library_burst"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/chair/chair_visual_top3d.glb" id="visual0"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/components/side_table/prp_side_table_visual_top3d.glb" id="visual1"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/locker_bank/locker_bank_visual_top3d.glb" id="visual2"]
@@ -68,23 +69,6 @@ colors = PackedColorArray(1,1,1,0, 1,1,1,1, 1,1,1,0.7, 1,1,1,0)
 [sub_resource type="GradientTexture1D" id="fade_texture"]
 gradient = SubResource("fade")
 
-[sub_resource type="ParticleProcessMaterial" id="process_blast"]
-resource_local_to_scene = true
-emission_shape = 1
-emission_sphere_radius = 0.16
-direction = Vector3(0, 1, 0)
-spread = 85.0
-initial_velocity_min = 2.8
-initial_velocity_max = 4.8
-gravity = Vector3(0, 0.3, 0)
-scale_min = 2.4
-scale_max = 3.6
-angle_min = -25.0
-angle_max = 25.0
-angular_velocity_min = -45.0
-angular_velocity_max = 45.0
-color_ramp = SubResource("fade_texture")
-
 [sub_resource type="ParticleProcessMaterial" id="process_flame"]
 resource_local_to_scene = true
 emission_shape = 1
@@ -140,14 +124,14 @@ color_ramp = SubResource("fade_texture")
 script = ExtResource("script")
 lifetime = 3.65
 metadata/asset_id = "VFX-FAT-ENTRY-BREACH-3D"
-metadata/asset_version = "v001"
+metadata/asset_version = "v002"
 metadata/asset_category = "combat_vfx"
 metadata/prefab_path = "res://assets/art/vfx/combat_3d/vfx_fat_entry_breach_root_top3d.tscn"
 metadata/source_manifest = "art_source/vfx/combat_3d/fat_entry_breach/source/v001/asset_manifest.json"
 metadata/runtime_save_excluded = true
 metadata/visual_only = true
 metadata/collision_policy = "none"
-metadata/particle_budget = 92
+metadata/particle_budget = 80
 metadata/default_landing_distance_m = 4.0
 metadata/initial_layout = "固定五角；桌柜长轴径向；中心半径1.56m"
 metadata/push_radius_max_m = 1.72
@@ -187,28 +171,8 @@ scale = Vector3(1.0, 1.0, 1.0)
 
 [node name="Impacts" type="Node3D" parent="."]
 
-[node name="Blast" type="GPUParticles3D" parent="."]
-emitting = false
-amount = 12
-lifetime = 0.65
-one_shot = true
-explosiveness = 1.0
-randomness = 0.25
-local_coords = false
-fixed_fps = 60
-interpolate = true
-use_fixed_seed = true
-seed = 20261116
-cast_shadow = 0
-visibility_aabb = AABB(-12, -6, -12, 24, 18, 24)
-process_material = SubResource("process_blast")
-draw_pass_1 = SubResource("quad_flame_b")
-metadata/scale_min = 2.4
-metadata/scale_max = 3.6
-metadata/speed_min = 2.8
-metadata/speed_max = 4.8
-metadata/gravity_y = 0.3
-metadata/opacity = 0.95
+[node name="LibraryBurst" parent="." instance=ExtResource("library_burst")]
+auto_play = false
 
 [node name="Flame0" type="GPUParticles3D" parent="Trails"]
 emitting = false

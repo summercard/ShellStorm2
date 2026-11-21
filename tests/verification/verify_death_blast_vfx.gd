@@ -18,23 +18,17 @@ const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_
 const BLAST_ASSET_ID := "VFX-DEATH-BLAST-3D"
 const ZONE_ASSET_ID := "VFX-BLAST-ZONE-3D"
 ## 两个资产各自定档（2026-10-14 v002 重做：FX01-17 换了造型语言 ⇒ 升版；FX01-18 未动）
-const EXPECTED_BLAST_VERSION := "v002"
+const EXPECTED_BLAST_VERSION := "v003"
 const EXPECTED_ZONE_VERSION := "v001"
 
 ## 期望值一律硬编码在验收侧（不引用被测脚本常量，防自印证）
-## FX01-17 v002（业主 2026-10-14 第二轮明确：「**把小僵尸的死亡特效放大两倍给胖子僵尸用**，
-## 然后带一个绿色冲击波的效果」）⇒ 本件与 FX01-19 共用 `VfxGooDeathBase3D` 的身体，
-## 形状就是「绿方块爆开 + 抛物线飞溅 + 地面液体」，只多出 3 层绿色冲击波。
-## 所以下面这些期望值 **与 `verify_zombie_goo_death_vfx` 里那一组同源**（同一段身体）。
+## v003 只替换胸口爆点；飞溅、地面液体和冲击波仍按原规格验证。
 const EXPECTED_BLAST_LIFETIME := 1.35
-## 12 方块 + 14 飞溅 + 4 液体 + 3 冲击波 + 1 盏 GooLight
-const EXPECTED_BLAST_NODE_MIN := 34
-const EXPECTED_BLAST_CUBES := 12
+const EXPECTED_BLAST_NODE_MIN := 23
+const EXPECTED_BLAST_SOURCE := "GreenBloodExplosionRound"
 const EXPECTED_BLAST_SPLATS := 14
 const EXPECTED_BLAST_PUDDLES := 4
 const EXPECTED_BLAST_SHOCKWAVES := 3
-## 尺度变化倍率 = 过冲峰值 / 起点 = 1.15 / 0.25 = 4.6
-const EXPECTED_BLAST_CUBE_PEAK_RATIO := 4.6
 const EXPECTED_LIGHT_NAME_BLAST := "GooLight"
 const EXPECTED_LIGHT_NAME_ZONE := "ZoneLight"
 ## 灯范围 = 常量 × effect_size（本件 blast 4.2 / zone 4.5）
@@ -182,26 +176,26 @@ func _check_blast_prefab() -> void:
 		"死亡自爆寿命应为 %.2fs：%.3f" % [EXPECTED_BLAST_LIFETIME, float(snapshot.get("lifetime", 0.0))])
 	_expect(int(snapshot.get("node_count", 0)) >= EXPECTED_BLAST_NODE_MIN,
 		"死亡自爆子节点过少，几何未构建：%d" % int(snapshot.get("node_count", 0)))
-	_expect(int(snapshot.get("burst_count", 0)) == EXPECTED_BLAST_CUBES,
-		"爆炸粒子数应为 %d（与小僵尸死亡件同一段身体）：%d"
-		% [EXPECTED_BLAST_CUBES, int(snapshot.get("burst_count", 0))])
+	var library := blast.get_node("LibraryBurst") as Node3D
+	var source: Dictionary = library.call("debug_exact")
+	_expect(int(snapshot.get("burst_count", -1)) == 0 and blast.get_node_or_null("Burst0") == null,
+		"库爆点应替代旧方块，而不是叠播")
+	_expect(library.visible and source.source_id == EXPECTED_BLAST_SOURCE and source.running and source.audio_play_calls == 0,
+		"自爆应播放库绿浆爆点，并保留宿主音效")
 	_expect(int(snapshot.get("splat_count", 0)) == EXPECTED_BLAST_SPLATS,
 		"飞溅粒子数应为 %d：%d" % [EXPECTED_BLAST_SPLATS, int(snapshot.get("splat_count", 0))])
 	_expect(int(snapshot.get("puddle_count", 0)) == EXPECTED_BLAST_PUDDLES,
 		"地面液体数应为 %d：%d" % [EXPECTED_BLAST_PUDDLES, int(snapshot.get("puddle_count", 0))])
 	_expect(int(snapshot.get("shockwave_count", 0)) == EXPECTED_BLAST_SHOCKWAVES,
 		"绿色冲击波层数应为 %d：%d" % [EXPECTED_BLAST_SHOCKWAVES, int(snapshot.get("shockwave_count", 0))])
-	for node_name in ["Burst0", "Burst11", "Splat0", "Puddle0", "Shockwave0", "Shockwave2", "GooLight"]:
+	for node_name in ["LibraryBurst", "Splat0", "Puddle0", "Shockwave0", "Shockwave2", "GooLight"]:
 		_expect(blast.get_node_or_null(node_name) != null, "缺少节点：%s" % node_name)
 	# 业主指定「绿色 + 绿色冲击波」：方块与环都走僵尸绿
 	_expect(bool(snapshot.get("green_dominant", false)),
 		"自爆方块不是绿色主导：%s" % str(snapshot.get("goo_color", Color.BLACK)))
 	_expect(bool(snapshot.get("green_dominant", false)),
 		"自爆冲击波不是绿色主导：%s" % str(snapshot.get("shockwave_color", Color.BLACK)))
-	# 「有大小变化动画」：过冲峰值 / 起点
-	_expect(is_equal_approx(float(snapshot.get("burst_scale_peak_ratio", 0.0)), EXPECTED_BLAST_CUBE_PEAK_RATIO),
-		"方块尺度变化倍率应 ≈ %.1f：%.3f"
-		% [EXPECTED_BLAST_CUBE_PEAK_RATIO, float(snapshot.get("burst_scale_peak_ratio", 0.0))])
+	_expect(is_equal_approx(library.scale.x, BLAST_SIZE_FOR_5M * 0.85), "库爆点仅做整体尺寸适配")
 
 	# 灯光真源：节点名 / 无阴影 / 范围随 size / 出生能量为正 / 末端归零
 	_expect(bool(snapshot.get("has_goo_light", false)), "死亡自爆缺少 OmniLight3D")
@@ -243,21 +237,9 @@ func _check_blast_prefab() -> void:
 		"自爆冲击波峰值外缘应落在 %.1f~%.1f m（规格半径 5.0）：%.3f"
 		% [BLAST_RING_RADIUS_MIN, BLAST_RING_RADIUS_MAX, ring_radius])
 
-	# 绕竖直轴全向对称：方块方向的**水平分量**之和应接近 0。
-	# ⚠ 只取水平分量：这套方向沿用了死亡件 v001 的「抬高式俯仰」（`pitch_center = 0.15`），
-	# 垂直分量天然不抵消（实测总模长 ~2.7）。业主的要求是「一圈炸开」= 绕 Y 轴均匀，
-	# 不是「连抬高都不许」；拿总模长去判会把这个**有意的设计**误判成缺陷。
-	var horizontal := Vector2(
-		float(snapshot.get("spread_sum_x", 0.0)), float(snapshot.get("spread_sum_z", 0.0))
-	)
-	var spread_length := horizontal.length()
-	_expect(spread_length < 0.5, "方块方向不是绕竖直轴全向对称（水平分量模长 %.3f）" % spread_length)
-	# 对照：同一判据用在「全挤在一侧的」方向集合上必须不成立 ⇒ 证明它有辨别力
-	var one_sided := Vector2.ZERO
-	for index in EXPECTED_BLAST_CUBES:
-		one_sided += Vector2(1.0, 0.05 * float(index)).normalized()
-	_expect(one_sided.length() > 5.0,
-		"对照失效：全向对称判据对单侧方向集合也成立（%.3f）" % one_sided.length())
+	_expect(not library.visible and not library.is_physics_processing(), "回收须隐藏库爆点并停止模拟")
+	blast.activate(Vector3(3.0, -12.0, -4.0), Color.WHITE, 2.0, {"floor_y": -12.65})
+	_expect(library.visible and library.is_physics_processing(), "再次激活须重播库爆点")
 
 	blast.free()
 
@@ -369,8 +351,8 @@ func _check_size_linearity() -> void:
 	_samples += 1
 	blast_a.call("_on_tick", 0.0, EXPECTED_BLAST_LIFETIME)
 	blast_b.call("_on_tick", 0.0, EXPECTED_BLAST_LIFETIME)
-	var core_a := float((blast_a.call("get_presentation_snapshot") as Dictionary).get("burst_scale_max_x", 0.0))
-	var core_b := float((blast_b.call("get_presentation_snapshot") as Dictionary).get("burst_scale_max_x", 0.0))
+	var core_a := (blast_a.get_node("LibraryBurst") as Node3D).scale.x
+	var core_b := (blast_b.get_node("LibraryBurst") as Node3D).scale.x
 	var range_a := float((blast_a.call("get_presentation_snapshot") as Dictionary).get("light_range", 0.0))
 	var range_b := float((blast_b.call("get_presentation_snapshot") as Dictionary).get("light_range", 0.0))
 	blast_a.free()

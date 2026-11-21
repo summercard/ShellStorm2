@@ -15,6 +15,11 @@ var _distance := 4.0
 var _burst_fired := false
 var _layout := "radial"
 
+@onready var _library_burst: Node3D = $LibraryBurst
+
+func _enter_tree() -> void:
+	LibraryVfxAdapter3D.prepare_visual($LibraryBurst, false)
+
 func _ready() -> void:
 	for index in PIECE_COUNT:
 		var pivot := get_node("Furniture/Piece%d" % index) as Node3D
@@ -108,8 +113,8 @@ func _on_activate(world_pos: Vector3, _color: Color, _size: float, context: Dict
 func _on_tick(elapsed: float, _total: float) -> void:
 	if elapsed >= BURST_TIME and not _burst_fired:
 		_burst_fired = true
-		$Blast.position = Vector3(0, 1.65 * effect_size, 0)
-		_fire($Blast)
+		_library_burst.position = Vector3(0, 1.65 * effect_size, 0)
+		LibraryVfxAdapter3D.play_visual(_library_burst, effect_size, _seed)
 	var flash := clampf(1.0 - (elapsed - BURST_TIME) / 0.23, 0, 1) if elapsed >= BURST_TIME else 0.0
 	$BreachLight.light_energy = flash * 2.1
 	$BreachLight.visible = flash > 0.0
@@ -166,6 +171,7 @@ func _fire(particles: GPUParticles3D) -> void:
 	particles.emitting = true
 
 func _on_lifetime_expired() -> void:
+	LibraryVfxAdapter3D.stop_visual(_library_burst)
 	for particles in _particles:
 		particles.emitting = false
 		particles.visible = false

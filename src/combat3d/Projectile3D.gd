@@ -29,8 +29,8 @@ const BULLET_VISUAL_REGISTRY: Dictionary = {
 	"mod_bullet_blackhole": preload("res://assets/art/vfx/combat_3d/vfx_bullet_blackhole_root_top3d.tscn"),
 	"mod_bullet_balloon": preload("res://assets/art/vfx/combat_3d/vfx_bullet_balloon_root_top3d.tscn"),
 }
-## 旧链（CombatEffectPool3D）图例：爆炸仍走旧链，待 14.6 §6 迁移完成后统一删除。
-const LEGACY_EFFECT_EXPLOSION := &"explosion"
+## 爆炸弹命中特效统一走 VfxPool3D 的正式 AssetID；伤害半径与伤害结算仍由本脚本持有。
+const EXPLOSION_EFFECT_ASSET_ID := VfxPool3D.FX01_EXPLOSION
 
 ## ── 命中特效路由（2026-10-14 业主「对击中特效进行区分」）────────────────────
 ## 打中「僵尸三兄弟」（`Enemy3D.ZOMBIE_KINDS` = 小僵尸 / 警察僵尸 / 胖子僵尸）
@@ -809,7 +809,7 @@ func _explode() -> void:
 		radius = 4.0
 	elif bullet_tags.has("balloon"):
 		radius = 3.6
-	_spawn_effect(LEGACY_EFFECT_EXPLOSION, global_position, bullet_color, radius * 0.42)
+	_spawn_effect(EXPLOSION_EFFECT_ASSET_ID, global_position, bullet_color, radius * 0.42)
 	if MonsterAIManager != null:
 		MonsterAIManager.broadcast_sound_stimulus(
 			global_position, maxf(12.0, radius * 4.0), "explosion", shooter
@@ -1425,16 +1425,15 @@ func _spawn_effect(effect_id: StringName, world_position: Vector3, color: Color,
 		return
 	if get_tree().current_scene == null:
 		return
-	# 未注册 AssetID（爆炸等旧链图例）：仍走 CombatEffectPool3D，待 14.6 §6 迁移完成后删除。
-	var effect_pool := _resolve_combat_effect_pool()
-	if effect_pool != null:
-		effect_pool.acquire(str(effect_id), color, size, world_position)
-		return
-	# VfxPool 不在场（异常态）且该 AssetID 已注册：直接从注册表实例化，保留 AssetID 语义。
+	# 全局池缺失时，已注册的 AssetID 仍实例化正式 Prefab；旧池仅认识旧 kind 字符串。
 	var pooled_effect := VfxPool3D.create_unpooled(effect_id)
 	if pooled_effect != null:
 		get_tree().current_scene.add_child(pooled_effect)
 		pooled_effect.activate(world_position, color, size, context)
+		return
+	var effect_pool := _resolve_combat_effect_pool()
+	if effect_pool != null:
+		effect_pool.acquire(str(effect_id), color, size, world_position)
 		return
 	var effect := EFFECT_SCENE.instantiate() as CombatEffect3D
 	effect.configure(str(effect_id), color, size)

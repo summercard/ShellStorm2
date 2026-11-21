@@ -1,8 +1,12 @@
 [gd_scene format=3 uid="uid://fx0117"]
 
 [ext_resource type="Script" path="res://src/vfx/VfxDeathBlast3D.gd" id="1_death_blast"]
+[ext_resource type="PackedScene" path="res://assets/art/vfx/library/UnityVFXLibrary/Prefabs/Combat/Blood/Green/GreenBloodExplosionRound.tscn" id="2_library"]
 
 [node name="VfxDeathBlast3D" type="Node3D"]
 script = ExtResource("1_death_blast")
 metadata/asset_id = "VFX-DEATH-BLAST-3D"
-metadata/asset_version = "v002"
+metadata/asset_version = "v003"
+
+[node name="LibraryBurst" parent="." instance=ExtResource("2_library")]
+auto_play = false

@@ -1,3 +1,15 @@
+- VFX-POOL · [赛博空间三色预设与交界](2026-11-21_cyber_space.md)。独立 Shader、三色 Prefab 与同模型混用验收。
+
+- VFX-POOL · [赛博虚空场景组件覆盖](2026-11-21_cyber_void_component_scope.md)。同一范围覆盖栏杆等场景组件。
+
+- VFX-POOL · [赛博虚空墙面连贯性修复](2026-11-21_cyber_void_wall.md)。限制断面范围，通过同机位墙板对照验收。
+
+- VFX-POOL · [赛博虚空正式登记与景深改版](2026-11-21_cyber_void.md)。缩小方块，加入体素缺口、常驻漂移和多景深星屑。
+
+- VFX-POOL · [虚空体素断面与动态绕拍](2026-11-21_scene_void_erosion_depth.md)。加深洞口层次与冷暖光，录制方块沉落和镜头视差。
+
+- VFX-POOL · [场景虚空侵蚀](2026-11-21_scene_void_erosion.md)。独立 Shader、编辑组件和墙地预览。
+
 - FATE-RULES / UI-HUD · [正式远征购卡上半区接管与验收](2026-11-20_expedition_purchase_layout.md)。保留主树布局，新增可复跑的真实窗口几何与交易验证。
 - WORLD-INTERACTIVE-CLUTTER / WORLD-PLAN · [远征 01／99 安全屋固定五件移除](2026-11-20_exp01_99_safe_room_clutter.md)。两入口复用固定陈设能力开关，场景布局不改。
 - WORLD-ENTRY / VFX-POOL · [99F 返航火球修复](2026-11-20_return_vfx_cleanup.md)。记录开圈时的破门特效复现、回收时序及回归结果。

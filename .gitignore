@@ -321,6 +321,18 @@ tests/rec/out/
 !scenes/StartupLoadingSplash.png.import
 # END runtime_texture_policy
 
+# Unity VFX 库导入契约（2026-11-21 加入）
+# assets/art/vfx/library/** 是从 Unity 特效库 1:1 转换来的运行期资产。库内 .tscn 用
+# path= 引用那 20 张贴图、不带 uid，所以缺 .import 不会断链 —— 但会**静默改画风**：
+# 这些贴图刻意设了 mipmaps/generate=false、compress/mode=0（无损）、
+# detect_3d/compress_to=0（禁止 3D 使用时自动转 VRAM 压缩）、fix_alpha_border=true。
+# 缺 .import 时 Godot 按默认重导入 ⇒ 一进 3D 场景就自动 VRAM 压缩 + 生成 mipmap，
+# 光晕 / 斜切 / 环形的 alpha 渐变会出块状光环和边缘灰边。
+# 5 个 .obj 同理（generate_tangents / lods / shadow_mesh 属还原契约）。
+# 规则族同上方注释：新增资产分区时必须同步加一条，否则被第 3 行 *.import 吞掉。
+!assets/art/vfx/library/**/*.png.import
+!assets/art/vfx/library/**/*.obj.import
+
 # Current editable art is tracked (Godot ignores art_source/.gdignore).
 !art_source/
 !art_source/**/

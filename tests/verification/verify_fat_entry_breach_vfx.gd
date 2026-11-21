@@ -86,14 +86,14 @@ func _units() -> void:
 	check(VfxPool.active_count(ID) == 1, "真实默认预热创建活跃样本")
 	var warm: Node3D = VfxPool._active[ID][0]
 	var warm_snapshot: Dictionary = warm.get_presentation_snapshot()
-	check(warm_snapshot.piece_count == 5 and warm_snapshot.particle_budget == 92, "无context预热完整装配家具与全部粒子")
+	check(warm_snapshot.piece_count == 5 and warm_snapshot.particle_budget == 80, "无context预热完整装配家具与80个原拖尾/落尘粒子")
 	check(warm.find_children("*", "MeshInstance3D", true, false).size() >= 8, "预热不是家具空壳")
 	warm.finish()
 	check(not warm.visible and VfxPool.inactive_count(ID) == 1, "提前取消正常回池")
 	var context := {"seed":77123, "floor_y":FLOOR_Y, "forward":Vector3.RIGHT, "landing_distance_m":4.0}
 	var fx := _spawn(context)
 	check(fx == warm, "预热样本被正式复借")
-	check(fx.get_meta("asset_id") == String(ID) and fx.get_meta("asset_version") == "v001", "资产身份v001")
+	check(fx.get_meta("asset_id") == String(ID) and fx.get_meta("asset_version") == "v002", "资产身份v002")
 	check(fx.find_children("*", "CollisionObject3D", true, false).is_empty(), "无碰撞及伤害承载节点")
 	check(fx.find_children("*", "CollisionShape3D", true, false).is_empty(), "无碰撞形状")
 	check(fx.find_children("*", "Light3D", true, false).size() == 1, "最多一盏短灯")
@@ -107,8 +107,13 @@ func _units() -> void:
 	var heights := [1.244, .865, 1.741, 1.244, .865]
 	for index in 5:
 		check(absf(initial.bounds[index].size.y - heights[index]) < 0.025, "家具真实尺寸双向校验%d" % index)
+	var library := fx.get_node("LibraryBurst") as Node3D
 	fx._on_tick(0.30, 3.65)
+	check(not library.visible, "库爆点不在家具推挤阶段提前播放")
 	var pushed: Dictionary = fx.get_presentation_snapshot()
+	fx._on_tick(0.40, 3.65)
+	var burst_state: Dictionary = library.call("debug_exact")
+	check(library.visible and burst_state.running and burst_state.source_id == "ExplosionRoundFire" and burst_state.audio_play_calls == 0, "0.40秒触发库爆点，保留宿主音效")
 	check(pushed.transforms[0].origin.distance_to(initial.transforms[0].origin) > 0.1, "爆破前有短推挤")
 	fx._on_tick(0.95, 3.65)
 	var flying: Dictionary = fx.get_presentation_snapshot()
@@ -131,7 +136,7 @@ func _units() -> void:
 	check(reused == fx and reused.visible, "完整回收后同实例再次可见")
 	reused._on_tick(0.95, 3.65)
 	check(reused.get_presentation_snapshot().transforms == flying.transforms, "同seed复借确定性变换逐位相同")
-	for mesh in reused.find_children("*", "MeshInstance3D", true, false):
+	for mesh in reused.get_node("Furniture").find_children("*", "MeshInstance3D", true, false):
 		check(mesh.transparency == 0.0 and mesh.is_visible_in_tree(), "复借恢复家具alpha和可见性")
 	reused.finish()
 	var changed := context.duplicate()

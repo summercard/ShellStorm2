@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/vfx/VfxCyberSpace3D.gd" id="1"]
+
+[node name="CyberSpaceGreen" type="Node3D"]
+script = ExtResource("1")
+face_color = Color(0.023, 0.14, 0.104, 1)
+grid_color = Color(0.077, 0.66, 0.45, 1)
+outline_color = Color(0.32, 0.97, 0.65, 1)
+guide_color = Color(0.06, 0.92, 0.83, 1)
+signal_color = Color(0.73, 1, 0.27, 1)
+metadata/asset_id = "VFX-ENV-CYBER-SPACE-GREEN-3D"
+metadata/asset_version = "v001"
+metadata/display_name_zh = "赛博空间（绿）"

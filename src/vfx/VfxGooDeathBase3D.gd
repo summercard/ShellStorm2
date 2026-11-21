@@ -60,6 +60,10 @@ func _shockwave_enabled() -> bool:
 	return false
 
 
+func _burst_cube_count() -> int:
+	return BURST_COUNT
+
+
 const ToonVfx = preload("res://src/vfx/ToonVfxGeometry.gd")
 const Burst = preload("res://src/vfx/ToonVfxBurst.gd")
 
@@ -273,7 +277,7 @@ func _build() -> void:
 	_mat_splat = ToonVfx.toon_material(GOO_GREEN)
 
 	# ── A 爆炸粒子 ──
-	for index in BURST_COUNT:
+	for index in _burst_cube_count():
 		var cube := _add_cube("Burst%d" % index, _mat_burst)
 		_burst_dirs.append(_burst_direction(index, BURST_COUNT))
 		_burst_size_ratio.append(

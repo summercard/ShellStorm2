@@ -1,3 +1,15 @@
+- VFX-POOL · [赛博空间](design/scene_cyber_space.md)提供独立 Shader 与紫绿蓝三色预制体，可和普通场景、赛博虚空同屏交替。[开发记录](development/2026-11-21_cyber_space.md)
+
+- VFX-POOL · [赛博虚空](design/scene_void_erosion.md)默认覆盖宿主父节点下的墙地、栏杆和箱柜，可指定目标或排除组件。[开发记录](development/2026-11-21_cyber_void_component_scope.md)
+
+- VFX-POOL · [赛博虚空](design/scene_void_erosion.md)改用共同射线基准跨过墙缝，断面限制于实际破口，新增选填接缝补面。[修复记录](development/2026-11-21_cyber_void_wall.md)
+
+- VFX-POOL · [赛博虚空](design/scene_void_erosion.md)正式登记为 `FX03-04` / `VFX-ENV-VOID-EROSION-3D`。近远缺角方块共享蚀边格宽，空间星屑分深度采样。[开发记录](development/2026-11-21_cyber_void.md)
+
+- VFX-POOL · [场景虚空侵蚀](design/scene_void_erosion.md)加入可调深度的体素断面、体积雾和沉落旋转的单层方块。运行验收和动态绕拍见[开发记录](development/2026-11-21_scene_void_erosion_depth.md)。
+
+- VFX-POOL · [场景虚空侵蚀](design/scene_void_erosion.md)已提供可编辑的独立环境 Prefab，支持跨墙地的同一空间网格和可动画展开。接入入口与验收范围见[开发记录](development/2026-11-21_scene_void_erosion.md)。
+
 - FATE-RULES / UI-HUD · [正式远征购卡上半区](development/2026-11-20_expedition_purchase_layout.md)。布局已在主树，专项补齐几何与真实购买断言；真渲染复验待闭环，partial 不提升。
 - WORLD-INTERACTIVE-CLUTTER / WORLD-PLAN · [远征 01／99 安全屋固定五件](development/2026-11-20_exp01_99_safe_room_clutter.md)。两关独立声明关闭，其余房间配置、布局和共享资源不变；运行结果见独立记录。
 - WORLD-ENTRY / VFX-POOL · [99F 返航火球修复](development/2026-11-20_return_vfx_cleanup.md)。读取页开圈前回收预热实例并取消余队列，主动退出返航也清理战局特效。专项结果见开发记录。

@@ -1,0 +1,247 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://tests/visual/scene_void_erosion_preview.gd" id="preview"]
+[ext_resource type="PackedScene" path="res://assets/art/vfx/environment_3d/void_erosion/runtime/vfx_env_void_erosion_root_top3d.tscn" id="effect"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/floor_tile_5m_a/floor_tile_5m_a_root_top3d.tscn" id="floor"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_a/wall_5m_a_root_top3d.tscn" id="wall"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_c/wall_5m_c_root_top3d.tscn" id="wall_c"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/bridge_guardrail/bridge_guardrail_root_top3d.tscn" id="rail"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/bank_crate/bank_crate_root_top3d.tscn" id="crate"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/floor_base/floor_base_root_top3d.tscn" id="base"]
+
+[sub_resource type="Environment" id="room_environment"]
+background_mode = 1
+background_color = Color(0.023, 0.019, 0.039, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.52, 0.59, 0.84, 1)
+ambient_light_energy = 0.54
+tonemap_mode = 2
+glow_enabled = true
+glow_intensity = 0.81
+glow_bloom = 0.06
+glow_hdr_threshold = 0.91
+
+[sub_resource type="BoxShape3D" id="floor_support"]
+size = Vector3(25, 0.2, 20)
+
+[sub_resource type="PlaneMesh" id="left_seams"]
+size = Vector2(6.57, 15.4)
+
+[sub_resource type="PlaneMesh" id="back_seams"]
+size = Vector2(25.9, 6.57)
+
+[sub_resource type="PlaneMesh" id="floor_seams"]
+size = Vector2(25.9, 20.4)
+
+[node name="VoidErosionPreview" type="Node3D"]
+script = ExtResource("preview")
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource("room_environment")
+
+[node name="KeyLight" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.83, -0.66, 0.12)
+light_color = Color(0.84, 0.87, 1, 1)
+light_energy = 1.06
+shadow_enabled = true
+directional_shadow_max_distance = 67.0
+
+[node name="FillLight" type="OmniLight3D" parent="."]
+position = Vector3(-8, 6, -5)
+light_color = Color(0.54, 0.39, 0.94, 1)
+light_energy = 1.52
+omni_range = 26.0
+
+[node name="Camera" type="Camera3D" parent="."]
+position = Vector3(14, 20, 20)
+rotation = Vector3(-0.63, 0.63, 0)
+current = true
+fov = 41.0
+
+[node name="Stage" type="Node3D" parent="."]
+
+[node name="Support" type="StaticBody3D" parent="Stage"]
+position = Vector3(0, -0.12, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stage/Support"]
+shape = SubResource("floor_support")
+
+[node name="Subfloor" parent="Stage" instance=ExtResource("base")]
+position = Vector3(0, -0.322, 0)
+scale = Vector3(0.5, 1, 0.5)
+
+[node name="Floor00" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(-10, -0.1, -7.5)
+
+[node name="Floor01" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(-5, -0.1, -7.5)
+rotation = Vector3(0, 1.570796, 0)
+
+[node name="Floor02" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(0, -0.1, -7.5)
+rotation = Vector3(0, 3.141593, 0)
+
+[node name="Floor03" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(5, -0.1, -7.5)
+rotation = Vector3(0, 4.712389, 0)
+
+[node name="Floor04" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(10, -0.1, -7.5)
+
+[node name="Floor10" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(-10, -0.1, -2.5)
+rotation = Vector3(0, 1.570796, 0)
+
+[node name="Floor11" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(-5, -0.1, -2.5)
+rotation = Vector3(0, 3.141593, 0)
+
+[node name="Floor12" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(0, -0.1, -2.5)
+rotation = Vector3(0, 4.712389, 0)
+
+[node name="Floor13" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(5, -0.1, -2.5)
+
+[node name="Floor14" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(10, -0.1, -2.5)
+rotation = Vector3(0, 1.570796, 0)
+
+[node name="Floor20" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(-10, -0.1, 2.5)
+rotation = Vector3(0, 3.141593, 0)
+
+[node name="Floor21" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(-5, -0.1, 2.5)
+rotation = Vector3(0, 4.712389, 0)
+
+[node name="Floor22" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(0, -0.1, 2.5)
+
+[node name="Floor23" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(5, -0.1, 2.5)
+rotation = Vector3(0, 1.570796, 0)
+
+[node name="Floor24" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(10, -0.1, 2.5)
+rotation = Vector3(0, 3.141593, 0)
+
+[node name="Floor30" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(-10, -0.1, 7.5)
+rotation = Vector3(0, 4.712389, 0)
+
+[node name="Floor31" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(-5, -0.1, 7.5)
+
+[node name="Floor32" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(0, -0.1, 7.5)
+rotation = Vector3(0, 1.570796, 0)
+
+[node name="Floor33" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(5, -0.1, 7.5)
+rotation = Vector3(0, 3.141593, 0)
+
+[node name="Floor34" parent="Stage" instance=ExtResource("floor")]
+position = Vector3(10, -0.1, 7.5)
+rotation = Vector3(0, 4.712389, 0)
+
+[node name="BackWall0" parent="Stage" instance=ExtResource("wall")]
+position = Vector3(-10, -0.02, -10.04)
+scale = Vector3(1, 0.55, 1)
+
+[node name="BackWall1" parent="Stage" instance=ExtResource("wall_c")]
+position = Vector3(-5, -0.02, -10.04)
+rotation = Vector3(0, 1.570796, 0)
+scale = Vector3(1, 0.55, 1)
+
+[node name="BackWall2" parent="Stage" instance=ExtResource("wall")]
+position = Vector3(0, -0.02, -10.04)
+scale = Vector3(1, 0.55, 1)
+
+[node name="BackWall3" parent="Stage" instance=ExtResource("wall_c")]
+position = Vector3(5, -0.02, -10.04)
+rotation = Vector3(0, 1.570796, 0)
+scale = Vector3(1, 0.55, 1)
+
+[node name="BackWall4" parent="Stage" instance=ExtResource("wall")]
+position = Vector3(10, -0.02, -10.04)
+scale = Vector3(1, 0.55, 1)
+
+[node name="LeftWall0" parent="Stage" instance=ExtResource("wall_c")]
+position = Vector3(-12.55, -0.02, -7.5)
+scale = Vector3(1, 0.55, 1)
+
+[node name="LeftWall1" parent="Stage" instance=ExtResource("wall")]
+position = Vector3(-12.55, -0.02, -2.5)
+rotation = Vector3(0, 1.570796, 0)
+scale = Vector3(1, 0.55, 1)
+
+[node name="LeftWall2" parent="Stage" instance=ExtResource("wall_c")]
+position = Vector3(-12.55, -0.02, 2.5)
+scale = Vector3(1, 0.55, 1)
+
+[node name="Foreground" type="Node3D" parent="."]
+
+[node name="FrontRail" parent="Foreground" instance=ExtResource("rail")]
+position = Vector3(0, 0, 9.55)
+rotation = Vector3(0, 1.570796, 0)
+scale = Vector3(1, 0.72, 0.79)
+
+[node name="DividerRail" parent="Foreground" instance=ExtResource("rail")]
+position = Vector3(0.65, 0, -4.6)
+rotation = Vector3(0, 0.42, 0)
+scale = Vector3(1, 0.73, 0.234)
+
+[node name="CargoA" parent="Foreground" instance=ExtResource("crate")]
+position = Vector3(8.3, 0, -7.4)
+rotation = Vector3(0, 0.600000, 0)
+
+[node name="CargoB" parent="Foreground" instance=ExtResource("crate")]
+position = Vector3(9.55, 0, -6.1)
+rotation = Vector3(0, -0.600000, 0)
+
+[node name="CargoC" parent="Foreground" instance=ExtResource("crate")]
+position = Vector3(-9.85, 0, 4.95)
+rotation = Vector3(0, 0.400000, 0)
+
+[node name="SeamPlanes" type="Node3D" parent="."]
+
+[node name="LeftWall" type="MeshInstance3D" parent="SeamPlanes"]
+position = Vector3(-12.94, 3.24, -2.7)
+rotation = Vector3(0, 0, -1.570796)
+visible = false
+mesh = SubResource("left_seams")
+
+[node name="BackWall" type="MeshInstance3D" parent="SeamPlanes"]
+position = Vector3(-0.45, 3.24, -10.4)
+rotation = Vector3(1.570796, 0, 0)
+visible = false
+mesh = SubResource("back_seams")
+
+[node name="Floor" type="MeshInstance3D" parent="SeamPlanes"]
+position = Vector3(-0.45, -0.325, -0.2)
+visible = false
+mesh = SubResource("floor_seams")
+
+[node name="VoidErosion" parent="." instance=ExtResource("effect")]
+position = Vector3(-6.86, 1.94, -5.65)
+seam_fill_planes = Array[NodePath]([NodePath("../SeamPlanes/LeftWall"), NodePath("../SeamPlanes/BackWall"), NodePath("../SeamPlanes/Floor")])
+box_size = Vector3(16.9, 8.15, 14.3)
+cell_size = 0.48
+edge_width = 1.55
+edge_irregularity = 1.20
+rim_depth = 1.27
+interior_axis = Vector3(-0.52, -0.66, -0.54)
+depth_scale = 0.95
+
+[node name="Controls" type="CanvasLayer" parent="."]
+
+[node name="Help" type="Label" parent="Controls"]
+offset_left = 20.0
+offset_top = 17.0
+theme_override_colors/font_color = Color(0.87, 0.87, 0.95, 0.94)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.72)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+text = "1  关闭    2  半开    3  全开    空格  展开／收回    方向键  旋转视角    P  正交／透视"
