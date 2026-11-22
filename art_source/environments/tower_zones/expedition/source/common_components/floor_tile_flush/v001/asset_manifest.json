@@ -1,0 +1,46 @@
+{
+  "version": "v001",
+  "scope": "expedition_01 static checkerboard floor variants",
+  "assets": [
+    {
+      "variant": "c01",
+      "base_glb_sha256": "f114c2e1a44d78df4fd5ea0a061c2279ed6cb8606d8256a5afcc9346b38a5b79",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/floor_tile_flush/v001/floor_tile_flush_c01_source.blend",
+      "source_sha256": "a2f5228ba481695f4df31c33a71f5500940452ae21264f593feaed180d7ceb93",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/floor_tile_flush/v001/optimized/floor_tile_flush_c01_optimized.blend",
+      "optimized_sha256": "99ffd9d342859f2e4f3fd03e9be0ca065fa03f87775e9f03634fd393f755db67",
+      "glb_sha256": "036ea80ab4a5bd3f827441b4b81db5ea628c0db17c43dd742477b8b42c85debd",
+      "triangles_before": 2608,
+      "triangles_after": 2608,
+      "loose_vertices_removed": 0,
+      "operation": "Extend substrate only to 5m on X/Y. Preserve UV, relief and Z.",
+      "asset_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "asset_variant": "expedition_01_flush",
+      "runtime_scene": "assets/art/environments/tower_zones/expedition/runtime/common_components/floor_tile_flush/floor_tile_flush_c01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/tower_zones/expedition/components/common_components/floor_tile_flush/floor_tile_flush_c01_visual_top3d.glb",
+      "reduction_ratio": 0.0,
+      "reduction_note": "Preserved relief and per-face palette UVs from the shipped triangulated mesh.",
+      "recovered_from": "assets/art/environments/tower_zones/battle/components/common_components/floor_tile_5m/floor_tile_r01_c01_visual_top3d.glb"
+    },
+    {
+      "variant": "c02",
+      "base_glb_sha256": "ad6afc956a002c6457ddcbb5b9429fac26750eab6c890d35ad071e624c582c1d",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/floor_tile_flush/v001/floor_tile_flush_c02_source.blend",
+      "source_sha256": "17f91c5fd4f9d994502f319af94b23f5228ef8ce1e10ae0845a659bac4c07c83",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/floor_tile_flush/v001/optimized/floor_tile_flush_c02_optimized.blend",
+      "optimized_sha256": "12add005b2ce449a1b9c2f52c834ce7a3d002740c44bf2137efd8607869506ae",
+      "glb_sha256": "e51e33634b0b6372907ff2b3b8846f3912c61ee5cdd7adc781ff4b5d5906198e",
+      "triangles_before": 3028,
+      "triangles_after": 3028,
+      "loose_vertices_removed": 0,
+      "operation": "Extend substrate only to 5m on X/Y. Preserve UV, relief and Z.",
+      "asset_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "asset_variant": "expedition_01_flush",
+      "runtime_scene": "assets/art/environments/tower_zones/expedition/runtime/common_components/floor_tile_flush/floor_tile_flush_c02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/tower_zones/expedition/components/common_components/floor_tile_flush/floor_tile_flush_c02_visual_top3d.glb",
+      "reduction_ratio": 0.0,
+      "reduction_note": "Preserved relief and per-face palette UVs from the shipped triangulated mesh.",
+      "recovered_from": "assets/art/environments/tower_zones/battle/components/common_components/floor_tile_5m/floor_tile_r01_c02_visual_top3d.glb"
+    }
+  ]
+}

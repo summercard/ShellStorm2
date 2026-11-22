@@ -1,3 +1,5 @@
+- 2026-11-22 · ASSET-PIPELINE / WORLD-PLAN · [远征01棋盘地砖补缝](2026-11-22_exp01_floor_flush.md)。C01/C02 底板覆盖 5m 网格，正式房间引用及场景账本已同步。
+
 - 2026-11-22 · WORLD-PLAN · [远征01复用房间黑幕](2026-11-22_expedition01_room_curtain.md)。按当前房间换圈，支持共墙门和深井标高。
 
 - 2026-11-22 · PLAYER-STATE / UI-HUD / WORLD-ENTRY · [游戏指针与战斗准星交接](2026-11-22_cursor_crosshair_handoff.md)。接入塔楼、远征、基地、靶场、读取与重试，新增光标交接专项。

@@ -2889,7 +2889,7 @@
   "ENV-EXPEDITION-L01-OFFICE-ROOM": {
    "c": "场景",
    "d": "scenes",
-   "v": "9f62bc21b68c24bf884717277b95b500dd1816d7665de27d7b08b9f0f9630849"
+   "v": "d9559b4b30fcf686551019af26dcfb30f3d45246acbaf7dd02c68ebaea5ed290"
   },
   "ENV-EXPEDITION-L01-ROOM-DB-70X50": {
    "c": "场景",
@@ -7723,7 +7723,7 @@
  "sheet": "资产主表",
  "sheet_digests": {
   "3D-其他": "dcfaaf667850374ed3c56a3cce0fc337734c84a50b9e8502a9170ce020e07743",
-  "3D-场景通用": "a328c5481bc915d993e0f28a431659a93eee1a386420c704be7d3dd922fe2711",
+  "3D-场景通用": "c77979eb1f45bd405797592fe8e085ade83ba60d87643a0d8c54145483cdd78c",
   "3D-敌人": "88fedfcd0603cd92aca2574df6e88ca7a7243ac03df105e42dd678a939dd1814",
   "3D-武器": "507f387042335d14fc4782386a2c083e509e0f530ba4997293cebf0b925c19f2",
   "3D-物品": "b9d3f610d2a77d8d7b4d55872eb3d0e2d57caa9840c144a672c76e6fe599ba4b",
@@ -8067,6 +8067,20 @@
     "flame_runtime_sha256": "03554e5a28210dd9dc3bfcd554e2f44eafb9f6491ac6914c8829c36272253fb7",
     "flame_source_sha256": "dc6b5decd0e7e99900b0493fa1496f80e34d272f5603081634d0e99235ea9d2b"
    }
+  },
+  {
+   "asset_id": [
+    "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+    "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+    "ENV-EXPEDITION-L01-OFFICE-ROOM"
+   ],
+   "date": "2026-11-22",
+   "operation": "远征01 棋盘地砖补缝：仅《3D-场景通用》P91/P92 与《资产主表》Y243 追加 floor_tile_flush/v001 变体追溯；不新增 AssetID、不改其他行与专表，只同步这两处行/页摘要。",
+   "record": "docs/v0.1/development/2026-11-22_exp01_floor_flush.md",
+   "refreshed_columns": [
+    "P",
+    "Y"
+   ]
   }
  ]
 }

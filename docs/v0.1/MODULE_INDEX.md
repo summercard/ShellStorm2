@@ -1,3 +1,5 @@
+- ASSET-PIPELINE / WORLD-PLAN · [远征01棋盘地砖补缝](development/2026-11-22_exp01_floor_flush.md)。C01/C02 底板覆盖 5m 网格，正式房间引用及场景账本已同步。
+
 - WORLD-PLAN · [远征01复用房间黑幕](development/2026-11-22_expedition01_room_curtain.md)。共享远征03幕墙机制，正式关卡专项与窗口验证见独立记录。
 
 - PLAYER-STATE / UI-HUD / WORLD-ENTRY · [游戏指针与战斗准星交接](development/2026-11-22_cursor_crosshair_handoff.md)。UiCursorMode 统一窗口指针和已登记世界准星的可见性，专项覆盖模态叠加、设备切换和读取交接。
