@@ -11,17 +11,16 @@ extends Node
 ##   A1 位点不与主路门洞重合 · A2 位点在房间边界且 lane 不越界 · A3 朝外无遮挡
 ##   A4 pair 0 恒刷 · A5 pair 1 命中率 ∈ [45%,55%] · A6 同种子房型序列一致
 ##   A7 存档往返逐字段相等 · A8 子图不进主图记录
-##   A9 破板后门口出现交互候选，按 E 才传送到子图落点
-##   A10 入口房未清时木板锁死（不掉血、不破）
-##   A11 撤离门阈值 = ceil(内容房总数 × 0.4)，锁定态与进度一致，超阈值可解锁
-##   A14 破板只拆木板层，门叶留在原地
-##   A15 子图末端有回主图的返程门且按 E 可用（否则进了出不来）
+##   A9 主路暗门初始可用，未按 E 不传送
+##   A11 撤离门阈值、锁定态与旧快照兼容
+##   A14 无板暗门保留可见门叶，无木板节点及碰撞
+##   A15 正式场景首间及末间从出生点走到返程门、按 E 回主路并激活目标房
 ##   A16 子图内部靠门与门对接走通（真房型 + 门互指 + 走廊，不许再传送串联）
 ##   A17 子图撤离房内含 STANDARD 非锁定撤离信标（复用主撤离房同一套）
 ##   A18 子图每一间都加载了正式美术（共享房壳），不许退回程序化灰盒
 ##   A19 子图每间固定 5 只强化怪 + 2 只普通怪，首次进房才刷，全灭即标清
-##   A20 位点木板不得压在**任何**主路门洞上（运行时实测中心距 ≥ 半个门宽 ×2）
-##   A21 木板必须露在墙面之外：从房间内 4m 朝门中心的射线，首个必须命中门本身
+##   A20 暗门位点不得压在任何主路门洞上（运行时实测中心距 ≥ 2.3m）
+##   A21 从房间内 4m 朝门中心的射线不应命中墙或家具；无板门不挡射线
 ##   A22 门前 2.4m 不得被工作台/货架等家具挡住（否则看得见也走不到）
 ##   A23 门框前表面必须比墙面凸出 ≥ 0.25m —— 3cm 那种「刚好不穿模」在暗房里就是一面平墙
 ##   A24 房间 TSCN 里手摆的门必须与运行时那扇门重合（差 ≤1cm、朝向点积 ≥0.99）
@@ -339,7 +338,7 @@ func _check_runtime(failures: Array[String], notes: Array[String]) -> void:
 	var main_records: Array = tower._records as Array
 	for record_value in main_records:
 		var record := record_value as Dictionary
-		if str(record.get("id", "")).begins_with("Secret"):
+		if str(record.get("id", "")).begins_with("secret_"):
 			failures.append("A8 子图房间混入了主图记录：%s" % str(record.get("id", "")))
 	for point_value in (snapshot.get("branch_points", {}) as Dictionary).values():
 		for point in point_value as Array:
@@ -347,123 +346,16 @@ func _check_runtime(failures: Array[String], notes: Array[String]) -> void:
 			if p.x < BRANCH_BASE_X - BRANCH_X_TOLERANCE:
 				failures.append("A8 子图房间没有落在主图外的偏移带：%s" % str(p))
 
-	# 板体血量公式与可破坏性。
-	var door_s1 := branch.get_node_or_null("SecretDoor_S1")
-	if door_s1 == null:
-		failures.append("运行时 找不到 SecretDoor_S1")
+	var player := get_tree().get_first_node_in_group("player_3d") as Player3D
+	if player == null:
+		failures.append("A9 场景内没有玩家，不能验证按 E 传送")
 	else:
-		var cleared := int(tower.call("_count_cleared_content_rooms"))
-		var expected_hp := DOOR_HP_BASE + DOOR_HP_PER_CLEARED * cleared
-		if int(door_s1.get("max_hp")) != expected_hp:
-			failures.append(
-				"运行时 S1 板体血量 %d 与公式 %d 不符"
-				% [int(door_s1.get("max_hp")), expected_hp]
-			)
-
-		# A10：入口板在入口房未清时必须锁着 —— 打上去不掉血、不破。
-		# 设计 §5.2：玩家在战斗中冲进支线会把主路怪物留在原地，回来时房态错乱。
-		if not bool(door_s1.call("is_locked")):
-			failures.append("A10 入口房未清时 S1 木板却是解锁的")
-		var hp_before := int(door_s1.get("hp"))
-		door_s1.call("take_damage", 9999, false, Vector3.ZERO, 0.0)
-		for _frame in range(3):
-			await get_tree().physics_frame
-		if int(door_s1.get("hp")) != hp_before:
-			failures.append(
-				"A10 锁定态被打掉血：%d -> %d" % [hp_before, int(door_s1.get("hp"))]
-			)
-		if bool(door_s1.call("is_broken")):
-			failures.append("A10 锁定态被打碎了")
-
-		# 模拟入口房清完：解锁后才能破。
-		branch.call("refresh_entry_locks", Callable(self, "_always_cleared"))
-		if bool(door_s1.call("is_locked")):
-			failures.append("A10 入口房清完后 S1 木板仍未解锁")
-
-		# A9：破板后门口出现交互候选，**按 E** 才被移到子图落点。
-		# 旧实现是「踩进 Area3D 就传送」：触发盒为了贴住门洞必然有一半探进房间，
-		# 玩家贴着墙走就会被吸走，既不知道发生了什么也没法拒绝。现在断言三件事：
-		#   ① 木板还在时不能传送（按 E 什么也不发生）；
-		#   ② 破板后门口有候选，且文案是按键文案（圆点下才会显示「(e) …」）；
-		#   ③ 真的按下 E 之后玩家落到子图落点。
-		if bool(door_s1.call("can_teleport")):
-			failures.append("A9 木板未破时就能传送")
-		if bool(door_s1.call("is_interaction_dot_visible")):
-			failures.append("A9 木板未破时门口就挂了交互圆点（会骗玩家按 E）")
-		door_s1.call("take_damage", 9999, false, Vector3.ZERO, 0.0)
-		for _frame in range(3):
-			await get_tree().physics_frame
-		if not bool(door_s1.call("is_broken")):
-			failures.append("A9 板体未进入破碎态")
-		if not bool(door_s1.call("can_teleport")):
-			failures.append("A9 破板后门仍不可传送")
-		if not bool(door_s1.call("is_interaction_dot_visible")):
-			failures.append("A9 破板后门口没有交互圆点")
-		if not door_s1.is_in_group(PlayerInteractionController3D.PROVIDER_GROUP):
-			failures.append("A9 门没进交互 provider 组，圆点不会被创建")
-
-		# A14：破板只拆木板层，门叶必须留在原地。
-		# 这是 2026-10-18 换资产后的新契约 —— 原实现整块板消失，破完只剩空气，
-		# 玩家不知道自己打掉了什么。若有人把门叶一起隐藏，这条会红。
-		# 木板层有 0.06+0.10s 的收缩反馈后才 visible=false，碰撞则是立即关闭的；
-		# 这里等动画走完再判定终态，否则测的是中间态。
-		for _frame in range(20):
-			await get_tree().process_frame
-		var door_view := door_s1.call("debug_snapshot") as Dictionary
-		if not bool(door_view.get("has_door_leaf", false)):
-			failures.append("A14 门叶层不存在（资产未挂上，退回了程序化兜底板）")
-		elif not bool(door_view.get("door_leaf_visible", false)):
-			failures.append("A14 破板后门叶被一起隐藏 —— 玩家看不到被木板封住的那扇门")
-		if bool(door_view.get("boards_visible", true)):
-			failures.append("A14 破板后木板层仍在显示")
-		if int(door_view.get("collision_layer", 1)) != 0:
-			failures.append("A14 破板后木板层碰撞未关闭")
-
-		var player := get_tree().get_first_node_in_group("player_3d") as Node3D
-		if player == null:
-			notes.append("A9 场景内没有 player_3d，按 E 传送未实测")
-		else:
-			# 站到门口（门节点原点 = 地面、门洞中心）。
-			player.set("global_position", (door_s1 as Node3D).global_position)
-			for _frame in range(4):
-				await get_tree().physics_frame
-			var candidate := door_s1.call("get_interaction_candidate", player) as Dictionary
-			if candidate.is_empty():
-				failures.append("A9 站在门口却没有交互候选（按 E 打不开门）")
-			else:
-				var prompt := str(candidate.get("prompt", ""))
-				if not prompt.begins_with("[E]"):
-					failures.append("A9 交互文案不是按键文案，圆点不会显示功能词：%s" % prompt)
-				var target := door_s1.call("get_teleport_target") as Vector3
-				if not bool(door_s1.call("perform_interaction", player, candidate)):
-					failures.append("A9 按 E 未触发传送")
-				for _frame in range(8):
-					await get_tree().physics_frame
-				if player.global_position.distance_to(target) > 2.0:
-					failures.append(
-						"A9 按 E 后玩家未被移到子图落点：%s -> %s（目标 %s）"
-						% [str(door_s1.call("get_interaction_dot_anchor")), str(player.global_position), str(target)]
-					)
-
-				# A25：落点必须**真的在子图房间里**。
-				#
-				# A9 只比「玩家位置 vs 落点」，两边一起被推歪时它照样是绿的 —— 2026-10-19
-				# 业主实测「按 E 传送到空房间」正是这种：`_rebase_door()` 把门的手摆位移
-				# 也加到了落点上，落点被子图房间外推 39m，人落在房间外的空中往下掉，
-				# 眼里就是一间没装配的空房。几何判据比距离阈值可靠：
-				# 落点必须落在某一间子图房间的平面范围内，高度不离地。
-				var landing := player.global_position
-				var landing_room := _room_containing(branch, landing)
-				if landing_room.is_empty():
-					failures.append(
-						"A25 按 E 的落点不在任何子图房间里：%s —— 玩家会落在空处/下坠" % str(landing)
-					)
-				else:
-					notes.append("A25 传送落点落在子图房间内：%s" % landing_room)
+		await _check_portal_round_trips(tower, branch, player, snapshot, failures, notes)
 
 		# A11：撤离门阈值 = ceil(内容房总数 × 0.4)，且锁定态与「已清 vs 阈值」一致。
 		# A15：子图末端必须有回主图的传送门 —— 出口门板在主图那侧，玩家进了子图
 		# 够不到它；只靠出口门就等于「进了出不来」。
+		var exit_board := branch.get_node_or_null("SecretDoor_X0") as SecretDoor3D
 		var total := int(tower.call("_count_content_rooms"))
 		var expected_threshold := int(ceil(float(total) * 0.4))
 		var extraction := branch.call("extraction_snapshot") as Dictionary
@@ -475,6 +367,16 @@ func _check_runtime(failures: Array[String], notes: Array[String]) -> void:
 		var rows: Array = extraction.get("rows", []) as Array
 		if rows.is_empty():
 			failures.append("A11 撤离门未装配（子图应有第二道隐藏门）")
+		if exit_board != null:
+			var expected_hp := DOOR_HP_BASE + DOOR_HP_PER_CLEARED * int(extraction.get("cleared", 0))
+			if exit_board.max_hp != expected_hp:
+				failures.append("A11 撤离门板体初始 HP 不符合公式")
+			exit_board.set_locked(false)
+			exit_board.restore_state({"broken": false, "locked": true})
+			var hp_before := exit_board.hp
+			exit_board.take_damage(9999, false, Vector3.ZERO, 0.0)
+			if not exit_board.is_locked() or exit_board.hp != hp_before or exit_board.can_teleport() or exit_board.is_interaction_dot_visible():
+				failures.append("A11 旧快照未恢复撤离门锁，或锁住时仍能破板/传送")
 		var cleared_now := int(extraction.get("cleared", -1))
 		var should_unlock := cleared_now >= expected_threshold
 		for row_value in rows:
@@ -780,7 +682,9 @@ func _check_runtime(failures: Array[String], notes: Array[String]) -> void:
 				% [JSON.stringify(door_rows), JSON.stringify(again.get("doors", []))]
 			)
 
-		# A20：位点木板不得压在**任何**主路门洞上。
+		await _check_middle_room_retreat(tower, branch, player, failures, notes)
+
+		# A20：暗门安装位点不得压在**任何**主路门洞上。
 		# 静态断言只看得见设计源；运行时房位由生成器重排（远征01 整层转 180°），
 		# 只有拿真实门扇节点的世界坐标量，才能保证「这块木板没有把哪条路钉死」。
 		_check_site_door_clearance(tower, failures, notes)
@@ -789,7 +693,236 @@ func _check_runtime(failures: Array[String], notes: Array[String]) -> void:
 	await get_tree().process_frame
 
 
-## A20：把每个 `SecretDoor_S*` 木板与所有主路 `Door_*` 门扇逐个量水平距离。
+func _check_portal_round_trips(
+	tower: TowerDescent3D, branch: Node, player: Player3D, snapshot: Dictionary,
+	failures: Array[String], notes: Array[String]
+) -> void:
+	var covered_templates := {}
+	var by_pair := snapshot.get("branch_points", {}) as Dictionary
+	for key in by_pair:
+		var pair_id := int(key)
+		var points := by_pair[key] as Array
+		for route in range(2):
+			var entry_id := "S%d" % (pair_id * 2 + route + 1)
+			var return_id := "%s%d" % ["E" if route == 0 else "R", pair_id]
+			var entry := branch.get_node_or_null("SecretDoor_" + entry_id) as SecretDoor3D
+			var back := branch.get_node_or_null("SecretDoor_" + return_id) as SecretDoor3D
+			if entry == null or back == null:
+				failures.append("A15 缺少配对门 %s / %s" % [entry_id, return_id])
+				continue
+			for door in [entry, back]:
+				_check_open_door(door, failures)
+			var index := 0 if route == 0 else points.size() - 1
+			var branch_id := "secret_%d_%d" % [pair_id, index]
+			var main_id := str((EXPECTED_SITES[entry_id] as Dictionary)["room_id"])
+			var landing := points[index] as Vector3
+			var main_room := (tower.get("_room_by_id") as Dictionary).get(main_id) as DungeonRoom3D
+			var branch_room := branch.find_child("SecretRoom_" + branch_id, true, false) as DungeonRoom3D
+			if branch_room == null or main_room == null:
+				failures.append("A15 %s / %s 缺房间" % [entry_id, return_id])
+				continue
+			if route == 0:
+				covered_templates[branch_room.static_layout_scene_path] = true
+			var source := entry.global_position - entry.global_basis.z * 1.2
+			var return_target := back.get_teleport_target()
+			if return_target.distance_to(source) > 10.5 or not main_room.contains_world_position(return_target + Vector3.UP * 0.05):
+				failures.append("A15 %s 未取 %s 终态门前的有效落点：%s" % [return_id, entry_id, return_target])
+			player.global_position = source + Vector3.UP * 0.05
+			player.velocity = Vector3.ZERO
+			await _wait_physics(12)
+			if route == 0 and str(tower.get("_current_room_id")) != main_id:
+				failures.append("A9 %s 门前未正常进主线房 %s" % [entry_id, main_id])
+			if route == 0 and main_room.cleared:
+				failures.append("A9 %s 未覆盖未清房直接进入支线" % entry_id)
+			if not await _use_portal(player, entry, failures):
+				continue
+			if player.global_position.distance_to(landing) > 0.2 or not player.is_on_floor() or _room_containing(branch, player.global_position) != branch_id or str(tower.get("_current_room_id")) != branch_id:
+				failures.append("A25 %s 未落地并触发 %s：%s（目标 %s）" % [entry_id, branch_id, player.global_position, landing])
+				continue
+			var encounter_before := _find_encounter_row(tower.call("secret_branch_encounter_snapshot") as Array, branch_id)
+			var enemies_before := _branch_enemy_ids(tower, branch_id)
+			var approach := back.global_position - back.global_basis.z * 1.1
+			if not await _walk_to(player, approach):
+				failures.append("A15 %s 从落点 %s 走不到 %s（停在 %s）" % [branch_id, landing, return_id, player.global_position])
+				continue
+			var space := player.get_world_3d().direct_space_state
+			var eye := Vector3.UP * 1.3
+			var view := PhysicsRayQueryParameters3D.create(approach + eye, back.global_position + eye, 1, [player.get_rid()])
+			if not space.intersect_ray(view).is_empty():
+				failures.append("A15 %s 门前视线被挡" % return_id)
+			var backing := PhysicsRayQueryParameters3D.create(back.global_position + eye, back.global_position + eye + back.global_basis.z * 2.7, 1, [player.get_rid()])
+			if space.intersect_ray(backing).is_empty():
+				failures.append("A15 %s 背后没有实体墙" % return_id)
+			if not await _use_portal(player, back, failures):
+				continue
+			if not player.is_on_floor() or str(tower.get("_current_room_id")) != main_id or main_room.get_stream_state() != DungeonRoom3D.STREAM_ACTIVE:
+				failures.append("A15 %s 返回后未恢复 %s 落地/进房/流送：%s，当前 %s" % [return_id, main_id, player.global_position, tower.get("_current_room_id")])
+				continue
+			if route == 1:
+				notes.append("A15 %s -> %s -> %s -> %s：走到门前、按 E、落地进房" % [entry_id, branch_id, return_id, main_id])
+				continue
+			if not await _use_portal(player, entry, failures):
+				continue
+			var enemies_after := _branch_enemy_ids(tower, branch_id)
+			var new_enemies := enemies_after.filter(func(id: int) -> bool: return not enemies_before.has(id))
+			if player.global_position.distance_to(landing) > 0.2 or encounter_before.is_empty() or not new_enemies.is_empty():
+				failures.append("A15 %s 重入落点变化、缺首访记录或额外刷怪：%s" % [entry_id, new_enemies])
+			else:
+				notes.append("A9/A15/A25 %s -> %s -> %s -> %s：走到门前、按 E、落地进房并重入" % [entry_id, branch_id, return_id, main_id])
+	if covered_templates.size() != 2:
+		failures.append("A15 未覆盖两种支线首间房型：%s" % str(covered_templates.keys()))
+
+
+func _branch_enemy_ids(tower: TowerDescent3D, room_id: String) -> Array[int]:
+	var ids: Array[int] = []
+	var by_room := tower.get("_enemy_nodes_by_room") as Dictionary
+	for enemy in by_room.get(room_id, []):
+		if is_instance_valid(enemy):
+			ids.append(enemy.get_instance_id())
+	return ids
+
+
+func _check_middle_room_retreat(
+	tower: TowerDescent3D, branch: Node, player: Player3D,
+	failures: Array[String], notes: Array[String]
+) -> void:
+	# 固定种子的 pair 0 有三间；从 S1 起步，桥房往返中不能再摆动玩家位置。
+	var first := branch.find_child("SecretRoom_secret_0_0", true, false) as DungeonRoom3D
+	var middle := branch.find_child("SecretRoom_secret_0_1", true, false) as DungeonRoom3D
+	var entry := branch.get_node_or_null("SecretDoor_S1") as SecretDoor3D
+	var back := branch.get_node_or_null("SecretDoor_E0") as SecretDoor3D
+	if first == null or middle == null or entry == null or back == null:
+		failures.append("A15 中间房回退路线缺房间或传送门")
+		return
+	var outbound := first.get_door_node_towards(middle.room_id)
+	var inbound := middle.get_door_node_towards(first.room_id)
+	if outbound == null or inbound == null:
+		failures.append("A15 首间和中间房缺配对通道门")
+		return
+	player.global_position = entry.global_position - entry.global_basis.z * 1.2 + Vector3.UP * 0.05
+	player.velocity = Vector3.ZERO
+	await _wait_physics(12)
+	if not await _use_portal(player, entry, failures):
+		return
+	var east := Vector3.RIGHT
+	var first_side := outbound.global_position - east * 1.6
+	var middle_side := inbound.global_position + east * 1.6
+	if not await _walk_to(player, first_side):
+		failures.append("A15 首间从出生点走不到通道门（停在 %s，目标 %s）" % [player.global_position, first_side])
+		return
+	if not await _open_branch_passage(tower, player, outbound, failures):
+		return
+	if not await _walk_to(player, inbound.global_position - east * 1.5):
+		failures.append("A15 首间走廊无法走到中间房门前（停在 %s）" % player.global_position)
+		return
+	if not await _open_branch_passage(tower, player, inbound, failures):
+		return
+	if not await _walk_to(player, middle_side):
+		failures.append("A15 中间房普通门开后不能通过（停在 %s）" % player.global_position)
+		return
+	await _wait_physics(6)
+	if str(tower.get("_current_room_id")) != middle.room_id or not middle.contains_world_position(player.global_position) or middle.cleared:
+		failures.append("A15 未进入尚未清房的中间房：当前位置 %s，房态 %s，已清 %s" % [player.global_position, tower.get("_current_room_id"), middle.cleared])
+		return
+	if not await _walk_to(player, first_side):
+		failures.append("A15 中间房不能沿原走廊退回首间（停在 %s）" % player.global_position)
+		return
+	await _wait_physics(6)
+	if str(tower.get("_current_room_id")) != first.room_id:
+		failures.append("A15 沿走廊返回后没有恢复首间房态")
+		return
+	var approach := back.global_position - back.global_basis.z * 1.1
+	if not await _walk_to(player, approach):
+		failures.append("A15 退回首间后走不到 E0（停在 %s，目标 %s）" % [player.global_position, approach])
+		return
+	if not await _use_portal(player, back, failures):
+		return
+	if not player.is_on_floor() or str(tower.get("_current_room_id")) != "room_03":
+		failures.append("A15 中间房原路回退未落地进 room_03")
+		return
+	notes.append("A15 S1 -> 首间 -> 中间房 -> 原走廊 -> 首间 -> E0 -> room_03：未清中间房，连续原路回退")
+
+
+func _open_branch_passage(
+	tower: TowerDescent3D, player: Player3D, door: RoomDoor3D, failures: Array[String]
+) -> bool:
+	if door.requires_clear or door.requires_key or door.triggers_fate:
+		failures.append("A15 通道门 %s 不再是免费双向门" % door.get_path())
+		return false
+	if not door.is_open:
+		var candidate := tower.get_interaction_candidate(player)
+		if candidate.get("door") != door or str(candidate.get("mode", "")) != "secret_branch_door":
+			failures.append("A15 普通门 %s 未给出正确的按键候选（当前位置 %s）" % [door.get_path(), player.global_position])
+			return false
+		_press_interact()
+	for _step in range(90):
+		await get_tree().physics_frame
+		if door.is_open and not bool(door.get_snapshot().get("blocks_passage", true)):
+			return true
+	failures.append("A15 按 E 后普通门 %s 未打开" % door.get_path())
+	return false
+
+
+func _check_open_door(door: SecretDoor3D, failures: Array[String]) -> void:
+	var view := door.debug_snapshot()
+	if not door.is_broken() or door.is_locked() or not door.can_teleport() or not door.is_interaction_dot_visible() or not door.is_in_group(PlayerInteractionController3D.PROVIDER_GROUP):
+		failures.append("A9 %s 不是初始可交互的破坏态" % door.site_id)
+	if not bool(view.get("door_leaf_visible", false)) or bool(view.get("has_boards", true)) or door.collision_layer != 0:
+		failures.append("A14 %s 缺门叶或仍有板体/碰撞" % door.site_id)
+	door.restore_state({"broken": false, "locked": true})
+	if door.is_locked() or not door.can_teleport():
+		failures.append("A7 旧快照将无板门 %s 锁回" % door.site_id)
+
+
+func _use_portal(player: Player3D, door: SecretDoor3D, failures: Array[String]) -> bool:
+	var start := player.global_position
+	await _wait_physics(3)
+	if player.global_position.distance_to(start) > 0.2:
+		failures.append("A9 %s 未按 E 已移动：%s → %s" % [door.site_id, start, player.global_position])
+	var candidate := door.get_interaction_candidate(player)
+	if not str(candidate.get("prompt", "")).begins_with("[E]"):
+		failures.append("A9 %s 门前没有按 E 的候选：玩家 %s 门 %s" % [door.site_id, player.global_position, door.global_position])
+		return false
+	_press_interact()
+	await _wait_physics(12)
+	if player.global_position.distance_to(door.get_teleport_target()) > 0.2:
+		failures.append("A9 %s 按 E 未到站：%s，目标 %s" % [door.site_id, player.global_position, door.get_teleport_target()])
+		return false
+	return true
+
+
+func _press_interact() -> void:
+	for pressed in [true, false]:
+		var input := InputEventAction.new()
+		input.action = &"interact"
+		input.pressed = pressed
+		Input.parse_input_event(input)
+
+
+func _walk_to(player: Player3D, target: Vector3) -> bool:
+	# 注入方向，让正式 Player3D 处理走路、地面吸附和门槛，不用胶囊平推代替。
+	var reached := false
+	for _step in range(450):
+		var delta := target - player.global_position
+		delta.y = 0.0
+		if delta.length() <= 0.22 and player.is_on_floor():
+			reached = true
+			break
+		if not player.is_on_floor():
+			break
+		player.set_test_move_direction(delta)
+		await get_tree().physics_frame
+	player.set_test_move_direction(null)
+	await _wait_physics(3)
+	return reached and player.is_on_floor()
+
+
+func _wait_physics(frames: int) -> void:
+	for _frame in range(frames):
+		await get_tree().physics_frame
+
+
+## A20：把每个 `SecretDoor_S*` 与所有主路 `Door_*` 门扇逐个量水平距离。
 ##
 ## 为什么必须运行时量：设计源只声明「哪面墙、哪条 lane」，最终世界坐标要等
 ## `FloorPlanGenerator` 重排 + 整层旋转之后才有。S3 曾因此压在
@@ -918,19 +1051,8 @@ func _check_site_visibility(
 		query.collide_with_areas = false
 		query.collide_with_bodies = true
 		var hit: Dictionary = space.intersect_ray(query)
-		if hit.is_empty():
-			failures.append("A21 位点 %s 的视线射线没打到任何东西（门没有碰撞？）" % site_id)
-			continue
-		var collider := hit.get("collider") as Node
-		var is_door := collider == door or (collider != null and door.is_ancestor_of(collider))
-		if not is_door:
-			var blocker := "?"
-			if collider != null and collider.get_parent() != null:
-				blocker = str(collider.get_parent().name)
-			failures.append(
-				"A21 位点 %s 从房间里看过去先撞到 %s —— 木板被挡住，玩家看不见入口"
-				% [site_id, blocker]
-			)
+		if not hit.is_empty():
+			failures.append("A21 位点 %s 门叶前的视线被 %s 挡住" % [site_id, hit.get("collider")])
 		checked += 1
 	var protrusions: Array[String] = []
 	var manuals := 0

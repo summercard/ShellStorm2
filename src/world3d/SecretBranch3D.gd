@@ -159,9 +159,11 @@ var _room_enter_handler: Callable = Callable()
 ## 状态栏文案上报口（`Dungeon3D.status_label`）。缺省时静默。
 var _status_reporter: Callable = Callable()
 
-## pair_id -> { entry: {site, door}, exit: {...}, rooms: Array, branch_root, return_door }
+## pair_id -> { entry: {site, door}, exit: {...}, rooms: Array, branch_root,
+##              return_door, entry_return_door }
 var _pairs: Dictionary = {}
-## site_id -> SecretDoor3D。含谜题门（S1–S4、X0/X1）与常开返程门（R0/R1、B0/B1）。
+## site_id -> SecretDoor3D。含主图谜题门（S1–S4）、撤离门（X0/X1）和
+## 子图常开返程门（E0/E1、R0/R1、B0/B1）。
 var _doors: Dictionary = {}
 ## 已建好的子图房中心点，pair_id -> Array[Vector3]（入口 → 出口顺序）
 var _branch_points: Dictionary = {}
@@ -171,6 +173,7 @@ var _extraction_doors: Dictionary = {}
 ## `combat = false` 的是撤离房：它是安全间（信标所在），不刷怪 —— 与「子图撤离房
 ## 跳过防线遭遇」同一条口径，不能让人一边读条一边被 5 只强化怪围住。
 var _branch_rooms: Dictionary = {}
+var _occupied_branch_room_id := ""
 ## room_id -> 主图房间节点。只在 `_collect_sites()` 前建一次：
 ## 位点要按**实测墙面外沿**外推，光有房间记录（center/dimensions）不够。
 var _room_nodes: Dictionary = {}
@@ -310,6 +313,9 @@ func settle_sites() -> void:
 	# 而这一条恰恰是射线判据查不出来的盲区（ray 能穿过去，玩家只看到墙）。
 	for value in _sites_debug:
 		_measure_visual_cover(value as Dictionary)
+	# 入口/出口位点可能在这轮因墙面外推或手摆门重读而改变；
+	# 子图两端的常开回退门必须同步更新主图落点，不能继续使用 build() 初始缓存。
+	_refresh_return_portal_targets()
 	# 房间齐了这一轮，把还没被认领的「摆位锚点门」清一遍。
 	# `node_added` 那条路已经能兜住按需出现的副本，这里是同帧兜底 + 幂等扫尾。
 	_sweep_room_copies()
@@ -549,8 +555,12 @@ func _index_rooms(node: Node) -> void:
 ## `apply = false` 时**只量不推**（手动摆位走这条）：仍然算出墙面在哪、
 ## 门凸出多少，让 A23 与 `debug_snapshot()` 能看到「这一摆是不是埋进墙里」，
 ## 但绝不改业主亲手放的位置。
-func _push_site_out_of_wall(site: Dictionary, apply: bool = true) -> void:
-	var room := _room_nodes.get(str(site.get("room_id", ""))) as Node3D
+func _push_site_out_of_wall(
+	site: Dictionary, apply: bool = true, room: Node3D = null,
+	clearance: float = WALL_FACE_CLEARANCE_M
+) -> void:
+	if room == null:
+		room = _room_nodes.get(str(site.get("room_id", ""))) as Node3D
 	if room == null:
 		return
 	var point := site.get("position", Vector3.ZERO) as Vector3
@@ -582,18 +592,17 @@ func _push_site_out_of_wall(site: Dictionary, apply: bool = true) -> void:
 			# wall，`_is_wall_mesh()` 认不出来）。位置本身来自装配时的外推，
 			# 按装配常量记一笔，并标记成**估计值** —— A23 照常判，但 NOTE 会说明
 			# 这个数不是实测的。
-			site["protrude_m"] = WALL_FACE_CLEARANCE_M
+			site["protrude_m"] = clearance
 			site["protrude_estimated"] = true
 			return
 		# 没认到墙件（房型用别的方式拼墙）：不能当「已就位」放过。
 		# 按正式凸出量整体前推，宁可多凸一点，也不要再留一扇齐平的隐形门。
-		site["wall_push_m"] = WALL_FACE_CLEARANCE_M
-		site["protrude_m"] = WALL_FACE_CLEARANCE_M
-		site["position"] = point - normal * WALL_FACE_CLEARANCE_M
+		site["wall_push_m"] = clearance
+		site["protrude_m"] = clearance
+		site["position"] = point - normal * clearance
 		return
-	# 凸出量固定 = WALL_FACE_CLEARANCE_M。算出负数说明门本来就在墙面前 ≥0.40m，
-	# 那就不动它（offset 夹到 0），绝不为了「统一数值」把门往墙里推。
-	var offset := maxf(base - face + WALL_FACE_CLEARANCE_M, 0.0)
+	# 已经留足净深的门不往墙里拉。
+	var offset := maxf(base - face + clearance, 0.0)
 	site["wall_face_m"] = face
 	if not apply:
 		# 手动摆位：只记录「门心比墙面外凸多少」，一个毫米都不挪。
@@ -858,19 +867,20 @@ func _build_pair(pair_id: int, entry: Dictionary, exit_site: Dictionary) -> void
 	if room_states.is_empty():
 		return
 
-	# 入口门只在入口房清完后可破（设计 §5.2）。出口门不锁 —— 玩家从子图回来时
-	# 必须能立刻落地，不能因为出口房还在战斗而被关在墙里。
-	var entry_door := _build_door(pair_id, entry, not _site_room_cleared(entry))
-	var exit_door := _build_door(pair_id, exit_site, false)
-
-	# 主图 ↔ 子图这一跳仍是传送（设计 §1：物理不相连），但**触发方式是按 E**：
-	# 门板一直在，破板后门口出现圆点，按 E 才过去（设计 §4.3）。
+	# 主图 ↔ 子图这一跳仍是传送（设计 §1：物理不相连），触发方式是按 E。
+	# S* 现在直接呈现「木板已拆、门叶半掩」的破坏态，不再在主线门口钉木板，
+	# 也不再要求入口房清完后才能进入；玩家看到门即可直接进入支线。
 	# 双向（§5.4）：从入口门进去落在子图首间，从出口门进去落在末间 —— 两端都能进。
+	var entry_door := _build_door(pair_id, entry, false, true)
+	var exit_door := _build_door(pair_id, exit_site, false, true)
 	var last_center := points[points.size() - 1] as Vector3
 	entry_door.call("set_teleport_target", points[0], VERB_ENTER)
 	exit_door.call("set_teleport_target", last_center, VERB_ENTER)
+	# 子图首间西墙 → 主图入口房间内侧：一扇常开隐藏门（没有木板，直接可传送）。
+	# 它是死路回退的保底出口：玩家不必走到末间，也能从首间返回原入口。
+	var entry_return_door := _build_entry_return_door(pair_id, room_states, entry)
 	# 子图末端 → 主图出口房间内侧：末间东墙上一扇常开门（没有木板，不用再打破一次）。
-	# 它是「进了能出来」的唯一保证（A15）。
+	# 它保留「走完支线后跳到主线出口」的捷径路径（A15）。
 	var return_door := _build_return_door(pair_id, room_states, exit_site)
 
 	_pairs[pair_id] = {
@@ -880,6 +890,7 @@ func _build_pair(pair_id: int, entry: Dictionary, exit_site: Dictionary) -> void
 		"branch_root": branch_root,
 		"entry_door": entry_door,
 		"exit_door": exit_door,
+		"entry_return_door": entry_return_door,
 		"return_door": return_door,
 	}
 
@@ -1109,13 +1120,9 @@ func _spawn_branch_room(
 	# 落点只在一处算才不会两套口径。
 	var landing := _branch_landing_point(room)
 	room.set_stream_state(DungeonRoom3D.STREAM_SHELL_READY)
-	# 进房上报：子图房间不在 `_records` 里，`Dungeon3D._on_room_entered` 那条链
-	# 收不到它们。挂到房间自带的 `player_entered`（由 `RoomTrigger` 的 Area3D 发），
-	# 上层据此切「当前房间」并按编成刷怪。
 	_branch_rooms[room_id] = {
 		"room": room, "combat": encounter, "entered": false, "landing": landing,
 	}
-	room.player_entered.connect(_on_branch_room_player_entered)
 	return room
 
 
@@ -1147,7 +1154,7 @@ func _reconcile_branch_shell(room: DungeonRoom3D) -> void:
 		if side.is_empty():
 			continue
 		_replace_branch_wall(room, piece, solid, position_in_room, side)
-	# 每扇真门必须把压在 lane 上的烘焙墙换成通透门墙；只建门扇不等于开洞。
+	# 只有实际连到走廊的普通门才把实墙替换为门墙；传送门不改房壳。
 	for side_value in room.doors:
 		var side := str(side_value)
 		var lane := float(room.get_meta("wall_door_lane_%s" % side, 0.0))
@@ -1628,11 +1635,31 @@ func _mesh_world_aabb(mesh: MeshInstance3D) -> AABB:
 	return box
 
 
-## 玩家踏进子图房间（房间自带 `RoomTrigger` 的 Area3D 触发）。
-##
-## **只上报，不刷怪。** 刷怪要接 6 个信号、挂 `$ActiveEnemies`、写 `_alive_by_room`
-## 与 `_enemy_nodes_by_room` —— 那是 `Dungeon3D` 的私事（同一条理由见剧情刷怪的
-## 「正门」注释）。子图另写一套就是两套战斗账：补刷、召唤、掉落、清房判定全会分叉。
+## 普通门是步行过界：胶囊先碰到 RoomTrigger，此时玩家脚点可能还在房外，
+## 被单次 body_entered 拒绝后不再补发。支线只按脚点确认房间变更，不加入主线流送图。
+func _physics_process(_delta: float) -> void:
+	if _branch_rooms.is_empty():
+		return
+	var player := get_tree().get_first_node_in_group("player_3d") as Node3D
+	if player == null:
+		_occupied_branch_room_id = ""
+		return
+	var point := player.global_position
+	var occupied := (_branch_rooms.get(_occupied_branch_room_id, {}) as Dictionary).get("room") as DungeonRoom3D
+	if is_instance_valid(occupied) and occupied.contains_world_position(point):
+		return
+	_occupied_branch_room_id = ""
+	for value in _branch_rooms.values():
+		var room := (value as Dictionary).get("room") as DungeonRoom3D
+		if not is_instance_valid(room) or not room.contains_world_position(point):
+			continue
+		_occupied_branch_room_id = room.room_id
+		room.visited = true
+		_on_branch_room_player_entered(room)
+		return
+
+
+## 只上报房态与首访；编成、共享存活账和掉落仍由 Dungeon3D 负责。
 func _on_branch_room_player_entered(room: DungeonRoom3D) -> void:
 	if room == null or not is_instance_valid(room) or room.room_id.is_empty():
 		return
@@ -1836,7 +1863,9 @@ func _instantiate_door() -> Node3D:
 	return SECRET_DOOR_SCRIPT.new() as Node3D
 
 
-func _build_door(pair_id: int, site: Dictionary, locked: bool = false) -> Node3D:
+func _build_door(
+	pair_id: int, site: Dictionary, locked: bool = false, direct_portal: bool = false
+) -> Node3D:
 	# 房间 TSCN 里已经有一扇**业主手摆**的门时，接管它 —— 不再新建第二扇。
 	# 运行时房间是直接实例化房间 TSCN 的（`DungeonRoom3D._build_shell`），
 	# 编辑器里那扇门在游戏里本来就在场；再建一扇只会两扇叠在同一处。
@@ -1850,15 +1879,15 @@ func _build_door(pair_id: int, site: Dictionary, locked: bool = false) -> Node3D
 		# 木板朝资产 -Z 凸向房间、门腔朝 +Z 凹进墙里。所以这里直接落地面点。
 		door_node.position = position
 		var normal := site.get("normal", Vector3.FORWARD) as Vector3
-		# 让资产的 **-Z 对齐「指向房间内」**（木板那面朝向房间、门腔朝墙内凹）。
-		# 绕 Y 转 θ 后资产 -Z 轴 = (-sinθ, 0, -cosθ)；要它等于 -normal：
-		#   -sinθ = -n.x, -cosθ = -n.z  ⇒  θ = atan2(n.x, n.z)
-		# ⚠️ 早先写成 atan2(-n.x, -n.z)，结果木板朝**墙外**凸、门腔反而插进房间，
-		# 玩家在房里看到的是那扇门叶而不是钉死的木板。资产包围盒看不出这个错，
-		# 因为它只报尺寸不报朝向，只有进游戏看才发现。
+		# 让资产的 **-Z 对齐「指向房间内」**（门叶/木板面朝房间、门腔朝墙内凹）。
 		door_node.rotation.y = atan2(normal.x, normal.z)
-	door_node.call("configure", site, _door_hp())
-	door_node.call("set_locked", locked)
+	if direct_portal:
+		# 主图进入支线的门直接使用破坏后的门态：只保留门叶，不创建木板层，
+		# 装配完成后立即可按 E，不再受入口房清房或木板血量约束。
+		door_node.call("configure_portal", site, VERB_ENTER, Vector3.ZERO)
+	else:
+		door_node.call("configure", site, _door_hp())
+		door_node.call("set_locked", locked)
 	# 传送由门自己按 E 触发（`teleport_requested`），不再有踩上去就走的 Area3D。
 	if not door_node.is_connected("teleport_requested", _on_door_teleport_requested):
 		door_node.connect("teleport_requested", _on_door_teleport_requested)
@@ -2020,6 +2049,23 @@ func _build_portal_door(site: Dictionary, verb: String, target: Vector3) -> Node
 	return door_node
 
 
+## `settle_sites()` 可能在 build() 后移动主图 S1/S2/S3/S4；
+## 两扇子图回退门的目标必须跟随最终位点更新，门自身位置不跟着主图移动。
+func _refresh_return_portal_targets() -> void:
+	for pair_id in _pairs:
+		var pair := _pairs[pair_id] as Dictionary
+		# 这里必须读 settle 后的 `_sites_debug`：`_pairs` 保存的是 build() 初始位点，
+		# 而晚到的手摆门/墙面外推可能已经改了 position 与 normal。
+		var entry_site := _find_site(_sites_debug, int(pair_id), "entry")
+		var exit_site := _find_site(_sites_debug, int(pair_id), "exit")
+		var entry_return := pair.get("entry_return_door") as Node3D
+		var exit_return := pair.get("return_door") as Node3D
+		if entry_return != null and is_instance_valid(entry_return) and not entry_site.is_empty():
+			entry_return.call("set_teleport_target", _inside_point(entry_site), VERB_RETURN)
+		if exit_return != null and is_instance_valid(exit_return) and not exit_site.is_empty():
+			exit_return.call("set_teleport_target", _inside_point(exit_site), VERB_RETURN)
+
+
 ## 玩家在门前按 E。落点由门自己存着（装配时下发），这里只做「瞬移」这一件事。
 func _on_door_teleport_requested(site_id: String, player: Node3D) -> void:
 	var door: Node3D = _doors.get(site_id)
@@ -2057,36 +2103,127 @@ func _release_player(player: Node3D, target: Vector3) -> void:
 	player.set_deferred("global_position", target + Vector3(0, TELEPORT_Y, 0))
 
 
-## 出口落点：从墙面往房间内侧退 1.2 m，避免落在墙体内。
+## 优先落到门前；主线远端暗门可能装在房壳凹边，门前不一定属于房间。
+## 沿门前就近寻找本房实际可走面，保证原生进房触发器能接管。
 func _inside_point(site: Dictionary) -> Vector3:
 	var normal := site.get("normal", Vector3.FORWARD) as Vector3
 	var position := site.get("position", Vector3.ZERO) as Vector3
-	return position - normal * 1.2
+	var preferred := position - normal * 1.2
+	var room := _room_nodes.get(str(site.get("room_id", ""))) as DungeonRoom3D
+	if room == null:
+		return preferred
+	var tangent := normal.cross(Vector3.UP)
+	var best := preferred
+	var best_distance := INF
+	for step in range(21):
+		for lateral in [0.0, -0.5, 0.5, -1.0, 1.0, -1.5, 1.5, -2.0, 2.0]:
+			var point := preferred - normal * (step * 0.5) + tangent * float(lateral)
+			var distance := point.distance_squared_to(preferred)
+			if distance >= best_distance or not room.contains_world_position(point + Vector3.UP * TELEPORT_Y):
+				continue
+			if not _standing_clear(room, point):
+				continue
+			best = point
+			best_distance = distance
+		if best_distance <= pow((step + 1) * 0.5, 2):
+			break
+	if best_distance == INF:
+		push_warning("[SecretBranch3D] %s 门前未找到有效的房内落点" % str(site.get("site_id", "")))
+	return best
+
+
+func _standing_clear(room: DungeonRoom3D, point: Vector3) -> bool:
+	return _room_segment_clear(room, point, point)
+
+
+## 首间回原入口：选实际地砖边缘上的实体墙，优先西侧。
+## 门腔贴在墙内侧，仍由原墙封住边界；不注册普通门或额外走廊。
+func _build_entry_return_door(
+	pair_id: int, room_states: Array, entry_site: Dictionary
+) -> Node3D:
+	var first := room_states[0] as Dictionary
+	var site := _branch_return_site(first, "west")
+	site.merge({"site_id": "E%d" % pair_id, "pair_id": pair_id, "role": "return_entry"})
+	return _build_portal_door(site, VERB_RETURN, _inside_point(entry_site))
+
+
+func _branch_return_site(state: Dictionary, preferred_side: String) -> Dictionary:
+	var room := state["room"] as DungeonRoom3D
+	var landing := state["landing"] as Vector3
+	var boxes := _branch_floor_boxes(room)
+	var sides := [preferred_side, "north", "south", "east" if preferred_side == "west" else "west"]
+	var candidates: Array[Dictionary] = []
+	for side: String in sides:
+		var normal := _wall_normal(side)
+		for box in boxes:
+			var tile := box.get_center()
+			tile.y = landing.y
+			if _branch_boxes_contain(boxes, tile + normal * SHELL_TILE_GRID_M):
+				continue
+			var edge := tile + normal * SHELL_TILE_HALF_M
+			var eye := edge + Vector3.UP * 1.3
+			if not _branch_boundary_blocked(room, eye - normal * 0.8, eye + normal * 0.8):
+				continue
+			var site := {"wall": side, "normal": normal, "position": edge, "room_id": room.room_id}
+			# 门叶预制体的 1.70m 门腔留在实体墙前，不用安装箱填进门腔。
+			_push_site_out_of_wall(site, true, room, 1.72)
+			var position := site["position"] as Vector3
+			var approach := position - normal * 1.1
+			if _branch_boxes_contain(boxes, approach):
+				site["approach"] = approach
+				# 优先保证门离固定落点近，其次才看墙向。
+				site["score"] = approach.distance_squared_to(landing) + (0.0 if side == preferred_side else 25.0)
+				candidates.append(site)
+	candidates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return float(a["score"]) < float(b["score"]))
+	for site in candidates:
+		var position := site["position"] as Vector3
+		var approach := site["approach"] as Vector3
+		if _branch_approach_clear(room, boxes, landing, approach) and _branch_approach_clear(room, boxes, approach, position):
+			return site
+	if not candidates.is_empty():
+		push_warning("[SecretBranch3D] %s 的返程门前没有直达路线，使用最近实体墙" % room.room_id)
+		return candidates[0]
+	push_warning("[SecretBranch3D] %s 缺少可挂载返程门的实墙，保留落点旁的返回交互" % room.room_id)
+	return {"wall": preferred_side, "normal": _wall_normal(preferred_side), "position": landing, "room_id": room.room_id}
+
+
+func _branch_approach_clear(room: DungeonRoom3D, boxes: Array[AABB], start: Vector3, end: Vector3) -> bool:
+	var steps := maxi(1, ceili(start.distance_to(end) / 0.4))
+	for index in range(steps + 1):
+		if not _branch_boxes_contain(boxes, start.lerp(end, float(index) / steps)):
+			return false
+	return _room_segment_clear(room, start, end)
+
+
+func _room_segment_clear(room: DungeonRoom3D, start: Vector3, end: Vector3) -> bool:
+	var height := Vector3.UP * 0.9
+	for value in room.find_children("*", "CollisionShape3D", true, false):
+		var collision := value as CollisionShape3D
+		var body := collision.get_parent() as StaticBody3D
+		var box := collision.shape as BoxShape3D
+		if body == null or box == null or collision.disabled or (body.collision_layer & 1) == 0:
+			continue
+		var inv := collision.global_transform.affine_inverse()
+		var bounds := AABB(-box.size * 0.5, box.size).grow(0.35)
+		if bounds.intersects_segment(inv * (start + height), inv * (end + height)) != null:
+			return false
+	return true
 
 
 ## 子图末端 → 主图出口房间内侧的那扇门。
 ##
-## 装在最后一间房的**东墙中点**（位置按该房自己的尺寸算，不写死 12.5）。
+## 优先选最后一间房的东侧实体墙；以真实地砖和从落点可达为准，不开门洞。
 ## 为什么仍然用传送：主图与子图按设计是**物理不相连**的两块（§1），
 ## 出口这一跳没有物理通道可走；子图**内部**已经是门 + 走廊走通的了。
 ##
 ## 这扇门**不开木板**：玩家已经在子图里，不该为了出去再打一块 60+ 血的板。
-## 它是 A15 的唯一保证 —— 没有它，玩家进了子图就出不来。
+## 它保留「走到末端后返回主图出口」的捷径路径。
 func _build_return_door(
 	pair_id: int, room_states: Array, exit_site: Dictionary
 ) -> Node3D:
 	var last := room_states[room_states.size() - 1] as Dictionary
-	var last_center := last.get("center", Vector3.ZERO) as Vector3
-	var last_size := last.get("size", Vector2(25.0, 25.0)) as Vector2
-	var site := {
-		"site_id": "R%d" % pair_id,
-		"pair_id": pair_id,
-		"role": "return",
-		"wall": "east",
-		"normal": Vector3(1, 0, 0),
-		"position": Vector3(last_center.x + last_size.x * 0.5, 0.0, last_center.z),
-		"room_id": "",
-	}
+	var site := _branch_return_site(last, "east")
+	site.merge({"site_id": "R%d" % pair_id, "pair_id": pair_id, "role": "return"})
 	return _build_portal_door(site, VERB_RETURN, _inside_point(exit_site))
 
 ## —— 撤离房（设计 §6）——

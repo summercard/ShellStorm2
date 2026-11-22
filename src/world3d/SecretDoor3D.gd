@@ -101,6 +101,9 @@ var _hit_count := 0
 var _teleport_target := Vector3.ZERO
 var _teleport_verb := ""
 var _has_teleport := false
+## 是否由 `configure_portal()` 装配成无木板常开门。
+## 不能用 `_has_teleport` 代替：S*/X* 谜题门破板后也有传送目标，但仍要按快照恢复木板锁定态。
+var _is_open_portal := false
 
 
 func _ready() -> void:
@@ -130,6 +133,7 @@ func configure_portal(site: Dictionary, verb: String, target: Vector3) -> void:
 	site_id = str(site.get("site_id", ""))
 	pair_id = int(site.get("pair_id", -1))
 	role = str(site.get("role", ""))
+	_is_open_portal = true
 	_build_visual(false)
 	state = State.BROKEN
 	_locked = false
@@ -480,6 +484,12 @@ func export_state() -> Dictionary:
 func restore_state(snapshot: Dictionary) -> void:
 	if bool(snapshot.get("broken", false)):
 		open_silently()
+		return
+	# 常开传送门没有木板，旧快照即使缺少 `broken` 字段也不能把它恢复成
+	# 「字段锁定但实际可传送」的假状态；`configure_portal()` 的语义优先。
+	# 不能只看 `_has_teleport`：S*/X* 谜题门同样会配置传送目标。
+	if _is_open_portal:
+		_locked = false
 		return
 	_locked = bool(snapshot.get("locked", _locked))
 
