@@ -13,6 +13,7 @@
 - Windows Godot：`F:/Godot/4.7.2-stable/...win64_console.exe`；验证一般用 `--headless --path . ... --quit-after 900`，隔离 `APPDATA`/`LOCALAPPDATA`。
 - 脚本解析失败可能不退出，必须带 `--quit-after 600`；需要 Autoload 时用场景而非 `--script`。
 - 交付前运行 `python3 scripts/check_documentation_contracts.py` 及相关门禁；新增/修改关卡还需读 `docs/v0.1/关卡接入规范.md`、运行 `python3 scripts/check_level_decoupling.py`。
+- 账本被表格软件（Excel/WPS）重存后会把《资产主表》查重结果列写成 CSE 数组公式，`verify_ledger_split` 用 `str()` 比对公式文本会整表假红（约 1054 条）；还原成普通公式即可，不要刷基线。
 - 运行资产路径不含版本号；版本写在 `art_source/`、清单、台账和 Prefab metadata。交付前运行 `scripts/check_asset_runtime_naming.py`。
 - headless 不能验证真实渲染管线；性能结论需真实渲染器。`VfxPool3D.create_unpooled()` 产物必须显式释放。
 
