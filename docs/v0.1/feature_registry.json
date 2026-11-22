@@ -374,6 +374,7 @@
         "docs/v0.1/design/远征关卡03设计.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-22_expedition01_room_curtain.md",
         "docs/v0.1/development/2026-11-16_expedition01_combat_feel.md",
         "docs/v0.1/development/2026-11-02_enemy_spawn_boundary.md",
         "docs/v0.1/development/2026-09-13_world_level_blocks.md",
@@ -390,6 +391,11 @@
         "docs/v0.1/development/2026-11-19_exp01_ceiling_room08.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_expedition01_room_curtain",
+          "suite": "core"
+        },
         {
           "kind": "command",
           "path": "tests/verification/verify_expedition01_room08_preplaced_positions.gd",

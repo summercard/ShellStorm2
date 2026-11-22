@@ -25,6 +25,11 @@ gameplay_theme = ExtResource("3_gameplay")
 visual_theme = ExtResource("4_visual")
 expedition_mode = true
 expedition_run_id = "expedition_01"
+room_view_curtain_enabled = true
+room_view_curtain_wall_thickness_m = 0.3
+room_view_curtain_bounds = Dictionary[String, AABB]({
+"boss": AABB(-40, -36.4, -70, 80, 72.8, 120)
+})
 return_scene_path = "res://scenes/TowerDescent3D.tscn"
 
 [node name="WorldEnvironment" parent="." index="0"]

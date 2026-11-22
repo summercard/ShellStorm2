@@ -1,3 +1,5 @@
+- 2026-11-22 · WORLD-PLAN · [远征01复用房间黑幕](2026-11-22_expedition01_room_curtain.md)。按当前房间换圈，支持共墙门和深井标高。
+
 - 2026-11-22 · PLAYER-STATE / UI-HUD / WORLD-ENTRY · [游戏指针与战斗准星交接](2026-11-22_cursor_crosshair_handoff.md)。接入塔楼、远征、基地、靶场、读取与重试，新增光标交接专项。
 
 - 2026-11-21 · VFX-POOL · [赛博空间三色预设与交界](2026-11-21_cyber_space.md)。同一 Shader 提供紫、绿、蓝三色，普通场景经扫描带进入全息网格，虚空断面与空间网格可重叠。

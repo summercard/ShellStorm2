@@ -1497,6 +1497,12 @@ func _adopt_authored_room_devices() -> bool:
 	return true
 
 
+## 房间绑定的美术局部包络应随正式布局一起做运行时旋转与偏移。
+func get_authored_layout_world_transform() -> Transform3D:
+	var layout := _authored_static_layout_root()
+	return layout.global_transform if layout != null else global_transform
+
+
 ## 静态布局根。远征 13 房 = `AuthoredLayoutArtRoot`；入口安全房 = `SafeRoomArtRoot`。
 func _authored_static_layout_root() -> Node3D:
 	for candidate in ["AuthoredLayoutArtRoot", "SafeRoomArtRoot"]:

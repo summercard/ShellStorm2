@@ -1,3 +1,5 @@
+- WORLD-PLAN · [远征01复用房间黑幕](development/2026-11-22_expedition01_room_curtain.md)。共享远征03幕墙机制，正式关卡专项与窗口验证见独立记录。
+
 - PLAYER-STATE / UI-HUD / WORLD-ENTRY · [游戏指针与战斗准星交接](development/2026-11-22_cursor_crosshair_handoff.md)。UiCursorMode 统一窗口指针和已登记世界准星的可见性，专项覆盖模态叠加、设备切换和读取交接。
 
 - VFX-POOL · [赛博空间](design/scene_cyber_space.md)提供独立 Shader 与紫绿蓝三色预制体，可和普通场景、赛博虚空同屏交替。[开发记录](development/2026-11-21_cyber_space.md)

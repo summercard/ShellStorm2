@@ -277,6 +277,7 @@ core_scenes=(
   probe_expedition_unlock
   probe_expedition03_entry_chain
   probe_expedition03_playable
+  verify_expedition01_room_curtain
   probe_authored_breakable_clutter
   probe_second_elite_motion
   probe_expedition99_pre_boss_elite

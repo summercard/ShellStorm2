@@ -521,6 +521,10 @@ const BATTLE_LEVEL_ID := "battle_level01"
 ## 设计源 id（`source/art/whitebox/tower_zones/<id>/`）。留空则跟随 expedition_run_id。
 ## 单独留一个出口是为了让「同一份设计源、两个不同 run_id」这种对照实验不必复制目录。
 @export var expedition_plan_id: String = ""
+## 幕墙是独立表现能力。场景可提供超出逻辑房框的围护包络（正式布局局部米）。
+@export var room_view_curtain_enabled := false
+@export var room_view_curtain_wall_thickness_m := FLOW_ROOM_WALL_THICKNESS_M
+@export var room_view_curtain_bounds: Dictionary[String, AABB] = {}
 @export var atmosphere_fog_density_override := -1.0
 @export var atmosphere_volumetric_fog_density_override := -1.0
 ## 测试接缝：强制 98F 回落到生成器房表，跳过区块00 授权布局接管。
@@ -1433,6 +1437,8 @@ func _ready() -> void:
 			player.velocity = Vector3.ZERO
 			_current_room_id = ""
 			_on_room_entered(entry_room)
+			if not _expedition_loading_active:
+				_refresh_flow_view_mask(true)
 	else:
 		if _returning_to_tower03:
 			player.global_position = ExpeditionEntryContext.TOWER03_SPAWN
@@ -1501,10 +1507,10 @@ func _complete_expedition_loading(failed: bool, status: String) -> void:
 		_apply_open_passage_edge_states(
 			_floor_plan_snapshots.get(EXPEDITION_LAYER_INDEX, {}) as Dictionary
 		)
-		# flow 关卡还要两件：门扇的开合初态（连通开、封闭关）与房间外黑幕
-		# （黑幕要所有房间足迹才能挖洞，只能在全部房间就位后建）。
 		if _flow_rules_active:
 			_open_all_flow_doors()
+		# 已就位的共享门和完整房间包络才能给出最终幕墙。
+		if not failed:
 			_refresh_flow_view_mask(true)
 		minimap.configure(_records, _open_edges)
 	super(failed, status)
@@ -2742,7 +2748,7 @@ const FLOW_CAMERA_ROOM_INSET_M := 0.55
 
 
 func _clamp_flow_camera_into_room(look_target: Vector3) -> void:
-	if not _flow_rules_active or player == null or player.camera == null:
+	if not _uses_room_view_curtain() or player == null or player.camera == null:
 		return
 	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
 	if room == null or not is_instance_valid(room):
@@ -2750,23 +2756,15 @@ func _clamp_flow_camera_into_room(look_target: Vector3) -> void:
 	var dims := room.get_dimensions()
 	if dims.x <= 0.0 or dims.y <= 0.0:
 		return
-	var rp := room.global_position
-	var min_x := rp.x - dims.x * 0.5 + FLOW_CAMERA_ROOM_INSET_M
-	var max_x := rp.x + dims.x * 0.5 - FLOW_CAMERA_ROOM_INSET_M
-	var min_z := rp.z - dims.y * 0.5 + FLOW_CAMERA_ROOM_INSET_M
-	var max_z := rp.z + dims.y * 0.5 - FLOW_CAMERA_ROOM_INSET_M
-	# 房间比两次内缩还窄时（极端小房），退化成房间中心，避免 min > max。
-	if min_x > max_x:
-		min_x = rp.x
-		max_x = rp.x
-	if min_z > max_z:
-		min_z = rp.z
-		max_z = rp.z
+	var footprint := _room_view_curtain_footprint(room, dims)
+	var inset := Vector2.ONE * FLOW_CAMERA_ROOM_INSET_M
+	var lower := (footprint.position + inset).min(footprint.get_center())
+	var upper := (footprint.end - inset).max(footprint.get_center())
 	var current := player.camera.global_position
 	var clamped := Vector3(
-		clampf(current.x, min_x, max_x),
+		clampf(current.x, lower.x, upper.x),
 		current.y,
-		clampf(current.z, min_z, max_z)
+		clampf(current.z, lower.y, upper.y)
 	)
 	if clamped.is_equal_approx(current):
 		return
@@ -7392,30 +7390,7 @@ func _open_all_flow_doors() -> void:
 	set_meta("flow_doors_closed_on_start", closed)
 
 
-## 房间外「黑幕」：**只留当前房间可见**（Gungeon 的 room-as-stage）。
-##
-## 问题不是"墙太矮"，是相机视线越过了墙顶。房间壳体是 2.8m 白盒、且
-## `DungeonRoom3D.set_stream_state()` 明确规定壳体永久可见（流送契约，避免房间凭空消失）；
-## 相机在约 10m 高、俯角 −60°，于是站在 A 房能直接看到 B 房的墙与地砖
-## —— 业主截图里用红框圈出的就是隔壁房间与走廊。
-##
-## Gungeon 的做法是「一次只有一间房是舞台」：相机贴着当前房间，推进到下一间才切换。
-## 这里用同一观感的实现：一层**只给当前房间挖洞的纯黑水平面**。
-##   · 相机高于遮罩（10m > 2.88m），于是遮罩把其余房间的地面全部挡住；
-##   · 门洞看出去是黑的 —— 与 Gungeon 里"门后是暗的、进去才亮"一致；
-##   · 换房间时重建（洞跟着走），代价是一次网格重建，节点只有 1 个。
-##
-## 为什么不做"隐藏非当前房间"：壳体可见是流送的既有契约，改它会把走廊、
-## 隔壁门扇、相机门代理一起卷进来；而遮罩只影响**观感**，不动任何玩法状态。
-## 为什么不加高墙：业主已确认 2.8m 墙高没问题，这是相机视线问题。
-## 黑幕 / 幕墙挂在哪里：**直接挂场景根**，不挂 `Blocks/Expedition`。
-##
-## `Blocks/Expedition` 是楼层几何容器，它的 `visible` 归楼层流送管
-## （实测装配后 `is_visible_in_tree()` 为 false）。黑幕跟着它一起被隐藏时，
-## 房间外的遮挡就整块失效 —— 而观感这种东西最怕"有时候有效"。
-##
-## 两者顶点都是世界坐标 + `top_level = true`，挂哪里都不吃父变换，
-## 所以直接挂根最省事、也不受楼层切换影响。
+## 竖直幕墙挂场景根，世界坐标不随楼层流送或区块变换。
 func _flow_view_mask_parent() -> Node:
 	return self
 
@@ -7425,7 +7400,7 @@ func _flow_view_mask_parent() -> Node:
 ## 装配完成时 `_current_room_id` 还没被基类写过（玩家刚出生），此时按入口房
 ## `start` 挖洞 —— 否则第一帧会是"整屏全黑"，玩家以为关卡坏了。
 func _refresh_flow_view_mask(force := false) -> void:
-	if not _flow_rules_active:
+	if not _uses_room_view_curtain():
 		return
 	var room_id := _current_room_id
 	if room_id.is_empty() or not _room_by_id.has(room_id):
@@ -7493,19 +7468,40 @@ func _build_flow_view_mask(hole_room_id: String) -> void:
 	_build_flow_view_walls(hole_room_id)
 
 
-## 房间外「幕墙」：**当前房间四周**贴一圈纯黑竖直面，从地面以下一直到 26m 高。
-##
-## 为什么光有水平遮罩不够（业主 2026-10-28 第三次报单）：
-## 水平遮罩（`FlowViewMask`）是个**有视差的平面**。相机在 10m 高、俯角 −60°，
-## 一条射向房间外的视线与遮罩平面（Y = 2.88）的交点，比它在地面上的落点**更靠近相机**
-## （约 0.7 倍距离）。所以"世界坐标矩形挖洞"在遮罩平面上永远偏大一圈，
-## 墙根外侧就漏出一条能看见隔壁地面的缝。挪相机位置，缝的宽度还会变 —— 换几个内缩量都治不干净。
-##
-## 之前这条缝看不出来，是因为**门板一直挡在门洞里**（升降门只抬起 0.32m，视觉上门洞始终被盖住）。
-## 门改成双扇对开之后门洞真的通了，缝就从门洞透出来了。
-##
-## 竖直幕墙没有视差问题：从房间内射向房间外的任何一条视线，都必然穿过"墙外表面"那一圈；
-## 幕墙就贴在那里、且上沿远高于相机，于是必然挡住。与相机位置无关，只有换房才要重建。
+func _uses_room_view_curtain() -> bool:
+	return _flow_rules_active or room_view_curtain_enabled
+
+
+func _room_view_curtain_footprint(room: DungeonRoom3D, dimensions: Vector2) -> Rect2:
+	var origin := Vector2(room.global_position.x, room.global_position.z)
+	var footprint := Rect2(origin - dimensions * 0.5, dimensions)
+	var bounds := room_view_curtain_bounds.get(room.room_id, AABB()) as AABB
+	if bounds.has_volume():
+		var world_bounds := room.get_authored_layout_world_transform() * bounds
+		footprint = footprint.merge(Rect2(
+			Vector2(world_bounds.position.x, world_bounds.position.z),
+			Vector2(world_bounds.size.x, world_bounds.size.z)
+		))
+	return footprint
+
+
+func _room_view_curtain_vertical_span(room: DungeonRoom3D) -> Vector2:
+	var bottom := room.global_position.y + FLOW_VIEW_WALL_BOTTOM_M
+	var top := room.global_position.y + FLOW_VIEW_WALL_TOP_M
+	for level_room: DungeonRoom3D in _rooms:
+		if not is_instance_valid(level_room):
+			continue
+		var y := level_room.global_position.y
+		var bounds := room_view_curtain_bounds.get(level_room.room_id, AABB()) as AABB
+		bottom = minf(bottom, y + FLOW_VIEW_WALL_BOTTOM_M)
+		top = maxf(top, y + FLOW_VIEW_WALL_TOP_M)
+		if bounds.has_volume():
+			var world_bounds := level_room.get_authored_layout_world_transform() * bounds
+			bottom = minf(bottom, world_bounds.position.y + FLOW_VIEW_WALL_BOTTOM_M)
+			top = maxf(top, world_bounds.end.y + FLOW_VIEW_WALL_GAP_M)
+	return Vector2(bottom, top)
+
+
 func _build_flow_view_walls(hole_room_id: String) -> void:
 	var room := _room_by_id.get(hole_room_id) as DungeonRoom3D
 	if room == null or not is_instance_valid(room):
@@ -7514,53 +7510,17 @@ func _build_flow_view_walls(hole_room_id: String) -> void:
 	if dims.x <= 0.0 or dims.y <= 0.0:
 		return
 	var rp := room.global_position
-	# 足迹 = 墙中线矩形；外推到**墙外表面**外一点点 gap。
-	# 贴着墙外表面是为了让墙顶剖面（footprint ± 半墙厚 那一圈水平面）完整露出来，
-	# 玩家看到的房间才有"墙有厚度"的顶视角感；再往外的一切都被这圈幕墙挡黑。
-	var off := FLOW_ROOM_WALL_THICKNESS_M * 0.5 + FLOW_VIEW_WALL_GAP_M
-	var x0 := rp.x - dims.x * 0.5 - off
-	var x1 := rp.x + dims.x * 0.5 + off
-	var z0 := rp.z - dims.y * 0.5 - off
-	var z1 := rp.z + dims.y * 0.5 + off
-	var bottom := FLOW_VIEW_WALL_BOTTOM_M
-	var top := FLOW_VIEW_WALL_TOP_M
-	# 门洞切口：宽度 = 墙体切口净宽 + 视差余量（见 `FLOW_VIEW_DOOR_HOLE_BLEED_M`），
-	# 高度**只到墙顶**（`FLOW_ROOM_WALL_HEIGHT_M`），墙顶以上照挡（理由见下方长注释）。
-	var hole_half := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M * 0.5 + FLOW_VIEW_DOOR_HOLE_BLEED_M
-	var hole_top := minf(FLOW_ROOM_WALL_HEIGHT_M, top)
+	# 沿脚印外侧竖起幕墙，保留当前房间的墙顶和门洞。
+	var off := room_view_curtain_wall_thickness_m * 0.5 + FLOW_VIEW_WALL_GAP_M
+	var footprint := _room_view_curtain_footprint(room, dims).grow(off)
+	var x0 := footprint.position.x
+	var x1 := footprint.end.x
+	var z0 := footprint.position.y
+	var z1 := footprint.end.y
+	var vertical_span := _room_view_curtain_vertical_span(room)
+	var bottom := vertical_span.x
+	var top := vertical_span.y
 	var material := _flow_view_mask_material()
-	# 四面各建一个 MeshInstance3D，而不是拼成一张网格：
-	# 门洞只能按侧切（每侧的开口是不同的 lane），拼成一片就得自己算接缝；
-	# 拆开后每片只装它自己那几条矩形，顺带还能单独开关排障。
-	#
-	# **洞的上沿 = 房间墙顶（2.8m），既不是门洞净高 2.5m，也不是幕墙上沿 26m。**
-	# 这两个边界各被业主退回过一次，原因都在"上沿放错位置"：
-	#
-	#   ① 上沿 = 2.5m（门洞净高）⇒ 门洞上方 2.5→26m 是一堵**悬空的黑墙**，
-	#      比墙顶还低 0.3m，露出一圈"凭空多出来的黑"。
-	#   ② 上沿 = 26m（挖到顶）⇒ 门洞上方那条口子通到天，俯视时视线越过 2.8m 墙顶
-	#      从口子里穿出去，看到门后那间的墙面 —— 屏幕上一个漏斗状亮梯形
-	#      （业主 2026-10-30：「为什么上面有一块」）。
-	#
-	#   ③ 上沿 = 墙顶 2.8m（当前）⇒ 洞只在"门洞到自己房间墙顶"这一段开，
-	#      门洞本身通透；墙顶以上与其他三个方向完全一致地被挡住。
-	#      屏幕上门洞上面就是黑，但这块黑的边界正是自己房间的墙顶线，
-	#      不再是一条"多出来的"黑边，也不会透出隔壁。
-	#
-	# 为什么洞开到墙顶仍能看见门后：相机在 10.26m、门洞净高 2.5m，
-	# 穿过门洞的视线在幕墙平面（墙外 0.16m）上的高度最大约
-	#   2.5 − (10.26 − 2.5) × 0.16 / 5.5 ≈ 2.28m
-	# 远低于 2.8m 的洞上沿，所以门洞方向不会被幕墙挡。
-	#
-	# 而"越过墙顶（2.8m）往外看"的视线，在门洞宽度范围内仍会被 2.8m 以上的幕墙挡住 ——
-	# 与其他三个方向同一套判据，观感统一。
-	#
-	# ⚠️ 这里和 2026-10-29 上午那版**只差一件事**：那一版同时在镜头出门时把整圈收起，
-	# 于是镜头退到门外看见外面房间（业主红框）。现在：
-	#   · 幕墙**恒显**（不按镜头显隐）；
-	#   · 镜头**照旧被夹在当前房间内**（`_clamp_flow_camera_into_room`）。
-	# 两条合起来，玩家永远站在"围着自己这间房的圈"里，门洞是唯一的出口 ——
-	# 从房间内往外看，只有门洞方向是通的，其余方向一律黑。
 	var walls := Node3D.new()
 	walls.name = "FlowViewWalls"
 	var door_count := 0
@@ -7570,28 +7530,9 @@ func _build_flow_view_walls(hole_room_id: String) -> void:
 		var fixed := z0 if side == "north" else (z1 if side == "south" else (x0 if side == "west" else x1))
 		var u_start := (x0 - off) if along_x else (z0 - off)
 		var u_end := (x1 + off) if along_x else (z1 + off)
-		var holes: Array = []
-		var axis_origin := rp.x if along_x else rp.z
-		for lane_value in room.get_wall_door_lanes(side):
-			var center: float = axis_origin + float(lane_value)
-			var opening_half := hole_half
-			for value in room.connection_ports:
-				var port := value as Dictionary
-				if str(port.get("side", "")) == side and is_equal_approx(float(port.get("lane_m", 0.0)), float(lane_value)):
-					var width := float(port.get("door_width_m", 0.0))
-					opening_half += maxf(0.0, width - TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M) * 0.5
-					break
-			# clamp 进本侧幕墙范围：小房间上门洞本就贴墙（`lane` 被建墙侧 clamp 到
-			# ±(length − opening)/2），再把余量加上去就会伸出幕墙两端，
-			# 那一段没有墙垛兜着，等于直接对外开天窗。
-			var from := clampf(center - opening_half, u_start, u_end)
-			var to := clampf(center + opening_half, u_start, u_end)
-			if to - from <= 0.01:
-				continue
-			holes.append(Vector2(from, to))
-		door_count += holes.size()
-		holes.sort_custom(func(a: Vector2, b: Vector2) -> bool: return a.x < b.x)
-		var quads := _flow_view_side_quads(u_start, u_end, holes, bottom, top, hole_top)
+		var openings := _room_view_curtain_openings(room, side, u_start, u_end, vertical_span)
+		door_count += openings.size()
+		var quads := _flow_view_side_quads(u_start, u_end, openings, bottom, top)
 		if quads.is_empty():
 			continue
 		var vertices := PackedVector3Array()
@@ -7620,10 +7561,12 @@ func _build_flow_view_walls(hole_room_id: String) -> void:
 		panel.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
 		panel.set_meta("view_wall_side", side)
 		panel.set_meta("view_wall_quad_count", quads.size())
-		panel.set_meta("view_wall_hole_count", holes.size())
-		# 洞区间（绝对沿墙坐标）留给探针独立核对：中心要对上门洞、宽度要够。
-		panel.set_meta("view_wall_holes", holes)
-		panel.set_meta("view_wall_hole_top", hole_top)
+		panel.set_meta("view_wall_hole_count", openings.size())
+		panel.set_meta("view_wall_openings", openings)
+		# 保留同标高幕墙的原有只读验收字段。
+		panel.set_meta("view_wall_holes", openings.map(func(hole: Rect2) -> Vector2:
+			return Vector2(hole.position.x, hole.end.x)))
+		panel.set_meta("view_wall_hole_top", rp.y + FLOW_ROOM_WALL_HEIGHT_M)
 		walls.add_child(panel)
 	# 顶点是世界坐标：用 top_level 忽略父节点变换，避免被区块偏移一次。
 	walls.top_level = true
@@ -7638,28 +7581,74 @@ func _build_flow_view_walls(hole_room_id: String) -> void:
 	_flow_view_wall_root = walls
 
 
-## 把某一侧幕墙切成「若干实心段 + 每扇门上方的过梁段」。
-##
-## 入参沿墙坐标 u、门洞区间 `holes`（Vector2(from, to)），返回矩形清单
-## `[u_from, u_to, y_from, y_to]`。门洞**下沿就是幕墙下沿** —— 门洞里往下不需要盖，
-## 那里本来就是要看见的地面与走廊。
+## 洞沿墙位置服从已有门扇测量，匹配端口后再取净宽和门槛标高。
+func _room_view_curtain_openings(
+	room: DungeonRoom3D, side: String, u_start: float, u_end: float, span: Vector2
+) -> Array[Rect2]:
+	var along_x := side in ["north", "south"]
+	var origin := room.global_position
+	var axis_origin := origin.x if along_x else origin.z
+	var door_metrics: Dictionary[float, Vector2] = {}
+	for lane_value in room.get_wall_door_lanes(side):
+		door_metrics[float(lane_value)] = Vector2(origin.y, TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M)
+	for port: Dictionary in room.connection_ports:
+		if str(port.get("side", "")) != side:
+			continue
+		var target_id := str(port.get("target_room_id", ""))
+		var neighbor := _room_by_id.get(target_id) as DungeonRoom3D
+		var declared_lane := float(port.get("lane_m", 0.0))
+		var lane := declared_lane
+		var sill_y := origin.y + float(port.get("height_m", 0.0))
+		var door := room.get_door_node_by_port(str(port.get("port_id", "")))
+		if door == null:
+			door = room.get_door_node_towards(target_id)
+		# 共墙上的门可以完全由对面房间持有。端口仍为当前房间保留洞口。
+		if door == null and room_view_curtain_enabled and is_instance_valid(neighbor):
+			door = neighbor.get_door_node_towards(room.room_id)
+		if is_instance_valid(door):
+			var offset := door.global_position - origin
+			lane = offset.x if along_x else offset.z
+			sill_y = door.global_position.y
+		if (
+			not door_metrics.has(lane) and not door_metrics.has(declared_lane)
+			and (not room_view_curtain_enabled or not is_instance_valid(neighbor))
+		):
+			continue
+		if not is_equal_approx(lane, declared_lane):
+			door_metrics.erase(declared_lane)
+		var width := maxf(TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M, float(port.get("door_width_m", 0.0)))
+		door_metrics[lane] = Vector2(sill_y, width)
+	var openings: Array[Rect2] = []
+	for lane: float in door_metrics:
+		var metrics := door_metrics[lane]
+		var half_width := metrics.y * 0.5 + FLOW_VIEW_DOOR_HOLE_BLEED_M
+		var from := maxf(u_start, axis_origin + lane - half_width)
+		var to := minf(u_end, axis_origin + lane + half_width)
+		var low := maxf(span.x, metrics.x + FLOW_VIEW_WALL_BOTTOM_M)
+		var high := minf(span.y, metrics.x + FLOW_ROOM_WALL_HEIGHT_M)
+		if to - from > 0.01 and high > low:
+			openings.append(Rect2(from, low, to - from, high - low))
+	openings.sort_custom(func(a: Rect2, b: Rect2) -> bool: return a.position.x < b.position.x)
+	return openings
+
+
+## 实心墙段加门上过梁。门下还有深井时也生成门下的挡片。
 func _flow_view_side_quads(
-	u_start: float, u_end: float, holes: Array, bottom: float, top: float, hole_top: float
+	u_start: float, u_end: float, openings: Array[Rect2], bottom: float, top: float
 ) -> Array:
 	var quads: Array = []
 	var cursor := u_start
-	for hole_value in holes:
-		var hole: Vector2 = hole_value
-		var hole_from := maxf(cursor, hole.x)
-		var hole_to := minf(u_end, hole.y)
+	for hole: Rect2 in openings:
+		var hole_from := maxf(cursor, hole.position.x)
+		var hole_to := hole.end.x
 		if hole_to <= hole_from:
 			continue
 		if hole_from > cursor:
 			quads.append([cursor, hole_from, bottom, top])
-		# 门洞上方的过梁段：从门洞净高一直到幕墙上沿。
-		var header := clampf(hole_top, bottom, top)
-		if header < top:
-			quads.append([hole_from, hole_to, header, top])
+		if hole.position.y > bottom:
+			quads.append([hole_from, hole_to, bottom, hole.position.y])
+		if hole.end.y < top:
+			quads.append([hole_from, hole_to, hole.end.y, top])
 		cursor = hole_to
 	if cursor < u_end:
 		quads.append([cursor, u_end, bottom, top])
@@ -9186,6 +9175,7 @@ func _refresh_physical_location_authority(force := false) -> void:
 		# 房间地面，至少同步位置权威和地图状态，后续房间逻辑仍走原链路。
 		if _current_room_id == previous_id:
 			_current_room_id = containing_room.room_id
+			_refresh_flow_view_mask()
 			minimap.set_current_room(containing_room.room_id)
 			minimap.reveal_room(containing_room.room_id)
 	_refresh_tower_hud()
