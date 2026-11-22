@@ -39,6 +39,15 @@ func _ready() -> void:
 	_restore_world_position()
 	_on_player_state_changed(player.get_presentation_state(), {})
 	_apply_prism_base_hud()
+	UiCursorMode.bind_world(player.aim_cursor, _cursor_context)
+
+
+func _cursor_context() -> UiCursorMode.Presentation:
+	if is_instance_valid(_active_menu):
+		return UiCursorMode.Presentation.UI
+	if player.aim_locked or player.current_hp <= 0:
+		return UiCursorMode.Presentation.HIDDEN
+	return UiCursorMode.Presentation.AIM
 
 
 ## 99F 基地世界常驻 HUD 收编到「棱镜线框」。

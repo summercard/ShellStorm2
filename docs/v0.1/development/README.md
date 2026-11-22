@@ -1,3 +1,5 @@
+- PLAYER-STATE / UI-HUD / WORLD-ENTRY · [游戏指针与战斗准星交接](2026-11-22_cursor_crosshair_handoff.md)。功能界面使用游戏箭头、玩法使用现有准星，专项与真实窗口验收见记录。
+
 - VFX-POOL · [赛博空间三色预设与交界](2026-11-21_cyber_space.md)。独立 Shader、三色 Prefab 与同模型混用验收。
 
 - VFX-POOL · [赛博虚空场景组件覆盖](2026-11-21_cyber_void_component_scope.md)。同一范围覆盖栏杆等场景组件。

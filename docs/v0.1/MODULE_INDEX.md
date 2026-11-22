@@ -1,3 +1,5 @@
+- PLAYER-STATE / UI-HUD / WORLD-ENTRY · [游戏指针与战斗准星交接](development/2026-11-22_cursor_crosshair_handoff.md)。UiCursorMode 统一窗口指针和已登记世界准星的可见性，专项覆盖模态叠加、设备切换和读取交接。
+
 - VFX-POOL · [赛博空间](design/scene_cyber_space.md)提供独立 Shader 与紫绿蓝三色预制体，可和普通场景、赛博虚空同屏交替。[开发记录](development/2026-11-21_cyber_space.md)
 
 - VFX-POOL · [赛博虚空](design/scene_void_erosion.md)默认覆盖宿主父节点下的墙地、栏杆和箱柜，可指定目标或排除组件。[开发记录](development/2026-11-21_cyber_void_component_scope.md)

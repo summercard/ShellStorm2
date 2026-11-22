@@ -119,6 +119,19 @@ func _ready() -> void:
 	_refresh_stats()
 	_refresh_bag_label()
 	status_label.text = "军械库任意取用枪身与弹药，刷怪台可测实战，命运卡组装台可测任意卡；所有配置仅在本场生效，离开即还原。"
+	UiCursorMode.bind_world(player.aim_cursor, _cursor_context)
+
+
+func _cursor_context() -> UiCursorMode.Presentation:
+	if (
+		(is_instance_valid(_inventory_ui) and _inventory_ui.is_inventory_open())
+		or (is_instance_valid(_weapon_panel) and _weapon_panel.visible)
+		or is_instance_valid(_fate_panel)
+	):
+		return UiCursorMode.Presentation.UI
+	if player.aim_locked or player.current_hp <= 0:
+		return UiCursorMode.Presentation.HIDDEN
+	return UiCursorMode.Presentation.AIM
 
 
 func _configure_environment() -> void:

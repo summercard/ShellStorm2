@@ -3400,7 +3400,7 @@ func uses_pointer_camera_aim() -> bool:
 
 
 func _update_aim_from_mouse() -> void:
-	if camera == null or not camera.is_inside_tree():
+	if camera == null or not camera.is_inside_tree() or UiCursorMode.is_aim_blocked(aim_cursor):
 		return
 	# 叙事用 actor.face 接管朝向时鼠标瞄准必须让位：input_locked 不拦瞄准
 	# （锁定期间仍可转向），所以玩家一晃鼠标就会把剧本刚摆好的"左右张望"顶掉，

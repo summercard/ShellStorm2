@@ -303,6 +303,7 @@ core_scenes=(
   verify_bullet_vfx_profiles
   verify_bullet_aim_alignment
   verify_crosshair_billboard
+  verify_cursor_crosshair_flow
   verify_monster_startup_roar
   verify_strong_variant_monsters
   verify_strong_variant_eye_glow

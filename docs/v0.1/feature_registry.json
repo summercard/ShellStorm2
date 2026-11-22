@@ -12,6 +12,7 @@
         "docs/v0.1/03_技术施工_玩家与操作.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-22_cursor_crosshair_handoff.md",
         "docs/v0.1/development/history/03_玩家与操作_历史记录.md",
         "docs/v0.1/development/2026-11-02_camera_damage_defeat_feedback.md",
         "docs/v0.1/development/2026-11-02_feedback_revision.md",
@@ -21,6 +22,11 @@
         "docs/v0.1/development/2026-11-19_exp01_ceiling_room08.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_cursor_crosshair_flow",
+          "suite": "core"
+        },
         {
           "kind": "scene",
           "id": "verify_player3d_animation_flow"
@@ -1683,12 +1689,18 @@
         "docs/v0.1/design/UI风格规范_棱镜线框.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-22_cursor_crosshair_handoff.md",
         "docs/v0.1/development/history/04_战斗与局内成长_历史记录.md",
         "docs/v0.1/development/2026-09-23_p2_media_and_traceability_repair.md",
         "docs/v0.1/development/2026-09-24_design_contract_backfill.md",
         "docs/v0.1/development/2026-11-16_weapon_hologram_ui.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_cursor_crosshair_flow",
+          "suite": "core"
+        },
         {
           "kind": "scene",
           "id": "verify_weapon_hologram_ui",

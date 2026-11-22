@@ -662,6 +662,7 @@ var _loading_scene_resources: Array[Resource] = []
 
 
 var _expedition_bootstrap_failed: bool = false
+var _cursor_world_ready := false
 var _expedition_loading_active: bool = false
 var _loading_viewport_modes: Dictionary = {}
 var _loading_render_gate_released := false
@@ -816,6 +817,7 @@ func _ready() -> void:
 	_install_fate_tutorial()
 	_install_run_vending_tutorial()
 	_begin_expedition_loading_if_active()
+	UiCursorMode.bind_world(player.aim_cursor, _cursor_context)
 	if not _hud_presenter.weapon_hud_command_ready.is_connected(_apply_weapon_hud_command):
 		_hud_presenter.weapon_hud_command_ready.connect(_apply_weapon_hud_command)
 	add_to_group("room_game_mode")
@@ -942,6 +944,7 @@ func _ready() -> void:
 	world_audio.name = "WorldAudioEnvironment"
 	add_child(world_audio)
 	world_audio.configure(self, player)
+	_cursor_world_ready = true
 	call_deferred("_activate_runtime_persistence")
 
 
@@ -3277,6 +3280,25 @@ func _has_exclusive_modal() -> bool:
 ## 输入锁仍由本 Owner 统一裁决，避免覆盖层直接写入后被下一帧清掉。
 func is_main_entry_input_locked() -> bool:
 	return false
+
+
+func _cursor_context() -> UiCursorMode.Presentation:
+	if not _cursor_world_ready or _expedition_loading_active or _expedition_bootstrap_failed:
+		return UiCursorMode.Presentation.HIDDEN
+	if is_main_entry_input_locked() or _has_exclusive_modal():
+		return UiCursorMode.Presentation.UI
+	if is_instance_valid(_inventory_ui) and _inventory_ui.is_inventory_open():
+		return UiCursorMode.Presentation.UI
+	if _is_player_dead():
+		return UiCursorMode.Presentation.HIDDEN
+	if (
+		_run_vending_tutorial_locked or player.aim_locked or _narrative_holds_player_input()
+		or NarrativeDirector.is_camera_override_active() or NarrativeDirector.is_actor_facing_overridden()
+	):
+		if NarrativeDirector.can_advance_mouse_dialogue():
+			return UiCursorMode.Presentation.UI
+		return UiCursorMode.Presentation.HIDDEN
+	return UiCursorMode.Presentation.AIM
 
 
 func _sync_player_input_lock() -> void:

@@ -8796,6 +8796,13 @@ func is_main_entry_input_locked() -> bool:
 	)
 
 
+func _cursor_context() -> UiCursorMode.Presentation:
+	var presentation := super()
+	if presentation == UiCursorMode.Presentation.AIM and not _main_story_gameplay_started:
+		return UiCursorMode.Presentation.HIDDEN
+	return presentation
+
+
 func _entry_context_requests_main_entry() -> bool:
 	return (
 		str(_entry_context.get("kind", "")) == GameEntryFlow.KIND_MAIN_ENTRY

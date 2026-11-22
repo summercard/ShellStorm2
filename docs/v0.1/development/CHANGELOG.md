@@ -1,3 +1,5 @@
+- 2026-11-22 · PLAYER-STATE / UI-HUD / WORLD-ENTRY · [游戏指针与战斗准星交接](2026-11-22_cursor_crosshair_handoff.md)。接入塔楼、远征、基地、靶场、读取与重试，新增光标交接专项。
+
 - 2026-11-21 · VFX-POOL · [赛博空间三色预设与交界](2026-11-21_cyber_space.md)。同一 Shader 提供紫、绿、蓝三色，普通场景经扫描带进入全息网格，虚空断面与空间网格可重叠。
 
 - 2026-11-21 · VFX-POOL · [赛博虚空场景组件覆盖](2026-11-21_cyber_void_component_scope.md)。空目标配置可覆盖父节点下的栏杆、箱柜和墙地。

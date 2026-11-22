@@ -210,6 +210,7 @@ func _ready() -> void:
 	_capture_destination()
 	if _root == null:
 		_build_ui()
+	UiCursorMode.bind_overlay(self, _cursor_context)
 	_set_loading_contract()
 	if IrisTransition != null:
 		IrisTransition.clear_now()
@@ -718,10 +719,13 @@ func _show_failure(kind: String, message: String) -> void:
 		_retry_button.visible = true
 		_retry_button.text = "返回入口" if kind == "map_bootstrap" else "重试读取"
 		_retry_button.grab_focus()
-		# 目标场景可能捕获了鼠标；失败页必须能实际点到按钮。
-		if not _should_skip_delay():
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	push_warning("[ExpeditionLoadingScreen] " + message)
+
+
+func _cursor_context() -> UiCursorMode.Presentation:
+	if is_instance_valid(_retry_button) and _retry_button.is_visible_in_tree():
+		return UiCursorMode.Presentation.UI
+	return UiCursorMode.Presentation.HIDDEN
 
 
 func _set_status(message: String) -> void:

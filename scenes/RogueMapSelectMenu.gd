@@ -43,7 +43,6 @@ var _axis_latched := false
 var _departing := false
 var _previous_input_lock := false
 var _initial_fov := 60.0
-var _mouse_mode := Input.MOUSE_MODE_VISIBLE
 var _source_environment: Environment
 var _city_environment: Environment
 var _source_dof_blur_amount := 0.0
@@ -138,9 +137,6 @@ func _ready() -> void:
 		if is_instance_valid(item) and item.visible:
 			_hidden.append(item)
 			item.hide()
-	_mouse_mode = Input.mouse_mode
-	if DisplayServer.get_name() != "headless":
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _process(delta: float) -> void:
 	if not is_instance_valid(_city) or not is_instance_valid(_camera):
@@ -496,8 +492,6 @@ func _departure_failed(message: String) -> void:
 	push_error("[HologramCity] " + message)
 
 func _exit_tree() -> void:
-	if DisplayServer.get_name() != "headless":
-		Input.mouse_mode = _mouse_mode
 	if is_instance_valid(_original_camera) and _original_camera.is_inside_tree():
 		_original_camera.make_current()
 	for item in _world_fades:

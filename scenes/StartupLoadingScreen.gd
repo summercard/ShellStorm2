@@ -246,6 +246,7 @@ var _title_font_cache: FontVariation
 func _ready() -> void:
 	layer = 128
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	UiCursorMode.bind_overlay(self, func() -> UiCursorMode.Presentation: return UiCursorMode.Presentation.HIDDEN)
 	_build_ui()
 	if _should_skip_delay():
 		_enter_game()
