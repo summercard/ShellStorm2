@@ -2,6 +2,7 @@ shader_type spatial;
 render_mode unshaded, blend_mix, cull_disabled, depth_draw_never, shadows_disabled, fog_disabled;
 
 uniform mat4 world_to_volume;
+uniform bool strict_box_bounds = false;
 uniform vec3 half_size = vec3(4.5, 2.5, 4.5);
 uniform float progress = 1.0;
 uniform float cell_size = 0.55;
@@ -412,7 +413,8 @@ void fragment() {
 	vec3 coordinates = p / cell_size;
 	vec3 aa = max(fwidth(coordinates) * 0.65, vec3(0.002));
 	float pixel_size = max(length(dFdx(p)), length(dFdy(p)));
-	if (progress <= 0.0 || box_distance(p, extent) > edge_width + cell_size * 2.1) {
+	float bounds_distance = box_distance(p, extent);
+	if (progress <= 0.0 || (strict_box_bounds && bounds_distance > 0.0) || bounds_distance > edge_width + cell_size * 2.1) {
 		discard;
 	}
 

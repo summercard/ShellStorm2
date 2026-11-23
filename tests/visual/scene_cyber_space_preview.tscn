@@ -17,4 +17,4 @@ theme_override_colors/font_color = Color(0.89, 0.93, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
-text = "0  原场景    1  紫    2  绿    3  蓝    4  与虚空混用    空格  播放过渡"
+text = "0  原场景    1  紫    2  绿    3  蓝    4  纯白空间    5  蓝+虚空    空格  播放过渡"

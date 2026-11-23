@@ -6,7 +6,7 @@
     "kind": "manual",
     "once": "run"
   },
-  "duration": 68.333,
+  "duration": 47.533,
   "presentation": {
     "dialogue": {
       "mode": "A"
@@ -43,14 +43,18 @@
       "speed": 3.2
     },
     {
-      "at": 25.0,
+      "at": 3.2,
+      "do": "story.boss.wait_for_walk"
+    },
+    {
+      "at": 4.2,
       "do": "camera.focus",
       "pivot_anchor": "boss",
       "distance": 8.0,
       "duration": 1.0
     },
     {
-      "at": 26.2,
+      "at": 5.4,
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
@@ -83,7 +87,7 @@
       ]
     },
     {
-      "at": 26.2,
+      "at": 5.4,
       "do": "ui.subtitle",
       "speaker": "系统",
       "speaker_id": "boss_monitor002",
@@ -91,7 +95,7 @@
       "auto": 2.553
     },
     {
-      "at": 29.538,
+      "at": 8.738,
       "do": "ui.subtitle",
       "speaker": "系统",
       "speaker_id": "boss_monitor002",
@@ -99,7 +103,7 @@
       "auto": 2.663
     },
     {
-      "at": 30.7,
+      "at": 9.9,
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
@@ -133,7 +137,7 @@
       ]
     },
     {
-      "at": 33.018,
+      "at": 12.218,
       "do": "ui.subtitle",
       "speaker": "系统",
       "speaker_id": "boss_monitor002",
@@ -141,7 +145,7 @@
       "auto": 2.663
     },
     {
-      "at": 35.2,
+      "at": 14.4,
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
@@ -175,7 +179,7 @@
       ]
     },
     {
-      "at": 36.499,
+      "at": 15.699,
       "do": "ui.subtitle",
       "speaker": "系统",
       "speaker_id": "boss_monitor002",
@@ -183,7 +187,7 @@
       "auto": 2.568
     },
     {
-      "at": 39.751,
+      "at": 18.951,
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
@@ -217,7 +221,7 @@
       ]
     },
     {
-      "at": 39.751,
+      "at": 18.951,
       "do": "ui.subtitle",
       "speaker": "系统",
       "speaker_id": "boss_monitor002",
@@ -225,7 +229,7 @@
       "auto": 2.882
     },
     {
-      "at": 43.517,
+      "at": 22.717,
       "do": "ui.subtitle",
       "speaker": "系统",
       "speaker_id": "boss_monitor002",
@@ -233,7 +237,7 @@
       "auto": 2.553
     },
     {
-      "at": 44.3,
+      "at": 23.5,
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
@@ -268,7 +272,7 @@
       ]
     },
     {
-      "at": 46.855,
+      "at": 26.055,
       "do": "ui.subtitle",
       "speaker": "系统",
       "speaker_id": "boss_monitor002",
@@ -276,7 +280,7 @@
       "auto": 2.991
     },
     {
-      "at": 48.8,
+      "at": 28.0,
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
@@ -310,7 +314,7 @@
       ]
     },
     {
-      "at": 50.764,
+      "at": 29.964,
       "do": "ui.subtitle",
       "speaker": "系统",
       "speaker_id": "boss_monitor002",
@@ -318,41 +322,38 @@
       "auto": 2.701
     },
     {
-      "at": 53.0,
+      "at": 32.2,
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
-        -0.6,
-        1.2,
-        -18.0
+        -11.0,
+        16.0,
+        5.0
       ],
       "position_offset": [
-        0.4,
-        1.4,
-        -16.8
+        11.0,
+        16.0,
+        5.0
       ],
-      "target_anchor": "player_frame",
-      "target_from_offset": [
-        0.0,
-        0.5,
-        0.0
-      ],
+      "target_anchor": "boss_room_frame",
       "target_offset": [
         0.0,
         0.8,
-        0.0
+        -22.5
       ],
       "duration": 3.679,
-      "fov": 47.0,
-      "shot_label": "player_reverse_reaction",
-      "composition": "player_reverse_from_boss",
+      "fov_from": 64.0,
+      "fov": 64.0,
+      "arc": true,
+      "shot_label": "boss_platform_wide_orbit",
+      "composition": "boss_platform_wide_orbit",
       "projection_targets": [
-        "player_frame",
-        "boss_south_axis"
+        "boss_frame",
+        "player_frame"
       ]
     },
     {
-      "at": 54.016,
+      "at": 33.216,
       "do": "ui.subtitle",
       "speaker": "系统",
       "speaker_id": "boss_monitor002",
@@ -360,19 +361,19 @@
       "auto": 2.663
     },
     {
-      "at": 56.68,
+      "at": 35.88,
       "do": "camera.restore",
       "duration": 1.0
     },
     {
-      "at": 58.33,
+      "at": 37.53,
       "do": "actor.say",
       "who": "player",
       "text": "你一句我也没听懂…",
       "hold": 2.701
     },
     {
-      "at": 61.582,
+      "at": 40.782,
       "do": "ui.subtitle",
       "speaker": "系统",
       "speaker_id": "boss_monitor002",
@@ -380,7 +381,7 @@
       "auto": 2.901
     },
     {
-      "at": 62.833,
+      "at": 42.032,
       "do": "camera.shot",
       "position_anchor": "boss_room_frame",
       "position_from_offset": [
@@ -414,7 +415,7 @@
       ]
     },
     {
-      "at": 64.834,
+      "at": 44.034,
       "do": "ui.subtitle",
       "speaker": "系统",
       "speaker_id": "boss_monitor002",
@@ -422,22 +423,22 @@
       "auto": 2.834
     },
     {
-      "at": 64.834,
+      "at": 44.034,
       "do": "camera.shake",
       "duration": 0.65,
       "amplitude": 0.12
     },
     {
-      "at": 68.086,
+      "at": 47.286,
       "do": "story.boss.control_hold",
       "held": true
     },
     {
-      "at": 68.086,
+      "at": 47.286,
       "do": "story.boss.activate"
     },
     {
-      "at": 68.333,
+      "at": 47.533,
       "do": "flow.end"
     }
   ]

@@ -8,8 +8,12 @@ const MESH_SCOPE := preload("res://src/vfx/VfxSceneMeshScope.gd")
 # RenderingServer exposes one overlay slot per mesh. Claims never enter scene files.
 static var _claims: Dictionary[int, WeakRef] = {}
 
-@export_group("接入")
-## Scene roots relative to this node. Leave empty to include the host parent's scene components.
+@export_group("覆盖范围")
+@export_flags("场景模型", "角色（玩家 / NPC / 敌人）") var affected_categories: int = 3:
+	set(value):
+		affected_categories = value
+		_queue_refresh()
+## 可选：指定后，只在这些子树中按类别筛选。留空自动收集。
 @export var target_roots: Array[NodePath] = []:
 	set(value):
 		target_roots = value
@@ -23,6 +27,18 @@ static var _claims: Dictionary[int, WeakRef] = {}
 @export var seam_fill_planes: Array[NodePath] = []:
 	set(value):
 		seam_fill_planes = value
+		_queue_refresh()
+## Preserve serialized legacy hosts; box volumes use category selection instead.
+@export_storage var require_explicit_targets := false:
+	set(value):
+		require_explicit_targets = value
+		_queue_refresh()
+## 开启后，方块侵蚀也严格限制在盒内，节点缩放参与范围计算。
+@export var strict_box_bounds := false:
+	set(value):
+		strict_box_bounds = value
+		_set_uniform(&"strict_box_bounds", value)
+		_update_box_extent()
 		_queue_refresh()
 @export var enabled := true:
 	set(value):
@@ -43,7 +59,7 @@ static var _claims: Dictionary[int, WeakRef] = {}
 @export var box_size := Vector3(9.0, 5.0, 9.0):
 	set(value):
 		box_size = value.abs().max(Vector3(0.05, 0.05, 0.05))
-		_set_uniform(&"half_size", box_size * 0.5)
+		_update_box_extent()
 @export_range(0.08, 5.0, 0.01, "or_greater", "suffix:m") var cell_size := 0.55:
 	set(value):
 		cell_size = maxf(value, 0.08)
@@ -105,6 +121,7 @@ var _overlay: ShaderMaterial
 var _seam_material: ShaderMaterial
 var _targets: Dictionary[int, MeshInstance3D] = {}
 var _seam_instances: Array[MeshInstance3D] = []
+var _boxed_instances: Dictionary[int, MeshInstance3D] = {}
 var _refresh_queued := false
 
 
@@ -114,7 +131,7 @@ func _enter_tree() -> void:
 	_overlay.shader = EROSION_SHADER
 	_overlay.render_priority = 1
 	_overlay.set_shader_parameter(&"progress", progress)
-	_overlay.set_shader_parameter(&"half_size", box_size * 0.5)
+	_overlay.set_shader_parameter(&"strict_box_bounds", strict_box_bounds)
 	_overlay.set_shader_parameter(&"cell_size", cell_size)
 	_overlay.set_shader_parameter(&"edge_width", edge_width)
 	_overlay.set_shader_parameter(&"edge_irregularity", edge_irregularity)
@@ -132,11 +149,14 @@ func _enter_tree() -> void:
 	_seam_material.render_priority = 0
 	_seam_material.set_shader_parameter(&"fill_aperture_only", true)
 	_update_volume_transform()
+	MESH_SCOPE.watch(self, _on_source_tree_changed)
 	_queue_refresh()
 
 
 func _exit_tree() -> void:
+	MESH_SCOPE.unwatch(self, _on_source_tree_changed)
 	_release_targets()
+	_refresh_queued = false
 	_overlay = null
 	_seam_material = null
 
@@ -148,15 +168,29 @@ func _notification(what: int) -> void:
 
 func refresh_targets() -> int:
 	_refresh_queued = false
-	_release_targets()
-	if not is_inside_tree() or not enabled or progress <= 0.0:
+	var active := is_inside_tree() and enabled and progress > 0.0
+	_release_targets(strict_box_bounds and active)
+	if not active:
 		return 0
-
-	var candidates := MESH_SCOPE.collect(self, target_roots, excluded_roots)
+	var candidates: Dictionary[int, MeshInstance3D] = {}
+	if strict_box_bounds:
+		candidates = MESH_SCOPE.collect_box(self, target_roots, excluded_roots, affected_categories)
+	elif not require_explicit_targets or not target_roots.is_empty():
+		candidates = MESH_SCOPE.collect(self, target_roots, excluded_roots)
 	for path in seam_fill_planes:
 		var marker := _get_seam_marker(path)
 		if marker != null:
 			candidates.erase(marker.get_instance_id())
+	if strict_box_bounds:
+		# Multiple boxes can receive the same source without competing for its overlay slot.
+		MESH_SCOPE.sync_coatings(candidates, _boxed_instances, _overlay, true)
+		if (affected_categories & MESH_SCOPE.SCENE) != 0:
+			_create_seam_fills()
+		update_configuration_warnings()
+		return _boxed_instances.size()
+	if require_explicit_targets and target_roots.is_empty():
+		update_configuration_warnings()
+		return 0
 	for id in candidates:
 		var mesh := candidates[id]
 		if mesh.material_overlay != null:
@@ -169,7 +203,7 @@ func refresh_targets() -> int:
 		RenderingServer.instance_geometry_set_material_overlay(mesh.get_instance(), _overlay.get_rid())
 	_create_seam_fills()
 	update_configuration_warnings()
-	return _targets.size()
+	return _targets.size() + _boxed_instances.size()
 
 
 func _get_configuration_warnings() -> PackedStringArray:
@@ -177,12 +211,17 @@ func _get_configuration_warnings() -> PackedStringArray:
 	for path in target_roots:
 		if get_node_or_null(path) == null:
 			warnings.append("侵蚀目标路径无效：%s" % path)
-	if enabled and progress > 0.0 and _targets.is_empty():
+	if enabled and progress > 0.0 and _targets.is_empty() and _boxed_instances.is_empty():
 		warnings.append("当前没有可绑定网格。请检查父节点、Target Roots 和排除项。")
 	for path in seam_fill_planes:
 		if _get_seam_marker(path) == null:
 			warnings.append("接缝补面需要引用已隐藏的 PlaneMesh 节点：%s" % path)
 	return warnings
+
+
+func _on_source_tree_changed(node: Node) -> void:
+	if strict_box_bounds and affected_categories != 0 and enabled and progress > 0.0 and MESH_SCOPE.is_source_mesh(node):
+		_queue_refresh()
 
 
 func _queue_refresh() -> void:
@@ -196,7 +235,9 @@ func _refresh_if_queued() -> void:
 		refresh_targets()
 
 
-func _release_targets() -> void:
+func _release_targets(keep_boxed := false) -> void:
+	if not keep_boxed:
+		MESH_SCOPE.clear_coatings(_boxed_instances)
 	for fill in _seam_instances:
 		if is_instance_valid(fill):
 			fill.hide()
@@ -223,6 +264,7 @@ func _create_seam_fills() -> void:
 			continue
 		used[id] = true
 		var fill := MeshInstance3D.new()
+		fill.set_meta(MESH_SCOPE.COATING_META, true)
 		fill.mesh = marker.mesh
 		fill.material_override = _seam_material
 		fill.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -244,6 +286,14 @@ func _update_volume_transform() -> void:
 	# The inspector size is in metres, even under a scaled parent.
 	var frame := Transform3D(global_basis.orthonormalized(), global_position)
 	_set_uniform(&"world_to_volume", frame.inverse())
+	_update_box_extent()
+
+
+func _update_box_extent() -> void:
+	var scale_factor := global_basis.get_scale().abs() if strict_box_bounds and is_inside_tree() else Vector3.ONE
+	_set_uniform(&"half_size", box_size * scale_factor.max(Vector3.ONE * 0.001) * 0.5)
+	if Engine.is_editor_hint() and is_inside_tree():
+		update_gizmos()
 
 
 func _set_uniform(parameter: StringName, value: Variant) -> void:

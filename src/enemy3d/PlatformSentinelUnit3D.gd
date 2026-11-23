@@ -23,6 +23,8 @@ var _recoil := -1
 var _fire_pose := Transform3D.IDENTITY
 var _meshes: Array[Node] = []
 var _camera_cutaway := 0.0
+var _hit_flash_remaining := 0.0
+const HIT_FLASH_SECONDS := 0.12
 var _cutaway_surfaces: Array[Array] = []
 var _standby_bones: Array[int] = []
 var _standby_rest: Array[Quaternion] = []
@@ -43,6 +45,7 @@ static var _cutaway_materials: Dictionary[ShaderMaterial, ShaderMaterial] = {}
 
 func _ready() -> void:
 	_joint = rig.find_bone("shoulder" if grapple else "gimbal_pitch")
+	set_process(grapple)
 	var joints := ["shoulder", "elbow", "wrist"] if grapple else ["gimbal_yaw", "gimbal_pitch", "lift", "forearm"]
 	for joint: String in joints:
 		_standby_bones.append(rig.find_bone(joint))
@@ -71,6 +74,25 @@ func _ready() -> void:
 		armor.add_child(shape)
 		bearing.add_child(armor)
 	play("activate_grapple" if grapple else "activate_sentry", 0.0)
+
+
+func _process(delta: float) -> void:
+	if not grapple or _hit_flash_remaining <= 0.0:
+		return
+	_hit_flash_remaining = maxf(0.0, _hit_flash_remaining - delta)
+	_apply_hit_flash(_hit_flash_remaining / HIT_FLASH_SECONDS)
+
+
+func flash_hit() -> void:
+	if not grapple:
+		return
+	_hit_flash_remaining = HIT_FLASH_SECONDS
+	_apply_hit_flash(1.0)
+
+
+func _apply_hit_flash(strength: float) -> void:
+	for mesh: MeshInstance3D in _meshes:
+		mesh.set_instance_shader_parameter("hit_flash", clampf(strength, 0.0, 1.0))
 
 
 func play(clip: StringName, speed := 1.0, at := 0.0) -> void:

@@ -76,17 +76,11 @@ const HIT_EFFECT_BITE_M := 0.03
 ## 统一成一套表现，避免「同一只怪换个词缀就换一种死法」。
 const ZOMBIE_KINDS: Array[String] = ["melee_chaser", "ranged_caster", "fat_zombie03", "fat_zombie21"]
 ## 死亡走 FX01-19 `VFX-ZOMBIE-GOO-DEATH-3D`（绿方块爆开 + 抛物线飞溅 + 地面液体 + 绿色冲击波）的怪种。
-## 胖子僵尸**不在**本名单：它走自己的重型自爆（FX01-17 橙红方块 + 绿色冲击波）。
+## 胖子僵尸不在本名单：它走独立的 FX01-17 原版蓝色爆炸。
 const GOO_DEATH_KINDS: Array[String] = ["melee_chaser", "ranged_caster"]
 ## FX01-19 的尺寸基准。业主 2026-10-14 第二轮明确「**小僵尸的死亡特效不要改变**」
 ## ⇒ 保持 1.0（规格尺寸，几何常量本身不动，验收仍有尺寸线性断言守着）。
 const GOO_DEATH_EFFECT_SIZE := 1.0
-## FX01-17（胖子僵尸死亡）的尺寸基准。业主 2026-10-14 第二轮：
-## 「把小僵尸的死亡特效**放大两倍**给胖子僵尸用」⇒ 由小僵尸的 1.0 提为 2.0。
-## ⚠ 这条替换了 v001 的「按伤害半径反推尺寸」（radius × 0.6）口径：
-##    现在的尺寸是**业主指定的固定倍率**，冲击波外缘（≈1.548 × 2.0 = 3.1m）
-##    不再等于远征01 的 5.0m 伤害半径 —— 它是一条风格元素，不再当半径指示。
-const FAT_DEATH_EFFECT_SIZE := 2.0
 const VALID_STATES := [
 	"dormant", "idle", "patrol", "alert", "chase", "search", "return",
 	"telegraph", "attack", "recovery", "stagger", "defeated", "death_warning", "dead",
@@ -1038,6 +1032,7 @@ var _death_cause := DeathCause.OTHER
 ## 空字典 = 本怪不自爆（缺省，塔楼与其余关卡恒为空）。
 var _death_explosion: Dictionary = {}
 var _death_warning_remaining_sec := 0.0
+var _death_warning_vfx: VfxDeathBlast3D
 var _death_warning_duration_sec := 0.0
 ## 当前生效的分离推力速度，以及重算相位（-1 = 尚未初始化）。
 var _separation_push := Vector3.ZERO
@@ -1946,9 +1941,13 @@ func is_concealed_in_world() -> bool:
 func _process(delta: float) -> void:
 	if ai_state == "death_warning":
 		if _narrative_holds_combat():
+			if is_instance_valid(_death_warning_vfx):
+				_death_warning_vfx.pause_charge_audio()
 			return
 		_death_warning_remaining_sec = maxf(0.0, _death_warning_remaining_sec - delta)
 		_state_time = _death_warning_duration_sec - _death_warning_remaining_sec
+		if is_instance_valid(_death_warning_vfx):
+			_death_warning_vfx.sync_charge(_state_time)
 		if avatar != null:
 			avatar.sync_death_warning(_state_time, _death_warning_duration_sec)
 		if _death_warning_remaining_sec <= 0.0:
@@ -4423,11 +4422,12 @@ func _detonate_death_explosion() -> void:
 	var damage := int(_death_explosion.get("damage", 0))
 	var radius := maxf(0.5, float(_death_explosion.get("radius_m", 0.0)))
 	var sfx_radius := float(_death_explosion.get("sfx_radius_m", 20.0))
-	# 视觉：胖子僵尸的死亡表现 = 小僵尸死亡表现 ×2 + 绿色冲击波（业主 2026-10-14 指定）。
-	# ⚠ **表现 ≠ 玩法**：视觉在这一行就出（不管伤害是多少），下面才是伤害结算。
-	# 规格里 damage<=0 表示「本关不自爆」—— 那只是不掉血，不是「连死亡表现都不给」。
-	# 分开是为了让去掉倒地动画后的胖子僵尸仍有死亡表现（见 `_die()`）。
-	_spawn_fat_death_burst(1.0)
+	# 发抖阶段已经借出视觉；在结算当帧跨过素材的爆发点，不重复播放。
+	if is_instance_valid(_death_warning_vfx):
+		_death_warning_vfx.detonate()
+		_death_warning_vfx = null
+	else:
+		_spawn_fat_death_burst()
 	if damage <= 0:
 		return
 	if radius <= 0.0:
@@ -5704,6 +5704,8 @@ func _begin_death_warning(remaining: float, duration: float) -> void:
 		_overhead_health_root.visible = false
 	if avatar != null:
 		avatar.sync_death_warning(duration - remaining, duration)
+	_cancel_death_warning_vfx()
+	_death_warning_vfx = _spawn_fat_death_burst(duration, duration - remaining)
 
 
 func _die(cause := DeathCause.OTHER) -> void:
@@ -5761,7 +5763,7 @@ func _commit_death() -> void:
 	if not _death_explosion.is_empty():
 		_detonate_death_explosion()
 	elif _asset_kind() == "fat_zombie03":
-		_spawn_fat_death_burst(1.0)
+		_spawn_fat_death_burst()
 	# —— 远征03 复刻怪的死亡行为（2026-10-29）——
 	# 三条都放在「关卡级死亡自爆」之后、`killed.emit` 之前：
 	# 子代与弹幕必须在「本怪还算活着」的窗口内发出，否则房间可能在
@@ -6083,33 +6085,40 @@ func _spawn_goo_death_burst() -> void:
 	_spawn_zombie_death_effect(VfxPool3D.FX01_ZOMBIE_GOO_DEATH, GOO_DEATH_EFFECT_SIZE)
 
 
-## 生成 FX01-17 `VFX-DEATH-BLAST-3D`（胖子僵尸死亡：小僵尸死亡表现 ×2 + 绿色冲击波）。
-## `radius` 只用于「有没有规格」的判断，**不再决定视觉尺寸** —— 尺寸走
-## `FAT_DEATH_EFFECT_SIZE`（业主指定的固定倍率）。伤害结算与视觉是两条独立的线，见
-## `_detonate_death_explosion`。
-func _spawn_fat_death_burst(radius: float) -> void:
-	if radius <= 0.0:
-		return
-	_spawn_zombie_death_effect(VfxPool3D.FX01_DEATH_BLAST, FAT_DEATH_EFFECT_SIZE)
+func _spawn_fat_death_burst(warning := 0.0, elapsed := 0.0) -> VfxDeathBlast3D:
+	var radius := maxf(0.5, float(_death_explosion.get("radius_m", 5.0)))
+	var zone := _death_explosion.get("zone", {}) as Dictionary
+	# A separately configured smaller hazard must not be overrun by the visual.
+	if bool(zone.get("enabled", false)) and int(zone.get("damage_per_tick", 0)) > 0:
+		radius = minf(radius, maxf(0.5, float(zone.get("radius_m", radius))))
+	return _spawn_zombie_death_effect(VfxPool3D.FX01_DEATH_BLAST, 1.0, {
+		"blast_visual_radius_m": radius, "blast_warning_sec": warning, "blast_warning_elapsed_sec": elapsed,
+	}) as VfxDeathBlast3D
+
+
+func _cancel_death_warning_vfx() -> void:
+	if is_instance_valid(_death_warning_vfx):
+		_death_warning_vfx.finish()
+	_death_warning_vfx = null
 
 
 ## 僵尸死亡特效的共用出口：胸口出生 + `floor_y = 脚底行走面`。
 ## 两件（FX01-17 / FX01-19）走同一个函数，保证「地面高度真源」只有一处口径。
-func _spawn_zombie_death_effect(asset_id: StringName, size: float) -> void:
+func _spawn_zombie_death_effect(asset_id: StringName, size: float, visual_context: Dictionary = {}) -> VfxEffectBase3D:
 	if get_tree().current_scene == null:
-		return
+		return null
 	var world_position := global_position + Vector3(0, EFFECT_SPAWN_LIFT, 0)
 	var color: Color = EnemyAvatar3D.COLORS.get(enemy_kind, Color.WHITE)
-	var context := {"floor_y": global_position.y}
+	var context := visual_context.duplicate()
+	context["floor_y"] = global_position.y
 	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
 	if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D:
-		(vfx_pools[0] as VfxPool3D).acquire(asset_id, world_position, color, size, context)
-		return
-	# 无池时独立实例化作后备（与 `_spawn_effect` 同口径）
+		return (vfx_pools[0] as VfxPool3D).acquire(asset_id, world_position, color, size, context)
 	var effect := VfxPool3D.create_unpooled(asset_id)
 	if effect != null:
 		get_tree().current_scene.add_child(effect)
 		effect.activate(world_position, color, size, context)
+	return effect
 
 
 ## 收起模型并本帧回收：这条路**没有倒地动画、也没有尸体**。
@@ -6640,6 +6649,7 @@ func _clear_fate_visuals() -> void:
 	_fate_visuals.clear()
 
 func _exit_tree() -> void:
+	_cancel_death_warning_vfx()
 	if monitor_combat != null:
 		monitor_combat.cancel_story_activation()
 	if arms_taker_combat != null:

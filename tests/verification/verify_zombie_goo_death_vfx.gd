@@ -1,1067 +1,178 @@
 extends Node
-## 专项验收：小僵尸 / 警察僵尸死亡「绿色方块爆开」特效（FX01-19 `VFX-ZOMBIE-GOO-DEATH-3D`）
-## ＋ 「状态机上去掉倒地动画」这条行为契约。
-##
-## 业主口径（2026-10-14）：「绿色方块爆开的粒子，掉落地面，然后地面上有方形像液体一样的
-## 扁平模型，停留 0.5 秒后慢慢下沉消失；特效由三部分组成 —— 爆炸的粒子、飞溅出去的粒子、
-## 地上的液体；节奏自己把控好，要有打击力度感、节奏感；粒子不要太小，可以大一点，
-## 需要有大小的变化动画」，并「配置在小僵尸和警察僵尸死亡后，状态机上去掉倒地动画」。
-##
-## 两层验收（规范 docs/v0.1/14.6_特效系统与制作规范.md §6）：
-##   A. 机制层：Prefab 资产契约 / 灯光真源 / 三段节奏与尺度动画 / 地面平铺 /
-##      `floor_y` 契约 / 尺寸线性 / 无碰撞体；
-##   B. 端到端接线层：`Enemy3D._die()` 真的借出了该特效、真的**不再走倒地动画**、
-##      且**没有**把这类怪塞进死亡显影组；反向对照 = 胖子僵尸仍然保留倒地尸体。
-## 期望值一律硬编码在验收侧（不引用被测脚本常量，防自印证）；末尾有防假绿哨兵。
-
-const GOO_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_zombie_goo_death_root_top3d.tscn")
-const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn")
-
-const GOO_ASSET_ID := "VFX-ZOMBIE-GOO-DEATH-3D"
-## v001：业主 2026-10-14 第二轮明确「**小僵尸的死亡特效不要改变**」⇒ 本件回到第一轮那一版，
-## 未改版。（中途那一版「放大 2 倍 + 绿色冲击波」被业主指名是**给胖子僵尸用的**，
-## 落在 FX01-17 `VfxDeathBlast3D`；本件与它共用 `VfxGooDeathBase3D` 的身体但不启用冲击波。）
-const EXPECTED_VERSION := "v001"
-const EXPECTED_LIFETIME := 1.35
-const EXPECTED_BURST_COUNT := 12
-const EXPECTED_SPLAT_COUNT := 14
-const EXPECTED_PUDDLE_COUNT := 4
-## 业主明确：**小僵尸死亡没有冲击波**（只有胖子僵尸那条有）⇒ 这里必须是 0
-const EXPECTED_SHOCKWAVE_COUNT := 0
-## 12 方块 + 14 飞溅 + 4 液体 + 1（GooLight）
-const EXPECTED_NODE_MIN := 31
-const EXPECTED_LIGHT_NAME := "GooLight"
-const EXPECTED_LIGHT_RANGE_PER_SIZE := 4.2
-const EXPECTED_LIGHT_ENERGY_PEAK := 6.0
-## 灯必须在**地面液体公共停留窗口 [0.445, 0.870] 之前**归零，否则地面亮度一直在变，
-## 真渲染上会把「液体完全静止的 0.5 秒」糊掉。
-const EXPECTED_LIGHT_DECAY_SEC := 0.34
-const PUDDLE_COMMON_HOLD_START := 0.445
-
-## 三部分各自的节奏（秒）—— 期望值硬编码，与被测脚本的常量互不派生
-const EXPECTED_BURST_WINDOW := 0.24
-const EXPECTED_BURST_POP_RATIO := 0.18
-## 尺度变化倍率 = 过冲峰值 / 起点 = 1.15 / 0.25 = 4.6（「有大小变化动画」的量化）
-const EXPECTED_BURST_SCALE_PEAK_RATIO := 4.6
-const EXPECTED_PUDDLE_HOLD_SECONDS := 0.50
-const EXPECTED_PUDDLE_SINK_DEPTH := 0.30
-const EXPECTED_PUDDLE_SINK_SEC := 0.36
-const EXPECTED_PUDDLE_LIFT := 0.035
-
-## ── 地面液体的尺寸（业主 2026-11-06，2026-11-08 两次收窄随机区间）──────────────
-## 2026-11-06「贴图太小了，放大到现在的 2 倍，然后要在 1.5-2 之间做随机值缩放」
-## 2026-11-08「放大倍数变成 1-1.5」→ 同日再改「大小缩放到 0.6-1.2」
-## ⇒ 世界边长 = size × BASE × SCALE × roll，roll ∈ [ROLL_MIN, ROLL_MAX]。
-## 三个数字**硬编码在验收侧**（不引用被测脚本常量，防自印证）。
-const EXPECTED_PUDDLE_SIDE_BASE := 0.72
-const EXPECTED_PUDDLE_SIDE_SCALE := 2.0
-const EXPECTED_PUDDLE_ROLL_MIN := 0.6
-const EXPECTED_PUDDLE_ROLL_MAX := 1.2
-## 四块的极差下限：随机若退化成常量表（四块同值），这条会红。
-## 取 0.10 —— 可用区间 0.5 的五分之一，四块真随机时实测极差 0.26~0.47。
-const PUDDLE_ROLL_SPREAD_MIN := 0.10
-
-## 尺寸线性：size 1.0 与 0.8 的同一子节点 scale 比值 = 1.25
-const SIZE_A := 1.0
-const SIZE_B := 0.8
-const SIZE_RATIO := 1.25
-const SIZE_RATIO_TOLERANCE := 0.02
-
-## 深层楼机位：塔楼楼层**向下**建造（`stage.position.y = -12.0 × 层号`，98F ≈ −1176 m）。
-## 任何「地面高度 / 绝对坐标」类契约都必须在这个高度上验，否则会因为 y≈0 而假绿。
-const FLOOR_DEEP := -1176.0
-const SPAWN_LIFT := 0.65
-## 反向对照用的地面位移（0.30m 不会触发「最低起抛高度 0.20m」的钳制）
-const FLOOR_SHIFT := -0.30
-
-const MIN_SAMPLES := 12
-var _failures: Array[String] = []
-var _samples := 0
-var _steps: Array[Callable] = []
-var _step_index := 0
-var _goo_enemy: Enemy3D = null
-var _killed_count := 0
-var _fat_enemy: Enemy3D = null
-
+## FX01-19: imported structure, timed playback, lit rendering and real death routing.
+const GOO := preload("res://assets/art/vfx/combat_3d/vfx_zombie_goo_death_root_top3d.tscn")
+const RAW_BURST := preload("res://assets/art/vfx/combat_3d/zombie_goo_death/vfx_zombie_goo_burst_source_top3d.tscn")
+const RAW_POOL := preload("res://assets/art/vfx/combat_3d/zombie_goo_death/vfx_zombie_goo_pool_source_top3d.tscn")
+const ENEMY := preload("res://assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn")
+const ORIGIN := Vector3(2.0, -1176.0, -3.0)
+var failures: Array[String] = []
+var killed := 0
 
 func _ready() -> void:
-	# ⚠ 分步执行（不写成 _ready 里一长串同步调用）：本仓 GDScript 的运行期报错会
-	# **中断当前函数**；全串在 `_ready` 里时，中途一处报错会跳过 `_report()` ⇒
-	# headless 场景永远挂着（本仓验收的经典假死）。每帧推进一步即可避免。
-	_steps = [
-		_check_prefab_contract,
-		_check_light_truth,
-		_check_rhythm_burst,
-		_check_rhythm_splat,
-		_check_rhythm_puddle,
-		_check_puddle_size_roll,
-		_check_ground_flatness,
-		_check_floor_contract,
-		_check_size_linearity,
-		_check_collision_free,
-		_enemy_death_case_begin,
-		_tick_wait,
-		_tick_wait,
-		_enemy_death_case_check_recycled,
-		_fat_zombie_reverse_begin,
-		_tick_wait,
-		_tick_wait,
-		_fat_zombie_reverse_check,
-		_check_shockwave_rhythm,
-	]
-	_step_index = 0
-	set_process(true)
+	call_deferred("run")
 
+func check(valid: bool, detail: String) -> void:
+	if not valid:
+		failures.append(detail)
 
-func _process(_delta: float) -> void:
-	if _step_index < _steps.size():
-		var step: Callable = _steps[_step_index]
-		_step_index += 1
-		print("ZOMBIE_GOO_DEATH_VFX_STEP %d/%d %s" % [_step_index, _steps.size(), step.get_method()])
-		step.call()
-		return
-	set_process(false)
-	_report()
+func source_emitters(root: Node3D) -> Array[Node]:
+	return root.find_children("Particle_1", "Node3D", true, false)
 
+func check_source(instance: Node3D, raw_scene: PackedScene, expected: int) -> void:
+	var raw := raw_scene.instantiate() as Node3D
+	var original_emitters := source_emitters(raw)
+	var game_emitters := source_emitters(instance)
+	check(game_emitters.size() == expected and original_emitters.size() == expected, "源发射器数量不符")
+	for i in mini(game_emitters.size(), original_emitters.size()):
+		var node := game_emitters[i]
+		var reference := original_emitters[i]
+		check(instance.get_path_to(node) == raw.get_path_to(reference), "实例不得重排源层级")
+		var instance_data: Dictionary = node.get("source").duplicate(false)
+		var original_data: Dictionary = reference.get("source")
+		var instance_render: Dictionary = instance_data.renderer.duplicate(true)
+		var original_render: Dictionary = original_data.renderer
+		check(bool(instance_render.receive_shadows), "源粒子实例应接收阴影")
+		instance_render.receive_shadows = original_render.receive_shadows
+		for slot in instance_render.materials.size():
+			var settings: Dictionary = instance_render.materials[slot]
+			check(is_equal_approx(float(settings.get("_LightingEnabled", 0.0)), 1.0), "源贴图实例须受光")
+			if original_render.materials[slot].has("_LightingEnabled"):
+				settings["_LightingEnabled"] = original_render.materials[slot]["_LightingEnabled"]
+			else:
+				settings.erase("_LightingEnabled")
+			if expected == 1:
+				var tint: Array = settings["_Color"]
+				check(is_equal_approx(float(tint[0]), 0.64) and is_equal_approx(float(tint[1]), 0.64) and is_equal_approx(float(tint[2]), 0.64) and tint[3] == 1.0, "地面绿浆仅压低颜色亮度，不改变透明度")
+				settings["_Color"] = original_render.materials[slot]["_Color"]
+		instance_data.renderer = instance_render
+		if expected == 1:
+			var growth: Dictionary = instance_data.size_over_lifetime
+			var original_growth: Dictionary = original_data.size_over_lifetime
+			for pair: Array in [[growth.size["keys"], original_growth.size["keys"]], [growth.size.curve["keys"], original_growth.size.curve["keys"]]]:
+				for k in pair[0].size():
+					var key: Dictionary = pair[0][k]
+					var source_key: Dictionary = pair[1][k]
+					check(key.t == source_key.t and is_equal_approx(float(key.v), 0.70 + 0.30 * float(source_key.v)), "绿浆曲线应从峰值 70% 开始，保持原关键帧时间")
+			instance_data.size_over_lifetime = original_growth
+		else:
+			var is_droplet: bool = node.get("component_key") == "0#1"
+			var main: Dictionary = instance_data.main.duplicate(false)
+			for param in [&"start_size", &"start_lifetime"]:
+				var scaled: Dictionary = main[param]
+				var original: Dictionary = original_data.main[param]
+				var gain := (2.0 / 1.30) * (2.0 if is_droplet else 1.0) if param == &"start_size" else (1.30 if is_droplet else 1.0)
+				for field in ["constant", "min", "max"]:
+					if original.has(field):
+						check(is_equal_approx(float(scaled[field]), float(original[field]) * gain), "%s %s 调参不符" % [node.get("component_key"), param])
+				main[param] = original
+			instance_data.main = main
+		check(instance_data == original_data and node.get("main_texture") == reference.get("main_texture"), "只允许实例级尺寸、寿命、亮度与受光调整")
+	raw.free()
 
-## 空转一帧（用于等 `queue_free` 真正生效）
-func _tick_wait() -> void:
-	pass
-
-
-func _expect(condition: bool, message: String) -> void:
-	if not condition:
-		_failures.append(message)
-
-
-func _pool() -> VfxPool3D:
-	var pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
-	if pools.is_empty():
-		return null
-	return pools[0] as VfxPool3D
-
-
-func _count_collision_nodes(node: Node) -> int:
-	var total := 0
-	if node is CollisionObject3D or node is CollisionShape3D:
-		total += 1
-	for child in node.get_children():
-		total += _count_collision_nodes(child)
-	return total
-
-
-## 造一个「手动步进」的实例：关掉基类 `_process`，只由用例显式调 `_on_tick`。
-## `xz` 默认沿用 v001 的固定机位；液体随机尺寸用例靠改它来验证「位置 → 形状」的派生关系。
-func _make_manual(
-	world_y: float, floor_y: Variant, size: float, xz: Vector2 = Vector2(4.0, -3.0)
-) -> VfxEffectBase3D:
-	var fx := GOO_SCENE.instantiate() as VfxEffectBase3D
-	if fx == null:
-		return null
-	add_child(fx)
-	fx.set_process(false)
-	var context: Dictionary = {}
-	if floor_y != null:
-		context["floor_y"] = floor_y
-	fx.activate(
-		Vector3(xz.x, world_y, xz.y), Color(0.58, 0.19, 0.12), size, context
-	)
-	return fx
-
-
-func _snap(fx: VfxEffectBase3D, elapsed: float) -> Dictionary:
-	fx.call("_on_tick", elapsed, EXPECTED_LIFETIME)
-	return fx.call("get_presentation_snapshot") as Dictionary
-
-
-# ---------------------------------------------------------------- A1 Prefab 契约
-func _check_prefab_contract() -> void:
-	var fx := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A)
-	if fx == null:
-		_failures.append("绿色方块爆开 Prefab 根节点不是 VfxEffectBase3D")
-		return
-	_samples += 1
-	var snapshot: Dictionary = fx.call("get_presentation_snapshot")
-	_expect(String(snapshot.get("asset_id", "")) == GOO_ASSET_ID,
-		"AssetID 不正确：%s" % snapshot.get("asset_id", ""))
-	_expect(String(snapshot.get("asset_version", "")) == EXPECTED_VERSION,
-		"版本不是 %s：%s" % [EXPECTED_VERSION, snapshot.get("asset_version", "")])
-	_expect(is_equal_approx(float(snapshot.get("lifetime", 0.0)), EXPECTED_LIFETIME),
-		"寿命应为 %.2fs：%.3f" % [EXPECTED_LIFETIME, float(snapshot.get("lifetime", 0.0))])
-	_expect(int(snapshot.get("node_count", 0)) >= EXPECTED_NODE_MIN,
-		"子节点过少，三部分几何未构建：%d" % int(snapshot.get("node_count", 0)))
-	_expect(int(snapshot.get("burst_count", 0)) == EXPECTED_BURST_COUNT,
-		"爆炸粒子数应为 %d：%d" % [EXPECTED_BURST_COUNT, int(snapshot.get("burst_count", 0))])
-	_expect(int(snapshot.get("splat_count", 0)) == EXPECTED_SPLAT_COUNT,
-		"飞溅粒子数应为 %d：%d" % [EXPECTED_SPLAT_COUNT, int(snapshot.get("splat_count", 0))])
-	_expect(int(snapshot.get("puddle_count", 0)) == EXPECTED_PUDDLE_COUNT,
-		"地上液体数应为 %d：%d" % [EXPECTED_PUDDLE_COUNT, int(snapshot.get("puddle_count", 0))])
-	# 业主明确「小僵尸死亡没有冲击波，只有胖子僵尸死亡有冲击波」⇒ 本件必须为 0
-	_expect(int(snapshot.get("shockwave_count", -1)) == EXPECTED_SHOCKWAVE_COUNT,
-		"小僵尸死亡不该有冲击波（期望 %d 层）：%d"
-		% [EXPECTED_SHOCKWAVE_COUNT, int(snapshot.get("shockwave_count", -1))])
-	_expect(snapshot.get("shockwave_color", Color.BLACK) == Color.BLACK or
-		float(snapshot.get("shockwave_alpha", 0.0)) == 0.0,
-		"未启用冲击波时不该有可见的环材质")
-
-	# 三部分按名存在（避免「数量对上但名字换了、别处按名取件取不到」）
-	for node_name in ["Burst0", "Burst11", "Splat0", "Splat13", "Puddle0", "Puddle3", "GooLight"]:
-		_expect(fx.get_node_or_null(node_name) != null, "缺少节点：%s" % node_name)
-
-	# 地面液体 = **贴图面片**（业主 2026-11-05：「用 Image 2 做一张贴图，贴在那个绿色方块上面」）。
-	# 这条是这次改动的核心，必须正面判：只看「有 Puddle0」会假绿 —— 换回纯色方块它也在。
-	_check_puddle_texture(fx)
-	# 反向对照：冲击波那两个节点**必须不存在**（业主口径），存在即说明切换没生效
-	for node_name in ["Shockwave0", "Shockwave2"]:
-		_expect(fx.get_node_or_null(node_name) == null,
-			"小僵尸死亡件里出现了 %s —— 冲击波只该出现在胖子僵尸那条" % node_name)
-
-	# 业主指定「绿色」：解析出的颜色必须绿色主导
-	_expect(bool(snapshot.get("green_dominant", false)),
-		"爆开色不是绿色主导：%s" % str(snapshot.get("goo_color", Color.BLACK)))
-	var goo := snapshot.get("goo_color", Color.BLACK) as Color
-	_expect(goo.g > goo.r and goo.g > goo.b, "爆开色 G 通道未占优：%s" % str(goo))
-	# 对照：调用方本色（小僵尸暗红）本身**不是**绿色主导 ⇒ 证明上面这条有辨别力
-	var caller := Color(0.58, 0.19, 0.12)
-	_expect(not (caller.g > caller.r and caller.g > caller.b),
-		"对照失效：调用方本色本身就是绿色主导")
-
-	fx.free()
-
-
-# ---------------------------------------------------------------- A1b 地面液体贴图
-## 业主 2026-11-05：「那个绿色方块的面片是用来替代用的，做一张贴图贴在这个方块上面」。
-##
-## 判据分四层，缺一层都能被别的实现蒙过去：
-##   ① 材质上真的挂了贴图（不是纯色）；
-##   ② 贴图**真的带 alpha**，且轮廓是「外面一圈深、里面一片中绿」——
-##      这正是业主口述的「不要写实、轮廓感强一些」的可量化形态。
-##      纯色方块 / 全不透明贴图 / 反过来（里深外浅）都会红；
-##   ③ 四块液体共用同一张贴图（不是每块各画一张，也不是只有第一块有贴图）；
-##   ④ 深度写模式必须是 OPAQUE_ONLY —— 贴图面片的透明区域不能写深度，
-##      否则四块之间会互相裁出方形空洞（贴图的方形包围盒会显形）。
-const PUDDLE_TEXTURE_PATH := "res://assets/art/vfx/textures/vfx_zombie_goo_puddle_floor.png"
-## 贴图边长下限：业主 2026-11-08 先指定 256、再改「贴图变成 128」⇒ 128 就是合规尺寸。
-## 下限仍钉在这里：低于 128 说明有人为了省显存把贴图压小了，描边（128 上约 4px）
-## 会糊成一片。
-const PUDDLE_TEXTURE_MIN_SIDE := 128
-## 描边/填充的亮度比上限：<1 表示外圈确实比中段暗（有描边）。
-const PUDDLE_OUTLINE_RATIO_MAX := 0.75
-## 透明边必须有：四角（贴图方形包围盒的四角）应当是透明的，
-## 否则「轮廓感」无从谈起 —— 它就是个满幅方块。
-const PUDDLE_CORNER_ALPHA_MAX := 32
-## 探「边缘」的探测距离（占贴图短边的比例）。取 2%：128 的贴图上约 2.6px（脚本里
-## 有 4px 下限）⇒ 与脚本扩出的描边同量级。实测 128² 上 probe=4 的边缘/中段亮度比 0.39，
-## 远低于上限 0.75，说明即使探针略宽过描边，量到的仍以描边为主。
-const RIM_PROBE_RATIO := 0.02
-
-
-func _check_puddle_texture(fx: VfxEffectBase3D) -> void:
-	_samples += 1
-	var puddle_nodes: Array[Node] = []
-	var textures: Array[Texture2D] = []
-	for index in EXPECTED_PUDDLE_COUNT:
-		var plate := fx.get_node_or_null("Puddle%d" % index) as MeshInstance3D
-		if plate == null:
-			_failures.append("缺少 Puddle%d，贴图契约未执行" % index)
-			return
-		puddle_nodes.append(plate)
-		# ① 材质真的带贴图
-		var mat := plate.material_override as StandardMaterial3D
-		if mat == null:
-			_failures.append("Puddle%d 未用 StandardMaterial3D（无法承载贴图）" % index)
-			return
-		if mat.albedo_texture == null:
-			_failures.append("Puddle%d 材质上没有贴图 —— 地面液体退回纯色方块了" % index)
-			return
-		textures.append(mat.albedo_texture)
-		# ④ 透明区域不写深度
-		_expect(mat.depth_draw_mode == BaseMaterial3D.DEPTH_DRAW_OPAQUE_ONLY,
-			"Puddle%d 深度写模式应为 OPAQUE_ONLY（当前 %d）：贴图透明区写深度会裁穿地面"
-			% [index, mat.depth_draw_mode])
-		_expect(mat.transparency == BaseMaterial3D.TRANSPARENCY_ALPHA,
-			"Puddle%d 未开启 alpha 混合，贴图的透明边缘会变成黑边" % index)
-		_expect(mat.shading_mode == BaseMaterial3D.SHADING_MODE_PER_PIXEL and not mat.disable_receive_shadows,
-			"Puddle%d 必须接受场景光和阴影，不能在暗房保持原亮度" % index)
-		_expect(not mat.emission_enabled and mat.blend_mode == BaseMaterial3D.BLEND_MODE_MIX,
-			"Puddle%d 不得自发光或使用加法混合" % index)
-		_expect(mat.specular_mode == BaseMaterial3D.SPECULAR_DISABLED,
-			"Puddle%d 应保留贴图高光，不添加镜面高光" % index)
-
-	for name in ["Burst0", "Splat0", "Shockwave0"]:
-		var piece := fx.get_node_or_null(name) as MeshInstance3D
-		if piece != null:
-			var material := piece.material_override as StandardMaterial3D
-			_expect(material != null and material.shading_mode == BaseMaterial3D.SHADING_MODE_UNSHADED,
-				"%s 不应跟随地面液体更改着色" % name)
-
-	# ③ 四块共用同一张贴图
-	for index in textures.size():
-		_expect(textures[index] == textures[0],
-			"Puddle%d 用的贴图与 Puddle0 不是同一张（应共用一份）" % index)
-	_expect(String(textures[0].resource_path) == PUDDLE_TEXTURE_PATH,
-		"地面液体贴图不是约定的那一张：%s" % textures[0].resource_path)
-
-	# 贴图**内容**判据从 PNG 源字节解码，而不是 `texture.get_image()`：
-	# 后者在 `--headless` 下会去等渲染线程读回像素，实测把整个用例挂死 8 分钟以上
-	# （本仓验收的经典假死形态）。解码源文件既与运行时用的是同一份数据，又不依赖 GPU。
-	var bytes := FileAccess.get_file_as_bytes(PUDDLE_TEXTURE_PATH)
-	if bytes.is_empty():
-		_failures.append("读不到地面液体贴图源文件：%s" % PUDDLE_TEXTURE_PATH)
-		return
-	var image := Image.new()
-	if image.load_png_from_buffer(bytes) != OK:
-		_failures.append("地面液体贴图不是合法 PNG：%s" % PUDDLE_TEXTURE_PATH)
-		return
-	_expect(maxi(image.get_width(), image.get_height()) >= PUDDLE_TEXTURE_MIN_SIDE,
-		"贴图边长 %d 低于 %d：缩到占屏尺寸后描边会糊掉"
-		% [maxi(image.get_width(), image.get_height()), PUDDLE_TEXTURE_MIN_SIDE])
-
-	# ② 真的有 alpha 轮廓（而不是满幅不透明）
-	var w := image.get_width()
-	var h := image.get_height()
-	var corner_max := 0.0
-	for corner in [Vector2i(1, 1), Vector2i(w - 2, 1), Vector2i(1, h - 2), Vector2i(w - 2, h - 2)]:
-		corner_max = maxf(corner_max, image.get_pixel(corner.x, corner.y).a)
-	_expect(corner_max * 255.0 <= PUDDLE_CORNER_ALPHA_MAX,
-		"贴图四角不透明（最大 alpha %.0f）：液体仍有方形包围盒的硬边" % (corner_max * 255.0))
-
-	# ② 边缘比中段暗 = 有描边（「轮廓感」的可量化形态）。
-	# ⚠ 不能用固定半径分环：贴图的图形占满整幅（content 横向 71..955/1024），
-	# 0.44~0.50 半径的环带落在**填充内部**，量出来的比是 0.95、判据恒假（实测）。
-	# 改成按「离透明区有多近」定义边缘 —— 与构图、贴图尺寸都无关。
-	var center_lum := _region_luminance(image, 0.0, 0.18)
-	var edge_lum := _rim_luminance(image)
-	_expect(center_lum > 0.05, "贴图中心几乎是空的（亮度 %.3f），不像一摊液体" % center_lum)
-	_expect(edge_lum < center_lum * PUDDLE_OUTLINE_RATIO_MAX,
-		"贴图边缘不够暗（中段 %.3f vs 边缘 %.3f，比 %.2f）：轮廓感不足"
-		% [center_lum, edge_lum, edge_lum / maxf(center_lum, 0.001)])
-
-	# 绿色主导（口径与 A/B 两段一致）
-	var center_color := image.get_pixel(w / 2, h / 2)
-	_expect(center_color.g > center_color.r and center_color.g > center_color.b,
-		"贴图中心不是绿色主导：%s" % str(center_color))
-
-	# 面片不是方块：Puddle 用的是平面（无厚度），仍按名可读、仍贴地
-	for index in puddle_nodes.size():
-		var plate := puddle_nodes[index] as MeshInstance3D
-		_expect(plate.mesh is PlaneMesh,
-			"Puddle%d 的 mesh 不是平面（%s）：贴图液体应该是单层面片" % [index, plate.mesh])
-
-
-## 采样「以中心为圆心、按半径比例取圆域」的平均亮度（只统计可见像素）。
-func _region_luminance(image: Image, inner_ratio: float, outer_ratio: float) -> float:
-	var w := image.get_width()
-	var h := image.get_height()
-	var cx := float(w) * 0.5
-	var cy := float(h) * 0.5
-	var half := float(mini(w, h)) * 0.5
-	var inner := inner_ratio * half
-	var outer := outer_ratio * half
-	var total := 0.0
-	var count := 0
-	var step := maxi(1, mini(w, h) / 128)
-	var y := 0
-	while y < h:
-		var x := 0
-		while x < w:
-			var dx := float(x) + 0.5 - cx
-			var dy := float(y) + 0.5 - cy
-			var r := sqrt(dx * dx + dy * dy)
-			if r >= inner and r <= outer:
-				var c := image.get_pixel(x, y)
-				if c.a > 0.5:
-					total += (c.r + c.g + c.b) / 3.0
-					count += 1
-			x += step
-		y += step
-	if count == 0:
-		return 0.0
-	return total / float(count)
-
-
-## 「边缘像素」的平均亮度：可见、且 8 个方向在 `RIM_PROBE_RATIO` 距离内能探到透明像素。
-##
-## 用「离透明区的距离」而不是「离中心的半径」来定义边缘 —— 这才是「轮廓」的定义，
-## 也自动适配贴图的构图（图形不必居中、不必是圆形）。
-func _rim_luminance(image: Image) -> float:
-	var w := image.get_width()
-	var h := image.get_height()
-	var probe := maxi(4, int(round(float(mini(w, h)) * RIM_PROBE_RATIO)))
-	var total := 0.0
-	var count := 0
-	var step := maxi(1, mini(w, h) / 256)
-	var y := 0
-	while y < h:
-		var x := 0
-		while x < w:
-			if image.get_pixel(x, y).a > 0.5 and _touches_transparent(image, x, y, probe):
-				var c := image.get_pixel(x, y)
-				total += (c.r + c.g + c.b) / 3.0
-				count += 1
-			x += step
-		y += step
-	if count == 0:
-		return 0.0
-	return total / float(count)
-
-
-func _touches_transparent(image: Image, x: int, y: int, probe: int) -> bool:
-	var w := image.get_width()
-	var h := image.get_height()
-	var offsets: Array[Vector2i] = [
-		Vector2i(probe, 0), Vector2i(-probe, 0), Vector2i(0, probe), Vector2i(0, -probe),
-		Vector2i(probe, probe), Vector2i(-probe, probe),
-		Vector2i(probe, -probe), Vector2i(-probe, -probe),
-	]
-	for offset: Vector2i in offsets:
-		var nx: int = x + offset.x
-		var ny: int = y + offset.y
-		if nx < 0 or ny < 0 or nx >= w or ny >= h:
-			return true
-		if image.get_pixel(nx, ny).a <= 0.5:
-			return true
-	return false
-
-
-
-func _check_light_truth() -> void:
-	var fx := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A)
-	if fx == null:
-		_failures.append("绿色方块爆开 Prefab 实例化失败（灯光用例）")
-		return
-	_samples += 1
-	var snapshot: Dictionary = fx.call("get_presentation_snapshot")
-	_expect(bool(snapshot.get("has_goo_light", false)), "缺少 OmniLight3D")
-	_expect(String(snapshot.get("light_name", "")) == EXPECTED_LIGHT_NAME,
-		"灯节点名不是 %s：%s" % [EXPECTED_LIGHT_NAME, snapshot.get("light_name", "")])
-	_expect(not bool(snapshot.get("light_shadows", true)), "灯不应投射阴影")
-	var range_per_size := float(snapshot.get("light_range", 0.0)) / SIZE_A
-	_expect(absf(range_per_size - EXPECTED_LIGHT_RANGE_PER_SIZE) < 0.001,
-		"灯范围应为 %.1f × size：实测每单位 %.3f"
-		% [EXPECTED_LIGHT_RANGE_PER_SIZE, range_per_size])
-	var birth := float(snapshot.get("light_energy", 0.0))
-	_expect(absf(birth - EXPECTED_LIGHT_ENERGY_PEAK) < 0.001,
-		"出生灯能量应为峰值 %.1f：%.3f" % [EXPECTED_LIGHT_ENERGY_PEAK, birth])
-	var half := float(_snap(fx, EXPECTED_LIGHT_DECAY_SEC * 0.5).get("light_energy", 0.0))
-	_expect(half < birth and half > 0.0,
-		"灯能量未按包络衰减或半程就归零：%.3f -> %.3f" % [birth, half])
-	var end := float(_snap(fx, EXPECTED_LIGHT_DECAY_SEC).get("light_energy", 0.0))
-	_expect(is_zero_approx(end), "灯能量在 %.2fs 未归零：%.4f" % [EXPECTED_LIGHT_DECAY_SEC, end])
-	# 「停留时必须真的静止」在**光照**这一面也要成立：灯必须早于公共停留窗口就熄灭
-	_expect(EXPECTED_LIGHT_DECAY_SEC < PUDDLE_COMMON_HOLD_START,
-		"灯熄灭时刻 %.2fs 落在液体公共停留窗口（起 %.3fs）之内 ⇒ 停留段地面亮度仍在变"
-		% [EXPECTED_LIGHT_DECAY_SEC, PUDDLE_COMMON_HOLD_START])
-	_expect(is_zero_approx(float(_snap(fx, PUDDLE_COMMON_HOLD_START).get("light_energy", 1.0))),
-		"公共停留窗口开始时灯仍未熄灭 ⇒ 视觉上的「停留」被光照变化糊掉")
-	fx.call("_on_lifetime_expired")
-	var retired := float((fx.call("get_presentation_snapshot") as Dictionary).get("light_energy", 1.0))
-	_expect(is_zero_approx(retired), "回收后灯能量必须归零（否则复借会长明）：%.4f" % retired)
-	fx.free()
-
-
-# ---------------------------------------------------------------- A3 爆炸粒子节奏
-func _check_rhythm_burst() -> void:
-	var fx := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A)
-	if fx == null:
-		_failures.append("爆炸粒子用例实例化失败")
-		return
-	_samples += 1
-	# 「粒子不要太小」：出生尺度就得是可观的（基准 0.34m × size × size_ratio × 0.25）
-	var start_scale := float(_snap(fx, 0.0).get("burst_scale_max_x", 0.0))
-	_expect(start_scale > 0.08, "爆炸粒子出生尺度过小：%.4f" % start_scale)
-	var peak_t: float = EXPECTED_BURST_WINDOW * EXPECTED_BURST_POP_RATIO
-	var peak_scale := float(_snap(fx, peak_t).get("burst_scale_max_x", 0.0))
-	var end_scale := float(_snap(fx, EXPECTED_BURST_WINDOW).get("burst_scale_max_x", 0.0))
-	_expect(peak_scale > start_scale, "爆炸粒子未膨胀（%.4f -> %.4f）" % [start_scale, peak_scale])
-	_expect(end_scale < peak_scale, "爆炸粒子未收缩（峰值 %.4f -> 末值 %.4f）" % [peak_scale, end_scale])
-	var ratio := peak_scale / maxf(start_scale, 0.000001)
-	_expect(absf(ratio - EXPECTED_BURST_SCALE_PEAK_RATIO) < 0.05,
-		"爆炸粒子尺度变化倍率应 ≈ %.1f：实测 %.3f" % [EXPECTED_BURST_SCALE_PEAK_RATIO, ratio])
-	# 窗口结束后必须真的收干净（否则会在天上挂一排绿方块）
-	var tail := _snap(fx, EXPECTED_BURST_WINDOW * 0.999)
-	var alpha_end := float(tail.get("burst_alpha", 1.0))
-	_expect(alpha_end < 0.02, "爆炸粒子在窗口末端未淡出：alpha=%.4f" % alpha_end)
-	# 「打击力度感」= 一帧内铺满视野：峰值尺度必须足够大（绝对量，不派生）
-	_expect(peak_scale > 0.35, "峰值尺度太小，读不出炸开：%.4f" % peak_scale)
-
-	# 出生就必须是**一圈数得出个数的方块壳**（真渲染实测：不散开时读作「一大块绿色」）
-	var birth := _snap(fx, 0.0)
-	var birth_radius_min := float(birth.get("burst_radius_min", 0.0))
-	_expect(birth_radius_min > 0.15,
-		"爆炸粒子出生挤在一起（最小半径 %.4f），读不出「方块爆开」" % birth_radius_min)
-	# 并真的要向外炸：峰值时刻的最远半径必须明显大于出生时刻
-	var birth_radius_max := float(birth.get("burst_radius_max", 0.0))
-	var peak_radius_max := float(_snap(fx, peak_t).get("burst_radius_max", 0.0))
-	_expect(peak_radius_max - birth_radius_max > 0.15,
-		"爆炸粒子没有向外炸开：%.3f -> %.3f" % [birth_radius_max, peak_radius_max])
-	# 对照：起点半径与终点半径也不能撞上（否则上面的差值可以靠别的项凑出来）
-	var tail_radius_max := float(_snap(fx, EXPECTED_BURST_WINDOW).get("burst_radius_max", 0.0))
-	_expect(tail_radius_max > peak_radius_max + 0.02,
-		"对照失效：峰值与窗口末端的半径没拉开（%.3f vs %.3f）" % [peak_radius_max, tail_radius_max])
-	fx.free()
-
-
-# ---------------------------------------------------------------- A4 飞溅粒子节奏
-func _check_rhythm_splat() -> void:
-	var fx := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A)
-	if fx == null:
-		_failures.append("飞溅粒子用例实例化失败")
-		return
-	_samples += 1
-	var floor_local := float((fx.call("get_presentation_snapshot") as Dictionary).get("floor_local_y", 0.0))
-	_expect(absf(floor_local + SPAWN_LIFT) < 0.01,
-		"floor_local_y 与脚底口径不一致：%.4f" % floor_local)
-	# 起飞段：确有粒子被抛到胸口以上
-	var up := _snap(fx, 0.06)
-	var up_max := float(up.get("splat_pos_max_y", -99.0))
-	_expect(up_max > 0.03, "飞溅粒子没有被抛起来（最高 y=%.4f）" % up_max)
-	# 落地段：全部落到地面（本地 y ≈ floor_local + 半个液体厚度），且没有一个穿透地面
-	var land_t := float((fx.call("get_presentation_snapshot") as Dictionary).get("splat_land_t_max", 1.0))
-	_expect(land_t > 0.10 and land_t < 0.40,
-		"飞溅粒子飞行时长应在 0.10~0.40s（节奏紧凑）：%.4f" % land_t)
-	var down := _snap(fx, land_t + 0.01)
-	var down_max := float(down.get("splat_pos_max_y", 99.0))
-	var down_min := float(down.get("splat_pos_min_y", 99.0))
-	var expect_rest := floor_local + EXPECTED_PUDDLE_LIFT * 0.5
-	_expect(absf(down_max - expect_rest) < 0.02,
-		"飞溅粒子未全部落地：最高 %.4f，期望 %.4f" % [down_max, expect_rest])
-	_expect(down_min > floor_local - 0.02,
-		"飞溅粒子穿透地面：最低 %.4f，地面 %.4f" % [down_min, floor_local])
-	# 对照：起飞段与落地段的高度必须真的不同（否则上面两条可以同时假绿）
-	_expect(up_max - down_max > 0.05,
-		"对照失效：起飞与落地的高度差不多（%.4f vs %.4f）" % [up_max, down_max])
-	fx.free()
-
-
-# ---------------------------------------------------------------- A5 地上液体节奏
-func _check_rhythm_puddle() -> void:
-	var fx := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A)
-	if fx == null:
-		_failures.append("地上液体用例实例化失败")
-		return
-	_samples += 1
-	# 出现前不可见
-	_expect(is_zero_approx(float(_snap(fx, 0.20).get("puddle_alpha", 1.0))),
-		"液体在出现时刻之前就已可见")
-	# 停留段：scale / position / alpha 三者在整段内**逐位不动**（业主要求「停留 0.5 秒」）
-	var hold_point := _snap(fx, 0.60)
-	var hold_scale := float(hold_point.get("puddle_scale_x", 0.0))
-	var hold_y := float(hold_point.get("puddle_pos_y", 0.0))
-	var hold_alpha := float(hold_point.get("puddle_alpha", 0.0))
-	_expect(is_equal_approx(hold_alpha, 1.0), "停留段液体不可见：alpha=%.4f" % hold_alpha)
-	_expect(hold_scale > 0.10, "停留段液体扁平件尺度太小：%.4f" % hold_scale)
-	var floor_local := float(hold_point.get("floor_local_y", 0.0))
-	_expect(absf(hold_y - (floor_local + EXPECTED_PUDDLE_LIFT)) < 0.001,
-		"液体未贴地：y=%.4f，期望 %.4f" % [hold_y, floor_local + EXPECTED_PUDDLE_LIFT])
-	# 扫描测出停留窗口（行为测量，不读被测常量）
-	var window := _measure_puddle_hold(fx, hold_scale, hold_y)
-	var hold_len: float = window.y - window.x
-	_expect(window.x > 0.0 and hold_len > 0.0, "未能测到停留窗口（扫描失效）")
-	_expect(absf(hold_len - EXPECTED_PUDDLE_HOLD_SECONDS) <= 0.02,
-		"停留时长应 ≈ %.2fs：实测 %.3fs（%.3f → %.3f）"
-		% [EXPECTED_PUDDLE_HOLD_SECONDS, hold_len, window.x, window.y])
-	_expect(is_equal_approx(float(hold_point.get("puddle_hold_seconds", 0.0)), EXPECTED_PUDDLE_HOLD_SECONDS),
-		"puddle_hold_seconds 定档值不是 %.2fs" % EXPECTED_PUDDLE_HOLD_SECONDS)
-	_expect(window.x > 0.30 and window.x < 0.42,
-		"液体出现时刻应在飞溅落地之后（0.30~0.42s）：实测 %.3f" % window.x)
-
-	# 下沉段：慢慢下沉并淡出，总深度 ≈ 0.30m
-	var sink_end: float = window.y + EXPECTED_PUDDLE_SINK_SEC
-	var mid := _snap(fx, window.y + EXPECTED_PUDDLE_SINK_SEC * 0.5)
-	var mid_y := float(mid.get("puddle_pos_y", 0.0))
-	var mid_alpha := float(mid.get("puddle_alpha", 1.0))
-	_expect(mid_y < hold_y - 0.05, "液体没有下沉：%.4f -> %.4f" % [hold_y, mid_y])
-	_expect(mid_alpha < 1.0 and mid_alpha > 0.0, "液体下沉期 alpha 不在淡出区间：%.4f" % mid_alpha)
-	var deep := _snap(fx, sink_end - 0.01)
-	var deep_y := float(deep.get("puddle_pos_y", 0.0))
-	var depth: float = hold_y - deep_y
-	_expect(absf(depth - EXPECTED_PUDDLE_SINK_DEPTH) < 0.02,
-		"下沉深度应 ≈ %.2fm：实测 %.4f" % [EXPECTED_PUDDLE_SINK_DEPTH, depth])
-	_expect(float(deep.get("puddle_alpha", 1.0)) < 0.06, "下沉到底时液体未淡净")
-	_expect(is_zero_approx(float(_snap(fx, sink_end + 0.02).get("puddle_alpha", 1.0))),
-		"停留 + 下沉结束后液体必须完全消失")
-	# 对照：停留段与下沉段的 y 必须不同（证明「下沉」这条不是恒真）
-	_expect(mid_y < hold_y - 0.05, "对照失效：停留段与下沉段的 y 一致")
-
-	# 液体落在飞溅粒子的**真实落点**上（不是另立一份散布口径）。
-	# ⚠ 四块可能互相重叠（中心距 1.17~1.95m vs 边长 0.864~1.728m），
-	# 业主明确「可以接受两块贴图有重叠」⇒ 落点刻意保持原值，不许为了「不重叠」偷偷推开 ——
-	# 这条断言就是钉住它的：一旦有人加了外扩倍数，XZ 会立刻对不上。
-	var landed := _snap(fx, 1.0)
-	var splat_positions: Array = landed.get("splat_land_positions", [])
-	var puddle_positions: Array = landed.get("puddle_positions", [])
-	_expect(splat_positions.size() == EXPECTED_SPLAT_COUNT,
-		"飞溅落点数组长度不对：%d" % splat_positions.size())
-	_expect(puddle_positions.size() == EXPECTED_PUDDLE_COUNT,
-		"液体位置数组长度不对：%d" % puddle_positions.size())
-	if splat_positions.size() > 1 and not puddle_positions.is_empty():
-		var source := splat_positions[1] as Vector3
-		var plate := puddle_positions[0] as Vector3
-		_expect(
-			absf(source.x - plate.x) < 0.001 and absf(source.z - plate.z) < 0.001,
-			"液体未落在飞溅粒子落点上：落点(%.3f,%.3f) vs 液体(%.3f,%.3f)（业主已接受重叠，落点不该被推开）"
-			% [source.x, source.z, plate.x, plate.z]
-		)
-		# 对照：不同来源的飞溅粒子落点彼此不同 ⇒ 上一条不是「都在原点」的巧合
-		var other := splat_positions[4] as Vector3
-		var gap := Vector2(source.x - other.x, source.z - other.z).length()
-		_expect(gap > 0.20,
-			"对照失效：不同飞溅落点几乎重合（%.3f m）" % gap)
-	fx.free()
-
-
-# ---------------------------------------------------------------- A5b 液体尺寸与随机缩放
-## 业主 2026-11-06：「贴图太小了，放大到现在的 2 倍，然后要在 1.5-2 之间做随机值缩放」；
-## 2026-11-08 两次收窄随机区间：「放大倍数变成 1-1.5」→「大小缩放到 0.6-1.2」。
-##
-## 六条判据，缺一条都能被别的实现蒙过去：
-##   ① 逻辑常量就是 2.0 倍 / 0.6~1.2 区间（防「文档写 2 倍、代码实际 1.5 倍」）；
-##   ② 四块**每一块**的系数都落在 [0.6, 1.2]（不是只有第 0 块）；
-##   ③ 四块不能一样大（随机退化成常量表会红）；
-##   ④ 停留段的实际边长 = size × 0.72 × 2.0 × 该块系数（尺寸公式真的被消费）；
-##   ⑤ 同一出生点重复激活 → 系数**逐位相同**（确定性；池化复借不会每帧换形状）；
-##   ⑥ 换一个出生点 → 系数不同（真的是「位置派生」，不是写死的一张常量表）。
-##
-## ⑤ 与 ⑥ 是一对：只验 ⑤ 会漏掉「永远同一套值」（等于没随机）；只验 ⑥ 会漏掉「每次重算都变」
-## （停留段 scale 会抖，`_check_rhythm_puddle` 的冻结窗口也会跟着红）。
-func _check_puddle_size_roll() -> void:
-	var fx := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A)
-	if fx == null:
-		_failures.append("液体尺寸用例实例化失败")
-		return
-	_samples += 1
-
-	var snap := _snap(fx, 0.60)
-	# ① 逻辑常量
-	_expect(is_equal_approx(float(snap.get("puddle_side_scale", 0.0)), EXPECTED_PUDDLE_SIDE_SCALE),
-		"液体整体放大倍数应为 %.1f 倍：%.3f"
-		% [EXPECTED_PUDDLE_SIDE_SCALE, float(snap.get("puddle_side_scale", 0.0))])
-	_expect(is_equal_approx(float(snap.get("puddle_side_base", 0.0)), EXPECTED_PUDDLE_SIDE_BASE),
-		"液体基准边长系数应为 %.2f：%.3f"
-		% [EXPECTED_PUDDLE_SIDE_BASE, float(snap.get("puddle_side_base", 0.0))])
-	_expect(is_equal_approx(float(snap.get("puddle_size_roll_min", 0.0)), EXPECTED_PUDDLE_ROLL_MIN),
-		"随机系数下限应为 %.1f：%.3f"
-		% [EXPECTED_PUDDLE_ROLL_MIN, float(snap.get("puddle_size_roll_min", 0.0))])
-	_expect(is_equal_approx(float(snap.get("puddle_size_roll_max", 0.0)), EXPECTED_PUDDLE_ROLL_MAX),
-		"随机系数上限应为 %.1f：%.3f"
-		% [EXPECTED_PUDDLE_ROLL_MAX, float(snap.get("puddle_size_roll_max", 0.0))])
-
-	var rolls: Array = snap.get("puddle_size_rolls", [])
-	if rolls.size() != EXPECTED_PUDDLE_COUNT:
-		_failures.append("液体随机系数数组长度应为 %d：%d"
-			% [EXPECTED_PUDDLE_COUNT, rolls.size()])
-		fx.free()
-		return
-
-	# ② 每一块都落在区间内
-	var roll_min := INF
-	var roll_max := -INF
-	for index in rolls.size():
-		var value := float(rolls[index])
-		roll_min = minf(roll_min, value)
-		roll_max = maxf(roll_max, value)
-		_expect(value >= EXPECTED_PUDDLE_ROLL_MIN - 0.0001
-			and value <= EXPECTED_PUDDLE_ROLL_MAX + 0.0001,
-			"第 %d 块液体的尺寸系数 %.4f 不在 [%.1f, %.1f] 内"
-			% [index, value, EXPECTED_PUDDLE_ROLL_MIN, EXPECTED_PUDDLE_ROLL_MAX])
-	# ③ 四块不能一样大
-	_expect(roll_max - roll_min >= PUDDLE_ROLL_SPREAD_MIN,
-		"四块液体尺寸几乎相同（极差 %.4f < %.2f）：随机缩放没生效，退化成常量表了"
-		% [roll_max - roll_min, PUDDLE_ROLL_SPREAD_MIN])
-
-	# ④ 停留段边长 = size × 基准 × 放大 × 该块系数
-	var side_now := float(snap.get("puddle_scale_x", 0.0))
-	var side_expect: float = (
-		SIZE_A * EXPECTED_PUDDLE_SIDE_BASE * EXPECTED_PUDDLE_SIDE_SCALE * float(rolls[0])
-	)
-	_expect(absf(side_now - side_expect) < 0.001,
-		"停留段边长为 %.4f，按公式应为 %.4f（%.2f × %.2f × %.2f）"
-		% [side_now, side_expect, SIZE_A, EXPECTED_PUDDLE_SIDE_BASE * EXPECTED_PUDDLE_SIDE_SCALE,
-			float(rolls[0])])
-	# 量化底线：第 0 块至少是「2 倍放大 × 随机下限」。低于这条说明放大或随机有一头没吃上。
-	# ⚠ 2026-11-08 随机区间改成 0.6-1.2 后，下限已低于原规格（0.72 × 1.0 = 0.72），
-	# 因此这里只能钉住「公式两端都被消费」（= 0.72 × 2.0 × 0.6 = 0.864），
-	# 不能再保留 11-06 那条「至少 3 倍原规格」的旧底线。
-	var side_floor: float = (
-		EXPECTED_PUDDLE_SIDE_BASE * EXPECTED_PUDDLE_SIDE_SCALE * EXPECTED_PUDDLE_ROLL_MIN
-	)
-	_expect(side_now >= side_floor - 0.001,
-		"液体边长 %.3f 未达到「2 倍放大 × 0.6 随机下限」= %.3f" % [side_now, side_floor])
-
-	# ⑤ 同一出生点重复激活 ⇒ 逐位相同
-	fx.call("activate", Vector3(4.0, FLOOR_DEEP + SPAWN_LIFT, -3.0),
-		Color(0.58, 0.19, 0.12), SIZE_A, {"floor_y": FLOOR_DEEP})
-	var again := _snap(fx, 0.60)
-	var rolls_again: Array = again.get("puddle_size_rolls", [])
-	_expect(rolls_again.size() == rolls.size(),
-		"重复激活后随机系数数组长度变了：%d -> %d" % [rolls.size(), rolls_again.size()])
-	for index in mini(rolls.size(), rolls_again.size()):
-		_expect(is_equal_approx(float(rolls[index]), float(rolls_again[index])),
-			"重复激活后第 %d 块系数变了（%.6f -> %.6f）：不再是确定性的，停留段会抖"
-			% [index, float(rolls[index]), float(rolls_again[index])])
-	fx.free()
-
-	# ⑥ 换出生点 ⇒ 系数不同
-	var other := _make_manual(
-		FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A, Vector2(12.5, 3.25)
-	)
-	if other == null:
-		_failures.append("液体尺寸用例：换机位实例化失败")
-		return
-	_samples += 1
-	var rolls_other: Array = _snap(other, 0.60).get("puddle_size_rolls", [])
-	_expect(rolls_other.size() == rolls.size(),
-		"换机位后随机系数数组长度不对：%d" % rolls_other.size())
-	var matched := 0
-	for index in mini(rolls.size(), rolls_other.size()):
-		if absf(float(rolls[index]) - float(rolls_other[index])) < 0.0001:
-			matched += 1
-	_expect(matched < rolls.size(),
-		"换出生点后四块系数与原来完全相同：说明是写死的常量表，不是按位置派生")
-	other.free()
-
-	# ⑦ 落点**不许**被推开（业主 2026-11-06：「可以接受两块贴图有重叠」）。
-	# 边长仍可能与中心距同量级（中心距 1.17~1.95m vs 边长 0.864~1.728m）。这里正面钉住
-	# 「重叠是允许的、落点保持原值」：谁若为了消重叠去乘一个外扩系数，这条会红。
-	# 判据用**几何关系**而不是读常量：四块中心到「胸口正下方」的距离，必须与飞溅落点一致。
-	var spot := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A)
-	if spot == null:
-		_failures.append("液体尺寸用例：落点对照实例化失败")
-		return
-	_samples += 1
-	var spot_snap := _snap(spot, 1.0)
-	var splat_pts: Array = spot_snap.get("splat_land_positions", [])
-	var plate_pts: Array = spot_snap.get("puddle_positions", [])
-	var worst := 0.0
-	for index in mini(plate_pts.size(), 4):
-		var plate := plate_pts[index] as Vector3
-		var src_index: int = [1, 4, 7, 10][index]
-		if src_index >= splat_pts.size():
+func check_lit_draw(root: Node3D) -> void:
+	var verified := 0
+	for child in root.find_children("*", "GeometryInstance3D", true, false):
+		var draw := child as GeometryInstance3D
+		var material := draw.material_override as ShaderMaterial
+		if material == null or not draw.visible:
 			continue
-		var splat := splat_pts[src_index] as Vector3
-		worst = maxf(worst, Vector2(plate.x - splat.x, plate.z - splat.z).length())
-	_expect(worst < 0.001,
-		"液体落点被推开了 %.3f m（最大偏差）：业主已接受重叠，落点必须保持飞溅原落点" % worst)
-	spot.free()
+		verified += 1
+		var code := material.shader.code
+		check(code.contains("#define VFX_LIT 1") and not code.contains("unshaded") and not code.contains("shadows_disabled"), "渲染材质必须实际走受光/阴影分支")
+	check(verified > 0, "未产生材质可核验的绘制实例")
 
-
-## 扫描出「alpha=1 且 scale / y 完全冻结」的连续窗口（行为测量）。
-func _measure_puddle_hold(fx: VfxEffectBase3D, side: float, hold_y: float) -> Vector2:
-	var first := -1.0
-	var last := -1.0
-	var t := 0.30
-	while t <= 1.34:
-		fx.call("_on_tick", t, EXPECTED_LIFETIME)
-		var snapshot: Dictionary = fx.call("get_presentation_snapshot")
-		var scale_x := float(snapshot.get("puddle_scale_x", 0.0))
-		var pos_y := float(snapshot.get("puddle_pos_y", 0.0))
-		var alpha := float(snapshot.get("puddle_alpha", 0.0))
-		if (
-			absf(scale_x - side) < 1e-6
-			and absf(pos_y - hold_y) < 1e-6
-			and absf(alpha - 1.0) < 1e-6
-		):
-			if first < 0.0:
-				first = t
-			last = t
-		t += 0.005
-	return Vector2(first, last)
-
-
-# ---------------------------------------------------------------- A6 地面平铺
-func _check_ground_flatness() -> void:
-	var fx := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A)
-	if fx == null:
-		_failures.append("地面平铺用例实例化失败")
-		return
-	_samples += 1
-	_snap(fx, 0.60)
-	var flat_dot := float((fx.call("get_presentation_snapshot") as Dictionary).get("ground_plane_dot_min", -1.0))
-	_expect(flat_dot > 0.999, "地上液体未平铺（与世界 UP 的最小点积 %.4f）" % flat_dot)
-	# 对照：故意把根节点倾斜 90°，同一判据必须塌掉
-	var tilted := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A)
-	if tilted == null:
-		_failures.append("地面平铺对照用例实例化失败")
-		fx.free()
-		return
-	_samples += 1
-	tilted.rotation.x = PI * 0.5
-	_snap(tilted, 0.60)
-	var tilted_dot := float((tilted.call("get_presentation_snapshot") as Dictionary).get("ground_plane_dot_min", 1.0))
-	_expect(tilted_dot < 0.5, "对照失效：倾斜 90° 后平铺判据仍成立（dot=%.4f）" % tilted_dot)
-	tilted.free()
-	fx.free()
-
-
-# ---------------------------------------------------------------- A7 floor_y 契约
-func _check_floor_contract() -> void:
-	# A：显式给真实地面（深层楼）⇒ 液体落在该层地面上，绝不在世界原点附近
-	var explicit := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A)
-	if explicit == null:
-		_failures.append("floor_y 用例实例化失败")
-		return
-	_samples += 1
-	var world_a := float(_snap(explicit, 0.60).get("puddle_pos_y", 0.0)) + explicit.global_position.y
-	_expect(absf(world_a - (FLOOR_DEEP + EXPECTED_PUDDLE_LIFT)) < 0.01,
-		"液体未落在 context.floor_y 那一层：%.3f vs %.3f" % [world_a, FLOOR_DEEP + EXPECTED_PUDDLE_LIFT])
-	_expect(absf(world_a) > 100.0, "液体落在世界原点附近（%.3f），用例没真正测到深层楼" % world_a)
-	explicit.free()
-
-	# B：不给 floor_y ⇒ 按调用方「胸口 = 脚底 + 0.65」口径反推，结果必须与 A 一致
-	var fallback := _make_manual(FLOOR_DEEP + SPAWN_LIFT, null, SIZE_A)
-	if fallback == null:
-		_failures.append("floor_y 缺省用例实例化失败")
-		return
-	_samples += 1
-	var world_b := float(_snap(fallback, 0.60).get("puddle_pos_y", 0.0)) + fallback.global_position.y
-	_expect(absf(world_b - world_a) < 0.01,
-		"缺省 floor_y 的反推口径与显式传入不一致：%.3f vs %.3f" % [world_b, world_a])
-	# 对照：缺省路径**不是**以 0 兜底（若兜底成 0，地面件会落到原点附近）
-	_expect(absf(world_b - FLOOR_DEEP) < 0.05,
-		"缺省 floor_y 兜底错了：%.3f 应贴 %.3f" % [world_b, FLOOR_DEEP])
-	fallback.free()
-
-	# C：故意把 floor_y 下移 0.30m（不触发最低起抛高度钳制）⇒ 液体必须**精确**跟着下移
-	#    （证明 floor_y 真的被消费，不是写死的常量）
-	var shifted := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP + FLOOR_SHIFT, SIZE_A)
-	if shifted == null:
-		_failures.append("floor_y 反向对照实例化失败")
-		return
-	_samples += 1
-	var world_c := float(_snap(shifted, 0.60).get("puddle_pos_y", 0.0)) + shifted.global_position.y
-	_expect(absf(world_c - world_a - FLOOR_SHIFT) < 0.01,
-		"对照失效：floor_y 移动 %.2fm 后液体只移动了 %.3f m" % [FLOOR_SHIFT, world_c - world_a])
-	shifted.free()
-
-
-# ---------------------------------------------------------------- A8 尺寸线性
-func _check_size_linearity() -> void:
-	var a := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A)
-	var b := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_B)
-	if a == null or b == null:
-		_failures.append("尺寸用例实例化失败")
-		return
-	_samples += 1
-	var snap_a := _snap(a, 0.60)
-	var snap_b := _snap(b, 0.60)
-	var burst_a := float(snap_a.get("burst_scale_x", 0.0))
-	var burst_b := float(snap_b.get("burst_scale_x", 0.0))
-	var puddle_a := float(snap_a.get("puddle_scale_x", 0.0))
-	var puddle_b := float(snap_b.get("puddle_scale_x", 0.0))
-	var range_a := float(snap_a.get("light_range", 0.0))
-	var range_b := float(snap_b.get("light_range", 0.0))
-	a.free()
-	b.free()
-	if burst_b <= 0.0 or puddle_b <= 0.0 or range_a <= 0.0:
-		_failures.append("尺寸用例：未测到可比的尺度量")
-		return
-	_expect(absf(burst_a / burst_b - SIZE_RATIO) <= SIZE_RATIO_TOLERANCE,
-		"爆炸粒子未随 size 线性（比值 %.4f，期望 %.3f）" % [burst_a / burst_b, SIZE_RATIO])
-	_expect(absf(puddle_a / puddle_b - SIZE_RATIO) <= SIZE_RATIO_TOLERANCE,
-		"地上液体未随 size 线性（比值 %.4f，期望 %.3f）" % [puddle_a / puddle_b, SIZE_RATIO])
-	_expect(absf(range_b / range_a - SIZE_B) <= 0.01,
-		"灯范围未随 size 线性（比值 %.4f，期望 %.2f）" % [range_b / range_a, SIZE_B])
-
-
-# ---------------------------------------------------------------- A9 无碰撞体
-func _check_collision_free() -> void:
-	var effect := GOO_SCENE.instantiate()
-	var collisions := _count_collision_nodes(effect)
-	_expect(collisions == 0, "Prefab 内出现碰撞体 %d 个（特效必须纯视觉）" % collisions)
-	effect.free()
-	_samples += 1
-
-
-# ---------------------------------------------------------------- B1 端到端接线
-func _enemy_death_case_begin() -> void:
-	if ENEMY_SCENE == null:
-		_failures.append("敌人场景未加载，端到端接线用例未执行")
-		return
-	var enemy := ENEMY_SCENE.instantiate() as Enemy3D
-	if enemy == null:
-		_failures.append("敌人生成场景根节点不是 Enemy3D，端到端接线用例未执行")
-		return
-	add_child(enemy)
-	enemy.set_physics_process(false)
-	enemy.global_position = Vector3(7.0, FLOOR_DEEP, -5.0)
-	enemy.configure_from_enemy_data({"enemy_type": "melee_chaser", "name": "小僵尸"})
-	enemy.room_id = "room_goo_probe"
-	_expect(enemy.uses_goo_death_burst(), "小僵尸未被识别为「绿色方块爆开」怪种")
-	# 先量出「倒地段」本来有多长：回收再快，也只有在这段确实存在时才说明问题
-	var fall_duration := 0.0
-	if enemy.avatar != null and enemy.avatar.has_formal_normal():
-		fall_duration = enemy.avatar.get_formal_death_duration()
-	_expect(fall_duration > 2.0,
-		"对照失效：小僵尸的「dead」倒地段本就该 > 2s（实测 %.2f），否则「立即回收」证明不了什么"
-		% fall_duration)
-	var pool := _pool()
-	if pool == null:
-		_failures.append("VfxPool 缺失，端到端接线用例未执行")
-		enemy.free()
-		return
-	var before := pool.active_count(VfxPool3D.FX01_ZOMBIE_GOO_DEATH)
-	_killed_count = 0
-	enemy.killed.connect(_on_goo_enemy_killed)
-	enemy.take_damage(999999)
-	_samples += 1
-	_goo_enemy = enemy
-
-	# 同帧断言①：不得进入死亡显影组（那条路是「管尸体显隐」的，本表现没有尸体）
-	_expect(not enemy.is_in_group("enemy_death_visual_3d"),
-		"goo 死亡不应进入死亡显影组（本表现没有尸体）")
-	# 同帧断言②：**模型本帧就收起**。
-	# 倒地动画要求先把一具躯干留在场上播 2.4s（见上面的 fall_duration），做不到「同帧收起」。
-	if enemy.avatar != null and enemy.avatar.has_formal_normal():
-		_expect(not enemy.avatar.visible, "死亡同帧模型未收起（仍在走倒地表现）")
-	else:
-		_failures.append("端到端用例：小僵尸未挂载正式普通怪表现，倒地契约测不到")
-
-	# 同帧断言③：特效真的经池借出，且**不跟随任何挂点**（全向世界锚定）
-	var after := pool.active_count(VfxPool3D.FX01_ZOMBIE_GOO_DEATH)
-	_expect(after == before + 1, "死亡未借出绿色方块爆开特效（%d -> %d）" % [before, after])
-	var bucket: Array = pool._active.get(VfxPool3D.FX01_ZOMBIE_GOO_DEATH, [])
-	if bucket.is_empty():
-		_failures.append("特效桶为空，无法继续端到端断言")
-		return
-	var fx := bucket.back() as VfxEffectBase3D
-	if fx == null:
-		_failures.append("借出的特效类型不对")
-		return
-	_expect(not fx.has_follow_target(), "死亡特效不应跟随挂点（爆发没有朝向/宿主）")
-	_expect(absf(fx.global_position.y - (FLOOR_DEEP + SPAWN_LIFT)) < 0.001,
-		"特效出生点未落在胸口（脚底 + %.2f）：%.4f" % [SPAWN_LIFT, fx.global_position.y])
-	_expect(absf(fx.global_position.y) > 100.0,
-		"特效位置落在世界原点附近，用例可能没真正测到深层楼")
-	var fx_snapshot: Dictionary = fx.call("get_presentation_snapshot")
-	_expect(String(fx_snapshot.get("asset_id", "")) == GOO_ASSET_ID,
-		"借出的不是 FX01-19：%s" % fx_snapshot.get("asset_id", ""))
-	# floor_y 必须按「脚底行走面」传入（本地地面偏移 = −0.65）
-	_expect(absf(float(fx_snapshot.get("floor_local_y", 0.0)) + SPAWN_LIFT) < 0.01,
-		"floor_y 未按脚底口径传入：floor_local_y=%.4f" % float(fx_snapshot.get("floor_local_y", 0.0)))
-
-
-func _on_goo_enemy_killed(_enemy: Enemy3D, _data: Dictionary) -> void:
-	_killed_count += 1
-
-
-func _enemy_death_case_check_recycled() -> void:
-	_expect(not is_instance_valid(_goo_enemy),
-		"绿色方块爆开死亡未立即回收 —— 仍在原地播倒地动画 / 留尸体")
-	_expect(_killed_count == 1, "死亡结算次数不是 1：%d" % _killed_count)
-	_expect(get_tree().get_nodes_in_group("enemy_death_visual_3d").is_empty(),
-		"死亡显影组残留：goo 死亡不该有尸体进组")
-	var pool := _pool()
-	if pool != null:
-		pool.clear_kind(VfxPool3D.FX01_ZOMBIE_GOO_DEATH)
-
-
-# ---------------------------------------------------------------- B2 反向对照
-## 反向对照：改动是**旁路**，不是把「倒地 + 尸体」整条链删掉。
-##
-## 为什么这里只能用源码级钉子：业主第二轮把**胖子僵尸也**加进了「去掉倒地动画」名单
-## （`Enemy3D.ZOMBIE_KINDS`），而本仓挂了 `has_formal_normal()`（有倒地段）的怪种
-## —— `fat_zombie03` / `melee_chaser` / `ranged_caster` —— **正好就是僵尸三兄弟**，
-## 于是已经不存在「有倒地动画」的怪种可以做行为对照（原来那条「胖子僵尸仍留尸体」
-## 的对照随本轮需求一起作废）。
-## ⇒ 改成钉住「那条链仍然在源码里、且分支按 no-corpse 收敛」：
-##    若有人图省事把 `tween_interval(get_formal_death_duration())` 整段删掉，这条会变红。
-func _fat_zombie_reverse_begin() -> void:
-	var enemy := ENEMY_SCENE.instantiate() as Enemy3D
-	if enemy == null:
-		_failures.append("反向对照：胖僵尸实例化失败")
-		return
-	add_child(enemy)
-	enemy.set_physics_process(false)
-	enemy.global_position = Vector3(-9.0, FLOOR_DEEP, 8.0)
-	enemy.configure_from_enemy_data({"enemy_type": "fat_zombie03", "name": "胖子僵尸"})
-	_expect(not enemy.uses_goo_death_burst(), "对照失效：胖子僵尸被识别成 FX01-19 怪种")
-	_expect(enemy.uses_no_corpse_death(), "胖子僵尸应在「无尸体」名单里（本轮新加）")
-	enemy.take_damage(999999)
-	_fat_enemy = enemy
-	_samples += 1
-	_expect(not enemy.is_in_group("enemy_death_visual_3d"),
-		"胖子僵尸不应进入死亡显影组（本表现没有尸体）")
-
-
-func _fat_zombie_reverse_check() -> void:
-	_expect(not is_instance_valid(_fat_enemy), "胖子僵尸未立即回收（倒地动画没去掉）")
-	# 源码级对照：倒地那条链必须仍在（旁路，不是删除）
-	var source := FileAccess.get_file_as_string("res://src/enemy3d/Enemy3D.gd")
-	_expect(not source.is_empty(), "读不到 Enemy3D.gd，源码级对照未执行")
-	_expect(source.contains("tween_interval(avatar.get_formal_death_duration())"),
-		"对照失效：「倒地 + 尸体」那条链被整条删掉了（应当只对 ZOMBIE_KINDS 旁路）")
-	_expect(source.contains("uses_no_corpse_death"),
-		"对照失效：死亡分支没有按 uses_no_corpse_death() 收敛")
-
-
-# ---------------------------------------------------------------- D 共享基类的开关（业主口径）
-## 两件事必须**同时**成立，缺一即说明「共用身体 + 子类开关」这套结构没搭对：
-##   ① 小僵尸这条（FX01-19）**没有**冲击波；
-##   ② 胖子僵尸那条（FX01-17）**有** 3 层冲击波，且真的从很小扫到很大、到点收干净。
-## 只验 ①会漏掉「开关永远关着」；只验 ②会漏掉「开关永远开着」。两侧一起钉才闭合。
-## 冲击波自身的节奏细节在 `verify_death_blast_vfx` 里逐帧验，这里只验开关的**两侧**。
-func _check_shockwave_rhythm() -> void:
-	# ① 小僵尸这条：没有
-	var plain := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A)
-	if plain == null:
-		_failures.append("开关用例：FX01-19 实例化失败")
-		return
-	_samples += 1
-	_expect(int((plain.call("get_presentation_snapshot") as Dictionary).get("shockwave_count", -1)) == 0,
-		"FX01-19（小僵尸死亡）不该有冲击波")
-	plain.free()
-
-	# ② 胖子僵尸这条：有 3 层，且能扫、能收
-	var fat_prefab := load("res://assets/art/vfx/combat_3d/vfx_death_blast_root_top3d.tscn") as PackedScene
-	if fat_prefab == null:
-		_failures.append("开关用例：FX01-17 场景未加载")
-		return
-	var fat := fat_prefab.instantiate() as VfxEffectBase3D
-	if fat == null:
-		_failures.append("开关用例：FX01-17 实例化失败")
-		return
-	add_child(fat)
-	fat.set_process(false)
-	fat.activate(Vector3(2.0, FLOOR_DEEP + SPAWN_LIFT, 1.0), Color(0.38, 0.43, 0.26), SIZE_A, {"floor_y": FLOOR_DEEP})
-	_check_puddle_texture(fat)
-	_samples += 1
-	var fat_total := float((fat.call("get_presentation_snapshot") as Dictionary).get("lifetime", 1.35))
-	_expect(int((fat.call("get_presentation_snapshot") as Dictionary).get("shockwave_count", 0)) == 3,
-		"FX01-17（胖子僵尸死亡）应有 3 层冲击波：%d"
-		% int((fat.call("get_presentation_snapshot") as Dictionary).get("shockwave_count", 0)))
-
-	# 单环 scale 从最小到最大（不能拿「三层取最大」当起始值：相位错开，t=0 就已很大）
-	var ring0_min := INF
-	var ring0_max := 0.0
-	var alpha_peak := 0.0
-	var probe := 0.0
-	while probe <= 0.70:
-		fat.call("_on_tick", probe, fat_total)
-		var snapshot: Dictionary = fat.call("get_presentation_snapshot")
-		ring0_min = minf(ring0_min, float(snapshot.get("shockwave0_scale_x", 0.0)))
-		ring0_max = maxf(ring0_max, float(snapshot.get("shockwave0_scale_x", 0.0)))
-		alpha_peak = maxf(alpha_peak, float(snapshot.get("shockwave_alpha", 0.0)))
-		probe += 0.005
-	_expect(ring0_min > 0.0 and ring0_max > ring0_min * 3.0,
-		"FX01-17 冲击波没有向外扫（单环 scale %.3f → %.3f）" % [ring0_min, ring0_max])
-	_expect(alpha_peak > 0.3, "FX01-17 冲击波几乎不可见（峰值 alpha %.3f）" % alpha_peak)
-	fat.call("_on_tick", 0.66, fat_total)
-	_expect(float((fat.call("get_presentation_snapshot") as Dictionary).get("shockwave_alpha", 1.0)) < 0.05,
-		"FX01-17 冲击波在 0.66s 未淡净（相位是循环的，必须有时间窗）")
-	# 平铺
-	_expect(float((fat.call("get_presentation_snapshot") as Dictionary).get("ground_plane_dot_min", -1.0)) > 0.999,
-		"FX01-17 冲击波未平铺在世界 UP 上")
-	fat.free()
-
-
-func _report() -> void:
-	if _samples < MIN_SAMPLES:
-		_failures.append("防假绿哨兵：实际样本数 %d 少于预期 %d，验收未真正执行" % [_samples, MIN_SAMPLES])
-	if _failures.is_empty():
-		print("ZOMBIE_GOO_DEATH_VFX_OK: fx01-19 goo death pass (samples=%d)" % _samples)
-		get_tree().quit(0)
-		return
-	for failure in _failures:
+func run() -> void:
+	var fx := GOO.instantiate() as VfxEffectBase3D
+	add_child(fx)
+	var burst := fx.get_node("LibraryBurst") as Node3D
+	var pool := fx.get_node("LibraryPool") as Node3D
+	check(fx.get_meta("asset_version") == "v004" and fx.get_child_count() == 2, "正式 Prefab 版本或结构错误")
+	fx.activate(ORIGIN + Vector3.UP * 0.65, Color.WHITE, 1.0, {"floor_y": ORIGIN.y})
+	check_source(burst, RAW_BURST, 2)
+	check_source(pool, RAW_POOL, 1)
+	fx.set_process(false)
+	burst.set_physics_process(false)
+	burst.call("advance_exact", 1.0 / 60.0)
+	var burst_state: Dictionary = burst.call("debug_exact")
+	var births := 0
+	for value: Dictionary in burst_state.layers.values():
+		births += int(value.burst_births)
+	check(births == 13 and burst_state.source_id == "GreenBloodExplosionRound2", "致死立即播放原版 1 主爆点 + 12 飞溅")
+	check_lit_draw(burst)
+	check_droplet_playback(fx, burst)
+	check(burst.scale.is_equal_approx(Vector3.ONE * 1.105), "爆散轨迹整体放大30%")
+	check(pool.global_position.is_equal_approx(ORIGIN + Vector3.UP * 0.025) and pool.scale.is_equal_approx(Vector3.ONE * 2.405), "地面池定位深层地面，铺展范围放大30%")
+	fx.call("_on_tick", 0.159, 1.35)
+	check(not pool.visible, "地面池不得早于0.16秒出现")
+	fx.call("_on_tick", 0.16, 1.35)
+	var pool_state: Dictionary = pool.call("debug_exact", true)
+	var particles: Array = pool_state.layers["#1"].particles
+	check(pool.visible and pool_state.source_id == "GreenBloodPoolGrowing" and particles.size() == 6, "地面池应保留原六份贴图粒子")
+	for p: Dictionary in particles:
+		var ratio := float(p.size.x) / float(p.initial_size.x)
+		check(ratio >= 0.699 and ratio <= 0.71, "实播首帧绿浆须在峰值的七成，实测比值 %.4f" % ratio)
+	check_lit_draw(pool)
+	fx.call("_on_tick", 1.34, 1.35)
+	pool_state = pool.call("debug_exact")
+	check(pool_state.layers["#1"].burst_births == 6 and float(pool_state.elapsed) > 6.5, "原曲线必须完成且不能循环重生")
+	fx.retired.connect(func(_effect: VfxEffectBase3D) -> void: pass)
+	fx.finish()
+	check(not burst.visible and not pool.visible and not burst.is_physics_processing() and not pool.is_physics_processing(), "回收时两段均隐藏且停止")
+	fx.activate(ORIGIN + Vector3.UP * 0.65, Color.WHITE, 0.5)
+	check(burst.scale.is_equal_approx(Vector3.ONE * 0.5525) and not pool.visible, "复借应复位尺寸及时序")
+	fx.finish()
+	fx.queue_free()
+	await check_real_death("melee_chaser")
+	await check_real_death("ranged_caster")
+	for failure in failures:
 		push_error(failure)
-	get_tree().quit(1)
+	if failures.is_empty():
+		print("ZOMBIE_GOO_DEATH_VFX_OK: source structure, lighting, timing, pool and melee/police routing")
+	get_tree().quit(0 if failures.is_empty() else 1)
+
+func check_droplet_playback(tuned: VfxEffectBase3D, burst: Node3D) -> void:
+	var baseline := GOO.instantiate() as VfxZombieGooDeath3D
+	baseline.droplet_size_gain = 1.0
+	baseline.droplet_lifetime_gain = 1.0
+	add_child(baseline)
+	baseline.activate(tuned.global_position, Color.WHITE, 1.0, {"floor_y": ORIGIN.y})
+	baseline.set_process(false)
+	var old_burst := baseline.get_node("LibraryBurst") as Node3D
+	old_burst.set_physics_process(false)
+	old_burst.call("advance_exact", 1.0 / 60.0)
+	var before: Dictionary = old_burst.call("debug_exact", true)
+	var after: Dictionary = burst.call("debug_exact", true)
+	var old_drops: Array = before.layers["0#1"].particles
+	var new_drops: Array = after.layers["0#1"].particles
+	check(old_drops.size() == 12 and new_drops.size() == 12 and after.sub_trigger_calls == 0, "原飞滴为同帧发出的 12 颗，不是后续子发射")
+	check(before.layers["#1"].particles == after.layers["#1"].particles, "中心爆花实播不得变化")
+	for i in mini(old_drops.size(), new_drops.size()):
+		var p: Dictionary = old_drops[i]
+		var q: Dictionary = new_drops[i]
+		check((p.initial_size as Vector3).is_equal_approx(q.initial_size / 2.0), "飞滴初始尺寸须翻倍")
+		check(is_equal_approx(float(q.life), float(p.life) * 1.30), "飞滴寿命须增加 30%")
+		check((p.world_velocity as Vector3).is_equal_approx(q.world_velocity), "飞滴初速度不应改变")
+	for scene in [old_burst, burst]:
+		scene.call("advance_exact", 0.61 - 1.0 / 60.0)
+	before = old_burst.call("debug_exact")
+	after = burst.call("debug_exact")
+	check(before.layers["0#1"].live == 0 and after.layers["0#1"].live > 0 and after.layers["0#1"].drawn > 0, "0.61 秒时旧版已消失，新版应仍有飞滴可绘制")
+	check(after.layers["0#1"].burst_births == 12, "后段不得补发额外粒子")
+	print("GOO_DROPLETS_AT_0_61S: old=%d new=%d drawn=%d" % [before.layers["0#1"].live, after.layers["0#1"].live, after.layers["0#1"].drawn])
+	baseline.free()
+
+func check_real_death(kind: String) -> void:
+	var pool := get_node("/root/VfxPool") as VfxPool3D
+	var before := pool.active_count(VfxPool3D.FX01_ZOMBIE_GOO_DEATH)
+	var enemy := ENEMY.instantiate() as Enemy3D
+	add_child(enemy)
+	enemy.configure_from_enemy_data({"enemy_type": kind, "loot_table": ""})
+	enemy.global_position = ORIGIN
+	enemy.set_physics_process(false)
+	var killed_before := killed
+	enemy.killed.connect(func(_enemy: Enemy3D, _data: Dictionary) -> void: killed += 1)
+	enemy.take_damage(enemy.current_hp + 1)
+	check(pool.active_count(VfxPool3D.FX01_ZOMBIE_GOO_DEATH) == before + 1, kind + " 须走正式特效池")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	check(not is_instance_valid(enemy) and killed == killed_before + 1, kind + " 不得留下尸体或重复结算")

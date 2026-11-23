@@ -11,7 +11,7 @@ extends "res://src/vfx/VfxEffectBase3D.gd"
 ##   伤害由玩法节点 `src/enemy3d/DeathBlastZone3D.gd` 按周期结算；
 ##   本件只负责「地上有一片还在烧、还在脉冲的伤害区」这个读法。
 ##
-## 地面朝向契约：整个视觉**平铺在 XZ 平面**（TorusMesh 的环轴是 Y ⇒ 环面天然躺在 XZ）。
+## 地面朝向契约：整个视觉**平铺在 XZ 平面**（场底圆片及虚化环面片）。
 ##   调用方在**地面高度**（怪物的脚底 y）activate，且**不做任何旋转**；
 ##   验收有「平铺」断言 + 反向对照（故意倾斜 90° 必须变红）。
 ##
@@ -22,7 +22,13 @@ extends "res://src/vfx/VfxEffectBase3D.gd"
 const ToonVfx = preload("res://src/vfx/ToonVfxGeometry.gd")
 
 const _ASSET_ID := "VFX-BLAST-ZONE-3D"
-const _ASSET_VERSION := "v001"
+const _ASSET_VERSION := "v002"
+const RING_TEXTURE: Texture2D = preload("res://assets/art/vfx/combat_3d/mega_explosion_blue/textures/vfx_mega_explosion_blue_aura_soft01.png")
+const RING_SHADER: Shader = preload("res://assets/art/vfx/combat_3d/mega_explosion_blue/vfx_blast_zone_soft_ring.gdshader")
+const FIELD_COLOR := Color(0.64, 0.78, 0.19)
+const EDGE_COLOR := Color(0.89, 0.98, 0.36)
+const PULSE_COLOR := Color(0.72, 0.94, 0.26)
+const EMBER_COLOR := Color(0.89, 0.98, 0.52)
 
 ## 默认持续时长（秒）。业主口径 3 秒；调用方可用 `context.zone_seconds` 覆盖。
 const DEFAULT_ZONE_SECONDS := 3.0
@@ -46,7 +52,7 @@ const EMBER_ALPHA := 0.85
 const LIGHT_RANGE_BASE := 4.5
 const LIGHT_ENERGY := 3.4
 const LIGHT_PULSE_HZ := 7.0
-const LIGHT_COLOR := Color(1.0, 0.58, 0.22)
+const LIGHT_COLOR := Color(0.79, 0.98, 0.32)
 
 var _field: MeshInstance3D
 var _edge: MeshInstance3D
@@ -54,8 +60,8 @@ var _pulses: Array[MeshInstance3D] = []
 var _embers: Array[MeshInstance3D] = []
 
 var _mat_field: StandardMaterial3D
-var _mat_edge: StandardMaterial3D
-var _mat_pulse: StandardMaterial3D
+var _mat_edge: ShaderMaterial
+var _mat_pulse: ShaderMaterial
 var _mat_ember: StandardMaterial3D
 
 var _zone_light: OmniLight3D
@@ -64,14 +70,11 @@ var _ember_dirs: Array[Vector3] = []
 var _ember_radius_ratio: Array[float] = []
 
 
-func _on_activate(_world_pos: Vector3, color: Color, size: float, context: Dictionary) -> void:
+func _on_activate(_world_pos: Vector3, _color: Color, size: float, context: Dictionary) -> void:
 	lifetime = maxf(0.2, float(context.get("zone_seconds", DEFAULT_ZONE_SECONDS)))
-	var ammo := color
-	if ammo.a < 0.001:
-		ammo = Color(1.0, 0.52, 0.18, 1.0)
 	if _field == null:
 		_build()
-	_reset_state(ammo, size)
+	_reset_state(size)
 	_on_tick(0.0, lifetime)
 
 
@@ -94,29 +97,21 @@ func _build() -> void:
 	# 外缘定环：把「范围边界」钉死，玩家能一眼读出杀伤半径
 	_edge = MeshInstance3D.new()
 	_edge.name = "Edge"
-	var edge_mesh := TorusMesh.new()
-	edge_mesh.inner_radius = 0.960
-	edge_mesh.outer_radius = 1.0
-	edge_mesh.rings = 40
-	edge_mesh.ring_segments = 6
-	_edge.mesh = edge_mesh
-	_mat_edge = ToonVfx.toon_material(Color(1.0, 0.68, 0.28, 1.0), 0.85)
+	var ring_plane := PlaneMesh.new()
+	ring_plane.size = Vector2(2.0, 2.0)
+	_edge.mesh = ring_plane
+	_mat_edge = _make_ring_material(EDGE_COLOR)
 	_edge.material_override = _mat_edge
 	_edge.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_edge.position.y = 0.05
 	add_child(_edge)
 
 	# 脉冲环：3 层错峰向外扫
-	_mat_pulse = ToonVfx.toon_material(Color(1.0, 0.72, 0.32, 1.0), 0.95)
+	_mat_pulse = _make_ring_material(PULSE_COLOR)
 	for index in PULSE_RING_COUNT:
 		var ring := MeshInstance3D.new()
 		ring.name = "Pulse%d" % index
-		var ring_mesh := TorusMesh.new()
-		ring_mesh.inner_radius = 0.93
-		ring_mesh.outer_radius = 0.975
-		ring_mesh.rings = 32
-		ring_mesh.ring_segments = 6
-		ring.mesh = ring_mesh
+		ring.mesh = ring_plane
 		ring.material_override = _mat_pulse
 		ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		ring.position.y = 0.07
@@ -148,12 +143,17 @@ func _build() -> void:
 	add_child(_zone_light)
 
 
-func _reset_state(ammo: Color, size: float) -> void:
-	_mat_field.albedo_color = ammo
-	_mat_field.albedo_color.a = 0.20
-	_mat_edge.albedo_color = Color(1.0, 0.68, 0.28, 1.0).lerp(ammo, 0.5)
-	_mat_pulse.albedo_color = Color(1.0, 0.72, 0.32, 1.0).lerp(ammo, 0.4)
-	_mat_ember.albedo_color = Color(1.0, 0.86, 0.46, 1.0)
+func _make_ring_material(tint: Color) -> ShaderMaterial:
+	var material := ShaderMaterial.new()
+	material.shader = RING_SHADER
+	material.set_shader_parameter("ring_texture", RING_TEXTURE)
+	material.set_shader_parameter("ring_color", tint)
+	return material
+
+
+func _reset_state(size: float) -> void:
+	_mat_field.albedo_color = FIELD_COLOR
+	_mat_ember.albedo_color = EMBER_COLOR
 	# 地面平面（薄片 / 定环 / 脉冲环）只摊 XZ，不缩放 Y —— 保持「平铺在地上」
 	_field.scale = Vector3(size, 1.0, size)
 	_edge.scale = Vector3.ONE * size
@@ -173,7 +173,7 @@ func _on_tick(elapsed: float, total: float) -> void:
 
 	# 场底面与外缘：整场恒定，只吃包络
 	_mat_field.albedo_color.a = 0.20 * env
-	_mat_edge.albedo_color.a = 0.90 * env
+	_mat_edge.set_shader_parameter("ring_opacity", 0.90 * env)
 
 	# 脉冲环：3 层错峰，周期 PULSE_PERIOD_SEC
 	var pulse_alpha := 0.0
@@ -184,7 +184,7 @@ func _on_tick(elapsed: float, total: float) -> void:
 		ring.scale = Vector3.ONE * size * grow
 		# 取最亮的那层写公共材质（三层共材质 ⇒ alpha 取最大值，避免互相覆盖）
 		pulse_alpha = maxf(pulse_alpha, (1.0 - phase) * 0.85)
-	_mat_pulse.albedo_color.a = pulse_alpha * env
+	_mat_pulse.set_shader_parameter("ring_opacity", pulse_alpha * env)
 
 	# 上升余烬
 	var ember_alpha := 0.0

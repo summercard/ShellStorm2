@@ -7963,7 +7963,9 @@ func _show_boss_hud(enemy: Enemy3D) -> void:
 	)
 	_boss_bar.show()
 	_boss_delayed_bar.show()
-	var segmented := _boss_bar.get_parent().get_node_or_null("PlatformArmSegments") as Control
+	var stack := _boss_bar.get_parent() as Control
+	stack.custom_minimum_size.y = _hud_int(10)
+	var segmented := stack.get_node_or_null("PlatformArmSegments") as Control
 	if segmented != null:
 		segmented.hide()
 

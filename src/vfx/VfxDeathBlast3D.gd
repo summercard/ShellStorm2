@@ -1,60 +1,116 @@
 class_name VfxDeathBlast3D
-extends VfxGooDeathBase3D
+extends VfxEffectBase3D
+## FX01-17: preserve all authored layers. Enemy3D owns the warning clock and damage.
+const SOURCE_CHARGE_SEC := 1.75
+const SOURCE_CORE_RADIUS_M := 9.0
+const COLOR_CORE := Color(0.80, 0.99, 0.29)
+const COLOR_HOT := Color(1.0, 0.97, 0.60)
+static var _variants: Dictionary = {}
 
 @onready var _library_burst: Node3D = $LibraryBurst
+@onready var _audio: AudioStreamPlayer = $LibraryBurst/UnityAudioSource
+var _materials: Array[ShaderMaterial] = []
+var _manual_charge := false
+var _clip_time := 0.0
+var _bounds := Vector4(0.0, 0.0, 0.0, 5.0)
 
-func _enter_tree() -> void:
-	LibraryVfxAdapter3D.prepare_visual($LibraryBurst, false)
+func _ready() -> void:
+	_library_burst.hide()
+	for layer in _library_burst.get_children():
+		# The library adds the ribbon lazily on its first visible frame.
+		layer.child_entered_tree.connect(_adapt_draw)
+	for node in _library_burst.find_children("*", "GeometryInstance3D", true, false):
+		_adapt_draw(node)
 
-func _on_activate(world_pos: Vector3, color: Color, size: float, context: Dictionary) -> void:
-	super._on_activate(world_pos, color, size, context)
-	LibraryVfxAdapter3D.play_visual(_library_burst, size * 0.85, 1703)
+func _adapt_draw(node: Node) -> void:
+	if not node is GeometryInstance3D:
+		return
+	var material := (node as GeometryInstance3D).material_override as ShaderMaterial
+	if material == null or _materials.has(material):
+		return
+	var original := material.shader
+	if not _variants.has(original):
+		var adapted := Shader.new()
+		adapted.code = original.code.replace("varying flat float frame_slot;", """varying flat float frame_slot;
+			varying vec3 blast_world;
+			uniform vec4 blast_center_radius;
+			uniform vec4 blast_core : source_color;
+			uniform vec4 blast_hot : source_color;""").replace("\n}\n\nvoid fragment()", """
+			blast_world = (INV_VIEW_MATRIX * MODELVIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
+		}
+		void fragment()""").replace("ALBEDO = result.rgb;", """
+			float r = length(blast_world.xz - blast_center_radius.xz) / blast_center_radius.w;
+			if (r >= 1.0) { discard; }
+			result.a *= 1.0 - smoothstep(0.94, 1.0, r);
+			float value = max(result.r, max(result.g, result.b));
+			ALBEDO = mix(blast_core.rgb, blast_hot.rgb, smoothstep(0.48, 1.0, value)) * value;""")
+		_variants[original] = adapted
+	material.shader = _variants[original]
+	material.set_shader_parameter("blast_core", COLOR_CORE)
+	material.set_shader_parameter("blast_hot", COLOR_HOT)
+	material.set_shader_parameter("blast_center_radius", _bounds)
+	_materials.append(material)
+
+func _on_activate(world_pos: Vector3, _color: Color, _size: float, context: Dictionary) -> void:
+	_manual_charge = false
+	_clip_time = 0.0
+	if bool(context.get("prewarm", false)):
+		return
+	global_position.y = float(context.get("floor_y", world_pos.y))
+	var radius := maxf(0.01, float(context.get("blast_visual_radius_m", 5.0)))
+	_library_burst.scale = Vector3.ONE * (radius / SOURCE_CORE_RADIUS_M)
+	var origin := _library_burst.global_position
+	_bounds = Vector4(origin.x, origin.y, origin.z, radius)
+	for material in _materials:
+		material.set_shader_parameter("blast_center_radius", _bounds)
+	var warning := float(context.get("blast_warning_sec", 0.0))
+	_manual_charge = true
+	_library_burst.show()
+	_library_burst.call("play_exact")
+	_library_burst.set_physics_process(false)
+	if warning > 0.0:
+		var progressed := float(context.get("blast_warning_elapsed_sec", 0.0))
+		sync_charge(progressed)
+		if progressed > 0.0:
+			_audio.play(_clip_time)
+	else:
+		# No-warning variants jump to the authored impact cue and play its tail.
+		detonate()
+		_audio.play(SOURCE_CHARGE_SEC)
+
+func sync_charge(elapsed: float) -> void:
+	if _manual_charge:
+		_audio.stream_paused = false
+		# Follow the same clock as the shake at original speed. Hold at the
+		# authored cue until gameplay commits, including after a save restore.
+		var goal := clampf(elapsed, 1.0 / 60.0, SOURCE_CHARGE_SEC - 0.0001)
+		_advance_charge(goal)
+
+func pause_charge_audio() -> void:
+	if _manual_charge:
+		_audio.stream_paused = true
+
+func detonate() -> void:
+	if not _manual_charge:
+		return
+	_advance_charge(SOURCE_CHARGE_SEC + 0.0001)
+	_manual_charge = false
+	_audio.stream_paused = false
+	_audio.pitch_scale = 1.0
+	_library_burst.set_physics_process(true)
+
+func _advance_charge(goal: float) -> void:
+	if goal > _clip_time:
+		_library_burst.call("advance_exact", goal - _clip_time)
+		_clip_time = goal
+
+func _process(_delta: float) -> void:
+	if _active and not _manual_charge and not _library_burst.is_physics_processing() and not _audio.playing:
+		finish()
 
 func _on_lifetime_expired() -> void:
-	LibraryVfxAdapter3D.stop_visual(_library_burst)
-	super._on_lifetime_expired()
-
-func _burst_cube_count() -> int:
-	return 0
-## FX01-17 v003：库内绿浆爆点替换 v002 胸口方块；飞溅、绿环、地贴和灯继续使用原实现。
-## 下方为历史设计说明；持续伤害仍由 DeathBlastZone3D 单独处理。
-## FX01-17 / VFX-DEATH-BLAST-3D 胖子僵尸死亡自爆特效
-##
-## 用途：`Enemy3D._detonate_death_explosion()` / `_spawn_fat_death_burst()` 在胖子僵尸
-## 被打死瞬间生成的一次性死亡视觉。
-##
-## 业主口径（2026-10-14 第一轮）：「胖子僵尸被打死后自爆没有特效，需要增加一个，
-## 并且在地上留一个持续伤害的范围效果，持续3秒」。
-## 业主口径（2026-10-14 第二轮）：「**把小僵尸的死亡特效放大两倍给胖子僵尸用**，
-## 然后带一个绿色冲击波的效果，同样去掉胖子僵尸的倒地动画播放」。
-##
-## ⇒ 本件 = **FX01-19 的那套死亡表现（绿方块爆开 + 抛物线飞溅 + 地面液体）×2 + 3 层绿色冲击波**。
-##    身体完全来自 `VfxGooDeathBase3D`（与小僵尸死亡件是同一段代码），
-##    本文件只覆盖三点：
-##      · `_asset_id()`          → `VFX-DEATH-BLAST-3D`
-##      · `_asset_version()`     → `v002`（从「亮芯+星芒+碎屑」重做为现在这套 ⇒ 升版）
-##      · `_shockwave_enabled()` → **true**（业主：只有胖子僵尸死亡有冲击波）
-##
-## ⚠ **尺寸由调用方给**：`Enemy3D.FAT_DEATH_EFFECT_SIZE = 2.0`（业主「放大两倍」）。
-##    与 v001 的差别要说清：v001 的环外缘是**按伤害半径**反推的（radius × 0.6），
-##    现在这一版按业主指定**固定 2.0**，因此冲击波外缘（≈1.548 × 2.0 = 3.1m）
-##    **不再等于**远征01 的 5.0m 伤害半径 —— 它是一条风格元素，不再充当半径指示。
-##
-## 与 FX01-19 `VFX-ZOMBIE-GOO-DEATH-3D` 的差别只有两点：**尺寸**（2.0 vs 1.0）
-## 与**冲击波**（有 vs 无）。两者共用基类身体，所以配色 / 节奏 / 落地数学不可能漂移。
-##
-## ⚠ 与 FX01-18 `VFX-BLAST-ZONE-3D` 的分工没变：那件仍是自爆后**留在地上的持续伤害场**
-##   的视觉层（由玩法节点 `DeathBlastZone3D` 持有、刻意不进 `VfxPool3D`），本件只管爆开那一下。
-
-
-func _asset_id() -> String:
-	return "VFX-DEATH-BLAST-3D"
-
-
-func _asset_version() -> String:
-	return "v003"
-
-
-## 业主指定：只有胖子僵尸死亡带绿色冲击波
-func _shockwave_enabled() -> bool:
-	return true
+	_manual_charge = false
+	_library_burst.call("stop_exact", true)
+	_audio.stream_paused = false
+	_audio.pitch_scale = 1.0
+	_library_burst.hide()

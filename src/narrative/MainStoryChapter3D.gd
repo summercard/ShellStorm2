@@ -34,6 +34,7 @@ var _move_anchor := ""
 var _key_visual: Node3D = null
 var _boss_camera_return_requested := false
 var _boss_control_released := false
+var _boss_waiting_for_walk := false
 var _performance_fault := ""
 var _player_meet_anchor: Variant = null
 
@@ -273,8 +274,15 @@ func call_instruction(action: String, params: Dictionary) -> Dictionary:
 			_activation_requested = false
 			_boss_camera_return_requested = false
 			_boss_control_released = false
+			_boss_waiting_for_walk = false
 			configure_enemy(boss)
 			return _done(Callable(self, "_release_boss_hold"))
+		"boss.wait_for_walk":
+			# 冻结剧情时间，不冻结玩家物理；步行停止后才开始计算聚焦前的停顿。
+			if _player() == null:
+				return _failed("下坡演员不可用。")
+			_boss_waiting_for_walk = true
+			return _ok()
 		"boss.activate":
 			return _request_boss_activation()
 		"boss.control_hold":
@@ -412,6 +420,7 @@ func _briefing_point_operations() -> Dictionary:
 
 
 func _release_boss_hold() -> void:
+	_boss_waiting_for_walk = false
 	_activation_requested = false
 	if _activation_enemy != null and is_instance_valid(_activation_enemy) and _activation_enemy.has_method("set_story_activation_hold"):
 		_activation_enemy.call("set_story_activation_hold", false)
@@ -584,6 +593,8 @@ func _npc_at_anchor(anchor_id: String) -> bool:
 ## 这里只判定；移动、手部动画、钥匙轨迹由各实体表现脚本负责。
 func should_advance_narrative() -> bool:
 	var director := _director()
+	if director != null and str(director.call("active_id")) == PlatformSentinelEncounter3D.TAKEOVER and is_instance_valid(_host) and _host.has_method("can_advance_platform_takeover"):
+		return bool(_host.call("can_advance_platform_takeover"))
 	if director != null and str(director.call("active_id")) == BRIEFING_ID:
 		var walking_player := _player()
 		if walking_player != null and float(walking_player.get("_narrative_walk_remaining")) > 0.0:
@@ -591,8 +602,17 @@ func should_advance_narrative() -> bool:
 	if _deposit_npc_started and (_npc() == null or _player() == null or _pedestal() == null or not is_instance_valid(_key_visual)):
 		_abort_performance("安装演出中演员、设施或钥匙丢失")
 		return false
-	if director != null and str(director.call("active_id")) == BOSS_ID and _activation_requested:
-		return _activation_is_complete()
+	if director != null and str(director.call("active_id")) == BOSS_ID:
+		if _boss_waiting_for_walk:
+			var walking_player := _player()
+			if walking_player == null:
+				_abort_performance("下坡演员丢失")
+				return false
+			if float(walking_player.get("_narrative_walk_remaining")) > 0.0:
+				return false
+			_boss_waiting_for_walk = false
+		if _activation_requested:
+			return _activation_is_complete()
 	if _move_target is Vector3:
 		var npc := _npc()
 		if npc == null:

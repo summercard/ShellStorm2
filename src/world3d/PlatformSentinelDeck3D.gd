@@ -45,6 +45,10 @@ var _feed_faces: Array[MeshInstance3D] = []
 var _feed := Vector2.ZERO
 var _lift_fascias: Dictionary[Node3D, Vector3] = {}
 var _gun_alert := 0.0
+var _arm_tile_clocks: Dictionary[StringName, float] = {}
+const ARM_TILE_WARNING_SECONDS := 0.85
+const ARM_TILE_FALL_SECONDS := 0.92
+const ARM_TILE_FINISH := ARM_TILE_WARNING_SECONDS + ARM_TILE_FALL_SECONDS
 
 func _enter_tree() -> void:
 	var arena := get_parent().get_parent().get_node("BossRoom02")
@@ -176,6 +180,13 @@ func set_rear_screen_retraction(retracted: bool, animate := false) -> void:
 			node.position = destination
 
 
+func rear_screens_are_retracted() -> bool:
+	for node in _rear_rest:
+		if not node.position.is_equal_approx(_rear_rest[node] + Vector3.FORWARD * rear_screen_travel):
+			return false
+	return true
+
+
 # Cosmetic outer lift housings follow the launch, not the walkable deck or its colliders.
 func sample_launch_lift(elapsed: float) -> void:
 	var lift := -1.25 * (1.0 - smoothstep(0.18, 2.65, elapsed))
@@ -249,6 +260,8 @@ func sample_collapse(elapsed: float, outer_start := OUTER_START) -> Array[Vector
 	var releases: Array[Vector3] = []
 	for tile in tiles:
 		var original: Transform3D = tile.get_meta("rest")
+		if _arm_tile_clocks.has(tile.name):
+			continue
 		var side := maxf(absf(original.origin.x), absf(original.origin.z))
 		if side <= 7.5:
 			continue
@@ -283,6 +296,71 @@ func sample_collapse(elapsed: float, outer_start := OUTER_START) -> Array[Vector
 		if tile.position.y < -24.0:
 			tile.hide()
 	return releases
+
+
+func is_outer_arm_tile(tile_name: StringName) -> bool:
+	var tile := _tile_mounts.get(tile_name, null) as Node3D
+	if tile == null:
+		return false
+	var origin: Vector3 = (tile.get_meta("rest") as Transform3D).origin
+	return maxf(absf(origin.x), absf(origin.z)) > 7.5
+
+
+func begin_arm_tile_drop(tile_name: StringName) -> void:
+	if not _arm_tile_clocks.has(tile_name):
+		_sample_arm_tile(tile_name, 0.0)
+
+
+func drop_arm_tile(tile_name: StringName, delta: float) -> Vector3:
+	var previous := get_arm_tile_drop_elapsed(tile_name)
+	if previous >= ARM_TILE_FINISH:
+		return Vector3.INF
+	var elapsed := minf(ARM_TILE_FINISH, previous + delta)
+	var tile := _sample_arm_tile(tile_name, elapsed)
+	if previous < ARM_TILE_WARNING_SECONDS and elapsed >= ARM_TILE_WARNING_SECONDS:
+		var rest: Transform3D = tile.get_meta("rest")
+		return to_global(rest.origin + Vector3.UP * 0.08)
+	return Vector3.INF
+
+
+func get_arm_tile_drop_elapsed(tile_name: StringName) -> float:
+	return _arm_tile_clocks.get(tile_name, 0.0)
+
+
+func clear_arm_tile_drops() -> void:
+	for tile_name in _arm_tile_clocks:
+		var tile: Node3D = _tile_mounts[tile_name]
+		var floor: StaticBody3D = tile.get_meta("floor")
+		floor.collision_layer = 1
+		tile.transform = tile.get_meta("rest")
+		tile.show()
+	_arm_tile_clocks.clear()
+
+
+func restore_arm_tile_state(tile_name: StringName, elapsed: float) -> void:
+	_sample_arm_tile(tile_name, clampf(elapsed, 0.0, ARM_TILE_FINISH))
+
+
+func _sample_arm_tile(tile_name: StringName, elapsed: float) -> Node3D:
+	var tile: Node3D = _tile_mounts[tile_name]
+	var rest: Transform3D = tile.get_meta("rest")
+	var floor: StaticBody3D = tile.get_meta("floor")
+	var previous := get_arm_tile_drop_elapsed(tile_name)
+	if not _arm_tile_clocks.has(tile_name) or (previous < ARM_TILE_WARNING_SECONDS and elapsed >= ARM_TILE_WARNING_SECONDS):
+		floor.set_deferred("collision_layer", 1 if elapsed < ARM_TILE_WARNING_SECONDS else 0)
+	_arm_tile_clocks[tile_name] = elapsed
+	if elapsed < ARM_TILE_WARNING_SECONDS:
+		var shake := smoothstep(0.0, ARM_TILE_WARNING_SECONDS, elapsed)
+		var phase := elapsed * 42.0 + rest.origin.x * 1.41 + rest.origin.z * 0.83
+		var tilt := Vector3(sin(phase), 0.0, cos(phase * 1.13)) * shake * 0.025
+		tile.transform = rest * Transform3D(Basis.from_euler(tilt), Vector3.UP * sin(phase * 1.76) * shake * 0.07)
+		_set_screen(tile, 1.0, 0.78 + 0.20 * sin(elapsed * 16.0), 0.08, elapsed * 0.05)
+	else:
+		var eased := smoothstep(ARM_TILE_WARNING_SECONDS, ARM_TILE_FINISH, elapsed)
+		tile.transform = rest * Transform3D(Basis.from_euler(Vector3(0.12, -0.08, 0.18) * eased), Vector3.DOWN * 9.0 * eased)
+		_set_screen(tile, 2.0, 1.0 - eased, 0.16, elapsed * 0.05)
+	tile.visible = elapsed < ARM_TILE_FINISH
+	return tile
 
 
 func set_bridge_retraction(west: float, east: float) -> void:

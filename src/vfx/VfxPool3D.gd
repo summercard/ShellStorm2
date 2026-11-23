@@ -211,7 +211,7 @@ func _process(_delta: float) -> void:
 	var camera := get_viewport().get_camera_3d()
 	if camera != null:
 		origin = camera.global_position - camera.global_basis.z * PREWARM_DISTANCE
-	var effect := acquire(asset_id, origin, Color.WHITE, PREWARM_SIZE)
+	var effect := acquire(asset_id, origin, Color.WHITE, PREWARM_SIZE, {"prewarm": true})
 	if effect != null:
 		_prewarm_active.append(effect)
 	if _prewarm_queue.is_empty():

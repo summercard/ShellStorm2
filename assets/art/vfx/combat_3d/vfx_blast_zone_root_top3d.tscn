@@ -5,4 +5,4 @@
 [node name="VfxBlastZone3D" type="Node3D"]
 script = ExtResource("1_blast_zone")
 metadata/asset_id = "VFX-BLAST-ZONE-3D"
-metadata/asset_version = "v001"
+metadata/asset_version = "v002"

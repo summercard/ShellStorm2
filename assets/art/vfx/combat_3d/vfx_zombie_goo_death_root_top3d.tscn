@@ -1,8 +1,19 @@
 [gd_scene format=3 uid="uid://fx012a"]
 
 [ext_resource type="Script" path="res://src/vfx/VfxZombieGooDeath3D.gd" id="1_zombie_goo_death"]
+[ext_resource type="PackedScene" path="res://assets/art/vfx/combat_3d/zombie_goo_death/vfx_zombie_goo_burst_source_top3d.tscn" id="2_burst"]
+[ext_resource type="PackedScene" path="res://assets/art/vfx/combat_3d/zombie_goo_death/vfx_zombie_goo_pool_source_top3d.tscn" id="3_pool"]
 
 [node name="VfxZombieGooDeath3D" type="Node3D"]
 script = ExtResource("1_zombie_goo_death")
+lifetime = 1.35
+droplet_size_gain = 2.0
+droplet_lifetime_gain = 1.3
 metadata/asset_id = "VFX-ZOMBIE-GOO-DEATH-3D"
-metadata/asset_version = "v001"
+metadata/asset_version = "v004"
+
+[node name="LibraryBurst" parent="." instance=ExtResource("2_burst")]
+auto_play = false
+
+[node name="LibraryPool" parent="." instance=ExtResource("3_pool")]
+auto_play = false

@@ -197,8 +197,6 @@ func _accept_dialogue_run(run_id: String, waiting := false) -> bool:
 ## 导演每帧调用：推进相机与朝向的过渡并落到场景上。
 func tick(delta: float) -> void:
 	_tick_camera_shake(delta)
-	if _expedition_entry_presentation != null:
-		_expedition_entry_presentation.tick(delta)
 	var controller := _main_story_controller()
 	if controller != null and controller.has_method("_sync_activation_control"):
 		# 手动导演 step 也复用控制器的真实激活时钟，不另造定时器。
@@ -240,6 +238,8 @@ func tick(delta: float) -> void:
 		_apply_pose()
 		if pose_finished:
 			_end_pose_transition()
+	if _expedition_entry_presentation != null:
+		_expedition_entry_presentation.tick(delta)
 
 
 ## 与 _advance_channel 同构，但值是 Vector3 —— 枢轴要能做空间位移，不能只 lerpf。
@@ -755,7 +755,10 @@ func _camera_shot(params: Dictionary) -> Dictionary:
 		return _degraded("camera.shot：position_anchor/target_anchor 不可用。")
 	if not (position_from is Vector3):
 		position_from = _camera.global_position
-	if not (target_from is Vector3):
+	var arc := bool(params.get("arc", false))
+	if arc and not params.has("target_from_offset"):
+		target_from = target_to
+	elif not (target_from is Vector3):
 		target_from = position_from - _camera.global_basis.z * 10.0
 	var from_transform := _camera_shot_transform(position_from as Vector3, target_from as Vector3)
 	var to_transform := _camera_shot_transform(position_to as Vector3, target_to as Vector3)
@@ -764,8 +767,8 @@ func _camera_shot(params: Dictionary) -> Dictionary:
 	_camera_shot_channel = {
 		"from": from_transform, "to": to_transform,
 		"from_target": target_from as Vector3, "to_target": target_to as Vector3,
-		"from_fov": _camera.fov, "to_fov": float(params.get("fov", _camera.fov)),
-		"t": 0.0, "duration": duration,
+		"from_fov": float(params.get("fov_from", _camera.fov)), "to_fov": float(params.get("fov", _camera.fov)),
+		"arc": arc, "t": 0.0, "duration": duration,
 	}
 	# 机位切换先落到起点，之后才进行镜内平移/取景；duration=0 直接到终点。
 	_camera.global_transform = from_transform
@@ -839,7 +842,18 @@ func _apply_camera_shot(weight: float) -> void:
 	var target_from: Vector3 = _camera_shot_channel.get("from_target", to_transform.origin - to_transform.basis.z * 10.0)
 	var target_to: Vector3 = _camera_shot_channel.get("to_target", target_from)
 	var target := target_from.lerp(target_to, progress)
-	_camera.global_transform = _constrain_camera_pose(from_transform.interpolate_with(to_transform, progress), target)
+	var pose := from_transform.interpolate_with(to_transform, progress)
+	if bool(_camera_shot_channel.get("arc", false)):
+		var start := from_transform.origin - target_from
+		var end := to_transform.origin - target_to
+		var start_flat := start.slide(Vector3.UP)
+		var end_flat := end.slide(Vector3.UP)
+		if not start_flat.is_zero_approx() and not end_flat.is_zero_approx():
+			var angle := start_flat.signed_angle_to(end_flat, Vector3.UP)
+			var radial := start_flat.normalized().rotated(Vector3.UP, angle * progress)
+			var radius := lerpf(start_flat.length(), end_flat.length(), progress)
+			pose = _camera_shot_transform(target + radial * radius + Vector3.UP * lerpf(start.y, end.y, progress), target)
+	_camera.global_transform = _constrain_camera_pose(pose, target)
 	_camera.fov = lerpf(float(_camera_shot_channel.get("from_fov", _camera_rest_fov)), float(_camera_shot_channel.get("to_fov", _camera_rest_fov)), progress)
 
 

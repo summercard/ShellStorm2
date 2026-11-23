@@ -12,32 +12,20 @@ extends Node
 ## 每类断言都配对照（未绑 follow / 单侧方向 / 故意倾斜 / 异房 stub）；末尾有防假绿哨兵。
 
 const BLAST_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_death_blast_root_top3d.tscn")
+const BLAST_SOURCE_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/mega_explosion_blue/vfx_mega_explosion_blue_source_top3d.tscn")
 const ZONE_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_blast_zone_root_top3d.tscn")
 const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn")
 
 const BLAST_ASSET_ID := "VFX-DEATH-BLAST-3D"
 const ZONE_ASSET_ID := "VFX-BLAST-ZONE-3D"
 ## 两个资产各自定档（2026-10-14 v002 重做：FX01-17 换了造型语言 ⇒ 升版；FX01-18 未动）
-const EXPECTED_BLAST_VERSION := "v003"
-const EXPECTED_ZONE_VERSION := "v001"
+const EXPECTED_BLAST_VERSION := "v007"
+const EXPECTED_ZONE_VERSION := "v002"
 
-## 期望值一律硬编码在验收侧（不引用被测脚本常量，防自印证）
-## v003 只替换胸口爆点；飞溅、地面液体和冲击波仍按原规格验证。
-const EXPECTED_BLAST_LIFETIME := 1.35
-const EXPECTED_BLAST_NODE_MIN := 23
-const EXPECTED_BLAST_SOURCE := "GreenBloodExplosionRound"
-const EXPECTED_BLAST_SPLATS := 14
-const EXPECTED_BLAST_PUDDLES := 4
-const EXPECTED_BLAST_SHOCKWAVES := 3
-const EXPECTED_LIGHT_NAME_BLAST := "GooLight"
+const EXPECTED_BLAST_SOURCE := "MegaExplosionBlue"
+const EXPECTED_LIBRARY_LAYERS := ["ChargeupDust", "ChargeupGlow", "ChargeupRays", "ChargeupShell", "EndGlow", "EndNova", "EndShell", "EndSparks", "EndSpikes", "MegaExplosionBlue"]
 const EXPECTED_LIGHT_NAME_ZONE := "ZoneLight"
-## 灯范围 = 常量 × effect_size（本件 blast 4.2 / zone 4.5）
-const EXPECTED_BLAST_LIGHT_RANGE_PER_SIZE := 4.2
 const EXPECTED_ZONE_LIGHT_RANGE_PER_SIZE := 4.5
-## 灯能量峰值（与 FX01-19 同一支灯）
-const EXPECTED_BLAST_LIGHT_ENERGY_PEAK := 6.0
-## 灯归零时刻（与 FX01-19 同一包络：0.34s 收干净，远早于地面液体的公共停留窗口）
-const EXPECTED_BLAST_LIGHT_DECAY_SEC := 0.34
 
 const ZONE_DEFAULT_SECONDS := 3.0
 const ZONE_NODE_MIN := 10
@@ -50,11 +38,8 @@ const SIZE_B := 0.8
 const SIZE_RATIO := 1.25
 const SIZE_RATIO_TOLERANCE := 0.02
 
-## 规格半径 5.0 ⇒ 调用方传 size = radius × 0.6 = 3.0
-## ⇒ 内环外缘 0.72 × 3.0 × 2.20 ≈ 4.75 m、外环 × 2.45 ≈ 5.29 m（视觉顶到伤害半径）
-const BLAST_SIZE_FOR_5M := 3.0
-const BLAST_RING_RADIUS_MIN := 4.4
-const BLAST_RING_RADIUS_MAX := 5.5
+## 有伤害规格时，实际半径优先于表现尺寸参数。
+const BLAST_SIZE_FOR_5M := 2.0
 
 const ZONE_RADIUS := 5.0
 const ZONE_DURATION := 3.0
@@ -164,82 +149,83 @@ func _check_blast_prefab() -> void:
 		_failures.append("死亡自爆 Prefab 根节点不是 VfxEffectBase3D")
 		return
 	add_child(blast)
-	blast.activate(Vector3(3.0, 0.0, -4.0), Color(0.55, 0.85, 0.45), BLAST_SIZE_FOR_5M, {})
+	blast.activate(Vector3(3.0, -12.0, -4.0), Color(0.55, 0.85, 0.45), BLAST_SIZE_FOR_5M, {"floor_y": -12.65, "blast_visual_radius_m": 5.0, "blast_warning_sec": 1.0})
 	_samples += 1
 
-	var snapshot: Dictionary = blast.call("get_presentation_snapshot")
-	_expect(String(snapshot.get("asset_id", "")) == BLAST_ASSET_ID,
-		"死亡自爆 AssetID 不正确：%s" % snapshot.get("asset_id", ""))
-	_expect(String(snapshot.get("asset_version", "")) == EXPECTED_BLAST_VERSION,
-		"死亡自爆版本不是 %s：%s" % [EXPECTED_BLAST_VERSION, snapshot.get("asset_version", "")])
-	_expect(is_equal_approx(float(snapshot.get("lifetime", 0.0)), EXPECTED_BLAST_LIFETIME),
-		"死亡自爆寿命应为 %.2fs：%.3f" % [EXPECTED_BLAST_LIFETIME, float(snapshot.get("lifetime", 0.0))])
-	_expect(int(snapshot.get("node_count", 0)) >= EXPECTED_BLAST_NODE_MIN,
-		"死亡自爆子节点过少，几何未构建：%d" % int(snapshot.get("node_count", 0)))
+	_expect(blast.get_meta("asset_id") == BLAST_ASSET_ID and blast.get_meta("asset_version") == EXPECTED_BLAST_VERSION,
+		"死亡自爆资产身份不正确")
 	var library := blast.get_node("LibraryBurst") as Node3D
+	var audio := library.get_node("UnityAudioSource") as AudioStreamPlayer
 	var source: Dictionary = library.call("debug_exact")
-	_expect(int(snapshot.get("burst_count", -1)) == 0 and blast.get_node_or_null("Burst0") == null,
-		"库爆点应替代旧方块，而不是叠播")
-	_expect(library.visible and source.source_id == EXPECTED_BLAST_SOURCE and source.running and source.audio_play_calls == 0,
-		"自爆应播放库绿浆爆点，并保留宿主音效")
-	_expect(int(snapshot.get("splat_count", 0)) == EXPECTED_BLAST_SPLATS,
-		"飞溅粒子数应为 %d：%d" % [EXPECTED_BLAST_SPLATS, int(snapshot.get("splat_count", 0))])
-	_expect(int(snapshot.get("puddle_count", 0)) == EXPECTED_BLAST_PUDDLES,
-		"地面液体数应为 %d：%d" % [EXPECTED_BLAST_PUDDLES, int(snapshot.get("puddle_count", 0))])
-	_expect(int(snapshot.get("shockwave_count", 0)) == EXPECTED_BLAST_SHOCKWAVES,
-		"绿色冲击波层数应为 %d：%d" % [EXPECTED_BLAST_SHOCKWAVES, int(snapshot.get("shockwave_count", 0))])
-	for node_name in ["LibraryBurst", "Splat0", "Puddle0", "Shockwave0", "Shockwave2", "GooLight"]:
-		_expect(blast.get_node_or_null(node_name) != null, "缺少节点：%s" % node_name)
-	# 业主指定「绿色 + 绿色冲击波」：方块与环都走僵尸绿
-	_expect(bool(snapshot.get("green_dominant", false)),
-		"自爆方块不是绿色主导：%s" % str(snapshot.get("goo_color", Color.BLACK)))
-	_expect(bool(snapshot.get("green_dominant", false)),
-		"自爆冲击波不是绿色主导：%s" % str(snapshot.get("shockwave_color", Color.BLACK)))
-	_expect(is_equal_approx(library.scale.x, BLAST_SIZE_FOR_5M * 0.85), "库爆点仅做整体尺寸适配")
+	_expect(blast.get_child_count() == 1, "不得叠加旧飞溅、地贴、灯或冲击波")
+	var layer_names: Array = source.layers.keys()
+	layer_names.sort()
+	_expect(layer_names == EXPECTED_LIBRARY_LAYERS, "原版十个粒子层必须完整：%s" % str(layer_names))
+	_expect(library.visible and source.source_id == EXPECTED_BLAST_SOURCE and source.running and source.audio_play_calls == 1,
+		"原版开始时应启动一次自带音效")
+	_expect(is_equal_approx(library.global_position.y, -12.65) and library.scale.is_equal_approx(Vector3.ONE * (5.0 / 9.0)),
+		"原版等比缩放，光核外径须对应 5m 半径")
+	var sparks: Dictionary = library.get_node("EndSparks").get("source")
+	_expect(sparks.trails.enabled and int(sparks.main.max_particles) == 1000 and is_equal_approx(float(sparks.main.start_delay.constant), 1.75),
+		"不得关掉原版拖尾、缩减预算上限或跳过蓄力时间")
+	var glow := library.get_node("EndGlow/UnityVfxDrawParticles") as MultiMeshInstance3D
+	var glow_material := glow.material_override as ShaderMaterial
+	var raw := BLAST_SOURCE_SCENE.instantiate() as Node3D
+	raw.set("auto_play", false)
+	add_child(raw)
+	var raw_glow := raw.get_node("EndGlow/UnityVfxDrawParticles") as MultiMeshInstance3D
+	var raw_material := raw_glow.material_override as ShaderMaterial
+	_expect(not raw_material.shader.code.contains("blast_center_radius"), "原版素材不得被实例染色污染")
+	raw.free()
+	var palette: Color = glow_material.get_shader_parameter("blast_core")
+	_expect(palette.g > palette.r and palette.r > palette.b, "新版爆破必须是黄绿色")
+	var adapted_draws := 0
+	for node in library.find_children("*", "GeometryInstance3D", true, false):
+		var mat := (node as GeometryInstance3D).material_override as ShaderMaterial
+		if mat == null:
+			continue
+		adapted_draws += 1
+		var bounds: Vector4 = mat.get_shader_parameter("blast_center_radius")
+		_expect(bounds.is_equal_approx(Vector4(3.0, -12.65, -4.0, 5.0)) and mat.shader.code.contains("if (r >= 1.0) { discard; }"),
+			"每个粒子和拖尾绘制件都必须裁到同一个世界空间半径")
+	_expect(adapted_draws >= layer_names.size(), "粒子材质验证不完整")
+	blast.call("sync_charge", 1.74)
+	var charge: Dictionary = library.call("debug_exact")
+	_expect(int(charge.layers.EndSparks.live) == 0 and int(charge.layers.ChargeupShell.live) > 0,
+		"预警未结束前只有蓄力，不能提前爆开")
+	blast.call("detonate")
+	var impact: Dictionary = library.call("debug_exact")
+	_expect(int(impact.layers.EndSparks.live) > 48, "结算同帧必须出生爆发粒子")
+	for _i in 12:
+		library.call("advance_exact", 1.0 / 60.0)
+	var ribbon := library.get_node_or_null("EndSparks/UnityVfxDrawRibbon") as MeshInstance3D
+	_expect(ribbon != null and ribbon.visible, "保留原版的可见拖尾")
+	if ribbon != null:
+		var rim := ribbon.material_override as ShaderMaterial
+		var rim_bounds: Vector4 = rim.get_shader_parameter("blast_center_radius")
+		_expect(is_equal_approx(rim_bounds.w, 5.0) and rim.shader.code.contains("if (r >= 1.0) { discard; }"), "懒创建的拖尾也须受半径裁切")
+	var explosion: Dictionary = library.call("debug_exact")
+	_expect(int(explosion.layers.EndGlow.drawn) > 0 and int(explosion.layers.EndSparks.live) > 48,
+		"原版在 1.75s 后完整爆发，不受旧火花上限约束")
 
-	# 灯光真源：节点名 / 无阴影 / 范围随 size / 出生能量为正 / 末端归零
-	_expect(bool(snapshot.get("has_goo_light", false)), "死亡自爆缺少 OmniLight3D")
-	_expect(String(snapshot.get("light_name", "")) == EXPECTED_LIGHT_NAME_BLAST,
-		"自爆灯节点名不是 %s：%s" % [EXPECTED_LIGHT_NAME_BLAST, snapshot.get("light_name", "")])
-	_expect(not bool(snapshot.get("light_shadows", true)), "自爆灯不应投射阴影")
-	var birth_energy := float(snapshot.get("light_energy", 0.0))
-	_expect(absf(birth_energy - EXPECTED_BLAST_LIGHT_ENERGY_PEAK) < 0.001,
-		"激活瞬间自爆灯能量应为峰值 %.1f：%.3f" % [EXPECTED_BLAST_LIGHT_ENERGY_PEAK, birth_energy])
-	var light_range := float(snapshot.get("light_range", 0.0))
-	var expected_range := EXPECTED_BLAST_LIGHT_RANGE_PER_SIZE * BLAST_SIZE_FOR_5M
-	_expect(absf(light_range - expected_range) < 0.001,
-		"自爆灯范围应为 %.1fm（4.2 × size %.1f）：%.3f" % [expected_range, BLAST_SIZE_FOR_5M, light_range])
-	blast.call("_on_tick", EXPECTED_BLAST_LIGHT_DECAY_SEC * 0.5, EXPECTED_BLAST_LIFETIME)
-	var half_energy := float((blast.call("get_presentation_snapshot") as Dictionary).get("light_energy", 0.0))
-	_expect(half_energy < birth_energy, "自爆灯能量未随包络衰减：%.3f -> %.3f" % [birth_energy, half_energy])
-	_expect(half_energy > 0.0, "自爆灯在归零时刻之前就灭，包络过陡：%.3f" % half_energy)
-	blast.call("_on_tick", EXPECTED_BLAST_LIGHT_DECAY_SEC, EXPECTED_BLAST_LIFETIME)
-	_expect(is_zero_approx(float((blast.call("get_presentation_snapshot") as Dictionary).get("light_energy", 1.0))),
-		"自爆灯在 %.2fs 未归零（与 FX01-19 同一包络）" % EXPECTED_BLAST_LIGHT_DECAY_SEC)
-	blast.call("_on_lifetime_expired")
-	var end_energy := float((blast.call("get_presentation_snapshot") as Dictionary).get("light_energy", 0.0))
-	_expect(is_zero_approx(end_energy), "寿命结束自爆灯能量必须归零：%.3f" % end_energy)
-
-	# 冲击波外缘**峰值**：本件按业主口径尺寸固定（2.0），冲击波外缘 ≈ 1.548 × size。
-	# 这里仍按 size 3.0 采样 ⇒ 期望 ≈ 4.64m，落在 4.4~5.5 带内。
-	# ⚠ 必须扫完整个寿命取最大值：冲击波是循环相位，**在某一时刻单点采样**可能落在
-	# 相位低谷（实测 t=lifetime 时最大外缘只 4.08m，会被误判成「顶不到半径」）。
-	var ring_radius := 0.0
-	var probe := 0.0
-	while probe <= EXPECTED_BLAST_LIFETIME:
-		blast.call("_on_tick", probe, EXPECTED_BLAST_LIFETIME)
-		ring_radius = maxf(
-			ring_radius,
-			float((blast.call("get_presentation_snapshot") as Dictionary).get("shockwave_outer_world_radius", 0.0))
-		)
-		probe += 0.005
-	_expect(ring_radius >= BLAST_RING_RADIUS_MIN and ring_radius <= BLAST_RING_RADIUS_MAX,
-		"自爆冲击波峰值外缘应落在 %.1f~%.1f m（规格半径 5.0）：%.3f"
-		% [BLAST_RING_RADIUS_MIN, BLAST_RING_RADIUS_MAX, ring_radius])
-
-	_expect(not library.visible and not library.is_physics_processing(), "回收须隐藏库爆点并停止模拟")
-	blast.activate(Vector3(3.0, -12.0, -4.0), Color.WHITE, 2.0, {"floor_y": -12.65})
-	_expect(library.visible and library.is_physics_processing(), "再次激活须重播库爆点")
+	blast.retired.connect(func(_effect: VfxEffectBase3D) -> void: pass)
+	for _step in 360:
+		library.call("advance_exact", 1.0 / 60.0)
+		audio.stop() # 手动步进的无头验收不等待真实音频时钟。
+		blast.call("_process", 1.0 / 60.0)
+		if not blast.visible:
+			break
+	_expect(not blast.visible and not library.visible and not library.is_physics_processing(), "源时间线完毕后须回收")
+	blast.activate(Vector3(3.0, -12.0, -4.0), Color.WHITE, 2.0, {"floor_y": -12.65, "blast_visual_radius_m": 3.0, "blast_warning_sec": 1.0})
+	var reused: Dictionary = library.call("debug_exact")
+	_expect(library.visible and not library.is_physics_processing() and reused.audio_play_calls == 2 and float(reused.elapsed) < 0.02,
+		"复借须从预警起点重播，仅由预警时钟推进")
+	var reused_bounds: Vector4 = glow_material.get_shader_parameter("blast_center_radius")
+	_expect(is_equal_approx(reused_bounds.w, 3.0), "复借不能沿用旧半径")
+	blast.finish()
+	blast.activate(Vector3.ZERO, Color.WHITE, 0.0008, {"prewarm": true})
+	var warmed: Dictionary = library.call("debug_exact")
+	_expect(not warmed.running and not audio.playing and warmed.audio_play_calls == 2, "预热不能播放原版音频或粒子")
 
 	blast.free()
 
@@ -349,27 +335,12 @@ func _check_size_linearity() -> void:
 	blast_a.activate(Vector3.ZERO, Color.WHITE, SIZE_A, {})
 	blast_b.activate(Vector3.ZERO, Color.WHITE, SIZE_B, {})
 	_samples += 1
-	blast_a.call("_on_tick", 0.0, EXPECTED_BLAST_LIFETIME)
-	blast_b.call("_on_tick", 0.0, EXPECTED_BLAST_LIFETIME)
-	var core_a := (blast_a.get_node("LibraryBurst") as Node3D).scale.x
-	var core_b := (blast_b.get_node("LibraryBurst") as Node3D).scale.x
-	var range_a := float((blast_a.call("get_presentation_snapshot") as Dictionary).get("light_range", 0.0))
-	var range_b := float((blast_b.call("get_presentation_snapshot") as Dictionary).get("light_range", 0.0))
+	var core_a := (blast_a.get_node("LibraryBurst") as Node3D).scale
+	var core_b := (blast_b.get_node("LibraryBurst") as Node3D).scale
+	_expect(core_a.is_equal_approx(Vector3.ONE * (5.0 / 9.0)) and core_b.is_equal_approx(core_a),
+		"无范围规格时默认5m，不随无关 size 参数变化")
 	blast_a.free()
 	blast_b.free()
-
-	if core_b <= 0.0:
-		_failures.append("尺寸用例：size %.1f 之下的核心 scale 未测到" % SIZE_B)
-	else:
-		var ratio := core_a / core_b
-		_expect(absf(ratio - SIZE_RATIO) <= SIZE_RATIO_TOLERANCE,
-			"自爆几何未随 size 线性（比值 %.4f，期望 %.3f ± %.2f）" % [ratio, SIZE_RATIO, SIZE_RATIO_TOLERANCE])
-	if range_a <= 0.0:
-		_failures.append("尺寸用例：size %.1f 之下的灯范围未测到" % SIZE_A)
-	else:
-		var light_ratio := range_b / range_a
-		_expect(absf(light_ratio - SIZE_B) <= 0.01,
-			"自爆灯范围未随 size 线性（比值 %.4f，期望 %.2f）" % [light_ratio, SIZE_B])
 
 	var zone_a := ZONE_SCENE.instantiate() as VfxEffectBase3D
 	var zone_b := ZONE_SCENE.instantiate() as VfxEffectBase3D
@@ -525,7 +496,27 @@ func _check_enemy_caller_wiring() -> void:
 		},
 	})
 	enemy.room_id = ZONE_ROOM
-	enemy.call("_spawn_ground_blast_zone", ZONE_RADIUS)
+	var inside := StubPlayer.new()
+	var outside := StubPlayer.new()
+	for target in [inside, outside]:
+		add_child(target)
+		target.add_to_group("player_3d")
+	inside.global_position = enemy.global_position + Vector3.RIGHT * 4.99
+	outside.global_position = enemy.global_position + Vector3.RIGHT * 5.01
+	var pool := get_node("/root/VfxPool") as VfxPool3D
+	var before_blast := pool.active_count(VfxPool3D.FX01_DEATH_BLAST)
+	enemy.call("_detonate_death_explosion")
+	_expect(inside.hits == [180] and outside.hits.is_empty(), "瞬爆伤害边界须仍在 5m")
+	inside.free()
+	outside.free()
+	var bucket: Array = pool._active.get(VfxPool3D.FX01_DEATH_BLAST, [])
+	_expect(bucket.size() == before_blast + 1, "关卡自爆必须借出新的瞬爆实例")
+	if bucket.size() == before_blast + 1:
+		var effect := bucket.back() as VfxEffectBase3D
+		var library := effect.get_node("LibraryBurst") as Node3D
+		_expect(library.scale.is_equal_approx(Vector3.ONE * (5.0 / 9.0)), "实际触发受玩法半径约束")
+		_expect(library.global_position.is_equal_approx(enemy.global_position), "实际触发以怪脚下为原点")
+		effect.finish()
 	_samples += 1
 
 	var zone := _find_zone(self)

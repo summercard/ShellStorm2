@@ -7,7 +7,7 @@ const VFX_MATERIALIZE := "VFX-HOLOGRAM-ENTRY-MATERIALIZE-3D"
 const HOLOGRAM_SHADER_CODE := """
 shader_type spatial;
 render_mode unshaded, cull_disabled, blend_add, depth_prepass_alpha;
-uniform float reveal_progress = 0.0;
+uniform float scan_y = 0.0;
 uniform float world_min = 0.0;
 uniform float world_max = 1.0;
 uniform float opacity = 1.0;
@@ -17,14 +17,13 @@ void vertex() {
     world_height = (MODEL_MATRIX * vec4(VERTEX, 1.0)).y;
 }
 void fragment() {
-    float height = (world_height - world_min) / max(world_max - world_min, 0.001);
-    float scan_height = mix(-0.07, 1.07, reveal_progress);
-    float body = 1.0 - smoothstep(scan_height - 0.025, scan_height + 0.025, height);
-    float scan = 1.0 - smoothstep(0.0, 0.045, abs(scan_height - height));
+    float scan_distance = (world_height - scan_y) / max(world_max - world_min, 0.001);
+    float body = 1.0 - smoothstep(-0.025, 0.025, scan_distance);
+    float scan = 1.0 - smoothstep(0.0, 0.045, abs(scan_distance));
     float stripes = 0.82 + 0.18 * sin(world_height * 145.0);
     ALBEDO = hologram_color.rgb;
-    EMISSION = hologram_color.rgb * (0.65 + scan * 1.8);
-    ALPHA = opacity * body * (0.38 * stripes + scan * 0.5);
+    EMISSION = hologram_color.rgb * (0.48 + scan * 1.25);
+    ALPHA = opacity * body * (0.35 * stripes + scan * 0.42);
     if (ALPHA < 0.002) { discard; }
 }
 """
@@ -33,9 +32,11 @@ static var _shader: Shader
 var _player: Node3D
 var _expression: Object
 var _expression_was_held := false
+var _state_vfx: Node3D
+var _state_vfx_was_visible := false
 var _materials: Array[Dictionary] = []
 var _hologram: ShaderMaterial
-var _vfx: VfxEffectBase3D
+var _vfx: VfxHologramEntry3D
 var _mode := "scan"
 var _active := false
 var _elapsed := 0.0
@@ -43,8 +44,8 @@ var _rebuild_seconds := 1.55
 var _solidify_seconds := 0.25
 var _solidifying := false
 var _solid := false
-var _world_min := 0.0
-var _world_max := 1.0
+var _world_bounds := AABB()
+const SCAN_OVERSHOOT := 0.07
 ## 挡在"近景相机 → 角色"之间、入场期间被临时淡出的场景几何。
 ## 角色朝向改成面向第一间房的门之后，近景会落进家具背后（实测起始房一张办公椅
 ## 正卡在机位与角色之间，把角色挡掉八成）。这里沿用项目既有的
@@ -88,21 +89,16 @@ func prepare(player: Node3D, params: Dictionary = {}) -> bool:
 	if meshes.is_empty():
 		restore()
 		return false
-	_world_min = INF
-	_world_max = -INF
-	for mesh in meshes:
-		var bounds := mesh.get_aabb()
-		for corner in 8:
-			var height := (mesh.global_transform * bounds.get_endpoint(corner)).y
-			_world_min = minf(_world_min, height)
-			_world_max = maxf(_world_max, height)
+	# Suppress the lock indicator during the shot without changing avatar state logic.
+	_state_vfx = state_root as Node3D
+	if is_instance_valid(_state_vfx):
+		_state_vfx_was_visible = _state_vfx.visible
+		_state_vfx.hide()
 	if _shader == null:
 		_shader = Shader.new()
 		_shader.code = HOLOGRAM_SHADER_CODE
 	_hologram = ShaderMaterial.new()
 	_hologram.shader = _shader
-	_hologram.set_shader_parameter("world_min", _world_min)
-	_hologram.set_shader_parameter("world_max", _world_max)
 	for mesh in meshes:
 		_materials.append({
 			"mesh": mesh, "material_override": mesh.material_override,
@@ -112,7 +108,27 @@ func prepare(player: Node3D, params: Dictionary = {}) -> bool:
 		mesh.material_overlay = null
 		mesh.material_override = _hologram
 		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_update_scan(0.0)
 	return true
+
+
+func _update_scan(progress: float) -> void:
+	# The hologram and the pooled effect sample the same live model bounds and clock.
+	var parts: Array[AABB] = []
+	for entry in _materials:
+		var mesh := entry["mesh"] as MeshInstance3D
+		if not is_instance_valid(mesh) or not mesh.is_visible_in_tree():
+			continue
+		var bounds := mesh.global_transform * mesh.get_aabb()
+		_world_bounds = bounds if parts.is_empty() else _world_bounds.merge(bounds)
+		parts.append(bounds)
+	var span := maxf(_world_bounds.size.y, 0.001)
+	var scan_y := _world_bounds.position.y + span * lerpf(-SCAN_OVERSHOOT, 1.0 + SCAN_OVERSHOOT, progress)
+	_hologram.set_shader_parameter("scan_y", scan_y)
+	_hologram.set_shader_parameter("world_min", _world_bounds.position.y)
+	_hologram.set_shader_parameter("world_max", _world_bounds.end.y)
+	if is_instance_valid(_vfx):
+		_vfx.apply_entry_frame(progress, _world_bounds, parts, scan_y)
 
 
 func start(_params: Dictionary = {}) -> bool:
@@ -124,12 +140,17 @@ func start(_params: Dictionary = {}) -> bool:
 	_elapsed = 0.0
 	if DisplayServer.get_name() != "headless":
 		_vfx = VfxPool.acquire(VFX_SCAN if _mode == "scan" else VFX_MATERIALIZE,
-			_player.global_position, Color(0.20, 0.86, 1.0), 1.0, {
-				"follow": _player, "duration": _rebuild_seconds,
-				"height_min": _world_min - _player.global_position.y,
-				"height_max": _world_max - _player.global_position.y,
-			})
+			_player.global_position, Color(0.20, 0.86, 1.0), 1.0,
+			{"duration": _rebuild_seconds, "timeline_driven": true}) as VfxHologramEntry3D
+		if _vfx != null:
+			_vfx.retired.connect(_on_vfx_retired, CONNECT_ONE_SHOT)
+	_update_scan(0.0)
 	return true
+
+
+func _on_vfx_retired(effect: VfxEffectBase3D) -> void:
+	if _vfx == effect:
+		_vfx = null
 
 
 func tick(delta: float) -> void:
@@ -141,10 +162,13 @@ func tick(delta: float) -> void:
 	_elapsed += maxf(delta, 0.0)
 	if _solid:
 		return
-	_hologram.set_shader_parameter("reveal_progress", clampf(_elapsed / _rebuild_seconds, 0.0, 1.0))
+	if not _solidifying:
+		_update_scan(clampf(_elapsed / _rebuild_seconds, 0.0, 1.0))
 	if _elapsed < _rebuild_seconds:
 		return
 	if not _solidifying:
+		if is_instance_valid(_vfx):
+			_vfx.finish()
 		_begin_solidify()
 	var weight := smoothstep(0.0, 1.0, clampf((_elapsed - _rebuild_seconds) / _solidify_seconds, 0.0, 1.0))
 	_hologram.set_shader_parameter("opacity", 1.0 - weight)
@@ -182,7 +206,7 @@ func suppress_occluders(camera: Camera3D) -> int:
 		return 0
 	var target := Vector3(
 		_player.global_position.x,
-		(_world_min + _world_max) * 0.5,
+		_world_bounds.get_center().y,
 		_player.global_position.z
 	)
 	var from := camera.global_position
@@ -269,6 +293,9 @@ func restore() -> void:
 	if is_instance_valid(_expression):
 		_expression.set("presentation_held", _expression_was_held)
 	_expression = null
+	if is_instance_valid(_state_vfx):
+		_state_vfx.visible = _state_vfx_was_visible
+	_state_vfx = null
 	restore_occluders()
 	_player = null
 	_hologram = null
@@ -300,5 +327,5 @@ func is_active() -> bool:
 func get_snapshot() -> Dictionary:
 	return {"active": _active, "mode": _mode, "mesh_count": _materials.size(),
 		"progress": clampf(_elapsed / _rebuild_seconds, 0.0, 1.0),
-		"solid": _solid, "solidifying": _solidifying, "world_min": _world_min, "world_max": _world_max,
+		"solid": _solid, "solidifying": _solidifying, "world_min": _world_bounds.position.y, "world_max": _world_bounds.end.y,
 		"suppressed_occluders": _occluders.size()}

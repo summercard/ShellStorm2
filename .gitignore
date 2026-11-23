@@ -333,6 +333,13 @@ tests/rec/out/
 !assets/art/vfx/library/**/*.png.import
 !assets/art/vfx/library/**/*.obj.import
 
+# 巨型蓝色爆炸（mega_explosion_blue）导入契约（2026-11-23 加入）
+# 从 Unity Epic Toon FX 1:1 转出的 8 张贴图，全部 compress/mode=0（无损）
+# + mipmaps/generate=false。缺 .import 会被第 3 行 *.import 吞掉，干净克隆按默认
+# 重导入（VRAM 压缩 + 生成 mipmap）⇒ 爆炸外圈光晕出块状色阶、边缘出现灰边。
+# 规则族同上方：新增 vfx 分区时必须同步加一条。
+!assets/art/vfx/combat_3d/mega_explosion_blue/textures/*.png.import
+
 # Current editable art is tracked (Godot ignores art_source/.gdignore).
 !art_source/
 !art_source/**/

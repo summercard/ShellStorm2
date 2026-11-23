@@ -24,7 +24,7 @@
       "enabled": false
     },
     {
-      "at": 0,
+      "at": 0.75,
       "do": "camera.shot",
       "position_anchor": "platform_takeover",
       "position_offset": [
@@ -53,12 +53,12 @@
       ]
     },
     {
-      "at": 0.55,
+      "at": 0.75,
       "do": "story.platform.voice",
       "event_id": "narrative.platform_takeover.core_reprimand"
     },
     {
-      "at": 0.55,
+      "at": 0.75,
       "do": "ui.subtitle",
       "speaker_id": "boss_platform_core",
       "speaker": "未知信号",
@@ -90,6 +90,14 @@
       "speaker": "数据库核心",
       "text": "你只会替我说话。废物，控制权交回来。",
       "duration": 4.69
+    },
+    {
+      "at": 13.35,
+      "do": "story.platform.retract_screens"
+    },
+    {
+      "at": 14.95,
+      "do": "story.platform.wait_rear_screens"
     },
     {
       "at": 15.05,

@@ -1043,26 +1043,14 @@ func _enemy_death_case_begin() -> void:
 	if not bucket.is_empty():
 		var fx := bucket.back() as VfxEffectBase3D
 		if fx != null:
-			var snapshot: Dictionary = fx.call("get_presentation_snapshot")
-			# 业主口径「把小僵尸的死亡特效放大两倍给胖子僵尸用」⇒ 固定 2.0（小僵尸那条是 1.0）
-			_expect(is_equal_approx(fx.effect_size, 2.0),
-				"胖子僵尸死亡视觉尺寸应为 2.0（小僵尸 1.0 的两倍）：%.3f" % fx.effect_size)
-			_expect(absf(float(snapshot.get("floor_local_y", 0.0)) + 0.65) < 0.01,
-				"floor_y 未按脚底口径传入：floor_local_y=%.4f"
-				% float(snapshot.get("floor_local_y", 0.0)))
-			# v003 只替换胖子胸口爆点，不叠播原方块；其余绿浆层继续沿用。
 			var library := fx.get_node_or_null("LibraryBurst") as Node3D
 			var playback: Dictionary = library.call("debug_exact") if library != null else {}
-			_expect(library != null and library.is_visible_in_tree() and bool(playback.get("running", false))
-				and playback.get("source_id", "") == "GreenBloodExplosionRound" and int(snapshot.get("burst_count", -1)) == 0,
-				"胖子僵尸死亡应实际启动库绿浆爆点，且不叠播原方块")
-			_expect(int(snapshot.get("splat_count", 0)) == 14, "胖子僵尸死亡应有 14 枚飞溅粒子")
-			_expect(int(snapshot.get("puddle_count", 0)) == 4, "胖子僵尸死亡应有 4 块地面液体")
-			_expect(int(snapshot.get("shockwave_count", 0)) == 3,
-				"胖子僵尸死亡应有 3 层绿色冲击波（业主：只有它有）：%d"
-				% int(snapshot.get("shockwave_count", 0)))
-			_expect(bool(snapshot.get("green_dominant", false)), "胖子僵尸死亡不是绿色主导")
-			_expect(bool(snapshot.get("green_dominant", false)), "自爆冲击波不是绿色主导")
+			_expect(fx.get_child_count() == 1 and library != null and library.is_visible_in_tree()
+				and bool(playback.get("running", false)) and playback.get("source_id", "") == "MegaExplosionBlue",
+				"胖子死亡只能播新版爆破，不得叠加任何旧瞬爆层")
+			if library != null:
+				_expect(library.global_position.is_equal_approx(fat.global_position) and library.scale.is_equal_approx(Vector3.ONE * (5.0 / 9.0)),
+					"无预警爆炸从脚下按默认5m范围播放")
 
 	# 小僵尸：走 FX01-19，尺寸 = 2.0（业主「放大 2 倍」）
 	var zombie := _spawn_enemy("melee_chaser")
@@ -1084,14 +1072,12 @@ func _enemy_death_case_begin() -> void:
 	if not goo_bucket.is_empty():
 		var fx := goo_bucket.back() as VfxEffectBase3D
 		if fx != null:
-			# 业主第二轮明确「**小僵尸的死亡特效不要改变**」⇒ 尺寸保持 1.0（规格尺寸）
-			_expect(is_equal_approx(fx.effect_size, 1.0),
-				"小僵尸死亡特效尺寸应为 1.0（未改版）：%.3f" % fx.effect_size)
-			var snapshot: Dictionary = fx.call("get_presentation_snapshot")
-			# 业主：小僵尸死亡**没有**冲击波，只有胖子僵尸那条有
-			_expect(int(snapshot.get("shockwave_count", -1)) == 0,
-				"小僵尸死亡不该有冲击波：%d" % int(snapshot.get("shockwave_count", -1)))
-			_expect(bool(snapshot.get("green_dominant", false)), "FX01-19 不是绿色主导")
+			var burst := fx.get_node("LibraryBurst") as Node3D
+			var ground := fx.get_node("LibraryPool") as Node3D
+			_expect(is_equal_approx(fx.effect_size, 1.0) and fx.get_child_count() == 2, "小僵尸应只借出两段库场景，不叠加旧效果")
+			_expect(burst.visible and str(burst.get("source_id")) == "GreenBloodExplosionRound2", "致死同帧应启动新爆破")
+			_expect(not ground.visible and str(ground.get("source_id")) == "GreenBloodPoolGrowing"
+				and is_equal_approx(ground.global_position.y, -1175.975), "新地面池须错峰并锚定深层地面")
 
 
 func _enemy_death_case_check() -> void:

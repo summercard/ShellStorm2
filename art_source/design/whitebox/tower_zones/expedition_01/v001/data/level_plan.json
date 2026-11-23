@@ -150,7 +150,7 @@
           "damage_per_tick": 24,
           "tick_interval_sec": 0.5
         },
-        "warning_sec": 1.0
+        "warning_sec": 1.75
       }
     },
     "projectile": {

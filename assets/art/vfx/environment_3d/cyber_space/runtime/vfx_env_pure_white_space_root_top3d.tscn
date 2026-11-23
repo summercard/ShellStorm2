@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/vfx/VfxPureWhiteSpace3D.gd" id="1"]
+
+[node name="PureWhiteSpace" type="Node3D"]
+script = ExtResource("1")
+block_size = 0.72
+edge_width = 1.25
+ao_radius = 0.72
+ao_strength = 0.82
+ao_bias = 0.018
+edge_strength = 0.68
+edge_softness = 0.12
+white_color = Color(0.72, 0.74, 0.80, 1)
+shadow_color = Color(0.12, 0.15, 0.22, 1)
+edge_color = Color(0.30, 0.36, 0.47, 1)
+edge_highlight_color = Color(0.68, 0.73, 0.82, 1)
+metadata/asset_id = "VFX-ENV-PURE-WHITE-SPACE-3D"
+metadata/asset_version = "v001"
+metadata/display_name_zh = "纯白空间"

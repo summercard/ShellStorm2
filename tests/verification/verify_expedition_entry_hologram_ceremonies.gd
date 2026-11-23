@@ -171,6 +171,7 @@ func _check_mode(index: int) -> void:
 	_expect(not NarrativeDirector.is_playing() and player.input_locked and NarrativeDirector.is_player_input_locked() and host.held, "预备态必须持锁而非假active")
 	_expect(probe.material_overlay == null and probe.cast_shadow == 0, "预备没有清overlay/影子")
 	_expect(hidden_mesh.material_override == hidden_original and outside.material_override == outside_original and player.avatar.lock_ring.material_override == state_material, "错误覆盖隐藏祖先、准星或状态环")
+	_expect(not player.avatar.lock_ring.is_visible_in_tree(), "黑幕预备后不应显示脚下锁定圈")
 	var shader_material := probe.material_override as ShaderMaterial
 	if shader_material == null:
 		_expect(false, "真实角色未应用全息材质 " + str(probe.get_path()))
@@ -197,9 +198,18 @@ func _check_mode(index: int) -> void:
 	var solidify := float(script.presentation["solidify_seconds"])
 	await _advance(rebuild * 0.5)
 	var hologram := probe.material_override as ShaderMaterial
-	_expect(hologram != null and is_equal_approx(float(hologram.get_shader_parameter("reveal_progress")), 0.5), "半成形未到统一扫描中点")
+	_expect(hologram != null, "半成形没有全息材质")
+	if hologram != null:
+		var scan_y := float(hologram.get_shader_parameter("scan_y"))
+		var world_min := float(hologram.get_shader_parameter("world_min"))
+		var world_max := float(hologram.get_shader_parameter("world_max"))
+		_expect(is_equal_approx(scan_y, (world_min + world_max) * 0.5), "半成形未到统一扫描中点")
+		if rendering:
+			_check_hologram_vfx(index, player, hologram)
 	await _capture("%s_half" % index)
 	await _advance(rebuild * 0.5 + solidify + 0.05)
+	var asset_id := VfxPool3D.FX01_HOLOGRAM_ENTRY_SCAN if index == 0 else VfxPool3D.FX01_HOLOGRAM_ENTRY_MATERIALIZE
+	_expect(VfxPool.active_count(asset_id) == 0, "凝实后入场特效未退池")
 	_expect(probe.material_overlay == overlay and probe.material_override == originals[0]["override"], "实体化结束前未还真实材质")
 	await _capture("%s_solid_close" % index)
 	await _advance(script.duration - rebuild - solidify - 0.05 + 0.03)
@@ -251,6 +261,63 @@ func _check_mode(index: int) -> void:
 	print("CEREMONY_MODE_OK mode=%s meshes=%d duration=%.2f" % [id, meshes.size(), script.duration])
 
 
+func _check_hologram_vfx(index: int, player: Player3D, hologram: ShaderMaterial) -> void:
+	var asset_id := VfxPool3D.FX01_HOLOGRAM_ENTRY_SCAN if index == 0 else VfxPool3D.FX01_HOLOGRAM_ENTRY_MATERIALIZE
+	var effect: VfxHologramEntry3D
+	for child in VfxPool.get_children():
+		var candidate := child as VfxHologramEntry3D
+		if candidate != null and candidate.visible and candidate.get_meta("asset_id", "") == asset_id:
+			effect = candidate
+			break
+	_expect(effect != null and VfxPool.active_count(asset_id) == 1, "叙事半成形时实际入场特效不在池中活跃")
+	if effect == null:
+		return
+	_expect(not effect.is_processing(), "入场特效不能另走节点时钟")
+	_expect(not effect.has_node("EntryRingLow") and effect.has_node("EntryRingHigh"), "只应保留头顶的入场光环")
+	_expect(not player.avatar.lock_ring.is_visible_in_tree(), "入场近景不能显示脚下锁定圈")
+	var state := effect.get_presentation_snapshot()
+	_expect(not state["has_light"] and not state["has_collision"], "入场 VFX 不允许加灯或碰撞")
+	if index == 0:
+		var bar := effect.get_node_or_null("EntryScanBar") as MeshInstance3D
+		_expect(bar != null and bar.visible, "半成形时未显示扫描线")
+		if bar == null:
+			return
+		# _advance yields once after its last director tick; resample the live pose
+		# before measuring the displacement, so idle animation is not part of the delta.
+		NarrativeDirector.call("_process", 0.0)
+		var origin := bar.global_position
+		_expect(is_equal_approx(origin.y, float(hologram.get_shader_parameter("scan_y"))), "扫描线没有对齐模型的全息边界")
+		var visual := player.avatar.visual_root
+		var saved := visual.global_position
+		var displacement := Vector3(0.37, 0.23, -0.21)
+		visual.global_position += displacement
+		NarrativeDirector.call("_process", 0.0)
+		_expect(bar.global_position.is_equal_approx(origin + displacement), "角色模型相对玩家根节点移动时扫描线掉队")
+		_expect(is_equal_approx(bar.global_position.y, float(hologram.get_shader_parameter("scan_y"))), "角色位移后扫描高度不同步")
+		visual.global_position = saved
+		NarrativeDirector.call("_process", 0.0)
+		var width := bar.global_basis.x.length()
+		var saved_scale := visual.scale
+		visual.scale *= 1.25
+		NarrativeDirector.call("_process", 0.0)
+		_expect(bar.global_basis.x.length() > width * 1.10, "模型放大后扫描线宽度仍写死")
+		visual.scale = saved_scale
+		NarrativeDirector.call("_process", 0.0)
+	else:
+		var brightness := {}
+		for i in 12:
+			var shard := effect.get_node_or_null("EntryShard%d" % i) as MeshInstance3D
+			_expect(shard != null and shard.visible, "半成形时缺少内收方块 %d" % i)
+			if shard == null:
+				continue
+			_expect((shard.mesh as BoxMesh) != null and (shard.mesh as BoxMesh).size == Vector3.ONE and shard.scale.is_equal_approx(Vector3.ONE * shard.scale.x), "内收碎片必须是立方体，不是长条")
+			var material := shard.material_override as StandardMaterial3D
+			if material != null:
+				brightness[material.emission_energy_multiplier] = true
+		_expect(brightness.size() == 3, "内收方块必须有三档亮度")
+	print("HOLOGRAM_GEOMETRY_OK mode=", index)
+
+
 func _emit(host: CeremonyHost, index: int) -> void:
 	if index == 0:
 		host.expedition_entry_ceremony_scan_ready.emit("start")
@@ -261,6 +328,7 @@ func _emit(host: CeremonyHost, index: int) -> void:
 func _check_restored(host: CeremonyHost, originals: Array[Dictionary], camera: Transform3D, fov: float, attributes: CameraAttributes, label: String) -> void:
 	_expect(not NarrativeDirector.is_playing() and not NarrativeDirector.is_player_input_locked() and not NarrativeDirector.is_camera_override_active(), label + " 导演未归还")
 	_expect(not host.held and not host.player.input_locked, label + " 实际输入未归还")
+	_expect((host.player.avatar.lock_ring.get_parent() as Node3D).visible, label + " 状态特效节点未归还")
 	_expect(host.player.camera.global_transform.is_equal_approx(camera), label + " 相机不精确")
 	_expect(host.player.camera.fov == fov and host.player.camera.attributes == attributes, label + " 相机光学状态变更")
 	for entry in originals:
@@ -401,6 +469,7 @@ func _check_loading_e2e(seed: int, via_base_menu := false) -> void:
 	var opening := false
 	var active := false
 	var solid := false
+	var captured_half := false
 	var last_status := ""
 	while departed and Time.get_ticks_msec() - started < 420000:
 		await tree.process_frame
@@ -485,6 +554,9 @@ func _check_loading_e2e(seed: int, via_base_menu := false) -> void:
 			_expect(opening and not (IrisTransition.get("_mask") as CanvasItem).visible and is_equal_approx(float(IrisTransition.get("_radius")), IrisTransition.HOLE_MAX), "presentation.start早于黑幕完全打开")
 			_expect(NarrativeDirector.active_id() == IDS[posmod(seed, 2)], "正式seed选片语义不符")
 			_loading_event(result, "presentation.start_after_open")
+		if presentation != null and active and not captured_half and float(presentation.get_snapshot().get("progress", 0.0)) >= 0.5:
+			captured_half = true
+			await _capture("%s_%d_half" % [tag, seed])
 		if presentation != null and active and not solid and bool(presentation.get_snapshot().get("solid", false)):
 			solid = true
 			_expect(player.input_locked and NarrativeDirector.is_camera_override_active(), "近景完成时已提前归还")
@@ -492,7 +564,7 @@ func _check_loading_e2e(seed: int, via_base_menu := false) -> void:
 			await _capture("%s_%d_solid_close" % [tag, seed])
 		if not finished.is_empty():
 			_expect(str(finished.get("reason", "")) == "flow.end", "仪式非正常结束: " + str(finished.get("reason")))
-			_expect(active and solid, "未观察到真实start及近景成形")
+			_expect(active and captured_half and solid, "未观察到真实start、半成形及近景成形")
 			_expect(not player.input_locked and not NarrativeDirector.is_player_input_locked() and not NarrativeDirector.is_camera_override_active(), "结束输入/相机所有权未归还")
 			if not original.is_empty():
 				result["camera_diagnostic"] = {"before_global": str(original["camera"]), "after_global": str(finished["camera"]), "before_local": str(original["local"]), "after_local": str(finished["local"]), "before_player": str(original["player_position"]), "after_player": str(finished["player_position"])}

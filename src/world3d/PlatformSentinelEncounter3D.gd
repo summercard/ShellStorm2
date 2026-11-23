@@ -89,6 +89,7 @@ var _shot_index := 0
 var _returning_visit := false
 var _takeover_requested := false
 var _rear_started := false
+var _waiting_rear_screens := false
 var _stairs_broken := false
 var _sent_racks := false
 var _proxy: Node3D
@@ -98,13 +99,20 @@ var _arm_motion: Tween
 var _proxy_motion: Tween
 var _voice: Node
 var _deployment_started_at := -1.0
+var _arm_tile_drop_indices: Array[int] = []
 
 func _ready() -> void:
 	set_physics_process(false)
 	grapples.assign($Arms.get_children())
 	sentries.assign($Sentries.get_children())
 	for i in range(grapples.size()):
+		assert(deck.is_outer_arm_tile(grapples[i].mount_tile), "Grapple must map to its front outer tile")
+		for previous in range(i):
+			assert(grapples[previous].mount_tile != grapples[i].mount_tile, "Grapple tiles must be unique")
 		var target := grapples[i].hit_body
+		var outward: Vector3 = [Vector3.BACK, Vector3.RIGHT, Vector3.FORWARD, Vector3.LEFT][i]
+		target.aim_height = global_position.y + GUN_FLIGHT_HEIGHT
+		target.configure_deck_hit(self, outward, DECK_HALF_WIDTH)
 		target.damaged.connect(_on_target_damaged.bind(target))
 		target.destroyed.connect(_on_arm_destroyed.bind(i))
 		_arm_targets.append(target)
@@ -159,6 +167,10 @@ func run_cue(cue: String, params: Dictionary) -> bool:
 				"source_node": source, "source_position": point, "spatial_mode": "world_3d",
 				"max_distance": 48.0, "unit_size": 14.0, "volume_db": -1.5,
 			})
+		"retract_screens":
+			deck.set_rear_screen_retraction(true, true)
+		"wait_rear_screens":
+			_waiting_rear_screens = true
 		"rear":
 			_start_rear()
 		"reach":
@@ -189,11 +201,19 @@ func run_cue(cue: String, params: Dictionary) -> bool:
 			return false
 	return true
 
+func can_advance_takeover() -> bool:
+	if stage != Stage.TAKEOVER or not _waiting_rear_screens:
+		return true
+	if not deck.rear_screens_are_retracted():
+		return false
+	_waiting_rear_screens = false
+	return true
+
+
 func _start_rear() -> void:
 	if _rear_started:
 		return
 	_rear_started = true
-	deck.set_rear_screen_retraction(true, true)
 	grapples[REAR].play("activate_grapple", 1.10)
 	_fx(VfxPool3D.FX01_METAL_SPARK_HIT, grapples[REAR].global_position + Vector3.UP * 5.0, 2.5)
 
@@ -272,6 +292,7 @@ func _reset_takeover() -> void:
 		_arm_motion.kill()
 	_arm_motion = null
 	_rear_started = false
+	_waiting_rear_screens = false
 	_takeover_requested = false
 	_screen_wake_at = -1.0
 	_deployment_started_at = -1.0
@@ -395,10 +416,12 @@ func _physics_process(delta: float) -> void:
 			if _arms_alive() > 2:
 				deck.sample_combat_feed(_clock)
 			_tick_combat(delta, here)
+			_tick_arm_tile_drops(delta)
 			for target in _arm_targets:
 				if target.current_hp > 0:
 					target.sync_pose()
 		Stage.COLLAPSE:
+			_tick_arm_tile_drops(delta)
 			_tick_collapse()
 		Stage.CORE:
 			_tick_core(delta)
@@ -836,7 +859,17 @@ func _finish_gun(standby: bool) -> void:
 	_barrage_lanes.clear()
 
 
+func _tick_arm_tile_drops(delta: float) -> void:
+	for index in _arm_tile_drop_indices:
+		var point := deck.drop_arm_tile(grapples[index].mount_tile, delta)
+		if point.is_finite():
+			_fx(VfxPool3D.FX01_METAL_SPARK_HIT, point, 1.45)
+			_fx(VfxPool3D.FX01_EXPLOSION, point, 1.0)
+			checkpoint.emit("platform_arm_tile_released")
+
+
 func _on_arm_destroyed(index: int) -> void:
+	assert(index >= 0 and index < grapples.size(), "Platform Sentinel arm index must map to a grapple")
 	if _active_arm == index:
 		_finish_slam(false)
 	grapples[index].play("death_grapple")
@@ -849,6 +882,9 @@ func _on_arm_destroyed(index: int) -> void:
 		_begin_collapse()
 	else:
 		_next_attack_at = maxf(_next_attack_at, _clock + 0.85)
+	if not _arm_tile_drop_indices.has(index):
+		_arm_tile_drop_indices.append(index)
+		deck.begin_arm_tile_drop(grapples[index].mount_tile)
 	checkpoint.emit("platform_arm_disabled")
 
 
@@ -1016,7 +1052,12 @@ func export_state() -> Dictionary:
 	var hp: Array[int] = []
 	for target in _arm_targets:
 		hp.append(target.current_hp)
-	var result := {"schema": 2, "stage": int(stage), "arm_hp": hp, "clock": _clock}
+	var tile_elapsed: Array[float] = []
+	for index in _arm_tile_drop_indices:
+		tile_elapsed.append(deck.get_arm_tile_drop_elapsed(grapples[index].mount_tile))
+	var result := {"schema": 2, "stage": int(stage), "arm_hp": hp, "clock": _clock,
+		"arm_tile_drop_indices": _arm_tile_drop_indices.duplicate(),
+		"arm_tile_drop_elapsed": tile_elapsed}
 	if stage == Stage.COLLAPSE:
 		result["outer_start"] = _outer_start
 		result["outer_started"] = _sent_racks
@@ -1026,6 +1067,8 @@ func export_state() -> Dictionary:
 
 func restore_state(state: Dictionary, already_cleared: bool) -> void:
 	deck.clear_combat_feed()
+	deck.clear_arm_tile_drops()
+	_arm_tile_drop_indices.clear()
 	_finish_standby()
 	_finish_slam(false)
 	_finish_gun(false)
@@ -1047,6 +1090,17 @@ func restore_state(state: Dictionary, already_cleared: bool) -> void:
 	for i in range(mini(hp.size(), _arm_targets.size())):
 		_arm_targets[i].current_hp = clampi(int(hp[i]), 0, ARM_HP)
 	var saved_stage := clampi(int(state.get("stage", Stage.DORMANT)), Stage.DORMANT, Stage.WON)
+	var saved_tiles: Array = state.get("arm_tile_drop_indices", [])
+	var saved_elapsed: Array = state.get("arm_tile_drop_elapsed", [])
+	for slot in range(saved_tiles.size()):
+		var index := int(saved_tiles[slot])
+		if index < 0 or index >= grapples.size() or _arm_targets[index].current_hp > 0 or _arm_tile_drop_indices.has(index):
+			continue
+		_arm_tile_drop_indices.append(index)
+		var elapsed := float(saved_elapsed[slot]) if slot < saved_elapsed.size() else 0.0
+		if saved_stage >= Stage.CORE:
+			elapsed = PlatformSentinelDeck3D.ARM_TILE_FINISH
+		deck.restore_arm_tile_state(grapples[index].mount_tile, elapsed)
 
 	deck.set_rear_screen_retraction(saved_stage >= Stage.DEPLOY)
 	deck.sample_launch_lift(FULL_DEPLOY if saved_stage >= Stage.COMBAT else 0.0)
@@ -1107,6 +1161,9 @@ func _prepare_attack_poses() -> void:
 
 
 func _on_target_damaged(_current: int, target: PlatformSentinelWeakPoint3D) -> void:
+	var index := _arm_targets.find(target)
+	if index >= 0:
+		grapples[index].flash_hit()
 	_emit_health()
 	_fx(VfxPool3D.FX01_METAL_SPARK_HIT, target.last_hit_position, 0.85)
 

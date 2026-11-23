@@ -230,6 +230,7 @@ const CAMERA_FOV_DEG := 65.0
 # 2026-11-17：仅远征01固化旧默认按 `'` 五次（+1.00m）；2026-11-18 业主追加8次，
 # 累计13次 = 2.60m。公共机位与临时调试量不变。
 const CAMERA_EXPEDITION_01_DISTANCE_OFFSET_M := 2.6
+const CAMERA_EXPEDITION_01_BOSS_DISTANCE_OFFSET_M := 1.0 # 5 x 0.20 m apostrophe presses
 const CAMERA_EXPEDITION_PROFILE_SMOOTH_RATE := 4.0
 const CAMERA_LOWER_WALL_PROBE_HEIGHT_M := 1.09
 # 探针从角色前侧开始并向镜头后方穿过角色。若从角色身后0.42m起射，
@@ -790,6 +791,11 @@ func play_platform_takeover_cue(cue: String, params: Dictionary) -> bool:
 	return sentinel != null and sentinel.run_cue(cue, params)
 
 
+func can_advance_platform_takeover() -> bool:
+	var sentinel := _platform_sentinel(get_main_story_room("boss") as DungeonRoom3D)
+	return sentinel == null or sentinel.can_advance_takeover()
+
+
 func get_platform_takeover_anchor() -> Variant:
 	var sentinel := _platform_sentinel(get_main_story_room("boss") as DungeonRoom3D)
 	if sentinel == null:
@@ -810,6 +816,7 @@ func _on_platform_health_changed(current: int, maximum: int, phase: int, room: D
 	_boss_bar.hide()
 	_boss_delayed_bar.hide()
 	var stack := _boss_bar.get_parent() as Control
+	stack.custom_minimum_size.y = _hud_int(18)
 	var parts := stack.get_node_or_null("PlatformArmSegments") as HBoxContainer
 	if parts == null:
 		parts = HBoxContainer.new()
@@ -820,12 +827,13 @@ func _on_platform_health_changed(current: int, maximum: int, phase: int, room: D
 		parts.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		for side in PlatformSentinelEncounter3D.SIDE_LABELS:
 			var bar := ProgressBar.new()
+			bar.custom_minimum_size.y = _hud_int(18)
 			bar.max_value = PlatformSentinelEncounter3D.ARM_HP
 			bar.show_percentage = false
 			bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			bar.add_theme_stylebox_override("fill", _boss_bar.get_theme_stylebox("fill"))
-			bar.add_theme_stylebox_override("background", _boss_bar.get_theme_stylebox("background"))
+			bar.add_theme_stylebox_override("background", _boss_delayed_bar.get_theme_stylebox("background"))
 			parts.add_child(bar)
 			var label := Label.new()
 			label.text = side
@@ -2512,7 +2520,10 @@ func _camera_default_distance_offset_m() -> float:
 ## 固定拉远先换算为本关基础Y/Z，再交给原避障；不能在避障之后再次把镜头推回墙/楼板。
 func _camera_default_local_position() -> Vector3:
 	var original := Vector3(0.0, CAMERA_HEIGHT_M, CAMERA_DEFAULT_TRAILING_M)
+	var sentinel := _platform_sentinel(_room_by_id.get(_current_room_id) as DungeonRoom3D)
 	var offset_m := _camera_default_distance_offset_m()
+	if sentinel != null and sentinel.stage == PlatformSentinelEncounter3D.Stage.COMBAT:
+		offset_m += CAMERA_EXPEDITION_01_BOSS_DISTANCE_OFFSET_M
 	if is_zero_approx(offset_m):
 		return original
 	var focal := Vector3(0.0, CAMERA_LOOK_HEIGHT_M, -CAMERA_LOOK_AHEAD_M)

@@ -6914,7 +6914,7 @@
   "VFX-BLAST-ZONE-3D": {
    "c": "特效",
    "d": "vfx",
-   "v": "aa5c7234ac5a4e7f585aab7cd3c8b79f79ff47707b8dbd34ed84ded755dcccb2"
+   "v": "e4a030be205bd8b3225a8ba20c4e3b143396ee728cfe995fd38c3b24c60035f5"
   },
   "VFX-BOARD-DEBRIS-3D": {
    "c": "特效",
@@ -6994,7 +6994,7 @@
   "VFX-DEATH-BLAST-3D": {
    "c": "特效",
    "d": "vfx",
-   "v": "9a91cd9e9c53b250a0051cd5b3caf62d39fd22f77cc59fd6e0b0129df094e8d8"
+   "v": "462721f60571f0c281e37562f99aa8f5dd49f182f20ca8f980b5fe1b1a4cd522"
   },
   "VFX-ELITE-RENT-TRANSFER-TRAIL-3D": {
    "c": "特效",
@@ -7324,7 +7324,7 @@
   "VFX-ZOMBIE-GOO-DEATH-3D": {
    "c": "特效",
    "d": "vfx",
-   "v": "f2588ecdf1767d131cd8df2bca799822115cc239eadde4fba861139cef5c65c9"
+   "v": "d7a2e5510cfdc7b6a81ea68dc1d3f0272006f22e089665e1f1c11e646c088252"
   },
   "WPN-ATT-ATTACH-BIG-MAG": {
    "c": "武器",
@@ -7510,12 +7510,7 @@
  "captured_at": "2026-11-17",
  "category_counts": {
   "UI": 26,
-  "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_flower_arrangement/env_manor_flower_arrangement_root_top3d.tscn": 1,
-  "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_reception_desk/env_manor_reception_desk_root_top3d.tscn": 1,
-  "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_bedroom/env_manor_rug_bedroom_root_top3d.tscn": 1,
-  "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_lounge/env_manor_rug_lounge_root_top3d.tscn": 1,
-  "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_runner/env_manor_rug_runner_root_top3d.tscn": 1,
-  "场景": 859,
+  "场景": 864,
   "场景道具": 52,
   "基地资产包": 114,
   "子弹特效": 11,
@@ -7523,34 +7518,34 @@
   "武器": 36,
   "特效": 73,
   "角色": 26,
-  "道具": 45,
+  "道具": 43,
   "音乐": 9,
   "音效": 185
  },
  "column_digests": {
   "1": "607f758ef9112de55c75c5de1be40ec33a429a6924e782a889ed53ad51d3640f",
-  "10": "0656a7a6eac57eb289daa0093127e00a1c4e639ed750a1e357661a3768eda718",
-  "11": "aadb7883f5d1c24ab2b9bc21c295c5cffd1c185f54e6db30e9ad08ffc4273a85",
-  "12": "a3a37f31b2a79377d969951e8571cbc153eb9834d3b2b3e5164b9483e4a92301",
-  "13": "d3e00ee41ded356ecd5391e76f539d0278cf0cc8d79a92bff21ef96a3193579d",
-  "14": "537ad7124e5e4aac97a15fc22f865ac2b57c5b4ce6d65cc8e217e2b78a086001",
-  "15": "cde9c97b3c347e43e7d0f6f703b7da7dd7af129a9ea8b84ca9aecb4bb55a8a1a",
-  "16": "25d46df0b1c0b250f76a901140add7102aefa4e4d7a7f64900a14c0fea29951a",
-  "17": "15e2fa9bc8b61919a214487e9b5f302a887930611f1115f9594e3af67b8bda57",
-  "2": "c96cdae99420ac71cb7890d414e008e045257dade23181c47f32837be0c6a171",
-  "20": "aba135fe8b0e26ad3c7e1f9ba9fb917c31a8b64f6fd5d7552bad7daae10051a0",
-  "21": "d55f98e745c4f93b963d3bf8820921d9ce7fe1953e090d8813ff6289c438cec3",
-  "22": "c9676779df187fd0e51daa4a5c8dbcc0712130957a746f40ca9adee43695cafb",
-  "23": "e52425b5fced6105d91652810e924e14e6f2fa881cf908380275595410d625c1",
-  "24": "dc37fd69ac43eb1957f967bd8681249b65e1e7d6542b401841c264dd460c27f2",
-  "25": "75063e791e43691daf3f13692ab8b0f593c90293d5c8f1c5a3dce237aad15396",
+  "2": "174819568f929193eb54470df78d44e0881e9cf4234611ab4a2911648b250a07",
   "3": "48d70b8509e693124f93fe0ac9205ff9056645199ece1c8dc08d8b1f6848ab70",
   "4": "ab15dfb2e994cdfc82c034ef52fa2aa7843d69d4e34af266e255fedb32a11cd5",
   "5": "0323f5a398f5a9f978c08dafd9d4566291a1444d846b3d76a265846337be6e99",
   "6": "5ba272b18443d89585aa9ade4db4dd9acef5a346e92eafb3c3ffe7e35c5ac114",
   "7": "74a1cdf7c701389c4849e5f5251f4afbd48336b72d398742b8e85335b3ecc713",
   "8": "2510a6e078a9d46b7eb94170fa26502f04ade16aaacfcce3ecd14d8f8b90bd27",
-  "9": "c4c09516b2d644b63581442d199645626f406bf33a39c39beb21c3fc33afc1f6"
+  "9": "c4c09516b2d644b63581442d199645626f406bf33a39c39beb21c3fc33afc1f6",
+  "10": "0656a7a6eac57eb289daa0093127e00a1c4e639ed750a1e357661a3768eda718",
+  "11": "25b1e9f045f6d46ea2e4c415efcdd189165012b5554390700df308d615ead07f",
+  "12": "a3a37f31b2a79377d969951e8571cbc153eb9834d3b2b3e5164b9483e4a92301",
+  "13": "9e6ea140c9ffb48acb8357570acb3697478381af23279734ed351f117dba9756",
+  "14": "f7eedd76daa5f7f83a4c5851219a4cecfb0cf9f9f282d59d873ae65f605969c1",
+  "15": "cde9c97b3c347e43e7d0f6f703b7da7dd7af129a9ea8b84ca9aecb4bb55a8a1a",
+  "16": "5af3aff4aed340df72a98fd022f59c3a69074cb4ef1945258a3b6241cfd0fea0",
+  "17": "3cdd6ebb63c2c81c31220d36af3ae648a28b8e43a7ffcd821e4a671e78ba4e38",
+  "20": "cad887eeac91bdc8d70c14ac4439c4a4a7a139497cc67e837f5d94096924e083",
+  "21": "d55f98e745c4f93b963d3bf8820921d9ce7fe1953e090d8813ff6289c438cec3",
+  "22": "abcfc469042f5fc2fa3dbc25d064997f8876f4e13327615b46b725748f24cc2f",
+  "23": "b18fbf6dfc90e6831bdf11bad2acfebe8e39baa6c3dcee29d8222ec6e7ce2512",
+  "24": "dc37fd69ac43eb1957f967bd8681249b65e1e7d6542b401841c264dd460c27f2",
+  "25": "918874ef62d25c25feb0d83fa52b5cd48de727731d88397e0b63af397dd8b627"
  },
  "columns": [
   "AssetID",
@@ -7727,7 +7722,7 @@
   "3D-敌人": "88fedfcd0603cd92aca2574df6e88ca7a7243ac03df105e42dd678a939dd1814",
   "3D-武器": "507f387042335d14fc4782386a2c083e509e0f530ba4997293cebf0b925c19f2",
   "3D-物品": "b9d3f610d2a77d8d7b4d55872eb3d0e2d57caa9840c144a672c76e6fe599ba4b",
-  "3D-特效": "2d40491cbd2e28ab206df2e0c6eb9917486730be951cc28d80297f230dc5513f",
+  "3D-特效": "93371ef01eeadc5fdc2a18b0327f460dbb05d53f820b3f2b85ab8528fd0629e0",
   "3D-角色": "3f2ee8eb49eab5f4986a636dce574020c47599ec49bd6e5525a914f334cb9411",
   "3D-设施": "878b6c589b6249493dec3c8e36a95c0d3b3ffa364f8831270c714c0d3625839b",
   "3D-道具": "25f7d8ed65aa88d7f01ff468c43c35601d5e24d9bb0eab1e2c45d3e183866d40",
