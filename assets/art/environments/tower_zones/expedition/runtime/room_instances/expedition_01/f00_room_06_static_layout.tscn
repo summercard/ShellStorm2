@@ -31,7 +31,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn" id="37_3logn"]
 [ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d.tscn" id="38_7me4y"]
 [ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_room_light_switch_root_top3d.tscn" id="40_ft4y7"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/secret_door/secret_door_root_top3d.tscn" id="42_3y156"]
+[ext_resource type="PackedScene" uid="uid://240efj44ame1" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/secret_door/secret_door_root_top3d.tscn" id="42_3y156"]
 
 [node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=192594339]
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-ROOM-TYPE-LAYOUT"
@@ -72,7 +72,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND" parent="." unique_id=893736971 instance=ExtResource("9_pgw6g")]
-transform = Transform3D(0.43049532, 0, 0.9025928, 0, 1, 0, -0.9025928, 0, 0.43049532, 7.4000096, 0, -2.215786)
+transform = Transform3D(0.43049532, 0, 0.9025928, 0, 1, 0, -0.9025928, 0, 0.43049532, 7.4000096, 0, 1.3652339)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-REPAIR_ISLAND"
 metadata/authored_slot_role = "room_type_component"
 
@@ -334,7 +334,7 @@ metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
 [node name="ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE" parent="." unique_id=2074449658 instance=ExtResource("13_ft4y7")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.8000002, 0, -16.7)
+transform = Transform3D(-0.06487647, 0, -0.9978933, 0, 1, 0, 0.9978933, 0, -0.06487647, 9.06915, 0, -3.4018025)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK"
 metadata/authored_slot_role = "room_type_component"
 
@@ -349,72 +349,72 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_B"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-ISLAND_CART_EAST" parent="." unique_id=1369449619 instance=ExtResource("16_aixpn")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.81249994, -0.0085, -4.15)
+transform = Transform3D(0.99527836, 0, 0.097062126, 0, 1, 0, -0.097062126, 0, 0.99527836, 8.532478, -0.0085, -5.4375615)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-ISLAND_CART"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-ISLAND_CART_WEST" parent="." unique_id=1536732710 instance=ExtResource("16_aixpn")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.81250006, -0.0085, 4.15)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.1645565, -0.0085, 4.308496)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-ISLAND_CART"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-RAISED_SERVICE_GANTRY" parent="." unique_id=1183484592 instance=ExtResource("17_djdnr")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 3.59, 0.58, -9.6)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6.122595, 0.58, -9.6)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_A"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-RAISED_SERVICE_PLATFORM" parent="." unique_id=1900026598 instance=ExtResource("18_ihpws")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.6, 0, -9.6)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.1550183, 0, -9.6)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_B"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_00" parent="." unique_id=798474322 instance=ExtResource("19_t7764")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.4456, 0, 16.5)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.441596, 0, 16.5)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_A"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_01" parent="." unique_id=1591283357 instance=ExtResource("20_gpaui")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.4456, 0, 14.3)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.441596, 0, 14.3)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_B"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_02" parent="." unique_id=1383583820 instance=ExtResource("20_gpaui")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.4456, 0, 12.1)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.441596, 0, 12.1)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_B"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_03" parent="." unique_id=613269371 instance=ExtResource("20_gpaui")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.4456, 0, 9.9)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.441596, 0, 9.9)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_B"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_04" parent="." unique_id=649295775 instance=ExtResource("21_p1k2n")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.4456, 0, 7.7)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.441596, 0, 7.7)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_C"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_05" parent="." unique_id=1387832054 instance=ExtResource("22_ciugn")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.4456, 0, 5.5)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.441596, 0, 5.5)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_D"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_BUS" parent="." unique_id=658599092 instance=ExtResource("23_6a7bx")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.6, 0.02, 11)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.595997, 0.02, 11)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVER_BUS"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_00" parent="." unique_id=678466915 instance=ExtResource("24_j4xj8")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -8.7925, -0.0085, 16.5)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.057522, -0.0085, 16.5)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVICE_CART"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_01" parent="." unique_id=983714160 instance=ExtResource("24_j4xj8")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -8.7925, -0.0085, 11)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.057522, -0.0085, 11)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVICE_CART"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_02" parent="." unique_id=4365418 instance=ExtResource("24_j4xj8")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -8.7925, -0.0085, 5.5)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.057522, -0.0085, 5.5)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVICE_CART"
 metadata/authored_slot_role = "room_type_component"
 

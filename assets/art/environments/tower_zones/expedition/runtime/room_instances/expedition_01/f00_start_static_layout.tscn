@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/floor_tile_flush/floor_tile_flush_c01_root_top3d.tscn" id="4_yowur"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/floor_tile_flush/floor_tile_flush_c02_root_top3d.tscn" id="5_5o5se"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/entry_safe_room/floor_base/floor_base_root_top3d.tscn" id="6_jom57"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/entry_safe_room/overhead_services/overhead_services_root_top3d.tscn" id="7_upa2l"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/entry_safe_room/debris_papers/debris_papers_root_top3d.tscn" id="8_dlfw3"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/entry_safe_room/north_server_00/north_server_00_root_top3d.tscn" id="9_4mdcv"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/entry_safe_room/north_server_01/north_server_01_root_top3d.tscn" id="10_ayx7h"]
@@ -171,10 +170,6 @@ metadata/walk_plane_snap_y = -0.056
 [node name="SafeRoomPackage_floor_base" parent="." unique_id=9823704 instance=ExtResource("6_jom57")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
 metadata/room_package_id = "floor_base"
-
-[node name="SafeRoomPackage_overhead_services" parent="." unique_id=841765964 instance=ExtResource("7_upa2l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2075, 3.5996, -0.865)
-metadata/room_package_id = "overhead_services"
 
 [node name="SafeRoomPackage_debris_papers" parent="." unique_id=169968297 instance=ExtResource("8_dlfw3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0288, 0.012999994, 0.0547)

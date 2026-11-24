@@ -67,8 +67,8 @@ func _verify_item_colors(failures: Array[String]) -> void:
 		{"id": "backpack_probe", "type": "equipment", "subtype": "backpack"},
 		{"id": "heal_probe", "type": "consumable", "use_action": "heal"},
 		{"id": "ammo_probe", "type": "consumable", "use_action": "refill_ammo"},
-		{"id": "item_room_key", "type": "item", "subtype": "key"},
-		{"id": "blueprint_probe", "type": "blueprint"},
+		{"id": "item_beacon", "type": "consumable"},
+		{"id": "mod_bullet_standard", "type": "module", "subtype": "bullet"},
 	]
 	var colors: Array[Color] = []
 	for sample in samples:

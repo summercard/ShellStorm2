@@ -163,7 +163,9 @@ static func _resolve_guaranteed_items(
 	chest_id: String,
 	floor_level: int
 ) -> Dictionary:
-	var items := chest_config.get("guaranteed_items", []) as Array
+	# Older unopened boxes may still carry a frozen guarantee for a retired item.
+	# Drop only that descriptor so it cannot invalidate the rest of the chest.
+	var items := ItemRegistry.without_retired_items(chest_config.get("guaranteed_items", []))
 	if items.is_empty():
 		return {"ok": true, "grants": []}
 	var entries: Array = []
@@ -211,6 +213,8 @@ static func resolve_additional_weapon(
 	if weapon.is_empty():
 		return {"ok": true, "grants": []}
 	var item_id := str(weapon.get("weapon_id", ""))
+	if ItemRegistry.is_retired_item_id(item_id):
+		return {"ok": true, "grants": []}
 	if item_id.is_empty():
 		return {"ok": false, "grants": [], "errors": [_error("INVALID_ADDITIONAL_WEAPON", "additional_weapon.weapon_id 不能为空")]}
 	var entry := {

@@ -42,12 +42,10 @@ const GROUND_SCENES := {
 	"special_molotov": preload("res://assets/art/items_weapons/props/special_molotov/runtime/itm_special_molotov_ground_root_top3d.tscn"),
 	"special_gasoline": preload("res://assets/art/items_weapons/props/special_gasoline/runtime/itm_special_gasoline_ground_root_top3d.tscn"),
 	"item_beacon": preload("res://assets/art/items_weapons/props/beacon/runtime/itm_beacon_ground_root_top3d.tscn"),
-	"item_room_key": preload("res://assets/art/items_weapons/props/room_key/runtime/itm_room_key_ground_root_top3d.tscn"),
 	"item_cell_pack": preload("res://assets/art/items_weapons/props/cell_pack/runtime/itm_cell_pack_ground_root_top3d.tscn"),
 	"item_flashlight_basic": preload("res://assets/art/items_weapons/props/flashlight_basic/runtime/itm_flashlight_basic_ground_root_top3d.tscn"),
 	"item_flashlight_advanced": preload("res://assets/art/items_weapons/props/flashlight_advanced/runtime/itm_flashlight_advanced_ground_root_top3d.tscn"),
 	"item_flashlight_efficient": preload("res://assets/art/items_weapons/props/flashlight_efficient/runtime/itm_flashlight_efficient_ground_root_top3d.tscn"),
-	"__blueprint__": preload("res://assets/art/items_weapons/props/blueprint_scroll/runtime/itm_blueprint_scroll_ground_root_top3d.tscn"),
 	"mod_bullet_standard": preload("res://assets/art/items_weapons/weapons/bullet_module_standard/runtime/wpn_bullet_module_standard_ground_root_top3d.tscn"),
 	"mod_bullet_sticky": preload("res://assets/art/items_weapons/weapons/bullet_module_sticky/runtime/wpn_bullet_module_sticky_ground_root_top3d.tscn"),
 	"mod_bullet_bounce": preload("res://assets/art/items_weapons/weapons/bullet_module_bounce/runtime/wpn_bullet_module_bounce_ground_root_top3d.tscn"),
@@ -73,12 +71,10 @@ const PREVIEW_SCENES := {
 	"special_molotov": preload("res://assets/art/items_weapons/props/special_molotov/runtime/itm_special_molotov_preview_root_top3d.tscn"),
 	"special_gasoline": preload("res://assets/art/items_weapons/props/special_gasoline/runtime/itm_special_gasoline_preview_root_top3d.tscn"),
 	"item_beacon": preload("res://assets/art/items_weapons/props/beacon/runtime/itm_beacon_preview_root_top3d.tscn"),
-	"item_room_key": preload("res://assets/art/items_weapons/props/room_key/runtime/itm_room_key_preview_root_top3d.tscn"),
 	"item_cell_pack": preload("res://assets/art/items_weapons/props/cell_pack/runtime/itm_cell_pack_preview_root_top3d.tscn"),
 	"item_flashlight_basic": preload("res://assets/art/items_weapons/props/flashlight_basic/runtime/itm_flashlight_basic_preview_root_top3d.tscn"),
 	"item_flashlight_advanced": preload("res://assets/art/items_weapons/props/flashlight_advanced/runtime/itm_flashlight_advanced_preview_root_top3d.tscn"),
 	"item_flashlight_efficient": preload("res://assets/art/items_weapons/props/flashlight_efficient/runtime/itm_flashlight_efficient_preview_root_top3d.tscn"),
-	"__blueprint__": preload("res://assets/art/items_weapons/props/blueprint_scroll/runtime/itm_blueprint_scroll_preview_root_top3d.tscn"),
 	"mod_bullet_standard": preload("res://assets/art/items_weapons/weapons/bullet_module_standard/runtime/wpn_bullet_module_standard_preview_root_top3d.tscn"),
 	"mod_bullet_sticky": preload("res://assets/art/items_weapons/weapons/bullet_module_sticky/runtime/wpn_bullet_module_sticky_preview_root_top3d.tscn"),
 	"mod_bullet_bounce": preload("res://assets/art/items_weapons/weapons/bullet_module_bounce/runtime/wpn_bullet_module_bounce_preview_root_top3d.tscn"),
@@ -109,10 +105,9 @@ static func create_model(item: Dictionary, _tint := Color(0.38, 0.88, 0.72), mod
 		_build_fate_card_drop(root)
 		root.set_meta("model_kind", "fate_pickup")
 		return root
-	var visual_key := "__blueprint__" if str(item.get("type", "")) == "blueprint" else item_id
 	var variants: Dictionary = GROUND_SCENES if model_role in [MODEL_ROLE_GROUND, MODEL_ROLE_ICON] else PREVIEW_SCENES
-	if variants.has(visual_key):
-		var scene: PackedScene = variants[visual_key]
+	if variants.has(item_id):
+		var scene: PackedScene = variants[item_id]
 		var visual := scene.instantiate() as Node3D
 		# 倾斜放在旋转根内部；外层绕世界Y旋转时，倾角保持不变。
 		var pivot := Node3D.new()
@@ -141,16 +136,12 @@ static func create_model(item: Dictionary, _tint := Color(0.38, 0.88, 0.72), mod
 			_build_bullet(root, item, model_tint)
 		"attachment":
 			_build_attachment(root, model_tint)
-		"key":
-			_build_key(root)
 		"heal":
 			_build_canister(root, Color(0.30, 0.92, 0.52), "heal")
 		"ammo":
 			_build_canister(root, Color(0.30, 0.72, 1.0), "ammo")
 		"beacon":
 			_build_beacon(root)
-		"blueprint":
-			_build_blueprint(root)
 		"currency":
 			_build_currency(root)
 		_:
@@ -171,11 +162,9 @@ static func get_item_color(item: Dictionary) -> Color:
 		"backpack": Color(0.16, 0.78, 0.72),
 		"bullet": Color(0.26, 0.66, 1.0),
 		"attachment": Color(0.70, 0.40, 1.0),
-		"key": Color(1.0, 0.72, 0.16),
 		"heal": Color(0.24, 0.94, 0.50),
 		"ammo": Color(0.20, 0.68, 1.0),
 		"beacon": Color(1.0, 0.34, 0.10),
-		"blueprint": Color(0.20, 0.76, 1.0),
 		"currency": Color(1.0, 0.72, 0.12),
 		"crate": Color(0.80, 0.56, 0.22),
 	}.get(kind, Color(0.34, 0.86, 0.72)) as Color
@@ -198,10 +187,6 @@ static func get_model_kind(item: Dictionary) -> String:
 		return "fate_pickup"
 	if bool(item.get("is_currency", false)) or item_id == "__currency__":
 		return "currency"
-	if item_id == "item_room_key" or subtype == "key":
-		return "key"
-	if item_type == "blueprint":
-		return "blueprint"
 	if item_type == "weapon" or subtype == "gun_body":
 		return "weapon"
 	if item_type == "equipment" and subtype == "backpack":
@@ -216,8 +201,6 @@ static func get_model_kind(item: Dictionary) -> String:
 		return "ammo"
 	if item_id == "item_beacon":
 		return "beacon"
-	if item_type == "blueprint":
-		return "blueprint"
 	return "crate"
 
 
@@ -267,26 +250,6 @@ static func _build_attachment(root: Node3D, tint: Color) -> void:
 	var accent := _material(tint, 0.42, 0.30, 0.32)
 	_add_box(root, "Mount", Vector3.ZERO, Vector3(0.62, 0.24, 0.34), metal)
 	_add_cylinder(root, "Optic", Vector3(0, 0.24, 0), 0.13, 0.64, accent, Vector3(90, 0, 0))
-
-
-static func _build_key(root: Node3D) -> void:
-	var gold := _material(Color(1.0, 0.72, 0.18), 0.72, 0.26, 0.38)
-	var ring_mesh := TorusMesh.new()
-	ring_mesh.inner_radius = 0.19
-	ring_mesh.outer_radius = 0.30
-	ring_mesh.rings = 20
-	ring_mesh.ring_segments = 10
-	ring_mesh.material = gold
-	var ring := MeshInstance3D.new()
-	ring.name = "KeyRing"
-	ring.position = Vector3(0, 0.36, 0)
-	ring.rotation_degrees.x = 90.0
-	ring.mesh = ring_mesh
-	root.add_child(ring)
-	_add_box(root, "KeyStem", Vector3(0, -0.05, 0), Vector3(0.14, 0.64, 0.12), gold)
-	_add_box(root, "KeyToothA", Vector3(0.15, -0.34, 0), Vector3(0.38, 0.13, 0.12), gold)
-	_add_box(root, "KeyToothB", Vector3(0.10, -0.20, 0), Vector3(0.28, 0.12, 0.12), gold)
-	root.rotation_degrees.z = -24.0
 
 
 static func _build_canister(root: Node3D, color: Color, kind: String) -> void:
@@ -346,15 +309,6 @@ static func _create_fate_card_material(color: Color, albedo_texture: Texture2D =
 	if albedo_texture != null:
 		material.set_shader_parameter("albedo_texture", albedo_texture)
 	return material
-
-
-static func _build_blueprint(root: Node3D) -> void:
-	var paper := _material(Color(0.18, 0.54, 0.78), 0.08, 0.72, 0.28)
-	var ink := _material(Color(0.66, 0.92, 1.0), 0.05, 0.76, 0.42)
-	_add_box(root, "Card", Vector3.ZERO, Vector3(0.82, 0.06, 1.02), paper)
-	_add_box(root, "LineA", Vector3(0, -0.045, -0.18), Vector3(0.58, 0.025, 0.06), ink)
-	_add_box(root, "LineB", Vector3(-0.12, -0.045, 0.05), Vector3(0.34, 0.025, 0.06), ink)
-	root.rotation_degrees = Vector3(-18, 18, -10)
 
 
 static func _build_currency(root: Node3D) -> void:

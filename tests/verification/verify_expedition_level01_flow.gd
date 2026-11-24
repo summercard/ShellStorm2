@@ -103,6 +103,15 @@ var _expedition_snapshot: Dictionary = {}
 
 func _ready() -> void:
 	var failures: Array[String] = []
+	if OS.get_cmdline_user_args().has("--lighting-only"):
+		var checked := await _verify_initial_room_lights(failures)
+		if checked != 4:
+			failures.append("预期验证 4 个房间/种子样本，实际 %d" % checked)
+		for failure in failures:
+			printerr("EXPEDITION_LIGHT_FAIL ", failure)
+		print("EXPEDITION_INITIAL_LIGHTS_OK" if failures.is_empty() else "EXPEDITION_INITIAL_LIGHTS_FAILED")
+		get_tree().quit(0 if failures.is_empty() else 1)
+		return
 	await _verify_catalog_and_menu(failures)
 	await _verify_loading_screen(failures)
 	_verify_plan_generator_seeds(failures)
@@ -307,6 +316,78 @@ func _verify_loading_screen(failures: Array[String]) -> void:
 
 
 # —— 3) 远征关卡本体 ——
+
+## 固定样本是独立旁证，不调用生产掷骰；同一房间换种子必须能翻转。
+func _verify_initial_room_lights(failures: Array[String]) -> int:
+	var packed := load(EXPEDITION_SCENE) as PackedScene
+	if packed == null:
+		failures.append("无法加载远征01")
+		return 0
+	var samples := {
+		77001199: {"room_02": true, "room_03": false},
+		77001200: {"room_02": false, "room_03": true},
+	}
+	var checked := 0
+	for seed_value: int in samples:
+		var instance := packed.instantiate()
+		var tower := instance as TowerDescent3D
+		if tower == null:
+			if instance != null:
+				instance.free()
+			failures.append("远征01场景缺少运行时脚本")
+			return checked
+		tower.test_mode = true
+		tower.run_seed_override = seed_value
+		add_child(tower)
+		tower.process_mode = Node.PROCESS_MODE_DISABLED
+		var expected: Dictionary = samples[seed_value]
+		for room_id: String in expected:
+			var tag := "%d/%s" % [seed_value, room_id]
+			var initial_on: bool = expected[room_id]
+			var room := tower._room_by_id.get(room_id) as DungeonRoom3D
+			if room == null:
+				failures.append("缺少正式房间 " + tag)
+				continue
+			room.set_stream_state(DungeonRoom3D.STREAM_SHELL_READY)
+			tower._capture_room_runtime_state(room_id)
+			var cold := tower._segment_runtime_state.get(room_id, {}) as Dictionary
+			if cold.is_empty() or cold.has("room_light_on"):
+				failures.append("只有房间壳体时应捕获房间、但不应保存灯态 " + tag)
+			tower._restore_room_runtime_state(room_id)
+			room.set_stream_state(DungeonRoom3D.STREAM_ACTIVE)
+			if room.is_room_light_on() != initial_on:
+				failures.append("房间初始灯态未命中固定样本 " + tag)
+			if room._room_lights.is_empty():
+				failures.append("正式房间没有受控灯具 " + tag)
+			for light in room._room_lights:
+				if (float(light.get_snapshot()["current_energy"]) > 0.0) != initial_on:
+					failures.append("受控灯实际能量未跟随初始态 " + tag)
+			room.set_stream_state(DungeonRoom3D.STREAM_DATA_ONLY)
+			room.set_stream_state(DungeonRoom3D.STREAM_ACTIVE)
+			if room.is_room_light_on() != initial_on:
+				failures.append("同一局重建后初始灯态改变 " + tag)
+			var switch_node := room._light_switch
+			if switch_node == null or not switch_node.toggle_light() or room.is_room_light_on() == initial_on:
+				failures.append("原墙面开关未翻转灯态 " + tag)
+			tower._capture_room_runtime_state(room_id)
+			room.set_stream_state(DungeonRoom3D.STREAM_DATA_ONLY)
+			room.set_stream_state(DungeonRoom3D.STREAM_SHELL_READY)
+			tower._capture_room_runtime_state(room_id)
+			var saved := tower._segment_runtime_state.get(room_id, {}) as Dictionary
+			if not saved.has("room_light_on") or bool(saved["room_light_on"]) == initial_on:
+				failures.append("流送过程中未保留手动灯态 " + tag)
+			tower._segment_runtime_state[room_id] = JSON.parse_string(JSON.stringify(saved))
+			tower._restore_room_runtime_state(room_id)
+			room.set_stream_state(DungeonRoom3D.STREAM_ACTIVE)
+			if room.is_room_light_on() == initial_on:
+				failures.append("已有快照未覆盖初始灯态 " + tag)
+			print("EXPEDITION_LIGHT_SAMPLE ", tag, " initial=", initial_on, " restored=", room.is_room_light_on())
+			checked += 1
+		tower.queue_free()
+		await get_tree().process_frame
+		await get_tree().process_frame
+	return checked
+
 
 func _verify_expedition_level(failures: Array[String]) -> void:
 	var scene := load(EXPEDITION_SCENE) as PackedScene

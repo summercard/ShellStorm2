@@ -230,7 +230,7 @@ func can_add(num_items: int = 1) -> bool:
 
 ## 交易预检：已有堆叠的剩余容量也算可用空间；不改变格位。
 func can_add_item_exact(item: Dictionary, count: int = 1) -> bool:
-	if item.is_empty() or count <= 0 or str(item.get("id", "")).is_empty():
+	if item.is_empty() or count <= 0 or str(item.get("id", "")).is_empty() or ItemRegistry.is_retired_item_entry(item):
 		return false
 	if str(item.get("type", "")) == "weapon" and count != 1:
 		return false
@@ -266,7 +266,7 @@ func plan_purchase_add(item: Dictionary, count: int = 1) -> Dictionary:
 ## 添加物品（自动分配格子）
 ## 返回实际成功添加的数量
 func add_item(item: Dictionary, count: int = 1) -> int:
-	if item.is_empty() or count <= 0:
+	if item.is_empty() or count <= 0 or ItemRegistry.is_retired_item_entry(item):
 		return 0
 	# 一个枪械字典只代表一个真实实例；禁止用 count 复制同一实例 ID。
 	if str(item.get("type", "")) == "weapon" and count != 1:
@@ -377,7 +377,7 @@ func restore_slots_snapshot(snapshot: Array) -> void:
 		var entry := snapshot[index] as Dictionary
 		var item := entry.get("item", {}) as Dictionary
 		var count := int(entry.get("count", 0))
-		if item.is_empty() or count <= 0:
+		if item.is_empty() or count <= 0 or ItemRegistry.is_retired_item_entry(entry):
 			continue
 		var rotation := int(entry.get("grid_rotation", item.get("grid_rotation", 0))) % 4
 		var placement := {"slot": index, "grid_rotation": rotation} if can_place_item_at(item, index, rotation) else _find_placement_for_entry(item, rotation)
@@ -480,7 +480,7 @@ func find_weapon_instance_slot(weapon_instance_id: String) -> int:
 
 
 func replace_item_in_slot(slot_index: int, item: Dictionary) -> bool:
-	if slot_index < 0 or slot_index >= _slots.size() or item.is_empty():
+	if slot_index < 0 or slot_index >= _slots.size() or item.is_empty() or ItemRegistry.is_retired_item_entry(item):
 		return false
 	var normalized := WeaponInstance.ensure_weapon_item(item)
 	var instance_id := str(normalized.get("weapon_instance_id", ""))
@@ -495,7 +495,7 @@ func replace_item_in_slot(slot_index: int, item: Dictionary) -> bool:
 
 ## 将一个完整物品写入指定锚点。装备位卸装使用该接口，禁止覆盖已占区域。
 func put_item_in_empty_slot(slot_index: int, item: Dictionary, count: int = 1) -> bool:
-	if slot_index < 0 or slot_index >= _slots.size() or item.is_empty() or count <= 0:
+	if slot_index < 0 or slot_index >= _slots.size() or item.is_empty() or count <= 0 or ItemRegistry.is_retired_item_entry(item):
 		return false
 	var normalized := WeaponInstance.ensure_weapon_item(item)
 	if str(normalized.get("type", "")) == "weapon" and count != 1:

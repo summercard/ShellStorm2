@@ -21,24 +21,32 @@
     "west": [-12.5, -7.5, -2.5, 2.5, 7.5, 12.5]
   },
   "slots": [],
-  "variants": ["l_turn", "u_turn"],
+  "variants": ["l_turn", "u_turn", "rect"],
   "variant_footprints": {
     "l_turn": {
       "kind": "polygon",
       "frame": "bbox_nw_x_east_y_south",
       "vertices_m": [[0, 0], [45, 0], [45, 15], [15, 15], [15, 40], [0, 40]],
-      "note": "L 形：北侧横臂 45×15 全宽 + 西南竖臂 15×25。外轮廓缺东南角（东南 30×15 不属于房间）。"
+      "note": "L 形：北侧横臂 45×15 全宽 + 西南竖臂 15×25，东南缺口 30×25。"
     },
     "u_turn": {
       "kind": "polygon",
       "frame": "bbox_nw_x_east_y_south",
       "vertices_m": [[0, 0], [45, 0], [45, 40], [0, 40], [0, 25], [30, 25], [30, 15], [0, 15]],
       "note": "凹字形：上横臂 45×15 + 右竖 15×10 + 下横臂 45×15；西侧中部 30×10 是实体（内墙岛，不属于房间）。"
+    },
+    "rect": {
+      "kind": "polygon",
+      "frame": "bbox_nw_x_east_y_south",
+      "vertices_m": [[0, 0], [45, 0], [45, 40], [0, 40]],
+      "explicit_only": true,
+      "checkpoint_layout_alias": "l_turn",
+      "note": "仅远征01 room_01 显式选用；补足缺角，原生朝向和端口不移。存档指纹沿用旧布局在同一组门槽下解析出的变体标签（从 l_turn 起选），房间坐标、尺寸、旋转或门槽差异仍会改变指纹。"
     }
   },
   "asset_ids": {
     "room": "ENV-EXPEDITION-L01-L-CORRIDOR",
     "components": []
   },
-  "note": "远征关卡拐角走廊。45×40 足印由两种内部造型复用同一白盒契约：`l_turn` = 拐角走廊01（单折 L 形，横臂 45×15 + 竖臂 15×25）、`u_turn` = 拐角走廊02（三折凹字形）。⚠️ 两者的**外轮廓都不是矩形**（见 `variant_footprints`），故 `variant_footprints` 是外轮廓真源、`wall_lane_table` 只是包围盒口径的候选槽；实际可开门的槽必须同时落在轮廓边界上（由 `scripts/check_expedition_room_footprints.py` 校验）。`door_contract` 在变体间一致。"
+  "note": "远征01数据连廊模板：rect 仅由 room_01 绑定；l_turn / u_turn 保留原轮廓。variant_footprints 是外轮廓真源，wall_lane_table 是包围盒候选槽；门位须同时落在相应轮廓边界，door_contract 在变体间一致。"
 }

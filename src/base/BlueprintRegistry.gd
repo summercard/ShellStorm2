@@ -1,13 +1,7 @@
 extends Node
-## 蓝图注册表 — 将蓝图物品ID映射到武器装配工厂
-## Autoload 别名：BlueprintRegistry（通过 project.godot 注册）
-## 
-## 工作流程：
-##   1. 玩家在局内获得蓝图碎片（ItemRegistry 中注册为 blueprint 类型物品）
-##   2. WorkshopMenu 解锁 BlueprintTier
-##   3. LootModule 根据 BlueprintTier 过滤掉落（已实现）
-##   4. 玩家开始游戏时，BlueprintRegistry 根据 BlueprintTier 提供可用武器树
-##   5. Player3D / Dungeon3D 使用 BlueprintRegistry 获取初始武器
+## 装配模板注册表 — 将枪身、弹种、配件模板 ID 映射到装配工厂。
+## Autoload 保留 BlueprintRegistry 原名，既有存档中的装配 ID 不变。
+## 工坊仍以金币提升 Tier；退役的蓝图碎片实物不参与装配或升级。
 
 func _ready() -> void:
 	_build_registry()
@@ -17,8 +11,8 @@ func _ensure_registry() -> void:
 		_build_registry()
 
 ## ========== 注册表结构 ==========
-## 格式：category_id -> blueprint_id -> {
-##   item_id: String,         # ItemRegistry 中的物品ID
+## 格式：category_id -> template_id -> {
+##   item_id: String,         # 此处历史字段名；枪身值是装配模板 ID，不是物品 ID
 ##   tier: int,               # 需要的蓝图Tier（>= 此Tier才可用）
 ##   node_type: String,       # "gun_body" | "bullet" | "attachment"
 ##   factory: Callable,      # () -> AssemblyNode

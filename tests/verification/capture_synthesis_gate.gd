@@ -41,10 +41,12 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 
-	# 盘面：2 个豌豆手枪碎片 + 4 个标准弹 ⇒ R0 定向合成。
+	# 盘面：1 把棒球棍 + 6 个标准弹 ⇒ R0 定向合成。
 	# 两条配方各拍一次：定向（翠）用 R0，随机（紫）用融合，方便对比两套配色。
-	panel.call("_tray_append", _item("bp_pistol"), 2, 0, 0)
-	panel.call("_tray_append", _item("mod_bullet_standard"), 4, 2, 0)
+	if not panel.call("_tray_append", _item("weapon_baseball_bat"), 1, 0, 0) or not panel.call("_tray_append", _item("mod_bullet_standard"), 6, 3, 0):
+		push_error("Capture fixture cannot fit the melee weapon and fuel into separate tray cells")
+		get_tree().quit(1)
+		return
 	panel.call("_refresh_all")
 	await get_tree().process_frame
 

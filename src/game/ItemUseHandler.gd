@@ -49,8 +49,6 @@ func apply(item: Dictionary, context: Dictionary = {}) -> bool:
 			return _apply_refill_ammo(item, context)
 		"summon_beacon_extraction":
 			return _apply_summon_beacon(item, context)
-		"unlock_blueprint":
-			return _apply_unlock_blueprint(item, context)
 		"restore_flashlight_charge":
 			return _apply_restore_flashlight_charge(item, context)
 		"equip_flashlight_module":
@@ -109,32 +107,6 @@ func _apply_summon_beacon(item: Dictionary, context: Dictionary) -> bool:
 	else:
 		print("[ItemUseHandler] summon_beacon failed: no beacon item available")
 	return ok
-
-## 蓝图解锁
-func _apply_unlock_blueprint(item: Dictionary, context: Dictionary) -> bool:
-	var bp_category: String = item.get("blueprint_category", "")
-	var bp_loot_tier: int = item.get("blueprint_loot_tier", 0)
-	var ep_reward: int = item.get("extraction_points_reward", 20)
-
-	if bp_category.is_empty():
-		print("[ItemUseHandler] unlock_blueprint failed: no blueprint_category")
-		return false
-
-	# 检查是否已解锁更高Tier
-	var current_tier: int = BaseManager.get_blueprint_tier(bp_category)
-	if current_tier >= bp_loot_tier + 1:
-		print("[ItemUseHandler] unlock_blueprint: %s already at Tier %d (>= %d)" % [bp_category, current_tier, bp_loot_tier + 1])
-		# 仍然给资源点奖励，但不提升Tier
-	else:
-		# 提升蓝图Tier到 loot_tier + 1（即蓝图能解锁到该Tier的物品）
-		BaseManager.set_blueprint_tier(bp_category, bp_loot_tier + 1)
-		print("[ItemUseHandler] Applied unlock_blueprint: %s → Tier %d" % [bp_category, bp_loot_tier + 1])
-
-	# 给资源点奖励
-	BaseManager.add_extraction_points(ep_reward)
-	print("[ItemUseHandler] unlock_blueprint: awarded %d extraction_points" % ep_reward)
-	return true
-
 
 ## 电池恢复手电筒电量。已满则拒绝,quick-slot 据此不消耗道具。
 func _apply_restore_flashlight_charge(item: Dictionary, context: Dictionary) -> bool:

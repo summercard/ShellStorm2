@@ -45,7 +45,6 @@ const ITEMS := [
 	"weapon_waraxe",
 	"weapon_baseball_bat",
 	"item_health_potion",
-	"item_room_key",
 	"item_beacon",
 	"equipment_backpack_2",
 	"equipment_backpack_4",

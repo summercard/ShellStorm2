@@ -378,9 +378,6 @@ var _flow_rules_active := false
 ##   · 这一段是「关卡数据自己声明的口径」（远征01 2026-11-06 用它关掉钥匙与命运卡）。
 ## 计划声明优先于 flow 分支 —— 关卡数据永远比代码默认更该说话。
 var _plan_door_policy: Dictionary = {}
-## 关卡计划声明是否保留「房间钥匙」这条局内经济（`economy.room_keys_enabled`）。
-## 缺省 true ⇒ 未声明的关卡（塔楼、远征02/03 之外的旧数据）行为逐字不变。
-var _plan_room_keys_enabled := true
 
 ## 玩家是否已经交给 flow 门的感应器（见 `_bind_flow_door_proximity`）。
 ## 只在「确实还有门没绑上」时为假，随后由 `_process` 兜底补一次。
@@ -571,7 +568,6 @@ var _main_story_extraction_committing := false
 var _main_story_return_to_base := false
 var _main_story_extraction_label: Label
 var _main_story_success_committed := false
-var _main_story_success_pity: Dictionary = {}
 
 
 ## 地图差异只在装配器这一处归一；其余远征绝不装主线控制器。
@@ -889,8 +885,21 @@ func _clear_drop_offset(room: DungeonRoom3D) -> Vector2:
 
 
 func _capture_room_runtime_state(room_id: String) -> void:
-	super(room_id)
 	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	# A shell-only room has no bound switch. Its false query is not a light state.
+	var keep_saved_light := is_instance_valid(room) and not room._detail_built and (
+		_uses_expedition_initial_light_roll(room.room_type, room.authored_layout_peaceful)
+	)
+	var saved_light: Variant = null
+	if keep_saved_light:
+		saved_light = (_segment_runtime_state.get(room_id, {}) as Dictionary).get("room_light_on")
+	super(room_id)
+	if keep_saved_light and _segment_runtime_state.has(room_id):
+		var state := _segment_runtime_state[room_id] as Dictionary
+		if saved_light == null:
+			state.erase("room_light_on")
+		else:
+			state["room_light_on"] = saved_light
 	var sentinel := _platform_sentinel(room)
 	if sentinel != null and _segment_runtime_state.has(room_id):
 		_segment_runtime_state[room_id]["platform_sentinel"] = sentinel.export_state()
@@ -1962,11 +1971,7 @@ func _finish_run(success: bool) -> void:
 	var extracted_count := _death_settlement.process_extraction_settlement(
 		_inventory, _insurance, _quick_inventory
 	)
-	# 保底走「带物返航」通道：判定赶在存档事务前（记账随事务落盘），
-	# 交付必须等事务提交成功之后 —— 否则存档失败、玩家还在原地，背包里却已经多了一件。
-	var pity_result: Dictionary = {}
 	if not test_mode:
-		pity_result = _plan_synthesis_pity_carry()
 		var transaction_id := _get_run_settlement_transaction_id(true)
 		var commit := BaseManager.commit_run_settlement({
 			"transaction_id": transaction_id,
@@ -1983,9 +1988,6 @@ func _finish_run(success: bool) -> void:
 			status_label.text = "撤离结算保存失败 · 请重试撤离"
 			push_error("[TowerDescent3D] Successful extraction settlement failed: %s" % commit)
 			return
-		_deliver_synthesis_pity_carry(pity_result)
-	var pity_summary := pity_result.duplicate(true)
-	pity_summary.erase("item")
 	var summary := {
 		"success": true,
 		"kills": _kills,
@@ -1997,13 +1999,9 @@ func _finish_run(success: bool) -> void:
 		"inventory_capacity": _inventory.get_capacity(),
 		"insurance_capacity": _insurance.get_max_slots(),
 		"return_room_id": "start" if _expedition_entry_source == ExpeditionEntryContext.TOWER03 else "facility",
-		"synthesis_pity": pity_summary,
 	}
 	_hold_player_after_settlement()
-	var line := "撤离成功 · %d件物资完整保留 · 正在返航%s" % [_run_loot.size(), _expedition_return_label()]
-	if not str(pity_result.get("granted", "")).is_empty():
-		line += " · 保底补给 1 件"
-	status_label.text = line
+	status_label.text = "撤离成功 · %d件物资完整保留 · 正在返航%s" % [_run_loot.size(), _expedition_return_label()]
 	run_completed.emit(true, summary)
 	if not test_mode:
 		await get_tree().create_timer(0.8).timeout
@@ -2026,13 +2024,8 @@ func _finish_expedition_successful_extraction() -> void:
 	var extracted_count := _death_settlement.process_extraction_settlement(
 		_inventory, _insurance, _quick_inventory
 	)
-	# 保底：判定随存档事务落盘，交付在事务提交成功之后、交接快照之前 ——
-	# 顺序错了会出现「快照里没有那件保底物，但它又已经被算作发过了」。
-	var pity_result: Dictionary = _main_story_success_pity.duplicate(true)
 	if not test_mode or force_extraction_settlement_for_test:
 		# 主线返航重试时若统计已提交，只补写携带物交接，不再走第二次结算。
-		if not _main_story_success_committed:
-			pity_result = _plan_synthesis_pity_carry()
 		var commit := {"success": true}
 		if not _main_story_success_committed:
 			commit = BaseManager.commit_run_settlement({
@@ -2058,19 +2051,14 @@ func _finish_expedition_successful_extraction() -> void:
 		# 检查点；再写交接快照，保证它就是存档里最后一份所有权。
 		BaseManager.unregister_runtime_checkpoint_provider(self, false)
 		_runtime_persistence_active = false
-		if not _main_story_success_committed:
-			_deliver_synthesis_pity_carry(pity_result)
-			if _main_story_return_to_base:
-				_main_story_success_committed = true
-				_main_story_success_pity = pity_result.duplicate(true)
-				_hold_player_after_settlement()
+		if not _main_story_success_committed and _main_story_return_to_base:
+			_main_story_success_committed = true
+			_hold_player_after_settlement()
 		if not _write_successful_extraction_carry_checkpoint():
 			_completed = false
 			status_label.text = "撤离交接保存失败 · 请重试撤离"
 			push_error("[TowerDescent3D] Expedition extraction carry handoff failed")
 			return
-	var pity_summary := pity_result.duplicate(true)
-	pity_summary.erase("item")
 	var summary := {
 		"success": true,
 		"kills": _kills,
@@ -2082,13 +2070,9 @@ func _finish_expedition_successful_extraction() -> void:
 		"inventory_capacity": _inventory.get_capacity(),
 		"insurance_capacity": _insurance.get_max_slots(),
 		"return_room_id": "start" if _expedition_entry_source == ExpeditionEntryContext.TOWER03 else "facility",
-		"synthesis_pity": pity_summary,
 	}
 	_hold_player_after_settlement()
-	var line := "撤离成功 · %d件物资完整保留 · 正在返航%s" % [_run_loot.size(), _expedition_return_label()]
-	if not str(pity_result.get("granted", "")).is_empty():
-		line += " · 保底补给 1 件"
-	status_label.text = line
+	status_label.text = "撤离成功 · %d件物资完整保留 · 正在返航%s" % [_run_loot.size(), _expedition_return_label()]
 	run_completed.emit(true, summary)
 	if test_mode:
 		return
@@ -3257,7 +3241,8 @@ func _install_player_occlusion_silhouette() -> void:
 	_player_occlusion_material = _make_player_occlusion_material()
 	for node in player.avatar.find_children("*", "GeometryInstance3D", true, false):
 		var geometry := node as GeometryInstance3D
-		if geometry == null:
+		# A depth-tested muzzle beam must not inherit the through-wall character outline.
+		if geometry == null or geometry.get_meta("skip_player_occlusion_silhouette", false):
 			continue
 		_player_occlusion_meshes.append(geometry)
 		_player_original_overlays[geometry] = geometry.material_overlay
@@ -3463,12 +3448,10 @@ func _build_expedition_records() -> void:
 	var first_main := _plan_spec(plan, "room_01")
 	# flow 关卡判定要早于任何门策略查询（`_door_policies_for_record` 在建房间时就会用到）。
 	_flow_rules_active = str(plan.get("mode", "")) == "flow"
-	# —— 关卡计划声明的门策略 / 钥匙经济 / 清房掉落（能力段，2026-11-06）——
-	# 三段都「不写不变」：缺段 ⇒ 空字典 / 缺省 true ⇒ 与接入前逐字相同。
+	# 普通门和清房掉落由关卡计划配置；旧 economy.room_keys_enabled 不再参与运行。
 	_plan_door_policy = (plan.get("door_policy", {}) as Dictionary).duplicate(true)
-	_plan_room_keys_enabled = bool(
-		(plan.get("economy", {}) as Dictionary).get("room_keys_enabled", true)
-	)
+	if not _plan_door_policy.is_empty():
+		_plan_door_policy["requires_key"] = false
 	configure_clear_drops(plan.get("clear_drops", {}) as Dictionary)
 	var source_plan := LevelPlanLoader.load_level_plan(get_expedition_level_id())
 	_flow_barks = (source_plan.get("flow_barks", []) as Array).duplicate(true)
@@ -3481,10 +3464,8 @@ func _build_expedition_records() -> void:
 			if not room_id.is_empty():
 				spec["clear_drop_plan"] = _clear_drop_service.roll_room_drop(room_id, "boss" if str(spec.get("type", "")) == "BOSS" or str(spec.get("role", "")) == "boss" else "content", run_seed)
 				_clear_drop_plans[room_id] = (spec["clear_drop_plan"] as Dictionary).duplicate(true)
-	# 本层没有钥匙经济 ⇒ 开局也不发初始钥匙（业主 2026-11-05）。
-	# 读档时 `_restore_carried_ownership()` 会按快照覆盖这个值，不会吞掉玩家的携带钥匙。
-	if not _room_key_economy_enabled():
-		_room_key_count = 0
+	# 普通房间钥匙已整体退役；旧存档字段不恢复。
+	_room_key_count = 0
 	if (
 		entry_spec.is_empty()
 		or first_main.is_empty()
@@ -3998,6 +3979,10 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 		# 于是烘焙文件里那套按旧门位摆的墙原样进游戏（门位一变就错位）。
 		if get_expedition_level_id() == "expedition_03":
 			record["art_layer_keep_structure"] = true
+		if _uses_expedition_initial_light_roll(str(record["type"]), bool(spec.get("authored_layout_peaceful", false))) and not spec.has("authored_room_light_on"):
+			# One 50/50 roll per room, independent of spawn, furnishing and reward RNGs.
+			var key := "room_light:%s:%d:%s" % [get_expedition_level_id(), run_seed, runtime_room_id]
+			record["authored_room_light_on"] = key.sha256_buffer()[0] < 128
 	# 授权布局壳体（区块00）：把整房组件清单随记录带到 DungeonRoom3D.configure。
 	# 只在房表写了 authored_layout_shell 时才落字段，未接管的房间一个字段都不多。
 	if bool(spec.get("authored_layout_shell", false)):
@@ -4081,6 +4066,10 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 		# reward_plan / chest_placements 上各踩过一次同形状的坑）。
 		if not bool(furnishing_plan.get("fixed_lobby_clutter_enabled", true)):
 			record["fixed_lobby_clutter_enabled"] = false
+
+
+func _uses_expedition_initial_light_roll(room_type: String, peaceful: bool) -> bool:
+	return is_expedition() and not peaceful and room_type != "BOSS" and room_type not in NON_CONTENT_ROOM_TYPES
 
 
 func _append_tower_record(
@@ -4328,11 +4317,8 @@ func _door_policy_for_edge(from_room_id: String, target_room_id: String) -> Dict
 ##   · 命运卡池不提供「获得房间钥匙」的空卡。
 ## 门策略本来就不吃钥匙（见 `_door_policy_for_edge` 的 flow 分支），所以没有消费口。
 func _room_key_economy_enabled() -> bool:
-	# 两重判据都是**能力**口径，不写关卡 ID：
-	#   · flow 关卡（远征03）没有钥匙经济；
-	#   · 关卡计划 `economy.room_keys_enabled = false`（远征01，2026-11-06）。
-	# 未声明的关卡两处都为默认 ⇒ 塔楼与远征02 逐字不变。
-	return not _flow_rules_active and _plan_room_keys_enabled
+	# 普通房间钥匙整体退役；主线剧情钥匙不经过此经济口。
+	return false
 
 
 func _try_open_room_door(target_room_id: String) -> bool:
@@ -8964,13 +8950,7 @@ func _journey_objective(floor_number: int) -> String:
 	if not room.cleared:
 		var alive := int(_alive_by_room.get(room.room_id, 0))
 		return "肃清威胁 · 剩余 %d 个敌对信号" % alive if alive > 0 else "保持警戒，留意增援与周围掩体"
-	# 门不消耗钥匙的房间（和平区如 98F 区块00）不该提钥匙：
-	# 否则 HUD 会一边写「用钥匙开门」、一边地上没钥匙也不需要钥匙。
-	if not _room_produces_room_key(room):
-		return "区域已肃清 · 直接开启下一扇门"
-	if _get_total_room_keys() <= 0:
-		return "区域已肃清 · 拾取掉落钥匙，再选择下一扇门"
-	return "搜索剩余物资，用钥匙开门选择路线"
+	return "区域已肃清 · 直接开启下一扇门"
 
 
 ## 带本关名字的进场目标文案（HUD 状态栏）。取自关卡清单，未登记时回退到通用文案。
@@ -9498,8 +9478,6 @@ func _build_runtime_world_save_snapshot() -> Dictionary:
 			"visited": room.visited,
 			"cleared": room.cleared,
 			"spawned": _spawned_rooms.has(room_id),
-			"key_spawned": _spawned_key_rooms.has(room_id),
-			"key_unclaimed": _has_unclaimed_room_key(room_id),
 			"event_resolved": _resolved_event_rooms.has(room_id),
 			"event_combat": _event_combat_rooms.has(room_id),
 		}
@@ -9582,9 +9560,6 @@ func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
 			minimap.reveal_room(room_id)
 		if bool(progress.get("spawned", false)):
 			_spawned_rooms[room_id] = true
-		# 未拾取钥匙必须在恢复后重新生成；已领取过的钥匙才保留 spawned 标记。
-		if bool(progress.get("key_spawned", false)) and not bool(progress.get("key_unclaimed", false)):
-			_spawned_key_rooms[room_id] = true
 		if bool(progress.get("event_resolved", false)):
 			_resolved_event_rooms[room_id] = true
 		if bool(progress.get("event_combat", false)):
@@ -9633,17 +9608,6 @@ func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
 			lower_boundary += 5
 		_unloaded_segment_floor_indices.assign(unloaded)
 	return true
-
-
-func _has_unclaimed_room_key(room_id: String) -> bool:
-	for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
-		var key := value as RoomKeyPickup3D
-		if key != null and key.room_id == room_id and not key.is_queued_for_deletion():
-			return true
-	var stored_room := _segment_runtime_state.get(room_id, {}) as Dictionary
-	if not (stored_room.get("room_keys", []) as Array).is_empty():
-		return true
-	return false
 
 
 func _resolve_runtime_restore_room(snapshot: Dictionary) -> DungeonRoom3D:

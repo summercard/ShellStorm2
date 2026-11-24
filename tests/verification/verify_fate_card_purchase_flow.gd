@@ -269,7 +269,8 @@ func _check_real_pickup_purchase_entry(dungeon: Dungeon3D, failures: Array[Strin
 	_expect(not first_room_id.is_empty() and room != null, "无法定位真实过门fixture", failures)
 	if first_room_id.is_empty() or room == null:
 		return
-	dungeon.set("_room_key_count", 5)
+	# 普通门已免钥匙；保持旧字段为零，验证开门不依赖余额。
+	dungeon.set("_room_key_count", 0)
 	room.cleared = true
 	_set_run_currency(9999)
 	var entry_currency := GameManager.currency

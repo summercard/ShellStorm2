@@ -64,6 +64,26 @@ func _run() -> void:
 			_expect_float(player.get_debug_gun_damage_multiplier(), 3.0, 0.001, "debug_gun_damage_set")
 			reset.pressed.emit()
 			_expect_float(player.get_debug_gun_damage_multiplier(), 1.0, 0.001, "debug_gun_damage_reset")
+
+		var currency_row := panel.find_child("RunCurrencyTestRow", true, false)
+		var add_currency := panel.find_child("AddDebugRunCurrency", true, false) as Button
+		var currency_status := panel.find_child("RunCurrencyStatus", true, false) as Label
+		_expect_true(
+			currency_row != null and add_currency != null and currency_status != null,
+			"debug_run_currency_controls"
+		)
+		if currency_row != null and add_currency != null and currency_status != null:
+			var currency_amount := currency_row.get_node("DebugRunCurrencyAmount") as HSlider
+			var currency_before := GameManager.currency
+			currency_amount.value = 500.0
+			add_currency.pressed.emit()
+			_expect_true(GameManager.currency == currency_before + 500, "debug_run_currency_adds_amount")
+			_expect_true(
+				currency_status.text.contains("当前局内金币：%d" % GameManager.currency),
+				"debug_run_currency_status_refreshes"
+			)
+			GameManager.currency = currency_before
+			GameManager.currency_changed.emit(currency_before)
 	_run_tab_checks(panel)
 	_run_step_constant_checks()
 	_run_camera_panel_checks(panel, player)

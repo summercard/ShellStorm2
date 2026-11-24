@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://src/vfx/VfxPlayerAimBeam3D.gd" id="1_beam"]
+[ext_resource type="Shader" path="res://assets/art/vfx/visibility_3d/vfx_player_aim_beam.gdshader" id="2_shader"]
+
+[sub_resource type="ShaderMaterial" id="MatBeam"]
+shader = ExtResource("2_shader")
+shader_parameter/beam_color = Color(1, 0.11, 0.16, 0.92)
+shader_parameter/fade_start = 0.6
+
+[sub_resource type="QuadMesh" id="MeshBeam"]
+size = Vector2(1, 1)
+
+[node name="VfxPlayerAimBeam3D" type="Node3D"]
+visible = false
+script = ExtResource("1_beam")
+lifetime = 0.0
+metadata/asset_id = "VFX-PLAYER-AIM-BEAM-3D"
+metadata/asset_version = "v002"
+metadata/lifecycle = "held_muzzle_attachment_no_pool"
+metadata/runtime_save_excluded = true
+
+[node name="Ribbon" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+gi_mode = 0
+material_override = SubResource("MatBeam")
+mesh = SubResource("MeshBeam")
+metadata/skip_player_occlusion_silhouette = true

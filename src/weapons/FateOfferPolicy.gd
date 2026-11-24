@@ -11,6 +11,9 @@ static func policy(level_id: String) -> Dictionary:
 	return (_policies.get(level_id, {}) as Dictionary).duplicate(true)
 
 static func allows(level_id: String, stable_id: String) -> bool:
+	# 历史稳定 ID 仍可被识别/读档，但退役卡不再进入新报价。
+	if stable_id == "fate_sun_key":
+		return false
 	var rules := policy(level_id)
 	# A missing configured level must fail closed, not leak the global pool.
 	if level_id == "expedition_01" and rules.is_empty():

@@ -159,6 +159,7 @@ var _active_tab: TabId = TabId.LIGHT
 
 # 预留 tab（测试工具）控件引用
 var _reserved_expedition_status: Label
+var _reserved_currency_status: Label
 
 # 镜头雾气 tab 控件引用
 var _camera_pitch_value_label: Label
@@ -192,6 +193,7 @@ func _ready() -> void:
 	custom_minimum_size = Vector2(430, 0)
 	_build_ui()
 	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
+	GameManager.currency_changed.connect(_on_reserved_currency_changed)
 	_resolve_flashlight()
 	_select_tab(TabId.LIGHT)
 	_setup_postfx_persist()
@@ -712,6 +714,55 @@ func _build_reserved_page(parent: Container) -> void:
 		reset.pressed.connect(func() -> void: slider.value = 1.0)
 		page.add_child(reset)
 
+		page.add_child(HSeparator.new())
+		var run_test_title := Label.new()
+		run_test_title.name = "RunTestTitle"
+		run_test_title.text = "局内测试（编辑器专用）"
+		page.add_child(run_test_title)
+
+		_reserved_currency_status = Label.new()
+		_reserved_currency_status.name = "RunCurrencyStatus"
+		_reserved_currency_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		page.add_child(_reserved_currency_status)
+		_refresh_reserved_currency_status()
+
+		var currency_row := HBoxContainer.new()
+		currency_row.name = "RunCurrencyTestRow"
+		currency_row.add_theme_constant_override("separation", 8)
+		page.add_child(currency_row)
+
+		var currency_label := Label.new()
+		currency_label.text = "增加金币"
+		currency_label.custom_minimum_size = Vector2(72, 0)
+		currency_row.add_child(currency_label)
+
+		var currency_amount := HSlider.new()
+		currency_amount.name = "DebugRunCurrencyAmount"
+		currency_amount.min_value = 100.0
+		currency_amount.max_value = 10000.0
+		currency_amount.step = 100.0
+		currency_amount.value = 1000.0
+		currency_amount.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		currency_row.add_child(currency_amount)
+
+		var currency_amount_label := Label.new()
+		currency_amount_label.name = "DebugRunCurrencyAmountValue"
+		currency_amount_label.text = "%d" % int(currency_amount.value)
+		currency_amount_label.custom_minimum_size = Vector2(56, 0)
+		currency_row.add_child(currency_amount_label)
+		currency_amount.value_changed.connect(func(value: float) -> void:
+			currency_amount_label.text = "%d" % int(value)
+		)
+
+		var add_currency_btn := Button.new()
+		add_currency_btn.name = "AddDebugRunCurrency"
+		add_currency_btn.text = "增加"
+		add_currency_btn.focus_mode = Control.FOCUS_NONE
+		add_currency_btn.pressed.connect(func() -> void:
+			_on_add_debug_run_currency_pressed(int(currency_amount.value))
+		)
+		currency_row.add_child(add_currency_btn)
+
 
 func _refresh_reserved_status() -> void:
 	if _reserved_expedition_status == null:
@@ -720,6 +771,26 @@ func _refresh_reserved_status() -> void:
 	_reserved_expedition_status.text = "当前状态：远征关卡02 %s" % (
 		"✔ 已解锁（情报室里可见）" if unlocked else "✘ 未解锁（情报室里看不到）"
 	)
+
+
+func _refresh_reserved_currency_status() -> void:
+	if _reserved_currency_status == null:
+		return
+	_reserved_currency_status.text = "当前局内金币：%d · 只改 GameManager.currency，不改局外金币" % GameManager.currency
+
+
+func _on_reserved_currency_changed(_amount: int) -> void:
+	_refresh_reserved_currency_status()
+
+
+func _on_add_debug_run_currency_pressed(amount: int) -> void:
+	if not OS.has_feature("editor"):
+		return
+	var granted := maxi(0, amount)
+	if granted <= 0:
+		return
+	GameManager.add_currency(granted)
+	_refresh_reserved_currency_status()
 
 
 func _on_unlock_expedition02_pressed() -> void:

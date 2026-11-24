@@ -21,12 +21,12 @@ func configure(p_room_id: String) -> void:
 
 
 func _ready() -> void:
-	add_to_group("room_key_pickup_3d")
+	# 旧场景/旧存档若仍带该节点，立即清理；不再允许钥匙实体进入运行时。
+	set_process(false)
+	set_deferred("monitoring", false)
 	collision_layer = 0
-	collision_mask = 1
-	monitoring = true
-	body_entered.connect(_on_body_entered)
-	_build_visual()
+	collision_mask = 0
+	call_deferred("queue_free")
 
 
 func _process(delta: float) -> void:

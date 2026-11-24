@@ -11,7 +11,7 @@ static var DEFINITIONS := {
 	"fate_moon_vitality": _entry("女祭司", "MAJOR", "MAJOR", "II", "生命上限-10，恢复50", "最大生命降低10，并立即恢复50生命。", {"amount": -10, "heal": 50}),
 	"fate_sun_extra_loot": _entry("皇后", "MAJOR", "MAJOR", "III", "下箱追加4抽，保留最佳", "下一个容器追加4次候选抽取并保留最高品质结果，最高为稀有且地面仍只掉落1件。", {"count": 4, "max_rarity": "RARE"}),
 	"fate_sun_reinforce": _entry("皇帝", "MAJOR", "MAJOR", "IV", "下房增加精英，奖50金币", "下一个敌对房间增加1名精英；清理后额外获得50金币。", {"count": 1, "elite_count": 1, "clear_currency": 50}),
-	"fate_sun_key": _entry("教皇", "MAJOR", "MAJOR", "V", "获得2把本层临时钥匙", "获得2把临时钥匙，离开当前楼层时失效。", {"count": 2, "temporary_floor_only": true}),
+	"fate_sun_key": _entry("教皇", "MAJOR", "MAJOR", "V", "已退役", "仅用于识别历史存档，不再投放或发放房间钥匙。", {}),
 	"fate_moon_power": _entry("恋人", "MAJOR", "MAJOR", "VI", "枪伤-8%，暴击+15%", "枪械伤害降低8%，暴击率提高15%。", {"multiplier": 0.92, "crit_chance_bonus": 0.15}),
 	"fate_bullet_carry_gun": _entry("战车", "MAJOR", "MAJOR", "VII", "携枪弹向后自动攻击", "子弹携带所选武器，枪口朝后自动开火；近战武器朝后自动挥击。", {"mount_reversed": true}),
 	"fate_armor_pierce": _entry("力量", "MAJOR", "MAJOR", "VIII", "慢速滚石命中碎裂，范围击退", "弹速与射速减半；石头命中怪物或障碍后碎裂，击退3米内怪物。", {"rock_projectile": true, "rock_shatter": true, "fire_rate_scale": 0.5}),

@@ -592,8 +592,9 @@ static func sun_reveal() -> FateCard:
 	return _scoped_modifier_card("曙光测绘", FateCard.CardType.RULE, RARITY_RARE, "🗺", "揭示周围2层", "立即揭示当前房间周围 2 层相邻房间", "reveal_rooms", {"radius": 2})
 
 
+## 保留稳定 ID 兼容历史存档，但不再进入任何可玩卡池；主动应用也会被运行时拒绝。
 static func sun_key() -> FateCard:
-	return _scoped_modifier_card("太阳钥印", FateCard.CardType.ENHANCE, RARITY_RARE, "🔑", "获得房间钥匙", "立即获得 1 把普通房间钥匙", "grant_room_key", {"count": 1})
+	return _scoped_modifier_card("太阳钥印", FateCard.CardType.ENHANCE, RARITY_RARE, "🔑", "已退役的旧卡", "历史卡片仅用于稳定 ID 识别，不再产生房间钥匙", "retired_room_key", {"count": 0})
 
 
 static func sun_currency() -> FateCard:
@@ -651,7 +652,7 @@ static func all_presets() -> Array[FateCard]:
 		fate_bless_dead(),
 		moon_vitality(), moon_stride(), moon_dash(), moon_guard(), moon_power(),
 		moon_room_heal(), moon_elite_heal(), moon_first_hit(), moon_last_stand(), moon_ammo(),
-		sun_quality(), sun_extra_loot(), sun_reinforce(), sun_reveal(), sun_key(),
+		sun_quality(), sun_extra_loot(), sun_reinforce(), sun_reveal(),
 		sun_currency(), sun_scorch(), sun_trial(), sun_bounty(), sun_extraction(),
 	]
 
@@ -690,7 +691,7 @@ static func playable_presets() -> Array[FateCard]:
 		fate_bless_dead(),  # ✨ 亡者祝福（低血存活伤害+10%）
 		moon_vitality(), moon_stride(), moon_dash(), moon_guard(), moon_power(),
 		moon_room_heal(), moon_elite_heal(), moon_first_hit(), moon_last_stand(), moon_ammo(),
-		sun_quality(), sun_extra_loot(), sun_reinforce(), sun_reveal(), sun_key(),
+		sun_quality(), sun_extra_loot(), sun_reinforce(), sun_reveal(),
 		sun_currency(), sun_scorch(), sun_trial(), sun_bounty(), sun_extraction(),
 	]
 
@@ -751,4 +752,7 @@ static func get_by_card_id(card_id: String) -> FateCard:
 	for card in all_presets():
 		if card.card_id == card_id:
 			return card
+	# 历史稳定 ID 仍可重建旧卡，以便旧存档读取；该卡不进入新卡池且主动应用会被拒绝。
+	if card_id == "fate_sun_key":
+		return sun_key()
 	return null

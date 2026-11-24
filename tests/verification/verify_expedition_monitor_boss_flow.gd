@@ -2,6 +2,10 @@ extends Node
 ## 正式远征场景进房 → 触发盒 → Boss → 自动续波 → 清房 → 撤离门。
 ## Runner 必须在 Autoload 前隔离 user://；不手工实例化 Boss、不预开门。
 const SCENE := preload("res://scenes/ExpeditionLevel01_3D.tscn")
+# Boss房02当前战场锚点，不是深井房间的几何中心。见设计源 floor_00 的 boss_spawn_local_m。
+const BOSS_PLATFORM_CENTER := Vector3(0.0, 0.0, -22.5)
+# 2026-10-14 的显示器基线 3 倍提速；2026-11-10 的全局节奏只乘一次。
+const BOSS_BASE_MOVE_MPS := 3.612
 var tower: TowerDescent3D
 var room: DungeonRoom3D
 var failures: Array[String] = []
@@ -55,9 +59,12 @@ func _ready() -> void:
 	if not bosses.is_empty():
 		var boss := bosses[0]
 		check(boss.max_hp == 8000 and boss.current_hp == 8000, "正式首战显示器满血8000 HP")
-		check(Vector2(boss.global_position.x, boss.global_position.z).distance_to(Vector2(room.global_position.x, room.global_position.z)) < 0.01, "Boss出生在房间中心")
+		var platform_center := room.to_global(BOSS_PLATFORM_CENTER)
+		check(Vector2(boss.global_position.x, boss.global_position.z).distance_to(Vector2(platform_center.x, platform_center.z)) < 0.01,
+			"Boss出生在已登记的战场锚点（实际 %s，预期 XZ %s）" % [boss.global_position, Vector2(platform_center.x, platform_center.z)])
 		check((-boss.global_basis.z).dot(Vector3.BACK) > 0.999, "Boss初始面向南边+Z")
-		check(is_equal_approx(boss.move_speed, 3.612), "Boss移速为原1.204的三倍")
+		var expected_speed := BOSS_BASE_MOVE_MPS * GameDesignConfig.PACE_SCALE
+		check(is_equal_approx(boss.move_speed, expected_speed), "Boss三倍基准乘一次全局节奏（实际 %.4f，预期 %.4f m/s）" % [boss.move_speed, expected_speed])
 		check(boss.monitor_combat != null, "正式技能策略已绑定")
 		check(boss.avatar._formal_boss_root is MonitorBossPresentation, "正式显示器资产已绑定")
 		check(boss.killed.is_connected(tower._on_enemy_killed), "Boss 死亡接入房间结算")

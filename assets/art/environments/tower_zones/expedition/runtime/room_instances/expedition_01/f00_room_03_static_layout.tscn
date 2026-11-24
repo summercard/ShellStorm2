@@ -23,7 +23,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_top_service/wall_top_service_root_top3d.tscn" id="26_wnk7m"]
 [ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d.tscn" id="27_kjigu"]
 [ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_room_light_switch_root_top3d.tscn" id="29_p5bs5"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/secret_door/secret_door_root_top3d.tscn" id="31_35a3r"]
+[ext_resource type="PackedScene" uid="uid://240efj44ame1" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/secret_door/secret_door_root_top3d.tscn" id="31_35a3r"]
 
 [node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=2083919036]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-ROOM03-PORT-CLEARANCE-LAYOUT"
@@ -306,7 +306,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="shelving_south3" parent="." unique_id=343613703 instance=ExtResource("11_kjigu")]
-transform = Transform3D(-0.108843684, 0.99352485, 0.032597464, -0.028253997, 0.029687133, -0.99916, -0.9936576, -0.10967323, 0.024839882, -2.2318583, 0.51525235, -11.010671)
+transform = Transform3D(-0.96696866, -0.25412706, 0.01979316, -0.028253995, 0.029687127, -0.99915993, 0.25332594, -0.9667157, -0.035886556, -4.331193, 0.51525235, -16.308962)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-SHELVING"
 metadata/authored_slot_role = "room_type_component"
 
@@ -321,7 +321,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-SHELVING"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="totem_column2" parent="." unique_id=503619991 instance=ExtResource("12_p5bs5")]
-transform = Transform3D(2.7764976, 0, 0, 0, 2.751604, 0, 0, 0, 3.1980836, 13.157619, -0.21443605, 5.8271227)
+transform = Transform3D(2.7764976, 0, 0, 0, 2.751604, 0, 0, 0, 3.1980836, 13.157619, -0.21443605, 8.34192)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN"
 metadata/authored_slot_role = "room_type_component"
 
@@ -331,7 +331,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="water_and_supply_corner" parent="." unique_id=1664287058 instance=ExtResource("13_35a3r")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.529752, 0, 2.2535362)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.386899, 0, 5.1225176)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER"
 metadata/authored_slot_role = "room_type_component"
 
@@ -370,8 +370,13 @@ transform = Transform3D(0.16346365, 0, 0.98654944, 0, 1, 0, -0.98654944, 0, 0.16
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
 metadata/authored_slot_role = "room_type_component"
 
+[node name="work_cluster_d7" parent="." unique_id=390312517 instance=ExtResource("14_pq4nd")]
+transform = Transform3D(0.009615419, 0, -0.9999537, 0, 1, 0, 0.9999537, 0, 0.009615419, -8.390005, -1.04904175e-05, -15.768411)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
+metadata/authored_slot_role = "room_type_component"
+
 [node name="work_cluster_d6" parent="." unique_id=2139091676 instance=ExtResource("14_pq4nd")]
-transform = Transform3D(-0.38877058, 0, 0.9213345, 0, 1, 0, -0.9213345, 0, -0.38877058, -4.3646054, -5.2452087e-06, -12.331298)
+transform = Transform3D(0.013839215, 0, 0.99990416, 0, 1, 0, -0.99990416, 0, 0.013839215, -4.748279, -5.2452087e-06, -13.237009)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
 metadata/authored_slot_role = "room_type_component"
 
@@ -381,7 +386,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="work_cluster_d3" parent="." unique_id=963134476 instance=ExtResource("14_pq4nd")]
-transform = Transform3D(0.88252115, 0, 0.47027278, 0, 1, 0, -0.47027278, 0, 0.88252115, 3.5377755, -9.536743e-07, -12.897499)
+transform = Transform3D(0.88252115, 0, 0.47027278, 0, 1, 0, -0.47027278, 0, 0.88252115, 4.9187417, -9.536743e-07, -13.692556)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
 metadata/authored_slot_role = "room_type_component"
 
@@ -708,7 +713,10 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="CollisionBody" parent="wall_top_service" index="1"]
-position = Vector3(0, 7.115186, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.115186, 0)
+
+[node name="CollisionShape" parent="wall_top_service/CollisionBody" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
 
 [node name="ConnectionPorts" type="Node3D" parent="." unique_id=627166589]
 metadata/connection_port_count = 2

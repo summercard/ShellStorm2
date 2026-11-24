@@ -13,7 +13,7 @@ extends Node3D
 
 const VISION_TARGET_GROUPS := [
 	&"enemy_death_visual_3d",
-	&"enemy_3d", &"ground_loot_3d", &"room_key_pickup_3d",
+	&"enemy_3d", &"ground_loot_3d",
 	&"hazard_3d", &"service_station_3d", &"extraction_beacon_3d",
 ]
 const VISION_PLANE_HEIGHT := 0.82

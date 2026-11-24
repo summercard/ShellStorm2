@@ -35,7 +35,6 @@ func _verify_catalog(failures: Array[String]) -> void:
 	var designed_prices := {
 		"weapon_greatblade": [165, 83],
 		"weapon_waraxe": [240, 120],
-		"item_room_key": [40, 20],
 	}
 	for item_id in designed_prices:
 		var definition := ItemRegistry.get_instance().get_item(item_id)

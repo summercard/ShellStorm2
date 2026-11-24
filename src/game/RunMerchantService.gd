@@ -20,6 +20,8 @@ func open_session(session_id: String, merchant_id: String, goods: Array[Dictiona
 			_offers.append((value as Dictionary).duplicate(true))
 	else:
 		for index in range(mini(6, goods.size())):
+			if ItemRegistry.is_retired_item_entry(goods[index]):
+				continue
 			var item := WeaponInstance.ensure_weapon_item(goods[index])
 			if str(item.get("id", "")).is_empty() or int(item.get("price", -1)) < 0:
 				continue
@@ -93,7 +95,8 @@ func restore_stock_snapshot(snapshot: Dictionary) -> bool:
 					return false
 				seen_weapon_ids[instance_id] = true
 			seen_offer_ids[offer_id] = true
-			restored.append(offer.duplicate(true))
+			if not ItemRegistry.is_retired_item_entry(offer):
+				restored.append(offer.duplicate(true))
 		rebuilt[merchant_id] = restored
 	_stocks = rebuilt
 	close_session()

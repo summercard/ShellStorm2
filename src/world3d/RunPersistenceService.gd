@@ -50,6 +50,79 @@ static func finalize_runtime_snapshot(snapshot: Dictionary) -> Dictionary:
 	return result
 
 
+## Migrate validated saves without re-rolling frozen rewards or interpreting assembly IDs as item IDs.
+static func without_retired_item_records(snapshot: Dictionary) -> Dictionary:
+	var result := snapshot.duplicate(true)
+	for field in ["inventory_slots", "insurance_slots", "quick_item_slots", "equipped_weapon_items"]:
+		_filter_item_array(result, field, true)
+	if result.get("quick_item_ids") is Array:
+		var ids := result["quick_item_ids"] as Array
+		for index in ids.size():
+			if ItemRegistry.is_retired_item_id(str(ids[index])):
+				ids[index] = ""
+	result.erase("room_key_count")
+	if result.get("world_state") is Dictionary:
+		_filter_world_item_records(result["world_state"])
+	return result
+
+
+static func _filter_item_array(owner: Dictionary, field: String, preserve_slots := false) -> void:
+	if owner.get(field) is Array:
+		owner[field] = ItemRegistry.without_retired_items(owner[field], preserve_slots)
+
+
+static func _filter_world_item_records(world: Dictionary) -> void:
+	for record in _snapshot_dictionary(world.get("segment_runtime_state")).values():
+		if not record is Dictionary:
+			continue
+		var room := record as Dictionary
+		room.erase("room_keys")
+		_filter_item_array(room, "ground_items")
+		if room.get("clear_drop_plan") is Dictionary:
+			_filter_clear_drop(room["clear_drop_plan"])
+		for pending in _snapshot_dictionary(room.get("pending_chest_grants")).values():
+			if pending is Dictionary:
+				_filter_item_array(pending, "grants")
+		for chest in _snapshot_dictionary(room.get("treasure_chests")).values():
+			if chest is Dictionary:
+				_filter_chest_config(chest)
+				if chest.get("config") is Dictionary:
+					_filter_chest_config(chest["config"])
+	for plan in _snapshot_dictionary(world.get("clear_drop_plans")).values():
+		if plan is Dictionary:
+			_filter_clear_drop(plan)
+	for delivery in _snapshot_dictionary(world.get("clear_drop_delivery")).values():
+		if delivery is Dictionary:
+			for field in ["grants_pending", "additional_weapon_pending", "item_pending"]:
+				_filter_item_array(delivery, field)
+	var legacy_config := _snapshot_dictionary(world.get("clear_drop_config"))
+	_filter_item_array(legacy_config, "fallback_pool")
+	for guarantee in _snapshot_array(legacy_config.get("room_guarantees")):
+		if guarantee is Dictionary:
+			_filter_item_array(guarantee, "items")
+
+
+static func _filter_chest_config(config: Dictionary) -> void:
+	_filter_item_array(config, "guaranteed_items")
+	if config.get("grants") is Array and not (config["grants"] as Array).is_empty():
+		# Preserve fixed-reward semantics when every old grant was retired.
+		config["explicit_reward_mode"] = true
+		_filter_item_array(config, "grants")
+
+
+static func _filter_clear_drop(plan: Dictionary) -> void:
+	_filter_item_array(plan, "grants")
+	var additional := _snapshot_dictionary(plan.get("additional_weapon"))
+	if ItemRegistry.is_retired_item_id(str(additional.get("weapon_id", ""))):
+		plan.erase("additional_weapon")
+	if ItemRegistry.is_retired_item_entry(plan.get("item")):
+		plan.erase("item")
+		if str(plan.get("kind", "")) == "item":
+			plan["kind"] = "none"
+	if plan.get("chest") is Dictionary:
+		_filter_chest_config(plan["chest"])
+
+
 static func _runtime_instance_id(candidate: String, fallback: String) -> String:
 	if not candidate.is_empty() and candidate not in SUPPORTED_SCHEMAS:
 		return candidate
@@ -101,5 +174,8 @@ static func _normalize_position(value: Variant) -> Array:
 
 
 static func _snapshot_array(value: Variant) -> Array:
-	# finalize_runtime_snapshot already owns a deep copy of this value.
 	return value as Array if value is Array else []
+
+
+static func _snapshot_dictionary(value: Variant) -> Dictionary:
+	return value as Dictionary if value is Dictionary else {}

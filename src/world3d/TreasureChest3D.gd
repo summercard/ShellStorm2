@@ -182,11 +182,13 @@ var mimic := false
 var mimic_monster_kind := "egt_mimic"
 ## 明确奖励清单（`[{kind:"item", item:{...}}]`，与 `RewardSink` 同一形状）。
 ##
-## 非空时**不再走 `ChestRewardService` 的池子解析**（见 `Dungeon3D._resolve_chest_grants`）：
+## 固定奖励模式**不再走 `ChestRewardService` 的池子解析**（见 `Dungeon3D._resolve_chest_grants`）：
 ## 箱子里装什么由调用方给定。用途只有一个——基地救援箱要把「上一局捞回来的东西」
 ## 原样还回去，那不是任何一张掉落表能表达的内容。
 ## 走的是同一条开箱链（认领 → 冻结 → 砰 → 落地 → 房间账），只是奖励来源换成这份清单。
 var explicit_grants: Array = []
+# 旧固定箱的全部物品退役时，仍是固定箱，不能重新抽奖。
+var _explicit_reward_mode := false
 ## 关卡保底条目（`[{item_id, count, grade?}]`），**在池子掉落之外额外另给**。
 ##
 ## 与上面 `explicit_grants` 的区别：`explicit_grants` 会**取代**整只箱子的解析，
@@ -237,8 +239,10 @@ func configure(config: Dictionary) -> void:
 	drop_count = maxi(1, int(config.get("drop_count", drop_count)))
 	mimic = bool(config.get("mimic", mimic))
 	mimic_monster_kind = str(config.get("mimic_monster_kind", mimic_monster_kind))
-	explicit_grants = (config.get("grants", explicit_grants) as Array).duplicate(true)
-	guaranteed_items = (config.get("guaranteed_items", guaranteed_items) as Array).duplicate(true)
+	var configured_grants := config.get("grants", explicit_grants) as Array
+	_explicit_reward_mode = bool(config.get("explicit_reward_mode", _explicit_reward_mode)) or not configured_grants.is_empty()
+	explicit_grants = ItemRegistry.without_retired_items(configured_grants).duplicate(true)
+	guaranteed_items = ItemRegistry.without_retired_items(config.get("guaranteed_items", guaranteed_items)).duplicate(true)
 	source_room_id = str(config.get("source_room_id", source_room_id))
 	fate_card_chance = clampf(float(config["fate_card_chance"]), 0.0, 1.0) if config.has("fate_card_chance") else -1.0
 	fate_common_offer = bool(config.get("fate_common_offer", false))
@@ -272,13 +276,13 @@ func get_reward_config() -> Dictionary:
 	return config
 
 
-## 箱内**明确装什么**（副本）。空数组 = 走池子解析。
+## 固定奖励的副本；是否走池子解析由 has_explicit_grants() 判定。
 func get_explicit_grants() -> Array:
 	return explicit_grants.duplicate(true)
 
 
 func has_explicit_grants() -> bool:
-	return not explicit_grants.is_empty()
+	return _explicit_reward_mode or not explicit_grants.is_empty()
 
 
 func _ready() -> void:
@@ -742,6 +746,8 @@ func get_save_data() -> Dictionary:
 	var snapshot := get_reward_config()
 	snapshot["opened"] = _opened
 	snapshot["grants"] = explicit_grants.duplicate(true)
+	if has_explicit_grants():
+		snapshot["explicit_reward_mode"] = true
 	snapshot["body_tint"] = [body_tint.r, body_tint.g, body_tint.b, body_tint.a]
 	snapshot["trim_tint"] = [trim_tint.r, trim_tint.g, trim_tint.b, trim_tint.a]
 	return snapshot

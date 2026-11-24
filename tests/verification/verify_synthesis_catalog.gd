@@ -3,24 +3,20 @@ extends Node
 ##
 ## 设计真源：docs/v0.1/07.3_玩法系统_合成目录与兴趣曲线.md §12（31 条断言）。
 ##
-## 覆盖六组：
+## 覆盖五组：
 ##   ① 结构与一致性（钥匙存在 / 产物在池 / curve_tier 与工坊 tier 一致 /
-##      产物集合 / 钥匙白名单 / 钥匙零价 / 近战 key_count / 钥匙链无环）
+##      产物集合 / 钥匙白名单 / 钥匙零价 / 近战 key_count / 钥匙链无环 /
+##      退役碎片与旧配方负向断言）
 ##   ② 经济（金币占比 / 燃料门槛 / 售价 / 零价兜底 / 印钞回归 / 净得）
-##   ③ 判定（R0 早于 R1 / 取最高 tier / 燃料不足不降级 / 钥匙不足 / 反向对照）
-##   ④ 保底（bp_charge 计数 / 只作用于它）
-##   ⑤ 曲线（每段有配方 / 密度递增 / 品质加成单调 / 钥匙数量单调）
-##   ⑥ 界面（页签 / 每行要素 / 完成标记）
+##   ③ 判定（R0 早于 R1 / 近战链分段 / 燃料不足回落 R1 / 反向对照）
+##   ④ 曲线（每段有配方 / 密度递增 / 品质加成单调）
+##   ⑤ 界面（页签 / 每行要素 / 完成标记 / 真实 _execute_forge）
 
 const FORGE := preload("res://src/weapons/WeaponForge.gd")
 const CATALOG := preload("res://src/weapons/SynthesisCatalog.gd")
 const GRADE := preload("res://src/weapons/WeaponDropGrade.gd")
 const INVENTORY := preload("res://src/game/InventoryModule.gd")
 const PANEL := preload("res://src/ui/WorkbenchPanel.gd")
-const MANAGER_SCRIPT := preload("res://src/base/BaseManager.gd")
-
-## 保底端到端验收用独立存档，不碰玩家真档。
-const PITY_TEST_PATH := "user://synthesis_pity_probe.json"
 
 ## 十把非初始武器（不含 `weapon_starter_rifle` / `weapon_sprinkler`）。
 ## 其中 `weapon_baseball_bat` 是近战链的**起点钥匙**，不是产物。
@@ -42,12 +38,11 @@ func _ready() -> void:
 	_case_structure()
 	_case_economy()
 	_case_verdicts()
-	_case_pity()
 	_case_curve()
 	await _case_panel()
 
 	if _failures.is_empty():
-		print("SYNTHESIS_CATALOG_OK: structure / economy / verdicts / pity / curve / panel pass")
+		print("SYNTHESIS_CATALOG_OK: structure / economy / verdicts / curve / panel pass")
 		print(CATALOG.summary_line())
 		get_tree().quit(0)
 		return
@@ -75,7 +70,7 @@ func _item(item_id: String, count: int = 1) -> Dictionary:
 # ————————————————————————————————
 
 func _case_structure() -> void:
-	_expect(CATALOG.RECIPES.size() == 9, "配方必须是 9 条，实际 %d" % CATALOG.RECIPES.size())
+	_expect(CATALOG.RECIPES.size() == 2, "配方必须是 2 条，实际 %d" % CATALOG.RECIPES.size())
 
 	var registry := ItemRegistry.get_instance()
 	for recipe in CATALOG.RECIPES:
@@ -130,31 +125,32 @@ func _case_structure() -> void:
 				]
 			)
 
-	# 4. 产物集合 = 十把非初始武器 − 棒球棍（它是钥匙不是产出）
+	# 4. 当前产物集合只保留两级近战升级。
 	var products := CATALOG.product_ids()
-	var expected: Array[String] = []
-	for weapon_id in NON_STARTER_WEAPONS:
-		if weapon_id != BASEBALL_BAT:
-			expected.append(weapon_id)
-	_expect(
-		products.size() == expected.size(),
-		"产物数应为 %d，实际 %d（%s）" % [expected.size(), products.size(), str(products)]
-	)
+	var expected: Array[String] = ["weapon_greatblade", "weapon_waraxe"]
+	_expect(products.size() == expected.size(), "产物数应为 %d，实际 %d（%s）" % [expected.size(), products.size(), str(products)])
 	for weapon_id in expected:
 		_expect(weapon_id in products, "产物集合缺少 %s" % weapon_id)
 	for weapon_id in products:
-		_expect(weapon_id in NON_STARTER_WEAPONS, "产物 %s 不在十把非初始武器里" % weapon_id)
-	_expect(
-		not BASEBALL_BAT in products,
-		"棒球棍不得作为产物 —— 它在基地无限购 45 金币，给它做配方等于「花更多钱买空气」"
-	)
+		_expect(weapon_id in expected, "产物 %s 不在当前近战产物集合里" % weapon_id)
+	_expect(not BASEBALL_BAT in products, "棒球棍不得作为产物")
+
 	# 无重复产物
 	var seen := {}
 	for weapon_id in products:
 		_expect(not seen.has(weapon_id), "产物 %s 重复登记" % weapon_id)
 		seen[weapon_id] = true
 
-	# 8. 钥匙链单向无环（存在环 ⇒ 可以无限刷）
+	# 8. 退役碎片、房间钥匙与旧配方不得回归。
+	for retired_recipe_id in ["SYN-PISTOL", "SYN-SHOTGUN", "SYN-RIFLE", "SYN-MACHINEGUN", "SYN-SNIPER", "SYN-LAUNCHER", "SYN-CHARGE"]:
+		_expect(CATALOG.recipe_by_id(retired_recipe_id).is_empty(), "%s 必须已退役" % retired_recipe_id)
+	_expect(CATALOG.recipe_by_id("SYN-ROOM-KEY").is_empty(), "房间钥匙旧配方不得存在")
+	var retired_blueprint := {"id": "bp_pistol", "type": "blueprint", "rarity": "common", "count": 6}
+	var retired_plan := FORGE.classify([retired_blueprint])
+	_expect(retired_plan["recipe"] == FORGE.RECIPE_NONE, "退役蓝图碎片不得成为合成燃料")
+	_expect((retired_plan["materials"] as Array).is_empty(), "退役蓝图碎片不得进入材料列表")
+
+	# 9. 钥匙链单向无环（存在环 ⇒ 可以无限刷）
 	_expect(not _has_key_cycle(), "近战钥匙链必须单向无环 —— 有环会让玩家无限刷")
 
 
@@ -293,105 +289,26 @@ func _case_verdicts() -> void:
 		"棒球棍 + 满燃料必须命中 SYN-GREATBLADE"
 	)
 
-	# 碎片链：0 武器 + 够数碎片 + 够燃料
-	var pistol_keys := FORGE.classify([_item("bp_pistol", 2), _item("mod_bullet_standard", 4)])
-	_expect(
-		str(pistol_keys["recipe"]) == FORGE.RECIPE_DIRECTED,
-		"2 个豌豆手枪碎片 + 4 点燃料（共 6 点）必须走 R0，实际 '%s'（reason=%s）" % [
-			str(pistol_keys["recipe"]), str(pistol_keys["reason"]),
-		]
-	)
-	_expect(
-		str((pistol_keys["synthesis"] as Dictionary).get("product_id", "")) == "weapon_pistol",
-		"豌豆手枪碎片必须产出 weapon_pistol"
-	)
-	_expect(
-		int(pistol_keys["coin_cost"]) == 25,
-		"定向合成的金币费必须取配方固定价 25，实际 %d" % int(pistol_keys["coin_cost"])
-	)
+	# 第二级近战升级：断刃 + 10 个标准弹（燃料 10）命中 SYN-WARAXE。
+	var waraxe_fuel := FORGE.classify([_item("weapon_greatblade"), _item("mod_bullet_standard", 10)])
+	_expect(str(waraxe_fuel["recipe"]) == FORGE.RECIPE_DIRECTED, "巨型工业断刃 + 10 点燃料必须走 R0")
+	_expect(str((waraxe_fuel["synthesis"] as Dictionary).get("recipe_id", "")) == "SYN-WARAXE", "断刃 + 满燃料必须命中 SYN-WARAXE")
+	_expect(int(waraxe_fuel["coin_cost"]) == 90, "SYN-WARAXE 必须收固定价 90 金币")
 
-	# 16. 多条命中取 curve_tier 最高：同时有低段与高段钥匙时，产出高段。
-	var mixed := FORGE.classify([
-		_item("bp_pistol", 2),
-		_item("bp_rifle", 3),
-		_item("mod_bullet_standard", 6),
-	])
-	_expect(
-		str((mixed["synthesis"] as Dictionary).get("recipe_id", "")) == "SYN-RIFLE",
-		"多配方同时命中必须取 tier 最高（SYN-RIFLE），实际 '%s'" % str(
-			(mixed["synthesis"] as Dictionary).get("recipe_id", "")
-		)
-	)
-	# 确定性：同投入同结果
-	var again := FORGE.classify([
-		_item("bp_pistol", 2),
-		_item("bp_rifle", 3),
-		_item("mod_bullet_standard", 6),
-	])
-	_expect(
-		str((again["synthesis"] as Dictionary).get("recipe_id", ""))
-		== str((mixed["synthesis"] as Dictionary).get("recipe_id", "")),
-		"同投入必须同结果（多条命中时不能随机选）"
-	)
+	# 17. 近战钥匙燃料不足时回落 R1，不得误报退役碎片拒绝码。
+	var short_fuel := FORGE.classify([_item("weapon_baseball_bat"), _item("mod_bullet_standard", 3)])
+	_expect(str(short_fuel["recipe"]) == FORGE.RECIPE_REMELT, "棒球棍燃料不足 R0 门槛时必须回落 R1")
+	_expect(int(short_fuel["coin_cost"]) > 0, "回落 R1 时必须按 R1 计费")
 
-	# 17. 钥匙够但燃料不够：拒绝，**不降级**成 R3，且盘面与金币不动。
-	#     bp_charge 是 epic（熔炼值 4）×5 = 20 点，门槛 15 —— 这里改用低熔炼值组合：
-	#     2 个 bp_shotgun（uncommon 2 点 ×2 = 4）+ 0 额外材料 ⇒ 4 < 6。
-	var short_fuel := FORGE.classify([_item("bp_shotgun", 2)])
-	_expect(
-		str(short_fuel["reason"]) == FORGE.REJECT_SYNTHESIS_FUEL_SHORT,
-		"钥匙够但燃料不够必须返回 synthesis_fuel_short，实际 '%s'" % str(short_fuel["reason"])
-	)
-	_expect(
-		str(short_fuel["recipe"]) == FORGE.RECIPE_NONE,
-		"燃料不足时不得降级成任何配方（recipe 必须为 NONE），实际 '%s'" % str(short_fuel["recipe"])
-	)
-	_expect(
-		int((short_fuel["synthesis"] as Dictionary).get("fuel_short", 0)) > 0,
-		"燃料不足时必须给出还差多少点"
-	)
-	_expect(int(short_fuel["coin_cost"]) == 0, "被拒绝时不得收费")
-
-	# 18. 钥匙不足：给软提示，且**不阻止**走 R3。
-	#     3 个 bp_charge（需 5）+ 足量材料 ⇒ V ≥ 6，仍可盲盒。
-	var key_short := FORGE.classify([_item("bp_charge", 3), _item("mod_bullet_standard", 2)])
-	_expect(
-		str(key_short["recipe"]) == FORGE.RECIPE_SYNTHESIS,
-		"钥匙不足时必须允许回落到 R3 盲盒，实际 '%s'" % str(key_short["recipe"])
-	)
-	var hint: Dictionary = key_short.get("synthesis_hint", {}) as Dictionary
-	_expect(not hint.is_empty(), "钥匙差 1–2 个时必须给出 synthesis_hint")
-	if not hint.is_empty():
-		_expect(
-			str(hint.get("recipe_id", "")) == "SYN-CHARGE",
-			"软提示应指向 SYN-CHARGE，实际 '%s'" % str(hint.get("recipe_id", ""))
-		)
-		_expect(int(hint.get("key_need", 0)) == 5, "软提示的 key_need 应为 5")
-
-	# 混投「碎片 + 武器」：碎片当燃料，走 R1，不得静默吞掉。
-	# 2 个 common 碎片的熔炼值只有 2 点，不够 R1 的燃料门槛 3 —— 补一件材料。
-	# 这条用例要验的是"碎片当燃料且不丢失"，不是"门槛能绕过"。
-	var mixed_weapon := FORGE.classify([
-		_item("weapon_rifle"), _item("bp_pistol", 2), _item("mod_bullet_standard", 1),
-	])
-	_expect(
-		str(mixed_weapon["recipe"]) == FORGE.RECIPE_REMELT,
-		"碎片 + 武器必须走 R1 重铸（碎片当燃料），实际 '%s'" % str(mixed_weapon["recipe"])
-	)
-	_expect(
-		int(mixed_weapon["melt"]) >= 1,
-		"混投时碎片必须计入熔炼值（否则等于凭空消失）"
-	)
-
-	# 19. 反向对照：quality_bonus 全清零后，L3 的金概率必须掉回基础池。
-	var l3 := CATALOG.recipe_by_id("SYN-CHARGE")
-	_expect(not l3.is_empty(), "SYN-CHARGE 必须存在")
-	if not l3.is_empty():
-		var with_bonus := FORGE.grade_probabilities(0, int(l3["quality_bonus"]))
+	# 19. 反向对照：WARAXE 的 quality_bonus 必须真实抬高金概率。
+	var waraxe_recipe := CATALOG.recipe_by_id("SYN-WARAXE")
+	_expect(not waraxe_recipe.is_empty(), "SYN-WARAXE 必须存在")
+	if not waraxe_recipe.is_empty():
+		var with_bonus := FORGE.grade_probabilities(0, int(waraxe_recipe["quality_bonus"]))
 		var without_bonus := FORGE.grade_probabilities(0, 0)
 		_expect(
 			float(with_bonus[GRADE.GRADE_GOLD]) > float(without_bonus[GRADE.GRADE_GOLD]),
-			"L3 的 quality_bonus 必须真实抬高金概率（%.4f vs %.4f）" % [
+			"WARAXE 的 quality_bonus 必须真实抬高金概率（%.4f vs %.4f）" % [
 				float(without_bonus[GRADE.GRADE_GOLD]), float(with_bonus[GRADE.GRADE_GOLD]),
 			]
 		)
@@ -433,165 +350,6 @@ func _case_verdicts() -> void:
 
 
 # ————————————————————————————————
-# ④ 保底
-# ————————————————————————————————
-
-func _case_pity() -> void:
-	# 20/21. 保底只在 bp_charge 上，且配置里只能有它一个键。
-	_expect(
-		int(CATALOG.PITY_THRESHOLD) == 3,
-		"保底阈值必须是「连续 3 次未见」，实际 %d" % int(CATALOG.PITY_THRESHOLD)
-	)
-	_expect(
-		CATALOG.PITY_KEYS.size() == 1 and str(CATALOG.PITY_KEYS[0]) == "bp_charge",
-		"保底只能作用于 bp_charge，实际 %s" % str(CATALOG.PITY_KEYS)
-	)
-	# 计数语义：未见递增，见到清零，达阈值则必得。
-	var state := {"misses": 0}
-	for index in range(3):
-		var granted := CATALOG.pity_should_grant(state)
-		_expect(not granted, "第 %d 次未见时不应触发保底" % (index + 1))
-		CATALOG.pity_record_miss(state)
-	_expect(int(state["misses"]) == 3, "连续 3 次未见后计数应为 3，实际 %d" % int(state["misses"]))
-	_expect(CATALOG.pity_should_grant(state), "连续 3 次未见后第 4 次必须触发保底")
-	CATALOG.pity_record_drop(state, "bp_charge")
-	_expect(int(state["misses"]) == 0, "获得 bp_charge 后计数必须清零，实际 %d" % int(state["misses"]))
-	_expect(not CATALOG.pity_should_grant(state), "清零后不得继续触发保底")
-	# 获得别的碎片不清零（否则"随便掉点什么"就能绕过保底）。
-	CATALOG.pity_record_miss(state)
-	CATALOG.pity_record_miss(state)
-	CATALOG.pity_record_drop(state, "bp_rifle")
-	_expect(
-		int(state["misses"]) == 2,
-		"获得非保底钥匙不得清零计数，实际 %d" % int(state["misses"])
-	)
-	_case_pity_settlement()
-
-
-## 保底**落地**验收：结算期三分支 + 真的写盘 + 真的回滚。
-##
-## 前面那些断言只管"计数怎么走"，管不到"这局到底有没有补一件东西给玩家"。
-## 保底最容易在落地这一层碎掉：判定对了，但东西没进结算物、或者没写盘。
-func _case_pity_settlement() -> void:
-	_cleanup_pity_probe()
-
-	# ——— 分支 1：没打首领 = 不记账（进图速撤刷不出保底） ———
-	var state: Dictionary = {}
-	var result := CATALOG.resolve_settlement(state, [], false)
-	_expect(int(result["misses"]) == 0, "没击败首领的局不得推进保底计数")
-	_expect(state.has("bp_charge"), "首次结算后 state 里必须建出计数桶")
-
-	# ——— 分支 2：打了首领没出碎片 = 推进 ———
-	result = CATALOG.resolve_settlement(state, [], true)
-	_expect(int(result["misses"]) == 1, "击败首领却没出碎片应推进 1 格，实际 %d" % int(result["misses"]))
-	# 带出别的钥匙不得清零（保底不能被"随便掉点什么"绕开）。
-	result = CATALOG.resolve_settlement(state, ["bp_rifle", "item_health_potion"], true)
-	_expect(int(result["misses"]) == 2, "带出非保底钥匙不得清零保底计数")
-
-	# ——— 分支 3：达阈值 = 补发，且补发后立即清零 ———
-	result = CATALOG.resolve_settlement(state, [], true)
-	_expect(int(result["misses"]) == 3, "连续 3 次未见后计数应为 3，实际 %d" % int(result["misses"]))
-	result = CATALOG.resolve_settlement(state, [], true)
-	_expect(
-		str(result["granted"]) == "bp_charge",
-		"连续 3 次未见后第 4 次必须补发 bp_charge，实际 '%s'" % str(result["granted"])
-	)
-	_expect(int(result["misses"]) == 0, "补发后计数必须清零，实际 %d" % int(result["misses"]))
-
-	# 本局带出了 bp_charge：即使没打首领也必须清零（发生过的事实优先于计数）。
-	var dropped: Dictionary = {"bp_charge": {"misses": 2}}
-	result = CATALOG.resolve_settlement(dropped, ["bp_charge"], false)
-	_expect(bool(result["cleared"]), "带出 bp_charge 必须置 cleared")
-	_expect(int(result["misses"]) == 0, "带出 bp_charge 必须清零计数，哪怕这局没打首领")
-
-	# ——— 端到端：plan → commit 落盘 → 重载还在 → 失败可回滚 ———
-	var manager := _new_pity_manager()
-	manager.data.synthesis_pity = {"bp_charge": {"misses": 3}}
-	var planned: Dictionary = manager.plan_synthesis_pity([], true)
-	_expect(str(planned.get("granted", "")) == "bp_charge", "plan 必须判定出补发")
-	var granted_item := planned.get("item", {}) as Dictionary
-	_expect(not granted_item.is_empty(), "plan 必须产出一件真物品，而不是只报个 ID")
-	_expect(
-		str(granted_item.get("id", "")) == "bp_charge",
-		"补发物必须是 bp_charge，实际 %s" % str(granted_item.get("id", ""))
-	)
-	var repeated: Dictionary = manager.plan_synthesis_pity([], true)
-	_expect(
-		str(repeated.get("granted", "")) == "bp_charge",
-		"同一次结算重试必须拿到同一份结论（不得二次记账）"
-	)
-	var loot: Array[Dictionary] = []
-	loot.append(granted_item)
-	var commit := manager.commit_run_settlement({
-		"transaction_id": "txn_synthesis_pity_probe",
-		"success": true,
-		"kills": 0,
-		"extraction_points": 0,
-		"extraction_loot": loot,
-	}) as Dictionary
-	_expect(bool(commit.get("success", false)), "保底结算提交失败：%s" % str(commit))
-	_expect(
-		manager.data.extraction_loot.size() == 1,
-		"补发物必须随结算进入待领取栏，实际 %d 件" % manager.data.extraction_loot.size()
-	)
-	_expect(
-		manager.get_synthesis_pity_misses("bp_charge") == 0,
-		"提交后计数必须清零，实际 %d" % manager.get_synthesis_pity_misses("bp_charge")
-	)
-
-	# 重载：计数真的进了存档，而不是只在内存里。
-	var reloaded := _new_pity_manager()
-	reloaded.load_base()
-	_expect(
-		reloaded.data.synthesis_pity.has("bp_charge"),
-		"重载后存档里必须有 synthesis_pity —— 说明它真的落盘了"
-	)
-	_expect(
-		reloaded.get_synthesis_pity_misses("bp_charge") == 0,
-		"重载后计数应为 0，实际 %d" % reloaded.get_synthesis_pity_misses("bp_charge")
-	)
-	reloaded.free()
-
-	# 存档失败：这一轮记账必须整体退回，不能白吃玩家一次保底。
-	manager.data.synthesis_pity = {"bp_charge": {"misses": 1}}
-	manager.force_save_failure_for_test = true
-	manager.plan_synthesis_pity([], true)
-	_expect(
-		manager.get_synthesis_pity_misses("bp_charge") == 2,
-		"plan 之后计数应已推进到 2，实际 %d" % manager.get_synthesis_pity_misses("bp_charge")
-	)
-	var failed := manager.commit_run_settlement({
-		"transaction_id": "txn_synthesis_pity_fail",
-		"success": true,
-		"kills": 0,
-		"extraction_points": 0,
-		"extraction_loot": [],
-	}) as Dictionary
-	_expect(not bool(failed.get("success", false)), "强制写盘失败时结算不得报告成功")
-	_expect(
-		manager.get_synthesis_pity_misses("bp_charge") == 1,
-		"存档失败必须把保底计数退回记账前（1），实际 %d" % manager.get_synthesis_pity_misses("bp_charge")
-	)
-	manager.force_save_failure_for_test = false
-	manager.free()
-	_cleanup_pity_probe()
-
-
-func _new_pity_manager() -> Node:
-	var manager: Node = MANAGER_SCRIPT.new()
-	manager.set("save_path", PITY_TEST_PATH)
-	manager.set("data", BaseData.new())
-	return manager
-
-
-func _cleanup_pity_probe() -> void:
-	for suffix in ["", ".tmp", ".bak"]:
-		var path: String = PITY_TEST_PATH + suffix
-		if FileAccess.file_exists(path):
-			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
-
-
-# ————————————————————————————————
 # ⑤ 曲线
 # ————————————————————————————————
 
@@ -605,16 +363,16 @@ func _case_curve() -> void:
 			"%s 段必须至少 1 条配方，实际 %d" % [str(tier_info["code"]), recipes.size()]
 		)
 
-	# 23. 配方密度严格递增（1 / 2 / 3 / 5）。
+	# 23. 当前两级近战配方密度保持为 1 / 2。
 	var densities: Array[int] = []
 	for tier_info in CATALOG.CURVE_TIERS:
 		densities.append(int(tier_info["density"]))
 	_expect(
-		densities == [1, 2, 3, 5],
-		"配方密度必须是 1/2/3/5，实际 %s —— 间隔恒定会让玩家在第 5 次就摸清套路" % str(densities)
+		densities == [1, 2],
+		"当前两级近战配方密度必须是 1/2，实际 %s" % str(densities)
 	)
 
-	# 24. quality_bonus 随段单调不减（0 ≤ 2 ≤ 4 ≤ 7）。
+	# 24. quality_bonus 随段单调不减（0 ≤ 2）。
 	var previous_bonus := -1
 	var max_bonus := 0
 	for tier_info in CATALOG.CURVE_TIERS:
@@ -629,28 +387,15 @@ func _case_curve() -> void:
 			)
 			previous_bonus = bonus
 			max_bonus = maxi(max_bonus, bonus)
-	_expect(max_bonus == 7, "最高段的 quality_bonus 必须是 7，实际 %d" % max_bonus)
+	_expect(max_bonus == 2, "最高段的 quality_bonus 必须是 2，实际 %d" % max_bonus)
 
-	# 25. 钥匙数量随段单调不减（2/3/4/5）；近战链单独是 1。
-	var previous_keys := 0
-	for tier_info in CATALOG.CURVE_TIERS:
-		var tier := int(tier_info["tier"])
-		for recipe in CATALOG.recipes_of_tier(tier):
-			if CATALOG.is_weapon_key(str(recipe["key_item_id"])):
-				continue
-			var need := int(recipe["key_count"])
-			_expect(
-				need >= previous_keys,
-				"%s 的钥匙数 %d 低于前段的 %d" % [str(recipe["recipe_id"]), need, previous_keys]
-			)
-			previous_keys = need
-	_expect(previous_keys == 5, "最高段的钥匙数必须是 5，实际 %d" % previous_keys)
+	# 25. 两级近战配方都只需 1 把对应武器。
 
 	# 曲线段号必须连续 0..3，缺号说明分层被删过。
 	var tiers: Array[int] = []
 	for tier_info in CATALOG.CURVE_TIERS:
 		tiers.append(int(tier_info["tier"]))
-	_expect(tiers == [0, 1, 2, 3], "曲线段必须是 0/1/2/3 连续，实际 %s" % str(tiers))
+	_expect(tiers == [0, 1], "曲线段必须是 0/1 连续，实际 %s" % str(tiers))
 
 
 # ————————————————————————————————
@@ -744,11 +489,11 @@ func _case_panel() -> void:
 		)
 
 	# 29. 完成打勾：手工塞一条已完成，重绘后该行状态必须是「已完成」。
-	panel.set("_completed_recipes", {"SYN-RIFLE": true})
+	panel.set("_completed_recipes", {"SYN-GREATBLADE": true})
 	panel.call("_refresh_catalog")
 	await get_tree().process_frame
-	var done_row := panel.find_child("Recipe_SYN-RIFLE", true, false)
-	_expect(done_row != null, "SYN-RIFLE 行必须存在")
+	var done_row := panel.find_child("Recipe_SYN-GREATBLADE", true, false)
+	_expect(done_row != null, "SYN-GREATBLADE 行必须存在")
 	if done_row != null:
 		var status_text := ""
 		for child in done_row.get_children():
@@ -757,17 +502,17 @@ func _case_panel() -> void:
 				status_text += label.text
 		_expect(status_text.contains("已完成"), "已完成的配方行必须打 ✓（文字「已完成」）")
 
-	# 盘面进度联动：投 2 个豌豆手枪碎片后，该行钥匙必须显示 2/2 且状态转「钥匙已齐」。
+	# 盘面进度联动：投 1 把棒球棍后，该行钥匙必须显示 1/1 且状态转「钥匙已齐」。
 	panel.call("_switch_page", "forge")
-	panel.call("_tray_append", _item("bp_pistol", 2), 2, 0, 0)
+	panel.call("_tray_append", _item("weapon_baseball_bat"), 1, 0, 0)
 	# 故意**不**调 `_refresh_all()`：那会走 `render_items`，为每个物品块建
 	# 3D 图标 SubViewport，在 headless 的 dummy 渲染器下报
 	# `material_get_instance_shader_parameters: material is null`（噪音，非逻辑错）。
 	# 本条断言验的是「目录页读盘面数据」，盘面真的画出来与否不影响判据。
 	panel.call("_switch_page", "catalog")
 	await get_tree().process_frame
-	var pistol_row := panel.find_child("Recipe_SYN-PISTOL", true, false)
-	_expect(pistol_row != null, "SYN-PISTOL 行必须存在")
+	var pistol_row := panel.find_child("Recipe_SYN-GREATBLADE", true, false)
+	_expect(pistol_row != null, "SYN-GREATBLADE 行必须存在")
 	if pistol_row != null:
 		var pistol_text := ""
 		for child in pistol_row.get_children():
@@ -775,17 +520,17 @@ func _case_panel() -> void:
 			if label != null:
 				pistol_text += label.text + " "
 		_expect(
-			pistol_text.contains("2 / 2"),
-			"投 2 个碎片后 SYN-PISTOL 行必须显示 2 / 2，实际「%s」" % pistol_text.strip_edges()
+			pistol_text.contains("1 / 1"),
+			"投 1 把棒球棍后 SYN-GREATBLADE 行必须显示 1 / 1，实际「%s」" % pistol_text.strip_edges()
 		)
 
-	# ——— 端到端：按下熔炼，盘上的 2 个豌豆手枪碎片必须真的变成一把豌豆手枪 ———
+	# ——— 端到端：按下熔炼，盘上的棒球棍必须真的变成一把巨型工业断刃 ———
 	# 上面验的都是 `classify` 的判定，还没验"面板拿这个判定去建产出"这一段。
 	# 少了这条，R0 有可能只在读数栏显示对、真正点击却产出随机枪身。
 	panel.call("_switch_page", "forge")
 	panel.call("_tray_remove_anchor", 0)
-	panel.call("_tray_append", _item("bp_pistol"), 2, 0, 0)
-	panel.call("_tray_append", _item("mod_bullet_standard"), 4, 2, 0)
+	panel.call("_tray_append", _item("weapon_baseball_bat"), 1, 0, 0)
+	panel.call("_tray_append", _item("mod_bullet_standard"), 6, 3, 0)
 	panel.call("_refresh_all")
 	var plan := FORGE.classify(panel.call("_tray_probe_items"))
 	_expect(
@@ -803,8 +548,8 @@ func _case_panel() -> void:
 		]
 	)
 	_expect(
-		int(fee) == 25,
-		"端到端：豌豆手枪必须收 25 金币（固定价，不按估值算），实际 %d" % fee
+		int(fee) == 60,
+		"端到端：巨型工业断刃必须收 60 金币（固定价，不按估值算），实际 %d" % fee
 	)
 	_expect(
 		(panel.get("_tray") as Array).is_empty(),
@@ -814,12 +559,12 @@ func _case_panel() -> void:
 	_expect(not produced.is_empty(), "端到端：背包必须产出一把枪")
 	if not produced.is_empty():
 		_expect(
-			str(produced.get("id", "")) == "weapon_pistol",
-			"端到端：必须产出**指定的** weapon_pistol，实际 '%s' —— 这是 R0 与 R3 的唯一区别" % str(produced.get("id", ""))
+			str(produced.get("id", "")) == "weapon_greatblade",
+			"端到端：必须产出**指定的** weapon_greatblade，实际 '%s' —— 这是 R0 与 R3 的唯一区别" % str(produced.get("id", ""))
 		)
 		_expect(
-			str(produced.get("created_recipe_id", "")) == "SYN-PISTOL",
-			"端到端：产出必须带 created_recipe_id=SYN-PISTOL（图鉴统计的外键），实际 '%s'" % str(produced.get("created_recipe_id", ""))
+			str(produced.get("created_recipe_id", "")) == "SYN-GREATBLADE",
+			"端到端：产出必须带 created_recipe_id=SYN-GREATBLADE（图鉴统计的外键），实际 '%s'" % str(produced.get("created_recipe_id", ""))
 		)
 		_expect(
 			GRADE.is_valid(str(produced.get("drop_grade", ""))),
@@ -836,8 +581,8 @@ func _case_panel() -> void:
 		)
 	# 完成后该配方必须被打勾。
 	_expect(
-		bool(panel.get("_completed_recipes").has("SYN-PISTOL")),
-		"端到端：成功合成后必须记录 SYN-PISTOL 到已完成集合"
+		bool(panel.get("_completed_recipes").has("SYN-GREATBLADE")),
+		"端到端：成功合成后必须记录 SYN-GREATBLADE 到已完成集合"
 	)
 
 	GameManager.currency = 0

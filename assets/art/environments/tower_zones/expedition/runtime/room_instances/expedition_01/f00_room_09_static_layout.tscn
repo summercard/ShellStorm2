@@ -23,9 +23,12 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/corner_guard/corner_guard_root_top3d.tscn" id="25_p61qp"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/floor_service/floor_service_root_top3d.tscn" id="26_5hwqt"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_top_service/wall_top_service_root_top3d.tscn" id="27_b3o5f"]
+[ext_resource type="Script" uid="uid://dx56053rauau4" path="res://src/vfx/VfxCyberSpace3D.gd" id="29_73jfs"]
+[ext_resource type="Script" uid="uid://dnd0l6bjsw51x" path="res://src/vfx/VfxVoidErosion3D.gd" id="30_hdwgn"]
 [ext_resource type="Script" uid="uid://dmwls48f10kdl" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
 [ext_resource type="Script" uid="uid://dgieqgeh1moll" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
-
+[ext_resource type="PackedScene" path="res://assets/art/vfx/environment_3d/cyber_space/runtime/vfx_env_cyber_space_blue_root_top3d.tscn" id="910_portal_blue"]
+[ext_resource type="PackedScene" path="res://assets/art/vfx/environment_3d/void_erosion/runtime/vfx_env_void_erosion_root_top3d.tscn" id="911_portal_void"]
 [node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=1351564467]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-ROOM-TYPE-LAYOUT"
 metadata/asset_version = "v009"
@@ -658,7 +661,10 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_RING_BEAM"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="CollisionBody" parent="ceiling_ring_beam" index="1"]
-position = Vector3(0, 8.873994, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.873994, 0)
+
+[node name="CollisionShape" parent="ceiling_ring_beam/CollisionBody" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
 
 [node name="corner_guard" parent="." unique_id=2051915423 instance=ExtResource("25_p61qp")]
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CORNER_GUARD"
@@ -676,7 +682,10 @@ metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERV
 metadata/authored_slot_role = "room_type_component"
 
 [node name="CollisionBody" parent="wall_top_service" index="1"]
-position = Vector3(0, 8.823994, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.823994, 0)
+
+[node name="CollisionShape" parent="wall_top_service/CollisionBody" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
 
 [node name="ConnectionPorts" type="Node3D" parent="." unique_id=1328787450]
 metadata/connection_port_count = 2
@@ -704,6 +713,37 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07392943, 3.4097147, -0.232
 light_color = Color(0.17921922, 0.31672853, 1, 1)
 light_energy = 5.764
 
-[editable path="ceiling_ring_beam"]
+[node name="CyberSpaceBlueBox" type="Node3D" parent="." unique_id=1759767131 instance=ExtResource("910_portal_blue")]
+transform = Transform3D(3.813168, 0, 0, 0, 1.001105, 0, 0, 0, 0.94996077, 0.6565552, 1.1202135, -16.882553)
+script = ExtResource("29_73jfs")
+strict_box_bounds = true
+box_size = Vector3(10, 19.693068, 10)
+face_color = Color(0.039, 0.121, 0.248, 1)
+grid_color = Color(0.052, 0.51, 0.86, 1)
+outline_color = Color(0.23, 0.87, 1, 1)
+edge_shadow_color = Color(0.008, 0.035, 0.12, 1)
+edge_highlight_color = Color(0.72, 0.94, 1, 1)
+edge_shadow_strength = 0.86
+edge_highlight_strength = 1.12
+edge_light_direction = Vector3(-0.4431129, 0.8018234, 0.4009117)
+edge_gradient_strength = 0.92
+edge_gradient_softness = 1.08
+edge_light_contrast = 1.45
+edge_light_energy = 1.18
+guide_color = Color(0.26, 0.57, 1, 1)
+signal_color = Color(0.76, 0.5, 1, 1)
+metadata/asset_id = "VFX-ENV-CYBER-SPACE-BLUE-3D"
+metadata/asset_version = "v001"
+metadata/display_name_zh = "赛博空间（蓝）"
 
+[node name="VoidErosionBox" type="Node3D" parent="." unique_id=737079243 instance=ExtResource("911_portal_void")]
+transform = Transform3D(2.3476405, 0, 0, 0, 1.6157426, 0, 0, 0, 1.1341406, 0.43335724, 3.3648272, -21.06951)
+script = ExtResource("30_hdwgn")
+strict_box_bounds = true
+box_size = Vector3(4.2714515, 6, 10)
+metadata/asset_id = "VFX-ENV-VOID-EROSION-3D"
+metadata/asset_version = "v005"
+metadata/display_name_zh = "赛博虚空"
+
+[editable path="ceiling_ring_beam"]
 [editable path="wall_top_service"]

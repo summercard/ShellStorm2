@@ -73,7 +73,22 @@
         }
       ],
       "floor_offset_m": 0,
-      "elite_id": "elite_arms_taker"
+      "elite_id": "elite_arms_taker",
+      "secret_site": {
+        "site_id": "EXP99_TEST_ROOM_ENTRY",
+        "pair_id": 0,
+        "role": "entry",
+        "wall": "east",
+        "lane": 0.0,
+        "door_width_m": 2.2,
+        "test_room": {
+          "room_id": "test_room_09",
+          "source_room_id": "room_09",
+          "layout": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_room_09_static_layout.tscn",
+          "size_m": [30.0, 40.0],
+          "objective": "channel_manager"
+        }
+      }
     },
     {
       "key": "boss",

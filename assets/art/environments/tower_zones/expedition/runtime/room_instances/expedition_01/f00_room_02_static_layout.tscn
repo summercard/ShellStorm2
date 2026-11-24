@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/cable_coil/cable_coil_root_top3d.tscn" id="1_d4tbx"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_deck_40m/ceiling_deck_40m_root_top3d.tscn" id="2_qupoa"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_ring_beam/ceiling_ring_beam_root_top3d.tscn" id="5_nh12n"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/repair_island/repair_island_root_top3d.tscn" id="9_4oqba"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/corner_guard/corner_guard_root_top3d.tscn" id="10_u35qc"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/floor_tile_flush/floor_tile_flush_c02_root_top3d.tscn" id="11_v6kt6"]
@@ -24,8 +23,6 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/shelf/shelf_root_top3d.tscn" id="27_avqmb"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/shelving/shelving_root_top3d.tscn" id="28_f80rl"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/wall_screen/wall_screen_root_top3d.tscn" id="30_4bv38"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/wall_service/wall_service_root_top3d.tscn" id="31_auqhs"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/wall_top_service/wall_top_service_root_top3d.tscn" id="32_br1js"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/workbench_a/workbench_a_root_top3d.tscn" id="33_idvw1"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/workbench_b/workbench_b_root_top3d.tscn" id="34_85g58"]
 [ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_corner_l_5m.tscn" id="35_wxmvl"]
@@ -102,14 +99,6 @@ metadata/authored_slot_role = "room_type_component"
 transform = Transform3D(-1.4361547, 0, -9.217314e-07, 0, 1, 0, 1.2555263e-07, 0, -10.543378, 2.1855695e-07, 18.333784, 2.5)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
 metadata/authored_slot_role = "room_type_component"
-
-[node name="ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM" parent="." unique_id=1326308490 instance=ExtResource("5_nh12n")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 11.15, 0)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="CollisionBody" parent="ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM" index="1"]
-position = Vector3(0, 7.183784, 0)
 
 [node name="ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND" parent="." unique_id=993531684 instance=ExtResource("9_4oqba")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 10.681166, 0, -8.105384)
@@ -394,12 +383,12 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-ISLAND_CART"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-RAISED_SERVICE_GANTRY" parent="." unique_id=1992457707 instance=ExtResource("17_axslg")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -9.6, 0.58, -3.589999)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -9.6, 0.58, -6.421383)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_A"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-RAISED_SERVICE_PLATFORM" parent="." unique_id=917085298 instance=ExtResource("18_77g2u")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -9.6, 0, -4.599999)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -9.6, 0, -7.473179)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_B"
 metadata/authored_slot_role = "room_type_component"
 
@@ -492,19 +481,6 @@ metadata/authored_slot_role = "room_type_component"
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -17.729998, 3.525, 11.655002)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-WALL_SCREEN"
 metadata/authored_slot_role = "room_type_component"
-
-[node name="ENV-EXPEDITION-L01-DB-WALL_SERVICE_RUN" parent="." unique_id=902950045 instance=ExtResource("31_auqhs")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.6532814e-07, 3.05, 3.035)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-WALL_SERVICE"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE" parent="." unique_id=745720934 instance=ExtResource("32_br1js")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 11.15, 0)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="CollisionBody" parent="ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE" index="1"]
-position = Vector3(0, 7.183784, 0)
 
 [node name="ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST" parent="." unique_id=1430390931 instance=ExtResource("33_idvw1")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.552807, 0.045, 10.475654)
@@ -694,11 +670,18 @@ metadata/lane_m = 2.5
 metadata/outward = Vector2(-1, 0)
 metadata/connected = true
 
+[node name="OmniLight3D" type="OmniLight3D" parent="ConnectionPorts" unique_id=168455289]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5323267, 8.935014, 2.948763)
+light_color = Color(0.50708246, 0.5758371, 0.43947953, 1)
+light_energy = 8.547
+light_volumetric_fog_energy = 7.777
+omni_range = 13.625
+omni_attenuation = 0.545
+
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=16683586]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2167759, 3.0369, -0.005728245)
-light_color = Color(0.4482724, 0.42737535, 0.371231, 1)
-light_energy = 5.764
-
-[editable path="ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM"]
-
-[editable path="ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.987732, 6.763571, 2.1390805)
+light_color = Color(0.50708246, 0.5758371, 0.43947953, 1)
+light_energy = 8.547
+light_volumetric_fog_energy = 7.777
+omni_range = 13.625
+omni_attenuation = 0.545

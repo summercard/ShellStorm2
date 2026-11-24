@@ -86,9 +86,7 @@ func _filter_by_blueprint_tier(candidates: Array[Dictionary]) -> Array[Dictionar
 
 	for item in candidates:
 		var item_tier: int = item.get("loot_table_tier", 0)
-		var blueprint_loot_tier: int = item.get("blueprint_loot_tier", -1)  # -1 means not a blueprint
 		var subtype: String = item.get("subtype", "")
-		var item_type: String = item.get("type", "")
 		var max_tier: int = 0
 		match subtype:
 			"gun_body":
@@ -100,12 +98,7 @@ func _filter_by_blueprint_tier(candidates: Array[Dictionary]) -> Array[Dictionar
 			_:
 				# 消耗品/信标/其他不受限
 				max_tier = 99
-		# 蓝图类物品：用 blueprint_loot_tier 与 BlueprintTier 对比
-		# 非蓝图类物品：用 loot_table_tier 与 BlueprintTier 对比
-		var effective_tier: int = item_tier
-		if item_type == "blueprint" and blueprint_loot_tier >= 0:
-			effective_tier = blueprint_loot_tier
-		if effective_tier <= max_tier:
+		if item_tier <= max_tier:
 			usable.append(item)
 
 	return usable

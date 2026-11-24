@@ -65,7 +65,7 @@
       "role": "main",
       "parent_key": "entry",
       "template_id": "corridor_45x40",
-      "template_variant": "l_turn",
+      "template_variant": "rect",
       "center_m": [
         -77.5,
         90.0

@@ -85,7 +85,7 @@ func _ready() -> void:
 	_expect(not bool(initial["visible"]), "未熔炼时闸门必须不可见")
 
 	# ——— ③ 时间轴：闭合 → 眼睛 → 开闸 → 结束 ———
-	var outputs := [_item("weapon_pistol"), _item("weapon_shotgun")]
+	var outputs := [_item("weapon_greatblade"), _item("weapon_waraxe")]
 	var finished_count := {"n": 0}
 	veil.finished.connect(func(): finished_count["n"] = int(finished_count["n"]) + 1)
 	veil.set_process(false)
@@ -205,8 +205,8 @@ func _ready() -> void:
 	var panel_veil := panel.find_child("SynthesisGateVeil", true, false) as SynthesisGateVeil
 	var melt_veil := panel.find_child("ForgeMeltVeil", true, false) as ForgeMeltVeil
 	_expect(melt_veil != null, "改造台必须挂上熔炼投料层（ForgeMeltVeil）")
-	panel.call("_tray_append", _item("bp_pistol"), 2, 0, 0)
-	panel.call("_tray_append", _item("mod_bullet_standard"), 4, 2, 0)
+	_expect(panel.call("_tray_append", _item("weapon_baseball_bat"), 1, 0, 0), "棒球棍应能放入熔炼盘")
+	_expect(panel.call("_tray_append", _item("mod_bullet_standard"), 6, 3, 0), "六个标准弹的堆叠不得与棒球棍的 3×2 格重叠")
 	var plan := FORGE.classify(panel.call("_tray_probe_items"))
 	_expect(
 		str(plan["recipe"]) == FORGE.RECIPE_DIRECTED,
@@ -297,7 +297,7 @@ func _ready() -> void:
 		)
 	# 播完自动放开 busy。注意顺序：`play` 内部会 `set_process(true)`，
 	# 必须先 play 再关掉引擎推进，否则手动推进与引擎滴答会叠加，时间轴翻倍。
-	panel_veil.play([_item("weapon_pistol")])
+	panel_veil.play([_item("weapon_greatblade")])
 	panel_veil.set_process(false)
 	_melt_advance(panel_veil, 0.7 + 2.4 + 0.7 + float(VEIL.LINGER_SECONDS))
 	await get_tree().process_frame

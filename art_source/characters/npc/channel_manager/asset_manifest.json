@@ -1,0 +1,98 @@
+{
+  "schema_version": 2,
+  "asset_id": "CHR-NPC-CHANNEL-MANAGER",
+  "logical_id": "npc_channel_manager",
+  "name": "频道管理者",
+  "slug": "channel_manager",
+  "category": "角色",
+  "subtype": "npc",
+  "version": "v002",
+  "production_status": "原型已接入",
+  "design_doc": "docs/v0.1/design/频道管理者NPC设计.md",
+  "sources": {
+    "model": {"path": "chr_npc_channel_manager_model_v002.blend", "sha256": "e427254f20117a26dc25ad4e5a406032c8e741c4b58dfa1f772a434af8d71847"},
+    "actions": {"path": "chr_npc_channel_manager_actions_v002.blend", "sha256": "3f84356b76234eeceed92f1f88217ad8d8a542217dfcd606bce9b104b7e47e79"},
+    "optimized_export": {"path": "export/v002/chr_npc_channel_manager_optimized_v002.blend", "sha256": "3f02674a006e4176db97ec37c1efcb3bcbddb5b6dfd3b58d57d4839582f48740"},
+    "prior_source_sha256": "be58a7733da58f24769819a705cb8f3b3b0d6f676c9e938c93e66befc4f055bb"
+  },
+  "rig": {
+    "object": "ChannelManagerRig",
+    "skeleton_id": "CHR-NPC-CHANNEL-MANAGER/CRT_RIG_002",
+    "signature_sha256": "adf5fd864652451018a40941f28014ba90f64f81b39d9a3dd44b6db2b8ae8b10",
+    "bones": 20,
+    "fixed_root": "fixed_root",
+    "fixed_mesh": "BaseFixed",
+    "bendable_mesh": "SupportCables",
+    "anchored_through_blender_z_m": 0.61,
+    "televisions": 13,
+    "floor_feeds": 4,
+    "blender_forward": "-Y",
+    "godot_forward": "+Z",
+    "nominal_active_size_m": [3, 3, 6],
+    "export_base_mesh_triangles": 99248
+  },
+  "animation": {
+    "fps": 24,
+    "clip_frames": {"sleep": 96, "activate": 60, "active_idle": 120, "talk_normal": 48, "talk_happy": 48, "talk_angry": 48, "talk_scheme": 48, "skill_windup": 34, "skill_lock": 14, "skill_release": 22},
+    "loop_clips": ["sleep", "active_idle", "talk_normal", "talk_happy", "talk_angry", "talk_scheme"],
+    "source_preview_start_frames": {"sleep": 1, "activate": 98, "active_idle": 159, "talk_normal": 280, "talk_happy": 329, "talk_angry": 378, "talk_scheme": 427, "skill_windup": 476, "skill_lock": 511, "skill_release": 526},
+    "preview_source": "动作母版内有按时间轴排列的身体和离线屏幕预演；交互追眼、三种卡面和光束在运行时生成。"
+  },
+  "display": {
+    "editable_atlas": "crt_channels_atlas.png",
+    "grid": [4, 3],
+    "resolution_px": [2048, 1152],
+    "sha256": "882f8545601a7cb7eadb454c25eeb4e7882d65fb3fece1acc15ba3d25eb5d447",
+    "slots": ["监视", "记录", "眼睛", "筛选", "引导", "传播", "识别", "观测", "寻呼", "监听", "中继", "同步"],
+    "initial_slots": [0, 1, 2, 3, 4, 5, 2, 6, 7, 8, 9, 10, 11],
+    "common_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+    "provenance": "沿用 v001：生成的 CRT 底纹加本地中文字和眼图合成，生成模型型号未返回，image-2 未核实。v002 未调用生成模型。"
+  },
+  "godot": {
+    "glb": "assets/art/characters/npc/channel_manager/components/chr_npc_channel_manager.glb",
+    "glb_sha256": "aa23af44be3e0a85ce8c321d20308bf13ee0ddf700afa3c92fb6d2cb1fa00427",
+    "mounts": "assets/art/characters/npc/channel_manager/components/screen_mounts.json",
+    "mounts_sha256": "c8566e9428e2f17ccbeedb880f193814f848af5c86cc54491559603cffd2c70e",
+    "prefab": "assets/art/characters/npc/channel_manager/runtime/channel_manager_runtime.tscn",
+    "prefab_sha256": "c01af93f1651254c025c38dee6311a07fa18abdfe6649d1299a59f5aebb835b4",
+    "state_machine": "assets/art/characters/npc/channel_manager/runtime/channel_manager_runtime.gd",
+    "screen_shader": "assets/art/characters/npc/channel_manager/runtime/channel_manager_screen.gdshader",
+    "event_integration": {
+      "host": "src/world3d/Dungeon3D.gd",
+      "room": "room_09 / f00_room_09",
+      "replaces": "异常信号终端",
+      "encounter_script": "assets/art/characters/npc/channel_manager/runtime/channel_manager_encounter.gd",
+      "portal_script": "assets/art/characters/npc/channel_manager/runtime/channel_manager_portal.gd",
+      "portal_source": "room_09 static layout authored CyberSpaceBlueBox and VoidErosionBox on the north-side wall area",
+      "portal_nodes": {"门效果": ["CyberSpaceBlueBox", "VoidErosionBox"], "监听": "VoidErosionBox", "中继": "CyberSpaceBlueBox"},
+      "portal_size_m": {"CyberSpaceBlueBox": [10, 19.693068, 10], "VoidErosionBox": [4.2714515, 6, 10]},
+      "portal_open_seconds": 1.45,
+      "portal_animation": "Drive the original authored boxes' progress only; no duplicate ChannelManagerPortal volumes.",
+      "beam_source": "screen_mounts.json screen index 9 (array index 8), north-facing -Z CRT socket",
+      "payment": "GameManager.currency / 1000",
+      "three_results": {"识别": "CyberSpaceBlueBox + VoidErosionBox 原有对象组合", "监听": "CyberSpaceBlueBox + VoidErosionBox 原有对象组合", "中继": "CyberSpaceBlueBox + VoidErosionBox 原有对象组合"},
+      "player_traversal": "未实现，留待下一轮设计"
+    },
+    "official_level_placement": "room_09 prototype integration",
+    "collision": false,
+    "beam_deals_damage": false
+  },
+  "verification": {
+    "blender_frames": 548,
+    "fixed_lower_vertices": 860,
+    "fixed_position_test_tolerance_m": 0.000001,
+    "runtime_assertions_passed": 53,
+    "renderers_reviewed": ["gl_compatibility", "forward_plus"],
+    "windows_pck": "Godot 4.7.2 Windows Desktop: prefab remap, runtime code, screen shader, model, atlas and socket data present; no art_source entries.",
+    "runtime_test": "tests/verification/verify_channel_manager_runtime.gd",
+    "runtime_capture": "tests/verification/capture_channel_manager_runtime.gd"
+  },
+  "ledger": {
+    "domain": "characters",
+    "sheet": "资产主表",
+    "intended_row": 32,
+    "status": "pending_registration",
+    "intended_production_status": "原型已接入",
+    "blocked_reason": "独立副本试写将 S6:S32 查重公式改成数组，且第 32 行优先级为空；正式角色账本和无损基线均未替换。"
+  }
+}

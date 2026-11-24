@@ -35,13 +35,6 @@ var _verified_file_revision := -1
 var _pending_room_payload: Dictionary = {}
 var _pending_write_reason := ""
 
-## 合成保底的「待提交记账」。非空 = `plan_synthesis_pity` 已经改过
-## `data.synthesis_pity` 但还没随 `commit_run_settlement` 落盘。
-## 快照存的是记账前的版本，供提交失败时整体撤回。
-var _synthesis_pity_snapshot: Dictionary = {}
-## 同一次结算的重试必须拿到同一份结论（不得二次记账），所以把 plan 结果缓存下来。
-var _synthesis_pity_plan: Dictionary = {}
-
 func _ready() -> void:
 	set_process(false)
 	_runtime_checkpoint_timer = Timer.new()
@@ -975,11 +968,11 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 	var success := bool(request.get("success", false))
 	var kills := maxi(0, int(request.get("kills", 0)))
 	var extraction_points := maxi(0, int(request.get("extraction_points", 0))) if success else 0
-	var extraction_loot := request.get("extraction_loot", []) as Array
-	var insurance_saved := request.get("insurance_saved", []) as Array
+	var extraction_loot := ItemRegistry.without_retired_items(request.get("extraction_loot", []) as Array)
+	var insurance_saved := ItemRegistry.without_retired_items(request.get("insurance_saved", []) as Array)
 	# 战败归航的救援暂存：与本次结算**同一事务**落盘，写失败一起回滚。
 	# 不放第二个事务的理由：结算已经成功、救援箱却没写进去，玩家会看到"救了但没救"。
-	var rescue_items := request.get("rescue_items", []) as Array
+	var rescue_items := ItemRegistry.without_retired_items(request.get("rescue_items", []) as Array)
 	var transaction_data := data
 	var old_expedition_02_unlocked := data.expedition_02_unlocked
 	var old_unlocked_levels := data.expedition_unlocked_levels.duplicate()
@@ -993,13 +986,6 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 	var old_streak := data.rescue_defeat_streak
 	var old_checkpoint := data.active_run_snapshot.duplicate(true)
 	var old_transactions := data.completed_transaction_ids.duplicate()
-	# 保底是「先记账、后提交」：`plan_synthesis_pity` 已经在内存里改过计数，
-	# 这里取的是那次记账**之前**的版本。没有待提交记账时就是当前值本身。
-	var old_synthesis_pity := (
-		_synthesis_pity_snapshot.duplicate(true)
-		if not _synthesis_pity_snapshot.is_empty()
-		else data.synthesis_pity.duplicate(true)
-	)
 
 	# 通关即解锁：由**解锁规则反查**「这一关通关后该开哪几关」，
 	# 不再写 `if level_id == "expedition_01": expedition_02_unlocked = true`。
@@ -1068,9 +1054,6 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 		data.rescue_defeat_streak = maxi(0, data.rescue_defeat_streak) + 1
 	ShopService.append_completed(data.completed_transaction_ids, transaction_id)
 	if save_base("run_settlement:%s" % ("success" if success else "death")):
-		# 记账已落盘，暂存快照随之作废；下一次结算重新开始一轮记账。
-		_synthesis_pity_snapshot = {}
-		_synthesis_pity_plan = {}
 		return {
 			"success": true,
 			"duplicate": false,
@@ -1092,70 +1075,7 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 		data.rescue_defeat_streak = old_streak
 		data.active_run_snapshot = old_checkpoint
 		data.completed_transaction_ids.assign(old_transactions)
-		data.synthesis_pity = old_synthesis_pity
-	# 存档失败：这一轮记账整体作废，重试时重新判定（而不是带着已推进的计数重来）。
-	_synthesis_pity_snapshot = {}
-	_synthesis_pity_plan = {}
 	return {"success": false, "reason": "存档失败，行动结算已整体回滚", "transaction_id": transaction_id}
-
-
-## 放弃这一轮待提交的保底记账：把计数恢复成记账前的版本。
-##
-## 用在两个"这局不算数"的出口：结算被判为重复提交（事务早已落过）、
-## 以及塔楼／远征在提交后被中止（交接快照写失败等）。
-## 不调它的后果是计数白推进一格 —— 玩家会莫名其妙少一次保底。
-func discard_synthesis_pity_plan() -> void:
-	if _synthesis_pity_snapshot.is_empty():
-		return
-	_ensure_data()
-	data.synthesis_pity = _synthesis_pity_snapshot.duplicate(true)
-	_synthesis_pity_snapshot = {}
-	_synthesis_pity_plan = {}
-
-
-## 合成保底当前计数（工作台「保底 n/3」用）。只读 —— 不记账、不写档。
-func get_synthesis_pity_misses(item_id: String) -> int:
-	_ensure_data()
-	return SynthesisCatalog.pity_progress(data.synthesis_pity, item_id)
-
-
-## 结算前判定并记账一次保底，返回 `{granted, item, misses, threshold}`。
-##
-## **调用契约（必须先 plan 后 commit）**：
-##   1. 调用方在本局结算物已确定之后调本函数；
-##   2. `granted` 非空时，`item` 是一件**真物品**，调用方负责把它交给玩家
-##      （撤离路径追加进结算物、带物返航路径直接塞背包）；
-##   3. 随后必须调 `commit_run_settlement` —— 计数靠这次提交落盘，
-##      存档失败时会整体撤回。跳过 commit 就等于凭空给了一件保底物。
-##
-## 为什么判定在前、提交在后：保底物要落进**各自不同的**交付通道
-## （Dungeon3D 走待领取栏、远征成功返航走随身背包），
-## 把它塞进 commit 内部就只能认一种通道，另一条路径的保底会凭空消失。
-func plan_synthesis_pity(loot_ids: Array, boss_cleared: bool) -> Dictionary:
-	_ensure_data()
-	# 同一次结算重试（存档失败后再撤一次）不得重复记账。
-	if not _synthesis_pity_plan.is_empty():
-		return _synthesis_pity_plan.duplicate(true)
-	if _synthesis_pity_snapshot.is_empty():
-		_synthesis_pity_snapshot = data.synthesis_pity.duplicate(true)
-	var result := SynthesisCatalog.resolve_settlement(
-		data.synthesis_pity, loot_ids, boss_cleared
-	)
-	result["item"] = {}
-	var granted_id := str(result.get("granted", ""))
-	if not granted_id.is_empty():
-		var definition := ItemRegistry.get_instance().get_item(granted_id)
-		if definition.is_empty():
-			# 保底钥匙不在物品表里 ⇒ 不能当作已发；计数退回，把问题留成可见的错误。
-			push_error("[BaseManager] 保底物品不存在：%s" % granted_id)
-			result["granted"] = ""
-			data.synthesis_pity = _synthesis_pity_snapshot.duplicate(true)
-		else:
-			var granted_item := ShopService.ensure_item_instance(definition.duplicate(true))
-			granted_item["count"] = 1
-			result["item"] = granted_item
-	_synthesis_pity_plan = result.duplicate(true)
-	return result
 
 
 func is_tutorial_completed() -> bool:
@@ -1418,7 +1338,8 @@ func get_vault_items() -> Array[Dictionary]:
 func set_vault_items(items: Array[Dictionary]) -> void:
 	data.vault_items = []
 	for item in items:
-		data.vault_items.append(ShopService.ensure_item_instance(item))
+		if not ItemRegistry.is_retired_item_entry(item):
+			data.vault_items.append(ShopService.ensure_item_instance(item))
 	save_base()
 
 func add_vault_item(item: Dictionary) -> bool:
@@ -1708,6 +1629,8 @@ func remove_pending_loadout_item(loadout_index: int) -> bool:
 	return bool(transfer_base_storage_item("loadout", loadout_index, "vault").get("success", false))
 
 func _try_add_owned_item(items: Array, incoming: Dictionary, capacity: int, target_slot: int = -1) -> Dictionary:
+	if ItemRegistry.is_retired_item_entry(incoming):
+		return {"success": false, "reason": "该物品已退役"}
 	var updated := items.duplicate(true)
 	var normalized := ShopService.ensure_item_instance(incoming)
 	var incoming_item_instance := str(normalized.get("item_instance_id", ""))
@@ -2018,6 +1941,8 @@ func _insurance_return_contains_identity(identity: String) -> bool:
 	return false
 
 func add_extraction_loot(item: Dictionary, count: int = 1) -> void:
+	if ItemRegistry.is_retired_item_entry(item):
+		return
 	var new_item := ShopService.ensure_item_instance(item)
 	var instance_id := str(new_item.get("weapon_instance_id", ""))
 	if not instance_id.is_empty():

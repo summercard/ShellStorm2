@@ -22,6 +22,8 @@ from ledger_registry import LedgerIndex
 
 INDEX = ROOT / 'assets/registry/ledger_index.json'
 REGISTRY = 'src/base/ItemRegistry.gd'
+SPECIAL_CATALOG = 'data/special_items/catalog.json'
+FATE_CREDENTIAL_ID = 'item_fate_card_drop'
 CONTENT = 'docs/v0.1/data/ShellStorm2_游戏内容数据库_v010.xlsx'
 DROP_CSV = 'docs/v0.1/data/怪物掉落表_地图x怪物.csv'
 PLAN = 'data/level_plans/expedition_01/level_plan.json'
@@ -32,8 +34,12 @@ HEADERS = ['内容ID', '名称', '种类', '子类', '唯一登记账本', '内�
 
 
 def definitions():
-    """Read each literal ItemRegistry dictionary without executing GDScript."""
-    source = (ROOT / REGISTRY).read_text()
+    """Read runtime item definitions, including the special catalog loaded by ItemRegistry."""
+    source = (ROOT / REGISTRY).read_text(encoding='utf-8')
+    retired_block = re.search(r'\bconst RETIRED_ITEM_IDS\s*:=\s*\[([^\]]*)\]', source)
+    if not retired_block:
+        raise ValueError('Missing ItemRegistry.RETIRED_ITEM_IDS')
+    retired = set(re.findall(r'"([^"]+)"', retired_block[1]))
     result = {}
     for match in re.finditer(r'"id"\s*:\s*"([^"]+)"', source):
         item_id = match[1]
@@ -64,11 +70,22 @@ def definitions():
         fields = dict(re.findall(r'"(name|type|subtype|use_action|assembly_id)"\s*:\s*"([^"]*)"', block))
         if not fields.get('type') or not fields.get('name'):
             raise ValueError(f'Incomplete item: {item_id}')
-        fields['line'] = source[:match.start()].count('\n') + 1
+        line = source[:match.start()].count('\n') + 1
+        fields['source'] = link(REGISTRY, f'L{line}')
         pools = re.search(r'"floor_loot_weights"\s*:\s*\{([^}]*)\}', block)
         fields['pools'] = re.findall(r'"([^"]+)"\s*:', pools[1]) if pools else []
         result[item_id] = fields
-    return result
+    catalog = json.loads((ROOT / SPECIAL_CATALOG).read_text(encoding='utf-8'))
+    if catalog['schema'] != 'special_item_catalog_v1':
+        raise ValueError('Invalid special item catalog schema')
+    for n, item in enumerate(catalog['items']):
+        item_id = item['id']
+        if item_id in result:
+            raise ValueError(f'Duplicate special item: {item_id}')
+        result[item_id] = {**item, 'source': link(SPECIAL_CATALOG, f'items[{n}]'), 'pools': []}
+    if retired & result.keys():
+        raise ValueError(f'Retired item registered: {sorted(retired & result.keys())}')
+    return result, retired
 
 
 def weapon_owned(item_id, item):
@@ -100,12 +117,16 @@ def link(path, location=''):
 def expected():
     index = LedgerIndex.load(ROOT)
     inventory = index.raw['content_ledgers']['inventory_items']
-    items = definitions()
+    items, retired = definitions()
     book = openpyxl.load_workbook(ROOT / CONTENT, read_only=True)
-    content_rows = {str(row[0]): n for n, row in enumerate(book['掉落物品'].iter_rows(min_row=5, values_only=True), 5) if row[0]}
+    content_rows = {str(row[0]): n for n, row in enumerate(book['掉落物品'].iter_rows(min_row=5, values_only=True), 5) if row[0] and str(row[0]) not in retired}
     book.close()
-    csv_rows = list(csv.DictReader((ROOT / DROP_CSV).open(encoding='utf-8-sig')))
-    plan = json.loads((ROOT / PLAN).read_text())['monster_drop_table']['rows']
+    with (ROOT / DROP_CSV).open(encoding='utf-8-sig', newline='') as drop_file:
+        csv_rows = list(csv.DictReader(drop_file))
+    plan = json.loads((ROOT / PLAN).read_text(encoding='utf-8'))['monster_drop_table']['rows']
+    with_drop_ids = {r['物品ID'] for r in csv_rows} | {r['item_id'] for r in plan}
+    if retired & with_drop_ids:
+        raise ValueError(f'Retired item in monster drops: {sorted(retired & with_drop_ids)}')
     if [(r['怪物ID'], r['物品ID']) for r in csv_rows] != [(r['monster_id'], r['item_id']) for r in plan]:
         raise ValueError('CSV/runtime plan item sequence differs')
     asset_refs = {}
@@ -120,6 +141,9 @@ def expected():
         wb.close()
     rows = {'物品道具': [], WEAPON_SHEET: [], '掉落归属导航': [], '非背包与待设计': []}
     for item_id, item in items.items():
+        if item_id == FATE_CREDENTIAL_ID:
+            rows['非背包与待设计'].append([item_id, link('src/world3d/Dungeon3D.gd', '_on_fate_pickup_interacted'), '命运卡世界交互凭据；由玩家主动认领，不进入普通背包'])
+            continue
         weapon = weapon_owned(item_id, item)
         owner = index.domain_for_key('weapons').relative_path if weapon else inventory['path']
         sheet = WEAPON_SHEET if weapon else '物品道具'
@@ -141,19 +165,17 @@ def expected():
         elif item_id == 'item_beacon':
             use = link('src/world3d/Dungeon3D.gd', '_on_inventory_item_clicked')
             model = 'beacon；程序几何'
-        elif item_id == 'item_room_key':
-            use = link('src/world3d/Dungeon3D.gd', '_consume_room_key')
-            model = 'key；程序几何'
+        elif item['type'] == 'special_item':
+            use = link('src/special_items/SpecialItemController3D.gd', 'request_use')
+            model = '特殊槽物品；双模型由共用工厂选择'
         elif item_id == 'item_ammo_pack':
             use = link('src/world3d/Dungeon3D.gd', '_on_inventory_item_clicked')
             model = 'ammo；程序罐体'
         else:
             use = link('src/game/ItemUseHandler.gd', f'apply / {action}')
-            model = {'heal': 'heal；程序罐体', 'refill_ammo': 'ammo；程序罐体',
-                     'unlock_blueprint': 'blueprint；程序几何'}.get(action, 'crate；通用箱体，尚无专用外观')
-        refs = [] if item['type'] == 'blueprint' else asset_refs.get(item_id, asset_refs.get(item.get('assembly_id', ''), []))
-        model_key = '__blueprint__' if item['type'] == 'blueprint' else item_id
-        authored_path = authored.get(model_key, authored.get(item.get('assembly_id', '')))
+            model = {'heal': 'heal；程序罐体', 'refill_ammo': 'ammo；程序罐体'}.get(action, 'crate；通用箱体，尚无专用外观')
+        refs = asset_refs.get(item_id, asset_refs.get(item.get('assembly_id', ''), []))
+        authored_path = authored.get(item_id, authored.get(item.get('assembly_id', '')))
         if authored_path:
             prefab = (ROOT / authored_path).read_text(encoding='utf8')
             identity = re.search(r'metadata/asset_id\s*=\s*"([^"]+)"', prefab)
@@ -164,7 +186,9 @@ def expected():
                 model += '；物品专用色板：assets/art/shared/palette/item_high_visibility_palette_10x10_512.png（HSV S/V×1.61；物品独立四材质；图标本色补光0.45）'
         occurrences = [f'{DROP_CSV}#CSV行{n} / {r["怪物ID"]}' for n, r in enumerate(csv_rows, 2) if r['物品ID'] == item_id]
         note = '已注册；本表只导航，堆叠/数值/掉落概率由原定义拥有'
-        if not occurrences:
+        if item['type'] == 'special_item':
+            note += '；99F固定货架，不注入随机掉落'
+        elif not occurrences:
             note += '；远征01作者掉落表未列此项（不可视为无其他产出）'
         if item_id not in content_rows:
             note += '；内容数据库缺行，运行注册表有此ID'
@@ -178,9 +202,9 @@ def expected():
             note += '；2026-10-19 起手动更换已关闭，需枪械工坊特殊流程（待实现）'
         pools = item['pools']
         row = [item_id, item['name'], item['type'], item.get('subtype', ''), owner,
-               link(REGISTRY, f'L{item["line"]}'), link(CONTENT, f'掉落物品!A{content_rows[item_id]}') if item_id in content_rows else '缺行',
+               item['source'], link(CONTENT, f'掉落物品!A{content_rows[item_id]}') if item_id in content_rows else '缺行',
                '\n'.join(occurrences) or '未在当前CSV列出；池来源见下一列',
-               link(REGISTRY, f'L{item["line"]}') + ' / ' + (', '.join(pools) or '无池声明'),
+               item['source'] + ' / ' + (', '.join(pools) or '无池声明'),
                link('src/game/InventoryModule.gd', 'add_item'), use,
                link('src/world3d/ItemModelFactory3D.gd', 'create_model / get_model_kind'), model,
                '\n'.join(r[0] for r in refs) or '未登记', '\n'.join(r[1] for r in refs) or '未登记',
@@ -216,7 +240,7 @@ def expected():
         ['地面实例', 'Dungeon3D', link('src/world3d/Dungeon3D.gd', '_spawn_loot_items'), '按既有房间边界、支撑面和散布规则落地'],
         ['拾取申请', 'GroundLootPickup3D', link('src/world3d/GroundLootPickup3D.gd', 'accept_pickup'), '事务确认后播放收取动画；模型读取ItemModelFactory3D'],
         ['拾取事务', 'Dungeon3D', link('src/world3d/Dungeon3D.gd', '_on_ground_loot_requested'), '金币走货币；物品走add_item，满包保留、部分接收保留余量'],
-        ['背包事实', 'InventoryModule', link('src/game/InventoryModule.gd', 'add_item'), '唯一格位所有者；武器实例去重，其他物品按stack_max堆叠'],
+        ['背包事实', 'InventoryModule', link('src/game/InventoryModule.gd', 'add_item'), '唯一格位所有者；拒绝退役实物；武器实例去重，其他物品按stack_max堆叠'],
         ['使用入口', 'Dungeon3D', link('src/world3d/Dungeon3D.gd', '_on_inventory_item_clicked'), '先分流换弹/武器/背包/手电/配件/子弹；普通use_action进入ItemUseHandler'],
         ['效果处理', 'ItemUseHandler', link('src/game/ItemUseHandler.gd', 'apply'), '药水heal；电池restore_flashlight_charge；拒绝效果时不扣物品'],
         ['共用模型', 'ItemModelFactory3D', link('src/world3d/ItemModelFactory3D.gd', 'create_model'), '地面与背包图标共用工厂；非专用物品落入crate'],
@@ -264,12 +288,32 @@ def format_sheet(ws, title, description, headers, rows, table_name):
     ws.add_table(table)
 
 
+def assert_function_link(target):
+    path, symbol = target.split('#', 1)
+    source = (ROOT / path).read_text(encoding='utf-8')
+    function = symbol.split(' / ', 1)[0]
+    if not re.search(r'\bfunc\s+' + re.escape(function) + r'\s*\(', source):
+        raise ValueError(f'Stale function link: {target}')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--write', action='store_true', help='Create navigation workbook and weapon-owned index; use only after backing up existing files')
     args = parser.parse_args()
     index, inventory, rows = expected()
     target = ROOT / inventory['path']
+    item_ids = {r[0] for r in rows['物品道具']}
+    weapon_ids = {r[0] for r in rows[WEAPON_SHEET]}
+    items, retired = definitions()
+    assert not item_ids & weapon_ids
+    assert not (item_ids | weapon_ids | {r[0] for r in rows['非背包与待设计']}) & retired
+    assert item_ids | weapon_ids == set(items) - {FATE_CREDENTIAL_ID}
+    for row in rows['功能调用链']:
+        assert_function_link(row[2])
+    for row in rows['物品道具'] + rows[WEAPON_SHEET]:
+        assert (ROOT / row[5].split('#')[0]).is_file()
+        for column in (9, 10, 11):
+            assert_function_link(row[column])
     if args.write:
         wb = openpyxl.Workbook(); wb.remove(wb.active)
         format_sheet(wb.create_sheet('物品道具'), '物品道具账本', '可掉落到地面、拾取进入背包的物品；内容ID唯一。子弹模块、配件及成品武器归武器账本；通用弹药归道具。', HEADERS, rows['物品道具'], 'InventoryItems')
@@ -297,20 +341,6 @@ def main():
             if normalized(saved) != normalized(rows[sheet]):
                 raise ValueError(f'Stale navigation: {path.name}#{sheet}; review source changes before --write')
         wb.close()
-    item_ids = {r[0] for r in rows['物品道具']}
-    weapon_ids = {r[0] for r in rows[WEAPON_SHEET]}
-    assert not item_ids & weapon_ids
-    assert item_ids | weapon_ids == set(definitions())
-    for row in rows['功能调用链']:
-        path, symbol = row[2].split('#', 1)
-        assert re.search(r'func\s+' + re.escape(symbol) + r'\s*\(', (ROOT / path).read_text()), row[2]
-    for row in rows['物品道具'] + rows[WEAPON_SHEET]:
-        assert (ROOT / row[5].split('#')[0]).is_file()
-        assert (ROOT / row[9].split('#')[0]).is_file()
-        use_path, symbol = row[10].split('#', 1)
-        use_source = (ROOT / use_path).read_text()
-        assert re.search(r'func\s+' + re.escape(symbol.split(' / ')[0]) + r'\s*\(', use_source), row[10]
-        assert (ROOT / row[11].split('#')[0]).is_file()
     print(f'INVENTORY_ITEM_LEDGER_OK items={len(item_ids)} weapons={len(weapon_ids)} drop_rows={len(rows["掉落归属导航"])} excluded={len(rows["非背包与待设计"])}')
 
 

@@ -112,7 +112,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-HALF_PARTITION"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="half_partition_1" parent="." unique_id=916535375 instance=ExtResource("3_tahw7")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 10.000002, 0, 17.7)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 10.000002, 0, 16.050577)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-HALF_PARTITION"
 metadata/authored_slot_role = "room_type_component"
 
@@ -657,7 +657,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-LOWER_CONTROL"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="near_crate_-1" parent="." unique_id=1261542515 instance=ExtResource("16_8amwm")]
-transform = Transform3D(-0.27484867, 0, -0.9614874, 0, 1, 0, 0.9614874, 0, -0.27484867, 13.073671, -0.035, -24.405272)
+transform = Transform3D(0.72655165, 0, -0.68711185, 0, 1, 0, 0.68711185, 0, 0.72655165, 13.613222, -0.035, -27.464378)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE"
 metadata/authored_slot_role = "room_type_component"
 
@@ -682,7 +682,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-PARTITION_BOX"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="partition_box_1" parent="." unique_id=1002442292 instance=ExtResource("18_2c4ff")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6.6571884, -0.035, 18.948605)
+transform = Transform3D(-0.52366513, 0, 0.8519242, 0, 1, 0, -0.8519242, 0, -0.52366513, 11.207628, -0.035001907, 17.580708)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-PARTITION_BOX"
 metadata/authored_slot_role = "room_type_component"
 

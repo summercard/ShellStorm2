@@ -23,14 +23,13 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/shelf/shelf_root_top3d.tscn" id="27_vxbsy"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/shelving/shelving_root_top3d.tscn" id="28_usxnw"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/wall_screen/wall_screen_root_top3d.tscn" id="30_b1c43"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/workbench_a/workbench_a_root_top3d.tscn" id="33_x01vi"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/workbench_b/workbench_b_root_top3d.tscn" id="34_p3a37"]
 [ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_corner_l_5m.tscn" id="35_vvf0i"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d.tscn" id="36_55c5w"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn" id="37_yr6ax"]
 [ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d.tscn" id="38_psljt"]
 [ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_room_light_switch_root_top3d.tscn" id="40_4clb4"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/secret_door/secret_door_root_top3d.tscn" id="42_wsjrs"]
+[ext_resource type="PackedScene" uid="uid://240efj44ame1" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/secret_door/secret_door_root_top3d.tscn" id="42_wsjrs"]
 
 [node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=1698526315]
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-ROOM-TYPE-LAYOUT"
@@ -71,7 +70,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND" parent="." unique_id=914664138 instance=ExtResource("9_uki4o")]
-transform = Transform3D(-0.41119617, 0, -0.9115469, 0, 1, 0, 0.9115469, 0, -0.41119617, -7.291655, -9.536743e-07, -6.4958925)
+transform = Transform3D(-0.944857, 0, -0.32748318, 0, 1, 0, 0.32748318, 0, -0.944857, -10.172621, -9.536743e-07, -3.0164447)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-REPAIR_ISLAND"
 metadata/authored_slot_role = "room_type_component"
 
@@ -332,6 +331,11 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
+[node name="ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE2" parent="." unique_id=633722084 instance=ExtResource("13_wsjrs")]
+transform = Transform3D(-0.37765002, 0, -0.92594844, 0, 1, 0, 0.92594844, 0, -0.37765002, 13.593469, 0, 18.029488)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK"
+metadata/authored_slot_role = "room_type_component"
+
 [node name="ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE" parent="." unique_id=758615628 instance=ExtResource("13_wsjrs")]
 transform = Transform3D(-0.9958225, 0, 0.09131036, 0, 1, 0, -0.09131036, 0, -0.9958225, -1.5562191, 0, 19.015238)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK"
@@ -353,13 +357,18 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-ISLAND_CART"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-ISLAND_CART_WEST" parent="." unique_id=1841187293 instance=ExtResource("16_35n5t")]
-transform = Transform3D(-0.18474051, 0, 0.98278725, 0, 1, 0, -0.98278725, 0, -0.18474051, -8.031921, -0.0085, -10.520555)
+transform = Transform3D(0.95840895, 0, -0.28539813, 0, 1, 0, 0.28539813, 0, 0.95840895, -9.001333, -0.0085, -0.8955364)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-ISLAND_CART"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-RAISED_SERVICE_GANTRY" parent="." unique_id=1524519297 instance=ExtResource("17_yv2xw")]
 transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -10.037526, 0.5799995, 2.3319259)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_A"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L01-DB-RAISED_SERVICE_PLATFORM2" parent="." unique_id=1791703010 instance=ExtResource("18_y0to6")]
+transform = Transform3D(-0.2067601, -0.97839177, -4.931179e-09, -0.97839177, 0.2067601, -2.3334406e-08, 2.3849761e-08, -8.3520773e-16, -1, 14.142357, 2.6215596, 4.074037)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_B"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-RAISED_SERVICE_PLATFORM" parent="." unique_id=1951613271 instance=ExtResource("18_y0to6")]
@@ -455,11 +464,6 @@ metadata/authored_slot_role = "room_type_component"
 [node name="ENV-EXPEDITION-L01-DB-WALL_SCREEN_BANK" parent="." unique_id=1781877499 instance=ExtResource("30_b1c43")]
 transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 11.655001, 3.525, 17.73)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-WALL_SCREEN"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST" parent="." unique_id=1597328319 instance=ExtResource("33_x01vi")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 8.753114, 0.045, 12.158352)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-WORKBENCH_A"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-WORKBENCH_WEST" parent="." unique_id=2046417907 instance=ExtResource("34_p3a37")]
@@ -683,7 +687,7 @@ collision_layer = 0
 metadata/authored_room_device = "wall_switch"
 
 [node name="SecretDoor_S4" parent="." unique_id=193973346 instance=ExtResource("42_wsjrs")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -14.599998, 0, -7.5)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -9.662043, 0, 6.8238335)
 metadata/secret_site_id = "S4"
 metadata/secret_pair_id = 1
 metadata/secret_role = "exit"

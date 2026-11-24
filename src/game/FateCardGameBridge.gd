@@ -67,6 +67,8 @@ func apply_card_instance(card: FateCard, source: AssemblyNode = null) -> Diction
 		set_player(_player)
 	if card.get_stable_card_id().is_empty():
 		return {"success": false, "message": "命运卡缺少正式身份；未应用"}
+	if card.get_stable_card_id() == "fate_sun_key":
+		return {"success": false, "error": "retired_room_key_card", "message": "房间钥匙命运已退役；卡片未应用"}
 	if card.scope == FateCard.Scope.CHARACTER:
 		return _apply_character_card(card)
 	if card.scope == FateCard.Scope.WORLD:

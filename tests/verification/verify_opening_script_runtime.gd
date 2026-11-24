@@ -309,8 +309,14 @@ func _phase_d_entry_camera_yield() -> void:
 		"让位期间叙事机位没被顶掉（让位前 %.1f° → 让位后 %.1f°）" % [narrative_elev, after],
 	)
 	_note("D 让位前 %.1f° → 让位后 %.1f°（近景机位 %.1f°）" % [narrative_elev, after, CLOSEUP_ELEVATION_DEG])
+	# 让位夹具主动重新展示了开场页。沿正式入口关闭它，再中止夹具剧本；
+	# 仅 abort 剧本不会关闭另一个持锁者，后面的手电段会错误继承入口锁。
+	_entry.call("skip_to_gameplay")
+	_check(not _tower.is_main_entry_input_locked() and NarrativeDirector.is_player_input_locked() and _player.input_locked,
+		"关闭夹具开场页只归还入口锁，仍保留剧本的独占输入")
 	NarrativeDirector.abort("d_cleanup")
 	await _wait_frames(2)
+	_check(not _player.input_locked and not NarrativeDirector.is_player_input_locked(), "让位夹具收场后两方都归还输入")
 
 
 # =========================================================================
@@ -598,17 +604,8 @@ func _phase_h_no_room_key_in_peaceful() -> void:
 	)
 	_note("H 和平区 HUD 目标文案 = %s" % objective)
 
-	# 源码级守卫：闸口必须**自检**（不能只信调用方的 `spawn_key`），否则重进房那条路会绕过去。
-	var d3_source := FileAccess.get_file_as_string("res://src/world3d/Dungeon3D.gd")
-	var guard_marker := "func _ensure_room_key_reward(room: DungeonRoom3D) -> void:"
-	var guard_start := d3_source.find(guard_marker)
-	_check(guard_start >= 0, "Dungeon3D 有 _ensure_room_key_reward（钥匙补发闸口）")
-	if guard_start >= 0:
-		var guard_body := d3_source.substr(guard_start, 900)
-		_check(
-			guard_body.contains("_room_produces_room_key("),
-			"钥匙补发闸口自检房间门策略（老 bug：只信调用方 spawn_key ⇒ 重进和平区掉钥匙）",
-		)
+	_check(not _tower._room_key_economy_enabled(), "普通房间钥匙机制已全局停用")
+	_check(not ItemRegistry.get_instance().has_item("item_room_key"), "旧房间钥匙不再登记为运行物品")
 
 
 func _count_room_keys_in(room: DungeonRoom3D) -> int:
@@ -846,7 +843,10 @@ func _phase_j_flashlight_input_and_wait() -> void:
 	if not log_lines.is_empty():
 		last_line = str(log_lines[log_lines.size() - 1])
 	_check(last_line == "finish:flow.end", "真实 F 输入后的收口原因是 flow.end（末条 %s）" % last_line)
-	_check(not _player.input_locked, "手电开启收口后玩家输入归还")
+	_check(not _player.input_locked, "手电开启收口后玩家输入归还（HP=%d，导演=%s，入口=%s，模态=%s，教程=%s，演出锁来源=%s）" % [
+		_player.current_hp, NarrativeDirector.is_player_input_locked(), _tower.is_main_entry_input_locked(),
+		_tower._has_exclusive_modal(), _tower.get("_run_vending_tutorial_locked"), _tower.get("_scripted_input_hold_sources"),
+	])
 	_check(not NarrativeDirector.is_camera_override_active(), "手电开启收口后相机归还")
 	# 收口必须把保持型系统提示一起收掉，否则「按完 F 那句提示还挂在屏幕上」。
 	for _settle_frame in range(4):

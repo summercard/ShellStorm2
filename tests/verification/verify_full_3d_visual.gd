@@ -37,7 +37,7 @@ func _ready() -> void:
 		if light_on_image == null or light_on_image.is_empty() or light_on_image.save_png(LIGHT_ON_PREVIEW_PATH) != OK:
 			failures.append("Dungeon3D light-on preview cannot be saved")
 	var inventory := dungeon.get_inventory_module()
-	for item_id in ["weapon_shotgun", "mod_bullet_standard", "item_health_potion", "item_room_key", "item_beacon"]:
+	for item_id in ["weapon_shotgun", "mod_bullet_standard", "item_health_potion", "item_beacon"]:
 		inventory.add_item(ItemRegistry.get_instance().get_item(item_id), 1)
 	var inventory_ui := dungeon.get_node_or_null("HUD/InventoryUI3D") as InventoryUI
 	if inventory_ui == null:

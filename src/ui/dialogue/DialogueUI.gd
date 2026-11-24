@@ -46,6 +46,9 @@ var _explicit_presentation := false
 var _run_presentation_id := ""
 var _run_auto_presentation := false
 var _panel: PanelContainer
+var _dialogue_column: VBoxContainer
+var _mounted_choice_controls: Array[Control] = []
+const CHOICE_PANEL_EXTRA_HEIGHT := 190.0
 var _speaker_label: Label
 var _text_label: Label
 var _guidance_label: RichTextLabel
@@ -552,6 +555,8 @@ func _step_next() -> void:
 
 
 func _finish(outcome: String) -> void:
+	_unmount_choice_controls()
+	_apply_choice_layout(false)
 	var finished_run := _run_id
 	var finished_presentation := _run_presentation_id
 	var auto_presentation := _run_auto_presentation
@@ -567,6 +572,39 @@ func _finish(outcome: String) -> void:
 		end_presentation(finished_presentation)
 	# 不等待立绘退场；回执后不再改任何可被同步重入替换的状态。
 	dialogue_finished.emit(finished_run, outcome)
+
+
+func mount_choice_controls(controls: Array[Control]) -> void:
+	_unmount_choice_controls()
+	_mounted_choice_controls = controls.duplicate()
+	for control: Control in _mounted_choice_controls:
+		if control == null or not is_instance_valid(control):
+			continue
+		if control.get_parent() != null:
+			control.get_parent().remove_child(control)
+		_dialogue_column.add_child(control)
+	_apply_choice_layout(true)
+
+
+func unmount_choice_controls() -> void:
+	_unmount_choice_controls()
+	_apply_choice_layout(false)
+
+
+func _unmount_choice_controls() -> void:
+	for control: Control in _mounted_choice_controls:
+		if control != null and is_instance_valid(control) and control.get_parent() == _dialogue_column:
+			_dialogue_column.remove_child(control)
+	_mounted_choice_controls.clear()
+
+
+func _apply_choice_layout(has_choices: bool) -> void:
+	if _panel == null:
+		return
+	_panel.offset_top = -(PANEL_HEIGHT + MARGIN_BOTTOM + (CHOICE_PANEL_EXTRA_HEIGHT if has_choices else 0.0))
+	_panel.visible = has_choices or _active
+	if _hint_label != null:
+		_hint_label.visible = not has_choices and _hint_label.visible
 
 
 func _set_shown(shown: bool) -> void:
@@ -615,22 +653,23 @@ func _build() -> void:
 	_panel.offset_bottom = -MARGIN_BOTTOM
 	root.add_child(_panel)
 
-	var column := VBoxContainer.new()
-	column.name = "Column"
-	column.add_theme_constant_override("separation", 6)
-	_panel.add_child(column)
+	_dialogue_column = VBoxContainer.new()
+	_dialogue_column.name = "Column"
+	_dialogue_column.add_theme_constant_override("separation", 6)
+	_panel.add_child(_dialogue_column)
+	_apply_choice_layout(false)
 
 	_speaker_label = UIStyleFactory.make_outline_label("", UIPalette.PRISM_LABEL)
 	_speaker_label.name = "Speaker"
 	UIStyleFactory.apply_prism_label(_speaker_label, "label", 3, 15)
-	column.add_child(_speaker_label)
+	_dialogue_column.add_child(_speaker_label)
 
 	_text_label = UIStyleFactory.make_outline_label("", UIPalette.PRISM_TEXT)
 	_text_label.name = "Text"
 	UIStyleFactory.apply_prism_label(_text_label, "value", 1, 19)
 	_text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_text_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	column.add_child(_text_label)
+	_dialogue_column.add_child(_text_label)
 
 	_guidance_label = RichTextLabel.new()
 	_guidance_label.name = "GuidanceText"
@@ -642,10 +681,10 @@ func _build() -> void:
 	_guidance_label.size_flags_vertical = _text_label.size_flags_vertical
 	UIStyleFactory.apply_prism_rich_text(_guidance_label, _text_label)
 	_guidance_label.hide()
-	column.add_child(_guidance_label)
+	_dialogue_column.add_child(_guidance_label)
 
 	_hint_label = UIStyleFactory.make_outline_label("[左键/空格/回车] 继续", UIPalette.PRISM_TEXT_FAINT)
 	_hint_label.name = "Hint"
 	UIStyleFactory.apply_prism_label(_hint_label, "faint", 1, 13)
 	_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	column.add_child(_hint_label)
+	_dialogue_column.add_child(_hint_label)

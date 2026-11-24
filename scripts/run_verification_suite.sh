@@ -214,6 +214,7 @@ core_scenes=(
   verify_player3d_firing_motion
   verify_weapon_fire_feedback
   verify_player3d_weapon_switch
+  verify_player3d_aim_beam
   verify_player3d_reload_motion
   verify_base99_radio_sound
   verify_base99_swivel_chairs

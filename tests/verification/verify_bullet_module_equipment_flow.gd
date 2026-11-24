@@ -8,7 +8,7 @@ extends Node
 ## 本文件钉住：
 ##   ① 背包左键 / 拖到主武器格 / 拖到副武器格 三条手动入口全部拒绝，且不吞物品；
 ##   ② 直接调用 `Player3D.install_bullet_module_to_weapon_slot` 也拒绝（不是只灰 UI）；
-##   ③ 装备界面仍显示当前弹药，并明确标注「锁定 · 需枪械工坊」；
+##   ③ 装备枪格内仍显示当前弹药的只读图标；悬停显示弹种及工坊限制，无常驻文字；
 ##   ④ 掉落枪的随机弹种仍然保留，且掉落枪的绑定原因优先于通用渠道原因。
 ##
 ## 判据：`BULLET_MODULE_LOCK_OK` 行，不看裸退出码。
@@ -45,7 +45,7 @@ func _ready() -> void:
 	_verify_weapon_slot_rejects_bullet(ui, failures)
 	_verify_hover_copy(player, ui, failures)
 	_verify_direct_transaction_locked(player, failures)
-	await _verify_equipment_display(ui, failures)
+	await _verify_equipment_display(player, ui, failures)
 	_verify_dropped_gun_keeps_random_bullet(player, failures)
 	_verify_source_guards(failures)
 
@@ -237,39 +237,38 @@ func _verify_direct_transaction_locked(player: Player3D, failures: Array[String]
 	)
 
 
-## 装备界面仍要显示当前弹药，标题要能一眼看出锁定。
-func _verify_equipment_display(ui: InventoryUI, failures: Array[String]) -> void:
+## 装备窗已改为枪格内嵌图标，弹种和工坊限制走玩家实际看到的悬停卡。
+func _verify_equipment_display(player: Player3D, ui: InventoryUI, failures: Array[String]) -> void:
+	var secondary := ItemRegistry.get_instance().get_item("weapon_shotgun").duplicate(true)
+	secondary["bullet_module_id"] = "mod_bullet_sticky"
+	_check(bool(player.equip_weapon_item_to_slot(secondary, 1).get("success", false)), "固定弹种的副枪无法装备", failures)
 	ui.set_inventory_panel_open(true)
 	await get_tree().process_frame
-	_check(ui.equipment_bullet_labels.size() == 2, "装备界面没有为两把武器各建一个弹药显示位", failures)
-	if ui.equipment_bullet_labels.size() < 2:
-		return
-	_check(
-		ui.equipment_bullet_labels[0].text == "标准子弹模块",
-		"主武器弹药行显示的是「%s」，期望「标准子弹模块」" % ui.equipment_bullet_labels[0].text,
-		failures
-	)
-	for index in range(2):
-		var slot := ui.equipment_bullet_slots[index]
-		var item := slot.get_meta("slot_item", {}) as Dictionary
-		_check(
-			not item.is_empty(),
-			"第 %d 把武器的弹药格没有填上图标（slot_item 为空）" % index,
-			failures
-		)
-		_check(
-			bool(slot.get_meta("drag_disabled", false)),
-			"弹药展示格可以被拖出，会把玩家背包里的展示物当真实物品",
-			failures
-		)
-		var caption := _bullet_caption(slot)
-		_check(
-			caption != null and caption.text.contains("锁定"),
-			"第 %d 把武器的弹药标题没有标注「锁定」（实际「%s」）" % [
-				index, caption.text if caption != null else "<无控件>",
-			],
-			failures
-		)
+	var slots := ui.equipment_bullet_slots
+	_check(slots.size() == 2 and ui.equipment_weapon_slots.size() == 2, "装备界面没有双枪弹药展示位", failures)
+	if slots.size() == 2 and ui.equipment_weapon_slots.size() == 2:
+		for index in range(2):
+			var slot := slots[index] as ItemSlot
+			if slot == null:
+				_check(false, "第 %d 个内嵌弹药展示位不是物品控件" % index, failures)
+				continue
+			var expected_id := STARTING_BULLET if index == 0 else "mod_bullet_sticky"
+			var shown := slot.get_meta("slot_item", {}) as Dictionary
+			var icon := slot.get_node_or_null("ItemModelIcon3D") as ItemModelIcon3D
+			var icon_state := icon.get_snapshot() if icon != null else {}
+			_check(player.get_equipped_bullet_item_for_slot(index).get("id", "") == expected_id
+				and shown.get("id", "") == expected_id and icon_state.get("item_id", "") == expected_id
+				and icon_state.get("model_kind", "") == "bullet" and int(icon_state.get("mesh_count", 0)) > 0
+				and slot.get_parent() == ui.equipment_weapon_slots[index] and slot.is_visible_in_tree(),
+				"第 %d 个内嵌弹药图标没有显示对应枪械的实际弹种：%s" % [index, shown.get("id", "<空>")], failures)
+			_check(bool(slot.get_meta("drag_disabled", false)) and slot._get_drag_data(Vector2.ZERO) == null,
+				"第 %d 个弹药展示位可拖出只读物品" % index, failures)
+			slot.mouse_entered.emit()
+			_check(ui.item_hover_card.is_visible_in_tree() and ui.item_hover_title.text == shown.get("name", "")
+				and ui.item_hover_body.text.contains(WORKSHOP_HINT) and not ui.item_hover_body.text.contains("左键"),
+				"第 %d 个图标的实际悬停卡未说明对应弹种及工坊限制" % index, failures)
+			slot.mouse_exited.emit()
+			await get_tree().process_frame
 	ui.set_inventory_panel_open(false)
 
 
@@ -350,17 +349,6 @@ func _verify_source_guards(failures: Array[String]) -> void:
 	)
 
 
-func _bullet_caption(bullet_slot: Control) -> Label:
-	# 结构固定为 HBox[ 只读弹药格, VBox[「弹药（锁定）」标题, 模块名] ]。
-	var row := bullet_slot.get_parent()
-	if row == null or row.get_child_count() < 2:
-		return null
-	var text_col := row.get_child(1) as Control
-	if text_col == null or text_col.get_child_count() == 0:
-		return null
-	return text_col.get_child(0) as Label
-
-
 func _status_text(dungeon: Dungeon3D) -> String:
 	var label := dungeon.get("status_label") as Label
 	return label.text if label != null else ""
@@ -398,7 +386,7 @@ func _check(condition: bool, message: String, failures: Array[String]) -> void:
 
 func _finish(failures: Array[String]) -> void:
 	if failures.is_empty():
-		print("BULLET_MODULE_LOCK_OK: 手动更换已锁（背包左键/拖主武器/拖副武器/直接事务全拒绝）、物品不吞、装备界面标注锁定、掉落枪随机弹种与绑定原因保留")
+		print("BULLET_MODULE_LOCK_OK: 手动更换已锁（背包左键/拖主武器/拖副武器/直接事务全拒绝）、物品不吞、双枪内嵌图标及悬停工坊说明、掉落枪随机弹种与绑定原因保留")
 		get_tree().quit(0)
 		return
 	for failure in failures:

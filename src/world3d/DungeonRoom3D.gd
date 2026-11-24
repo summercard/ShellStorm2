@@ -2055,6 +2055,13 @@ func _static_layout_alignment_delta_deg(static_layout: Node3D) -> float:
 	# Captured from this exact local geometry; no historical orientation inference.
 	if str(static_layout.get_meta("runtime_room_source_schema", "")) == "shellstorm2.runtime_room_art.v1":
 		return 0.0
+	# 完整矩形的地砖、外墙在 180° 下相同，不能靠壳体点数猜作者方向。
+	# 标有烘焙方位的场景用本局模板旋转减去该方位，门、灯和陈设一起刚体对齐。
+	if static_layout.has_meta("authored_template_rotation_deg"):
+		return fposmod(
+			float(get_meta("template_rotation_deg", 0.0))
+			- float(static_layout.get_meta("authored_template_rotation_deg")), 360.0
+		)
 	# 安全屋没有实例清单；元数据记的是历史方位，实体门槽才是当前事实。
 	if authored_layout_instances.is_empty() and static_layout.has_meta("safe_room_orientation_steps"):
 		return _static_layout_door_alignment_delta_deg(static_layout)
@@ -3369,10 +3376,11 @@ func _build_shell() -> void:
 			else:
 				var static_room_id := str(static_layout.get_meta("room_id", ""))
 				var static_instance_total := int(static_layout.get_meta("layout_instance_total", -1))
-				if not static_room_id.is_empty() and static_room_id != room_id:
+				var layout_room_id := str(get_meta("borrowed_layout_room_id", room_id))
+				if not static_room_id.is_empty() and static_room_id != layout_room_id:
 					push_error(
 						"DungeonRoom3D: 静态场景房间 ID 不符，期望 %s，实得 %s"
-						% [room_id, static_room_id]
+						% [layout_room_id, static_room_id]
 					)
 				# 静态场景**照常使用** —— 它是本关美术的唯一来源（手工排布的墙样式、
 				# 地砖、装饰、灯、专属件都在里面），程序化壳体拿不出同等观感。
@@ -6369,8 +6377,10 @@ func _build_content() -> void:
 		if is_search:
 			prop.searched.connect(_on_prop_searched)
 
-	if room_type in ["MERCHANT", "UPGRADE", "EVENT"]:
+	if room_type in ["MERCHANT", "UPGRADE"]:
 		_create_service_station(room_type.to_lower(), dimensions)
+	elif room_type == "EVENT" and not (room_id == "room_09" or room_id.ends_with("_room_09")):
+		_create_service_station("event", dimensions)
 	# 静态布局手摆的额外服务点（如普通战斗房里的局内贩卖机）：排在房型自建之后，
 	# `get_service_station()` 已能看见自建那一个，同类不会重复建。
 	_build_authored_service_stations()

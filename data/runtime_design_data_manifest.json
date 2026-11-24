@@ -4,7 +4,7 @@
     {
       "source": "art_source/design/whitebox/tower_zones/99/v001/data/floors/floor_00.json",
       "runtime": "data/level_plans/99/floors/floor_00.json",
-      "sha256": "19d71eaee000cca5926e1d5a268aadbfc736a99ddc6c5f0d6b2b3d9177a1d203"
+      "sha256": "f966976090d95694a2a893a991678ff8eebe8da85dd7fe26b644349cfa147f36"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/99/v001/data/level_plan.json",
@@ -94,7 +94,7 @@
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json",
       "runtime": "data/level_plans/expedition_01/floors/floor_00.json",
-      "sha256": "b4e2e33e9d520a565a35e84bbcfce1b510498e4b9e90774f79d044dbf8a37768"
+      "sha256": "b770fb37ee0360b0bf27b5d33634c576d6b0ca638da385509c0227bfe57d662a"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/level_plan.json",
@@ -119,7 +119,7 @@
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/corridor_45x40.json",
       "runtime": "data/level_plans/expedition_01/room_templates/corridor_45x40.json",
-      "sha256": "b5eb6993d1e002f61581fc2af386cb0d9bcf16c30630aaafb21cf581424b20c7"
+      "sha256": "54b8b8e150d1a1b2052d864aa499b11b19ebcbc6b4b48dda8061fde21d610524"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/db_70x50.json",

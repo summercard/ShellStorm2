@@ -245,6 +245,10 @@ func build() -> void:
 		if not _pair_spawned(pair_id):
 			continue
 		var entry := _find_site(sites, pair_id, "entry")
+		var test_room := entry.get("test_room", {}) as Dictionary
+		if not test_room.is_empty():
+			_build_test_room_branch(pair_id, entry, test_room)
+			continue
 		var exit_site := _find_site(sites, pair_id, "exit")
 		if entry.is_empty() or exit_site.is_empty():
 			# 配对不完整只告警不崩：缺一半的支线没有意义，跳过即可。
@@ -412,6 +416,7 @@ func _collect_sites() -> Array:
 			"position": point,
 			"authored_position": point,
 			"room_id": str(record.get("id", "")),
+			"test_room": site.get("test_room", {}) if site.get("test_room") is Dictionary else {},
 		}
 		# 房间 TSCN 里如果已经手动摆好了这扇门（业主在编辑器里拖的），
 		# 就用他的手摆位置与朝向 —— 不再按数据推算，也不再自动外推。
@@ -848,6 +853,35 @@ func _branch_room_count(pair_id: int) -> int:
 	return 2 + absi(hash("%d|secret_len|%d" % [_run_seed, pair_id])) % 2
 
 
+## A declared test room is a round trip, not a shortcut to a later main-route room.
+func _build_test_room_branch(pair_id: int, entry: Dictionary, spec: Dictionary) -> void:
+	var path := str(spec.get("layout", ""))
+	var room_id := str(spec.get("room_id", ""))
+	var size_m: Variant = spec.get("size_m", [])
+	if room_id.is_empty() or not (size_m is Array) or size_m.size() != 2 or not ResourceLoader.exists(path, "PackedScene"):
+		push_error("[SecretBranch3D] Invalid test room declaration at %s" % entry.get("site_id", ""))
+		return
+	var size := Vector2(float(size_m[0]), float(size_m[1]))
+	if size.x <= 0.0 or size.y <= 0.0:
+		push_error("[SecretBranch3D] Invalid test room size: %s" % room_id)
+		return
+	var branch_root := Node3D.new()
+	branch_root.name = "SecretBranch_%d" % pair_id
+	add_child(branch_root)
+	var origin := _branch_origin(pair_id)
+	var center := Vector3(origin.x + size.x * 0.5, 0.0, origin.y)
+	var room := _spawn_branch_room(branch_root, room_id, center, size, [], {}, 0, 0.0, "", false, spec)
+	var landing := (_branch_rooms[room_id] as Dictionary)["landing"] as Vector3
+	var entry_door := _build_door(pair_id, entry, false, true)
+	entry_door.call("set_teleport_target", landing, "进入频道管理者测试房")
+	var return_door := _build_entry_return_door(pair_id, [{"room": room, "landing": landing}], entry)
+	_branch_points[pair_id] = [landing]
+	_pairs[pair_id] = {
+		"entry": entry, "rooms": [landing], "branch_root": branch_root,
+		"entry_door": entry_door, "entry_return_door": return_door,
+	}
+
+
 ## —— 装配 ——
 
 func _build_pair(pair_id: int, entry: Dictionary, exit_site: Dictionary) -> void:
@@ -1067,10 +1101,14 @@ func _spawn_branch_room(
 	index: int,
 	lane: float = 0.0,
 	template_id: String = "",
-	encounter: bool = true
+	encounter: bool = true,
+	test_spec: Dictionary = {}
 ) -> DungeonRoom3D:
 	var room := DungeonRoom3D.new()
 	room.name = "SecretRoom_%s" % room_id
+	if not test_spec.is_empty():
+		room.set_meta("test_room_objective", str(test_spec.get("objective", "")))
+		room.set_meta("borrowed_layout_room_id", str(test_spec.get("source_room_id", "")))
 	# 子图房的门是**普通通道门**，不是主路那种消耗钥匙、触发命运卡、要求清房的关卡门：
 	#   ① 子图里没有钥匙产出，`requires_key = true` 会让门永远打不开（死路）；
 	#   ② 命运三选一属于主路推进节奏，在可选的支线里插一张卡只会打断战斗；
@@ -1092,7 +1130,8 @@ func _spawn_branch_room(
 		"theme": _room_theme,
 		"seed": _run_seed + index * 104729,
 		"is_main_path": false,
-		"static_layout_scene_path": _shared_layout_path(template_id),
+		"static_layout_scene_path": str(test_spec.get("layout", "")) if not test_spec.is_empty() else _shared_layout_path(template_id),
+		"procedural_furniture_enabled": test_spec.is_empty(),
 	})
 	# 门洞与门扇读同一个 lane：`DungeonRoom3D._build_wall` 切口、
 	# `_build_door` 门扇位置都取 `wall_door_lane_<side>`。只设一头会得到

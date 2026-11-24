@@ -106,7 +106,6 @@ const REJECT_NO_OUTPUT := "no_output"
 ##
 ## 注意只适用于**碎片链**。武器链（钥匙是那把枪本身）燃料不够时要继续走 R1 重铸 ——
 ## 那是设计的分岔：V 3–5 重铸 / V ≥ 6 升级。
-const REJECT_SYNTHESIS_FUEL_SHORT := "synthesis_fuel_short"
 
 ## R1 的燃料门槛（熔炼值）。**所有物品都能当材料**，但"能当"不等于"一件就够"。
 ##
@@ -190,7 +189,7 @@ static var _attachment_slot_cache: Dictionary = {}
 ##
 ## 只有空字典返回 false —— 那是"这一格没有物品"，不是"这件物品不被接受"。
 static func accepts(item: Dictionary) -> bool:
-	return not item.is_empty()
+	return not item.is_empty() and not ItemRegistry.is_retired_item_entry(item)
 
 
 ## 这件物品是不是武器（= 可当蓝本）。
@@ -281,7 +280,7 @@ static func classify(items: Array) -> Dictionary:
 		if not value_variant is Dictionary:
 			continue
 		var item := value_variant as Dictionary
-		if item.is_empty():
+		if not accepts(item):
 			continue
 		value += item_value(item)
 		if is_blueprint_weapon(item):
@@ -315,10 +314,7 @@ static func classify(items: Array) -> Dictionary:
 		"blueprint_candidates": [],
 		"blueprint_index": -1,
 		"coin_cost": 0,
-		# R0 命中（或"钥匙齐/燃料差"）时填配方与产出规格；否则为空。
 		"synthesis": {},
-		# 钥匙差 1–2 个时的**软提示**（不阻止熔炼）。
-		"synthesis_hint": {},
 	}
 	if weapons.is_empty() and materials.is_empty():
 		result["reason"] = REJECT_EMPTY_TRAY
@@ -327,7 +323,7 @@ static func classify(items: Array) -> Dictionary:
 	# ——— R0 定向合成：必须排在 R1 之前 ———
 	# 「1 把棒球棍 + 燃料 ≥3」同时满足 R1 与 R0，判定顺序决定结果：
 	# 先 R0 才能升级成断刃，先 R1 就只能重铸棒球棍。业主口径要的是前者。
-	var directed: Dictionary = SynthesisCatalog.find_key_complete(weapons, materials)
+	var directed := SynthesisCatalog.find_key_complete(weapons)
 	if not directed.is_empty():
 		var fuel_min := int(directed["fuel_min"])
 		if melt >= fuel_min:
@@ -338,21 +334,7 @@ static func classify(items: Array) -> Dictionary:
 			# 按投入估值计费会让"同样两条碎片因为顺手多丢几件垃圾而涨价"。
 			result["coin_cost"] = int(directed["coin_cost"])
 			return result
-		# 钥匙齐但燃料不够 —— 两种钥匙行为**必须不同**：
-		#
-		# ① 武器链（钥匙就是那把枪）：燃料不够只是"没升级"，继续走 R1 重铸它。
-		#    在这里直接拒绝会让玩家被自己的棒球棍卡死 —— R1 永远够不到。
-		# ② 碎片链（钥匙是蓝图碎片）：凭据不能静默烧掉，必须拒绝并说清还差多少。
-		if not SynthesisCatalog.is_weapon_key(str(directed["key_item_id"])):
-			result["synthesis"] = _directed_payload(directed, melt)
-			result["reason"] = REJECT_SYNTHESIS_FUEL_SHORT
-			return result
-
-	# 钥匙差 1–2 个：盘面上确实有这条配方的钥匙，给一条软提示。
-	# **不拒绝** —— 玩家仍可走 R1/R2/R3，剥夺"我就是要烧掉这批货"的自由是错的。
-	var short: Dictionary = SynthesisCatalog.nearest_key_short(weapons, materials)
-	if not short.is_empty():
-		result["synthesis_hint"] = short
+	# 近战升级燃料不足时继续按原 R1 门槛判定。
 
 	if weapons.size() >= 2:
 		result["recipe"] = RECIPE_FUSION

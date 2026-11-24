@@ -704,11 +704,16 @@ func configure_firing_context(hostile: bool, target_group: String, projectile_co
 ##
 ## 2026-11-09：`Player3D._ballistic_direction()` 用它作为弹道起点 ——
 ## 准星与枪口同高，屏幕上弹道才会穿过准星。不要让调用方直接摸 `_muzzle`：
-## 那个字段在视觉重建期间可能为空，这里是唯一的安全入口。
+## 那个字段在视觉重建期间可能为空。需要真实挂点的表现层用 get_muzzle_socket()。
 func muzzle_global_position() -> Vector3:
 	if is_instance_valid(_muzzle):
 		return _muzzle.global_position
 	return global_position
+
+
+## The current visual muzzle for attachments; unlike ballistic position, no root fallback.
+func get_muzzle_socket() -> Marker3D:
+	return _muzzle if is_instance_valid(_muzzle) else null
 
 
 func try_fire(aim_direction: Vector3, shooter: Node3D) -> bool:

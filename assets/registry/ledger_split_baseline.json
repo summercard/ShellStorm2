@@ -1,5 +1,5 @@
 {
- "asset_count": 1501,
+ "asset_count": 1502,
  "assets": {
   "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
    "c": "场景",
@@ -2882,9 +2882,9 @@
    "v": "4a074a97f09c8ba66dfacc6a0753573cc8eedcda6410bf191468e890f46af41b"
   },
   "ENV-EXPEDITION-L01-L-CORRIDOR": {
+   "v": "74db9a3149e9a142c3202cec58aff1e0fc32e7ff150ea8373faceda0c2d65834",
    "c": "场景",
-   "d": "scenes",
-   "v": "feab8e279291694b5ed5262d673d03afe8ac5231ff050c7fb824638c40a4bb5f"
+   "d": "scenes"
   },
   "ENV-EXPEDITION-L01-OFFICE-ROOM": {
    "c": "场景",
@@ -6304,7 +6304,7 @@
   "ITM-BLUEPRINT-SHARED-SCROLL": {
    "c": "道具",
    "d": "props",
-   "v": "3fb6284edd9ad9a284bf43a0dc32e5695865515cd7fca93e7cc0770783a6882e"
+   "v": "605fdc805c36ef57af94e21c850646311cf5fa3b5844439e1c5dfb2b9131a626"
   },
   "ITM-CONSUMABLE-ITEM-AMMO-PACK": {
    "c": "道具",
@@ -6364,7 +6364,7 @@
   "ITM-KEY-ITEM-ROOM-KEY": {
    "c": "道具",
    "d": "props",
-   "v": "bd6caa5c749ee2b75d7a75c19f548e59905232fe932f4cbd1e75a9d992a6812a"
+   "v": "01cb9dd7a5b67efa153e7afcb742886c41431ba0b7f18341eb85b7371a9b1290"
   },
   "ITM-MAIN-STORY-RARE-EARTH-KEY": {
    "c": "道具",
@@ -6419,7 +6419,7 @@
   "ITM-PICKUP-ROOM-KEY-PICKUP": {
    "c": "道具",
    "d": "props",
-   "v": "77ba79671b3dd3470661fc72f7bf442b82bf09b6f935234c1438d07c41a9ec7a"
+   "v": "74b24b214c27edc94bec279ac8be4fe3091a88763287ee0f55be9c92f345aa6c"
   },
   "ITM-PICKUP-SOUL-ORB": {
    "c": "道具",
@@ -7505,9 +7505,14 @@
    "c": "武器",
    "d": "weapons",
    "v": "918186220c780d9577a3613bed28f1296566d34b936419730c330b714d4d0bab"
+  },
+  "VFX-PLAYER-AIM-BEAM-3D": {
+   "v": "1137b00d914fc7a967f5b1c8d499823daf1eb00ab7fa37cde6c14c8b41cbf055",
+   "c": "特效",
+   "d": "vfx"
   }
  },
- "captured_at": "2026-11-17",
+ "captured_at": "2026-11-24",
  "category_counts": {
   "角色": 26,
   "敌人": 62,
@@ -7521,36 +7526,36 @@
   "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_flower_arrangement/env_manor_flower_arrangement_root_top3d.tscn": 1,
   "道具": 45,
   "武器": 36,
-  "特效": 73,
+  "特效": 74,
   "子弹特效": 11,
   "UI": 26,
   "音效": 185,
   "音乐": 9
  },
  "column_digests": {
-  "1": "607f758ef9112de55c75c5de1be40ec33a429a6924e782a889ed53ad51d3640f",
-  "2": "174819568f929193eb54470df78d44e0881e9cf4234611ab4a2911648b250a07",
-  "3": "48d70b8509e693124f93fe0ac9205ff9056645199ece1c8dc08d8b1f6848ab70",
-  "4": "ab15dfb2e994cdfc82c034ef52fa2aa7843d69d4e34af266e255fedb32a11cd5",
-  "5": "0323f5a398f5a9f978c08dafd9d4566291a1444d846b3d76a265846337be6e99",
-  "6": "5ba272b18443d89585aa9ade4db4dd9acef5a346e92eafb3c3ffe7e35c5ac114",
-  "7": "74a1cdf7c701389c4849e5f5251f4afbd48336b72d398742b8e85335b3ecc713",
-  "8": "2510a6e078a9d46b7eb94170fa26502f04ade16aaacfcce3ecd14d8f8b90bd27",
-  "9": "c4c09516b2d644b63581442d199645626f406bf33a39c39beb21c3fc33afc1f6",
-  "10": "0656a7a6eac57eb289daa0093127e00a1c4e639ed750a1e357661a3768eda718",
-  "11": "25b1e9f045f6d46ea2e4c415efcdd189165012b5554390700df308d615ead07f",
-  "12": "a3a37f31b2a79377d969951e8571cbc153eb9834d3b2b3e5164b9483e4a92301",
-  "13": "1109d770f7abd9ecc30814e33a9cc4596e941ec76245b418b00b1ee112104720",
-  "14": "c57f62734d417090aede1c901f0da1e9e91a3d8126fef711c3d68d2295488d2a",
-  "15": "cde9c97b3c347e43e7d0f6f703b7da7dd7af129a9ea8b84ca9aecb4bb55a8a1a",
-  "16": "5af3aff4aed340df72a98fd022f59c3a69074cb4ef1945258a3b6241cfd0fea0",
-  "17": "f3b3eaf4990a55c3f21fd3a0a6dc0ef0272ed99a96fae06b48384964ef93ea27",
-  "20": "2e3ce96e7775dc86f5cdc45756b83ff9349e97c5b4182ae4731fe20405a87c16",
-  "21": "d55f98e745c4f93b963d3bf8820921d9ce7fe1953e090d8813ff6289c438cec3",
-  "22": "abcfc469042f5fc2fa3dbc25d064997f8876f4e13327615b46b725748f24cc2f",
-  "23": "b18fbf6dfc90e6831bdf11bad2acfebe8e39baa6c3dcee29d8222ec6e7ce2512",
-  "24": "dc37fd69ac43eb1957f967bd8681249b65e1e7d6542b401841c264dd460c27f2",
-  "25": "f5b9c85ba1f894bd3a15d2abb9f90feb091cd51284d193e7914a984adc6da641"
+  "1": "571cc72deef5bece27811487e17c498fc0f18fc454b00893229f94a14765c0b3",
+  "2": "e3c660c2d44f47ac57f72a9b6ffcbbe2aa2ed976c66685049f97845bc62ebd6a",
+  "3": "b26460517d43715e242746b0b9015bfe2552d58c1ec5adcfa71178d47107394d",
+  "4": "501b6dd6c4792ab1acad7de054861ed5ee222a74c3528db56ab6a952ee61dad7",
+  "5": "99502cfffa8d461f44f71df2f8e9fabf4265f42616b812ee4949e722d334acc7",
+  "6": "d2160b901c5b049c04888937f8628472cf9cbfbfab28cd2eaf5e6a5400d48e31",
+  "7": "2302f78d0979a325faf39f34a81321d0d77040079fb683cc23c70eda40781dac",
+  "8": "31ee2cf2eb4025ac8157b142981e842dd20daac59f063597de853e035af85082",
+  "9": "944de3fe706c465973d41290babce0ebde8aeedd9c5699320fecad2e12dacfbf",
+  "10": "1aadc07092f327e29c235d9e740f0c46d227e3e168462da67264d3bf915dd1c0",
+  "11": "6a78a61a0da16124e8810d266d605d25adaa17d73d268e4622653d19faa1e2f9",
+  "12": "26b87d8a0d58f6c7b479e0ce8893fad8b25f6bf84ae3a33d9965126a4710559a",
+  "13": "98dbb80987b852710902c64ac84ec8ad4843bcdaec9a93aa0b104e63fbda6592",
+  "14": "dbcf2149ef8e3740d73b69bae341aa3b15c470df90f2d23875f0f017fe42918e",
+  "15": "ea70933568196cb54f468e00207c7554ea1730ce5f27d4d69c6d5d2f85e579ee",
+  "16": "c7606457a7f87cc5daa12324c713bf6dc16c97f1d84b38666d7dc4ac06c2894a",
+  "17": "7a7e3932eb5a0f144104eac29fade9d0256e7559a001ace19e923e239f63bfc2",
+  "20": "b95f55c92667b436e60a0f3ea1c2b2ce3681e3b4bf5064f8d1b888476e1c055f",
+  "21": "9ec8b8d854a23326c4f398f239cfb8056a551e9876e50d14530ef756250a1457",
+  "22": "91bf296574f91b643797c9947a0fed1da06e675ddb070f6150327047658454af",
+  "23": "89712abf74a360438839919d2d5227574d202ffd3ef2a6a06b2db8e5226690d1",
+  "24": "3cc91599260b73e044ebe8dcb77d05638bfc8b23f3edf98072d3d84b835aa469",
+  "25": "79ae7f776752fe01f28b54e244b8d4d516888691e7f307d4a6eeb896b39f320f"
  },
  "columns": [
   "AssetID",
@@ -7726,8 +7731,8 @@
   "3D-场景通用": "c77979eb1f45bd405797592fe8e085ade83ba60d87643a0d8c54145483cdd78c",
   "3D-敌人": "88fedfcd0603cd92aca2574df6e88ca7a7243ac03df105e42dd678a939dd1814",
   "3D-武器": "507f387042335d14fc4782386a2c083e509e0f530ba4997293cebf0b925c19f2",
-  "3D-物品": "b9d3f610d2a77d8d7b4d55872eb3d0e2d57caa9840c144a672c76e6fe599ba4b",
-  "3D-特效": "bdd82a7b7bbb93c07fca441afcc458d3459faee0d1d61430488ddc21eaa004b8",
+  "3D-物品": "9fc161a00357ebe1d3d2054de92ddcb04f16e1d8a7ba797e2da2183175a2845f",
+  "3D-特效": "b5b5792387dbb28aaa288277146594ced8ea9de5fcede83d4684128f67a651e9",
   "3D-角色": "3f2ee8eb49eab5f4986a636dce574020c47599ec49bd6e5525a914f334cb9411",
   "3D-设施": "878b6c589b6249493dec3c8e36a95c0d3b3ffa364f8831270c714c0d3625839b",
   "3D-道具": "25f7d8ed65aa88d7f01ff468c43c35601d5e24d9bb0eab1e2c45d3e183866d40",
@@ -7737,7 +7742,7 @@
   "域变更日志": "023cae9b5161f45dc58c1f3be018742cbf8aeef5e87317b6bc135e66d99b7b1f",
   "房间运行登记": "b6e02091f7abe53725d848874241cd51e5eacd5411b402de446e6b41a89bf854",
   "敌人动画与状态": "63c6038391d932f0e19d9944061460217e844b5eec5536404f10bd222773aa97",
-  "背包物品调用索引": "586212c8949d6e45d26a9e7f00c1e9150e7575df4606bfa545bbf86327f0162e",
+  "背包物品调用索引": "ff2e09a118dfdca79cac351dae6ebffad95f39d0d6de15fe2d6c20f3387db1b6",
   "角色中转记录": "4554d93d33461dcb875297c9145ff8d42800ad47c57d20f6ee6734bb54f9be85",
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b"
  },
@@ -8090,6 +8095,32 @@
    "old_row_digest": "df48099df36cfc26ea512795e1f4a6c8593098b9ef1d3f84270d1486dcc6625e",
    "new_row_digest": "24c7084d6f972428bea3bb74f2e35812f4e8295f2d3a84acc1f78dcf8c222e5d",
    "record": "域变更日志 v0.1.65"
+  },
+  {
+   "asset_id": "ENV-EXPEDITION-L01-L-CORRIDOR",
+   "date": "2026-11-24",
+   "version": "v0.1.104",
+   "scope": "仅更新《资产主表》Y242备注与目标资产行指纹、全域备注列摘要；不改共享L型源规格/M/T/ID/其它房/Prefab分页，不新增AssetID。",
+   "old_row_digest": "feab8e279291694b5ed5262d673d03afe8ac5231ff050c7fb824638c40a4bb5f",
+   "new_row_digest": "74db9a3149e9a142c3202cec58aff1e0fc32e7ff150ea8373faceda0c2d65834",
+   "refreshed_columns": [
+    "Y"
+   ],
+   "record": "域变更日志 v0.1.104"
+  },
+  {
+   "date": "2026-11-24",
+   "scope": "只更新退役资产行、3D-物品与背包物品调用索引摘要及相关列 J/K/Y；保留其它资产行和分页基线。",
+   "asset_ids": [
+    "ITM-BLUEPRINT-SHARED-SCROLL",
+    "ITM-KEY-ITEM-ROOM-KEY",
+    "ITM-PICKUP-ROOM-KEY-PICKUP"
+   ],
+   "sheets": [
+    "3D-物品",
+    "背包物品调用索引"
+   ],
+   "record": "道具域变更日志 v0.1.114"
   }
  ]
 }

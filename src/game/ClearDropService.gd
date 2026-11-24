@@ -10,7 +10,7 @@ extends RefCounted
 ## 那种不可复现的掉落无法验收，也无法解释给玩家。
 ##
 ## 本服务不认识任何关卡 ID：配置由关卡计划的 `clear_drops` 段下发，
-## 未配置 ⇒ `is_configured() == false` ⇒ 调用方逐字走原路径（钥匙时代的行为不变）。
+## 未配置 ⇒ `is_configured() == false`；不生成关卡专用清房奖励。
 
 const SCHEMA := "shellstorm2.battle.clear_drops"
 ## 宝箱品质档（与 `TreasureChest3D.QUALITY_COLORS` 同序）。只用于「最低品质」过滤，
@@ -58,7 +58,7 @@ func configure(config: Dictionary) -> Dictionary:
 		errors.append("clear_drops.chest 段缺失：宝箱无处取参数")
 	if not errors.is_empty():
 		return {"ok": false, "errors": errors}
-	_fallback_pool = (config.get("fallback_pool", []) as Array).duplicate(true)
+	_fallback_pool = ItemRegistry.without_retired_items(config.get("fallback_pool", [])).duplicate(true)
 	_room_overrides = _parse_room_overrides(config.get("room_overrides", {}), errors)
 	_room_guarantees = _parse_room_guarantees(config.get("room_guarantees", []), errors)
 	if not errors.is_empty():
@@ -83,6 +83,11 @@ func _parse_room_overrides(raw: Variant, errors: Array[String]) -> Dictionary:
 		if override.is_empty():
 			continue
 		var parsed := override.duplicate(true)
+		if parsed.has("grants"):
+			parsed["grants"] = ItemRegistry.without_retired_items(parsed["grants"])
+		var additional := parsed.get("additional_weapon", {}) as Dictionary
+		if ItemRegistry.is_retired_item_id(str(additional.get("weapon_id", ""))):
+			parsed.erase("additional_weapon")
 		if parsed.has("mimic_chance"):
 			parsed["mimic_chance"] = clampf(float(parsed["mimic_chance"]), 0.0, 1.0)
 		if parsed.has("fate_card_chance"):
@@ -114,6 +119,10 @@ func _parse_room_guarantees(raw: Variant, errors: Array[String]) -> Array:
 			errors.append("clear_drops.room_guarantees[%d] 既没有 items 也没有 weapon_choices" % index)
 			continue
 		var parsed := entry.duplicate(true)
+		parsed["items"] = ItemRegistry.without_retired_items(parsed.get("items", []))
+		parsed["weapon_choices"] = choices.filter(func(value): return not ItemRegistry.is_retired_item_id(str(value)))
+		if parsed["items"].is_empty() and parsed["weapon_choices"].is_empty():
+			continue
 		parsed["id"] = str(entry.get("id", "guarantee_%d" % index))
 		out.append(parsed)
 	return out

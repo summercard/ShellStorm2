@@ -1,264 +1,227 @@
 extends Node
 
 const DUNGEON_SCENE: PackedScene = preload("res://scenes/Dungeon3D.tscn")
+# The visible grid tile, not the hidden anchor-cell preview, uses this budget.
+# See the 2026-10-15 inventory experience record; pixel QA is a separate visual scene.
+const GRID_ICON_LONG_EDGE := 384
+const SHOTGUN_ID := "weapon_shotgun"
+const ATTACHMENTS := {
+	AssemblyNode.SlotType.MUZZLE: "attach_triple_muzzle",
+	AssemblyNode.SlotType.MAGAZINE: "attach_big_mag",
+	AssemblyNode.SlotType.MUTATOR: "attach_copy_sticker",
+}
+
+var _failures: Array[String] = []
+var _dungeon: Dungeon3D
+var _inventory: InventoryModule
+var _ui: InventoryUI
 
 
 func _ready() -> void:
-	var failures: Array[String] = []
-	var dungeon := DUNGEON_SCENE.instantiate() as Dungeon3D
-	dungeon.test_mode = true
-	dungeon.run_seed_override = 240725
-	add_child(dungeon)
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	_dungeon = DUNGEON_SCENE.instantiate() as Dungeon3D
+	_dungeon.test_mode = true
+	_dungeon.run_seed_override = 240725
+	add_child(_dungeon)
 	await get_tree().process_frame
-	var inventory := dungeon.get_inventory_module()
-	var tree := dungeon.player.get_weapon_tree()
-	await _verify_real_slot_click_and_3d_icons(dungeon, inventory, tree, failures)
-	_verify_weapon_swap_preserves_build(dungeon, inventory, tree, failures)
-	_verify_module_swap_is_atomic(dungeon, inventory, tree, failures)
-	_verify_blueprint_and_consumable_routing(dungeon, inventory, tree, failures)
-	if failures.is_empty():
-		print("3D_INVENTORY_WEAPON_FLOW_OK: real slot-click equip, shared 3D item projections, per-instance build ownership, atomic module swap and item routing pass")
+	_inventory = _dungeon.get_inventory_module()
+	_ui = _dungeon.get_node_or_null("HUD/InventoryUI3D") as InventoryUI
+	_expect(_inventory != null and _ui != null, "Inventory module or actual InventoryUI3D is missing")
+	if _inventory != null and _ui != null:
+		await _verify_grid_and_weapon_ownership()
+		await _verify_manual_bullet_swap_is_rejected()
+		_verify_retired_items_and_healing()
+	_dungeon.queue_free()
+	await get_tree().process_frame
+	if _failures.is_empty():
+		print("3D_INVENTORY_WEAPON_FLOW_OK: actual grid click, adaptive one-shot projections, per-instance weapon ownership, bullet lock and retired-item routing pass")
 		get_tree().quit(0)
 		return
-	for failure in failures:
+	for failure in _failures:
 		push_error(failure)
 	get_tree().quit(1)
 
 
-func _verify_real_slot_click_and_3d_icons(
-	dungeon: Dungeon3D,
-	inventory: InventoryModule,
-	tree: WeaponAssemblyTree,
-	failures: Array[String]
-) -> void:
-	inventory.clear_all()
-	var expected_kinds := {
-		"weapon_shotgun": "weapon",
-		"mod_bullet_standard": "bullet",
-		"item_health_potion": "heal",
-		"item_room_key": "key",
-		"item_beacon": "beacon",
-	}
-	for item_id in expected_kinds.keys():
-		var item := ItemRegistry.get_instance().get_item(item_id)
-		if item.is_empty() or inventory.add_item(item, 1) <= 0:
-			failures.append("Cannot prepare 3D inventory projection for %s" % item_id)
-	var inventory_ui := dungeon.get_node_or_null("HUD/InventoryUI3D") as InventoryUI
-	if inventory_ui == null:
-		failures.append("InventoryUI3D is missing for real-click acceptance")
+func _verify_grid_and_weapon_ownership() -> void:
+	_inventory.clear_all()
+	var player := _dungeon.player
+	var equipped_slot := player.get_active_weapon_slot()
+	var starting_item := player.get_equipped_weapon_item()
+	var starting_id := str(starting_item.get("weapon_instance_id", ""))
+	_expect(not starting_id.is_empty() and starting_item.get("assembly_id", "") == BlueprintRegistry.DEFAULT_STARTING_GUN_ID,
+		"The real starting gun and its unique instance must be equipped")
+	if starting_id.is_empty():
 		return
-	inventory_ui.set_inventory_panel_open(true)
+	for slot_type in ATTACHMENTS:
+		var attachment := ItemRegistry.get_instance().get_item(ATTACHMENTS[slot_type])
+		var added := _inventory.add_item(attachment, 1)
+		var anchor := _find_slot(ATTACHMENTS[slot_type])
+		_expect(added == 1 and anchor >= 0 and _dungeon._install_attachment_from_inventory(anchor, attachment, equipped_slot, slot_type),
+			"Cannot install legal attachment through the inventory transaction: %s" % ATTACHMENTS[slot_type])
+	var built_gun := player.get_equipped_weapon_item()
+	_expect(_installed_attachments(WeaponInstance.from_item(built_gun)) == ATTACHMENTS, "The starting gun has no verified attachment build")
+
+	var expected_kinds := {SHOTGUN_ID: "weapon", "mod_bullet_standard": "bullet", "item_health_potion": "heal", "item_beacon": "beacon"}
+	for item_id in expected_kinds:
+		_expect(_inventory.add_item(ItemRegistry.get_instance().get_item(item_id), 1) == 1, "Cannot seed grid fixture: %s" % item_id)
+	_ui.set_inventory_panel_open(true)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	for item_id in expected_kinds.keys():
-		var slot_index := _find_slot(inventory, item_id)
-		var model_snapshot := inventory_ui.get_slot_model_snapshot(slot_index)
-		if str(model_snapshot.get("model_kind", "")) != str(expected_kinds[item_id]):
-			failures.append("Inventory item %s does not use its expected 3D model kind" % item_id)
-		if int(model_snapshot.get("mesh_count", 0)) <= 0:
-			failures.append("Inventory item %s has an empty 3D projection" % item_id)
-		if model_snapshot.get("viewport_size", Vector2i.ZERO) != Vector2i(96, 96):
-			failures.append("Inventory item %s does not render at the 96x96 projection budget" % item_id)
-		if float(model_snapshot.get("camera_size", 99.0)) > 1.9:
-			failures.append("Inventory item %s 3D model is too small to read at slot scale" % item_id)
-		if (
-			not bool(model_snapshot.get("update_once", false))
-			or not bool(model_snapshot.get("uses_world_model_factory", false))
-		):
-			failures.append("Inventory item %s is not a one-shot projection of the shared world model" % item_id)
-
-	var shotgun_slot := _find_slot(inventory, "weapon_shotgun")
-	var slots: Array = inventory_ui.get("_slots")
-	if shotgun_slot < 0 or shotgun_slot >= slots.size() or not slots[shotgun_slot] is ItemSlot:
-		failures.append("Cannot resolve the actual shotgun ItemSlot for click acceptance")
-	else:
-		(slots[shotgun_slot] as ItemSlot).slot_clicked.emit(shotgun_slot)
-		await get_tree().process_frame
-		var root := tree.get_root()
-		var weapon_snapshot := dungeon.player.get_weapon_snapshot()
-		if root == null or root.node_name != "GunBody_Shotgun":
-			failures.append("Actual ItemSlot left click did not equip the picked-up shotgun")
-		if str(weapon_snapshot.get("gun_id", "")) != "bp_shotgun" or not bool(weapon_snapshot.get("has_model", false)):
-			failures.append("Actual inventory click did not synchronize the equipped 3D gun model")
-		# 换枪后回背包的应当是「出厂枪」，而出厂枪由 BlueprintRegistry.DEFAULT_STARTING_GUN_ID
-		# 决定（当前是初始步枪）。这里不要写死手枪：换一次出厂枪就会红一次，
-		# 而且写死等于永远只盯着一把枪，出厂枪真换错了反而看不出来。
-		var starting_item_id := _starting_weapon_item_id()
-		if starting_item_id.is_empty():
-			failures.append(
-				"Cannot resolve the starting weapon item id from BlueprintRegistry.DEFAULT_STARTING_GUN_ID"
-			)
-		elif not inventory.has_item(starting_item_id):
-			failures.append(
-				"Actual inventory click did not return the old starting gun (%s) to the inventory"
-				% starting_item_id
-			)
-	inventory_ui.set_inventory_panel_open(false)
-	inventory.clear_all()
-	if not dungeon.player.equip_weapon("bp_pistol", "mod_bullet_standard"):
-		failures.append("Cannot reset the weapon tree after real-click acceptance")
-
-
-func _verify_weapon_swap_preserves_build(
-	dungeon: Dungeon3D,
-	inventory: InventoryModule,
-	tree: WeaponAssemblyTree,
-	failures: Array[String]
-) -> void:
-	var old_root := tree.get_root()
-	var desired := {
-		AssemblyNode.SlotType.MUZZLE: "attach_triple_muzzle",
-		AssemblyNode.SlotType.MAGAZINE: "attach_big_mag",
-		AssemblyNode.SlotType.MUTATOR: "attach_copy_sticker",
-	}
-	for slot_type in desired.keys():
-		var node := BlueprintRegistry.create_assembly_node(desired[slot_type])
-		if node == null or not tree.mount(old_root, int(slot_type), node):
-			failures.append("Cannot prepare installed module %s for weapon-swap acceptance" % desired[slot_type])
-	var expected_names: Dictionary = {}
-	for slot_type in old_root.slots.keys():
-		var installed := old_root.slots.get(slot_type) as AssemblyNode
-		if installed != null:
-			expected_names[slot_type] = installed.node_name
-	var shotgun := ItemRegistry.get_instance().get_item("weapon_shotgun")
-	inventory.add_item(shotgun, 1)
-	var shotgun_slot_before := _find_slot(inventory, "weapon_shotgun")
-	var shotgun_item_before := (inventory.get_slot(shotgun_slot_before).get("item", {}) as Dictionary)
-	var shotgun_instance_id := str(shotgun_item_before.get("weapon_instance_id", ""))
-	var shotgun_slot := _find_slot(inventory, "weapon_shotgun")
-	dungeon.call("_on_inventory_item_clicked", shotgun_slot, {})
-	var new_root := tree.get_root()
-	if new_root == null or new_root.node_name != "GunBody_Shotgun":
-		failures.append("Inventory weapon click did not equip the selected gun body")
-	elif dungeon.player.get_equipped_weapon_instance_id() != shotgun_instance_id:
-		failures.append("Inventory weapon click did not equip the selected unique instance")
-	if not inventory.has_item("weapon_pistol"):
-		failures.append("Switching gun body did not return the old weapon to inventory")
-	else:
-		var pistol_slot := _find_slot(inventory, "weapon_pistol")
-		var pistol_item := inventory.get_slot(pistol_slot).get("item", {}) as Dictionary
-		var pistol_instance := WeaponInstance.from_item(pistol_item)
-		var stored_tree := pistol_instance.build_runtime_tree() if pistol_instance != null else null
-		if stored_tree == null or stored_tree.get_root() == null:
-			failures.append("Old weapon instance lost its stored assembly snapshot")
-		else:
-			for slot_type in expected_names.keys():
-				var stored := stored_tree.get_root().slots.get(slot_type) as AssemblyNode
-				if stored == null or stored.node_name != expected_names[slot_type]:
-					failures.append("Old weapon instance lost installed module in slot %s" % slot_type)
-			stored_tree.free()
-	for slot_type in [AssemblyNode.SlotType.MUZZLE, AssemblyNode.SlotType.MAGAZINE, AssemblyNode.SlotType.MUTATOR]:
-		if new_root.slots.get(slot_type) != null:
-			failures.append("New gun incorrectly inherited old gun module in slot %s" % slot_type)
-
-
-func _verify_module_swap_is_atomic(
-	dungeon: Dungeon3D,
-	inventory: InventoryModule,
-	tree: WeaponAssemblyTree,
-	failures: Array[String]
-) -> void:
-	var root := tree.get_root()
-	var old_bullet := root.slots.get(AssemblyNode.SlotType.BULLET) as AssemblyNode
-	if old_bullet == null:
-		failures.append("Weapon has no bullet module before swap")
+	var board := _ui.inventory_grid as GridInventoryBoard
+	_expect(board != null, "Visible inventory is not a grid board")
+	if board == null:
+		_ui.set_inventory_panel_open(false)
 		return
-	var old_item_id := _module_item_id(old_bullet.node_name)
-	var new_item_id := "mod_bullet_standard" if old_item_id != "mod_bullet_standard" else "mod_bullet_sticky"
-	var new_item := ItemRegistry.get_instance().get_item(new_item_id)
-	inventory.add_item(new_item, 1)
-	var new_slot := _find_slot(inventory, new_item_id)
-	dungeon.call("_on_inventory_item_clicked", new_slot, {})
-	var installed := tree.get_root().slots.get(AssemblyNode.SlotType.BULLET) as AssemblyNode
-	if installed == null or _module_item_id(installed.node_name) != new_item_id:
-		failures.append("New bullet module was not installed from inventory")
-	if old_item_id.is_empty() or not inventory.has_item(old_item_id):
-		failures.append("Replaced bullet module was not returned to inventory")
+	var visuals := board.get("_item_visuals") as Dictionary
+	for item_id in expected_kinds:
+		var visual := visuals.get(_find_slot(item_id)) as Control
+		var icon := visual.get_node_or_null("ItemModelIcon3D") as ItemModelIcon3D if visual != null else null
+		_expect(icon != null and icon.is_visible_in_tree(), "Missing visible grid icon: %s" % item_id)
+		if icon != null:
+			_verify_projection(icon, item_id, expected_kinds[item_id])
 
-	inventory.clear_all()
-	var blocked_new_id := "mod_bullet_bounce" if new_item_id != "mod_bullet_bounce" else "mod_bullet_explosive"
-	var blocked_item := ItemRegistry.get_instance().get_item(blocked_new_id)
-	inventory.add_item(blocked_item, 2)
-	for candidate in ItemRegistry.get_instance().get_all_items():
-		if inventory.get_used_slots() >= inventory.get_capacity():
-			break
-		var candidate_id := str(candidate.get("id", ""))
-		if candidate_id.is_empty() or inventory.has_item(candidate_id):
-			continue
-		inventory.add_item(candidate, 1)
-	var before_name := (tree.get_root().slots.get(AssemblyNode.SlotType.BULLET) as AssemblyNode).node_name
-	var blocked_slot := _find_slot(inventory, blocked_new_id)
-	dungeon.call("_on_inventory_item_clicked", blocked_slot, {})
-	var after_name := (tree.get_root().slots.get(AssemblyNode.SlotType.BULLET) as AssemblyNode).node_name
-	if before_name != after_name:
-		failures.append("Full-inventory module swap replaced the build without space for the old module")
-	if inventory.get_item_count(blocked_new_id) != 2:
-		failures.append("Rejected full-inventory module swap consumed the new module")
+	var shotgun_anchor := _find_slot(SHOTGUN_ID)
+	var incoming := _inventory.get_slot(shotgun_anchor).get("item", {}) as Dictionary
+	var shotgun_id := str(incoming.get("weapon_instance_id", ""))
+	_expect(not shotgun_id.is_empty() and shotgun_id != starting_id, "The backpack shotgun must have a distinct instance")
+	if not shotgun_id.is_empty():
+		await _click_item(shotgun_anchor)
+		var active := player.get_equipped_weapon_item()
+		var root := player.get_weapon_tree().get_root()
+		var weapon_view := player.get_weapon_snapshot()
+		_expect(active.get("weapon_instance_id", "") == shotgun_id and active.get("id", "") == SHOTGUN_ID
+			and root != null and root.node_name == "GunBody_Shotgun",
+			"Real grid click did not equip the selected shotgun instance and its current assembly tree")
+		_expect(weapon_view.get("gun_id", "") == "bp_shotgun" and bool(weapon_view.get("has_model", false)),
+			"The equipped shotgun did not update the live 3D gun model")
+		_expect(not _inventory.has_weapon_instance(shotgun_id), "The equipped shotgun must not remain in the backpack")
+		_expect(_installed_attachments(player.get_equipped_weapon_instance()).is_empty(), "A fresh shotgun inherited the previous gun's attachments")
+		var returned_anchor := _inventory.find_weapon_instance_slot(starting_id)
+		var returned_item := _inventory.get_slot(returned_anchor).get("item", {}) as Dictionary
+		_expect(returned_anchor >= 0 and returned_item.get("weapon_instance", {}) == built_gun.get("weapon_instance", {}),
+			"The old gun's identity, ammo, or assembly snapshot changed when it returned to the backpack")
+		if returned_anchor >= 0:
+			await _click_item(returned_anchor)
+			_expect(player.get_equipped_weapon_instance_id() == starting_id and
+				_installed_attachments(player.get_equipped_weapon_instance()) == ATTACHMENTS,
+				"Re-equipping must restore the original gun and its own attachments")
+			_expect(_inventory.has_weapon_instance(shotgun_id) and not _inventory.has_weapon_instance(starting_id),
+				"Re-equipping must leave exactly one owner for both weapon instances")
+	_ui.set_inventory_panel_open(false)
 
 
-func _verify_blueprint_and_consumable_routing(
-	dungeon: Dungeon3D,
-	inventory: InventoryModule,
-	tree: WeaponAssemblyTree,
-	failures: Array[String]
-) -> void:
-	inventory.clear_all()
-	var root_name := tree.get_root().node_name
-	var dummy_blueprint := {
-		"id": "acceptance_gun_blueprint",
-		"name": "验收枪身蓝图",
-		"type": "blueprint",
-		"subtype": "gun_body",
-		"stack_max": 1,
-	}
-	inventory.add_item(dummy_blueprint, 1)
-	dungeon.call("_on_inventory_item_clicked", _find_slot(inventory, "acceptance_gun_blueprint"), {})
-	if tree.get_root().node_name != root_name:
-		failures.append("Gun-body blueprint fragment was incorrectly equipped as a physical weapon")
-	if not inventory.has_item("acceptance_gun_blueprint"):
-		failures.append("Non-usable blueprint fragment was incorrectly consumed")
+func _verify_projection(icon: ItemModelIcon3D, item_id: String, kind: String) -> void:
+	var snapshot := icon.get_snapshot()
+	var pixels := snapshot.get("viewport_size", Vector2i.ZERO) as Vector2i
+	var control_size := icon.size
+	_expect(snapshot.get("item_id", "") == item_id and snapshot.get("model_kind", "") == kind
+		and int(snapshot.get("mesh_count", 0)) > 0 and bool(snapshot.get("uses_world_model_factory", false)),
+		"%s does not use a non-empty projection of the shared world model" % item_id)
+	var short_edge := clampi(roundi(GRID_ICON_LONG_EDGE * minf(control_size.x, control_size.y) / maxf(1.0, maxf(control_size.x, control_size.y))), 24, GRID_ICON_LONG_EDGE)
+	var expected := Vector2i(GRID_ICON_LONG_EDGE, short_edge) if control_size.x >= control_size.y else Vector2i(short_edge, GRID_ICON_LONG_EDGE)
+	_expect(pixels == expected, "%s grid icon viewport is %s, expected %s" % [item_id, pixels, expected])
+	var fit := float(snapshot.get("fit_ratio", 0.0))
+	var error_px := snapshot.get("center_error_pixels", Vector2.INF) as Vector2
+	var viewport := icon.get_node_or_null("ItemPreviewViewport") as SubViewport
+	_expect(fit >= 0.5 and fit <= 1.0 and maxf(absf(error_px.x), absf(error_px.y)) <= 2.0,
+		"%s must be readable, uncropped, and centered inside its adaptive frame" % item_id)
+	_expect(viewport != null and viewport.render_target_update_mode in [SubViewport.UPDATE_ONCE, SubViewport.UPDATE_DISABLED],
+		"%s preview continuously redraws instead of being rendered once" % item_id)
 
-	inventory.clear_all()
-	dungeon.player.current_hp = dungeon.player.max_hp
+
+func _verify_manual_bullet_swap_is_rejected() -> void:
+	_inventory.clear_all()
+	var player := _dungeon.player
+	var active_slot := player.get_active_weapon_slot()
+	var gun_before := player.get_equipped_weapon_item()
+	var installed_id := str(player.get_equipped_bullet_item_for_slot(active_slot).get("id", ""))
+	var incoming_id := "mod_bullet_sticky" if installed_id != "mod_bullet_sticky" else "mod_bullet_standard"
+	var incoming := ItemRegistry.get_instance().get_item(incoming_id)
+	_expect(not installed_id.is_empty() and _inventory.add_item(incoming, 2) == 2, "Cannot seed the locked-bullet fixture")
+	var anchor := _find_slot(incoming_id)
+	if installed_id.is_empty() or anchor < 0:
+		return
+	_ui.set_inventory_panel_open(true)
+	await get_tree().process_frame
+	var before := _inventory.get_slots_snapshot()
+	await _click_item(anchor)
+	_expect(_dungeon.status_label.text == WeaponBulletDrop.manual_swap_block_reason(), "The real bullet click did not reach the explicit workshop-only rejection")
+	var weapon_slot := _ui.equipment_weapon_slots[active_slot] as ItemSlot
+	var payload := {"inventory_drag": true, "source_kind": "inventory", "source_index": anchor, "item": incoming}
+	_expect(weapon_slot != null and not weapon_slot._can_drop_data(Vector2.ZERO, payload), "The equipment slot still accepts a manual bullet-module drag")
+	_expect(not _dungeon._install_bullet_module_from_inventory(anchor, incoming, active_slot), "The lower-level transaction accepted a manual bullet swap")
+	_expect(player.get_equipped_weapon_item() == gun_before and _inventory.get_slots_snapshot() == before,
+		"A rejected bullet swap mutated the equipped gun, stack counts, or grid coordinates")
+	_ui.set_inventory_panel_open(false)
+
+
+func _verify_retired_items_and_healing() -> void:
+	_inventory.clear_all()
+	var player := _dungeon.player
+	var equipped := player.get_equipped_weapon_item()
+	var before := _inventory.get_slots_snapshot()
+	for retired in [{"id": "bp_rifle", "type": "blueprint"}, {"id": "item_room_key", "type": "key"}]:
+		_expect(_inventory.add_item(retired, 1) == 0, "Retired content entered the backpack: %s" % retired["id"])
+	_expect(_inventory.get_slots_snapshot() == before and player.get_equipped_weapon_item() == equipped,
+		"Rejection of retired contents changed slots or an equipped weapon")
+	var rifle := ItemRegistry.get_instance().get_item("weapon_rifle")
+	_expect(rifle.get("assembly_id", "") == "bp_rifle" and _inventory.add_item(rifle, 1) == 1,
+		"Rejecting a blueprint fragment must not reject a weapon with the same assembly ID")
+	player.current_hp = player.max_hp
 	var potion := ItemRegistry.get_instance().get_item("item_health_potion")
-	inventory.add_item(potion, 1)
-	dungeon.call("_on_inventory_item_clicked", _find_slot(inventory, "item_health_potion"), {})
-	if not inventory.has_item("item_health_potion"):
-		failures.append("Healing consumable was wasted while player HP was already full")
-	dungeon.player.current_hp = 40
-	dungeon.player.hp_changed.emit(40, dungeon.player.max_hp)
-	var potion_before := inventory.get_item_count("item_health_potion")
-	dungeon.call("_on_inventory_item_clicked", _find_slot(inventory, "item_health_potion"), {})
-	if dungeon.player.current_hp <= 40 or inventory.get_item_count("item_health_potion") != potion_before - 1:
-		failures.append("Successful backpack consumable use did not apply effect and consume exactly one item")
+	_expect(_inventory.add_item(potion, 1) == 1, "Cannot seed the legal consumable")
+	var potion_slot := _find_slot("item_health_potion")
+	_dungeon._on_inventory_item_clicked(potion_slot, {})
+	_expect(_inventory.get_item_count("item_health_potion") == 1, "Healing was wasted at full health")
+	player.current_hp = 40
+	player.hp_changed.emit(40, player.max_hp)
+	_dungeon._on_inventory_item_clicked(potion_slot, {})
+	_expect(player.current_hp == mini(player.max_hp, 40 + int(potion.get("heal_amount", 30)))
+		and _inventory.get_item_count("item_health_potion") == 0, "Legal healing did not apply its effect and consume exactly one item")
 
 
-func _find_slot(inventory: InventoryModule, item_id: String) -> int:
-	for slot in inventory.get_occupied_slots():
+func _click_item(anchor: int) -> void:
+	var board := _ui.inventory_grid as GridInventoryBoard
+	if board == null or anchor < 0 or anchor >= board.get_cells().size():
+		_expect(false, "Cannot find the real grid input cell: %d" % anchor)
+		return
+	var cell := board.get_cells()[anchor] as ItemSlot
+	if cell == null or not cell.is_visible_in_tree():
+		_expect(false, "The real grid input cell is not visible: %d" % anchor)
+		return
+	var point := cell.get_global_transform_with_canvas() * (cell.size * 0.5)
+	var motion := InputEventMouseMotion.new()
+	motion.position = point
+	motion.global_position = point
+	get_viewport().push_input(motion, true)
+	for pressed in [true, false]:
+		var event := InputEventMouseButton.new()
+		event.position = point
+		event.global_position = point
+		event.button_index = MOUSE_BUTTON_LEFT
+		event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
+		event.pressed = pressed
+		get_viewport().push_input(event, true)
+		await get_tree().process_frame
+
+
+func _find_slot(item_id: String) -> int:
+	for slot in _inventory.get_occupied_slots():
 		if str((slot.get("item", {}) as Dictionary).get("id", "")) == item_id:
 			return int(slot.get("slot", -1))
 	return -1
 
 
-## 出厂枪的**内容 ID**：走的是「装配 ID -> 节点名 -> 内容 ID」这条运行时同构路径，
-## 因此它顺带也在替出厂枪的三方身份一致性站岗（任一处漏改都会在这里断掉）。
-func _starting_weapon_item_id() -> String:
-	var node := BlueprintRegistry.create_assembly_node(BlueprintRegistry.DEFAULT_STARTING_GUN_ID)
-	if node == null:
-		return ""
-	var item_id := BlueprintRegistry.get_item_id_for_assembly_node(node)
-	node.free()
-	return item_id
+func _installed_attachments(instance: WeaponInstance) -> Dictionary:
+	var installed := {}
+	if instance != null:
+		for row in instance.get_presentation_snapshot().get("attachment_layout", []):
+			var item_id := str(row.get("installed_item_id", ""))
+			if not item_id.is_empty():
+				installed[int(row["slot_type"])] = item_id
+	return installed
 
 
-func _module_item_id(node_name: String) -> String:
-	return str({
-		"Bullet_Standard": "mod_bullet_standard",
-		"Bullet_Sticky": "mod_bullet_sticky",
-		"Bullet_Bounce": "mod_bullet_bounce",
-		"Bullet_Piercing": "mod_bullet_piercing",
-		"Bullet_Explosive": "mod_bullet_explosive",
-		"Bullet_Homing": "mod_bullet_homing",
-		"Bullet_Blackhole": "mod_bullet_blackhole",
-		"Bullet_Balloon": "mod_bullet_balloon",
-	}.get(node_name, ""))
+func _expect(condition: bool, detail: String) -> void:
+	if not condition:
+		_failures.append(detail)

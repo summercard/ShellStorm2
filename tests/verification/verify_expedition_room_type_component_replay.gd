@@ -23,15 +23,9 @@ const BRIDGE_BAD_WALL_ID := "ENV-EXPEDITION-L01-BRIDGE-WALL_X670"
 const GENERIC_SOLID_WALL_ID := "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 const TARGETS := {
 	"room_01": {
-		"template_id": "corridor_45x40",
-		"expected_instances": 123,
-		"expected_floor_tiles": 42,
-		"expected_common_floor_tiles": 42,
-		"expected_room_type_components": 47,
-		"expected_solid_walls": 34,
-		"expected_door_walls": 0,
-		"expected_version": "v012",
-		"expected_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-ROOM-TYPE-LAYOUT",
+		"expected_floor_tiles": 72,
+		"expected_version": "runtime_generated",
+		"expected_asset_id": "EXPEDITION-GENERIC-SHELL-ROOM_01",
 	},
 	"room_08": {
 		"template_id": "corridor_45x40",
@@ -151,9 +145,14 @@ var failures: Array[String] = []
 var checks := 0
 
 
+func _target_ids() -> Array:
+	return ["room_01"] if "--room01-only" in OS.get_cmdline_user_args() else TARGETS.keys()
+
+
 func _ready() -> void:
 	print("---- 远征01 房型组件重放验收 ----")
-	await _check_runtime_prefabs()
+	if "--room01-only" not in OS.get_cmdline_user_args():
+		await _check_runtime_prefabs()
 	var legacy := "--legacy" in OS.get_cmdline_user_args()
 	var rotation := 0 if legacy else 180
 	print("REPLAY_MODE legacy=%s rotation=%d" % [str(legacy), rotation])
@@ -161,7 +160,7 @@ func _ready() -> void:
 	_check(bool(plan.get("valid", false)), "关卡规划应有效：%s" % str(plan.get("validation_errors", [])))
 	if bool(plan.get("valid", false)):
 		var rooms := plan.get("rooms", []) as Array
-		for room_id in TARGETS:
+		for room_id in _target_ids():
 			var record := _room_record(rooms, room_id)
 			_check(not record.is_empty(), "规划中必须存在 %s" % room_id)
 			if not record.is_empty():
@@ -249,10 +248,13 @@ func _check_runtime_prefabs() -> void:
 
 func _check_plan_record(room_id: String, record: Dictionary, expected: Dictionary) -> void:
 	var instances := record.get("authored_layout_instances", []) as Array
-	_check_source_plan_contract(room_id, instances, expected)
 	_check(bool(record.get("authored_layout_shell", false)), "%s 必须启用 authored_layout_shell" % room_id)
 	_check(str(record.get("authored_layout_version", "")) == str(expected["expected_version"]), "%s 房型版本应为 %s" % [room_id, expected["expected_version"]])
 	_check(str(record.get("authored_layout_asset_id", "")) == str(expected["expected_asset_id"]), "%s 房型 asset_id 不符" % room_id)
+	if room_id == "room_01":
+		_check_room01_rect_plan(record, instances)
+		return
+	_check_source_plan_contract(room_id, instances, expected)
 	if expected.has("template_variant"):
 		# 运行房表的精简 record 不透传 template_variant；具体房间 asset_id 只有在生成器
 		# 同时匹配 room_key/template_id/template_variant 时才会选中，因此它就是变体门禁。
@@ -276,6 +278,26 @@ func _check_plan_record(room_id: String, record: Dictionary, expected: Dictionar
 				_check((instance.get("position", Vector3.ZERO) as Vector3).y < -10.0, "tile_lower 必须保留下沉标高")
 		_check(lower_tiles == 36, "room_05 应含 36 块坑底 tile_lower，实得 %d" % lower_tiles)
 	print("plan %-7s instances=%d roles=%s" % [room_id, instances.size(), str(roles)])
+
+
+## 此房的规划只消费白盒矩形；TSCN 是陈设与视觉的另一路真源，不再要求等于 L 形母版清单。
+func _check_room01_rect_plan(record: Dictionary, instances: Array) -> void:
+	var cells := {}
+	var size := record.get("dimensions", Vector2.ZERO) as Vector2
+	_check(size == Vector2(45, 40) or size == Vector2(40, 45), "room_01 外包络必须仍为 45×40m")
+	for value in instances:
+		var item := value as Dictionary
+		if str(item.get("slot_role", "")) != "floor_tile":
+			continue
+		var pos := item.get("position", Vector3.ZERO) as Vector3
+		var cell := Vector2i(roundi(pos.x * 2), roundi(pos.z * 2))
+		_check(not cells.has(cell), "room_01 地砖位置不得重复：%s" % str(cell))
+		cells[cell] = true
+	_check(cells.size() == 72, "room_01 矩形规划必须恰有 72 格地砖")
+	for x in range(int(size.x / 5.0)):
+		for z in range(int(size.y / 5.0)):
+			var cell := Vector2i(5 + 10 * x - int(size.x), 5 + 10 * z - int(size.y))
+			_check(cells.has(cell), "room_01 缺少矩形内的地砖：%s" % str(cell))
 
 
 ## 独立读取源规划（含 remove 覆写），不从正式 TSCN 倒推规划数量。
@@ -364,7 +386,7 @@ func _check_live_expedition_rooms() -> void:
 	var block := tower.get_node_or_null("Blocks/Expedition") as Node3D
 	_check(block != null, "远征01 必须生成 Blocks/Expedition")
 	if block != null:
-		for room_id in TARGETS:
+		for room_id in _target_ids():
 			var room := block.get_node_or_null(room_id) as DungeonRoom3D
 			_check(room != null, "真实远征场景必须生成 %s" % room_id)
 			if room != null:
@@ -384,6 +406,22 @@ func _check_runtime_room(room_id: String, room: DungeonRoom3D, expected: Diction
 		var verifier := STATIC_VERIFIER.new()
 		verifier._check_saved_instance_replay(room, art_root, room_id)
 		verifier._check_plan_scene_alignment(room, art_root, room_id)
+		if room_id == "room_01":
+			_check(art_root.get_meta("asset_version", "") == "v013", "room_01 必须加载正式矩形静态布局 v013")
+			_check(art_root.get_meta("template_variant", "") == "rect", "room_01 正式场景必须声明 rect")
+			_check(verifier._prefab_children(art_root).size() == 165, "room_01 正式布局应重放 165 个顶层 Prefab")
+			_check(room.doors.size() == 2, "room_01 仅 A/B 两个已连接端口应生成门")
+			var ports := art_root.get_node_or_null("ConnectionPorts") as Node3D
+			_check(ports != null and ports.get_child_count() == 4, "room_01 应保留四个作者候选端口")
+			if ports != null:
+				for port_id in ["A", "B"]:
+					var marker := ports.get_node_or_null("Port_%s" % port_id) as Marker3D
+					var port := room.get_connection_port_by_id(port_id)
+					var pos := port.get("position_m", []) as Array
+					_check(marker != null and pos.size() == 2, "room_01 缺少 %s 端口" % port_id)
+					if marker != null and pos.size() == 2:
+						var local := room.to_local(marker.global_position)
+						_check(is_equal_approx(local.x, float(pos[0])) and is_equal_approx(local.z, float(pos[1])), "room_01 %s 作者门槽没有对齐当前规划" % port_id)
 		checks += verifier.checks
 		failures.append_array(verifier.failures)
 		verifier.free()

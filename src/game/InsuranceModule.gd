@@ -149,7 +149,7 @@ func restore_slots_snapshot(snapshot: Array) -> void:
 			continue
 		var entry: Dictionary = snapshot[index]
 		var item: Dictionary = entry.get("item", {}).duplicate(true)
-		if item.is_empty():
+		if item.is_empty() or ItemRegistry.is_retired_item_entry(entry):
 			continue
 		item = WeaponInstance.ensure_weapon_item(item)
 		var rotation := int(entry.get("grid_rotation", item.get("grid_rotation", 0)))

@@ -6,7 +6,29 @@
  "room_role": "main",
  "content_type": "COMBAT",
  "assembly_route": "room_type_layout_replay",
- "assembly_route_note": "分支 A0：具体房间白模与房型默认尺寸、门槽与必需设施一致，且 03 的 room_layout 只声明 base_layout（无 instance_overrides）⇒ 直接重放房型 component_instances.json，不做 Godot 侧第二套手工摆位。",
+ "assembly_route_scope": "historical_source_only",
+ "assembly_route_note": "历史 A0 来源记录：具体房间白模与房型默认尺寸、门槽与必需设施一致时，曾直接重放房型 component_instances.json；该路由不代表当前 room_01 运行时装配。",
+ "manifest_status": "historical_snapshot_with_active_runtime_link",
+ "active_runtime_layout": {
+  "assembly_route": "formal_static_scene",
+  "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_room_01_static_layout.tscn",
+  "scene_version": "v013",
+  "template_variant": "rect",
+  "geometry_replay_disabled": true,
+  "direct_prefab_total": 165,
+  "floor_tile_count": 72,
+  "perimeter_wall_prefab_count": 33,
+  "room_type_component_count": 56,
+  "door_contract": "2 个门口：1 个静态门墙，1 个运行时共边；4 个候选旧端口坐标保持不变。",
+  "note": "当前 room_01 以正式静态布局为实体事实源，不重放旧 L 型 component_instances。复用 v012 组件，不新增几何。"
+ },
+ "historical_a0_source": {
+  "assembly_route": "room_type_layout_replay",
+  "component_instances": "res://art_source/environments/tower_zones/expedition/source/common_components/v012/component_instances.json",
+  "component_library_version": "v012",
+  "template_variant": "l_turn",
+  "replay_status": "retained_for_history_and_provenance_only"
+ },
  "level": {
   "level_id": "expedition_01",
   "block_id": "expedition",
@@ -18,9 +40,9 @@
   "geometry_is_generated_at_runtime": true
  },
  "sources": {
-  "whitebox_level_plan": "res://source/art/whitebox/tower_zones/expedition_01/v001/data/level_plan.json",
-  "whitebox_floor_plan": "res://source/art/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json",
-  "room_template": "res://source/art/whitebox/tower_zones/expedition_01/v001/data/room_templates/corridor_45x40.json",
+  "whitebox_level_plan": "res://art_source/design/whitebox/tower_zones/expedition_01/v001/data/level_plan.json",
+  "whitebox_floor_plan": "res://art_source/design/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json",
+  "room_template": "res://art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/corridor_45x40.json",
   "template_id": "corridor_45x40",
   "template_variant": "l_turn",
   "component_instances": "res://art_source/environments/tower_zones/expedition/source/common_components/v012/component_instances.json",
@@ -34,7 +56,7 @@
  },
  "godot_references": {
   "layout_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-ROOM-TYPE-LAYOUT",
-  "component_catalog": "res://assets/art/environments/tower_zones/battle/runtime/shell_component_catalog.json",
+  "component_catalog": "res://assets/art/environments/tower_zones/shared/runtime/shell_component_catalog.json",
   "scene": "res://scenes/ExpeditionLevel01_3D.tscn",
   "room_node_path": "Blocks/Expedition/room_01",
   "art_root_node": "AuthoredLayoutArtRoot",

@@ -1141,8 +1141,6 @@ func _apply_inventory_slot_frame(slot: Control, filled: bool) -> void:
 
 
 func _item_glyph(item: Dictionary) -> String:
-	if item.get("id", "") == "item_room_key":
-		return "KEY"
 	if item.get("type", "") == "equipment" and item.get("subtype", "") == "backpack":
 		return "BAG"
 	if item.get("type", "") == "weapon" or item.get("subtype", "") == "gun_body":
@@ -1151,8 +1149,6 @@ func _item_glyph(item: Dictionary) -> String:
 		return "BUL"
 	if item.get("type", "") == "attachment":
 		return "ATT"
-	if item.get("type", "") == "blueprint":
-		return "BP"
 	if item.get("use_action", "") == "heal":
 		return "HP"
 	if item.get("use_action", "") == "refill_ammo":

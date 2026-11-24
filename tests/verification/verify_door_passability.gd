@@ -2,11 +2,11 @@ extends Node
 ## 端到端测试：玩家走到门附近 + 按 E + 验证门是否打开 + 玩家能否通过碰撞 + 表现层
 ## 不依赖 HUD、不依赖相机——直接调底层 API。
 
-const OUTPUT_DIR := "res://outputs/verification"
+const EVENT_FIXTURE_ID := "verification_plain_event"
+const EVENT_EXIT_ID := "verification_event_exit"
 
 
 func _ready() -> void:
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT_DIR))
 	var scene := load("res://scenes/TowerDescent3D.tscn") as PackedScene
 	var tower := scene.instantiate() as TowerDescent3D
 	tower.test_mode = true
@@ -166,7 +166,7 @@ func _ready() -> void:
 	print("\n=== 测试 4: 提示文案按状态切换 ===")
 	if test_door != null:
 		var prompts_seen := []
-		# 状态 1: 默认 closed + requires_key
+		# 状态 1: 旧 requires_key 标记不再提示使用房间钥匙
 		test_door.set_open(false, true)
 		test_door.set_access_policy({"requires_key": true, "requires_clear": true, "triggers_fate": true})
 		prompts_seen.append(test_door._prompt.text)
@@ -181,7 +181,7 @@ func _ready() -> void:
 		prompts_seen.append(test_door._prompt.text)
 		print("  提示序列: %s" % [prompts_seen])
 		var expected := [
-			"[E] 使用房间钥匙",
+			"[E] 开启通道",
 			"[E] 开启入口 · 选择命运",
 			"[E] 开启通道",
 			"通道已开启",
@@ -262,10 +262,9 @@ func _ready() -> void:
 		])
 		tower._open_edges[edge_key] = false
 		test_door_node.set_open(false, true)
-		# 绕过清场检查
+		# 绕过清场检查；普通门不再依赖房间钥匙。
 		test_room.cleared = true
 		await _settle_short()
-		tower._room_key_count += 1
 		tower.player.global_position = test_door_node.global_position + Vector3(1.0, 0.0, 0.0)
 		tower._current_room_id = test_room.room_id
 		await _settle_short()
@@ -405,14 +404,10 @@ func _ready() -> void:
 	# 测试 9: EVENT 空房目标、透明阻挡与软锁修复
 	# ============================================================
 	print("\n=== 测试 9: EVENT 房目标可见、无透明阻挡、不会空房锁门 ===")
-	var event_room: DungeonRoom3D = null
-	for value in room_by_id.values():
-		var candidate := value as DungeonRoom3D
-		if candidate != null and candidate.room_type == "EVENT":
-			event_room = candidate
-			break
+	# 当前塔楼前段不承诺随机生成纯事件房。挂两个独立的测试房，仍走正式房间、终端与门路由。
+	var event_room := _add_plain_event_fixture(tower)
 	if event_room == null:
-		print("  ❌ 找不到 EVENT 测试房")
+		print("  ❌ 无法装配纯 EVENT 门闸夹具")
 		tests_failed += 1
 	else:
 		event_room.ensure_detail_built()
@@ -438,6 +433,7 @@ func _ready() -> void:
 		tower._resolved_event_rooms.erase(event_room.room_id)
 		tower._event_combat_rooms.erase(event_room.room_id)
 		event_room.cleared = false
+		tower.player.global_position = event_room.to_global(Vector3(0, 0.1, 0))
 		tower.force_enter_room_for_test(event_room.room_id)
 		await _settle_short()
 		if "紫色光柱" in tower.status_label.text and "战斗未结束" not in tower.status_label.text:
@@ -445,6 +441,22 @@ func _ready() -> void:
 			tests_passed += 1
 		else:
 			print("  ❌ EVENT 返回提示错误: %s" % tower.status_label.text)
+			tests_failed += 1
+
+		# 注入旧门策略，不发钥匙。一条断言同时防止误解锁事件门和恢复旧道具门槛。
+		event_room.door_policies["east"] = {"requires_key": true, "requires_clear": true, "triggers_fate": false}
+		var event_edge := tower._edge_key(EVENT_FIXTURE_ID, EVENT_EXIT_ID)
+		var event_policy := tower._door_policy_towards(EVENT_FIXTURE_ID, EVENT_EXIT_ID)
+		var denied := not tower.try_open_room_door(EVENT_EXIT_ID)
+		if (denied and not bool(tower._open_edges.get(event_edge, false))
+			and not tower._pending_room_door_open_edges.has(event_edge)
+			and "紫色光柱" in tower.status_label.text
+			and not bool(event_policy.get("requires_key", true))
+			and bool(event_policy.get("requires_clear", false))):
+			print("  ✅ 旧钥匙标记被忽略；未结算事件仍阻止开门")
+			tests_passed += 1
+		else:
+			print("  ❌ 未结算事件门未正确拒绝：%s / %s" % [event_policy, tower.status_label.text])
 			tests_failed += 1
 
 		# 模拟必做终端节点意外丢失：下一次进房必须原位重建目标。
@@ -464,22 +476,47 @@ func _ready() -> void:
 		tower._event_combat_rooms.erase(event_room.room_id)
 		event_room.cleared = false
 		tower._repair_room_progress(event_room)
-		if event_room.cleared:
-			print("  ✅ 已结算的非战斗 EVENT 状态可自愈并解除门锁")
+		var accepted := event_room.cleared and tower.try_open_room_door(EVENT_EXIT_ID)
+		var event_door := event_room.get_door_node("east")
+		var deadline := Time.get_ticks_msec() + 2000
+		while accepted and event_door != null and not event_door.is_open and Time.get_ticks_msec() < deadline:
+			await get_tree().physics_frame
+		await get_tree().physics_frame
+		if (accepted and bool(tower._open_edges.get(event_edge, false))
+			and event_door != null and event_door.is_open and event_door._collision.disabled
+			and tower._get_total_room_keys() == 0 and not bool(tower.get("_door_fate_active"))):
+			print("  ✅ 已结算的 EVENT 门无钥匙可开，实体门放行，不弹命运卡")
 			tests_passed += 1
 		else:
-			print("  ❌ 已结算 EVENT 仍然锁门")
+			print("  ❌ 已结算 EVENT 门未完整放行")
 			tests_failed += 1
 
 	# 汇总
 	print("\n=== 汇总 ===")
 	print("通过 %d / 失败 %d" % [tests_passed, tests_failed])
 	if tests_failed == 0:
-		print("✅ 门功能 + 表现 + 通过性 全部通过")
+		print("DOOR_PASSABILITY_OK checks=%d" % tests_passed)
 	else:
-		print("❌ 有失败项")
+		print("DOOR_PASSABILITY_FAILED failures=%d" % tests_failed)
 
 	get_tree().quit(0 if tests_failed == 0 else 1)
+
+
+func _add_plain_event_fixture(tower: TowerDescent3D) -> DungeonRoom3D:
+	const FIXTURE_FLOOR := 2
+	var origin := Vector3(320.0, -TowerDescent3D.FLOOR_HEIGHT * FIXTURE_FLOOR, 320.0)
+	var event_record := tower._record(EVENT_FIXTURE_ID, "EVENT", "medium", origin, [], true, "", tower._records.size(), -FIXTURE_FLOOR)
+	var exit_record := tower._record(EVENT_EXIT_ID, "START", "medium", origin + Vector3(40.0, 0.0, 0.0), [], true, EVENT_FIXTURE_ID, tower._records.size() + 1, -FIXTURE_FLOOR)
+	for record in [event_record, exit_record]:
+		record["floor_index"] = FIXTURE_FLOOR
+		record["procedural_furniture_enabled"] = false
+		tower._records.append(record)
+		tower._room_floor_index[record["id"]] = FIXTURE_FLOOR
+	tower._declare_and_register_edge(EVENT_FIXTURE_ID, EVENT_EXIT_ID, "horizontal")
+	tower._instantiate_dynamic_room(event_record)
+	tower._instantiate_dynamic_room(exit_record)
+	tower.minimap.configure(tower._records, tower._open_edges)
+	return tower._room_by_id.get(EVENT_FIXTURE_ID) as DungeonRoom3D
 
 
 func _settle_long() -> void:

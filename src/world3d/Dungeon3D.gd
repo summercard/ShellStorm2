@@ -37,7 +37,7 @@ signal encounter_event_finished(snapshot: Dictionary)
 const ROOM_SCENE: PackedScene = preload("res://assets/art/environments/dungeon_3d/env_dungeon_runtime_kit_top3d.tscn")
 const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn")
 const EXTRACTION_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_extraction_beacon_root_top3d.tscn")
-const KEY_SCRIPT := preload("res://src/world3d/RoomKeyPickup3D.gd")
+## 房间钥匙脚本仅保留旧快照兼容，不再由运行时实例化。
 ## 传送支线管理器（支线秘密房间设计）。只在房表声明了 `secret_site` 的关卡上实例化。
 const SECRET_BRANCH_SCRIPT := preload("res://src/world3d/SecretBranch3D.gd")
 ## 子图房型表走 L3 加载器（与生成器/校验器同一份读取口径，不另写文件解析）。
@@ -420,7 +420,8 @@ var _open_edges: Dictionary = {}
 var _pending_room_door_open_edges: Dictionary = {}
 var _corridor_by_edge: Dictionary = {}
 var _spawned_key_rooms: Dictionary = {}
-var _room_key_count := 1
+## 旧存档字段保留只读兼容，但运行时钥匙余额恒为零。
+var _room_key_count := 0
 var _enemy_nodes_by_room: Dictionary = {}
 var _room_wave_queues: Dictionary = {}
 var _room_wave_numbers: Dictionary = {}
@@ -933,11 +934,7 @@ func _ready() -> void:
 	_on_ammo_changed(int(weapon_snapshot.get("current_ammo", 0)), int(weapon_snapshot.get("magazine_size", 0)))
 	title_label.text = "%s · 3D行动区" % gameplay_theme.display_name
 	seed_label.text = "SEED %d" % run_seed
-	status_label.text = (
-		"%s · 初始钥匙 1，把战利品安全带到撤离点" % gameplay_theme.fantasy
-		if _room_key_economy_enabled()
-		else "%s · 把战利品安全带到撤离点" % gameplay_theme.fantasy
-	)
+	status_label.text = "%s · 把战利品安全带到撤离点" % gameplay_theme.fantasy
 	_refresh_loot_label()
 	generation_completed.emit(get_generation_snapshot())
 	var world_audio := preload("res://src/audio/WorldAudioEnvironment3D.gd").new()
@@ -1136,7 +1133,7 @@ func build_runtime_save_snapshot() -> Dictionary:
 		"flashlight_charge_ratio": flashlight.get_charge_ratio() if flashlight != null else 1.0,
 		"quick_item_slots": _quick_inventory.get_slots_snapshot(),
 		"quick_item_ids": _quick_item_ids.duplicate(),
-		"room_key_count": _room_key_count,
+		"room_key_count": 0,
 		"run_value": _run_value,
 		"kills": _kills,
 		"run_currency": GameManager.currency,
@@ -1350,11 +1347,15 @@ func _import_door_fate_snapshot(value: Variant) -> bool:
 		return false
 	var restored_cards: Array[FateCard] = []
 	var restored_purchased: Array[bool] = []
+	var had_saved_candidates := false
 	for row_value in snapshot.get("cards", []) as Array:
 		if not row_value is Dictionary:
 			return false
 		var row: Dictionary = row_value as Dictionary
 		var stable_id := str(row.get("stable_card_id", ""))
+		had_saved_candidates = true
+		if stable_id == "fate_sun_key":
+			continue
 		var card: FateCard = null
 		for candidate in FateCardPresets.door_reward_presets():
 			if candidate.get_stable_card_id() == stable_id:
@@ -1375,6 +1376,7 @@ func _import_door_fate_snapshot(value: Variant) -> bool:
 	# 旧档没有这一项 ⇒ 0 ⇒ 报价序号退回「用门序号」（历史口径；固定价下该序号已不影响价格）。
 	_fate_offer_price_index = maxi(0, int(snapshot.get("price_index", 0)))
 	_fate_door_quote = (snapshot.get("quotes", {}) as Dictionary).duplicate(true)
+	_fate_door_quote.erase("fate_sun_key")
 	# 2026-11-20：恢复到正式入口后，**未购**候选一律按当前固定售价重新报价，
 	# 旧档里的参考收益价/保底压价不得把报价带回旧口径。已购位的报价属于已成交记录，
 	# 保持原值不重写（该位本来就不可再购买）。
@@ -1385,7 +1387,7 @@ func _import_door_fate_snapshot(value: Variant) -> bool:
 		_fate_door_quote[restored_card.get_stable_card_id()] = _fate_fixed_price(restored_card)
 	_fate_pickup_claimed = (snapshot.get("claimed_pickups", {}) as Dictionary).duplicate(true)
 	# 过渡档可能已有 pickup offer 而尚未写 claimed_pickups；冻结候选就是已认领证据。
-	if _fate_offer_source == "pickup" and not _fate_offer_pickup_id.is_empty() and not restored_cards.is_empty():
+	if _fate_offer_source == "pickup" and not _fate_offer_pickup_id.is_empty() and had_saved_candidates:
 		_fate_pickup_claimed[_fate_offer_pickup_id] = true
 	_pending_fate_door_from_id = str(snapshot.get("from_id", ""))
 	_pending_fate_door_target_id = str(snapshot.get("target_id", ""))
@@ -1474,7 +1476,8 @@ func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) 
 			if source_slot >= 0:
 				_move_inventory_item_to_quick(source_slot, quick_index)
 	_sync_quick_item_ids()
-	_room_key_count = maxi(0, int(snapshot.get("room_key_count", 1)))
+	# 旧存档里的房间钥匙字段只读兼容并零化，不恢复旧钥匙。
+	_room_key_count = 0
 	_run_value = maxi(0, int(snapshot.get("run_value", 0)))
 	_kills = maxi(0, int(snapshot.get("kills", 0)))
 	GameManager.currency = maxi(0, int(snapshot.get("run_currency", 0)))
@@ -2025,11 +2028,7 @@ func _try_settle_encounter_room_clear(room_id: String) -> void:
 	if room.room_type == "EVENT" and not _resolved_event_rooms.has(room_id):
 		return
 	_mark_room_cleared(room, true)
-	status_label.text = (
-		"遭遇结束 · 房间肃清，钥匙已掉落"
-		if _room_key_economy_enabled() and _room_produces_room_key(room)
-		else "遭遇结束 · 房间肃清"
-	)
+	status_label.text = "遭遇结束 · 房间肃清"
 
 
 ## 清房存活重算：已实例化节点、休眠房间快照、在途预约三者合一，写回 `_alive_by_room`。
@@ -3291,6 +3290,8 @@ func _cursor_context() -> UiCursorMode.Presentation:
 		return UiCursorMode.Presentation.UI
 	if _is_player_dead():
 		return UiCursorMode.Presentation.HIDDEN
+	if is_instance_valid(_channel_manager_encounter) and _channel_manager_encounter.dialogue_needs_cursor():
+		return UiCursorMode.Presentation.UI
 	if (
 		_run_vending_tutorial_locked or player.aim_locked or _narrative_holds_player_input()
 		or NarrativeDirector.is_camera_override_active() or NarrativeDirector.is_actor_facing_overridden()
@@ -3450,6 +3451,8 @@ func set_fate_tutorial_locked(locked: bool) -> void:
 func try_close_modal_for_pause() -> bool:
 	if _fate_tutorial_locked:
 		return false
+	if is_instance_valid(_channel_manager_encounter) and _channel_manager_encounter.try_close_dialogue():
+		return true
 	if is_instance_valid(_fate_confirm):
 		_fate_confirm.call("cancel")
 		return true
@@ -4132,6 +4135,9 @@ func _on_secret_branch_room_entered(room: DungeonRoom3D, with_encounter: bool) -
 	_secret_branch_room_ids[room.room_id] = room
 	_current_room_id = room.room_id
 	room_label.text = "%s · 暗室" % room.room_id
+	if room.get_meta("test_room_objective", "") == "channel_manager" and _ensure_channel_manager_encounter(room):
+		room_label.text = "频道管理者 · 测试支线"
+		status_label.text = "靠近频道管理者按 E 交谈；由返程门回到主路"
 	_update_wave_hud(room.room_id)
 	if not with_encounter or _spawned_rooms.has(room.room_id):
 		return
@@ -4500,7 +4506,7 @@ func _edge_key(a: String, b: String) -> String:
 func _door_policy_for_edge(_from_room_id: String, _target_room_id: String) -> Dictionary:
 	return {
 		"requires_clear": true,
-		"requires_key": true,
+		"requires_key": false,
 		"triggers_fate": true,
 	}
 
@@ -4857,7 +4863,7 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 		_ensure_room_clear_drop(room)
 		if is_room_boss_defeated(room.room_id):
 			_ensure_boss_chest_drop(room.room_id)
-		_ensure_room_key_reward(room)
+		# 房间钥匙已退役；清房只结算保留的奖励。
 		_repair_room_progress(room)
 		if not _wave_spawn_pending.has(room.room_id):
 			status_label.text = _return_room_status(room)
@@ -4882,7 +4888,11 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 			else:
 				status_label.text = "事件房：清除异常敌群"
 		elif event_ready:
-			status_label.text = "事件房：前往紫色光柱，按 E 使用异常信号终端"
+			if _is_channel_manager_room(room):
+				_ensure_channel_manager_encounter(room)
+				status_label.text = "事件房：靠近频道管理者并按 E 交谈"
+			else:
+				status_label.text = "事件房：前往紫色光柱，按 E 使用异常信号终端"
 	else:
 		status_label.text = _room_status(room.room_type)
 		_mark_room_cleared(room, room.room_type not in ["START", "EXTRACTION", "ELEVATOR"])
@@ -4920,6 +4930,9 @@ func _event_room_has_authored_combat(room: DungeonRoom3D) -> bool:
 ##      `_room_encounter_active` 这道门，否则第一波清完就把房间判清、门放行。
 ##   3. 计时到点后不再开新波（由 Director 的 `_drop_unstarted_stages` 负责），
 ##      但**已出的怪仍要打完** —— 所以封门只在「房间真被肃清」时解除。
+const CHANNEL_MANAGER_ENCOUNTER_SCRIPT := preload("res://assets/art/characters/npc/channel_manager/runtime/channel_manager_encounter.gd")
+var _channel_manager_encounter: Node = null
+
 const STRONG_RANDOM_FALLBACK: Array[String] = [
 	"melee_chaser_strong", "fat_zombie03_strong", "ranged_caster_strong",
 ]
@@ -7167,9 +7180,18 @@ func _return_room_status(room: DungeonRoom3D) -> String:
 	return "返回已探索房间 · 战斗未结束"
 
 
+func _is_channel_manager_room(room: DungeonRoom3D) -> bool:
+	return room != null and (
+		room.get_meta("test_room_objective", "") == "channel_manager"
+		or room.room_id in ["room_09", "f00_room_09"]
+	)
+
+
 func _ensure_event_room_objective(room: DungeonRoom3D) -> bool:
 	if room == null or room.room_type != "EVENT":
 		return false
+	if _is_channel_manager_room(room):
+		return _ensure_channel_manager_encounter(room)
 	var station := room.ensure_required_service_station()
 	if station != null:
 		return true
@@ -7179,6 +7201,34 @@ func _ensure_event_room_objective(room: DungeonRoom3D) -> bool:
 	_mark_room_cleared(room, true)
 	status_label.text = "事件终端载入失败，房间已安全解锁"
 	return false
+
+
+func _ensure_channel_manager_encounter(room: DungeonRoom3D) -> bool:
+	if not _is_channel_manager_room(room):
+		return false
+	if _channel_manager_encounter != null and is_instance_valid(_channel_manager_encounter):
+		return true
+	_channel_manager_encounter = CHANNEL_MANAGER_ENCOUNTER_SCRIPT.new()
+	_channel_manager_encounter.configure(self, room, player)
+	_channel_manager_encounter.event_resolved.connect(_on_channel_manager_event_resolved.bind(room))
+	_channel_manager_encounter.portal_opened.connect(_on_channel_manager_portal_opened)
+	return true
+
+
+func _on_channel_manager_event_resolved(result: String, room: DungeonRoom3D) -> void:
+	if not _is_channel_manager_room(room):
+		return
+	if room.get_meta("test_room_objective", "") == "channel_manager":
+		status_label.text = "频道管理者已转台 · %s" % result
+		return
+	_resolved_event_rooms[room.room_id] = true
+	status_label.text = "频道管理者已转台 · %s；等待战斗清除" % result
+	_queue_runtime_autosave("channel_manager_event_resolved")
+	_repair_room_progress(room)
+
+
+func _on_channel_manager_portal_opened(result: String) -> void:
+	status_label.text = "频道裂口已打开 · %s · 玩家穿越逻辑待设计" % result
 
 
 func _repair_hostile_room_progress(room: DungeonRoom3D, allow_event_combat := false) -> void:
@@ -7667,11 +7717,7 @@ func _resolve_room_enemy_departure(enemy: Enemy3D, did_escape: bool, enemy_data:
 	if did_escape:
 		status_label.text = "精英已逃脱并记入跨局档案 · 房间通路恢复"
 	else:
-		status_label.text = (
-			"房间肃清 · 钥匙已掉落，可继续搜索或推进"
-			if _room_key_economy_enabled() and _room_produces_room_key(room)
-			else "房间肃清 · 可继续搜索或推进"
-		)
+		status_label.text = "房间肃清 · 可继续搜索或推进"
 	if AudioManager != null:
 		AudioManager.play_sfx("wave_clear", -3.0)
 	if (
@@ -8165,6 +8211,9 @@ func _on_chest_open_requested(room: DungeonRoom3D, chest: TreasureChest3D) -> vo
 		return
 	var prepared := _prepare_story_boss_chest_config(room, chest.get_reward_config())
 	chest.mimic = bool(prepared.get("mimic", chest.mimic))
+	var empty_fixed_chest := chest.has_explicit_grants() and chest.get_explicit_grants().is_empty()
+	if empty_fixed_chest:
+		chest.mimic = false
 	if chest.mimic:
 		# 拟态：箱子变怪，物资挂在那只怪肚子里（击杀才掉）。**不要在这里弹购买界面** ——
 		# 玩家正要打怪，全屏模态会把战斗直接卡在背后。
@@ -8178,7 +8227,7 @@ func _on_chest_open_requested(room: DungeonRoom3D, chest: TreasureChest3D) -> vo
 	var chest_id := chest.chest_id
 	var burst_origin := chest.global_position + Vector3(0, 0.4, 0)
 	var burst_delay := chest.get_open_burst_delay()
-	if grants.is_empty():
+	if grants.is_empty() and not empty_fixed_chest:
 		status_label.text = "宝箱奖励暂不可用 · 宝箱保留"
 		return
 	var previous_pending := room.get_pending_chest_grants()
@@ -8238,7 +8287,7 @@ func _on_chest_open_requested(room: DungeonRoom3D, chest: TreasureChest3D) -> vo
 			CHEST_BURST_CAMERA_STRENGTH, TreasureChest3D.BURST_SECONDS
 		)
 
-	status_label.text = "宝箱开启 · %d 件物资散落，命运卡需主动交互" % delivered
+	status_label.text = "宝箱开启 · 无可领取物资" if empty_fixed_chest else "宝箱开启 · %d 件物资散落，命运卡需主动交互" % delivered
 	_queue_runtime_autosave("chest_rewards_landed")
 
 
@@ -8254,7 +8303,7 @@ func _deliver_pending_chest_grants(
 		return 0
 	if room.room_id != _current_room_id:
 		return 0
-	var remaining := (state.get("grants", []) as Array).duplicate(true)
+	var remaining := ItemRegistry.without_retired_items(state.get("grants", []))
 	if remaining.is_empty():
 		room.clear_pending_chest_grants(chest_id)
 		return 0
@@ -8436,7 +8485,7 @@ func _resolve_chest_grants(room: DungeonRoom3D, chest: TreasureChest3D) -> Array
 	if not bool(report.get("ok", false)):
 		push_warning("[Dungeon3D] Chest reward resolution failed: %s" % str(report.get("errors", [])))
 		return []
-	var grants := (report.get("grants", []) as Array).duplicate(true)
+	var grants := ItemRegistry.without_retired_items((report.get("grants", []) as Array))
 	for grant: Dictionary in grants:
 		var item := grant.get("item", {}) as Dictionary
 		if not FATE_CARD_DROP_SCRIPT.is_fate_pickup_data(item):
@@ -8480,7 +8529,7 @@ func _apply_fate_item_quality(item: Dictionary, tiers: int, cap: String = "") ->
 ## 候选按物品实际稀有度排序，池档位不等同于品质。
 func _ground_reward_candidates(grants: Array) -> Array[Dictionary]:
 	var candidates: Array[Dictionary] = []
-	for value in grants:
+	for value in ItemRegistry.without_retired_items(grants):
 		if not value is Dictionary:
 			continue
 		var item := REWARD_SINK_SCRIPT.materialize_ground_items([value])
@@ -8585,7 +8634,7 @@ func _deliver_ground_rewards(
 	presentation_context: Dictionary = {}
 ) -> Dictionary:
 	var adjusted: Array = []
-	for value in grants:
+	for value in ItemRegistry.without_retired_items(grants):
 		var grant := (value as Dictionary).duplicate(true)
 		if str(grant.get("kind", "")) == "currency":
 			if room != null and bool(_room_zero_currency.get(room.room_id, false)):
@@ -8735,6 +8784,8 @@ func _import_character_fate_delivery_snapshot(value: Variant) -> bool:
 
 ## 世界掉落唯一构造口；生成和恢复共用，防止命运凭据读档后降级为自动拾取物。
 func _create_ground_pickup(item: Dictionary) -> GroundLootPickup3D:
+	if ItemRegistry.is_retired_item_entry(item):
+		return null
 	var pickup: GroundLootPickup3D
 	if FATE_CARD_DROP_SCRIPT.is_fate_pickup_data(item):
 		if str(item.get("fate_pickup_id", "")).is_empty():
@@ -8825,6 +8876,9 @@ func _spawn_loot_items(
 			continue
 		if chest_arc and index >= chest_positions.size():
 			# 宝箱专用落点没有合法候选时保留该奖励在 pending，不能回缩到箱心。
+			break
+		# 直接落地调用（不经 RewardSink）也不得生成旧实物。保留成功前缀语义。
+		if ItemRegistry.is_retired_item_entry(item_value):
 			break
 		var item: Dictionary = (item_value as Dictionary).duplicate(true)
 		# 堆叠数量是物品真实数量；尤其弹药必须以“发”为单位落地和拾取。
@@ -9577,12 +9631,7 @@ func apply_world_fate_card(card: FateCard) -> Dictionary:
 		"fate_sun_reveal":
 			_reveal_nearby_rooms(_current_room_id, int(effect.get("radius", 1)), bool(effect.get("hide_room_types", false)))
 		"fate_sun_key":
-			if bool(effect.get("temporary_floor_only", false)):
-				_temporary_key_floor = _fate_floor_key(_room_by_id.get(_current_room_id) as DungeonRoom3D)
-				_temporary_room_keys += maxi(0, int(effect.get("count", 1)))
-			else:
-				_room_key_count += maxi(0, int(effect.get("count", 1)))
-			_refresh_loot_label()
+			return {"success": false, "error": "retired_room_key_card", "message": "房间钥匙命运已退役；卡片未应用"}
 		"fate_sun_currency":
 			_world_currency_multiplier *= maxf(0.0, float(effect.get("multiplier", 1.0)))
 			if int(effect.get("quality_every", 0)) > 0:
@@ -9648,7 +9697,7 @@ const WORLD_FATE_SAVE_DEFAULTS := {
 	"_next_room_enemy_count": 0, "_next_room_elite_configs": [], "_fate_elite_reservation_serial": 0,
 	"_next_room_clear_currency": 0, "_next_room_enemy_hp_multiplier": 1.0,
 	"_next_room_enemy_damage_multiplier": 1.0, "_next_room_currency_multiplier": 1.0,
-	"_world_currency_multiplier": 1.0, "_temporary_room_keys": 0, "_temporary_key_floor": "",
+	"_world_currency_multiplier": 1.0,
 	"_fate_visited_rooms": {}, "_fate_bounty_queues": [], "_fate_drop_quality_rules": [],
 	"_room_fate_bounties": {}, "_room_fate_clear_currency": {}, "_room_zero_currency": {},
 	"_room_enemy_hp_multipliers": {}, "_room_enemy_damage_multipliers": {}, "_room_currency_multipliers": {},
@@ -9676,6 +9725,9 @@ func export_world_fate_snapshot() -> Dictionary:
 
 
 func import_world_fate_snapshot(value: Variant) -> bool:
+	# Old temporary-key fields are intentionally not part of WORLD_FATE_SAVE_DEFAULTS.
+	_temporary_room_keys = 0
+	_temporary_key_floor = ""
 	var previous_time := _extraction_time_multiplier
 	# 恢复不是退役精英预约：不调用会 settle 的 reset_world_fate_state。
 	for key in WORLD_FATE_SAVE_DEFAULTS:
@@ -9762,7 +9814,7 @@ func get_world_fate_snapshot() -> Dictionary:
 		"next_room_currency_multiplier": _next_room_currency_multiplier,
 		"currency_multiplier": _world_currency_multiplier,
 		"bounty_queues": _fate_bounty_queues.duplicate(true),
-		"temporary_keys": _temporary_room_keys,
+		"temporary_keys": 0,
 		"next_room_elite_count": _next_room_elite_configs.size(),
 		"next_chest_max_rarity": _next_chest_max_rarity,
 		"extraction_time_multiplier": _extraction_time_multiplier,
@@ -9798,11 +9850,10 @@ func _fate_floor_key(room: DungeonRoom3D) -> String:
 	return str(room.get_meta("floor_number", room.position.y)) if room != null else ""
 
 
-func _expire_temporary_room_keys(floor_key: String) -> void:
-	if _temporary_room_keys > 0 and floor_key != _temporary_key_floor:
-		_temporary_room_keys = 0
-		_temporary_key_floor = ""
-		_refresh_loot_label()
+func _expire_temporary_room_keys(_floor_key: String) -> void:
+	# 旧命运卡字段保留兼容，但临时钥匙永不创建。
+	_temporary_room_keys = 0
+	_temporary_key_floor = ""
 
 
 func _update_fate_extraction_slow() -> void:
@@ -9848,7 +9899,7 @@ func _mark_room_boss_defeated(room_id: String) -> void:
 	call_deferred("_ensure_boss_chest_drop", room_id)
 
 
-func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
+func _mark_room_cleared(room: DungeonRoom3D, _spawn_key: bool) -> void:
 	if room == null:
 		return
 	if room.room_type == "EVENT" and _event_room_has_authored_combat(room):
@@ -9893,12 +9944,7 @@ func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 		var bounty := int(_room_fate_bounties.get(room.room_id, 0)) + int(_room_fate_clear_currency.get(room.room_id, 0))
 		_grant_run_currency(bounty)
 		_refresh_loot_label()
-	if spawn_key and not was_cleared:
-		call_deferred("_ensure_room_key_reward", room)
-	# 清房掉落（2026-11-06）：钥匙时代结束后，这一格改掉宝箱/补给。
-	# 与钥匙**互斥**：本关配了 `clear_drops` 就不再发钥匙（见计划段的 `economy`），
-	# 两条都开会给同一间房发两份清房奖励。摆放间隔交给 deferred —— 奖励协调器、
-	# 房间细节树、玩家位置都要在本帧末才稳定。
+	# 宝箱/补给按房间的独立清房配置发放；旧布尔入参仅兼容调用签名。
 	if not was_cleared:
 		call_deferred("_ensure_room_clear_drop", room)
 
@@ -9910,73 +9956,19 @@ func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 ## ⛔ 这里必须**自检**，不能只信调用方的 `spawn_key` 形参：
 ## `_on_room_entered()` 的「重进已探索房间」分支是无条件调用本函数的，
 ## 于是玩家回头走一趟刚清过的和平区，地上就会掉出一把钥匙（2026-09-22 人报截图）。
-func _room_produces_room_key(room: DungeonRoom3D) -> bool:
-	if room == null:
-		return false
-	if room.authored_layout_peaceful:
-		return false
-	var declared: Dictionary = room.door_policies
-	var targets: Dictionary = room.door_targets
-	for direction in declared.keys():
-		# ⛔ 只认「有实际去向」的门。`door_targets[direction]` 为空 = 该侧是安全房壳体的
-		# 「封闭抵达门 / [E] 退出战局门」：它不经 `_try_open_room_door()`、从不消耗钥匙
-		# （`verify_expedition_level01_flow._verify_safe_room` 按这个口径断言「唯一封闭抵达门」）。
-		# 旧实现把它连同 `_door_policies_for_record()` 给的 `requires_key: true` 一起算进来，
-		# 于是整间入口安全房被判成产钥匙房 —— 进房即刻白掉一把**永远用不掉**的钥匙
-		# （前门 → room_01 是免费通行，退出门又不吃钥匙）。2026-10-12 人报「安全房默认刷钥匙」。
-		if str(targets.get(direction, "")).is_empty():
-			continue
-		if bool((declared[direction] as Dictionary).get("requires_key", true)):
-			return true
-	return declared.is_empty()
+func _room_produces_room_key(_room: DungeonRoom3D) -> bool:
+	# 房间钥匙已整体退役；保留查询接口供旧调用点读取 false。
+	return false
 
 
-func _ensure_room_key_reward(room: DungeonRoom3D) -> void:
-	if (
-		room == null
-		or not is_instance_valid(room)
-		or not room.cleared
-		or not _room_key_economy_enabled()
-		or not _room_produces_room_key(room)
-		or room.room_type in ["START", "EXTRACTION", "FACILITY", "ELEVATOR"]
-		or _spawned_key_rooms.has(room.room_id)
-	):
-		return
-	_spawn_room_key(room)
+func _ensure_room_key_reward(_room: DungeonRoom3D) -> void:
+	# 兼容旧调用点；房间钥匙已退役，不再创建任何奖励实体。
+	return
 
 
-func _spawn_room_key(room: DungeonRoom3D) -> void:
-	if room == null or not is_instance_valid(room) or _spawned_key_rooms.has(room.room_id):
-		return
-	var reward_report := _reward_coordinator.resolve_fixed_item(
-		"item_room_key", 1, "room_clear_key:%s" % room.room_id, maxi(1, visual_theme.difficulty_rank)
-	)
-	if not bool(reward_report.get("ok", false)) or (reward_report.get("grants", []) as Array).is_empty():
-		push_error("Room key reward rejected by RewardService: %s" % str(reward_report.get("errors", [])))
-		return
-	var key := KEY_SCRIPT.new() as RoomKeyPickup3D
-	key.configure(room.room_id)
-	room.add_child(key)
-	var spawn_position := Vector3(0, 0.05, -2.2)
-	if player != null and is_instance_valid(player) and _current_room_id == room.room_id:
-		var player_local := room.to_local(player.global_position)
-		player_local.y = 0.05
-		var toward_center := Vector3(-player_local.x, 0, -player_local.z)
-		if toward_center.length_squared() <= 0.001:
-			var fallback_angle := fmod(float(room.room_seed) * 0.731, TAU)
-			toward_center = Vector3(cos(fallback_angle), 0, sin(fallback_angle))
-		spawn_position = player_local + toward_center.normalized() * 2.2
-	var dimensions := room.get_dimensions()
-	var safe_half_x := maxf(1.0, dimensions.x * 0.5 - 2.1)
-	var safe_half_z := maxf(1.0, dimensions.y * 0.5 - 2.1)
-	spawn_position.x = clampf(spawn_position.x, -safe_half_x, safe_half_x)
-	spawn_position.z = clampf(spawn_position.z, -safe_half_z, safe_half_z)
-	key.global_position = _find_supported_spawn_position(
-		room.to_global(spawn_position),
-		room.global_position
-	)
-	key.collected.connect(_on_room_key_collected)
-	_spawned_key_rooms[room.room_id] = true
+func _spawn_room_key(_room: DungeonRoom3D) -> void:
+	# 兼容旧调用点；房间钥匙已退役，不再创建任何奖励实体。
+	return
 
 
 func _find_supported_spawn_position(
@@ -10006,9 +9998,8 @@ func _find_supported_spawn_position(
 
 
 func _on_room_key_collected(_room_id: String) -> void:
-	_room_key_count += 1
-	status_label.text = "获得房间钥匙 · 靠近门按 E 开启"
-	_refresh_loot_label()
+	# 旧节点兼容回调：退役钥匙不再改变任何运行时状态。
+	return
 
 
 ## 清房掉落（2026-11-06）：本房清完，按 `clear_drops` 掷一次 —— 宝箱或补给。
@@ -10141,6 +10132,7 @@ func _clear_drop_offset(room: DungeonRoom3D) -> Vector2:
 ## 缺失才回落到 `_door_policy_for_edge()`。`door_policies` 是按**门方向**存的，
 ## 所以这里先用 `door_targets` 把目标房反查回方向。
 func _door_policy_towards(room_id: String, target_room_id: String) -> Dictionary:
+	var policy: Dictionary = {}
 	var room := _room_by_id.get(room_id) as DungeonRoom3D
 	if room != null:
 		var declared: Dictionary = room.door_policies
@@ -10149,8 +10141,13 @@ func _door_policy_towards(room_id: String, target_room_id: String) -> Dictionary
 			if str(targets[direction]) != target_room_id:
 				continue
 			if declared.has(direction):
-				return declared[direction]
-	return _door_policy_for_edge(room_id, target_room_id)
+				policy = (declared[direction] as Dictionary).duplicate(true)
+				break
+	if policy.is_empty():
+		policy = _door_policy_for_edge(room_id, target_room_id)
+	# 旧关卡数据里的 requires_key 只读兼容，不恢复普通门钥匙门槛。
+	policy["requires_key"] = false
+	return policy
 
 
 func _try_open_room_door(target_room_id: String) -> bool:
@@ -10193,19 +10190,13 @@ func _try_open_room_door(target_room_id: String) -> bool:
 		else:
 			status_label.text = "先清理当前房间，才能开启房门"
 		return false
-	var requires_key := bool(policy.get("requires_key", true))
-	if requires_key and _get_total_room_keys() <= 0:
-		status_label.text = "需要房间钥匙"
-		return false
-	if requires_key:
-		_consume_room_key()
 	_pending_room_door_open_edges[edge] = true
 	status_label.text = "门扇开启中…"
-	_open_room_edge_after_pause(_current_room_id, target_room_id, edge, requires_key)
+	_open_room_edge_after_pause(_current_room_id, target_room_id, edge)
 	return true
 
 
-func _open_room_edge_after_pause(from_room_id: String, target_room_id: String, edge: String, requires_key: bool) -> void:
+func _open_room_edge_after_pause(from_room_id: String, target_room_id: String, edge: String) -> void:
 	# 点击后先留出可读停顿，再让RoomDoor3D执行升降动画；边状态在动画完成前不提交。
 	await get_tree().create_timer(0.18, false).timeout
 	if not _pending_room_door_open_edges.has(edge) or _completed:
@@ -10216,11 +10207,7 @@ func _open_room_edge_after_pause(from_room_id: String, target_room_id: String, e
 		MonsterAIManager.broadcast_sound_stimulus(player.global_position, 6.5, "door_open", player)
 	minimap.set_edge_open(from_room_id, target_room_id, true)
 	_refresh_edge_visuals(from_room_id, target_room_id, true)
-	status_label.text = (
-		"房门已开启 · 剩余钥匙 %d" % _get_total_room_keys()
-		if requires_key
-		else "通行门已开启 · 未消耗钥匙"
-	)
+	status_label.text = "通行门已开启"
 	_refresh_loot_label()
 	# 门只负责通行；旧 triggers_fate 配置不再创建新购卡事务。
 	_update_room_streaming(from_room_id)
@@ -11704,29 +11691,20 @@ func resolve_fate_choice_for_test(_choice_index := 0) -> void:
 	_close_door_fate_overlay()
 
 
-## 本层是否还存在「房间钥匙」这条局内经济。
-##
-## **业主 2026-11-05：远征03 的钥匙全部去掉。** 该关卡由 `TowerDescent3D` 在
-## flow 规则下覆写为 `false` ⇒ 不刷清房钥匙、不发钥匙奖励、不把「钥匙已掉落」
-## 写进状态栏、命运卡池里也不发「获得房间钥匙」这类空卡。
-##
-## 这是**能力**判据，不是关卡 ID 判据（见 [关卡接入规范](../../docs/v0.1/关卡接入规范.md) §3）：
-## 其它关卡不覆写 ⇒ 恒为 `true`，行为逐字不变。
+## 历史普通钥匙经济的兼容查询：全局退役后恒为假，不读取关卡开关。
 func _room_key_economy_enabled() -> bool:
-	return true
+	# 房间钥匙经济整体退役；主线剧情钥匙不经过此余额。
+	return false
 
 
 func _get_total_room_keys() -> int:
-	return _room_key_count + _temporary_room_keys + (_inventory.get_item_count("item_room_key") if _inventory != null else 0)
+	# 旧调用方保留查询接口，但退役物品永不计入运行时余额。
+	return 0
 
 
 func _consume_room_key() -> void:
-	if _temporary_room_keys > 0:
-		_temporary_room_keys -= 1
-	elif _inventory != null and _inventory.has_item("item_room_key"):
-		_inventory.consume_item("item_room_key", 1)
-	else:
-		_room_key_count = maxi(0, _room_key_count - 1)
+	# 旧调用方保留接口；正常门不再消费钥匙。
+	return
 
 
 func _refresh_edge_visuals(a: String, b: String, opened: bool) -> void:
@@ -11811,8 +11789,8 @@ func _hibernate_room_entities(room_id: String) -> void:
 		if value is GroundLootPickup3D and room.is_ancestor_of(value) and not value.is_queued_for_deletion() and not (value as GroundLootPickup3D).is_pickup_accepted():
 			(value as GroundLootPickup3D).queue_free()
 	for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
-		if value is RoomKeyPickup3D and room.is_ancestor_of(value):
-			(value as RoomKeyPickup3D).queue_free()
+		if value is Node3D and room.is_ancestor_of(value):
+			(value as Node3D).queue_free()
 
 
 func _capture_room_runtime_state(room_id: String) -> void:
@@ -11842,15 +11820,8 @@ func _capture_room_runtime_state(room_id: String) -> void:
 				"item_data": pickup.item_data.duplicate(true),
 				"position": [pickup.global_position.x, pickup.global_position.y, pickup.global_position.z],
 			})
+	# 旧运行快照不再导出房间钥匙；旧字段由恢复逻辑忽略。
 	var room_keys: Array[Dictionary] = []
-	if _room_produces_room_key(room):
-		for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
-			if value is RoomKeyPickup3D and room.is_ancestor_of(value) and not value.is_queued_for_deletion():
-				var key := value as RoomKeyPickup3D
-				room_keys.append({
-					"room_id": key.room_id,
-					"position": [key.global_position.x, key.global_position.y, key.global_position.z],
-				})
 	var container_states: Dictionary = {}
 	for value in get_tree().get_nodes_in_group("room_prop_3d"):
 		if value is RoomFurniture3D and room.is_ancestor_of(value):
@@ -11867,7 +11838,7 @@ func _capture_room_runtime_state(room_id: String) -> void:
 		"room_light_on": room.is_room_light_on(),
 		"enemies": enemy_states,
 		"ground_items": ground_items,
-		"room_keys": room_keys,
+		"room_keys": [],
 		"containers": container_states,
 		"treasure_chests": room.get_persistent_detail_state("treasure_chests"),
 		"pending_chest_grants": room.get_pending_chest_grants(),
@@ -12120,7 +12091,7 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			has_live_ground_item = true
 			break
 	if not has_live_ground_item:
-		for runtime_value in state.get("ground_items", []):
+		for runtime_value in ItemRegistry.without_retired_items(state.get("ground_items", [])):
 			var item_state := runtime_value as Dictionary
 			var item_data := (item_state.get("item_data", {}) as Dictionary).duplicate(true)
 			if item_data.is_empty():
@@ -12143,31 +12114,10 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			if is_instance_valid(_fate_tutorial):
 				_fate_tutorial.call("register_pickup", pickup)
 	_resume_pending_chest_grants(room)
-	var has_live_room_key := false
-	if not _room_produces_room_key(room):
-		for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
-			if value is RoomKeyPickup3D and room.is_ancestor_of(value):
-				(value as RoomKeyPickup3D).queue_free()
-	if _room_produces_room_key(room):
-		for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
-			if value is RoomKeyPickup3D and room.is_ancestor_of(value) and not value.is_queued_for_deletion():
-				has_live_room_key = true
-				break
-		if not has_live_room_key:
-			for runtime_value in state.get("room_keys", []):
-				var key_state := runtime_value as Dictionary
-				var key := KEY_SCRIPT.new() as RoomKeyPickup3D
-				key.configure(str(key_state.get("room_id", room_id)))
-				room.add_child(key)
-				var saved_position: Variant = key_state.get("position", room.global_position)
-				if saved_position is Array and (saved_position as Array).size() >= 3:
-					key.global_position = Vector3(
-						float((saved_position as Array)[0]),
-						float((saved_position as Array)[1]),
-						float((saved_position as Array)[2])
-					)
-				key.collected.connect(_on_room_key_collected)
-				_spawned_key_rooms[room_id] = true
+	# 旧运行快照中的 room_keys 明确忽略，不恢复任何钥匙实体。
+	for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
+		if value is Node3D and room.is_ancestor_of(value):
+			(value as Node3D).queue_free()
 
 
 func get_segment_runtime_snapshot() -> Dictionary:
@@ -13892,14 +13842,7 @@ func _finish_run(success: bool) -> void:
 			quick_settlement.get("total_lost", 0)
 		)
 		_run_loot = _collect_extracted_items(false)
-	# 保底在提交**之前**判定并把补发物塞进 `_run_loot`，所以 summary 与状态行
-	# 看到的是同一份结算物 —— 不能一处算总数、一处算不含补发的数。
-	var pity_result: Dictionary = {}
 	if not test_mode:
-		# 先判保底再提交：补发物必须进本局结算物，件数与待领取栏才一致。
-		# 只在成功撤离时判 —— 死在里面的局没有"带出"这回事。
-		if success:
-			pity_result = _plan_synthesis_pity_drop()
 		var transaction_id := _get_run_settlement_transaction_id(success)
 		var settlement_request := {
 			"transaction_id": transaction_id,
@@ -13937,26 +13880,18 @@ func _finish_run(success: bool) -> void:
 		# 结算后的场景卸载不再回写旧运行态；保险/战利品已经进入长期事务。
 		BaseManager.unregister_runtime_checkpoint_provider(self, false)
 		_runtime_persistence_active = false
-	# summary 只带结论，不带补发物本体（物品已在 `_run_loot` 里）。
-	var pity_summary := pity_result.duplicate(true)
-	pity_summary.erase("item")
 	var summary := {
 		"success": success, "kills": _kills, "value": _run_value,
 		"loot": _run_loot.duplicate(true), "seed": run_seed,
 		"theme_id": gameplay_theme.theme_id, "settlement": settlement,
 		"inventory_capacity": _inventory.get_capacity(), "insurance_capacity": _insurance.get_max_slots(),
-		"synthesis_pity": pity_summary,
 	}
 	# 终局已提交：返航窗口内玩家输入被锁、站着挨打，残留拦截怪能把他拖死，
 	# 从而在已写盘的结果之上再叠一次死亡结算（或作废后以 hp=0 卡住）。
 	if success:
 		_hold_player_after_settlement()
 	if success:
-		var line := "撤离成功 · %d 击杀 · %d件物资" % [_kills, _run_loot.size()]
-		# 保底补发必须说出来。玩家看不到"为什么多了一件"，就会当成掉落表的随机。
-		if not str(pity_result.get("granted", "")).is_empty():
-			line += " · 保底补给 1 件"
-		status_label.text = line
+		status_label.text = "撤离成功 · %d 击杀 · %d件物资" % [_kills, _run_loot.size()]
 	else:
 		status_label.text = "行动失败 · 按原规则结算未保险物资"
 	run_completed.emit(success, summary)
@@ -13964,55 +13899,6 @@ func _finish_run(success: bool) -> void:
 		await get_tree().create_timer(0.18 if not success else 1.6).timeout
 		var entry_request_id: int = _request_return_entry_context(success)
 		await _return_to_scene_after_settlement(entry_request_id)
-
-
-## 本局合成保底：判一次、必要时补一件。返回 `{granted, misses, threshold, item}`。
-##
-## 「这一局算不算一次机会」只看本局有没有真打死首领（`_boss_defeated_rooms` 非空）：
-## 一个首领都没打就从撤离点走人，既不推进也不清零 ——
-## 否则「进图二十秒 → 撤离」就能把保底刷出来，它就不再是运气下限。
-##
-## 补发物直接进 `_run_loot`：它随后既进待领取栏、又进状态行的件数。
-## 只在成功撤离时调用（`_finish_run(true)`），死亡路径没有"带出"这回事。
-func _plan_synthesis_pity_drop() -> Dictionary:
-	var loot_ids: Array = []
-	for raw_item in _run_loot:
-		if raw_item is Dictionary:
-			loot_ids.append(str((raw_item as Dictionary).get("id", "")))
-	var result := BaseManager.plan_synthesis_pity(
-		loot_ids, not _boss_defeated_rooms.is_empty()
-	)
-	var item := result.get("item", {}) as Dictionary
-	if not item.is_empty():
-		_run_loot.append(item)
-	return result
-
-
-## 「带物返航」路径（塔楼 / 远征成功撤离）的保底：只判定与记账，**不交付**。
-##
-## 这条路径把战利品原地留在背包里、不复制进待领取栏，所以补发物不能走
-## `_run_loot`（那张表在这里是"只读参考"）。交付必须等存档事务提交成功之后
-## 再做 —— 否则存档失败、玩家还在原地，背包里却已经多了一件保底物。
-func _plan_synthesis_pity_carry() -> Dictionary:
-	var loot_ids: Array = []
-	for raw_item in _run_loot:
-		if raw_item is Dictionary:
-			loot_ids.append(str((raw_item as Dictionary).get("id", "")))
-	return BaseManager.plan_synthesis_pity(loot_ids, not _boss_defeated_rooms.is_empty())
-
-
-## 把保底物交给玩家。**必须在 `plan_synthesis_pity_carry` 的存档事务成功之后调用。**
-## 背包塞不下时退回待领取栏 —— 保底物绝不能因为"格子不够"凭空消失。
-func _deliver_synthesis_pity_carry(result: Dictionary) -> bool:
-	var item := result.get("item", {}) as Dictionary
-	if item.is_empty():
-		return false
-	if _inventory != null and _inventory.add_item(item, 1) > 0:
-		BaseManager.save_base("synthesis_pity_carry")
-		return true
-	BaseManager.add_extraction_loot(item, 1)
-	BaseManager.save_base("synthesis_pity_carry_overflow")
-	return true
 
 
 ## 结算完成后的统一返航入口。子类可覆写读取页过场，但不能改变上层结算顺序。
@@ -14042,8 +13928,6 @@ func _absorb_duplicate_settlement(commit: Dictionary) -> bool:
 	if not bool(commit.get("duplicate", false)):
 		return false
 	push_error("[Dungeon3D] 行动结算已提交过，忽略重复请求：%s" % commit)
-	# 这一局早就结算过了：刚才 `plan_synthesis_pity` 推进的那格计数必须退回。
-	BaseManager.discard_synthesis_pity_plan()
 	return true
 
 
@@ -14361,7 +14245,7 @@ func get_generation_snapshot() -> Dictionary:
 		"required_branch_types": gameplay_theme.required_branch_types.duplicate(), "size_counts": size_counts,
 		"records": record_summary, "has_extraction": _extraction != null, "is_3d": true,
 		"room_dimensions": DungeonRoom3D.ROOM_DIMENSIONS.duplicate(true),
-		"locked_edge_count": _open_edges.size(), "initial_room_keys": 1,
+		"locked_edge_count": _open_edges.size(), "initial_room_keys": 0,
 		"inventory_capacity": _inventory.get_capacity() if _inventory != null else BASE_INVENTORY_CAPACITY,
 		"inventory_base_capacity": BASE_INVENTORY_CAPACITY,
 		"equipped_backpack": get_backpack_equipment_snapshot(),
@@ -14410,18 +14294,16 @@ func get_runtime_snapshot() -> Dictionary:
 	var projectile_pool := get_node_or_null("ProjectilePool3D") as ProjectilePool3D
 	var effect_pool := get_node_or_null("CombatEffectPool3D") as CombatEffectPool3D
 	var vision := player.get_node_or_null("PlayerVision3D") as PlayerVision3D
+	# 房间钥匙已退役；旧诊断字段固定为零，保持查询接口兼容。
 	var unclaimed_key_count := 0
-	for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
-		if value is RoomKeyPickup3D and is_ancestor_of(value):
-			unclaimed_key_count += 1
 	return {
 		"current_room_id": _current_room_id, "active_rooms": active_rooms, "built_shells": built_shells,
 		"detailed_rooms": detailed_rooms, "total_rooms": _rooms.size(),
 		"active_lights": active_lights, "active_ai": active_ai,
-		"keys": _get_total_room_keys(), "inventory_used": _inventory.get_used_slots(),
+		"keys": 0, "inventory_used": _inventory.get_used_slots(),
 		"inventory_capacity": _inventory.get_capacity(),
 		"equipped_backpack": get_backpack_equipment_snapshot(),
-		"spawned_key_room_count": _spawned_key_rooms.size(), "unclaimed_key_count": unclaimed_key_count,
+		"spawned_key_room_count": 0, "unclaimed_key_count": unclaimed_key_count,
 		"open_edges": _open_edges.values().count(true), "total_edges": _open_edges.size(),
 		"edge_states": _open_edges.duplicate(true),
 		"wave_numbers": _room_wave_numbers.duplicate(true),

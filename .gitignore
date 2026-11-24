@@ -21,6 +21,8 @@
 !assets/art/environments/open_world/components/**/*.glb.import
 !assets/art/environments/tower_zones/rooftop/components/*.glb.import
 !assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import
+!assets/art/characters/npc/channel_manager/components/chr_npc_channel_manager.glb.import
+!assets/art/characters/npc/channel_manager/components/crt_channels_atlas.png.import
 *.translation
 *.inspect.ndjson
 *.bak

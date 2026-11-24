@@ -83,8 +83,7 @@ func apply_world_fate_card(card: FateCard) -> Dictionary:
 			revealed_radius = maxi(revealed_radius, int(effect.get("radius", 1)))
 			detail = "揭示半径 %d（靶场无小地图，仅记录）" % revealed_radius
 		"fate_sun_key":
-			room_key_count += maxi(0, int(effect.get("count", 1)))
-			detail = "钥匙 +%d（靶场无门锁，仅记录）" % room_key_count
+			return {"success": false, "error": "retired_room_key_card", "message": "房间钥匙命运已退役；卡片未应用"}
 		"fate_sun_currency":
 			currency_multiplier *= maxf(0.0, float(effect.get("multiplier", 1.0)))
 			detail = "金币倍率 ×%.2f（靶场无结算，仅记录）" % currency_multiplier

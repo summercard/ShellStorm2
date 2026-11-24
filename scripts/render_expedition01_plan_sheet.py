@@ -4,9 +4,9 @@
 用法：python scripts/render_expedition01_plan_sheet.py
 幂等：每次全量重写全部输出文件，不读旧产物。
 
-真源（版图一改就要重跑本脚本）—— **文档即数据源**，房间尺寸 / 定位 / 坐标 / 父房直接解析设计页表格：
-  docs/v0.1/design/远征关卡01设计.md            §3.1 总表（编号/中文名/定位/房型/尺寸/面积）
-                                                §4.2 坐标草案（中心 x,y / 父房）
+真源（版图一改就要重跑本脚本）—— **文档即数据源**，本图只绘制示例版图：
+  docs/v0.1/design/远征关卡01设计.md            §3.1 总表（编号/中文名/定位/房型）
+                                                §4.2 坐标草案（示例尺寸 / 中心 x,y / 父房）
   art_source/design/whitebox/tower_zones/expedition_01/v001/data/level_plan.json
       site 250x250 居中 (2.5, 2.5) / grid_unit_m 5 / floor_height_m 12
 
@@ -141,7 +141,7 @@ SHOW_BRANCH_ROOMS = False
 
 # ---------------------------------------------------------------- 数据（从设计页解析）
 #
-# 文档即数据源：尺寸 / 定位 取自设计页 §3.1 总表，坐标 / 父房 取自 §4.2 坐标草案。
+# 文档即数据源：名称 / 定位取自 §3.1，示例尺寸 / 坐标 / 父房取自 §4.2。
 # 改了文档就重跑本脚本，图纸跟着变；解析不出来直接报错退出，不静默出半张图。
 
 _PLAN = json.loads(LEVEL_PLAN.read_text(encoding="utf-8"))
@@ -202,38 +202,36 @@ def _table_after(text, start_marker, header_keys):
 def parse_design_rooms():
     md = DESIGN_MD.read_text(encoding="utf-8")
 
-    # ---- §3.1 总表：编号 / 中文名 / 定位 / 房型 / 尺寸 / 面积 / 参考图
+    # ---- §3.1 总表：编号 / 中文名 / 定位 / 房型。
     rows = []
     for cells in _table_after(md, "### 3.1 总表", ("编号", "尺寸", "面积")):
         if len(cells) < 6:
             continue
         code = cells[0].strip("`").strip()
-        name, placement, rtype, dims = cells[1], cells[2].strip(), cells[3], cells[4]
-        m = re.match(r"(\d+(?:\.\d+)?)\s*[×x]\s*(\d+(?:\.\d+)?)", dims)
-        if not m:
-            raise SystemExit("§3.1 尺寸列无法解析：%r（行：%s）" % (dims, name))
+        name, placement, rtype = cells[1], cells[2].strip(), cells[3]
         if rtype not in KIND_BY_ROOM_TYPE:
             raise SystemExit("§3.1 未知房型 %r（%s）—— 请在 KIND_BY_ROOM_TYPE 里补映射" % (rtype, name))
         kind = "BRANCH" if placement == "支线" else KIND_BY_ROOM_TYPE[rtype]
-        area_txt = re.sub(r"[^\d.]", "", cells[5])
         rows.append(dict(
             key=code or KEY_WHEN_NO_CODE[rtype],
             name=name,
             kind=kind,
             room_type=rtype,
             placement=placement,
-            w=float(m.group(1)),
-            d=float(m.group(2)),
-            area=float(area_txt) if area_txt else 0.0,
         ))
 
-    # ---- §4.2 坐标草案：编号 -> 中心 (x, y) / 父房
+    # ---- 示例尺寸与中心必须来自同一张坐标表，不能把正式 Boss 尺寸套到旧样例坐标上。
     centres = {}
+    sizes = {}
     parents = {}
     for cells in _table_after(md, "### 4.2 坐标草案", ("编号", "中心")):
         if len(cells) < 5:
             continue
         rkey = cells[0].strip("`").strip()
+        dims = re.search(r"(\d+(?:\.\d+)?)\s*[×x]\s*(\d+(?:\.\d+)?)", cells[2])
+        if not dims:
+            raise SystemExit("§4.2 尺寸列无法解析：%r（编号：%s）" % (cells[2], rkey))
+        sizes[rkey] = (float(dims.group(1)), float(dims.group(2)))
         m = re.search(r"\(\s*([^\s,]+)\s*,\s*([^\s)]+)\s*\)", cells[3])
         if m:
             centres[rkey] = (_num(m.group(1)), _num(m.group(2)))
@@ -250,6 +248,7 @@ def parse_design_rooms():
                 r["cx"] = r["cy"] = r["x0"] = r["x1"] = r["y0"] = r["y1"] = None
                 continue
             raise SystemExit("§4.2 坐标草案里找不到房间「%s」的中心坐标" % r["key"])
+        r["w"], r["d"] = sizes[r["key"]]
         r["cx"], r["cy"] = centres[r["key"]]
         r["x0"] = r["cx"] - r["w"] / 2.0
         r["x1"] = r["cx"] + r["w"] / 2.0
@@ -296,10 +295,11 @@ for _r in DRAWN_ROOMS:
 # 总平面图与详图**共用这套顶点**，避免两处各写一份对不上。
 # ✅ 2026-09-25 第三轮：本表与 `room_templates/*.json` 的 `variant_footprints` **已逐值一致**
 # （门禁 `check_expedition_room_footprints.py` 校 JSON；`room_06` 由旧 50×30 收敛为 40×30 = db_02）。
-# 同一房型在主路的多个实例共用同一份顶点（room_01/room_08 = l_turn、room_02/room_10 = db_01）。
+# 同一房型在主路的多个实例共用同一份顶点（room_02/room_10 = db_01）。
+# room_01 已按业主 2026-11-24 确认切到 `corridor_45x40::rect`，不与保留
+# `l_turn` 变体的 room_08 共用轮廓；无 OUTLINES 项即按 §3.1 的完整矩形绘制。
 OUTLINES = {
     # 拐角走廊 L 形（`corridor_45x40::l_turn`）：横臂 45×15 + 竖臂 15×25
-    "room_01": [(0, 0), (45, 0), (45, 15), (15, 15), (15, 40), (0, 40)],
     "room_08": [(0, 0), (45, 0), (45, 15), (15, 15), (15, 40), (0, 40)],
     # 拐角走廊 凹字形折返（`corridor_45x40::u_turn`）：上下横臂 45×15 + 右侧竖 15×10
     "room_04": [(0, 0), (45, 0), (45, 40), (0, 40), (0, 25), (30, 25), (30, 15), (0, 15)],
@@ -333,9 +333,8 @@ for _r in DRAWN_ROOMS:
 
 # 轮廓房的标签锚点（局部坐标）—— 不能用包围盒中心：L 形 / 凹字形 / 工字形的包围盒
 # 中心往往落在**缺口或窄腰**上，文字会溢出到房间外。这里给每间轮廓房挑一块**实心且够宽**
-# 的区域放文字（room_01 取横臂、room_04 取上横臂、room_05 取北端平台、room_06 取满宽带）。
+# 的区域放文字（room_04 取上横臂、room_05 取北端平台、room_06 取满宽带）。
 OUTLINE_LABEL = {
-    "room_01": (22.5, 7.5),
     "room_08": (22.5, 7.5),
     "room_04": (22.5, 7.5),
     "room_02": (20.0, 12.5),
@@ -646,20 +645,39 @@ def build_details():
         return g
     out["entry"] = safe
 
-    # ---- 拐角走廊01 45x40（L 形）
-    def c1(X, Y):
+    # ---- 数据连廊01 45x40（完整矩形，`corridor_45x40::rect`）
+    def c1_rect(X, Y):
+        k = KIND["COMMON"]
+        g = [rect(X(0), Y(0), 45 * DS, 40 * DS, k["fill"], k["stroke"], 1.2, 2)]
+        for x in range(5, 45, 5):
+            g.append(line(X(x), Y(0), X(x), Y(40), "#b5d2ec", 0.5))
+        for y in range(5, 40, 5):
+            g.append(line(X(0), Y(y), X(45), Y(y), "#b5d2ec", 0.5))
+        for i in range(4):
+            g.append(rect(X(21 + i * 5.4), Y(0.8), 3.4 * DS * 0.55, 2.2 * DS * 0.55,
+                          "#cfe3f7", k["stroke"], 0.6, 1))
+        for i in range(3):
+            g.append(rect(X(1.2), Y(7 + i * 9.0), 3.6, 7, "#cfe3f7", k["stroke"], 0.6, 1))
+        g.append(label(X, Y, 22.5, 20, "完整矩形 · 四边合围", 9, k["ink"]))
+        g.append(label(X, Y, 22.5, 24.5, "45 × 40 · 72 格地砖", 8.5, k["ink"]))
+        g.append(foot_label(X, Y, dict(w=45, d=40), "45 × 40 m · 完整矩形（rect）"))
+        return g
+    out["room_01"] = c1_rect
+
+    # ---- 拐角走廊01 45x40（L 形，room_08 保持既有变体）
+    def c1_l(X, Y):
         k = KIND["COMMON"]
         walk = [(0, 0), (45, 0), (45, 15), (15, 15), (15, 40), (0, 40)]
         g = [poly([(X(a), Y(b)) for a, b in walk], k["fill"], k["stroke"], 1.2)]
         g.append(pline([(X(15), Y(40)), (X(15), Y(15)), (X(45), Y(15))], k["stroke"], 0.8))
         for i in range(4):
-            g.append(rect(X(21 + i * 5.4), Y(0.8), 3.4 * DS * 0.55, 2.2 * DS * 0.55, "#cfe3f7", k["stroke"], 0.6, 1))
+            g.append(rect(X(21 + i * 5.4), Y(0.8), 3.4 * DS * 0.55, 2.2 * DS * 0.55,
+                          "#cfe3f7", k["stroke"], 0.6, 1))
         g.append(rect(X(1.2), Y(28), 3.6, 7, "#cfe3f7", k["stroke"], 0.6, 1))
         g.append(label(X, Y, 7.5, 29, "竖臂 15 × 25", 9, k["ink"]))
         g.append(label(X, Y, 22.5, 7.5, "横臂 45 × 15 · 净宽 15 m", 9, k["ink"]))
         g.append(foot_label(X, Y, dict(w=45, d=40), "45 × 40 m · 单拐角 L 形"))
         return g
-    out["room_01"] = c1
 
     # ---- 拐角走廊02 45x40（凹字形折返）
     def c2(X, Y):
@@ -769,8 +787,8 @@ def build_details():
         return g
     out["room_07"] = std
 
-    # ---- room_08 与 room_01 同房型（拐角走廊 L 形）⇒ 复用同一份绘制函数
-    out["room_08"] = c1
+    # ---- room_08 保持 `corridor_45x40::l_turn`（不随 room_01 的 rect 改动）
+    out["room_08"] = c1_l
 
     # ---- room_09 与 room_03 同房型（办公室 30×40）⇒ 复用同一份绘制函数
     out["room_09"] = off
@@ -827,8 +845,8 @@ def build_details():
     out["room_05"] = bridge
 
     # 注：13 房示例版图里 10 间内容房用到 5 个 `COMMON_ROOM` 模板 ⇒ 绘制函数覆盖全部 5 个房型
-    #     （corridor L/凹 + db_01/db_02 + office + bridge + std）。同房型的多个实例复用同一函数
-    #     （room_08=room_01、room_09=room_03、room_10=room_02）。若 §3.4 池子将来新增房型，
+    #     （corridor 矩形/L/凹 + db_01/db_02 + office + bridge + std）。相同变体复用同一函数
+    #     （room_09=room_03、room_10=room_02）。若将来新增房型，
     #     这里要补一份绘制函数，否则重跑会 KeyError（出图不做静默兜底）。
 
     return out
@@ -946,14 +964,14 @@ def build_html():
     for r in DRAWN_ROOMS:
         extra = {
             "entry": "特殊房 · 沿用塔楼 v007 安全房壳体",
-            "room_01": "主路房 1 · 房型 拐角走廊 L 形（房间种类美术已有 121 包）",
+            "room_01": "主路房 1 · 房型 数据连廊完整矩形（corridor_45x40::rect；正式实例 v013）",
             "room_02": "主路房 2 · 房型 数据库房间01（40 × 30，南中段外凸 10 × 5）",
             "room_03": "主路房 3 · 房型 办公室（30 × 40，无内墙）",
             "room_04": "主路房 4 · 房型 拐角走廊 凹字折返",
             "room_05": "主路房 5 · 房型 通道桥房间（30 × 60 工字型）· 两扇门是桥的两端 · 唯一多层几何",
             "room_06": "主路房 6 · 房型 数据库房间02（40 × 30 缺角：左缺 15 × 10 · 右缺 15 × 5）",
             "room_07": "主路房 7 · 房型 标准房间（25 × 25，四墙平房、空内容）",
-            "room_08": "主路房 8 · 房型 拐角走廊 L 形（与 room_01 同房型）",
+            "room_08": "主路房 8 · 白盒示例保留 l_turn；正式房间为独立的封闭设备区布局",
             "room_09": "主路房 9 · 房型 办公室（30 × 40，与 room_03 同房型）",
             "room_10": "主路房 10 · 房型 数据库房间01（40 × 30，与 room_02 同房型）· 示例版图最后一间内容房",
             "boss": "特殊房 · 白模 + 房间种类美术已有（214 包）",
@@ -1003,7 +1021,7 @@ def build_html():
 <h2>5. 绘制口径与待确认项</h2>
 <div class="warn"><b>需要你确认或留意的地方：</b>
 <ul style="margin:8px 0 0;padding-left:20px">
-<li><b>本图画的是「示例版图」。</b>实跑时每间内容房的房型按种子从池子里抽取（设计页 §3.4），尺寸与整张版图随之改变；<b>不变的是</b>：主路房的存在与顺序、8 个模板的尺寸、门数规则（主路内容房各 2 门）。</li>
+<li><b>本图画的是「示例版图」。</b>图中尺寸和坐标取设计页 §4.2，不代表实跑的世界坐标或正式 Boss 房尺寸。实跑房型分配固定，整房坐标和朝向按种子决定；主路内容房各有两个有效门口。</li>
 <li><b>✅ 尺寸已四处同步（2026-09-25 第三轮）。</b>`room_02` / `room_03` / `room_05` / `room_06` 四间的尺寸与形态（含桥房工字型）连同 <code>room_templates/*.json</code> 的 <code>size_m</code> / <code>variant_footprints</code> / <code>sunken_pit</code> / <code>bridge_span</code>、<code>floor_00.json</code> 的 13 房表与验收断言 <b>同轮改完</b> —— 本图与模板 JSON 的非矩形轮廓<b>逐值一致</b>（门禁 <code>check_expedition_room_footprints.py</code> 校 JSON）。</li>
 <li><b>通道桥房改成 30 × 60 工字型、只在短边开门。</b>南北两端各 15 m 是上层平台（通道），中间 30 m 段中央留 10 m 宽跨桥（沿 y 跨），桥两侧各 10 m 宽 × 30 m 进深是下层。门只能开在桥跨向两端墙（30 m 短板），最多 2 个连接且必须同轴。主路在 <code>room_05</code> 处正是「北进南出」的一根竖轴（设计页 §3.2 / §4.4、05.2 §3.6 第 8 条）。</li>
 <li><b>Boss 房门位由生成算法定。</b>墙贴墙摆位会给 Boss 房两个贴合方向（进 / 出）；本图按坐标草案记的是<b>西进南出</b>（西接数据库房间01 = <code>room_10</code>、南接撤离屋），美术源的门洞须与生成结果对齐。</li>
@@ -1016,7 +1034,7 @@ def build_html():
 来源：<code>docs/v0.1/design/远征关卡01设计.md</code>（房型库 §3 / 坐标草案 §4）·
 <code>art_source/design/whitebox/tower_zones/expedition_01/v001/data/level_plan.json</code> ·
 <code>floor_00.json</code>。参考图见 <code>refs/expedition01/</code>。<br>
-生成于 2026-09-25 · 示意图集（画的是<b>示例版图</b>；实跑版图由 <code>FloorPlanGenerator</code> 按种子现算）。本版：四房缩尺 + 桥房改工字型 + 主路加深到 13 房 + 支线取消（图纸只画主路）。
+生成于 2026-11-24 · 示意图集（画的是<b>示例版图</b>；实跑版图由 <code>FloorPlanGenerator</code> 按种子现算）。本版：`room_01` 切换 <code>corridor_45x40::rect</code> 完整矩形；room_04/room_08 保持既有变体；主路 13 房 + 支线取消。
 </div>
 
 </div></body></html>"""
@@ -1049,8 +1067,11 @@ def main():
 
     dets = build_details()
     for r in DRAWN_ROOMS:
-        p = PLANDIR / ("%02d-%s.svg" % (r["i"], r["name"]))
-        p.write_text(XML_HEAD + detail_svg(r, dets[r["key"]], doors_for(r)), encoding="utf-8", newline="\r\n")
+        # room_01 的设计正文长期引用这个旧文件名；继续原地更新该路径，避免新增同义图并覆盖兄弟图。
+        filename = "02-拐角走廊01.svg" if r["key"] == "room_01" else "%02d-%s.svg" % (r["i"], r["name"])
+        p = PLANDIR / filename
+        detail = detail_svg(r, dets[r["key"]], doors_for(r))
+        p.write_text(XML_HEAD + detail, encoding="utf-8", newline="\r\n")
         written.append(p)
 
     # 清掉旧版残留（房型/顺序一改，文件名就会变），避免目录里混着过期图。
@@ -1098,4 +1119,5 @@ def main():
           % (SITE_X1 - max(xs), min(xs) - SITE_X0, min(ys) - SITE_Y0, SITE_Y1 - max(ys)))
 
 
-main()
+if __name__ == "__main__":
+    main()

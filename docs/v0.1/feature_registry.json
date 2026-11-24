@@ -158,6 +158,10 @@
         },
         {
           "kind": "scene",
+          "id": "verify_player3d_aim_beam"
+        },
+        {
+          "kind": "scene",
           "id": "verify_crosshair_billboard"
         },
         {
@@ -1093,6 +1097,40 @@
         {
           "kind": "scene",
           "id": "verify_base_npc_story_beat"
+        }
+      ],
+      "status": "partial"
+    },
+    {
+      "feature_id": "CHANNEL-MANAGER-NPC",
+      "owner": "ChannelManagerRuntime / StateMachine；宿主持有对白与玩法",
+      "design_docs": [
+        "docs/v0.1/design/频道管理者NPC设计.md",
+        "docs/v0.1/design/远征关卡01设计.md",
+        "docs/v0.1/design/新关卡设计表_测试关卡99.md"
+      ],
+      "development_records": ["docs/v0.1/development/CHANGELOG.md"],
+      "verification": [
+        {
+          "kind": "command",
+          "path": "tests/verification/verify_channel_manager_runtime.gd",
+          "args": ["--script", "res://tests/verification/verify_channel_manager_runtime.gd"],
+          "suite": "manual",
+          "requires": "Godot 已导入组件；可用 gl_compatibility 实跑"
+        },
+        {
+          "kind": "command",
+          "path": "tests/verification/verify_channel_manager_expedition_event.gd",
+          "args": ["--script", "res://tests/verification/verify_channel_manager_expedition_event.gd"],
+          "suite": "manual",
+          "requires": "DialogueUI、GameManager 与频道管理者运行资产"
+        },
+        {
+          "kind": "command",
+          "path": "tests/verification/verify_expedition99_channel_manager_branch.gd",
+          "args": ["--script", "res://tests/verification/verify_expedition99_channel_manager_branch.gd"],
+          "suite": "manual",
+          "requires": "启动 Godot 前先隔离 APPDATA、LOCALAPPDATA；验证真房间、往返、付费与现有 Shader 范围盒"
         }
       ],
       "status": "partial"

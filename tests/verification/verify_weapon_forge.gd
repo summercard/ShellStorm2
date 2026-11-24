@@ -187,10 +187,12 @@ func _case_rejects() -> void:
 		{"id": "mod_bullet_standard", "type": "module", "subtype": "bullet"},
 		{"id": "weapon_rifle", "type": "weapon"},
 		{"id": "equipment_backpack", "type": "equipment", "subtype": "backpack"},
-		{"id": "bp_fragment", "type": "blueprint"},
+		{"id": "weapon_rifle", "type": "weapon", "assembly_id": "bp_rifle"},
 	]:
 		_expect(FORGE.accepts(item), "%s 必须被接受为材料" % str(item.get("id", "?")))
 	_expect(not FORGE.accepts({}), "空字典不是材料")
+	_expect(not FORGE.accepts({"id": "bp_rifle", "type": "blueprint"}), "退役碎片不能再熔炼")
+	_expect(not FORGE.accepts({"id": "item_room_key", "type": "key"}), "退役普通钥匙不能再熔炼")
 
 	# 混入消耗品不再整盘拒绝：它变成了燃料，并真的参与凑门槛。
 	var potion := ItemRegistry.get_instance().get_item("item_health_potion")

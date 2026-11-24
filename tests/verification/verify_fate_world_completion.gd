@@ -64,9 +64,9 @@ func clear_pickups() -> void:
 		pickup.free()
 
 func grant_item(rarity := "common") -> Dictionary:
-	var item := ItemRegistry.new().get_item("item_room_key").duplicate(true)
+	var item := ItemRegistry.get_instance().get_item("item_health_potion").duplicate(true)
 	item["rarity"] = rarity
-	return {"kind": "item", "item_id": "item_room_key", "item": item, "count": 1}
+	return {"kind": "item", "item_id": "item_health_potion", "item": item, "count": 1}
 
 func _run() -> void:
 	check(OS.get_environment("APPDATA").replace("\\", "/").contains("fate_completion_20261008/world"), "APPDATA启动前隔离")
@@ -278,16 +278,10 @@ func _run() -> void:
 	check(quality.rarity == "rare" and quality.weapon_instance.rarity == "rare", "真实品质降级与枪实例一致")
 
 	prepare()
-	var keys := dungeon._room_key_count
-	apply("fate_sun_key", true)
+	var retired_key_card := dungeon.apply_world_fate_card(card("fate_sun_key", true))
+	check(not bool(retired_key_card.get("success", false)), "退役教皇卡主动应用被拒绝")
 	dungeon._consume_room_key()
-	check(dungeon._temporary_room_keys == 1 and dungeon._room_key_count == keys, "临时钥匙优先消耗")
-	var away := dungeon._room_by_id["start"] as DungeonRoom3D
-	away.set_meta("floor_number", 999)
-	enter(away)
-	check(dungeon._temporary_room_keys == 0, "正式跨层进房临时钥匙失效")
-	apply("fate_sun_key")
-	check(dungeon._room_key_count == keys + 1, "教皇正位真实永久钥匙")
+	check(dungeon._get_total_room_keys() == 0 and dungeon._room_key_count == 0, "退役钥匙不会被消耗或恢复")
 	apply("fate_sun_reveal", true)
 	check(not dungeon.minimap._hidden_room_types.is_empty(), "拓扑隐藏类型实际状态")
 	for hidden in dungeon.minimap._hidden_room_types:

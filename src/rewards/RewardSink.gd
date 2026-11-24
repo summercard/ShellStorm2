@@ -71,7 +71,7 @@ static func plan(grants: Array, options: Dictionary = {}) -> Dictionary:
 static func materialize_ground_items(grants: Array) -> Array[Dictionary]:
 	var out: Array[Dictionary] = []
 	for grant in grants:
-		if not grant is Dictionary:
+		if not grant is Dictionary or ItemRegistry.is_retired_item_entry(grant):
 			continue
 		var g := grant as Dictionary
 		if str(g.get("kind", "")) == _SPEC.KIND_CURRENCY:
@@ -109,9 +109,10 @@ static func apply(host: Object, classified: Dictionary) -> Dictionary:
 		"rejected": [] as Array[Dictionary],
 	}
 
-	var ground: Array = classified.get(SINK_GROUND, [])
-	var inventory: Array = classified.get(SINK_INVENTORY, [])
-	var wallet: Array = classified.get(SINK_WALLET, [])
+	var rejected: Array = report["rejected"]
+	var ground := _eligible_grants(classified.get(SINK_GROUND, []), rejected)
+	var inventory := _eligible_grants(classified.get(SINK_INVENTORY, []), rejected)
+	var wallet := _eligible_grants(classified.get(SINK_WALLET, []), rejected)
 
 	if not ground.is_empty():
 		var delivered := _spawn_ground(host, ground)
@@ -168,6 +169,18 @@ static func dispatch(spec: Dictionary, context: Dictionary, host: Object, option
 		"used_fallback": resolution.get("used_fallback", false),
 	}
 	return report
+
+
+## Frozen batches can contain old item dictionaries. Reject those before the host sees the
+## batch, so its accepted-prefix accounting still refers to the actual eligible grants.
+static func _eligible_grants(grants: Array, rejected: Array) -> Array:
+	var eligible: Array = []
+	for grant in grants:
+		if ItemRegistry.is_retired_item_entry(grant):
+			rejected.append(grant)
+		else:
+			eligible.append(grant)
+	return eligible
 
 
 static func _host_has(host: Object, method_name: String) -> bool:

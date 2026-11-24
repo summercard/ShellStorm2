@@ -37,6 +37,7 @@ var _failures: Array[String] = []
 
 func _ready() -> void:
 	_case_registry_gate()
+	_case_retired_items()
 	_case_reproducible()
 	_case_same_source()
 	_case_override_chain()
@@ -61,6 +62,69 @@ func _ready() -> void:
 	for failure in _failures:
 		push_error(failure)
 	get_tree().quit(1)
+
+
+## These are item IDs only: the identically named gun assembly templates must still load.
+func _case_retired_items() -> void:
+	_reset()
+	var retired := ["item_room_key", "bp_pistol", "bp_shotgun", "bp_rifle", "bp_machinegun",
+		"bp_sprinkler", "bp_starter_rifle", "bp_sniper", "bp_launcher", "bp_charge"]
+	var registry := ItemRegistry.get_instance()
+	for item_id: String in retired:
+		_expect(not registry.has_item(item_id), "退役实物仍在注册表：%s" % item_id)
+		var fixed := _SERVICE.resolve({"spec_id": "retired:" + item_id, "entries": [
+			{"kind": "item", "item_id": item_id, "count": 1},
+		]}, {"seed": 24})
+		_expect(not bool(fixed.get("ok", true)) and _error_codes(fixed).has("UNKNOWN_ITEM"), "不能直发退役物品：%s" % item_id)
+	for pool_id: String in _POOLS.pool_ids():
+		for member: Dictionary in registry.get_loot_table(pool_id):
+			_expect(member.get("id", "") not in retired, "掉落/搜索池仍含退役物：%s/%s" % [pool_id, member.get("id", "")])
+	var coordinator := _RUNTIME_COORDINATOR.new()
+	coordinator.configure(24)
+	for floor in range(1, 6):
+		var search := coordinator.resolve_search({}, "scavenge_floor_%d" % floor, floor, "retirement:search")
+		var grants := search.get("grants", []) as Array
+		_expect(bool(search.get("ok", false)) and grants.size() == 1, "搜索池 %d 仍须能发放正常物资" % floor)
+		for grant: Dictionary in grants:
+			_expect(grant.get("item_id", "") not in retired, "搜索生成了退役物资")
+	_test_retired_profile_records(registry)
+
+
+func _test_retired_profile_records(registry: ItemRegistry) -> void:
+	var weapon := WeaponInstance.ensure_weapon_item(registry.get_item("weapon_rifle"))
+	_expect(weapon.get("assembly_id") == "bp_rifle" and not weapon.get("assembly_snapshot", {}).is_empty(), "同名枪械模板必须保留")
+	var old_key := {"id": "item_room_key", "type": "key", "price": 40}
+	var old_fragment := {"id": "bp_rifle", "type": "blueprint", "price": 50}
+	var slot := {"item": weapon, "count": 1}
+	var ground := {"position": [1, 2, 3], "item_data": weapon}
+	var profile := {"vault_items": [old_key, weapon, old_fragment],
+		"pending_loadout_items": [weapon, old_key], "extraction_loot": [old_fragment, weapon],
+		"pending_insurance_slots": [{"item": old_key}, slot], "rescue_cache": [{"item": old_fragment}, {"item": weapon}],
+		"synthesis_pity": {"bp_charge": {"misses": 3}},
+		"active_run_snapshot": {"schema": "runtime_player_state_v2", "valid": true, "room_key_count": 7,
+			"inventory_slots": [{"item": old_key}, slot], "quick_item_ids": ["bp_rifle", "item_health_potion"],
+			"world_state": {"segment_runtime_state": {"r": {"room_keys": [{}],
+				"ground_items": [{"item_data": old_fragment}, ground],
+				"pending_chest_grants": {"box": {"grants": [{"item_id": "bp_rifle"}, slot]}}}}}}}
+	var loaded := BaseData.from_dict(profile)
+	_expect(loaded.vault_items == [weapon] and loaded.pending_loadout_items == [weapon] and loaded.extraction_loot == [weapon], "只移除退役实物，原枪实例须保持")
+	_expect(loaded.pending_insurance_slots == [slot] and loaded.rescue_cache == [{"item": weapon}], "保险中转及救援箱须过滤旧退役物")
+	_expect(not loaded._to_dict().has("synthesis_pity"), "旧碎片保底不得重新写回")
+	var snapshot := loaded.active_run_snapshot
+	var room: Dictionary = snapshot["world_state"]["segment_runtime_state"]["r"]
+	_expect(snapshot["inventory_slots"] == [{}, slot] and snapshot["quick_item_ids"] == ["", "item_health_potion"], "保留背包及快捷栏原锚点")
+	_expect(not snapshot.has("room_key_count") and not room.has("room_keys"), "不应恢复旧钥匙数量及地面实体")
+	_expect(room["ground_items"] == [ground] and room["pending_chest_grants"]["box"]["grants"] == [slot], "旧地面和冻结箱账只跳过退役成员")
+	_expect(profile["active_run_snapshot"]["room_key_count"] == 7 and RunPersistenceService.without_retired_item_records(snapshot) == snapshot, "读档过滤必须不动输入且可重复")
+	var inventory := InventoryModule.new()
+	_expect(inventory.add_item(old_fragment) == 0 and inventory.add_item(old_key) == 0 and inventory.add_item(weapon) == 1, "背包只接受同名装配的成品枪")
+	var merchant := RunMerchantService.new()
+	var stock := {"schema": "run_merchant_stock_v1", "stocks": {"a": [
+		{"offer_id": "a:0", "item": old_fragment}, {"offer_id": "a:1", "item": weapon},
+	]}}
+	_expect(merchant.restore_stock_snapshot(stock), "旧货架不能因退役条目整份拒绝")
+	var goods := merchant.open_session("session", "a", []).get("offers", []) as Array
+	_expect(goods.size() == 1 and goods[0].get("offer_id") == "a:1" and goods[0].get("item") == weapon, "旧货架须保留原商品实例与价格，不重抽")
 
 
 func _case_forced_bullet_stream() -> void:
@@ -124,9 +188,9 @@ func _case_monster_drop_table() -> void:
 	}, "drop_table:room_override")
 	_expect(str(room_override.get("spec_id", "")).begins_with("inline:reward_plan.room.kill"), "房间 kill 必须覆盖关卡怪物表")
 	var fallback := coordinator.resolve_kill({}, {
-		"enemy_type": "shielded", "floor": 1, "loot_table": "loot_floor_1_2",
+		"enemy_type": "ambusher", "floor": 1, "loot_table": "loot_floor_1_2",
 	}, "drop_table:fallback")
-	_expect(str(fallback.get("spec_id", "")).begins_with("monster:shielded"), "表未写的怪必须走旧公式兜底")
+	_expect(str(fallback.get("spec_id", "")).begins_with("monster:ambusher"), "表未写的怪必须走旧公式兜底")
 
 	var bad_table := table.duplicate(true)
 	bad_table["rows"] = (table["rows"] as Array).duplicate(true)
@@ -211,7 +275,7 @@ func _case_normal_ammo_range() -> void:
 	# 固定 `count = 1`）。池抽到弹药、而 34% 备弹加成没中时，玩家确实只拿 1 发 —— 那是既有的
 	# 池语义，不是本次调整的产物；把它写进断言会让这条用例长期假红。
 	var injector := load("res://src/map/MonsterInjector.gd")
-	var normal_spec := injector.drop_spec_for("shielded", "normal", 0, 1) as Dictionary
+	var normal_spec := injector.drop_spec_for("ambusher", "normal", 0, 1) as Dictionary
 	var normal_ammo := _ammo_entry_of(normal_spec)
 	_expect(not normal_ammo.is_empty(), "普通怪的兜底公式必须带备弹条目")
 	if not normal_ammo.is_empty():
@@ -237,7 +301,7 @@ func _case_normal_ammo_range() -> void:
 	var bonus_samples := 0
 	for index in 240:
 		var report := coordinator.resolve_kill({}, {
-			"enemy_type": "shielded", "floor": 1, "loot_table": "loot_floor_1_2",
+			"enemy_type": "ambusher", "floor": 1, "loot_table": "loot_floor_1_2",
 		}, "ammo_range:normal_%d" % index)
 		for value in _SINK.materialize_ground_items(report.get("grants", [])):
 			var item := value as Dictionary

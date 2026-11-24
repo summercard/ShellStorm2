@@ -365,12 +365,10 @@ func _apply_page_footer() -> void:
 			done += 1
 	var ready := 0
 	for recipe in SynthesisCatalog.RECIPES:
-		var progress := SynthesisCatalog.key_progress(
-			recipe, _tray_weapons_for_catalog(), _tray_materials_for_catalog()
-		)
+		var progress := SynthesisCatalog.key_progress(recipe, _tray_weapons_for_catalog())
 		if bool(progress["complete"]):
 			ready += 1
-	_set_status("配方 %d 条　·　已完成 %d　·　盘面钥匙已齐 %d 条" % [
+	_set_status("配方 %d 条　·　已完成 %d　·　盘面所需武器已齐 %d 条" % [
 		SynthesisCatalog.RECIPES.size(), done, ready,
 	])
 
@@ -404,12 +402,11 @@ func _refresh_catalog() -> void:
 	for child in _catalog_list.get_children():
 		child.queue_free()
 	var weapons: Array = _tray_weapons_for_catalog()
-	var materials: Array = _tray_materials_for_catalog()
 	for tier_info in SynthesisCatalog.CURVE_TIERS:
-		_catalog_list.add_child(_build_catalog_section(tier_info, weapons, materials))
+		_catalog_list.add_child(_build_catalog_section(tier_info, weapons))
 
 
-func _build_catalog_section(tier_info: Dictionary, weapons: Array, materials: Array) -> Control:
+func _build_catalog_section(tier_info: Dictionary, weapons: Array) -> Control:
 	var section := VBoxContainer.new()
 	section.name = "Section_%s" % str(tier_info["code"])
 	section.add_theme_constant_override("separation", 4)
@@ -440,7 +437,7 @@ func _build_catalog_section(tier_info: Dictionary, weapons: Array, materials: Ar
 	section.add_child(head)
 
 	for recipe in recipes:
-		section.add_child(_build_catalog_row(recipe, weapons, materials))
+		section.add_child(_build_catalog_row(recipe, weapons))
 	section.add_child(UIStyleFactory.make_prism_rule(UIPalette.PRISM_LINE_FAINT, 1.0))
 	return section
 
@@ -449,7 +446,7 @@ func _build_catalog_section(tier_info: Dictionary, weapons: Array, materials: Ar
 ##
 ## 不显示"未解锁 = ???"：本项目的配方全是"钥匙够了就能做"，
 ## 没有前置解锁条件，遮起来只会让玩家以为漏了什么。
-func _build_catalog_row(recipe: Dictionary, weapons: Array, materials: Array) -> Control:
+func _build_catalog_row(recipe: Dictionary, weapons: Array) -> Control:
 	var row := HBoxContainer.new()
 	row.name = "Recipe_%s" % str(recipe["recipe_id"])
 	row.custom_minimum_size = Vector2(0, 30)
@@ -466,7 +463,7 @@ func _build_catalog_row(recipe: Dictionary, weapons: Array, materials: Array) ->
 	row.add_child(name_label)
 
 	var key_definition := ItemRegistry.get_instance().get_item(str(recipe["key_item_id"]))
-	var progress := SynthesisCatalog.key_progress(recipe, weapons, materials)
+	var progress := SynthesisCatalog.key_progress(recipe, weapons)
 	var key_label := Label.new()
 	key_label.text = "%s　%d / %d" % [
 		str(key_definition.get("name", recipe["key_item_id"])),
@@ -485,9 +482,6 @@ func _build_catalog_row(recipe: Dictionary, weapons: Array, materials: Array) ->
 	row.add_child(gate)
 
 	var effect := _catalog_effect_text(recipe, rarity)
-	var pity_note := _catalog_pity_text(recipe)
-	if not pity_note.is_empty():
-		effect = "%s · %s" % [effect, pity_note]
 	var effect_label := Label.new()
 	effect_label.text = effect
 	effect_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -501,28 +495,13 @@ func _build_catalog_row(recipe: Dictionary, weapons: Array, materials: Array) ->
 		status.text = "已完成"
 		UIStyleFactory.apply_prism_label(status, "label", 3, 11)
 	elif bool(progress["complete"]):
-		status.text = "钥匙已齐"
+		status.text = "武器已齐"
 		UIStyleFactory.apply_prism_label(status, "value", 3, 11)
 	else:
-		status.text = "缺 %d 个" % (int(progress["need"]) - int(progress["have"]))
+		status.text = "待投入"
 		UIStyleFactory.apply_prism_label(status, "faint", 3, 11)
 	row.add_child(status)
 	return row
-
-
-## 保底进度，只对被保底的那条配方（目前只有蓄力炮）显示。
-##
-## 必须让玩家看见"连着几次没出"。保底兜的是**绝望**，而看不见的保底
-## 救不了绝望 —— 玩家只会觉得"这枪根本刷不出来"，然后不刷了。
-func _catalog_pity_text(recipe: Dictionary) -> String:
-	var key := str(recipe["key_item_id"])
-	if not key in SynthesisCatalog.PITY_KEYS:
-		return ""
-	var misses := BaseManager.get_synthesis_pity_misses(key)
-	return "保底 %d/%d" % [
-		mini(misses, int(SynthesisCatalog.PITY_THRESHOLD)),
-		int(SynthesisCatalog.PITY_THRESHOLD),
-	]
 
 
 ## 一行小字：稀有度 + 预装弹种/配件。只在有值时才提，不写"无"。
@@ -551,14 +530,6 @@ func _tray_weapons_for_catalog() -> Array:
 	var out: Array = []
 	for item in _tray_probe_items():
 		if str((item as Dictionary).get("type", "")) == "weapon":
-			out.append(item)
-	return out
-
-
-func _tray_materials_for_catalog() -> Array:
-	var out: Array = []
-	for item in _tray_probe_items():
-		if str((item as Dictionary).get("type", "")) != "weapon":
 			out.append(item)
 	return out
 
@@ -1077,20 +1048,7 @@ func _refresh_readout() -> void:
 		_coins_label.text = str(_coins())
 	var plan := WeaponForge.classify(_tray_probe_items())
 	var recipe := str(plan["recipe"])
-	# 钥匙已齐、燃料不够：这**不是**"盘面空"，必须显示产物名与还差多少。
-	# 否则玩家会以为没投对东西，反复调整配方 —— 而实际上只差几点熔炼值。
-	var short_spec: Dictionary = plan.get("synthesis", {}) as Dictionary
-	if (
-		str(plan["reason"]) == WeaponForge.REJECT_SYNTHESIS_FUEL_SHORT
-		and not short_spec.is_empty()
-	):
-		_refresh_readout_fuel_short(plan, short_spec)
-		return
 	if recipe == WeaponForge.RECIPE_NONE:
-		# **先给软提示**（"钥匙还差 N 个"），它有优先级 —— 它解释的是"为什么没出
-		# 我想合成的那把枪"，比"为什么不能熔"更贴近玩家的真实疑问。
-		# 顺序反了会让拒绝原因先把状态栏占掉，软提示被自己的 `HINT_TEXT` 判据挡回去。
-		_refresh_status_hint(plan)
 		# 再补拒绝原因：配方不成立时状态栏要写**为什么**不能熔，默认速记答不了。
 		#
 		# 两条排除：
@@ -1161,14 +1119,12 @@ func _refresh_readout() -> void:
 		])
 	else:
 		_restore_hint_status()
-	_refresh_status_hint(plan)
 
 
 ## 状态栏当前是不是"读数自己写的"那一条。
 ##
 ## 读数刷新是高频的（每次拖动都跑），它只该覆盖自己写过的内容 ——
 ## 拖拽失败的提示、熔炼结果文案、目录页汇总都比它更即时或更权威。
-## 认得的自家文案有两种：默认速记、以及一条"钥匙还差 N 个"的软提示。
 ##
 ## 判据用文本前缀而不是布尔标记：状态栏没有"谁写的"这个字段，
 ## 加标记就要同步改所有写入方（拖拽 / 目录页 / 结算），漏一处就静默失效。
@@ -1177,8 +1133,7 @@ func _is_readout_status() -> bool:
 		return false
 	if str(_status.get_meta("page_hint", "")) == "catalog":
 		return false
-	var text := _status.text
-	return text == HINT_TEXT or text.begins_with("「") or text.begins_with("还差 ")
+	return _status.text == HINT_TEXT
 
 
 ## 把状态栏还回默认速记。只在它确实是读数自己写的、且现在不需要再提示什么时才动。
@@ -1187,58 +1142,6 @@ func _restore_hint_status() -> void:
 		return
 	if _status.text.begins_with("金币不足："):
 		_set_status(HINT_TEXT)
-
-
-## 「钥匙差一点」的软提示。
-##
-## 只在不打扰的前提下写状态栏：玩家正在熔炼结果里看产出时，不能被一条提示顶掉。
-## 这条提示的作用是解释"为什么没合成出指定的枪"，而不是阻止熔炼。
-func _refresh_status_hint(plan: Dictionary) -> void:
-	var hint: Dictionary = plan.get("synthesis_hint", {}) as Dictionary
-	if hint.is_empty():
-		return
-	if _status == null or _status.text != HINT_TEXT:
-		# 状态栏已被别的内容占用（熔炼结果 / 拒绝原因），让位给那条更重要的信息。
-		return
-	var key_definition := ItemRegistry.get_instance().get_item(str(hint["key_item_id"]))
-	_set_status("「%s」还差 %d 个（%d/%d）· 本次将按随机合成处理" % [
-		str(key_definition.get("name", hint["key_item_id"])),
-		int(hint["key_count"]) - int(hint["key_have"]),
-		int(hint["key_have"]),
-		int(hint["key_count"]),
-	])
-
-
-## 「钥匙齐、燃料不够」的读数：显示产物名与缺口，费用栏转危险色、按钮禁用。
-func _refresh_readout_fuel_short(plan: Dictionary, spec: Dictionary) -> void:
-	var weapons := (plan["weapons"] as Array).size()
-	var materials := 0
-	for value in plan["materials"] as Array:
-		materials += maxi(1, int((value as Dictionary).get("count", 1)))
-	var rarity_points := int(plan["rarity_points"])
-	var quality_bonus := int(spec.get("quality_bonus", 0))
-	var probabilities := WeaponForge.grade_probabilities(
-		weapons, rarity_points + quality_bonus
-	)
-	_stat_payload.text = "%d 枪 · %d 材料" % [weapons, materials]
-	_stat_melt.text = "%d / %d" % [int(plan["melt"]), int(spec["fuel_min"])]
-	_stat_rarity.text = (
-		"%d + %d" % [rarity_points, quality_bonus] if quality_bonus > 0
-		else str(rarity_points)
-	)
-	_stat_recipe.text = "定向合成（缺燃料）"
-	_stat_blueprint.text = str(spec.get("product_name", "—"))
-	_stat_grades.text = "蓝 %.0f%% · 紫 %.0f%% · 金 %.0f%%" % [
-		float(probabilities.get(WeaponDropGrade.GRADE_BLUE, 0.0)) * 100.0,
-		float(probabilities.get(WeaponDropGrade.GRADE_PURPLE, 0.0)) * 100.0,
-		float(probabilities.get(WeaponDropGrade.GRADE_GOLD, 0.0)) * 100.0,
-	]
-	_stat_cost.text = str(int(spec.get("coin_cost", 0)))
-	UIStyleFactory.apply_prism_label(_stat_cost, "danger", 2, 17)
-	_forge_button.disabled = true
-	_set_status("还差 %d 点熔炼值才能合成%s" % [
-		int(spec.get("fuel_short", 0)), str(spec.get("product_name", "该武器")),
-	])
 
 
 func _recipe_text(recipe: String) -> String:
@@ -1262,8 +1165,6 @@ func _reason_text(reason: String) -> String:
 			return "燃料熔炼值不足 %d 点（3 件白装，或 1 件稀有材料）" % WeaponForge.FUEL_THRESHOLD
 		WeaponForge.REJECT_INSUFFICIENT_MELT:
 			return "材料熔炼值不足 6 点，凑不够合成门槛"
-		WeaponForge.REJECT_SYNTHESIS_FUEL_SHORT:
-			return "钥匙已齐，但燃料熔炼值还不够"
 		WeaponForge.REJECT_BACKPACK_FULL:
 			return "背包空间不足"
 		WeaponForge.REJECT_INSUFFICIENT_CURRENCY:
@@ -1448,8 +1349,7 @@ func _on_forge_pressed() -> void:
 	if str(plan["recipe"]) == WeaponForge.RECIPE_NONE:
 		_set_status(_reason_text(str(plan["reason"])))
 		return
-	# R0 定向合成也要二次确认：它消耗的是**打怪攒出来的凭据**，
-	# 比武器更不该误触 —— 武器丢了还能再掉，碎片数着攒了好几局。
+	# R0 的近战定向合成会消耗投入武器；仍要求二次确认以防误触。
 	if (
 		str(plan["recipe"]) == WeaponForge.RECIPE_DIRECTED
 		or not (plan["weapons"] as Array).is_empty()

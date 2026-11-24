@@ -60,10 +60,9 @@ const ROOM_TYPE_LAYOUT_SOURCES := {
 		"asset_id": "ENV-EXPEDITION-L01-CORRIDOR-ROOM-TYPE-LAYOUT",
 		"size_m": Vector2(45.0, 40.0),
 		"door_wall_component_id": "",
-		# 当前 v012 的默认实例清单只对应 l_turn。此阶段房间记录尚未稳定携带
-		# template_variant，因此按设计源锁定的具体房间 key 限定，避免 room_04(u_turn)
-		# 被默认布局冒充；待 03 产出 u_turn overrides 后再扩展。
-		"room_keys": ["room_01", "room_08"],
+		# v012 的 L 形清单只为既有 room_08 保留。room_01 的 rect 由通用壳体
+		# 生成完整占地与本局门槽；房内陈设仍只从它自己的正式 TSCN 加载。
+		"room_keys": ["room_08"],
 	},
 	"boss_50x40": {
 		"path": "res://data/layouts/expedition/v011/component_instances.json",
@@ -472,7 +471,8 @@ static func generate_from_level_plan(
 			floor_source,
 			mode,
 			run_seed,
-			int(policy.get("expedition_global_rotation_deg", 0))
+			int(policy.get("expedition_global_rotation_deg", 0)),
+			templates
 		),
 		"run_seed": run_seed,
 		"level_id": level_id,
@@ -554,7 +554,7 @@ static func generate_from_level_plan(
 ## constrained 模式随机与种子相关，必须含 —— 否则两局不同图会撞同一个 layout_id。
 static func _data_driven_layout_id(
 	level_id: String, floor_number: int, normalized: Dictionary, mode: String, run_seed: int,
-	global_rotation_deg: int = 0
+	global_rotation_deg: int = 0, templates: Dictionary = {}
 ) -> String:
 	var rows: Array = []
 	for value in normalized.get("rooms", []):
@@ -569,10 +569,20 @@ static func _data_driven_layout_id(
 				snappedf(float(port.get("lane_m", 0.0)), 0.001),
 			])
 		port_rows.sort_custom(func(a, b): return str(a[0]) < str(b[0]))
+		var template_id := str(room.get("template_id", ""))
+		var variant := str(room.get("template_variant", ""))
+		var template := templates.get(template_id, {}) as Dictionary
+		var outlines := template.get("variant_footprints", {}) as Dictionary
+		var footprint := outlines.get(variant, {}) as Dictionary
+		# 扩建变体继承旧版指纹标签；旧标签可能已因端口被替换成另一个候选轮廓。
+		# 房号、尺寸、坐标、朝向和门槽仍逐项进入指纹。
+		var alias := str(footprint.get("checkpoint_layout_alias", ""))
+		if not alias.is_empty() and outlines.has(alias):
+			variant = str(room.get("checkpoint_layout_variant", alias))
 		rows.append({
 			"key": str(room.get("key", "")),
-			"template_id": str(room.get("template_id", "")),
-			"template_variant": str(room.get("template_variant", "")),
+			"template_id": template_id,
+			"template_variant": variant,
 			"center": [snappedf(center.x, 0.001), snappedf(center.y, 0.001)],
 			"size": [snappedf(size.x, 0.001), snappedf(size.y, 0.001)],
 			"rotation_deg": snappedf(float(room.get("rotation_deg", 0.0)), 0.001),
@@ -1809,10 +1819,16 @@ static func _pick_template_variant(
 	templates: Dictionary, template_id: String, rng: RandomNumberGenerator
 ) -> String:
 	var template := templates.get(template_id, {}) as Dictionary
-	var variants := template.get("variants", []) as Array
+	var outlines := template.get("variant_footprints", {}) as Dictionary
+	var variants: Array[String] = []
+	for value in template.get("variants", []) as Array:
+		var variant := str(value)
+		var footprint := outlines.get(variant, {}) as Dictionary
+		if not bool(footprint.get("explicit_only", false)):
+			variants.append(variant)
 	if variants.is_empty():
 		return ""
-	return str(variants[rng.randi_range(0, variants.size() - 1)])
+	return variants[rng.randi_range(0, variants.size() - 1)]
 
 
 ## 钉死房型时的变体解析：蓝图写了就用；带变体族却漏写时取**第一个**变体（确定性）。
@@ -3944,6 +3960,16 @@ static func _authored_shell_block_room(room: Dictionary, templates: Dictionary =
 	)
 	if not footprint.is_empty():
 		var variant := str(footprint.get("variant", str(room.get("template_variant", ""))))
+		var alias := str(footprint.get("checkpoint_layout_alias", ""))
+		if not alias.is_empty():
+			# 在原装配坐标系，用同一组门槽推导旧变体标签，不把旧轮廓装到新房。
+			var previous_room := room.duplicate()
+			previous_room["template_variant"] = alias
+			var previous := _room_variant_footprint(
+				previous_room, size, built["doors"] as Dictionary, built["bounds_x_m"] as Array,
+				built["bounds_y_m"] as Array, templates
+			)
+			room["checkpoint_layout_variant"] = str(previous.get("variant", alias))
 		built["footprint_vertices_m"] = footprint.get("vertices_m", [])
 		built["footprint_frame"] = str(
 			footprint.get("frame", ROOM_SHELL_LAYOUT_BUILDER.FOOTPRINT_FRAME)
@@ -4061,10 +4087,13 @@ static func _variant_candidate_order(
 	for value in template.get("variants", []) as Array:
 		var variant := str(value)
 		if by_variant.has(variant) and variant not in order:
-			order.append(variant)
+			var footprint: Variant = by_variant[variant]
+			if footprint is Dictionary and not bool(footprint.get("explicit_only", false)):
+				order.append(variant)
 	for value in by_variant.keys():
 		var variant := str(value)
-		if variant not in order:
+		var footprint: Variant = by_variant[variant]
+		if variant not in order and footprint is Dictionary and not bool(footprint.get("explicit_only", false)):
 			order.append(variant)
 	return order
 

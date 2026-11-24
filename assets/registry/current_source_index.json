@@ -2,6 +2,34 @@
   "date": "2026-11-19",
   "sources": [
     {
+      "path": "art_source/characters/npc/channel_manager/chr_npc_channel_manager_model_v002.blend",
+      "bytes": 4178393,
+      "family": "art_source/characters/npc/channel_manager/chr_npc_channel_manager_model_VERSION.blend",
+      "version": [
+        2
+      ],
+      "sha256": "e427254f20117a26dc25ad4e5a406032c8e741c4b58dfa1f772a434af8d71847"
+    },
+    {
+      "path": "art_source/characters/npc/channel_manager/chr_npc_channel_manager_actions_v002.blend",
+      "bytes": 4300019,
+      "family": "art_source/characters/npc/channel_manager/chr_npc_channel_manager_actions_VERSION.blend",
+      "version": [
+        2
+      ],
+      "sha256": "3f84356b76234eeceed92f1f88217ad8d8a542217dfcd606bce9b104b7e47e79"
+    },
+    {
+      "path": "art_source/characters/npc/channel_manager/export/v002/chr_npc_channel_manager_optimized_v002.blend",
+      "bytes": 1928637,
+      "family": "art_source/characters/npc/channel_manager/export/VERSION/chr_npc_channel_manager_optimized_VERSION.blend",
+      "version": [
+        2,
+        2
+      ],
+      "sha256": "3f02674a006e4176db97ec37c1efcb3bcbddb5b6dfd3b58d57d4839582f48740"
+    },
+    {
       "path": "art_source/legacy_design/卧室/左墙区域深化_v4.blend",
       "bytes": 2021017,
       "family": "art_source/legacy_design/卧室/左墙区域深化_v4.blend",

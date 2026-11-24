@@ -51,8 +51,9 @@ func seed_state(dungeon: Dungeon3D) -> void:
 	apply("fate_moon_last_stand")
 	apply("fate_bless_dead")
 	apply("fate_mark_enemy", true)
-	apply("fate_sun_key")
-	apply("fate_sun_key", true)
+	for reversed in [false, true]:
+		var retired := FateCardGameBridge.apply_card_instance(card("fate_sun_key", reversed))
+		check(not bool(retired.get("success", false)), "教皇正逆位都不再发放钥匙")
 	apply("fate_sun_extra_loot", true)
 	apply("fate_sun_trial", true)
 	apply("fate_sun_scorch", true)
@@ -84,8 +85,8 @@ func compare(dungeon: Dungeon3D, saved: Dictionary) -> void:
 	var p := dungeon.player
 	check(p.current_hp == 43 and p.max_hp == 90, "HP与女祭司上限恢复，无即时回血重放")
 	check(GameManager.currency == 137, "金币不重复扣除/发放")
-	check(dungeon._room_key_count == int(saved["room_key_count"]), "永久钥匙不重复发放")
-	check(dungeon._temporary_room_keys == 2, "临时钥匙及楼层归属恢复")
+	check(dungeon._room_key_count == 0 and dungeon._get_total_room_keys() == 0, "不恢复旧永久钥匙")
+	check(dungeon._temporary_room_keys == 0, "不恢复旧临时钥匙")
 	var expected_cards := (saved["fate_run_state"]["bridge"]["cards"] as Array).size()
 	var pending_now := FateCardGameBridge.get_pending_character_rewards()
 	check(FateCardGameBridge.get_card_count() == expected_cards, "持卡登记数量不变 actual=%d expected=%d" % [FateCardGameBridge.get_card_count(), expected_cards])
@@ -106,6 +107,24 @@ func compare(dungeon: Dungeon3D, saved: Dictionary) -> void:
 	for slot in 2:
 		var source: Dictionary = saved["equipped_weapon_items"][slot]
 		check(p.get_equipped_weapon_instance_id_for_slot(slot) == str(source.get("weapon_instance_id", "")), "真实装备实例归属%d" % slot)
+
+func check_retired_door_offer(dungeon: Dungeon3D) -> void:
+	var offer := {"schema_version": 2, "source": "pickup", "pickup_id": "legacy_pickup", "active": true, "offer_id": 8,
+		"cards": [{"stable_card_id": "fate_sun_key", "orientation": "REVERSED"},
+			{"stable_card_id": "fate_overclock", "orientation": "REVERSED", "orientation_roll": 0.75, "purchased": true},
+			{"stable_card_id": "fate_bounce_bullet", "orientation": "UPRIGHT"}],
+		"quotes": {"fate_sun_key": 50, "fate_overclock": 60}}
+	check(dungeon._import_door_fate_snapshot(offer), "旧报价含教皇仍可恢复")
+	var saved := dungeon._export_door_fate_snapshot()
+	var choices: Array = saved.get("cards", [])
+	check(choices.size() == 2 and choices[0].get("stable_card_id") == "fate_overclock" and choices[0].get("purchased")
+		and choices[0].get("orientation_roll") == 0.75 and choices[1].get("stable_card_id") == "fate_bounce_bullet", "原候选顺序、方向与已购状态不重抽")
+	check(saved["offer_id"] == 8 and saved["quotes"].get("fate_overclock") == 60 and not saved["quotes"].has("fate_sun_key"), "已成交报价不变，只移除退役卡报价")
+	offer["cards"] = [{"stable_card_id": "fate_sun_key"}]
+	check(dungeon._import_door_fate_snapshot(offer), "只含退役卡的旧报价可安全关闭")
+	saved = dungeon._export_door_fate_snapshot()
+	check(not saved["active"] and saved["cards"].is_empty() and saved["claimed_pickups"].has("legacy_pickup"), "不重抽候选或补发已认领凭据")
+
 
 func _run() -> void:
 	for env in ["APPDATA", "LOCALAPPDATA"]:
@@ -128,6 +147,8 @@ func _run() -> void:
 	else:
 		seed_state(dungeon)
 		saved = JSON.parse_string(JSON.stringify(dungeon.build_runtime_save_snapshot()))
+		saved["room_key_count"] = 7
+		saved["fate_run_state"]["world"]["state"]["_temporary_room_keys"] = 2
 		if writer:
 			check(BaseManager.flush_runtime_checkpoint("fate_process_write"), "正式BaseManager原子写盘")
 			var file := FileAccess.open("user://fate_expected.json", FileAccess.WRITE)
@@ -143,9 +164,11 @@ func _run() -> void:
 			compare(dungeon, saved)
 	if not writer:
 		var count := FateCardGameBridge.get_card_count()
+		var pending := FateCardGameBridge.get_pending_character_rewards()
 		var reward := FateCardGameBridge.retry_pending_character_reward()
-		check(reward.get("success", false) and GameManager.currency == 107 and FateCardGameBridge.get_card_count() == count + 1, "恢复后领取恰好扣金币/登记一次")
-		check(not FateCardGameBridge.retry_pending_character_reward().get("success", false) and GameManager.currency == 107, "已领取拒绝重复")
+		check(not reward.get("success", false) and reward.get("migration_pending", false) and GameManager.currency == 137, "恢复后仍拒绝旧直授旁路且不扣金币")
+		check(not FateCardGameBridge.retry_pending_character_reward().get("success", false) and GameManager.currency == 137
+			and FateCardGameBridge.get_card_count() == count and FateCardGameBridge.get_pending_character_rewards() == pending, "反复拒绝不改持有卡、待迁移奖励或余额")
 		FateCardGameBridge.reset_run_state()
 		dungeon.reset_world_fate_state()
 		check(dungeon.player.max_hp == 100 and dungeon.player.weapon_tree.growth_stacks == 0 and dungeon.player.weapon_tree.get("_overheat_shots") == 0, "reset清角色上限与武器临时状态")
@@ -158,6 +181,7 @@ func _run() -> void:
 		check(not dungeon.player.import_fate_snapshot({"version": 1, "character": {"room_hit_count": -2}}), "负计数拒绝")
 		check(not dungeon.import_world_fate_snapshot({"version": 1, "state": {"_fate_bounty_queues": ["bad"]}}), "损坏队列拒绝")
 		check(not FateCardGameBridge.import_fate_snapshot({"version": 1, "cards": [{"stable_card_id": "unknown"}], "pending": []}), "未知牌拒绝")
+		check_retired_door_offer(dungeon)
 	if writer or reader:
 		BaseManager.unregister_runtime_checkpoint_provider(dungeon, false)
 		dungeon._runtime_persistence_active = false

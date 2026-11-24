@@ -107,12 +107,6 @@ var rescue_cache: Array = []
 # 不参与任何数值、掉落或解锁 —— 它是一个**语气**，不是进度。
 var rescue_defeat_streak: int = 0
 
-# 合成目录的硬保底计数（跨局持久）。键 = 被保底的钥匙物品 ID，值 = `{misses:int}`。
-# 语义与判据见 SynthesisCatalog.resolve_settlement：**只在击败过首领的局里记账**，
-# 没打首领的局既不累加也不清零，否则「进图→撤离」可以无限刷计数。
-# 旧档没有这个字段 = 一次都没记过账。
-var synthesis_pity: Dictionary = {}
-
 # 存档封套元数据与有界事务幂等日志
 var save_revision: int = 0
 var last_saved_at_unix: int = 0
@@ -184,7 +178,6 @@ func _to_dict() -> Dictionary:
 		"pending_insurance_slots": pending_insurance_slots,
 		"rescue_cache": rescue_cache,
 		"rescue_defeat_streak": rescue_defeat_streak,
-		"synthesis_pity": synthesis_pity,
 		"save_revision": save_revision,
 		"last_saved_at_unix": last_saved_at_unix,
 		"last_save_reason": last_save_reason,
@@ -241,7 +234,7 @@ static func from_dict(d: Dictionary) -> BaseData:
 	if d.has("blueprint_bullet_tier"): data.blueprint_bullet_tier = d["blueprint_bullet_tier"]
 	if d.has("blueprint_attachment_tier"): data.blueprint_attachment_tier = d["blueprint_attachment_tier"]
 	if d.has("extraction_points"): data.extraction_points = d["extraction_points"]
-	if d.has("vault_items") and d["vault_items"] is Array: data.vault_items = Array(d["vault_items"])
+	if d.get("vault_items") is Array: data.vault_items = ItemRegistry.without_retired_items(d["vault_items"])
 	if d.has("unlocked_flashlight_modules") and d["unlocked_flashlight_modules"] is Array:
 		for module_id in d["unlocked_flashlight_modules"]:
 			var normalized := str(module_id)
@@ -266,25 +259,18 @@ static func from_dict(d: Dictionary) -> BaseData:
 	if d.has("avatar_customization") and d["avatar_customization"] is Dictionary:
 		data.avatar_customization = (d["avatar_customization"] as Dictionary).duplicate(true)
 	if d.has("pending_fate_card"): data.pending_fate_card = d["pending_fate_card"]
-	if d.has("pending_loadout_items") and d["pending_loadout_items"] is Array: data.pending_loadout_items = Array(d["pending_loadout_items"])
-	if d.has("extraction_loot") and d["extraction_loot"] is Array: data.extraction_loot = Array(d["extraction_loot"])
-	if d.has("pending_insurance_slots") and d["pending_insurance_slots"] is Array: data.pending_insurance_slots = Array(d["pending_insurance_slots"])
+	# Filter only retired item records, never weapon template fields or other owned equipment.
+	if d.get("pending_loadout_items") is Array: data.pending_loadout_items = ItemRegistry.without_retired_items(d["pending_loadout_items"])
+	if d.get("extraction_loot") is Array: data.extraction_loot = ItemRegistry.without_retired_items(d["extraction_loot"])
+	if d.get("pending_insurance_slots") is Array: data.pending_insurance_slots = ItemRegistry.without_retired_items(d["pending_insurance_slots"])
 	# 旧档没有这个字段 = 没有待开箱的救援物资（不是错误，也不是"已开过"）。
 	if d.has("rescue_cache") and d["rescue_cache"] is Array:
 		for value in d["rescue_cache"]:
-			if value is Dictionary:
+			if value is Dictionary and not ItemRegistry.is_retired_item_entry(value):
 				data.rescue_cache.append((value as Dictionary).duplicate(true))
 	if d.has("rescue_defeat_streak"):
 		data.rescue_defeat_streak = maxi(0, int(d["rescue_defeat_streak"]))
-	# 保底计数只接受「键 → 字典」的形状。坏形状视为没记过账，而不是把整个计数清成 0
-	# 后照常跑 —— 后者会让一个被写坏的值变成"差 3 次"的既成事实。
-	if d.has("synthesis_pity") and d["synthesis_pity"] is Dictionary:
-		for raw_key in (d["synthesis_pity"] as Dictionary).keys():
-			var bucket: Variant = (d["synthesis_pity"] as Dictionary).get(raw_key)
-			if bucket is Dictionary:
-				data.synthesis_pity[str(raw_key)] = {
-					"misses": maxi(0, int((bucket as Dictionary).get("misses", 0))),
-				}
+	# 旧档的 synthesis_pity 只对应已退役的碎片；不再读入或写回。
 	if d.has("save_revision"): data.save_revision = int(d["save_revision"])
 	if d.has("last_saved_at_unix"): data.last_saved_at_unix = int(d["last_saved_at_unix"])
 	if d.has("last_save_reason"): data.last_save_reason = str(d["last_save_reason"])
@@ -292,7 +278,7 @@ static func from_dict(d: Dictionary) -> BaseData:
 		for transaction_id in d["completed_transaction_ids"]:
 			data.completed_transaction_ids.append(str(transaction_id))
 	if d.has("active_run_snapshot") and d["active_run_snapshot"] is Dictionary:
-		data.active_run_snapshot = (d["active_run_snapshot"] as Dictionary).duplicate(true)
+		data.active_run_snapshot = RunPersistenceService.without_retired_item_records(d["active_run_snapshot"])
 	if d.has("elite_archive_records") and d["elite_archive_records"] is Dictionary:
 		data.elite_archive_records = (d["elite_archive_records"] as Dictionary).duplicate(true)
 	# 旧档没有这个字段 = 没有任何剧情播过（会让已看过的 `run` 剧情重播一次，属既有声明）。

@@ -116,6 +116,9 @@ const ENEMY_GROUP := "enemy_3d"
 ## 高度实测值 0.749m，取整到 0.75。换枪只改枪口 x/z，不改这个高度量级。
 ## 改这个常量必须同步 `tests/verification/verify_bullet_aim_alignment.gd` 的断言。
 const AIM_TARGET_HEIGHT := 0.75
+## The beam only probes visual occlusion. Its length is set in the prefab, in world meters.
+const AIM_BEAM_WALL_GAP_M := 0.025
+const AIM_BEAM_WORLD_MASK := 1
 
 ## ── 准星图标朝向与屏幕尺寸（2026-11-09 主人：「准星重新设计，设计成准星的图标，
 ## 一直面对摄像机的公告板」）──────────────────────────────────────────────
@@ -349,7 +352,10 @@ const CHARACTER_FATE_DEFAULTS := {
 }
 var _character_fate: Dictionary = CHARACTER_FATE_DEFAULTS.duplicate(true)
 
+var _aim_beam_query := PhysicsRayQueryParameters3D.new()
+
 @onready var avatar: PlayerAvatar3D = $Avatar3D
+@onready var _aim_beam: VfxPlayerAimBeam3D = get_node_or_null("AimBeam3D") as VfxPlayerAimBeam3D
 @onready var camera: Camera3D = $Camera3D
 @onready var aim_cursor: Node3D = $AimCursor
 @onready var virtual_collision_capsule: CollisionShape3D = $VirtualCollisionCapsule
@@ -388,6 +394,9 @@ func _ready() -> void:
 	if avatar != null:
 		avatar.set_customization(_avatar_customization)
 	_initialize_debug_scale_contract()
+	_aim_beam_query.collision_mask = AIM_BEAM_WORLD_MASK
+	_aim_beam_query.exclude = [get_rid()]
+	_aim_beam_query.hit_from_inside = true
 	hp_changed.emit(current_hp, max_hp)
 	_hook_mobile_input()
 	# 嵌入式运行窗口在首个 _ready 帧里可能尚未完成 Viewport/Camera 投影初始化。
@@ -747,6 +756,7 @@ func _physics_process(delta: float) -> void:
 		if _electric_root_remaining <= 0.0001:
 			_clear_electric_root()
 	_tick_dash_input_buffer(delta)
+	_update_aim_beam()
 	_tick_footstep_sound(delta)
 	var flashlight := get_node_or_null("PlayerFlashlight3D")
 	if flashlight != null:
@@ -1120,6 +1130,9 @@ func set_input_locked(locked: bool) -> void:
 
 func set_combat_enabled(enabled: bool) -> void:
 	combat_enabled = enabled
+	# Loading can suspend physics immediately after this call.
+	if not enabled and is_instance_valid(_aim_beam):
+		_aim_beam.hide()
 
 
 func get_presentation_state() -> String:
@@ -2986,6 +2999,13 @@ func _on_weapon_ammo_changed(current: int, maximum: int) -> void:
 
 
 func _on_weapon_loadout_changed(gun_id: String, bullet_id: String) -> void:
+	if is_instance_valid(_aim_beam):
+		var muzzle := weapon.get_muzzle_socket() if is_instance_valid(weapon) else null
+		var mount: Node3D = muzzle if muzzle != null else self
+		if _aim_beam.get_parent() != mount:
+			# This signal follows the visual rebuild, before the old socket is freed.
+			_aim_beam.hide()
+			_aim_beam.reparent(mount, false)
 	weapon_changed.emit(gun_id, bullet_id)
 
 
@@ -3397,6 +3417,36 @@ func uses_pointer_camera_aim() -> bool:
 	# The virtual input Autoloads also exist on desktop. Their presence does not
 	# identify the active device; InputDevice owns that fact.
 	return InputDevice.get_active_device() == InputDevice.DEVICE_KEYBOARD_MOUSE
+
+
+func _update_aim_beam() -> void:
+	if not is_instance_valid(_aim_beam):
+		return
+	if (
+		not combat_enabled or current_hp <= 0 or weapon_holstered
+		or not is_instance_valid(weapon) or not weapon.is_visible_in_tree()
+		or weapon.display_only or weapon.gun_id.is_empty() or weapon.is_melee_weapon()
+	):
+		_aim_beam.hide()
+		return
+	var muzzle := weapon.get_muzzle_socket()
+	if muzzle == null or _aim_beam.get_parent() != muzzle or not muzzle.is_visible_in_tree():
+		_aim_beam.hide()
+		return
+	var pose := muzzle.global_transform
+	var forward := -pose.basis.z.normalized()
+	if not pose.origin.is_finite() or not forward.is_finite() or forward.is_zero_approx():
+		_aim_beam.hide()
+		return
+	var span_m := _aim_beam.length_m
+	# Read-only VFX occlusion; do not reuse this hit for bullets or aim assist.
+	_aim_beam_query.from = pose.origin
+	_aim_beam_query.to = pose.origin + forward * span_m
+	var hit := get_world_3d().direct_space_state.intersect_ray(_aim_beam_query)
+	if not hit.is_empty():
+		var hit_position: Vector3 = hit["position"]
+		span_m = clampf((hit_position - pose.origin).dot(forward) - AIM_BEAM_WALL_GAP_M, 0.0, span_m)
+	_aim_beam.set_span(span_m)
 
 
 func _update_aim_from_mouse() -> void:

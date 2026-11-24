@@ -11,8 +11,48 @@ static func get_instance() -> ItemRegistry:
 		_instance = ItemRegistry.new()
 	return _instance
 
+## 旧档的实物标识，不是武器装配 ID 的黑名单。读取武器的 assembly_id 时不得使用此表。
+const RETIRED_ITEM_IDS := [
+	"item_room_key",
+	"bp_pistol", "bp_shotgun", "bp_rifle", "bp_machinegun", "bp_sprinkler",
+	"bp_starter_rifle", "bp_sniper", "bp_launcher", "bp_charge",
+]
+
 ## 物品字典：item_id -> item_definition
 var _items: Dictionary = {}
+
+
+static func is_retired_item_id(item_id: String) -> bool:
+	return item_id in RETIRED_ITEM_IDS
+
+
+## 只用于物品/奖品记录。可识别裸物品、格位、奖励、地面快照；绝不遍历枪身装配。
+static func is_retired_item_entry(value: Variant) -> bool:
+	if not value is Dictionary:
+		return false
+	var entry := value as Dictionary
+	if is_retired_item_id(str(entry.get("id", ""))) or is_retired_item_id(str(entry.get("item_id", ""))):
+		return true
+	if str(entry.get("type", "")) == "blueprint":
+		return true
+	for key in ["item", "item_data"]:
+		var item: Variant = entry.get(key)
+		if item is Dictionary and (
+			is_retired_item_id(str(item.get("id", ""))) or str(item.get("type", "")) == "blueprint"
+		):
+			return true
+	return false
+
+
+## 格位快照用空格替代，避免改变剩余物品的锚点；名单类快照则跳过退役条目。
+static func without_retired_items(entries: Array, preserve_slots := false) -> Array:
+	var kept: Array = []
+	for entry in entries:
+		if not is_retired_item_entry(entry):
+			kept.append(entry)
+		elif preserve_slots:
+			kept.append({})
+	return kept
 
 func _init() -> void:
 	_register_all_items()
@@ -22,7 +62,6 @@ func _init() -> void:
 func _register_all_items() -> void:
 	_register_fate_card_drop_item()
 	_register_beacon_item()
-	_register_room_key_item()
 	_register_backpack_equipment()
 	_register_weapon_modules()
 	_register_consumables()
@@ -37,8 +76,8 @@ func _register_all_items() -> void:
 ## ————————————————————————————————
 ## 真源表：每件物品在背包棋盘上占的宽×高（格）。口径：
 ##   长枪 4×2 · 狙击/发射器 5×2 · 手枪 2×1 · 近战长柄 3×1 · 重斧 2×2
-##   蓝图(纸) 2×1 · 背包本体按容量档 2×2/3×3/4×4 · 电芯包/信标 2×2
-##   大电池/子弹模块 2×1 · 药水/弹药/小电池/钥匙/手电模块/配件 1×1
+##   背包本体按容量档 2×2/3×3/4×4 · 电芯包/信标 2×2
+##   大电池/子弹模块 2×1 · 药水/弹药/小电池/手电模块/配件 1×1
 ## 未登记的物品按 1×1 兜底 —— 新物品忘了登记也放得进包，只是不占便宜。
 ## 存的是 JSON 安全的 [w, h] 数组（物品字典会整包进存档，Vector2i 会炸序列化）。
 ## 装备位（武器槽/配件网格/背包装备槽/手电位）**不读这张表**：
@@ -69,8 +108,6 @@ const GRID_SIZES: Dictionary = {
 	"item_battery_l": [2, 1],
 	"item_cell_pack": [2, 2],
 	"item_beacon": [2, 2],
-	# 钥匙
-	"item_room_key": [1, 1],
 	# 手电模块
 	"item_flashlight_basic": [1, 1],
 	"item_flashlight_advanced": [1, 1],
@@ -81,7 +118,6 @@ const GRID_SIZES: Dictionary = {
 const GRID_SIZE_FAMILY_DEFAULTS: Dictionary = {
 	"mod_bullet_": [2, 1],
 	"attach_": [1, 1],
-	"bp_": [2, 1],
 }
 
 ## 把占格尺寸写进每个物品字典（grid_size = [w, h]，JSON 安全）。
@@ -195,28 +231,6 @@ func _register_beacon_item() -> void:
 		"price": 150,
 	}
 
-func _register_room_key_item() -> void:
-	_items["item_room_key"] = {
-		"id": "item_room_key",
-		"name": "房间钥匙",
-		"description": "用于开启地图上的一扇房门。来自怪物掉落或房间搜索。",
-		"type": "key",
-		"rarity": "common",
-		"stack_max": 9,
-		"tags": ["key", "progression"],
-		"price": 40,
-		"floor_loot_weights": {
-			"loot_common": 1.0,
-			"loot_floor_1_2": 1.8,
-			"scavenge_floor_1": 2.4,
-			"scavenge_floor_2": 2.0,
-			"combat_floor_1": 1.2,
-			"elite_floor_1": 1.0,
-			"elite_floor_2": 1.0,
-		},
-	}
-
-
 func _register_backpack_equipment() -> void:
 	var backpacks: Array[Dictionary] = [
 		{
@@ -289,13 +303,9 @@ func _register_backpack_equipment() -> void:
 	for backpack in backpacks:
 		_items[str(backpack["id"])] = backpack
 
-## 注册武器模块类（蓝图类，玩家获得后可在基地解锁）
+## 注册成品武器、弹药模块及武器配件。武器装配模板由 BlueprintRegistry 独立拥有。
 func _register_weapon_modules() -> void:
-	# Tier 0 — 基础（总是可用）
 	_register_weapon_drops()
-	_register_gunbody_tier0()
-	# Tier 1 — 解锁后追加
-	_register_gunbody_tier1()
 	_register_bullet_tier0()
 	_register_bullet_tier1()
 	_register_attachment_tier0()
@@ -604,271 +614,6 @@ func _register_weapon_drops() -> void:
 	]
 	for weapon in weapons:
 		_items[weapon["id"]] = weapon
-
-func _register_gunbody_tier0() -> void:
-	# 基础枪身蓝图（Tier 0，初始可用）
-	var gun_bodies: Array = [
-		{
-			"id": "bp_pistol",
-			"name": "豌豆手枪蓝图碎片",
-			"description": "使用后解锁豌豆手枪蓝图，并获得 20 资源点",
-			"type": "blueprint",
-			"subtype": "gun_body",
-			"rarity": "common",
-			"stack_max": 99,
-			"tags": ["blueprint", "gun_body"],
-			"price": 50,
-			"loot_table_tier": 0,
-			"merchant_tier": 0,
-			"use_action": "unlock_blueprint",
-			"blueprint_category": "gunbody",
-			"blueprint_loot_tier": 0,
-			"extraction_points_reward": 20,
-			"floor_loot_weights": {
-				"loot_floor_1_2": 3.0,
-				"loot_floor_3_4": 2.5,
-				"loot_floor_5": 2.0,
-				"loot_abyss": 1.5,
-				"loot_common": 1.0,
-				"spawn_starter": 4.0,
-				"scavenge_floor_1": 2.5,
-				"scavenge_floor_2": 1.8,
-				"combat_floor_1": 1.5,
-				"combat_floor_2": 1.0,
-			},
-		},
-		{
-			"id": "bp_shotgun",
-			"name": "散射喷壶蓝图碎片",
-			"description": "使用后解锁散射喷壶蓝图，并获得 25 资源点",
-			"type": "blueprint",
-			"subtype": "gun_body",
-			"rarity": "common",
-			"stack_max": 99,
-			"tags": ["blueprint", "gun_body", "shotgun"],
-			"price": 60,
-			"loot_table_tier": 0,
-			"merchant_tier": 0,
-			"use_action": "unlock_blueprint",
-			"blueprint_category": "gunbody",
-			"blueprint_loot_tier": 0,
-			"extraction_points_reward": 25,
-			"floor_loot_weights": {
-				"loot_floor_1_2": 2.5,
-				"loot_floor_3_4": 2.0,
-				"loot_floor_5": 1.5,
-				"loot_abyss": 1.0,
-				"loot_common": 1.0,
-				"spawn_starter": 3.5,
-				"scavenge_floor_1": 2.0,
-				"scavenge_floor_2": 1.5,
-				"combat_floor_1": 1.0,
-				"combat_floor_2": 0.5,
-			},
-		},
-		{
-			"id": "bp_sprinkler",
-			"name": "花洒机枪蓝图碎片",
-			"description": "使用后解锁花洒机枪蓝图，并获得 20 资源点",
-			"type": "blueprint",
-			"subtype": "gun_body",
-			"rarity": "common",
-			"stack_max": 99,
-			"tags": ["blueprint", "gun_body", "auto"],
-			"price": 45,
-			"loot_table_tier": 0,
-			"merchant_tier": 0,
-			"use_action": "unlock_blueprint",
-			"blueprint_category": "gunbody",
-			"blueprint_loot_tier": 0,
-			"extraction_points_reward": 20,
-			"floor_loot_weights": {
-				"loot_floor_1_2": 2.0,
-				"loot_floor_3_4": 1.5,
-				"loot_floor_5": 1.0,
-				"loot_abyss": 0.75,
-				"loot_common": 1.0,
-				"spawn_starter": 2.0,
-				"scavenge_floor_1": 1.5,
-				"scavenge_floor_2": 1.0,
-				"combat_floor_1": 0.75,
-				"combat_floor_2": 0.5,
-			},
-		},
-		{
-			"id": "bp_starter_rifle",
-			"name": "初始步枪蓝图碎片",
-			"description": "使用后解锁初始步枪蓝图，并获得 20 资源点",
-			"type": "blueprint",
-			"subtype": "gun_body",
-			"rarity": "common",
-			"stack_max": 99,
-			"tags": ["blueprint", "gun_body", "rifle"],
-			"price": 45,
-			"loot_table_tier": 0,
-			"merchant_tier": 0,
-			"use_action": "unlock_blueprint",
-			"blueprint_category": "gunbody",
-			"blueprint_loot_tier": 0,
-			"extraction_points_reward": 20,
-			"floor_loot_weights": {
-				"loot_floor_1_2": 2.0,
-				"loot_floor_3_4": 1.5,
-				"loot_floor_5": 1.0,
-				"loot_abyss": 0.75,
-				"loot_common": 1.0,
-				"spawn_starter": 2.0,
-				"scavenge_floor_1": 1.5,
-				"scavenge_floor_2": 1.0,
-				"combat_floor_1": 0.75,
-				"combat_floor_2": 0.5,
-			},
-		},
-	]
-	for bp in gun_bodies:
-		_items[bp["id"]] = bp
-
-func _register_gunbody_tier1() -> void:
-	# 进阶枪身蓝图（Tier 1+，蓝图Tier >= 1 时可用）
-	var gun_bodies: Array = [
-		{
-			"id": "bp_rifle",
-			"name": "步枪蓝图碎片",
-			"description": "使用后解锁步枪蓝图，并获得 35 资源点",
-			"type": "blueprint",
-			"subtype": "gun_body",
-			"rarity": "uncommon",
-			"stack_max": 99,
-			"tags": ["blueprint", "gun_body", "rifle"],
-			"price": 80,
-			"loot_table_tier": 1,
-			"merchant_tier": 1,
-			"use_action": "unlock_blueprint",
-			"blueprint_category": "gunbody",
-			"blueprint_loot_tier": 1,
-			"extraction_points_reward": 35,
-			"floor_loot_weights": {
-				"loot_floor_3_4": 2.0,
-				"loot_floor_5": 2.5,
-				"loot_abyss": 3.0,
-				"boss_floor_1": 3.0,
-				"loot_common": 1.0,
-				"spawn_starter": 2.0,
-				"scavenge_floor_3": 1.5,
-				"scavenge_floor_4": 2.0,
-				"combat_floor_1": 1.5,
-				"combat_floor_2": 1.0,
-				"combat_floor_3": 0.8,
-			},
-		},
-		{
-			"id": "bp_machinegun",
-			"name": "蜂窝机枪蓝图碎片",
-			"description": "使用后解锁蜂窝机枪蓝图，并获得 40 资源点",
-			"type": "blueprint",
-			"subtype": "gun_body",
-			"rarity": "uncommon",
-			"stack_max": 99,
-			"tags": ["blueprint", "gun_body", "auto"],
-			"price": 90,
-			"loot_table_tier": 1,
-			"merchant_tier": 1,
-			"use_action": "unlock_blueprint",
-			"blueprint_category": "gunbody",
-			"blueprint_loot_tier": 1,
-			"extraction_points_reward": 40,
-			"floor_loot_weights": {
-				"loot_floor_3_4": 1.5,
-				"loot_floor_5": 2.0,
-				"loot_abyss": 2.5,
-				"scavenge_floor_3": 1.5,
-				"scavenge_floor_4": 2.0,
-				"scavenge_floor_5": 2.5,
-				"combat_floor_1": 0.8,
-				"combat_floor_2": 0.5,
-			},
-		},
-		{
-			"id": "bp_sniper",
-			"name": "弹弓狙击蓝图碎片",
-			"description": "使用后解锁弹弓狙击蓝图，并获得 50 资源点",
-			"type": "blueprint",
-			"subtype": "gun_body",
-			"rarity": "rare",
-			"stack_max": 99,
-			"tags": ["blueprint", "gun_body", "sniper"],
-			"price": 120,
-			"loot_table_tier": 2,
-			"merchant_tier": 2,
-			"use_action": "unlock_blueprint",
-			"blueprint_category": "gunbody",
-			"blueprint_loot_tier": 2,
-			"extraction_points_reward": 50,
-			"floor_loot_weights": {
-				"loot_floor_5": 2.0,
-				"loot_abyss": 3.0,
-				"boss_floor_1": 4.0,
-				"boss_floor_2": 5.0,
-				"scavenge_floor_5": 1.5,
-				"combat_floor_3": 1.5,
-				"combat_floor_4": 2.0,
-				"combat_floor_5": 2.5,
-				"loot_common": 0.5,
-				"spawn_starter": 1.0,
-			},
-		},
-		{
-			"id": "bp_launcher",
-			"name": "反胃榴弹筒蓝图碎片",
-			"description": "使用后解锁反胃榴弹筒蓝图，并获得 55 资源点",
-			"type": "blueprint",
-			"subtype": "gun_body",
-			"rarity": "rare",
-			"stack_max": 99,
-			"tags": ["blueprint", "gun_body", "launcher"],
-			"price": 130,
-			"loot_table_tier": 2,
-			"merchant_tier": 2,
-			"use_action": "unlock_blueprint",
-			"blueprint_category": "gunbody",
-			"blueprint_loot_tier": 2,
-			"extraction_points_reward": 55,
-			"floor_loot_weights": {
-				"loot_abyss": 2.5,
-				"boss_floor_1": 3.0,
-				"boss_floor_2": 4.0,
-				"scavenge_floor_5": 1.0,
-				"combat_floor_3": 0.5,
-				"combat_floor_4": 0.3,
-			},
-		},
-		{
-			"id": "bp_charge",
-			"name": "蓄力萝卜炮蓝图碎片",
-			"description": "使用后解锁蓄力萝卜炮蓝图，并获得 80 资源点",
-			"type": "blueprint",
-			"subtype": "gun_body",
-			"rarity": "epic",
-			"stack_max": 99,
-			"tags": ["blueprint", "gun_body", "charge"],
-			"price": 200,
-			"loot_table_tier": 3,
-			"merchant_tier": 3,
-			"use_action": "unlock_blueprint",
-			"blueprint_category": "gunbody",
-			"blueprint_loot_tier": 3,
-			"extraction_points_reward": 80,
-			"floor_loot_weights": {
-				"loot_abyss": 2.0,
-				"boss_floor_2": 4.0,
-				"scavenge_floor_5": 0.5,
-				"combat_floor_4": 0.5,
-				"combat_floor_5": 1.0,
-			},
-		},
-	]
-	for bp in gun_bodies:
-		_items[bp["id"]] = bp
 
 ## 注册消耗品
 func _register_consumables() -> void:

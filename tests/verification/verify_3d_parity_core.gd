@@ -29,8 +29,8 @@ func _ready() -> void:
 		failures.append("ARENA room is missing")
 
 	var runtime := dungeon.get_runtime_snapshot()
-	if int(runtime.get("keys", -1)) != 1 or int(runtime.get("open_edges", -1)) != 0:
-		failures.append("Run must start with exactly one key and all edges locked")
+	if int(runtime.get("keys", -1)) != 0 or int(runtime.get("open_edges", -1)) != 0:
+		failures.append("Run must start without ordinary keys while its edges remain closed")
 	if int(runtime.get("active_rooms", -1)) != 1 or int(runtime.get("detailed_rooms", -1)) != 1:
 		failures.append("Initial streaming must build only the current room")
 	if int(runtime.get("active_lights", 99)) > 3:
@@ -47,11 +47,11 @@ func _ready() -> void:
 		if not first_room_id.is_empty() and str(record.get("parent", "")) == first_room_id and second_room_id.is_empty():
 			second_room_id = str(record.get("id", ""))
 	if first_room_id.is_empty() or not dungeon.try_open_room_door(first_room_id):
-		failures.append("Initial key cannot open the first 3D room door")
-	await get_tree().process_frame
+		failures.append("The first 3D room door could not be opened without a key")
+	await get_tree().create_timer(0.25).timeout
 	runtime = dungeon.get_runtime_snapshot()
 	if int(runtime.get("keys", -1)) != 0 or int(runtime.get("open_edges", -1)) != 1:
-		failures.append("Opening a door must consume one key and open one graph edge")
+		failures.append("Opening a door must leave the key balance zero and open one graph edge")
 	if int(runtime.get("active_rooms", -1)) != 2:
 		failures.append("Opened adjacent room was not streamed in")
 	var minimap_snapshot := dungeon.minimap.get_snapshot()
@@ -82,10 +82,10 @@ func _ready() -> void:
 	if room == null or not room.cleared:
 		failures.append("Killing all enemies did not clear the room")
 	var keys := get_tree().get_nodes_in_group("room_key_pickup_3d").filter(func(node): return room != null and room.is_ancestor_of(node))
-	if keys.is_empty():
-		failures.append("Cleared combat room did not drop a physical 3D key")
+	if not keys.is_empty() or dungeon._get_total_room_keys() != 0:
+		failures.append("The cleared combat room generated a retired physical key")
 	if not second_room_id.is_empty() and not dungeon.try_open_room_door(second_room_id):
-		failures.append("Cleared room plus key cannot open the next edge")
+		failures.append("A cleared room must open the next ordinary door without a key")
 
 	_verify_inventory_and_insurance(dungeon, failures)
 	_verify_weapon_tree(dungeon, failures)
@@ -351,7 +351,7 @@ func _count_nodes(root: Node) -> int:
 
 func _finish(failures: Array[String], generation_ms: float, node_count: int, runtime: Dictionary) -> void:
 	if failures.is_empty():
-		print("3D_PARITY_CORE_OK: room scale, locked keys/doors, clear reward, inventory/insurance, shared weapon tree, occluded vision, original loot tables and pools pass (generation_ms=%.1f nodes=%d runtime=%s)" % [generation_ms, node_count, runtime])
+		print("3D_PARITY_CORE_OK: room scale, keyless doors, clear reward, inventory/insurance, shared weapon tree, occluded vision, original loot tables and pools pass (generation_ms=%.1f nodes=%d runtime=%s)" % [generation_ms, node_count, runtime])
 		get_tree().quit(0)
 		return
 	for failure in failures:

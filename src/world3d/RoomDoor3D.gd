@@ -63,7 +63,8 @@ var target_room_id := ""
 ## 可开启 / 不可开启。**权限**，与 `is_open` 的位置状态正交。
 var openable := true
 var is_open := false
-var requires_key := true
+## 房间钥匙经济已退役；独立装饰/主线锁仍可显式设置为 true。
+var requires_key := false
 var requires_clear := true
 var triggers_fate := true
 var _panel: Node3D
@@ -122,7 +123,8 @@ func configure(
 
 
 func set_access_policy(policy: Dictionary) -> void:
-	requires_key = bool(policy.get("requires_key", true))
+	# 普通门默认免钥匙；独立装饰锁/主线锁仍由调用方显式传 true。
+	requires_key = bool(policy.get("requires_key", false))
 	requires_clear = bool(policy.get("requires_clear", true))
 	triggers_fate = bool(policy.get("triggers_fate", true))
 	_refresh_prompt()
@@ -482,7 +484,7 @@ func _refresh_prompt() -> void:
 		_prompt.text = "通道已开启"
 		_prompt.modulate = Color(0.42, 0.92, 0.68)
 	elif requires_key:
-		_prompt.text = "[E] 使用房间钥匙"
+		_prompt.text = "[E] 开启通道"
 		_prompt.modulate = Color(1.0, 0.72, 0.22)
 	elif triggers_fate:
 		_prompt.text = "[E] 开启入口 · 选择命运"
@@ -534,7 +536,7 @@ func _build(accent: Color) -> void:
 	_prompt = Label3D.new()
 	_prompt.name = "DoorPrompt"
 	_prompt.position = Vector3(0, clear_height + 0.62, 0)
-	_prompt.text = "[E] 使用房间钥匙"
+	_prompt.text = "[E] 开启通道"
 	_prompt.font_size = 38
 	_prompt.pixel_size = 0.011
 	_prompt.outline_size = 8
