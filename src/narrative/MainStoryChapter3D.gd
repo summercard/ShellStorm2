@@ -14,7 +14,9 @@ const NPC_ID := "npc_base99_green"
 const BOSS_ROOM_ID := "boss"
 const FACILITY_ROOM_ID := "facility"
 const FACILITY_ID := "mission_operations"
-const BRIEFING_DISTANCE_M := 5.0
+const BASE_OPENING_GUIDE_ID := "nar_tower_opening_03_base_dark"
+const BASE_DARK_ENTRY_CLEARANCE_M := 6.5
+const BASE_BRIEFING_WALK_SPEED := 3.2
 const BOSS_CONTROL_RETURN_SECONDS := 5.4
 
 var _host: Node = null
@@ -29,6 +31,11 @@ var _deposit_succeeded := false
 var _deposit_npc_started := false
 var _diagnostics: Array[String] = []
 var _briefing_npc_started := false
+var _briefing_meet: Variant = null
+var _briefing_switch: RoomLightSwitch3D
+var _briefing_switch_stand: Variant = null
+var _briefing_wait_for_lights := false
+var _briefing_route: Array[Vector3] = []
 var _move_target: Variant = null
 var _move_anchor := ""
 var _key_visual: Node3D = null
@@ -77,9 +84,10 @@ func _process(_delta: float) -> void:
 		if _is_boss_ready():
 			director.call("play", BOSS_ID, {"priority": 30})
 		return
-	if _is_briefing_ready():
-		if bool(director.call("play", BRIEFING_ID, {"priority": 30})):
-			_briefing_succeeded = false
+	var branch := _briefing_branch()
+	if not branch.is_empty():
+		_briefing_succeeded = false
+		director.call("play", BRIEFING_ID, {"priority": 30, "branch": branch})
 		return
 	if _is_boss_ready():
 		director.call("play", BOSS_ID, {"priority": 30})
@@ -123,6 +131,12 @@ func resolve_anchor(anchor_id: String) -> Variant:
 		if boss_room != null:
 			return {"position": boss_room.global_position, "basis": boss_room.global_basis}
 		return null
+	if anchor_id == "briefing_room_frame":
+		var base_room := _main_story_room(FACILITY_ROOM_ID)
+		if base_room != null:
+			return {"position": base_room.global_position, "basis": base_room.global_basis}
+	if anchor_id == "briefing_switch" and is_instance_valid(_briefing_switch):
+		return _briefing_switch.get_interaction_dot_anchor()
 	if anchor_id == "briefing_finish" and _host.has_method("get_facility_spawn_point"):
 		# 收尾沿基地中央主通道走近终端；不把玩法镜头还到贴墙吊灯下方。
 		return _host.call("get_facility_spawn_point")
@@ -260,6 +274,43 @@ func call_instruction(action: String, params: Dictionary) -> Dictionary:
 	match action:
 		"briefing.prepare":
 			return _prepare_briefing()
+		"briefing.dark_meet":
+			return _move_briefing_npc(_briefing_meet)
+		"briefing.flashlight":
+			var green := _npc() as NpcCharacter3D
+			if green == null:
+				return _failed("3.1 缺少手电演员。")
+			green.set_scripted_flashlight(bool(params.get("enabled", true)))
+			return _ok()
+		"briefing.walk_switch":
+			return _move_briefing_npc(_briefing_switch_stand)
+		"briefing.press_switch":
+			var green := _npc() as NpcCharacter3D
+			if green == null or not is_instance_valid(_briefing_switch):
+				return _failed("3.1 缺少真实灯开关。")
+			_face_briefing_npc(_briefing_switch.global_position)
+			green.scripted_gesture("press_switch")
+			return _ok()
+		"briefing.light_up":
+			if not is_instance_valid(_briefing_switch):
+				return _failed("3.1 缺少真实灯开关。")
+			var green := _npc() as NpcCharacter3D
+			if green != null:
+				green.scripted_gesture("")
+			if not _facility_light_is_on() and not _briefing_switch.toggle_light():
+				return _failed("3.1 绿苔未能启动基地灯。")
+			return _ok()
+		"briefing.wait_for_lights":
+			_briefing_wait_for_lights = true
+			return _ok()
+		"briefing.approach":
+			return _move_briefing_npc(_briefing_meet)
+		"briefing.face_player":
+			var player := _player()
+			if player == null:
+				return _failed("3.1 缺少主角。")
+			_face_briefing_npc(player.global_position)
+			return _ok()
 		"briefing.point_operations":
 			return _briefing_point_operations()
 		"briefing.complete":
@@ -401,12 +452,58 @@ func _prepare_briefing() -> Dictionary:
 			return _failed("主线接纳失败，3.1 中止。")
 		if accepted is bool and not bool(accepted):
 			return _failed("主线接纳失败，3.1 中止。")
-	if npc.has_method("begin_scripted_appearance"):
-		var player := _player()
-		var look := player.global_position if player != null else npc.global_position - npc.global_basis.z
-		npc.call("begin_scripted_appearance", npc.global_position, look)
-		_briefing_npc_started = true
+	var player := _player()
+	var room := _main_story_room(FACILITY_ROOM_ID) as DungeonRoom3D
+	if player == null or room == null:
+		return _failed("3.1 缺少主角或基地场景。")
+	_briefing_succeeded = false
+	_briefing_meet = _resolve_meet_position(player, npc)
+	if not _briefing_meet is Vector3:
+		return _failed("3.1 玩家附近没有可会合站位。")
+	var side := "east" if room.to_local(player.global_position).x >= 0.0 else "west"
+	_briefing_switch = room.get_narrative_light_switch(side)
+	if is_instance_valid(_briefing_switch):
+		# 开关 local -Z 朝室内，NPC 停在面板前而不是进墙。
+		var stand := _briefing_switch.to_global(Vector3(0.0, 0.0, -0.9))
+		stand.y = room.global_position.y
+		_briefing_switch_stand = stand
+	npc.call("begin_scripted_appearance", npc.global_position, player.global_position)
+	_briefing_npc_started = true
 	return _done(Callable(self, "_release_briefing"))
+
+
+func _move_briefing_npc(target: Variant) -> Dictionary:
+	var green := _npc() as NpcCharacter3D
+	var room := _main_story_room(FACILITY_ROOM_ID) as DungeonRoom3D
+	if green == null or room == null or not target is Vector3:
+		return _failed("3.1 缺少绿苔移动目标。")
+	# 绿苔的基地演出站位由固定墙边锚点提供；这里沿现有基地地面直线走位，
+	# 不把通用刷怪可达性网格当成剧情导航。该网格可能因陈设清单尚未完成而拒绝
+	# 一条视觉上可走的演出线，导致摸黑分支在台词后直接中止。
+	_briefing_route.clear()
+	green.clear_scripted_facing()
+	_move_anchor = "briefing_route"
+	if not green.scripted_move_to(target as Vector3, BASE_BRIEFING_WALK_SPEED):
+		return _failed("3.1 绿苔拒绝脚本移动。")
+	_move_target = target
+	return _ok()
+
+
+func _step_briefing_route_started(green: NpcCharacter3D) -> bool:
+	var next: Vector3 = _briefing_route.pop_front()
+	if not green.scripted_move_to(next, BASE_BRIEFING_WALK_SPEED):
+		return false
+	_move_target = next
+	return true
+
+
+func _face_briefing_npc(point: Vector3) -> void:
+	var green := _npc() as NpcCharacter3D
+	if green == null:
+		return
+	var heading := point - green.global_position
+	if Vector2(heading.x, heading.z).length_squared() > 0.001:
+		green.set_scripted_facing(atan2(-heading.x, -heading.z))
 
 
 func _briefing_point_operations() -> Dictionary:
@@ -537,6 +634,14 @@ func _release_briefing() -> void:
 	if _briefing_npc_started and npc != null and npc.has_method("end_scripted_appearance"):
 		npc.call("end_scripted_appearance")
 	_briefing_npc_started = false
+	_briefing_meet = null
+	_briefing_switch = null
+	_briefing_switch_stand = null
+	_briefing_wait_for_lights = false
+	_briefing_route.clear()
+	if _move_anchor == "briefing_route":
+		_move_target = null
+		_move_anchor = ""
 
 
 func _resolve_meet_position(player: Node3D, npc: Node3D) -> Variant:
@@ -597,6 +702,17 @@ func should_advance_narrative() -> bool:
 		return bool(_host.call("can_advance_platform_takeover"))
 	if director != null and str(director.call("active_id")) == BRIEFING_ID:
 		var walking_player := _player()
+		if _briefing_npc_started and (_npc() == null or walking_player == null):
+			_abort_performance("3.1 演员丢失")
+			return false
+		if _briefing_wait_for_lights:
+			var room := _main_story_room(FACILITY_ROOM_ID) as DungeonRoom3D
+			if room == null or not BaseManager.is_base_power_on():
+				_abort_performance("3.1 基地灯失去供电")
+				return false
+			if room.is_room_light_starting() or not _facility_light_is_on():
+				return false
+			_briefing_wait_for_lights = false
 		if walking_player != null and float(walking_player.get("_narrative_walk_remaining")) > 0.0:
 			return false
 	if _deposit_npc_started and (_npc() == null or _player() == null or _pedestal() == null or not is_instance_valid(_key_visual)):
@@ -622,6 +738,10 @@ func should_advance_narrative() -> bool:
 		offset.y = 0.0
 		var snapshot: Dictionary = npc.call("get_snapshot")
 		if bool(snapshot.get("scripted_moving", snapshot.get("moving", false))) or offset.length() > 0.24:
+			return false
+		if _move_anchor == "briefing_route" and not _briefing_route.is_empty():
+			if not _step_briefing_route_started(npc as NpcCharacter3D):
+				_abort_performance("3.1 绿苔拒绝下一段路线")
 			return false
 		_move_target = null
 		_move_anchor = ""
@@ -715,14 +835,24 @@ func _boss_is_lost() -> bool:
 	return state == "dead" or int(_activation_enemy.get("current_hp")) <= 0
 
 
-func _is_briefing_ready() -> bool:
-	if _completed(BRIEFING_ID) or not _is_player_in_facility():
-		return false
-	if not _facility_light_is_on():
-		return false
-	var npc := _npc()
+func _briefing_branch() -> String:
+	if _completed(BRIEFING_ID) or not _is_player_in_facility() or not BaseManager.is_base_power_on():
+		return ""
+	var room := _main_story_room(FACILITY_ROOM_ID) as DungeonRoom3D
 	var player := _player()
-	return npc != null and player != null and npc.global_position.distance_to(player.global_position) <= BRIEFING_DISTANCE_M
+	if room == null or player == null or _npc() == null:
+		return ""
+	var local := room.to_local(player.global_position)
+	if local.y < -1.0 or local.y > 2.2:
+		return ""
+	if room.is_room_light_starting():
+		return "lit"
+	if _facility_light_is_on():
+		# 03在东门内是位置轮询；尚未抵达其位置时不要抢播默认亮灯的基地。
+		if local.x > 8.5 and not _completed(BASE_OPENING_GUIDE_ID):
+			return ""
+		return "lit"
+	return "dark" if absf(local.x) <= room.get_dimensions().x * 0.5 - BASE_DARK_ENTRY_CLEARANCE_M else ""
 
 
 func _is_boss_ready() -> bool:

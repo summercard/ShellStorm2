@@ -153,6 +153,8 @@ ASSET-PIPELINE / WORLD-BLOCKS：[远征Boss房02装配](design/远征关卡01_Bo
 
 # v0.1 模块、功能与工程契约索引
 
+- FATE-RULES / WEAPON-COMBAT（2026-11-24）：[力量正位滚石弹](14_技术施工_命运塔罗牌组.md#力量滚石弹2026-11-24)已接入穿敌碾压、尺寸档位和第二张正位增幅；继续使用 `verify_star_physical_mounts` 专项，不提升模块整体 `partial`。
+
 - WEAPON-COMBAT / FATE-RULES / VFX-POOL（2026-11-18，partial）　七种 v004 飞行附件与 FX01-20/21 覆盖单附魔和全部 21 种双附魔。命中动画、分摊预算、专项结果与整局验收边界分别见[特效规范 §3.5a](14.6_特效系统与制作规范.md)和[开发记录](development/2026-11-18_enchant_hit_feedback.md)。
 
 - NARRATIVE-TRIGGER / DIALOGUE-UI（2026-11-17，仅文档）：新增[剧情方式A/B定义与旧主线混用核对](design/主线剧情剧本.md#story-presentation-modes)，[节点表](design/主线剧情节点表.md)同步分类；A是现场演绎/运镜与三点示意，B是底栏＋侧边人物立绘，底栏共用不等于B。命运教学三支段明确B；原主线14份中11份有B请求路径，共39条文字cue（28 actor.say＋11 Boss字幕），现状是A现场基础叠B。当前没有A/B隔离开关，本轮不改代码/JSON/存档、不决定旧段回退，真实渲染未验、整体partial不提升。[核查记录](development/2026-11-17_narrative_presentation_ab_audit.md)。

@@ -264,6 +264,9 @@ func _run() -> void:
 	check(await _wait_stage(FIGHT.Stage.WON, 2.0), "shutdown completes and bridge powers up")
 	await get_tree().process_frame
 	await get_tree().physics_frame
+	check(tower._boss_camera_distance_m > 4.0, "winning starts a gradual camera return instead of snapping")
+	await get_tree().create_timer(TowerDescent3D.CAMERA_EXPEDITION_01_BOSS_ZOOM_RESTORE_SECONDS + 0.2).timeout
+	_verify_boss_camera("after")
 	check(room.cleared and tower.is_room_boss_defeated(room.room_id), "phase two resolves through formal boss and room flags")
 	check(_floor(Vector3(6.0, 0, 0)) and _floor(Vector3(13.0, 0, 0)) and not _floor(Vector3(-13.0, 0, 0)), "shutdown connects the center to the east bridge while west stays open to the shaft")
 	check(fight.deck._exit_bridge.visible and (fight.deck._exit_bridge.get_node("Grating") as Node3D).scene_file_path.contains("bridge_deck_5m")
@@ -384,7 +387,7 @@ func _verify_arm_feedback_only() -> void:
 	for frame in range(4):
 		await get_tree().physics_frame
 	_verify_boss_camera("combat")
-	check(absf(rider.camera.position.y - 13.380472) < 0.08, "open deck camera actually reaches the combat height")
+	check(absf(rider.camera.position.y - _expected_boss_camera(true).y) < 0.08, "open deck camera actually reaches the combat height")
 	var parts := tower._boss_bar.get_parent().get_node("PlatformArmSegments") as HBoxContainer
 	var bar := parts.get_child(0) as ProgressBar
 	check(parts.get_child_count() == 4 and bar.size.y >= tower._hud_int(18), "all four HP segments use the thicker layout")
@@ -494,12 +497,23 @@ func _verify_attack_rules() -> void:
 		var hp := rider.current_hp
 		check(selected == 0 and fight.grapples[selected].global_position.distance_to(contact) > 14.0, "center coverage uses a long real reach from the correct arm")
 		rider.global_position = fight.to_global(Vector3(-8.0, 0.08, -8.0))
-		fight._tick_slam(FIGHT.SLAM_LOAD_END, fight.to_local(rider.global_position))
+		fight._tick_slam(FIGHT.SLAM_LOAD_END * 0.5, fight.to_local(rider.global_position))
+		var arm_mesh := fight.grapples[selected]._meshes[0] as MeshInstance3D
+		var charge := float(arm_mesh.get_instance_shader_parameter("slam_charge"))
+		check(charge > 0.0 and charge <= 0.23 and not (arm_mesh.get_instance_shader_parameter("slam_visual_offset") as Vector3).is_zero_approx(),
+			"windup adds a restrained glow and render-only tremor to the attacking arm")
+		fight._tick_slam(FIGHT.SLAM_LOAD_END * 0.5, fight.to_local(rider.global_position))
+		check(is_zero_approx(float(arm_mesh.get_instance_shader_parameter("slam_charge"))), "arm warning ends before the downstroke")
 		var raised := fight._palm_world(selected)
 		check(fight._active_arm == selected and fight._slam_point == contact, "crossing the quarter boundary does not retarget or cancel a committed windup")
 		await _capture("palm_windup")
 		rider.camera_feedback.reset()
+		var impact_pool := get_tree().get_first_node_in_group("vfx_pool_3d") as VfxPool3D
+		var impact_asset := VfxPool3D.FX01_FLASH_EXPLOSION_YELLOW
+		var impact_count := impact_pool.active_count(impact_asset) if impact_pool != null else -1
 		fight._tick_slam(FIGHT.IMPACT - FIGHT.SLAM_LOAD_END + 0.01, fight.to_local(rider.global_position))
+		check(impact_pool != null and impact_pool.active_count(impact_asset) == impact_count + 1,
+			"a real palm impact emits one original yellow flash even when the player dodges")
 		var actual := fight._palm_world(selected)
 		check(actual.distance_to(contact) < 0.065 and rider.current_hp == hp, "extended palm lands on its locked point and the player who left avoids damage")
 		check(raised.y - actual.y > 1.5, "loaded palm drops visibly during the short powered downstroke")
@@ -878,22 +892,42 @@ func _verify_takeover_order() -> void:
 	var cut_at := -1.0
 	var screens_at := -1.0
 	var arm_at := -1.0
-	var grab_at := -1.0
-	for frame in range(24 * 60):
+	var strike_at := -1.0
+	var flight_at := -1.0
+	var rose_from_below := false
+	var rose_above_deck := false
+	var fell_off_deck := false
+	var dipped_through_deck := false
+	for frame in range(26 * 60):
+		if strike_at < 0.0:
+			var palm_y := fight.to_local(fight._palm_world(FIGHT.REAR)).y
+			rose_from_below = rose_from_below or palm_y < -0.25
+			rose_above_deck = rose_above_deck or (rose_from_below and fight._rear_started and palm_y > 1.0)
 		if cut_at < 0.0 and NarrativeDirector.active_id() == FIGHT.TAKEOVER and NarrativeDirector.is_camera_override_active():
 			cut_at = fight._clock
 		if screens_at < 0.0 and fight.deck.rear_screens_are_retracted():
 			screens_at = fight._clock
 		if arm_at < 0.0 and fight._rear_started:
 			arm_at = fight._clock
-		if fight._proxy_attached:
-			grab_at = fight._clock
-			break
+		if strike_at < 0.0 and fight._strike_pose_started:
+			strike_at = fight._clock
+		if strike_at >= 0.0 and flight_at < 0.0 and fight._proxy_motion != null:
+			flight_at = fight._clock
+		if flight_at >= 0.0:
+			if not is_instance_valid(fight._proxy):
+				break
+			var point := fight._proxy.position
+			var over_deck := maxf(absf(point.x), absf(point.z)) < FIGHT.DECK_HALF_WIDTH
+			dipped_through_deck = dipped_through_deck or (over_deck and point.y < -0.05)
+			fell_off_deck = fell_off_deck or (not over_deck and point.y < -2.0)
 		await get_tree().physics_frame
-	print("PLATFORM_TAKEOVER_ORDER cut=%.3f screens=%.3f arm=%.3f grab=%.3f" % [cut_at, screens_at, arm_at, grab_at])
+	print("PLATFORM_TAKEOVER_ORDER cut=%.3f screens=%.3f arm=%.3f strike=%.3f flight=%.3f" % [cut_at, screens_at, arm_at, strike_at, flight_at])
 	check(cut_at >= 0.95 and cut_at <= 1.12, "first victory holds the gameplay camera for about one second before cutting")
-	check(fight.deck._rear_rest.size() == 9 and screens_at > cut_at and arm_at > screens_at and grab_at > arm_at,
-		"all three rear screens, their chassis and their lights retract before arm emergence and grip")
+	check(fight.deck._rear_rest.size() == 9 and screens_at > cut_at and arm_at > screens_at and strike_at > arm_at,
+		"all three rear screens, their chassis and their lights retract before the rear arm rises and strikes")
+	check(rose_from_below and rose_above_deck, "the rear palm rises from below the deck before striking")
+	check(strike_at >= 0.0 and flight_at > strike_at and fell_off_deck and not dipped_through_deck,
+		"the strike sends the monitor past the platform edge before it falls below the deck")
 
 
 func _verify_west_arm_box() -> void:
@@ -949,13 +983,27 @@ func _hit_arms_with_projectiles() -> bool:
 	return ok
 
 
+func _expected_boss_camera(phase_two: bool) -> Vector3:
+	var normal := Vector3(0, 12.514413, 6.214302)
+	var one_meter_direction := Vector3(0, 13.380472, 6.714244) - normal
+	return normal + one_meter_direction * (22.0 * Player3D.DEBUG_CAMERA_TRAILING_STEP_M) if phase_two else normal
+
+
 func _verify_boss_camera(stage_label: String) -> void:
 	var base := tower._camera_default_local_position()
 	var offsets := tower.player.get_camera_pose_offsets()
 	print("BOSS_CAMERA ", stage_label, " level=", tower.get_expedition_level_id(), " baseline=", base, " offsets=", offsets)
-	var expected := Vector3(0, 13.380472, 6.714244) if fight.stage == FIGHT.Stage.COMBAT else Vector3(0, 12.514413, 6.214302)
-	check(base.distance_to(expected) < 0.01 and not tower.player.has_camera_pose_offset(),
-		"only combat adds five zoom-out steps, independent of debug offsets: " + stage_label)
+	var in_phase_two := fight.stage >= FIGHT.Stage.COMBAT and fight.stage < FIGHT.Stage.WON
+	check(base.distance_to(_expected_boss_camera(in_phase_two)) < 0.01 and not tower.player.has_camera_pose_offset(),
+		"phase two adds 22 apostrophe zoom steps along the camera ray: " + stage_label)
+	if stage_label == "combat":
+		var debug_step := Vector3.UP * Player3D.DEBUG_CAMERA_PAN_STEP_M
+		tower.player.adjust_debug_camera_pan(debug_step)
+		tower._apply_indoor_camera_pose()
+		var preserved := tower.player.get_camera_pose_offsets().get("pan_m", Vector3.ZERO) as Vector3
+		check(preserved.is_equal_approx(debug_step), "Boss height lift preserves an independent debug pan offset")
+		tower.player.adjust_debug_camera_pan(-debug_step)
+		tower._apply_indoor_camera_pose()
 
 
 func _wall_ray(from: Vector3, to: Vector3, expected: StaticBody3D = null) -> bool:

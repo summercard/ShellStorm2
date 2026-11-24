@@ -103,17 +103,18 @@ static func overclock() -> FateCard:
 	return card
 
 
-## 穿甲强化：增加穿透和伤害
+## 力量正位：滚石碾压。保留构造器旧名以兼容稳定身份映射。
 static func armor_pierce() -> FateCard:
 	var card := FateCard.new("穿甲强化", FateCard.CardType.ENHANCE, RARITY_RARE)
 	card.icon_emoji = "🎯"
-	card.short_description = "滚石弹：弹速与射速减半"
-	card.description = "子弹变为沿地面滚动的石头；弹速降低50%，射速降低50%"
+	card.short_description = "滚石穿敌，基础碾压3次"
+	card.description = "滚石穿过敌人，首碰即伤害，之后每0.3秒一段，基础3段。尺寸每比原始大满20%，段数+1、单段伤害再加20%基础值。第二张正位使滚石变大60%。每张弹速与射速减半。"
 	card.tags = ["Fate.Enhance", "Fate.AddDamage"]
 	card.effect = {
 		"action": FateCard.EffectAction.ADD_DAMAGE,
 		"rock_projectile": true,
 		"rock_shatter": false,
+		"rock_repeat_size_multiplier": 1.6,
 		"fire_rate_scale": 0.5,
 	}
 	return card

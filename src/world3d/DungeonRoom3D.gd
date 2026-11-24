@@ -1009,23 +1009,30 @@ func apply_narrative_light_state(enabled: bool) -> bool:
 ## 返回供剧情相机使用的稳定灯光开关锚点，不暴露节点路径。
 ## 新主线从 98F 东侧进入 99F，因此默认优先东侧开关。
 func get_narrative_light_switch_anchor(preferred_entry := "east") -> Variant:
-	var switches := _all_room_light_switches()
-	if switches.is_empty():
+	var light_switch := get_narrative_light_switch(preferred_entry)
+	if light_switch == null:
 		return null
+	return {
+		"position": light_switch.get_interaction_dot_anchor(),
+		"room_id": room_id,
+		"side": str(light_switch.get_meta("facility_entry_direction", "")).get_slice("_", 0),
+	}
+
+
+func get_narrative_light_switch(preferred_entry: String) -> RoomLightSwitch3D:
+	var switches := _all_room_light_switches()
 	var wanted_direction := "east" if preferred_entry != "west" else "west"
 	for light_switch in switches:
 		if str(light_switch.get_meta("facility_entry_direction", "")).begins_with(wanted_direction + "_"):
-			return {
-				"position": light_switch.get_interaction_dot_anchor(),
-				"room_id": room_id,
-				"side": wanted_direction,
-			}
-	var fallback := switches[0]
-	return {
-		"position": fallback.get_interaction_dot_anchor(),
-		"room_id": room_id,
-		"side": str(fallback.get_meta("facility_entry_direction", "")),
-	}
+			return light_switch
+	return switches[0] if not switches.is_empty() else null
+
+
+func is_room_light_starting() -> bool:
+	for light_switch in _all_room_light_switches():
+		if bool(light_switch.get_snapshot().get("transitioning", false)):
+			return true
+	return false
 
 
 func get_room_snapshot() -> Dictionary:
@@ -8228,6 +8235,67 @@ func is_narrative_floor_position_valid(world_point: Vector3) -> bool:
 		return false
 	local.y = 0.0
 	return _spawn_floor_contains(local, _spawn_clearance()) and _spawn_obstacle_free(local) and _narrative_floor_supported(to_global(local))
+
+
+## Short staged walks first try a straight line, then route around authored furniture on a 1m grid.
+func resolve_narrative_walk_route(from: Vector3, to: Vector3) -> Array[Vector3]:
+	from.y = global_position.y
+	to.y = global_position.y
+	if _narrative_walk_segment_clear(from, to):
+		return [to]
+	var dimensions := get_dimensions()
+	var grid := AStarGrid2D.new()
+	var half := Vector2i(floori(dimensions.x * 0.5), floori(dimensions.y * 0.5))
+	grid.region = Rect2i(-half, half * 2 + Vector2i.ONE)
+	grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
+	grid.update()
+	var start_cell := Vector2i.ZERO
+	var end_cell := Vector2i.ZERO
+	var start_cost := INF
+	var end_cost := INF
+	for x in range(-half.x, half.x + 1):
+		for z in range(-half.y, half.y + 1):
+			var cell := Vector2i(x, z)
+			var point := to_global(Vector3(x, 0, z))
+			if not is_narrative_floor_position_valid(point):
+				grid.set_point_solid(cell)
+				continue
+			var d := point.distance_squared_to(from)
+			if d < start_cost and d < 9.0 and _narrative_walk_segment_clear(from, point):
+				start_cell = cell
+				start_cost = d
+			d = point.distance_squared_to(to)
+			if d < end_cost and d < 9.0 and _narrative_walk_segment_clear(point, to):
+				end_cell = cell
+				end_cost = d
+	if is_inf(start_cost) or is_inf(end_cost):
+		return []
+	var cells := grid.get_id_path(start_cell, end_cell)
+	if cells.is_empty():
+		return []
+	var points: Array[Vector3] = []
+	for cell in cells:
+		points.append(to_global(Vector3(cell.x, 0, cell.y)))
+	points.append(to)
+	var route: Array[Vector3] = []
+	while not points.is_empty():
+		var selected := points.size() - 1
+		while selected >= 0 and not _narrative_walk_segment_clear(from, points[selected]):
+			selected -= 1
+		if selected < 0:
+			return []
+		from = points[selected]
+		route.append(from)
+		points = points.slice(selected + 1)
+	return route
+
+
+func _narrative_walk_segment_clear(from: Vector3, to: Vector3) -> bool:
+	var steps := maxi(1, ceili(from.distance_to(to) / 0.45))
+	for step in range(1, steps + 1):
+		if not is_narrative_floor_position_valid(from.lerp(to, float(step) / steps)):
+			return false
+	return true
 
 
 func _narrative_floor_supported(world_point: Vector3) -> bool:

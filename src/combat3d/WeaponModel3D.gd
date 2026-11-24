@@ -915,7 +915,7 @@ func _extract_projectile_behavior(stats: Dictionary) -> Dictionary:
 		"uncontrolled_damage_scale", "copy_fire", "copy_fire_delay",
 		"second_wave_damage_scale", "explode_on_reload", "explosion_radius",
 		"explosion_damage_scale", "every_nth_fire", "every_nth_attach_gun",
-		"visual_has_eyes", "visual_has_legs", "rock_projectile", "rock_shatter",
+		"visual_has_eyes", "visual_has_legs", "rock_projectile", "rock_shatter", "rock_size_multiplier",
 		"fate_attachment_hit_trigger",
 		"crit_on_kill", "crit_damage_multiplier", "pierce_shield", "shield_damage_scale",
 		"target_mode", "return_on_hit", "refund_ammo", "outbound_damage_multiplier",

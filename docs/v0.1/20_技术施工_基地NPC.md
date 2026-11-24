@@ -26,7 +26,7 @@ r5（2026-11-04，本轮）<span style="color:#1565C0">**[用户设计]**</span>
 
 - 仍使用真实 `npc_base99_green`、玩家同源模型与衣柜 `suit_green`，不用复制NPC替身或另一套对白播放器；台词在 `data/narrative/nar_main_*.json`，由Director逐句调 `say_scripted_line()`走头顶气泡，系统底栏独立。
 - `MainStoryChapter3D`判条件与领域结果；`NpcCharacter3D`只负责实体动作。`begin_scripted_appearance()`停巡接管，`scripted_move_to(target, speed)`跑到真实位置、`set_scripted_facing/clear_scripted_facing`管朝向、`scripted_gesture()`执行手势，`end_scripted_appearance()`复位归还。NPC不写main_story，不授权地图。
-- 3.1在03后实际开灯、空闲并接近绿苔时停巡转头，说明四key、传送不了生物而机器人可用，指向真实 `mission_operations`；正式JSON duration56.5，55.05玩家真实走到 `briefing_finish`（duration4、speed3.2），实体屏障等99F中央安全通道到位后55.15还镜1秒，56.25 complete、56.35归还、56.5 end，实际另含等待；完整结束才记 `nar_main_031_green_briefing` history，开灯瞬间错过后须复核。
+- 3.1在03后进入99F时分两路：玩家开灯后等真实启动完成，镜头扫基地并由绿苔主动走到玩家面前；玩家未开灯而深入基地内侧时，玩家停下，绿苔从暗处走来亮起独立演出手电并警告，再走到真实墙壁开关前点灯，灯稳后扫基地并走回玩家。两路汇入同一段四钥匙说明、指向真实 `mission_operations`；正式JSON duration62.0，60.55玩家真实走到 `briefing_finish`（duration4、speed3.2），实体屏障等99F中央安全通道到位后60.65还镜1秒，61.75 complete、61.85归还、62.0 end，实际另含等待；完整结束才记 `nar_main_031_green_briefing` history，空闲时复核灯态与地面站位。
 - 3.3在持有acquired未deposited的稀土key归来，且读取/出生/携带交接与救援演出结束后，绿苔**从原位真实跑来，不瞬移**。主角保持原站位；“啧啧，真被你拿到了，给我吧”后拿出钥匙，同一临时投影在双方真实手部接触点换父级；绿苔再到 `pedestal_stand`（台前地面，不是台面），钥匙沿 `PRP-BASE99-MAIN-STORY-KEY-INSERT` 第一孔的 20° 孔轴斜向内插到 `key_slot_rare_earth` 接触点才提交deposit。
 - `MainStoryKeyVisual3D`负责拿出/交接/插入，`MainStoryPedestal3D`只投影嵌件槽灯、已安装key与N/4环，不能通过隐藏临时模型冒充业务提交。`deposit_main_story_key()`成功后才亮第一孔槽灯与台面 1/4 环、发一次扩散脉冲并开放公馆；写盘失败保留待交付、不开锁。嵌件挂在99F美术布置层下跟随房间流送，承载点由 `TowerDescent3D.get_main_story_insert_transform()` 按布置层真实变换换算，叙事层不写死世界坐标。
 - Director实体屏障等NPC到位、手部接触与插入完成，连续阻塞60秒abort。玩家死亡、演员/挂点/设施缺失或卸载时释放NPC、临时key、镜头/朝向/操作锁，中断不记history；已领取/安装事实不因演出清理撤销。ESC可暂停。成功或失败归来都能交付永久key，不被救援节拍卡住。

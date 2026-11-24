@@ -252,6 +252,7 @@ var _scripted_look := Vector3.ZERO
 var _scripted_move_target := Vector3.ZERO
 var _scripted_move_active := false
 var _scripted_gesture := ""
+var _scripted_flashlight: Node3D
 var _scripted_facing_active := false
 var _walking_speed_override := WALK_SPEED
 
@@ -361,6 +362,7 @@ func end_scripted_appearance() -> void:
 	_scripted_active = false
 	_scripted_move_active = false
 	_scripted_gesture = ""
+	set_scripted_flashlight(false)
 	_scripted_facing_active = false
 	hide_dialogue()
 	_end_dialogue_session("scripted")
@@ -388,6 +390,65 @@ func scripted_gesture(name: String) -> bool:
 		return false
 	_scripted_gesture = name
 	return true
+
+
+## 绿苔手持的演出灯。只照场景和角色，不参与主角视野/电量/装备。
+func set_scripted_flashlight(enabled: bool) -> void:
+	if not enabled:
+		if is_instance_valid(_scripted_flashlight):
+			_scripted_flashlight.hide()
+			_scripted_flashlight.queue_free()
+		_scripted_flashlight = null
+		return
+	if not _scripted_active or is_instance_valid(_scripted_flashlight):
+		return
+	_scripted_flashlight = Node3D.new()
+	_scripted_flashlight.name = "ScriptedFlashlight"
+	if is_instance_valid(_hand_r):
+		_hand_r.add_child(_scripted_flashlight)
+		_scripted_flashlight.position = Vector3(0.0, 0.02, -0.14)
+	else:
+		add_child(_scripted_flashlight)
+		_scripted_flashlight.position = Vector3(0.28, 1.1, -0.35)
+	var body := MeshInstance3D.new()
+	var barrel := CylinderMesh.new()
+	barrel.top_radius = 0.075
+	barrel.bottom_radius = 0.055
+	barrel.height = 0.27
+	body.mesh = barrel
+	body.rotation.x = -PI * 0.5
+	var body_material := StandardMaterial3D.new()
+	body_material.albedo_color = Color(0.17, 0.21, 0.20)
+	body.material_override = body_material
+	_scripted_flashlight.add_child(body)
+	var lens := MeshInstance3D.new()
+	var face := CylinderMesh.new()
+	face.top_radius = 0.061
+	face.bottom_radius = 0.061
+	face.height = 0.015
+	lens.mesh = face
+	lens.rotation.x = -PI * 0.5
+	lens.position.z = -0.142
+	var lens_material := StandardMaterial3D.new()
+	lens_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	lens_material.albedo_color = Color(1.0, 0.92, 0.69)
+	lens.material_override = lens_material
+	_scripted_flashlight.add_child(lens)
+	var beam := SpotLight3D.new()
+	beam.position.z = -0.17
+	beam.rotation.x = deg_to_rad(-14.0)
+	beam.spot_range = 9.0
+	beam.spot_angle = 33.0
+	beam.light_color = Color(1.0, 0.92, 0.74)
+	beam.light_energy = 3.0
+	beam.light_cull_mask = GameDesignConfig.LIGHT_MASK_WORLD_AND_PLAYER
+	_scripted_flashlight.add_child(beam)
+	var spill := OmniLight3D.new()
+	spill.omni_range = 2.5
+	spill.light_color = beam.light_color
+	spill.light_energy = 0.7
+	spill.light_cull_mask = beam.light_cull_mask
+	_scripted_flashlight.add_child(spill)
 
 
 func set_scripted_facing(yaw: float) -> void:
@@ -1012,7 +1073,7 @@ func _tick_patrol(delta: float) -> void:
 			return
 		var scripted_direction := scripted_offset.normalized()
 		_moving = true
-		global_position += scripted_direction * _walking_speed_override * delta
+		global_position += scripted_direction * minf(scripted_offset.length(), _walking_speed_override * delta)
 		_yaw_target = atan2(-scripted_direction.x, -scripted_direction.z)
 		return
 	# 搭话中一律钉住：位置不动，也不消耗停留计时（谈完继续从原地走）。
@@ -1103,7 +1164,12 @@ func _tick_pose(delta: float) -> void:
 			_hand_l.position += Vector3(0.0, 0.10 + gesture_phase * 0.04, -0.12)
 		if _hand_r != null:
 			_hand_r.position += Vector3(0.0, 0.10 + gesture_phase * 0.04, -0.12)
-	elif _scripted_gesture == "insert_key":
+	elif _scripted_gesture == "press_switch":
+		if _hand_l != null:
+			_hand_l.position += Vector3(0.05, 0.28, -0.40)
+	elif is_instance_valid(_scripted_flashlight) and _hand_r != null:
+		_hand_r.position += Vector3(0.0, 0.17, -0.22)
+	if _scripted_gesture == "insert_key":
 		if _hand_r != null:
 			_hand_r.position += Vector3(0.0, 0.18, -0.22)
 		if _hand_l != null:

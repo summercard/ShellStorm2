@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/vfx/LibraryVfxAdapter3D.gd" id="1_adapter"]
+[ext_resource type="PackedScene" path="res://assets/art/vfx/library/UnityVFXLibrary/Prefabs/Combat/Explosions/FlashExplosion/vfx_flash_explosion_yellow_source.tscn" id="2_library"]
+
+[node name="VfxLibraryFlashExplosionYellow3D" type="Node3D"]
+script = ExtResource("1_adapter")
+source_lifetime = 2.0
+metadata/asset_id = "VFX-FLASH-EXPLOSION-YELLOW-3D"
+metadata/asset_version = "v001"
+metadata/source_scene = "res://assets/art/vfx/library/UnityVFXLibrary/Prefabs/Combat/Explosions/FlashExplosion/vfx_flash_explosion_yellow_source.tscn"
+metadata/source_scene_sha256 = "c59516bb9a3e1ba66e60791cbe6cd85d61e2520cd75478f583bbe5a51f006538"
+metadata/source_prefab_sha256 = "412cbfe31c38db37ea51a6f5d1b01179c10ed2867a046ef18bf68ccb691796aa"
+
+[node name="LibraryEffect" parent="." instance=ExtResource("2_library")]
+auto_play = false

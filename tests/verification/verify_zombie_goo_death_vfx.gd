@@ -86,7 +86,7 @@ func run() -> void:
 	add_child(fx)
 	var burst := fx.get_node("LibraryBurst") as Node3D
 	var pool := fx.get_node("LibraryPool") as Node3D
-	check(fx.get_meta("asset_version") == "v004" and fx.get_child_count() == 2, "正式 Prefab 版本或结构错误")
+	check(fx.get_meta("asset_version") == "v005" and fx.get_child_count() == 2, "正式 Prefab 版本或结构错误")
 	fx.activate(ORIGIN + Vector3.UP * 0.65, Color.WHITE, 1.0, {"floor_y": ORIGIN.y})
 	check_source(burst, RAW_BURST, 2)
 	check_source(pool, RAW_POOL, 1)
@@ -112,14 +112,13 @@ func run() -> void:
 		var ratio := float(p.size.x) / float(p.initial_size.x)
 		check(ratio >= 0.699 and ratio <= 0.71, "实播首帧绿浆须在峰值的七成，实测比值 %.4f" % ratio)
 	check_lit_draw(pool)
-	fx.call("_on_tick", 1.34, 1.35)
-	pool_state = pool.call("debug_exact")
-	check(pool_state.layers["#1"].burst_births == 6 and float(pool_state.elapsed) > 6.5, "原曲线必须完成且不能循环重生")
-	fx.retired.connect(func(_effect: VfxEffectBase3D) -> void: pass)
-	fx.finish()
+	check_pool_recession(fx, pool)
 	check(not burst.visible and not pool.visible and not burst.is_physics_processing() and not pool.is_physics_processing(), "回收时两段均隐藏且停止")
 	fx.activate(ORIGIN + Vector3.UP * 0.65, Color.WHITE, 0.5)
 	check(burst.scale.is_equal_approx(Vector3.ONE * 0.5525) and not pool.visible, "复借应复位尺寸及时序")
+	fx.call("_on_tick", 0.16, fx.lifetime)
+	check(pool.visible and is_equal_approx(pool.scale.x, 1.2025) and absf(pool.global_position.y - (ORIGIN.y + 0.025)) < 0.0002, "复借不得保留缩小或下沉")
+	check(is_equal_approx(pool_material_alpha(pool), 1.0), "复借不得保留淡出透明度")
 	fx.finish()
 	fx.queue_free()
 	await check_real_death("melee_chaser")
@@ -129,6 +128,68 @@ func run() -> void:
 	if failures.is_empty():
 		print("ZOMBIE_GOO_DEATH_VFX_OK: source structure, lighting, timing, pool and melee/police routing")
 	get_tree().quit(0 if failures.is_empty() else 1)
+
+func pool_material_alpha(pool: Node3D) -> float:
+	for child in pool.find_children("*", "GeometryInstance3D", true, false):
+		var draw := child as GeometryInstance3D
+		var material := draw.material_override as ShaderMaterial
+		if draw.visible and material != null:
+			var tint: Variant = material.get_shader_parameter("tint")
+			if tint is Color:
+				return tint.a
+	return -1.0
+
+func pool_draw_transforms(pool: Node3D) -> Array[Transform3D]:
+	var result: Array[Transform3D] = []
+	for child in pool.find_children("*", "GeometryInstance3D", true, false):
+		var draw := child as GeometryInstance3D
+		if not draw.visible:
+			continue
+		if draw is MultiMeshInstance3D:
+			for i in draw.multimesh.visible_instance_count:
+				result.append(draw.global_transform * draw.multimesh.get_instance_transform(i))
+		elif draw is MeshInstance3D:
+			result.append(draw.global_transform)
+	return result
+
+func check_pool_recession(fx: VfxEffectBase3D, pool: Node3D) -> void:
+	check(is_equal_approx(fx.lifetime, 2.55), "正式生命周期须追加 1.20 秒")
+	var start_scale := pool.scale
+	var start_pos := pool.global_position
+	fx.call("_on_tick", 1.35, fx.lifetime)
+	var start: Dictionary = pool.call("debug_exact", true)
+	check(pool.visible and start.layers["#1"].live == 6 and start.layers["#1"].drawn == 6, "收尾必须从原六份绿浆无缝接上")
+	check(pool.scale.is_equal_approx(start_scale) and pool.global_position.is_equal_approx(start_pos) and is_equal_approx(pool_material_alpha(pool), 1.0), "收尾起点不得跳尺寸、位置或亮度")
+	# Dummy rendering does not retain MultiMesh instance transforms for readback.
+	var can_read_draws := DisplayServer.get_name() != "headless"
+	# 显式声明成无类型 Array：三元表达式会从另一个分支推出 Array[Transform3D]，
+	# 而 headless 走 `[]` 这一支是普通 Array，运行期报
+	# "Trying to assign an array of type Array to a variable of type Array[Transform3D]"
+	# 并被算作 UNEXPECTED_ENGINE_ERROR，整条门禁在 headless 下必红。
+	var start_draws: Array = pool_draw_transforms(pool) if can_read_draws else []
+	fx.call("_on_tick", 1.95, fx.lifetime)
+	check(pool.scale.is_equal_approx(start_scale), "收尾不许缩放根节点")
+	if can_read_draws:
+		var middle_draws := pool_draw_transforms(pool)
+		check(start_draws.size() == 6 and middle_draws.size() == 6, "必须保留六个独立绘制中心")
+		var distinct_centers := false
+		for i in mini(start_draws.size(), middle_draws.size()):
+			var before: Transform3D = start_draws[i]
+			var after := middle_draws[i]
+			var first: Vector3 = start_draws[0].origin
+			distinct_centers = distinct_centers or Vector2(before.origin.x, before.origin.z).distance_to(Vector2(first.x, first.z)) > 0.001
+			check(absf(after.origin.x - before.origin.x) < 0.0001 and absf(after.origin.z - before.origin.z) < 0.0001, "绿浆片 %d 须以自身中心收缩" % i)
+			check(absf(after.origin.y - (before.origin.y - 0.012)) < 0.0002 and after.basis.get_scale().is_equal_approx(before.basis.get_scale() * 0.56), "绿浆片 %d 应原地缩至 56%% 并下沉 12mm" % i)
+		check(distinct_centers, "验收样本必须包含不重合的绿浆中心")
+		if distinct_centers and start_draws.size() == 6 and middle_draws.size() == 6:
+			print("GOO_INDIVIDUAL_PIVOTS_CHECKED: 6 original draw centers")
+	check(absf(pool.global_position.y - (start_pos.y - 0.012)) < 0.0002 and is_equal_approx(pool_material_alpha(pool), 0.5), "尾段中点应下沉 12mm、透明度减半")
+	var middle: Dictionary = pool.call("debug_exact")
+	check(middle.elapsed == start.elapsed and middle.layers["#1"].burst_births == 6, "收尾不得重播、增发或继续推进原曲线")
+	fx.call("_on_tick", 2.55, fx.lifetime)
+	check(is_zero_approx(pool_material_alpha(pool)) and absf(pool.global_position.y - (ORIGIN.y + 0.001)) < 0.0002, "回收前须完全淡出，不能被地板深度硬切")
+	fx.retired.connect(func(_effect: VfxEffectBase3D) -> void: pass)
+	fx.call("_process", 2.55)
 
 func check_droplet_playback(tuned: VfxEffectBase3D, burst: Node3D) -> void:
 	var baseline := GOO.instantiate() as VfxZombieGooDeath3D

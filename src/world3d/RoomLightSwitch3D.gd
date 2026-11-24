@@ -245,7 +245,9 @@ func _run_turn_on_sequence() -> void:
 	for light in _controlled_lights:
 		if light != null and is_instance_valid(light):
 			light.set_light_enabled(true)
-	await presentation_sequence
+	# BaseFixtureGlow3D 的协程由上面 call 独立启动；这里不能 await 它的返回值。
+	# 否则某些 Godot 版本把异步返回对象当作永不完成的等待，开关永久保持 transitioning。
+	await get_tree().create_timer(maxf(_turn_on_presentation_duration - STAGED_MAIN_LIGHT_START_SECONDS, 0.0)).timeout
 	if not is_instance_valid(self) or not _base_power_available or not _transitioning or generation != _sequence_generation:
 		return
 	_transitioning = false

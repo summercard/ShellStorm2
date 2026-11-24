@@ -415,9 +415,15 @@ func _play_internal(narrative_id: String, context: Dictionary) -> bool:
 			)
 			return false
 		_finish("interrupted")
+	# 单一会话可带一条互斥演出轨；对白快进和时间轴读同一份过滤后的 cue。
+	var cues: Array[Dictionary] = []
+	var branch := str(context.get("branch", ""))
+	for cue: Dictionary in script.cues:
+		if not cue.has("branch") or str(cue["branch"]) == branch:
+			cues.append(cue)
 	var has_dialogue := false
 	var dialogue_config: Dictionary = {}
-	for cue: Dictionary in script.cues:
+	for cue: Dictionary in cues:
 		if _is_dialogue_cue(cue):
 			has_dialogue = true
 		if str(cue.get("do", "")) == "ui.dialogue" and dialogue_config.is_empty():
@@ -435,6 +441,7 @@ func _play_internal(narrative_id: String, context: Dictionary) -> bool:
 	_active = {
 		"id": narrative_id,
 		"script": script,
+		"cues": cues,
 		"priority": int(context.get("priority", script.priority)),
 		"t": 0.0,
 		"index": 0,
@@ -598,10 +605,10 @@ func _advance_dialogue_internal() -> bool:
 	if _adapter.advance_carrier_line():
 		return true
 	_adapter.finish_dialogue_hold()
-	var script := _active.get("script") as NarrativeScript3D
-	if script != null:
-		for index in range(int(_active.get("index", 0)), script.cues.size()):
-			if _is_dialogue_cue(script.cues[index]):
+	var cues: Array[Dictionary] = _active["cues"]
+	if not bool(_dialogue_cue.get("wait", false)):
+		for index in range(int(_active.get("index", 0)), cues.size()):
+			if _is_dialogue_cue(cues[index]):
 				_advance_target = index
 				break
 	_dialogue_cue = {}
@@ -760,11 +767,12 @@ func _process(delta: float) -> void:
 	_active["t"] = float(_active.get("t", 0.0)) + delta
 	var now := float(_active["t"])
 	var index := int(_active.get("index", 0))
-	if _advance_target >= index and _advance_target < script.cues.size():
-		now = maxf(now, float(script.cues[_advance_target]["at"]))
+	var cues: Array[Dictionary] = _active["cues"]
+	if _advance_target >= index and _advance_target < cues.size():
+		now = maxf(now, float(cues[_advance_target]["at"]))
 	# 同一 at 的多条 cue 在**同一帧内连续执行**（不跨帧），与 08 文档 §3.3 一致。
-	while index < script.cues.size() and float(script.cues[index]["at"]) <= now + 0.0001:
-		var cue := script.cues[index]
+	while index < cues.size() and float(cues[index]["at"]) <= now + 0.0001:
+		var cue := cues[index]
 		index += 1
 		var generation := _play_generation
 		_dispatching = true
@@ -873,7 +881,7 @@ func _dispatch_cue(cue: Dictionary) -> bool:
 			_adapter._restore_dialogue()
 		return true
 	if bool(result.get("ok", false)):
-		if verb == "ui.dialogue" and bool(params.get("wait", false)):
+		if verb in ["ui.dialogue", "actor.say"] and bool(params.get("wait", false)):
 			_dialogue_waiting = true
 		if _is_dialogue_cue(cue):
 			_dialogue_cue = cue.duplicate(true)
@@ -886,7 +894,7 @@ func _dispatch_cue(cue: Dictionary) -> bool:
 		if verb == "player.lock_input" and bool(params.get("locked", true)):
 			_apply_auto_invulnerability()
 		return false
-	if verb == "ui.dialogue" and bool(params.get("wait", false)):
+	if verb in ["ui.dialogue", "actor.say"] and bool(params.get("wait", false)):
 		_warn("等待型对白拒收：%s" % str(result.get("reason", "")))
 		_finish("abort:dialogue_rejected")
 		return true

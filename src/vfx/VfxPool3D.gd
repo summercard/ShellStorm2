@@ -15,6 +15,7 @@ const FX01_FATE_LIGHTNING := "VFX-FATE-LIGHTNING-3D"
 const FX01_MUZZLE_FLASH := "VFX-MUZZLE-FLASH-3D"
 const FX01_IMPACT := "VFX-IMPACT-3D"
 const FX01_EXPLOSION := "VFX-EXPLOSION-3D"
+const FX01_FLASH_EXPLOSION_YELLOW := "VFX-FLASH-EXPLOSION-YELLOW-3D"
 const FX01_MELEE_SLASH := "VFX-MELEE-SLASH-3D"
 const FX01_MELEE_IMPACT := "VFX-MELEE-IMPACT-3D"
 const FX01_SHELL_CASING := "VFX-SHELL-CASING-3D"
@@ -101,6 +102,7 @@ const _REGISTRY := {
 	FX01_MUZZLE_FLASH: preload("res://assets/art/vfx/combat_3d/vfx_library_muzzle_fire_root_top3d.tscn"),
 	FX01_IMPACT: preload("res://assets/art/vfx/combat_3d/vfx_impact_root_top3d.tscn"),
 	FX01_EXPLOSION: preload("res://assets/art/vfx/combat_3d/vfx_library_bullet_explosion_fire_root_top3d.tscn"),
+	FX01_FLASH_EXPLOSION_YELLOW: preload("res://assets/art/vfx/combat_3d/vfx_library_flash_explosion_yellow_root_top3d.tscn"),
 	FX01_MELEE_SLASH: preload("res://assets/art/vfx/combat_3d/vfx_library_sword_slash_thin_root_top3d.tscn"),
 	FX01_MELEE_IMPACT: preload("res://assets/art/vfx/combat_3d/vfx_library_sword_hit_root_top3d.tscn"),
 	FX01_SHELL_CASING: preload("res://assets/art/vfx/combat_3d/vfx_shell_casing_root_top3d.tscn"),

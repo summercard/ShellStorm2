@@ -10,6 +10,15 @@ class Target extends Node3D:
 		pushes += 1
 		push_direction = direction * strength
 
+class RockTarget extends StaticBody3D:
+	var current_hp := 1000
+	var received: Array[int] = []
+	func can_absorb_projectile(_tags: Array[String]) -> bool:
+		return false
+	func take_damage(amount: int, _critical := false, _direction := Vector3.ZERO, _knockback := 0.0) -> void:
+		current_hp -= amount
+		received.append(amount)
+
 var failures: Array[String] = []
 var samples := 0
 var shots: Array[Projectile3D] = []
@@ -58,6 +67,109 @@ func fire(gun: WeaponModel3D) -> Projectile3D:
 	gun._cooldown = 0.0
 	gun.try_fire(Vector3.FORWARD, shooter)
 	return shots[0] if not shots.is_empty() else null
+
+func _rock_box(parent: Node3D, center: Vector3, size: Vector3) -> void:
+	var shape := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = size
+	shape.shape = box
+	shape.position = center
+	parent.add_child(shape)
+
+
+func _rock_test_target(at: Vector3) -> RockTarget:
+	var target := RockTarget.new()
+	target.collision_layer = 4
+	target.collision_mask = 0
+	_rock_box(target, Vector3.ZERO, Vector3(0.8, 1.6, 0.38))
+	add_child(target)
+	target.global_position = at
+	target.add_to_group("enemy_3d")
+	return target
+
+
+func _verify_rock_crush(base: WeaponModel3D) -> void:
+	var source := tree()
+	apply(source, "fate_armor_pierce")
+	var once := fire(weapon(source))
+	var base_radius := float(once.get_orientation_snapshot()["collision_radius"])
+	check(once._rock_hit_limit == 3 and once._rock_tick_damage == once.damage, "rock base: three unboosted hits")
+	var trial := Projectile3D.new()
+	for spec in [[0.75, 3, 100], [1.19, 3, 100], [1.2, 4, 120], [1.4, 5, 140], [1.6, 6, 160]]:
+		trial.configure({"damage": 100, "behavior": {"rock_projectile": true, "fate_scale": spec[0]}})
+		check(trial._rock_hit_limit == spec[1] and trial._rock_tick_damage == spec[2], "rock step at %.2f" % spec[0])
+	trial.free()
+	apply(source, "fate_armor_pierce")
+	var restored := tree()
+	var instance := WeaponInstance.from_runtime_tree(source)
+	check(WeaponInstance.from_item(instance.to_item_dictionary()).load_into_runtime_tree(restored), "rock assembly snapshot round trip")
+	var rock_gun := weapon(restored)
+	rock_gun._critical_chance = 0.0
+	var twice := fire(rock_gun)
+	check(is_equal_approx(rock_gun.bullet_speed, base.bullet_speed * 0.25) and is_equal_approx(rock_gun.fire_rate, base.fire_rate * 0.25), "both original speed penalties retained")
+	check(twice._rock_hit_limit == 6 and twice._rock_tick_damage == int(twice.damage * 1.6), "second upright yields six hits at 160 percent")
+	check(is_equal_approx(float(twice.get_orientation_snapshot()["collision_radius"]), base_radius * 1.6) and is_equal_approx(twice._visual_scale_factor(), once._visual_scale_factor() * 1.6), "rock visuals and collision both grow by 60 percent")
+	apply(source, "fate_armor_pierce")
+	check(is_equal_approx(float(fire(weapon(source)).fate_behavior.get("rock_size_multiplier", 0.0)), 1.6), "third upright does not re-award size")
+	var mixed := tree()
+	apply(mixed, "fate_armor_pierce", null, true)
+	apply(mixed, "fate_armor_pierce")
+	check(fire(weapon(mixed))._rock_hit_limit == 3, "reverse is not a second upright")
+
+	var floor := StaticBody3D.new()
+	_rock_box(floor, Vector3(50, -0.1, 0), Vector3(12, 0.2, 12))
+	_rock_box(floor, Vector3(50, 1, -2.0), Vector3(6, 2.0, 0.2))
+	add_child(floor)
+	var a := _rock_test_target(Vector3(50, 0.75, -0.35))
+	var b := _rock_test_target(Vector3(50, 0.75, -1.25))
+	var behind := _rock_test_target(Vector3(50, 0.75, -2.9))
+	var proxy := EnemyHitVolume3D.new()
+	proxy.bind(a)
+	proxy.collision_layer = 4
+	proxy.collision_mask = 0
+	_rock_box(proxy, Vector3(0, 0, 0.24), Vector3(0.8, 1.6, 0.18))
+	a.add_child(proxy)
+	var timestamps := {a.get_instance_id(): [], b.get_instance_id(): []}
+	twice.hit_confirmed.connect(func(target: Node, _amount: int, _critical: bool):
+		var clock_samples: Array = timestamps.get(target.get_instance_id(), [])
+		clock_samples.append(twice._rock_clock))
+	twice.global_position = Vector3(50, 0.75, 0.65)
+	twice.direction = Vector3.FORWARD
+	await get_tree().physics_frame
+	for _frame in range(170):
+		twice._physics_process(1.0 / 60.0)
+	var expected: Array[int] = []
+	expected.resize(6)
+	expected.fill(twice._rock_tick_damage)
+	check(a.received == expected and b.received == expected, "actual rolling collision passes two targets; proxy does not duplicate hits")
+	check(behind.received.is_empty(), "wall blocks further targets")
+	check(not twice._active and twice._rock_pending_hits.is_empty(), "final hits drain and release rock")
+	for target_times: Array in timestamps.values():
+		var correct := target_times.size() == 6
+		for index in range(1, target_times.size()):
+			correct = correct and is_equal_approx(float(target_times[index]) - float(target_times[index - 1]), 0.3)
+		check(correct, "each target ticks independently every 0.3 seconds")
+
+	var pool := ProjectilePool3D.new()
+	add_child(pool)
+	var config := {"behavior": {"rock_projectile": true}, "damage": 10}
+	var reused := pool.acquire(config, Vector3(50, 0.75, 0))
+	reused.set_physics_process(false)
+	a.current_hp = 1
+	a.received.clear()
+	reused._hit_target(a)
+	reused._rock_clock = 0.6
+	reused._tick_rock_hits()
+	check(a.received == [10] and reused._rock_pending_hits.is_empty(), "dead targets stop ticking")
+	b.received.clear()
+	reused._hit_target(b)
+	reused.cancel()
+	check(pool.acquire(config, Vector3(50, 0.75, 0)) == reused and reused._rock_pending_hits.is_empty(), "pooled rock never inherits cancelled hits")
+	reused.set_physics_process(false)
+	reused._hit_target(b)
+	check(b.received == [10, 10], "pooled rock may hit the same target anew")
+	reused.cancel()
+
 
 func _run() -> void:
 	shooter = Node3D.new()
@@ -187,6 +299,7 @@ func _run() -> void:
 			p.activate({"behavior": {}}, Vector3.ZERO)
 			p.set_physics_process(false)
 			check(p._visual.get_meta("asset_id") != "VFX-FATE-ROCK-3D", "pool reuse clears stone visual")
+	await _verify_rock_crush(base)
 	var deep := tree()
 	var parent := deep.root
 	for index in range(5):

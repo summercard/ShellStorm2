@@ -65,8 +65,18 @@ const GOO_HIT_SIZE_ABSORB := METAL_SPARK_SIZE_ABSORB * ZOMBIE_HIT_SIZE_RATIO
 
 var _weapon_socket: Marker3D
 var _carried_weapon: WeaponModel3D
+const ROCK_HIT_INTERVAL := 0.3
+const ROCK_SIZE_STEP := 0.2
+const ROCK_BASE_HITS := 3
+const ROCK_MAX_CONTACTS_PER_SWEEP := 16
 var _rock_vertical_speed := 0.0
 var _rock_shattered := false
+var _rock_hit_limit := ROCK_BASE_HITS
+var _rock_tick_damage := 0
+var _rock_clock := 0.0
+var _rock_waiting := false
+var _rock_target_ids: Dictionary = {}
+var _rock_pending_hits: Dictionary = {}
 
 var direction := Vector3(0, 0, -1)
 var speed := 24.0
@@ -180,6 +190,10 @@ func configure(config: Dictionary) -> void:
 	_hit_any = false
 	_rock_vertical_speed = 0.0
 	_rock_shattered = false
+	_rock_clock = 0.0
+	_rock_waiting = false
+	_rock_target_ids.clear()
+	_rock_pending_hits.clear()
 	_ungrown_damage = damage
 	_attached_hit_fired = false
 	_initial_overlap_checked = false
@@ -191,6 +205,10 @@ func configure(config: Dictionary) -> void:
 		fate_behavior["fate_scale"] = float(fate_behavior.get("fate_scale", 1.0)) * growth_size
 	_flight_base_damage = damage
 	damage = maxi(1, int(damage * float(fate_behavior.get("outbound_damage_multiplier", 1.0))))
+	if _is_crushing_rock():
+		var rock_size_steps := maxi(0, floori((_fate_size_multiplier() - 1.0) / ROCK_SIZE_STEP + 0.000001))
+		_rock_hit_limit = ROCK_BASE_HITS + rock_size_steps
+		_rock_tick_damage = maxi(1, floori(float(damage) * (1.0 + ROCK_SIZE_STEP * rock_size_steps) + 0.000001))
 	# 默认 0 = 不让怪物位移；霰弹枪在 WeaponModel3D 注入 0.8（轻微击退）。
 	hit_knockback = float(config.get("hit_knockback", hit_knockback))
 	# 射程上限（米）。0/缺省 = 不启用，保持旧行为（敌弹与旧内容不受影响）。
@@ -274,6 +292,15 @@ func _physics_process(delta: float) -> void:
 	if hostile and NarrativeDirector != null and NarrativeDirector.holds_enemy_combat():
 		_retire()
 		return
+	if _is_crushing_rock():
+		_rock_clock += delta
+		_tick_rock_hits()
+		if not _active:
+			return
+		if _rock_waiting:
+			if _rock_pending_hits.is_empty():
+				_retire()
+			return
 	if _turret_active:
 		_tick_turret(delta)
 		return
@@ -291,18 +318,18 @@ func _physics_process(delta: float) -> void:
 			_begin_return()
 		else:
 			expired.emit()
-			_retire()
+			_finish_flight()
 		return
 	_tick_attached_gun(delta)
 	if _returning:
 		if not is_instance_valid(shooter):
-			_retire()
+			_finish_flight()
 			return
 		var destination := _return_destination()
 		if global_position.distance_to(destination) <= maxf(0.72, speed * delta):
 			if is_instance_valid(source_weapon):
 				source_weapon.refund_projectile_ammo(int(fate_behavior.get("refund_ammo", 0)), source_weapon_tree)
-			_retire()
+			_finish_flight()
 			return
 		direction = (destination - global_position).normalized()
 	elif (bullet_tags.has("homing") or bool(fate_behavior.get("homing", false))) and not hostile:
@@ -319,7 +346,7 @@ func _physics_process(delta: float) -> void:
 		_rock_vertical_speed -= 18.0 * delta
 		velocity.y = _rock_vertical_speed
 		if is_instance_valid(_visual):
-			_visual.call("roll", speed * delta / 0.18)
+			_visual.call("roll", speed * delta / (0.18 * _collision_scale_factor()))
 	var step := velocity * delta
 	if is_finite(_level_flight_y):
 		step.y = move_toward(global_position.y, _level_flight_y, speed * delta * 0.36) - global_position.y
@@ -332,7 +359,7 @@ func _physics_process(delta: float) -> void:
 				_explode()
 			else:
 				expired.emit()
-			_retire()
+			_finish_flight()
 			return
 	var previous_position := global_position
 	var graze := _enemy_graze(step)
@@ -342,7 +369,9 @@ func _physics_process(delta: float) -> void:
 			oil_world.call("ignite_bullet_segment", previous_position, global_position)
 		_hit_target(graze["collider"], graze)
 		return
-	var collision := move_and_collide(step)
+	var collision := _move_through_rock_targets(step) if _is_crushing_rock() and not _returning else move_and_collide(step)
+	if not _active or _rock_waiting:
+		return
 	if damage > 0:
 		for oil_world: Node in get_tree().get_nodes_in_group("special_item_world_3d"):
 			oil_world.call("ignite_bullet_segment", previous_position, global_position)
@@ -364,7 +393,7 @@ func _physics_process(delta: float) -> void:
 		return
 	if fate_behavior.has("floor_burst"):
 		_land_floor_burst(collision.get_normal(), collision.get_position(), collider)
-		_retire()
+		_finish_flight()
 		return
 	if collider != null and collider.has_method("take_damage"):
 		_hit_target(collider, hit_context)
@@ -372,7 +401,9 @@ func _physics_process(delta: float) -> void:
 	if bool(fate_behavior.get("rock_projectile", false)) and collision.get_normal().y > 0.55:
 		_rock_vertical_speed = 0.0
 		var planar := Vector3(direction.x, 0.0, direction.z).normalized() * speed * delta
-		var ground_collision := move_and_collide(planar)
+		var ground_collision := _move_through_rock_targets(planar) if _is_crushing_rock() else move_and_collide(planar)
+		if not _active or _rock_waiting:
+			return
 		if ground_collision != null:
 			var obstacle := ground_collision.get_collider() as Node
 			if obstacle != null and obstacle.has_method("take_damage"):
@@ -435,9 +466,105 @@ func _enemy_graze(step: Vector3) -> Dictionary:
 	return {"collider": target, "fraction": fraction, "position": hit["point"], "normal": hit["normal"]}
 
 
+func _is_crushing_rock() -> bool:
+	return bool(fate_behavior.get("rock_projectile", false)) and not bool(fate_behavior.get("rock_shatter", false))
+
+
+func _rock_target(collider: Node) -> Node3D:
+	var target := collider as Node3D
+	if collider is EnemyHitVolume3D:
+		target = (collider as EnemyHitVolume3D).owner_enemy as Node3D
+	if not is_instance_valid(target) or target == shooter or not target.is_in_group(target_group):
+		return null
+	if not target.has_method("take_projectile_damage") and not target.has_method("take_damage"):
+		return null
+	return target
+
+
+## Use native collision order: each enemy body is ignored only after contact, never walls.
+func _move_through_rock_targets(step: Vector3) -> KinematicCollision3D:
+	var remaining := step
+	for contact in range(ROCK_MAX_CONTACTS_PER_SWEEP):
+		var collision := move_and_collide(remaining)
+		if collision == null:
+			return null
+		var body := collision.get_collider() as PhysicsBody3D
+		if body == null or _rock_target(body) == null:
+			return collision
+		var hit_context := {"normal": collision.get_normal(), "position": collision.get_position()}
+		remaining = collision.get_remainder()
+		_add_tracked_collision_exception(body)
+		_hit_target(body, hit_context)
+		if not _active or _rock_waiting or remaining.is_zero_approx():
+			return null
+	return null
+
+
+func _start_rock_hits(target: Node3D, collider: Node, hit_context: Dictionary) -> void:
+	var target_id := target.get_instance_id()
+	if _rock_target_ids.has(target_id) or _target_is_dead(target) or damage <= 0:
+		return
+	_rock_target_ids[target_id] = true
+	if target.has_method("can_absorb_projectile") and bool(target.call("can_absorb_projectile", bullet_tags)):
+		if target.has_method("on_projectile_absorbed"):
+			target.call("on_projectile_absorbed", _rock_tick_damage)
+		_spawn_hit_effect(collider, GOO_HIT_SIZE_ABSORB, METAL_SPARK_SIZE_ABSORB, hit_context)
+		_finish_flight()
+		return
+	_hit_any = true
+	_rock_pending_hits[target_id] = {"count": 1, "next": _rock_clock + ROCK_HIT_INTERVAL, "direction": direction}
+	_apply_direct_damage(target, _rock_tick_damage, direction, hit_knockback)
+	if not _active or not is_instance_valid(target):
+		return
+	var outbound_damage := damage
+	damage = _rock_tick_damage
+	_apply_secondary_effect(target)
+	_apply_fate_on_hit(target)
+	damage = outbound_damage
+	hit_confirmed.emit(target, _rock_tick_damage, critical)
+	_spawn_hit_effect(collider, GOO_HIT_SIZE_TARGET, METAL_SPARK_SIZE_TARGET, hit_context)
+
+
+func _tick_rock_hits() -> void:
+	for target_id: int in _rock_pending_hits.keys():
+		var target := instance_from_id(target_id) as Node3D
+		if not is_instance_valid(target) or not target.is_inside_tree() or target.is_queued_for_deletion() or _target_is_dead(target):
+			_rock_pending_hits.erase(target_id)
+			continue
+		var entry: Dictionary = _rock_pending_hits[target_id]
+		if _rock_clock + 0.000001 < float(entry["next"]):
+			continue
+		entry["count"] = int(entry["count"]) + 1
+		entry["next"] = float(entry["next"]) + ROCK_HIT_INTERVAL
+		if int(entry["count"]) >= _rock_hit_limit:
+			_rock_pending_hits.erase(target_id)
+		_apply_direct_damage(target, _rock_tick_damage, entry["direction"], 0.0)
+		if not _active:
+			return
+		if is_instance_valid(target):
+			hit_confirmed.emit(target, _rock_tick_damage, critical)
+		if not _active:
+			return
+
+
+func _apply_direct_damage(collider: Node, amount: int, hit_direction: Vector3, knockback: float) -> void:
+	var attacker: Node3D = shooter if is_instance_valid(shooter) and not (hits_allies and _is_ally_target(collider)) else null
+	if collider.has_method("take_projectile_damage"):
+		collider.call("take_projectile_damage", amount, critical, hit_direction, bullet_tags, fate_behavior, attacker, knockback)
+	else:
+		if attacker != null and collider.has_method("notify_attacked_by"):
+			collider.call("notify_attacked_by", attacker)
+		collider.call("take_damage", amount, critical, hit_direction, knockback)
+
+
 func _hit_target(collider: Node, hit_context: Dictionary = {}) -> void:
 	if not _active:
 		return
+	if _is_crushing_rock() and not _returning:
+		var target := _rock_target(collider)
+		if target != null:
+			_start_rock_hits(target, collider, hit_context)
+			return
 	if _returning and (damage <= 0 or _return_hit_ids.has(collider.get_instance_id())):
 		return
 	if collider != null:
@@ -447,7 +574,7 @@ func _hit_target(collider: Node, hit_context: Dictionary = {}) -> void:
 			_spawn_hit_effect(collider, GOO_HIT_SIZE_ABSORB, METAL_SPARK_SIZE_ABSORB, hit_context)
 			if bool(fate_behavior.get("rock_shatter", false)):
 				_shatter_rock()
-			_retire()
+			_finish_flight()
 			return
 		if bool(fate_behavior.get("size_growth", false)) and is_instance_valid(source_weapon_tree):
 			var growth := minf(float(fate_behavior.get("max_fate_scale", 3.0)), 1.0 + source_weapon_tree.growth_stacks * float(fate_behavior.get("growth_per_hit", 0.2)))
@@ -459,21 +586,7 @@ func _hit_target(collider: Node, hit_context: Dictionary = {}) -> void:
 		var shock_target := collider as Player3D
 		var root_seconds := float(fate_behavior.get("electric_root_seconds", 0.0))
 		var previous_hp := shock_target.current_hp if shock_target != null and root_seconds > 0.0 else 0
-		if collider.has_method("take_projectile_damage"):
-			# 发射者可能在子弹飞行途中被释放（怪被打死、玩家死亡重生）。
-			# 传参前必须再归一一次：configure 时有效不代表命中时有效
-			# （本函数常见于跨帧飞行后的命中帧）。见 configure 里的注释。
-			var attacker: Node3D = shooter if is_instance_valid(shooter) else null
-			# 敌我通吃命中敌对怪时**不带攻击者**：`Enemy3D` 收到 attacker 会走
-			# `notify_attacked_by()` 建立仇恨，把一个怪当玩家处理会把 AI 目标链搅乱。
-			# 这里只要伤害，不要归属。
-			if hits_allies and _is_ally_target(collider):
-				attacker = null
-			collider.call("take_projectile_damage", damage, critical, direction, bullet_tags, fate_behavior, attacker, hit_knockback)
-		else:
-			if is_instance_valid(shooter) and collider.has_method("notify_attacked_by") and not (hits_allies and _is_ally_target(collider)):
-				collider.call("notify_attacked_by", shooter)
-			collider.call("take_damage", damage, critical, direction, hit_knockback)
+		_apply_direct_damage(collider, damage, direction, hit_knockback)
 		if previous_hp > 0 and is_instance_valid(shock_target) and shock_target.current_hp < previous_hp:
 			shock_target.apply_electric_root(root_seconds)
 		_apply_secondary_effect(collider)
@@ -505,7 +618,7 @@ func _hit_target(collider: Node, hit_context: Dictionary = {}) -> void:
 			return
 		if _is_explosive_payload():
 			_explode()
-		_retire()
+		_finish_flight()
 		return
 
 
@@ -517,7 +630,7 @@ func _hit_surface(normal: Vector3, hit_context: Dictionary = {}) -> void:
 	# 其余所有子弹（玩家武器、Boss、既有敌人）行为逐字不变。
 	if bool(fate_behavior.get("shatter_on_wall", false)):
 		_shatter_into_ring()
-		_retire()
+		_finish_flight()
 		return
 	if bool(fate_behavior.get("rock_shatter", false)):
 		_shatter_rock()
@@ -549,7 +662,7 @@ func _hit_surface(normal: Vector3, hit_context: Dictionary = {}) -> void:
 		VfxPool3D.FX01_METAL_SPARK_HIT, global_position, bullet_color,
 		METAL_SPARK_SIZE_SURFACE, hit_context
 	)
-	_retire()
+	_finish_flight()
 
 
 ## 处理投射物出生帧的物理重叠。
@@ -591,6 +704,13 @@ func _resolve_initial_overlap() -> bool:
 		if fate_behavior.has("floor_burst"):
 			return false
 		if collider.has_method("take_projectile_damage") or collider.has_method("take_damage"):
+			if _is_crushing_rock() and _rock_target(collider) != null:
+				if collider is PhysicsBody3D:
+					_add_tracked_collision_exception(collider as PhysicsBody3D)
+				_hit_target(collider, {"position": global_position, "normal": Vector3.ZERO})
+				if not _active or _rock_waiting:
+					return true
+				continue
 			_hit_target(collider, {"position": global_position, "normal": Vector3.ZERO})
 			return true
 	return false
@@ -948,8 +1068,14 @@ func _collision_scale_factor() -> float:
 ## 弹种 × 命运：视觉与碰撞共用的底座倍率。
 func _base_scale_factor() -> float:
 	var scale_factor := 1.55 if bullet_tags.has("balloon") else 1.0
-	scale_factor *= clampf(float(fate_behavior.get("fate_scale", 1.0)), 0.35, 4.0)
-	return scale_factor
+	return scale_factor * _fate_size_multiplier()
+
+
+func _fate_size_multiplier() -> float:
+	var size := float(fate_behavior.get("fate_scale", 1.0))
+	if bool(fate_behavior.get("rock_projectile", false)):
+		size *= float(fate_behavior.get("rock_size_multiplier", 1.0))
+	return clampf(size, 0.35, 4.0)
 
 
 func _uses_enchantment_body_visual() -> bool:
@@ -1020,7 +1146,7 @@ func _begin_return() -> void:
 	if _returning:
 		return
 	if not is_instance_valid(shooter):
-		_retire()
+		_finish_flight()
 		return
 	_returning = true
 	_lifetime = 0.0
@@ -1086,7 +1212,7 @@ func _tick_turret(delta: float) -> void:
 		global_position = global_position.move_toward(shooter.global_position + Vector3(0, 0.72, 0), speed * delta)
 	_turret_remaining -= delta
 	if _turret_remaining <= 0.0:
-		_retire()
+		_finish_flight()
 		return
 	_turret_shot_timer -= delta
 	if _turret_shot_timer > 0.0:
@@ -1379,11 +1505,20 @@ func get_orientation_snapshot() -> Dictionary:
 	return snapshot
 
 
+## Keep the pooled node reserved until already-contacted targets finish their hits.
+func _finish_flight() -> void:
+	if not _is_crushing_rock() or _rock_pending_hits.is_empty():
+		_retire()
+		return
+	_rock_waiting = true
+	_stop_flight_presentation()
+
+
 func cancel() -> void:
 	_retire()
 
 
-func _retire() -> void:
+func _stop_flight_presentation() -> void:
 	_enchant_attributes.clear()
 	if _enchantment_visuals != null:
 		_enchantment_visuals.reset()
@@ -1391,20 +1526,27 @@ func _retire() -> void:
 		_carried_weapon.queue_free()
 		_carried_weapon.set_process(false)
 		_carried_weapon.visible = false
-	_carried_weapon = null
-	if not _active:
-		return
-	_active = false
-	if is_in_group("hostile_projectile_3d"):
-		remove_from_group("hostile_projectile_3d")
-	if not _hit_any and is_instance_valid(source_weapon_tree):
-		source_weapon_tree.record_growth_result(false, fate_behavior)
+		_carried_weapon = null
 	velocity = Vector3.ZERO
 	visible = false
 	if _visual != null and _visual.has_method("deactivate"):
 		_visual.call("deactivate")
 	if _collision_shape != null:
 		_collision_shape.set_deferred("disabled", true)
+
+
+func _retire() -> void:
+	if not _active:
+		return
+	if not _rock_waiting:
+		_stop_flight_presentation()
+	_rock_pending_hits.clear()
+	_rock_target_ids.clear()
+	_active = false
+	if is_in_group("hostile_projectile_3d"):
+		remove_from_group("hostile_projectile_3d")
+	if not _hit_any and is_instance_valid(source_weapon_tree):
+		source_weapon_tree.record_growth_result(false, fate_behavior)
 	process_mode = Node.PROCESS_MODE_DISABLED
 	if retired.get_connections().is_empty():
 		queue_free()

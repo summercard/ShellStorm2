@@ -1,10 +1,15 @@
 class_name VfxZombieGooDeath3D
 extends VfxEffectBase3D
 ## FX01-19: two intact library scenes; this host owns placement, lighting and timing.
-const TOTAL_SEC := 1.35
+const POOL_RECESSION_START_SEC := 1.35
 const POOL_DELAY_SEC := 0.16
 const POOL_SOURCE_SEC := 7.0
-const POOL_CLOCK := POOL_SOURCE_SEC / (TOTAL_SEC - POOL_DELAY_SEC)
+const POOL_CLOCK := POOL_SOURCE_SEC / (POOL_RECESSION_START_SEC - POOL_DELAY_SEC)
+# Last opaque plateau in the imported pool; its original terminal fade is replaced by the host tail.
+const POOL_HOLD_SOURCE_SEC := 6.57
+const POOL_END_SCALE := 0.12
+# Leave 1 mm above the floor, so the depth buffer cannot hard-cut the fade.
+const POOL_SINK_M := 0.024
 const SPREAD_GAIN := 1.30
 const BURST_PARTICLE_GAIN := 2.0
 const BODY_SCALE := 0.85 * SPREAD_GAIN
@@ -18,11 +23,18 @@ const DROPLET_EMITTER := ^"Source/Droplets/Particle_1"
 
 @export var droplet_size_gain := 1.0
 @export var droplet_lifetime_gain := 1.0
+@export_range(0.0, 3.0, 0.05) var pool_recession_sec := 0.0
 
 @onready var _burst: Node3D = $LibraryBurst
 @onready var _pool: Node3D = $LibraryPool
 var _pool_started := false
 var _pool_source_time := 0.0
+var _pool_rest_position := Vector3.ZERO
+var _pool_rest_scale := 1.0
+var _pool_tail_tints: Dictionary[ShaderMaterial, Color] = {}
+var _pool_tail_batches: Dictionary[MultiMesh, Array] = {}
+var _pool_tail_meshes: Dictionary[MeshInstance3D, Transform3D] = {}
+var _pool_tail_started := false
 var _prewarm := false
 
 func _enter_tree() -> void:
@@ -71,18 +83,21 @@ static func _scale_curve_values(authored: Dictionary, gain: float) -> Dictionary
 	return scaled
 
 func _on_activate(world_pos: Vector3, _color: Color, size: float, context: Dictionary) -> void:
-	lifetime = TOTAL_SEC
+	_prewarm = bool(context.get("prewarm", false))
+	lifetime = POOL_RECESSION_START_SEC + (0.0 if _prewarm else pool_recession_sec)
+	_reset_pool_tail()
 	_pool_started = false
 	_pool_source_time = 0.0
-	_prewarm = bool(context.get("prewarm", false))
 	_burst.hide()
 	_pool.hide()
 	if _prewarm:
 		return
 	var floor_y := float(context.get("floor_y", world_pos.y - CALLER_LIFT_M))
 	_burst.scale = Vector3.ONE * maxf(0.0001, size * BODY_SCALE)
-	_pool.scale = Vector3.ONE * maxf(0.0001, size * POOL_SCALE)
-	_pool.global_position = Vector3(world_pos.x, floor_y + FLOOR_LIFT_M, world_pos.z)
+	_pool_rest_scale = maxf(0.0001, size * POOL_SCALE)
+	_pool_rest_position = Vector3(world_pos.x, floor_y + FLOOR_LIFT_M, world_pos.z)
+	_pool.scale = Vector3.ONE * _pool_rest_scale
+	_pool.global_position = _pool_rest_position
 	_burst.show()
 	_burst.call("play_exact", SEED)
 
@@ -98,12 +113,64 @@ func _on_tick(elapsed: float, _total: float) -> void:
 		_pool_source_time = 1.0 / 60.0
 		# Keep all six original particles and their curves. Suppress a second cycle only.
 		_pool.call("stop_exact", false)
-	var goal := minf(POOL_SOURCE_SEC, (elapsed - POOL_DELAY_SEC) * POOL_CLOCK)
+	var source_end := POOL_HOLD_SOURCE_SEC if pool_recession_sec > 0.0 else POOL_SOURCE_SEC
+	var goal := minf(source_end, (elapsed - POOL_DELAY_SEC) * POOL_CLOCK)
 	if goal > _pool_source_time:
 		_pool.call("advance_exact", goal - _pool_source_time)
 		_pool_source_time = goal
+	if pool_recession_sec > 0.0 and elapsed >= POOL_RECESSION_START_SEC:
+		_recede_pool(clampf((elapsed - POOL_RECESSION_START_SEC) / pool_recession_sec, 0.0, 1.0))
+
+func _recede_pool(progress: float) -> void:
+	# Freeze the six original draws and scale each basis without moving its own pivot.
+	if not _pool_tail_started:
+		_pool_tail_started = true
+		for node in _pool.find_children("*", "GeometryInstance3D", true, false):
+			var draw := node as GeometryInstance3D
+			if not draw.visible:
+				continue
+			if draw is MultiMeshInstance3D:
+				var batch: MultiMesh = draw.multimesh
+				var transforms: Array[Transform3D] = []
+				for i in batch.visible_instance_count:
+					transforms.append(batch.get_instance_transform(i))
+				_pool_tail_batches[batch] = transforms
+			elif draw is MeshInstance3D:
+				var mesh := draw as MeshInstance3D
+				_pool_tail_meshes[mesh] = mesh.transform
+			var material := draw.material_override as ShaderMaterial
+			if material != null:
+				var tint: Variant = material.get_shader_parameter("tint")
+				if tint is Color:
+					_pool_tail_tints[material] = tint
+	var eased := smoothstep(0.0, 1.0, progress)
+	var scale_factor := lerpf(1.0, POOL_END_SCALE, eased)
+	for batch in _pool_tail_batches:
+		var transforms: Array = _pool_tail_batches[batch]
+		for i in transforms.size():
+			var at: Transform3D = transforms[i]
+			at.basis = at.basis.scaled(Vector3.ONE * scale_factor)
+			batch.set_instance_transform(i, at)
+	for draw in _pool_tail_meshes:
+		var at := _pool_tail_meshes[draw]
+		at.basis = at.basis.scaled(Vector3.ONE * scale_factor)
+		draw.transform = at
+	_pool.global_position = _pool_rest_position - Vector3.UP * (POOL_SINK_M * eased)
+	for material in _pool_tail_tints:
+		var tint := _pool_tail_tints[material]
+		tint.a *= 1.0 - eased
+		material.set_shader_parameter("tint", tint)
+
+func _reset_pool_tail() -> void:
+	for material in _pool_tail_tints:
+		material.set_shader_parameter("tint", _pool_tail_tints[material])
+	_pool_tail_tints.clear()
+	_pool_tail_batches.clear()
+	_pool_tail_meshes.clear()
+	_pool_tail_started = false
 
 func _on_lifetime_expired() -> void:
+	_reset_pool_tail()
 	LibraryVfxAdapter3D.stop_visual(_burst)
 	LibraryVfxAdapter3D.stop_visual(_pool)
 	_pool_started = false

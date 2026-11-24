@@ -5,6 +5,13 @@ uniform int role = 1;
 uniform float red_black = 0.0;
 uniform float camera_cutaway = 0.0;
 instance uniform float hit_flash : hint_range(0.0, 1.0) = 0.0;
+instance uniform float slam_charge : hint_range(0.0, 0.25) = 0.0;
+instance uniform vec3 slam_visual_offset = vec3(0.0);
+
+void vertex() {
+	// Render-only world-space tremor; sockets and damage shapes stay on the authored pose.
+	VERTEX += (inverse(MODEL_MATRIX) * vec4(slam_visual_offset, 0.0)).xyz;
+}
 
 void fragment() {
 	if (camera_cutaway > 0.0) {
@@ -43,4 +50,5 @@ void fragment() {
 		EMISSION = mix(original * 1.9, lamp, red_black);
 	}
 	EMISSION += vec3(1.0, 0.02, 0.01) * hit_flash * 1.8;
+	EMISSION += vec3(1.0, 0.40, 0.08) * slam_charge;
 }

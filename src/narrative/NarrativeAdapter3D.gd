@@ -1234,7 +1234,7 @@ func _actor_say(params: Dictionary) -> Dictionary:
 		metadata["presentation_id"] = _dialogue_presentation_id
 	metadata["guidance_highlight"] = _dialogue_guidance_highlight
 	var run_id := _say_dialogue_on_actor(actor, who, text, hold, metadata)
-	if not _accept_dialogue_run(run_id):
+	if not _accept_dialogue_run(run_id, bool(params.get("wait", false))):
 		return _failed("actor.say：演员『%s』拒绝脚本台词或底栏未接管。" % who)
 	_bind_dialogue_carrier(DialogueUI, "subtitle", text, run_id)
 	return _done(Callable(self, "_restore_dialogue"))

@@ -95,6 +95,24 @@ func _apply_hit_flash(strength: float) -> void:
 		mesh.set_instance_shader_parameter("hit_flash", clampf(strength, 0.0, 1.0))
 
 
+func set_slam_warning(elapsed: float, windup: float) -> void:
+	if not grapple:
+		return
+	var charge := 0.0
+	var motion := Vector3.ZERO
+	if elapsed >= 0.0 and elapsed < windup:
+		var progress := elapsed / windup
+		var reduced := bool(ProjectSettings.get_setting("accessibility/reduce_motion", false))
+		var phase := TAU * (2.4 * elapsed + 1.3 * elapsed * progress)
+		var pulse := 0.65 if reduced else 0.20 + 0.80 * (0.5 - cos(phase) * 0.5)
+		charge = lerpf(0.08, 0.23, progress) * pulse
+		if not reduced:
+			motion = Vector3(sin(TAU * 9.0 * elapsed), 0.0, sin(TAU * 11.0 * elapsed)) * (0.025 * progress)
+	for mesh: MeshInstance3D in _meshes:
+		mesh.set_instance_shader_parameter("slam_charge", charge)
+		mesh.set_instance_shader_parameter("slam_visual_offset", motion)
+
+
 func play(clip: StringName, speed := 1.0, at := 0.0) -> void:
 	if not animation.has_animation(clip):
 		push_error("Platform Sentinel missing clip %s/%s" % [name, clip])
@@ -109,6 +127,12 @@ func play(clip: StringName, speed := 1.0, at := 0.0) -> void:
 	if is_zero_approx(speed):
 		animation.pause()
 	sync_rig()
+
+
+func play_story_strike(speed: float) -> void:
+	stop_standby()
+	# Let AnimationPlayer blend and advance normally; seek/advance(0) would snap to the new pose.
+	animation.play("attack_grapple_slam", 0.18, speed)
 
 
 func delay_motion(seconds: float) -> void:

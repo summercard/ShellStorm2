@@ -1,3 +1,13 @@
+- 2026-11-24 · FATE-RULES / WEAPON-COMBAT · [滚石弹穿敌碾压](../14_技术施工_命运塔罗牌组.md#力量滚石弹2026-11-24)。正位每目标独立排定 0.3 秒多段伤害，尺寸每 +20% 加一段且单段加 20% 基础伤害，第二张正位按当前尺寸 ×1.60；逆位、射速/弹速惩罚和存档格式不变。同步游戏内容库《命运卡》第 13 行、特效分账本《资产主表》第 41 行和域变更日志；不替换 Prefab。隔离无头 `verify_star_physical_mounts` 94 项、`verify_bullet_vfx_profiles` 70 项及 `verify_fate_card_purchase_flow` 通过；命运武器全卡专项仍有改前已复现的 3 条高塔断言失败，整局真实渲染未验。
+
+- 2026-11-24 · NARRATIVE-TRIGGER / BASE-NPC / WORLD-ENTRY · [主线3.1 99F灯光双分支](2026-11-24_main_story_031_light_branches.md)。主动开灯与摸黑深入两路均由绿苔主动会合并汇入同一份 15 句对白，共用同一剧本 ID 与完成提交、不新增存档字段；导演新增按 `branch` 过滤 cue，`actor.say wait=true` 成为真实对白屏障；绿苔增加一次性演出手电与开关按压手势。修掉基地墙灯启动协程错误 await 异步返回值（`RoomLightSwitch3D` 永久 `transitioning`）与剧情走位误用刷怪可达性网格两处缺陷。正式 JSON `duration=62.0`，60.55 由真实 `player.walk_to` 走到 `briefing_finish`（4.0s / 3.2 m·s⁻¹），60.65 还镜、61.75 完成、61.85 归还、62.0 结束。`verify_main_story_narrative` 需专用隔离 runner（`scripts/run_narrative_presentation_qa.py`）设置 `SHELLSTORM_MAIN_STORY_ISOLATED=1`，直接走通用套件会被前置守卫拒绝并 `quit(2)`；本轮未跑通该专项。
+
+- 2026-11-24 · VFX-POOL · 僵尸死亡特效升 v005。`VfxZombieGooDeath3D` 新增 `pool_recession_sec`：原 1.35 s 不变，其后 1.20 s 让地上绿浆继续铺展并缓慢下沉淡出（`POOL_HOLD_SOURCE_SEC = 6.57`、末缩放 0.12、离地 1 mm 防深度硬切），预制体 `lifetime` 1.35 → 2.55、`asset_version` v004 → v005。特效账本域日志 v0.1.64。
+
+- 2026-11-24 · WORLD-BOSS · 远征01武装平台掌拍序列重构。`reach`/`grab`/`throw` 三段改为 `strike`/`wait_strike`：后臂按 `REAR_RISE_SPEED = 1.10` 播 `activate_grapple`，`can_advance_takeover()` 增加「后臂抬到位」「代理已飞离」两道屏障；`PlatformSentinelUnit3D` 增加 `set_slam_warning()` 与 `play_story_strike()`；`Dungeon3D` 血条容器最小高度。镜头侧 `CAMERA_EXPEDITION_01_BOSS_DISTANCE_OFFSET_M` 由固定 1.0 m 改为 `22 × DEBUG_CAMERA_TRAILING_STEP_M`，并新增 4.0 s 渐进复位，胜负切换不再瞬移。**`verify_expedition01_platform_sentinel` 未通过**：`PLATFORM_TAKEOVER_ORDER cut=0.900`，断言要求 `0.95–1.12`，早 3 个物理帧。
+
+- 2026-11-24 · VFX-POOL · 新增闪光爆炸 `VFX-FLASH-EXPLOSION-YELLOW-3D` v001。库源 `UnityVFXLibrary/.../FlashExplosion/vfx_flash_explosion_yellow_source.tscn` 原样移植，经 `LibraryVfxAdapter3D` 包装，由武装平台掌拍落点借出；5 张 `.res` 贴图与 1 个音效随件入库。**该 ID 尚未登记特效账本与 `ledger_split_baseline.json`，也无设计/开发记录**。
+
 - 2026-11-23 · WORLD-SECRET · [支线回退隐藏门与常开入口](2026-11-23_secret_branch_return_doors.md)。主图 `S1–S4` 改无板常开门，首间新增 `E0/E1` 回退门，末端 `R0/R1` 改按真实地砖墙位选点；专项 2 条已知红未修。
 
 - 2026-11-22 · PERF · [近期间歇性卡顿调查结论](../13_技术施工_性能优化与热管理.md)。进房调用链分段、候选贡献项与验收口径；未改生产代码、未新增采样。

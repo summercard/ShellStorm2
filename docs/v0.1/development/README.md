@@ -1,3 +1,4 @@
+- NARRATIVE-TRIGGER / BASE-NPC / WORLD-ENTRY · [主线3.1 99F灯光双分支](2026-11-24_main_story_031_light_branches.md)。主动开灯与摸黑深入两路均由绿苔主动会合并汇入同一主线；同步真实墙灯启动、演出手电、分支cue过滤和验收遗留。
 - WORLD-SECRET · [支线回退隐藏门与常开入口](2026-11-23_secret_branch_return_doors.md)。主线入口改无板常开门，首间新增回退门，末端返程门按真实地砖墙位选点。
 - PERF · [近期间歇性卡顿调查结论](../13_技术施工_性能优化与热管理.md)。进房调用链分段与候选贡献项，未改生产代码。
 - ASSET-PIPELINE / WORLD-PLAN · [远征01棋盘地砖补缝](2026-11-22_exp01_floor_flush.md)。C01/C02 底板覆盖 5m 网格，正式房间引用及场景账本已同步。

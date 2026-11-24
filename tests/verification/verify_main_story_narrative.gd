@@ -38,8 +38,9 @@ func _ready() -> void:
 		return
 	_check_files_exist()
 	_check_json_contracts()
-	_check_source_contracts()
-	_check_forbidden_scope_mentions()
+	if OS.get_environment("SHELLSTORM_NARRATIVE_CASE") != "base_branches":
+		_check_source_contracts()
+		_check_forbidden_scope_mentions()
 	await _check_runtime_contracts()
 	_report()
 
@@ -135,16 +136,19 @@ func _check_runtime_contracts() -> void:
 	var old_data := BaseManager.data
 	var old_path := BaseManager.save_path
 	BaseManager.data = BaseData.new()
-	BaseManager.save_path = "user://narrative_runtime.json"
+	BaseManager.save_path = "user://narrative_runtime_%d.json" % Time.get_ticks_usec()
 	BaseManager.replace_narrative_history_for_test({})
 	NarrativeDirector.reset_for_test()
 	NarrativeDirector.set_process(false)
 	# 两个重场景可由Runner分进程验收，每个进程仍使用真实正式装配链。
 	var runtime_case := OS.get_environment("SHELLSTORM_NARRATIVE_CASE")
-	if runtime_case not in ["boss", "boss_full"]:
-		await _check_base_runtime()
-	if runtime_case != "base":
-		await _check_boss_runtime()
+	if runtime_case == "base_branches":
+		await _check_base_branches()
+	else:
+		if runtime_case not in ["boss", "boss_full"]:
+			await _check_base_runtime()
+		if runtime_case != "base":
+			await _check_boss_runtime()
 	NarrativeDirector.reset_for_test()
 	DialogueUI.close()
 	BaseManager.data = old_data
@@ -175,6 +179,86 @@ func _make_host(scene_path: String) -> TowerDescent3D:
 	NarrativeDirector.abort("runtime_fixture_ready")
 	NarrativeDirector.bind_dungeon_for_test(host)
 	return host
+
+
+func _check_base_branches() -> void:
+	var host := await _make_host("res://scenes/TowerDescent3D.tscn")
+	var controller := host.get_main_story_controller()
+	var room := host.get_main_story_room("facility") as DungeonRoom3D
+	var green := host.find_npc("npc_base99_green") as NpcCharacter3D
+	if room == null or green == null or controller == null:
+		_assert(false, "正式基地双分支的房间、绿苔和控制器均存在")
+		return
+	host._current_room_id = "facility"
+	var wall_switch := room.get_narrative_light_switch("east")
+	_assert(wall_switch != null, "东侧真实灯开关存在")
+	if wall_switch == null:
+		return
+	BaseManager.replace_narrative_history_for_test({MainStoryChapter3D.BASE_OPENING_GUIDE_ID: {"completed_count": 1}})
+	_assert(room.set_room_light_on(false), "真实基地灯关闭")
+	host.player.global_position = wall_switch.to_global(Vector3(0.0, 0.05, -1.4))
+	controller._process(0.0)
+	_assert(not NarrativeDirector.is_playing(), "关灯时留在开关附近不会触发摸黑分支")
+	_assert(wall_switch.toggle_light() and room.is_room_light_starting(), "真实开关进入分段点灯")
+	controller._process(0.0)
+	_assert(NarrativeDirector.active_id() == MainStoryChapter3D.BRIEFING_ID, "玩家不接近绿苔也进入3.1")
+	NarrativeDirector.call("_process", 2.0)
+	_assert(NarrativeDirector.is_player_input_locked() and not _did_dispatch("camera.shot"), "亮灯启动期间锁住玩家，不提前扫镜")
+	await _run_base_branch(host, controller, green, room, false)
+	controller._process(0.0)
+	_assert(not NarrativeDirector.is_playing(), "同一存档不重播3.1")
+	BaseManager.replace_narrative_history_for_test({MainStoryChapter3D.BASE_OPENING_GUIDE_ID: {"completed_count": 1}})
+	room.set_room_light_on(false)
+	host.player.global_position = room.to_global(Vector3(8.0, 0.05, -2.5))
+	host.player.set_physics_process(false)
+	controller._process(0.0)
+	_assert(NarrativeDirector.active_id() == MainStoryChapter3D.BRIEFING_ID, "没开灯、越过开关区就自动进入3.1")
+	NarrativeDirector.call("_process", 0.12)
+	_assert(NarrativeDirector.is_player_input_locked() and _did_dispatch("story.briefing.dark_meet"), "摸黑分支先停住玩家，再派发真实绿苔步行")
+	NarrativeDirector.abort("branch_abort_fixture")
+	_assert(not NarrativeDirector.is_player_input_locked() and not green.is_scripted_appearance() and not BaseManager.has_narrative_completed(MainStoryChapter3D.BRIEFING_ID), "中止释放演员与输入且不写完成")
+	controller._process(0.0)
+	await _run_base_branch(host, controller, green, room, true)
+	host.queue_free()
+	await get_tree().process_frame
+
+
+func _run_base_branch(host: TowerDescent3D, controller: MainStoryChapter3D, green: NpcCharacter3D, room: DungeonRoom3D, dark: bool) -> void:
+	var label := "摸黑" if dark else "主动开灯"
+	var player_start := host.player.global_position
+	var saw_flashlight := false
+	var saw_lights_starting := false
+	var saw_sweep := false
+	var saw_first_shared_line := false
+	var deadline := Time.get_ticks_msec() + 55000
+	host.player.set_physics_process(true)
+	while NarrativeDirector.is_playing() and Time.get_ticks_msec() < deadline:
+		await get_tree().physics_frame
+		var delta := get_physics_process_delta_time()
+		if saw_first_shared_line and controller.should_advance_narrative():
+			delta = 0.75
+		NarrativeDirector.call("_process", delta)
+		saw_flashlight = saw_flashlight or is_instance_valid(green.get("_scripted_flashlight"))
+		saw_lights_starting = saw_lights_starting or room.is_room_light_starting()
+		if not saw_sweep and _did_dispatch("camera.shot"):
+			saw_sweep = true
+			_assert(room.is_room_light_on() and not room.is_room_light_starting(), label + "：真实灯全部亮稳后才扫镜")
+		if not saw_first_shared_line and _did_dispatch("6.40 actor.say"):
+			saw_first_shared_line = true
+			_assert(saw_sweep and green.global_position.distance_to(host.player.global_position) < 1.6, label + "：扫镜后绿苔到位再接共用对白")
+			_assert(host.player.global_position.distance_to(player_start) < 0.3, label + "：玩家不必主动靠近")
+	if NarrativeDirector.is_playing():
+		print("BASE_BRANCH_TIMEOUT ", label, " t=", NarrativeDirector.active_time(), " light=", room.is_room_light_on(), " starting=", room.is_room_light_starting(), " npc=", green.global_position, " controller=", controller.get_snapshot(), " log=", NarrativeDirector.dispatch_log())
+	_assert(saw_flashlight == dark and _did_dispatch("story.briefing.light_up") == dark, label + "：仅摸黑轨播放手电亮起及绿苔开灯")
+	_assert(saw_lights_starting and saw_sweep and saw_first_shared_line, label + "：真实点灯、扫镜和共用对白全部发生")
+	_assert(BaseManager.has_narrative_completed(MainStoryChapter3D.BRIEFING_ID), label + "：共用剧情正常完成并写历史")
+	_assert(not green.is_scripted_appearance() and not is_instance_valid(green.get("_scripted_flashlight")) and not NarrativeDirector.is_player_input_locked(), label + "：收尾释放绿苔、手电、玩家")
+	if NarrativeDirector.is_playing():
+		NarrativeDirector.abort("branch_fixture_timeout")
+
+
+func _did_dispatch(verb: String) -> bool:
+	return NarrativeDirector.dispatch_log().any(func(entry: String) -> bool: return entry.contains(verb))
 
 
 func _check_base_runtime() -> void:

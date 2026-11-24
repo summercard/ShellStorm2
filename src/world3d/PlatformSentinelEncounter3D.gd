@@ -42,11 +42,11 @@ const MONITOR_VISUAL := preload("res://assets/art/enemies/bosses/enm_boss_monito
 const REAR := 2
 const FULL_DEPLOY := 3.15
 const DEFEAT_BEAT := 0.55
-const GRAB_POSE := 1.145
+const REAR_RISE_SPEED := 1.10
+const STORY_STRIKE_SPEED := 1.65
+const STRIKE_CONTACT_POSE := SLAM_CONTACT_POSE
 const MONITOR_MARK := Vector3(-7.15, 0.08, -8.55)
-const THROW_DURATION := 0.78
-const CARRY_LIFT_POSE := 1.075
-const THROW_LOAD_POSE := 1.09
+const STRIKE_DURATION := 0.78
 
 enum Stage { DORMANT, TAKEOVER, DEPLOY, COMBAT, COLLAPSE, CORE, WON }
 enum Barrage { NONE, BURST, CROSS, VOLLEY }
@@ -93,10 +93,11 @@ var _waiting_rear_screens := false
 var _stairs_broken := false
 var _sent_racks := false
 var _proxy: Node3D
-var _proxy_attached := false
-var _proxy_grip_offset := Transform3D.IDENTITY
 var _arm_motion: Tween
 var _proxy_motion: Tween
+var _strike_pose_started := false
+var _waiting_strike := false
+var _rear_raise_end := 0.0
 var _voice: Node
 var _deployment_started_at := -1.0
 var _arm_tile_drop_indices: Array[int] = []
@@ -173,26 +174,10 @@ func run_cue(cue: String, params: Dictionary) -> bool:
 			_waiting_rear_screens = true
 		"rear":
 			_start_rear()
-		"reach":
-			_start_rear()
-			AudioManager.play_sfx("door_open", -8.0, 0.71)
-			_sample_rear_pose(0.0)
-			_arm_motion = create_tween()
-			_arm_motion.tween_method(_sample_rear_pose, 0.0, GRAB_POSE, 1.17).set_trans(Tween.TRANS_SINE)
-		"grab":
-			if _arm_motion != null:
-				_arm_motion.kill()
-			_sample_rear_pose(GRAB_POSE)
-			AudioManager.play_sfx("melee_impact", -9.0, 0.78)
-			if is_instance_valid(_proxy):
-				_proxy_grip_offset = _grip_frame().affine_inverse() * _proxy.global_transform
-				_proxy_attached = true
-			_arm_motion = create_tween()
-			_arm_motion.tween_method(_sample_rear_pose, GRAB_POSE, CARRY_LIFT_POSE, 0.78).set_trans(Tween.TRANS_SINE).set_delay(0.10)
-			_arm_motion.tween_interval(0.18)
-			_arm_motion.tween_method(_sample_rear_pose, CARRY_LIFT_POSE, THROW_LOAD_POSE, 0.79).set_trans(Tween.TRANS_SINE)
-		"throw":
-			_throw_monitor()
+		"strike":
+			_start_monitor_strike()
+		"wait_strike":
+			_waiting_strike = true
 		"ignite":
 			_screen_wake_at = _clock
 			deck.wake_screens(0.0)
@@ -202,11 +187,18 @@ func run_cue(cue: String, params: Dictionary) -> bool:
 	return true
 
 func can_advance_takeover() -> bool:
-	if stage != Stage.TAKEOVER or not _waiting_rear_screens:
+	if stage != Stage.TAKEOVER:
 		return true
-	if not deck.rear_screens_are_retracted():
+	if _waiting_rear_screens:
+		if not deck.rear_screens_are_retracted():
+			return false
+		_waiting_rear_screens = false
+	if _clock < _rear_raise_end:
 		return false
-	_waiting_rear_screens = false
+	if _waiting_strike:
+		if is_instance_valid(_proxy):
+			return false
+		_waiting_strike = false
 	return true
 
 
@@ -214,8 +206,11 @@ func _start_rear() -> void:
 	if _rear_started:
 		return
 	_rear_started = true
-	grapples[REAR].play("activate_grapple", 1.10)
-	_fx(VfxPool3D.FX01_METAL_SPARK_HIT, grapples[REAR].global_position + Vector3.UP * 5.0, 2.5)
+	_strike_pose_started = false
+	var arm := grapples[REAR]
+	_rear_raise_end = _clock + arm.animation.get_animation("activate_grapple").length / REAR_RISE_SPEED
+	arm.play("activate_grapple", REAR_RISE_SPEED)
+	_fx(VfxPool3D.FX01_METAL_SPARK_HIT, arm.global_position + Vector3.UP * 5.0, 2.5)
 
 func _spawn_proxy(proxy_scale := Vector3.ONE) -> void:
 	_clear_proxy()
@@ -226,53 +221,40 @@ func _spawn_proxy(proxy_scale := Vector3.ONE) -> void:
 	(_proxy as MonitorBossPresentation).sync_context({"action_id": "stun_loop", "time": 0.22}, false)
 
 
-func _sample_rear_pose(at: float) -> void:
-	grapples[REAR].play("attack_grapple_slam", 0.0, at)
-	if _proxy_attached and is_instance_valid(_proxy):
-		_proxy.global_transform = _grip_frame() * _proxy_grip_offset
-		_proxy.position.y = maxf(_proxy.position.y, MONITOR_MARK.y)
-
-
-func _grip_frame() -> Transform3D:
-	var arm := grapples[REAR]
-	var left := arm.socket("grip_contact_l")
-	var right := arm.socket("grip_contact_r")
-	var palm := arm.socket("palm_contact_ll")
-	return Transform3D(palm.global_basis.orthonormalized(), (left.global_position + right.global_position) * 0.5)
-
-
-func _throw_monitor() -> void:
-	if not is_instance_valid(_proxy) or _proxy_motion != null:
+func _start_monitor_strike() -> void:
+	if not is_instance_valid(_proxy) or _proxy_motion != null or _strike_pose_started:
 		return
-	if not _proxy_attached:
-		_clear_proxy() # Skip/fallback does not show a throw from a stationary actor.
-		return
+	_strike_pose_started = true
 	if _arm_motion != null:
 		_arm_motion.kill()
-	var attack_time := grapples[REAR].animation.current_animation_position
+	var arm := grapples[REAR]
+	arm.play_story_strike(STORY_STRIKE_SPEED)
 	_arm_motion = create_tween()
-	_arm_motion.tween_method(_sample_rear_pose, attack_time, SLAM_CONTACT_POSE, 0.16).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	_arm_motion.tween_callback(_release_monitor)
-	_arm_motion.tween_method(_sample_rear_pose, SLAM_CONTACT_POSE, SLAM_HOLD_POSE, 0.15)
-	_arm_motion.tween_method(_sample_rear_pose, SLAM_HOLD_POSE, SLAM_CLIP_END, 0.52).set_trans(Tween.TRANS_SINE)
-	_arm_motion.tween_callback(func() -> void: grapples[REAR].play("idle_grapple"))
+	_arm_motion.tween_interval(STRIKE_CONTACT_POSE / STORY_STRIKE_SPEED)
+	_arm_motion.tween_callback(_strike_monitor)
+	_arm_motion.tween_interval((arm.animation.get_animation("attack_grapple_slam").length - STRIKE_CONTACT_POSE) / STORY_STRIKE_SPEED)
+	_arm_motion.tween_callback(func() -> void: arm.play("idle_grapple"))
 
 
-func _release_monitor() -> void:
-	if not is_instance_valid(_proxy) or not _proxy_attached:
+func _strike_monitor() -> void:
+	if not is_instance_valid(_proxy):
 		return
 	AudioManager.play_sfx("melee_impact", -2.0, 0.69)
 	_fx(VfxPool3D.FX01_METAL_SPARK_HIT, _proxy.global_position + Vector3.UP, 1.8)
-	_proxy_attached = false
 	var from := _proxy.position
 	var start_basis := _proxy.basis
 	var out := Vector3(-9.8, -14.0, -22.0)
+	# Clear the rear lip before falling; don't pass through the solid deck on the way out.
+	var clear_edge_at := clampf(inverse_lerp(from.z, out.z, -DECK_HALF_WIDTH - 1.1), 0.0, 0.95)
 	_proxy_motion = create_tween()
 	_proxy_motion.tween_method(func(t: float) -> void:
+		if not is_instance_valid(_proxy):
+			return
+		var fall := clampf(inverse_lerp(clear_edge_at, 1.0, t), 0.0, 1.0)
 		_proxy.position = from.lerp(out, t)
-		_proxy.position.y = lerpf(from.y, out.y, t * t) + 4.0 * t * (1.0 - t)
+		_proxy.position.y = lerpf(from.y, out.y, fall * fall) + 4.0 * t * (1.0 - t)
 		_proxy.basis = Basis.from_euler(Vector3(2.4, -0.8, 2.0) * t) * start_basis,
-		0.0, 1.0, THROW_DURATION)
+		0.0, 1.0, STRIKE_DURATION)
 	_proxy_motion.tween_callback(_clear_proxy)
 
 
@@ -280,10 +262,10 @@ func _clear_proxy() -> void:
 	if _proxy_motion != null:
 		_proxy_motion.kill()
 		_proxy_motion = null
-	_proxy_attached = false
+	_strike_pose_started = false
 	if is_instance_valid(_proxy):
 		_proxy.queue_free()
-	_proxy = null
+		_proxy = null
 
 
 func _reset_takeover() -> void:
@@ -293,6 +275,8 @@ func _reset_takeover() -> void:
 	_arm_motion = null
 	_rear_started = false
 	_waiting_rear_screens = false
+	_waiting_strike = false
+	_rear_raise_end = 0.0
 	_takeover_requested = false
 	_screen_wake_at = -1.0
 	_deployment_started_at = -1.0
@@ -549,7 +533,6 @@ func _start_slam() -> bool:
 		_prefer_palm = false
 		_arm_clock = 0.0
 		_play_slam_pose()
-		_fx(VfxPool3D.FX01_METAL_SPARK_HIT, _palm_world(index), 0.75)
 		AudioManager.play_sfx("door_open", -11.0, 0.74)
 		return true
 	return false
@@ -574,6 +557,7 @@ func _play_slam_pose() -> void:
 	var reach := smoothstep(0.47, IMPACT, _arm_clock) * (1.0 - smoothstep(release, SLAM_END, _arm_clock))
 	arm.slew(float(_slam_plan.yaw) * smoothstep(0.0, 0.42, _arm_clock))
 	arm.apply_slam_reach(_slam_plan, reach)
+	arm.set_slam_warning(_arm_clock, SLAM_LOAD_END)
 	_update_grapple_visibility()
 
 
@@ -608,6 +592,7 @@ func _finish_slam(standby: bool) -> void:
 		return
 	var arm := grapples[_active_arm]
 	arm.rig.clear_bones_global_pose_override()
+	arm.set_slam_warning(-1.0, SLAM_LOAD_END)
 	arm.set_fade(0.0)
 	if standby:
 		arm.play("idle_grapple")
@@ -617,7 +602,7 @@ func _finish_slam(standby: bool) -> void:
 
 func _resolve_slam(here: Vector3) -> void:
 	AudioManager.play_sfx("melee_impact", 0.0, 0.65)
-	_fx(VfxPool3D.FX01_METAL_SPARK_HIT, _slam_point + Vector3.UP * 0.12, 2.1, {"normal": Vector3.UP})
+	_fx(VfxPool3D.FX01_FLASH_EXPLOSION_YELLOW, _slam_point + Vector3.UP * 0.04, 1.0)
 	_next_attack_at = maxf(_next_attack_at, _clock + SLAM_RESPONSE)
 	var offset := _player.global_position - _slam_point
 	if offset.slide(Vector3.UP).length() < SLAM_RADIUS and offset.y > -0.25 and offset.y < 1.9:

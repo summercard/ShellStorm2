@@ -230,7 +230,12 @@ const CAMERA_FOV_DEG := 65.0
 # 2026-11-17：仅远征01固化旧默认按 `'` 五次（+1.00m）；2026-11-18 业主追加8次，
 # 累计13次 = 2.60m。公共机位与临时调试量不变。
 const CAMERA_EXPEDITION_01_DISTANCE_OFFSET_M := 2.6
-const CAMERA_EXPEDITION_01_BOSS_DISTANCE_OFFSET_M := 1.0 # 5 x 0.20 m apostrophe presses
+const CAMERA_EXPEDITION_01_BOSS_ZOOM_STEPS := 22
+# Apostrophe adds 0.20 m along the focus-to-camera ray, not along world Y.
+const CAMERA_EXPEDITION_01_BOSS_DISTANCE_OFFSET_M := (
+	CAMERA_EXPEDITION_01_BOSS_ZOOM_STEPS * Player3D.DEBUG_CAMERA_TRAILING_STEP_M
+)
+const CAMERA_EXPEDITION_01_BOSS_ZOOM_RESTORE_SECONDS := 4.0
 const CAMERA_EXPEDITION_PROFILE_SMOOTH_RATE := 4.0
 const CAMERA_LOWER_WALL_PROBE_HEIGHT_M := 1.09
 # 探针从角色前侧开始并向镜头后方穿过角色。若从角色身后0.42m起射，
@@ -486,6 +491,7 @@ var _camera_profile_look_height_current_m := CAMERA_LOOK_HEIGHT_M
 var _camera_profile_look_ahead_target_m := CAMERA_LOOK_AHEAD_M
 var _camera_profile_look_ahead_current_m := CAMERA_LOOK_AHEAD_M
 var _camera_profile_transition_rate := CAMERA_EXPEDITION_PROFILE_SMOOTH_RATE
+var _boss_camera_distance_m := 0.0
 var _vertical_arrival_open: Dictionary = {}
 var _corridor_floor_module_mesh: Mesh
 var _corridor_wall_module_mesh: Mesh
@@ -2480,6 +2486,7 @@ func _physics_process(delta: float) -> void:
 		else CAMERA_PROBE_IDLE_INTERVAL
 	)
 	_camera_probe_accumulator += delta
+	_update_boss_camera_distance(delta)
 	var refresh_camera_probes := (
 		_camera_probe_accumulator + 0.0001 >= _camera_probe_interval_s
 	)
@@ -2520,10 +2527,7 @@ func _camera_default_distance_offset_m() -> float:
 ## 固定拉远先换算为本关基础Y/Z，再交给原避障；不能在避障之后再次把镜头推回墙/楼板。
 func _camera_default_local_position() -> Vector3:
 	var original := Vector3(0.0, CAMERA_HEIGHT_M, CAMERA_DEFAULT_TRAILING_M)
-	var sentinel := _platform_sentinel(_room_by_id.get(_current_room_id) as DungeonRoom3D)
-	var offset_m := _camera_default_distance_offset_m()
-	if sentinel != null and sentinel.stage == PlatformSentinelEncounter3D.Stage.COMBAT:
-		offset_m += CAMERA_EXPEDITION_01_BOSS_DISTANCE_OFFSET_M
+	var offset_m := _camera_default_distance_offset_m() + _boss_camera_distance_m
 	if is_zero_approx(offset_m):
 		return original
 	var focal := Vector3(0.0, CAMERA_LOOK_HEIGHT_M, -CAMERA_LOOK_AHEAD_M)
@@ -2535,6 +2539,16 @@ func _camera_lower_wall_retract_trigger_m() -> float:
 	if not is_zero_approx(_camera_default_distance_offset_m()):
 		return _camera_default_local_position().z
 	return CAMERA_LOWER_WALL_RETRACT_TRIGGER_M
+
+
+func _update_boss_camera_distance(delta: float) -> void:
+	var sentinel := _platform_sentinel(_room_by_id.get(_current_room_id) as DungeonRoom3D)
+	if sentinel != null and sentinel.stage >= PlatformSentinelEncounter3D.Stage.COMBAT \
+		and sentinel.stage < PlatformSentinelEncounter3D.Stage.WON:
+		_boss_camera_distance_m = CAMERA_EXPEDITION_01_BOSS_DISTANCE_OFFSET_M
+	else:
+		_boss_camera_distance_m = move_toward(_boss_camera_distance_m, 0.0,
+			CAMERA_EXPEDITION_01_BOSS_DISTANCE_OFFSET_M / CAMERA_EXPEDITION_01_BOSS_ZOOM_RESTORE_SECONDS * maxf(delta, 0.0))
 
 
 func _uses_expedition_camera_profiles() -> bool:

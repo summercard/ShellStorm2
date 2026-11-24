@@ -104,20 +104,12 @@
       "do": "story.platform.rear"
     },
     {
-      "at": 18.04,
-      "do": "story.platform.reach"
-    },
-    {
-      "at": 19.21,
-      "do": "story.platform.grab"
-    },
-    {
-      "at": 19.3,
+      "at": 17.65,
       "do": "story.platform.voice",
       "event_id": "narrative.platform_takeover.monitor_panic"
     },
     {
-      "at": 19.3,
+      "at": 17.65,
       "do": "ui.subtitle",
       "speaker_id": "boss_monitor002",
       "speaker": "显示器",
@@ -125,8 +117,12 @@
       "duration": 1.74
     },
     {
-      "at": 21.07,
-      "do": "story.platform.throw"
+      "at": 18.65,
+      "do": "story.platform.strike"
+    },
+    {
+      "at": 20.3,
+      "do": "story.platform.wait_strike"
     },
     {
       "at": 22.05,

@@ -548,8 +548,16 @@ static func _apply_add_damage(
 	var target: AssemblyNode = targets[0]
 	if bool(card.effect.get("rock_projectile", false)):
 		var rock_stats := target.get_base_stats()
+		var was_upright := bool(rock_stats.get("rock_projectile", false)) and not bool(rock_stats.get("rock_shatter", false))
+		var upright_count := int(rock_stats.get("rock_upright_count", 1 if was_upright else 0))
+		var shatters := bool(card.effect.get("rock_shatter", false))
+		if not shatters:
+			upright_count += 1
+			if upright_count == 2:
+				rock_stats["rock_size_multiplier"] = float(card.effect.get("rock_repeat_size_multiplier", 1.6))
+		rock_stats["rock_upright_count"] = upright_count
 		rock_stats["rock_projectile"] = true
-		rock_stats["rock_shatter"] = bool(card.effect.get("rock_shatter", false))
+		rock_stats["rock_shatter"] = shatters
 		rock_stats["fate_speed_multiplier"] = float(rock_stats.get("fate_speed_multiplier", 1.0)) * 0.5
 		rock_stats["fire_rate"] = float(rock_stats.get("fire_rate", 4.0)) * float(card.effect.get("fire_rate_scale", 0.5))
 		target.set_base_stats(rock_stats)

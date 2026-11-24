@@ -7084,7 +7084,7 @@
   "VFX-FATE-ROCK-3D": {
    "c": "子弹特效",
    "d": "vfx",
-   "v": "df48099df36cfc26ea512795e1f4a6c8593098b9ef1d3f84270d1486dcc6625e"
+   "v": "24c7084d6f972428bea3bb74f2e35812f4e8295f2d3a84acc1f78dcf8c222e5d"
   },
   "VFX-FATE-ROCK-SHATTER-3D": {
    "c": "特效",
@@ -7324,7 +7324,7 @@
   "VFX-ZOMBIE-GOO-DEATH-3D": {
    "c": "特效",
    "d": "vfx",
-   "v": "d7a2e5510cfdc7b6a81ea68dc1d3f0272006f22e089665e1f1c11e646c088252"
+   "v": "1d8e6a55cfdec71c0f5bc0fab4b7336abad9e12bfdd91259df7614d6c1a2f01d"
   },
   "WPN-ATT-ATTACH-BIG-MAG": {
    "c": "武器",
@@ -7509,18 +7509,23 @@
  },
  "captured_at": "2026-11-17",
  "category_counts": {
-  "UI": 26,
-  "场景": 864,
+  "角色": 26,
+  "敌人": 62,
+  "场景": 859,
   "场景道具": 52,
   "基地资产包": 114,
-  "子弹特效": 11,
-  "敌人": 62,
+  "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_lounge/env_manor_rug_lounge_root_top3d.tscn": 1,
+  "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_runner/env_manor_rug_runner_root_top3d.tscn": 1,
+  "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_bedroom/env_manor_rug_bedroom_root_top3d.tscn": 1,
+  "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_reception_desk/env_manor_reception_desk_root_top3d.tscn": 1,
+  "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_flower_arrangement/env_manor_flower_arrangement_root_top3d.tscn": 1,
+  "道具": 45,
   "武器": 36,
   "特效": 73,
-  "角色": 26,
-  "道具": 43,
-  "音乐": 9,
-  "音效": 185
+  "子弹特效": 11,
+  "UI": 26,
+  "音效": 185,
+  "音乐": 9
  },
  "column_digests": {
   "1": "607f758ef9112de55c75c5de1be40ec33a429a6924e782a889ed53ad51d3640f",
@@ -7535,17 +7540,17 @@
   "10": "0656a7a6eac57eb289daa0093127e00a1c4e639ed750a1e357661a3768eda718",
   "11": "25b1e9f045f6d46ea2e4c415efcdd189165012b5554390700df308d615ead07f",
   "12": "a3a37f31b2a79377d969951e8571cbc153eb9834d3b2b3e5164b9483e4a92301",
-  "13": "9e6ea140c9ffb48acb8357570acb3697478381af23279734ed351f117dba9756",
-  "14": "f7eedd76daa5f7f83a4c5851219a4cecfb0cf9f9f282d59d873ae65f605969c1",
+  "13": "1109d770f7abd9ecc30814e33a9cc4596e941ec76245b418b00b1ee112104720",
+  "14": "c57f62734d417090aede1c901f0da1e9e91a3d8126fef711c3d68d2295488d2a",
   "15": "cde9c97b3c347e43e7d0f6f703b7da7dd7af129a9ea8b84ca9aecb4bb55a8a1a",
   "16": "5af3aff4aed340df72a98fd022f59c3a69074cb4ef1945258a3b6241cfd0fea0",
-  "17": "3cdd6ebb63c2c81c31220d36af3ae648a28b8e43a7ffcd821e4a671e78ba4e38",
-  "20": "cad887eeac91bdc8d70c14ac4439c4a4a7a139497cc67e837f5d94096924e083",
+  "17": "f3b3eaf4990a55c3f21fd3a0a6dc0ef0272ed99a96fae06b48384964ef93ea27",
+  "20": "2e3ce96e7775dc86f5cdc45756b83ff9349e97c5b4182ae4731fe20405a87c16",
   "21": "d55f98e745c4f93b963d3bf8820921d9ce7fe1953e090d8813ff6289c438cec3",
   "22": "abcfc469042f5fc2fa3dbc25d064997f8876f4e13327615b46b725748f24cc2f",
   "23": "b18fbf6dfc90e6831bdf11bad2acfebe8e39baa6c3dcee29d8222ec6e7ce2512",
   "24": "dc37fd69ac43eb1957f967bd8681249b65e1e7d6542b401841c264dd460c27f2",
-  "25": "918874ef62d25c25feb0d83fa52b5cd48de727731d88397e0b63af397dd8b627"
+  "25": "f5b9c85ba1f894bd3a15d2abb9f90feb091cd51284d193e7914a984adc6da641"
  },
  "columns": [
   "AssetID",
@@ -7722,7 +7727,7 @@
   "3D-敌人": "88fedfcd0603cd92aca2574df6e88ca7a7243ac03df105e42dd678a939dd1814",
   "3D-武器": "507f387042335d14fc4782386a2c083e509e0f530ba4997293cebf0b925c19f2",
   "3D-物品": "b9d3f610d2a77d8d7b4d55872eb3d0e2d57caa9840c144a672c76e6fe599ba4b",
-  "3D-特效": "93371ef01eeadc5fdc2a18b0327f460dbb05d53f820b3f2b85ab8528fd0629e0",
+  "3D-特效": "bdd82a7b7bbb93c07fca441afcc458d3459faee0d1d61430488ddc21eaa004b8",
   "3D-角色": "3f2ee8eb49eab5f4986a636dce574020c47599ec49bd6e5525a914f334cb9411",
   "3D-设施": "878b6c589b6249493dec3c8e36a95c0d3b3ffa364f8831270c714c0d3625839b",
   "3D-道具": "25f7d8ed65aa88d7f01ff468c43c35601d5e24d9bb0eab1e2c45d3e183866d40",
@@ -8076,6 +8081,15 @@
     "P",
     "Y"
    ]
+  },
+  {
+   "asset_id": "VFX-FATE-ROCK-3D",
+   "date": "2026-11-24",
+   "version": "v001",
+   "scope": "仅更新《资产主表》N41/Y41玩法关联文本与域变更日志；R/S、Prefab专表及其他资产保持不变；按当前分账本刷新目标行指纹和全域列摘要。",
+   "old_row_digest": "df48099df36cfc26ea512795e1f4a6c8593098b9ef1d3f84270d1486dcc6625e",
+   "new_row_digest": "24c7084d6f972428bea3bb74f2e35812f4e8295f2d3a84acc1f78dcf8c222e5d",
+   "record": "域变更日志 v0.1.65"
   }
  ]
 }

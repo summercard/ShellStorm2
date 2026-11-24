@@ -24,6 +24,8 @@ const RUN_CLIP_RATE_SCALE := 1.3 * GameDesignConfig.PACE_SCALE
 ## 它与 `RUN_CLIP_RATE_SCALE` 的乘积（1.0625 × 1.105 = 1.174）才是跑动剪辑的相对速率，
 ## 缩放后仍与移速同比，脚不打滑。
 const ANIMATION_RATE_MULTIPLIER := 1.25 * GameDesignConfig.PACE_SCALE
+## 普通与开火的走路／跑步额外播放倍率。不改实际移速。
+const LOCOMOTION_CLIP_RATE_SCALE := 1.5
 ## 最后一发真实射击后继续保持开火剪辑的时间；不拉长后坐/枪口火光脉冲。
 const FIRE_HOLD_DURATION_S := 2.0
 static var _libraries: Dictionary = {}
@@ -184,6 +186,8 @@ func apply(avatar: Node3D, delta: float) -> void:
 		rate = clampf(planar_speed / (2.4 if walking_clip else 5.0), 0.72, 1.18)
 		if not walking_clip:
 			rate *= RUN_CLIP_RATE_SCALE
+		if not melee_now:
+			rate *= LOCOMOTION_CLIP_RATE_SCALE
 	rate *= ANIMATION_RATE_MULTIPLIER
 	_time += delta * rate
 	playback_rate = rate
