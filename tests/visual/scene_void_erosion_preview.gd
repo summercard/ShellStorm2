@@ -147,12 +147,15 @@ func _capture(output: String) -> void:
 		["wall_close_stage_only", 1.0, 0.58, Camera3D.PROJECTION_PERSPECTIVE, 12],
 		["wall_close_no_depth", 1.0, 0.58, Camera3D.PROJECTION_PERSPECTIVE, 12],
 		["wall_close_no_panel", 1.0, 0.58, Camera3D.PROJECTION_PERSPECTIVE, 12],
+		["physics_open", 1.0, 0.58, Camera3D.PROJECTION_PERSPECTIVE, 12],
 		["off_restored", 0.0, 0.58, Camera3D.PROJECTION_PERSPECTIVE, 12],
 	]
 	var captures_ok := true
+	var physics_opened := false
 	var frames: Dictionary[String, Image] = {}
 	for sample in samples:
 		_erosion.progress = sample[1]
+		_erosion.remove_collision_in_void = sample[0] == "physics_open"
 		_azimuth = sample[2]
 		_camera.projection = sample[3]
 		_erosion.cube_count = sample[4]
@@ -176,6 +179,8 @@ func _capture(output: String) -> void:
 		await get_tree().process_frame
 		await RenderingServer.frame_post_draw
 		await RenderingServer.frame_post_draw
+		if sample[0] == "physics_open":
+			physics_opened = int(_erosion.get_collision_opening_snapshot().active_shapes) > 0
 		var path := output.path_join("%s.png" % sample[0])
 		var frame := get_viewport().get_texture().get_image()
 		captures_ok = (frame.save_png(path) == OK) and captures_ok
@@ -199,11 +204,13 @@ func _capture(output: String) -> void:
 	var component_delta := _changed_fraction(frames.wall_close, frames.wall_close_stage_only)
 	var restored_delta := _changed_fraction(frames.off, frames.off_restored)
 	var removed_delta := _changed_fraction(frames.off, removed)
+	var physics_delta := _changed_fraction(frames.off, frames.physics_open)
 	var visual_ok := partial_delta > 0.02 and full_delta > partial_delta * 1.3 and cube_delta > 0.005 and depth_delta > 0.003
 	visual_ok = visual_ok and far_delta > 0.00025 and stars_delta > 0.0008
 	visual_ok = visual_ok and restored_delta < 0.006 and removed_delta < 0.006
 	visual_ok = visual_ok and wall_delta < 0.012
 	visual_ok = visual_ok and component_delta > 0.0006
+	visual_ok = visual_ok and physics_opened and physics_delta > 0.02
 	var scene_preserved := all_original and collider.shape == shape
 	var passed := (
 		count > 0 and exclusive and expanded_scope and excluded and restored_targets and rebound
@@ -216,6 +223,7 @@ func _capture(output: String) -> void:
 	print("VOID_EROSION_DEPTH far_cubes=%.5f spatial_stars=%.5f" % [far_delta, stars_delta])
 	print("VOID_EROSION_WALL interior_differences=%.5f samples=%d" % [wall_delta, wall_points.size()])
 	print("VOID_EROSION_COMPONENTS host=%d explicit=%d changed_fraction=%.5f" % [count, stage_count, component_delta])
+	print("VOID_EROSION_PHYSICS_RENDER opening_active=%s changed_fraction=%.5f" % [physics_opened, physics_delta])
 	get_tree().quit(0 if passed else 1)
 
 

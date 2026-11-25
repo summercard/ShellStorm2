@@ -4,6 +4,8 @@ extends Node3D
 
 const EROSION_SHADER := preload("res://assets/art/vfx/environment_3d/void_erosion/runtime/scene_void_erosion.gdshader")
 const MESH_SCOPE := preload("res://src/vfx/VfxSceneMeshScope.gd")
+const COLLISION_CUT := preload("res://src/vfx/VoidCollisionCut3D.gd")
+const COLLISION_REVEAL_PROGRESS := 0.075
 
 # RenderingServer exposes one overlay slot per mesh. Claims never enter scene files.
 static var _claims: Dictionary[int, WeakRef] = {}
@@ -46,6 +48,20 @@ static var _claims: Dictionary[int, WeakRef] = {}
 		_queue_refresh()
 @export_tool_button("刷新侵蚀目标") var refresh_button: Callable = refresh_targets
 
+@export_group("物理开口")
+## 虚空移除阻挡。游戏运行时，在洞内切除选中环境静态碰撞。
+@export var remove_collision_in_void := false:
+	set(value):
+		if remove_collision_in_void == value:
+			return
+		remove_collision_in_void = value
+		_queue_refresh()
+## 留空沿用视觉目标树。用于指定与视觉模型分开装配的楼面支撑。
+@export var collision_roots: Array[NodePath] = []:
+	set(value):
+		collision_roots = value
+		_queue_refresh()
+
 @export_group("展开")
 ## Animate this property: 0 is off, 1 is the full box.
 @export_range(0.0, 1.0, 0.001) var progress := 1.0:
@@ -55,6 +71,7 @@ static var _claims: Dictionary[int, WeakRef] = {}
 		_set_uniform(&"progress", progress)
 		if was_active != (progress > 0.0):
 			_queue_refresh()
+		_queue_collision_update()
 ## Full extent in metres. Rotate the node to align the grid with the building.
 @export var box_size := Vector3(9.0, 5.0, 9.0):
 	set(value):
@@ -64,6 +81,7 @@ static var _claims: Dictionary[int, WeakRef] = {}
 	set(value):
 		cell_size = maxf(value, 0.08)
 		_set_uniform(&"cell_size", cell_size)
+		_queue_collision_update()
 @export_range(0.08, 5.0, 0.01, "or_greater", "suffix:m") var edge_width := 1.35:
 	set(value):
 		edge_width = maxf(value, 0.08)
@@ -123,6 +141,11 @@ var _targets: Dictionary[int, MeshInstance3D] = {}
 var _seam_instances: Array[MeshInstance3D] = []
 var _boxed_instances: Dictionary[int, MeshInstance3D] = {}
 var _refresh_queued := false
+var _collision_cut := COLLISION_CUT.new()
+var _collision_sources: Array[CollisionShape3D] = []
+var _collision_update_queued := false
+var _collision_mode_active := false
+var _collision_extent := Vector3.ZERO
 
 
 func _enter_tree() -> void:
@@ -156,6 +179,11 @@ func _enter_tree() -> void:
 func _exit_tree() -> void:
 	MESH_SCOPE.unwatch(self, _on_source_tree_changed)
 	_release_targets()
+	_collision_cut.clear()
+	_collision_sources.clear()
+	_collision_extent = Vector3.ZERO
+	_collision_update_queued = false
+	_collision_mode_active = false
 	_refresh_queued = false
 	_overlay = null
 	_seam_material = null
@@ -169,6 +197,11 @@ func _notification(what: int) -> void:
 func refresh_targets() -> int:
 	_refresh_queued = false
 	var active := is_inside_tree() and enabled and progress > 0.0
+	_collision_sources.clear()
+	if active and _wants_collision_cut() and not Engine.is_editor_hint():
+		var roots := target_roots if collision_roots.is_empty() else collision_roots
+		_collision_sources = COLLISION_CUT.collect_sources(self, roots, excluded_roots)
+	_queue_collision_update()
 	_release_targets(strict_box_bounds and active)
 	if not active:
 		return 0
@@ -216,11 +249,19 @@ func _get_configuration_warnings() -> PackedStringArray:
 	for path in seam_fill_planes:
 		if _get_seam_marker(path) == null:
 			warnings.append("接缝补面需要引用已隐藏的 PlaneMesh 节点：%s" % path)
+	if remove_collision_in_void:
+		for path in collision_roots:
+			if get_node_or_null(path) == null:
+				warnings.append("物理目标路径无效：%s" % path)
 	return warnings
 
 
 func _on_source_tree_changed(node: Node) -> void:
-	if strict_box_bounds and affected_categories != 0 and enabled and progress > 0.0 and MESH_SCOPE.is_source_mesh(node):
+	if not enabled or progress <= 0.0:
+		return
+	var mesh_changed := strict_box_bounds and affected_categories != 0 and MESH_SCOPE.is_source_mesh(node)
+	var collision_changed := remove_collision_in_void and _collision_cut.tracks_source(node)
+	if mesh_changed or collision_changed:
 		_queue_refresh()
 
 
@@ -283,17 +324,69 @@ func _get_seam_marker(path: NodePath) -> MeshInstance3D:
 
 
 func _update_volume_transform() -> void:
-	# The inspector size is in metres, even under a scaled parent.
-	var frame := Transform3D(global_basis.orthonormalized(), global_position)
-	_set_uniform(&"world_to_volume", frame.inverse())
+	_set_uniform(&"world_to_volume", _volume_frame().inverse())
 	_update_box_extent()
 
 
 func _update_box_extent() -> void:
-	var scale_factor := global_basis.get_scale().abs() if strict_box_bounds and is_inside_tree() else Vector3.ONE
-	_set_uniform(&"half_size", box_size * scale_factor.max(Vector3.ONE * 0.001) * 0.5)
+	_set_uniform(&"half_size", _volume_half_size())
+	_queue_collision_update()
 	if Engine.is_editor_hint() and is_inside_tree():
 		update_gizmos()
+
+
+func _volume_frame() -> Transform3D:
+	return Transform3D(global_basis.orthonormalized(), global_position)
+
+
+func _volume_half_size() -> Vector3:
+	var scale_factor := global_basis.get_scale().abs() if strict_box_bounds and is_inside_tree() else Vector3.ONE
+	return box_size * scale_factor.max(Vector3.ONE * 0.001) * 0.5
+
+
+func _wants_collision_cut() -> bool:
+	if strict_box_bounds:
+		return remove_collision_in_void and (affected_categories & MESH_SCOPE.SCENE) != 0
+	return remove_collision_in_void and (not require_explicit_targets or not target_roots.is_empty())
+
+
+func _queue_collision_update() -> void:
+	if not is_inside_tree() or _overlay == null or _collision_update_queued:
+		return
+	if not remove_collision_in_void and not _collision_mode_active:
+		return
+	_collision_update_queued = true
+	_sync_collision_opening.call_deferred()
+
+
+func _sync_collision_opening() -> void:
+	_collision_update_queued = false
+	if not is_inside_tree() or _overlay == null:
+		return
+	_collision_mode_active = _wants_collision_cut()
+	var extent := Vector3.ZERO
+	if enabled and _collision_mode_active and progress >= COLLISION_REVEAL_PROGRESS:
+		extent = _volume_half_size() * progress
+		# Advance the geometry and the Shader together, with bounded rebuild steps.
+		if progress < 1.0:
+			var step_size := minf(cell_size * 0.5, 0.20)
+			extent = (extent / step_size).floor() * step_size
+	_collision_extent = extent
+	_set_uniform(&"collision_cut_mode", _collision_mode_active)
+	_set_uniform(&"collision_extent", extent)
+	if not Engine.is_editor_hint():
+		var previous_unsupported: int = _collision_cut.unsupported_count
+		_collision_cut.sync(_collision_sources, _volume_frame(), extent)
+		if _collision_cut.unsupported_count > previous_unsupported:
+			push_warning("赛博虚空保留了 %d 个部分相交且不支持局部裁切的碰撞形状。" % _collision_cut.unsupported_count)
+
+
+func get_collision_opening_snapshot() -> Dictionary:
+	return {
+		"half_size": _collision_extent,
+		"active_shapes": _collision_cut.active_count(),
+		"unsupported_shapes": _collision_cut.unsupported_count,
+	}
 
 
 func _set_uniform(parameter: StringName, value: Variant) -> void:

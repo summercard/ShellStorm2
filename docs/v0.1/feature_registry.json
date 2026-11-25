@@ -538,7 +538,8 @@
         "docs/v0.1/development/2026-11-11_expedition_entry_hologram_ceremonies.md",
         "docs/v0.1/development/2026-11-10_main_story_031_033.md",
         "docs/v0.1/development/2026-11-11_expedition01_flow.md",
-        "docs/v0.1/development/2026-11-19_esc_expedition99.md"
+        "docs/v0.1/development/2026-11-19_esc_expedition99.md",
+        "docs/v0.1/development/2026-11-25_performance_phase2_phase3.md"
       ],
       "verification": [
         {
@@ -1790,6 +1791,7 @@
         "docs/v0.1/design/scene_cyber_space.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-25_cyber_void_collision.md",
         "docs/v0.1/development/2026-11-21_cyber_space.md",
         "docs/v0.1/development/2026-11-21_cyber_void_component_scope.md",
         "docs/v0.1/development/2026-11-21_cyber_void_wall.md",
@@ -1807,6 +1809,13 @@
         "docs/v0.1/development/2026-11-16_weapon_hologram_ui.md"
       ],
       "verification": [
+        {
+          "kind": "command",
+          "path": "scripts/run_scene_void_erosion_qa.py",
+          "args": ["--physics"],
+          "suite": "manual",
+          "requires": "GODOT_BIN 或 --godot 指定 Godot console；静态碰撞局部裁切、真实玩家下落和落地、多开口及形状恢复"
+        },
         {
           "kind": "command",
           "path": "scripts/run_scene_void_erosion_qa.py",
@@ -1970,7 +1979,9 @@
       ],
       "development_records": [
         "docs/v0.1/development/history/13_性能优化与热管理_历史记录.md",
-        "docs/v0.1/development/2026-11-08_expedition03_frame_budget.md"
+        "docs/v0.1/development/2026-11-08_expedition03_frame_budget.md",
+        "docs/v0.1/development/2026-11-25_performance_baseline_preflight.md",
+        "docs/v0.1/development/2026-11-25_performance_phase2_phase3.md"
       ],
       "verification": [
         {
@@ -1980,6 +1991,15 @@
         {
           "kind": "scene",
           "id": "verify_performance_runtime_complete"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_enemy_spawn_boundary"
+        },
+        {
+          "kind": "command",
+          "path": "tests/tooling/test_profile_expedition_events.py",
+          "args": []
         }
       ],
       "status": "partial"

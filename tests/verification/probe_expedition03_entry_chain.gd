@@ -11,6 +11,7 @@ extends Node
 const LOADING_PATH := "res://scenes/ExpeditionLoadingScreen.tscn"
 const LEVEL_ID := "expedition_03"
 const MIN_ROOMS := 10
+const LEGACY_HEAVY_PATH := "res://assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/enm_normal_fat_zombie03_root_top3d.tscn"
 
 var _failures: Array[String] = []
 
@@ -23,6 +24,10 @@ func _run() -> void:
 	var tree := get_tree()
 	# 自身必须活过 change_scene：把 current_scene 摘掉，本节点留在 root 下。
 	tree.current_scene = null
+	var expect_heavy := "--expect-heavy-box-prewarm" in OS.get_cmdline_user_args()
+	if expect_heavy:
+		LevelSelect.selected_seed = 41021
+		_verify_box_resource_plan()
 	GameEntryFlow.request_gameplay_entry(GameEntryFlow.REASON_MISSION_OPERATIONS_TELEPORT)
 	_check(GameDesignConfig.select_expedition_level(LEVEL_ID),
 		"select_expedition_level(%s) 被拒绝" % LEVEL_ID)
@@ -81,7 +86,7 @@ func _run() -> void:
 
 	# 预热必须在**恢复玩家操作之前**做完，否则进门第一只怪、第一次开火照样现编管线。
 	# 判据用加载页写出的完成度报告，而不是"有没有调用过预热"：
-	# 只有 `completed=true` 才说明 VFX 队列排空、三个怪基类都过了一遍。
+	# `completed=true` 记录 VFX 队列排空、公共怪表现集合走完。
 	#
 	# headless 没有渲染管线可预热，加载页会按"不适用"报 `skipped=true, completed=true`。
 	# ⇒ 这一条只在真渲染（不带 `--headless`）下是有效门禁，无头跑过不代表验证过。
@@ -109,6 +114,12 @@ func _run() -> void:
 				"逐房渲染预热一间房都没画：%s" % str(room_report))
 			_check(str(room_report.get("truncated", "")).is_empty(),
 				"逐房渲染预热被截断：%s" % str(room_report))
+			var resources := room_report.get("box_enemy_resources", {}) as Dictionary
+			_check(resources.get("completed") == true, "刷怪盒表现资源准备未完成")
+			if expect_heavy:
+				_verify_heavy_box_preload(tower, resources)
+		elif expect_heavy:
+			_check(false, "旧胖子资源预热验收必须使用真实渲染")
 	# 🔴 必须等**加载页交接完成**再判落地。
 	# 交接前加载页把目标树 `process_mode` 设成 DISABLED，Godot 的
 	# `CollisionObject3D.disable_mode` 默认是 REMOVE ⇒ 碰撞体暂时不在物理空间里，
@@ -148,6 +159,47 @@ func _run() -> void:
 			str(tower.get("_current_room_id"))])
 		print("ENTRY03_CHAIN collision_children=%d" % entry_room.find_children("*", "CollisionShape3D", true, false).size())
 	_finish()
+
+func _verify_box_resource_plan() -> void:
+	var host := Dungeon3D.new()
+	var room := DungeonRoom3D.new()
+	room.room_type = "COMBAT"
+	room.spawn_placements = [
+		{"box": "box_egt_heavy_pair"},
+		{"box": "box_egt_heavy_pair", "spawn_overrides": [{"type": "egt_pinhead", "count": 1}]},
+		{"box": "box_egt_mimic_trap"},
+	]
+	var rooms: Array[DungeonRoom3D] = [room]
+	room.encounter = {"stages": [{"boxes": [1]}]}
+	_check(host._box_enemy_resource_plan(rooms).is_empty(), "忽略逐盒覆盖/未引用盒，或把程序壳当作新资产")
+	room.encounter = {"stages": [{"boxes": [2, 0, 0, 1]}]}
+	var paths := host._box_enemy_resource_plan(rooms)
+	var kinds := paths.get(LEGACY_HEAVY_PATH, []) as Array
+	_check(paths.size() == 1 and kinds.size() == 3 and "egt_gun_nut" in kinds and "egt_mimic" in kinds and "egt_chain_gunner" in kinds,
+		"三个逻辑怪种的旧模型路径未正确去重：%s" % str(paths))
+	room.authored_layout_peaceful = true
+	_check(host._box_enemy_resource_plan(rooms).is_empty(), "和平房不应申请刷怪表现")
+	room.free()
+	host.free()
+
+
+func _verify_heavy_box_preload(tower: TowerDescent3D, report: Dictionary) -> void:
+	var valid_seed := tower.run_seed == 41021
+	var entries := report.get("entries", []) as Array
+	var entry := entries[0] as Dictionary if entries.size() == 1 else {}
+	var kinds := entry.get("kinds", []) as Array
+	var retained := ResourceLoader.get_cached_ref(LEGACY_HEAVY_PATH) as PackedScene
+	var expected_route := EnemyAvatar3D.formal_normal_scene_path_for("egt_gun_nut") == LEGACY_HEAVY_PATH
+	var not_native_route := EnemyAvatar3D.formal_normal_scene_path_for("fat_zombie03") != LEGACY_HEAVY_PATH
+	var no_actors := get_tree().get_nodes_in_group("enemy_3d").all(func(node: Node) -> bool:
+		return not node is Enemy3D or str(node.get("enemy_kind")) not in kinds)
+	_check(valid_seed and expected_route and not_native_route, "预热与正式模型路由或固定种子不一致")
+	_check(entry.get("path") == LEGACY_HEAVY_PATH and "egt_gun_nut" in kinds and entry.get("state") in ["loaded", "reused"],
+		"固定路线未报告旧胖子 PackedScene 路径")
+	_check(retained != null and tower._loading_scene_resources.has(retained), "关卡没保留预加载资源的强引用")
+	_check(no_actors, "预热创建了正式借皮敌人")
+	print("ENTRY03_BOX_RESOURCE seed=", tower.run_seed, " report=", report, " retained=", retained != null, " no_actors=", no_actors)
+
 
 func _check(ok: bool, message: String) -> void:
 	if not ok:

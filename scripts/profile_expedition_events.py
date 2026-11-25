@@ -12,6 +12,23 @@ from pathlib import Path
 from workspace_paths import PROJECT_ROOT, work_path
 
 
+BASELINE_ENVIRONMENT = {"renderer": "forward_plus", "quality": "high", "viewport": "(1280.0, 720.0)"}
+BASELINE_GODOT = "4.7.2"
+ENGINE_ERROR = re.compile(r"^\s*(?:SCRIPT )?ERROR:")
+EXIT_LEAK = re.compile(r"ObjectDB instances?(?: (?:was|were))? leaked at exit|resources? still in use at exit", re.I)
+
+
+def classify_console(lines):
+    errors = 0
+    exit_warnings = []
+    for line in lines:
+        if EXIT_LEAK.search(line):
+            exit_warnings.append(line.strip())
+        elif ENGINE_ERROR.match(line):
+            errors += 1
+    return errors, exit_warnings
+
+
 def summarize_run(data, requested_rooms):
     phases = {}
     events = {event["phase"]: event for event in data["events"]}
@@ -23,21 +40,39 @@ def summarize_run(data, requested_rooms):
     for label, times in phases.items():
         times.sort()
         summary[label] = {
-            "frames": len(times), "p95_ms": times[math.ceil(.95 * len(times)) - 1],
+            "frames": len(times), "p50_ms": times[math.ceil(.50 * len(times)) - 1],
+            "p95_ms": times[math.ceil(.95 * len(times)) - 1],
             "p99_ms": times[math.ceil(.99 * len(times)) - 1], "max_ms": times[-1],
             "over_50_ms": sum(value > 50 for value in times),
             "sync_ms": events.get(label, {}).get("sync_ms"),
         }
-    warm = data["warm_b"]
-    roar_warm = warm.get("roar_icon", {})
-    overlay_warm = warm.get("occlusion_overlay", {})
-    complete = (data["warm_a"]["completed"] and not data["warm_a"]["skipped"]
-                and not warm["skipped"] and warm["rooms"] == warm["total"] and warm["rooms"] > 0
-                and roar_warm.get("completed", False) and roar_warm.get("retained", False)
-                and bool(overlay_warm)
-                and (not overlay_warm.get("applicable", True)
-                     or (overlay_warm.get("completed", False) and overlay_warm.get("restored", False)
-                         and overlay_warm.get("same_material", False))))
+    environment_mismatches = {
+        field: {"expected": expected, "actual": data.get(field)}
+        for field, expected in BASELINE_ENVIRONMENT.items() if data.get(field) != expected
+    }
+    version = data.get("godot")
+    if not isinstance(version, str) or not re.match(rf"^{re.escape(BASELINE_GODOT)}[.-]stable\b", version):
+        environment_mismatches["godot"] = {"expected": f"{BASELINE_GODOT} stable", "actual": version}
+    warm_a = data["warm_a"]
+    warm_b = data["warm_b"]
+    complete_a = (warm_a.get("completed") is True and warm_a.get("skipped") is False
+                  and warm_a.get("truncated") == "" and warm_a.get("kinds_total", 0) > 0
+                  and warm_a.get("kinds_done") == warm_a["kinds_total"]
+                  and warm_a.get("vfx_total", 0) > 0 and warm_a.get("vfx_pending") == 0)
+    box_resources = warm_b.get("box_enemy_resources")
+    box_entries = box_resources.get("entries") if isinstance(box_resources, dict) else None
+    box_complete = (isinstance(box_entries, list) and box_resources.get("completed") is True
+                    and all(isinstance(entry, dict) and entry.get("path") and entry.get("kinds")
+                            and entry.get("state") in ("loaded", "reused") for entry in box_entries))
+    roar_warm = warm_b.get("roar_icon", {})
+    overlay_warm = warm_b.get("occlusion_overlay", {})
+    complete_b = (warm_b.get("skipped") is False and warm_b.get("truncated") == "" and box_complete
+                  and warm_b.get("rooms", 0) > 0 and warm_b["rooms"] == warm_b.get("total")
+                  and roar_warm.get("completed", False) and roar_warm.get("retained", False)
+                  and bool(overlay_warm)
+                  and (not overlay_warm.get("applicable", True)
+                       or (overlay_warm.get("completed", False) and overlay_warm.get("restored", False)
+                           and overlay_warm.get("same_material", False))))
     confirmed = any(e["phase"].startswith("fixture_flight/")
                     and e["details"].get("confirmed")
                     and "hp_after" in e["details"]
@@ -52,9 +87,21 @@ def summarize_run(data, requested_rooms):
                       and all(entry.get("current_room") == entry["room"] for entry in entries))
     violations = [label for label, values in summary.items()
                   if values["max_ms"] > 50 or values["p99_ms"] > 33.3]
-    return {"phases": summary, "warm_complete": complete, "confirmed_pooled_hit": confirmed,
-            "chest_created": chest, "route_complete": route_complete, "violations": violations,
-            "passed": bool(summary and complete and confirmed and chest and route_complete and not violations)}
+    complete = complete_a and complete_b
+    return {"phases": summary, "environment_mismatches": environment_mismatches,
+            "warm_complete": complete, "warm_a_complete": complete_a, "warm_b_complete": complete_b,
+            "box_enemy_resources_complete": box_complete, "confirmed_pooled_hit": confirmed,
+            "chest_created": chest, "route_complete": route_complete,
+            "violations": violations, "passed": bool(summary and not environment_mismatches and complete
+                                                   and confirmed and chest and route_complete and not violations)}
+
+
+def finalize_summary(summary, sources_stable, execution_ok, exit_warnings):
+    # A valid frame sample can still fail the independent shutdown contract.
+    frame_gate_passed = bool(summary["passed"] and sources_stable and execution_ok)
+    shutdown_clean = not exit_warnings
+    return {**summary, "sources_stable": sources_stable, "frame_gate_passed": frame_gate_passed,
+            "shutdown_clean": shutdown_clean, "passed": frame_gate_passed and shutdown_clean}
 
 
 def main():
@@ -65,7 +112,8 @@ def main():
     parser.add_argument("--gate", action="store_true", help="Use a BaseWorld3D dungeon entrance ID")
     parser.add_argument("--seed", type=int, default=41021)
     parser.add_argument("--rooms", type=int, default=4, help="Maximum distinct rooms to visit after the start")
-    parser.add_argument("--check-budget", action="store_true", help="Exit 7 for incomplete coverage or frame-budget violations")
+    parser.add_argument("--check-budget", action="store_true",
+                        help="Exit 7 for baseline environment, coverage, frame-budget, or shutdown violations")
     args = parser.parse_args()
     if args.rooms < 1:
         parser.error("--rooms must be positive")
@@ -92,7 +140,7 @@ def main():
                       "src/world3d/RoomFurnishingNavigation.gd", "src/core/GameplaySpatialRegistry3D.gd",
                       "src/enemy3d/EnemyIllumination3D.gd", "src/vfx/VfxMonsterRoarIcon3D.gd",
                       "src/enemy3d/EliteRosterService.gd", "src/enemy3d/RoamingEliteRunDirector.gd",
-                      "src/enemy3d/EnemyWarmup.gd"]
+                      "src/enemy3d/EnemyWarmup.gd", "src/world3d/LoadingResourceWarmup.gd"]
     plan_dir = PROJECT_ROOT / "data" / "level_plans" / args.level
     tracked_inputs.extend(p.relative_to(PROJECT_ROOT).as_posix() for p in sorted(plan_dir.rglob("*.json")))
     def source_fingerprints():
@@ -128,19 +176,21 @@ def main():
             code = 124
     code = code or (0 if (folder / "frames.json").exists() else 3)
     with (folder / "console.txt").open(encoding="utf-8", errors="replace") as log:
-        errors = sum(line.startswith(("SCRIPT ERROR:", "ERROR:")) for line in log)
+        errors, exit_warnings = classify_console(log)
     if errors and not code:
         code = 6
     frames_path = folder / "frames.json"
     after = source_fingerprints()
     if frames_path.is_file():
-        summary = summarize_run(json.loads(frames_path.read_text(encoding="utf-8")), args.rooms)
-        summary["sources_stable"] = after == metadata["before"]
-        summary["passed"] = summary["passed"] and summary["sources_stable"] and not code
+        summary = finalize_summary(
+            summarize_run(json.loads(frames_path.read_text(encoding="utf-8")), args.rooms),
+            after == metadata["before"], code == 0, exit_warnings,
+        )
         (folder / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
         if args.check_budget and not summary["passed"] and not code:
             code = 7
-    metadata.update({"after": after, "exit_code": code, "engine_errors": errors})
+    metadata.update({"after": after, "exit_code": code, "engine_errors": errors,
+                     "exit_cleanup_warnings": exit_warnings})
     metadata_path.write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     return code
 

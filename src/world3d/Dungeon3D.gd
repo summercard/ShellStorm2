@@ -3584,14 +3584,15 @@ func _uses_loading_frame_budget() -> bool:
 	return not test_mode and IrisTransition != null and IrisTransition.is_loading_scene(self)
 
 
-func _load_bootstrap_resource(path: String, type_hint := "") -> Resource:
+func _load_bootstrap_resource(path: String, type_hint := "", required := true) -> Resource:
 	if type_hint == "PackedScene":
 		var warm_error := await LOADING_RESOURCE_WARMUP.warm(path, get_tree(), _loading_scene_resources)
 		if warm_error != OK:
 			return null
 	var error := ResourceLoader.load_threaded_request(path, type_hint)
 	if error != OK:
-		push_error("后台读取失败：%s (%s)" % [path, error_string(error)])
+		if required:
+			push_error("后台读取失败：%s (%s)" % [path, error_string(error)])
 		return null
 	# 请求与轮询分在不同帧；只在 LOADED 后取资源，避免 get 等待后台线程。
 	await get_tree().process_frame
@@ -3600,11 +3601,13 @@ func _load_bootstrap_resource(path: String, type_hint := "") -> Resource:
 		await get_tree().process_frame
 		status = ResourceLoader.load_threaded_get_status(path)
 	if status != ResourceLoader.THREAD_LOAD_LOADED:
-		push_error("后台资源读取失败：%s" % path)
+		if required:
+			push_error("后台资源读取失败：%s" % path)
 		return null
 	var resource := ResourceLoader.load_threaded_get(path)
 	# 保持强引用，确保房间内的 load 只命中缓存。
-	_loading_scene_resources.append(resource)
+	if resource != null:
+		_loading_scene_resources.append(resource)
 	return resource
 
 
@@ -3666,6 +3669,62 @@ func get_room_warmup_targets() -> Array[DungeonRoom3D]:
 	return targets
 
 
+## 只读本局会经过盒编排的内容声明，不编排波次、不抽随机数、不预约身份。
+func _box_enemy_resource_plan(rooms: Array[DungeonRoom3D]) -> Dictionary:
+	var common := {}
+	for kind in EnemyWarmup.BASE_KINDS:
+		common[EnemyAvatar3D.formal_normal_scene_path_for(kind)] = true
+	var paths := {}
+	for room in rooms:
+		if room.authored_layout_peaceful or _room_has_encounter_trigger(room):
+			continue
+		if room.room_type not in HOSTILE_ROOM_TYPES and room.room_type != "EVENT":
+			continue
+		var placements := room.spawn_placements
+		var seen := {}
+		for stage: Array in _resolve_encounter_stages(room.encounter, placements.size()):
+			for index: int in stage:
+				if seen.has(index) or not placements[index] is Dictionary:
+					continue
+				seen[index] = true
+				var box := SpawnBoxCatalog.resolve_placement_box(placements[index])
+				for spawn: Dictionary in box.get("spawns", []):
+					var kind := str(spawn.get("type", ""))
+					if not MonsterInjector.is_authorable_enemy_type(kind):
+						continue
+					var path := EnemyAvatar3D.formal_normal_scene_path_for(kind)
+					if path.is_empty() or common.has(path):
+						continue
+					if not paths.has(path):
+						paths[path] = []
+					var kinds: Array = paths[path]
+					if not kinds.has(kind):
+						kinds.append(kind)
+	return paths
+
+
+## 只持有 PackedScene 和依赖，不实例化。失败留给正式首用的现有装配路径处理。
+func _warm_box_enemy_resources(rooms: Array[DungeonRoom3D]) -> Dictionary:
+	var started := Time.get_ticks_msec()
+	var paths := _box_enemy_resource_plan(rooms)
+	var entries: Array[Dictionary] = []
+	var completed := true
+	for path: String in paths:
+		var scene := ResourceLoader.get_cached_ref(path) as PackedScene
+		var state := "reused"
+		if scene != null:
+			if not _loading_scene_resources.has(scene):
+				_loading_scene_resources.append(scene)
+		else:
+			scene = await _load_bootstrap_resource(path, "PackedScene", false) as PackedScene
+			state = "loaded" if scene != null else "failed"
+		if scene == null:
+			completed = false
+			push_warning("刷怪表现资源未预加载，保留首用路径：%s" % path)
+		entries.append({"path": path, "kinds": paths[path], "state": state})
+	return {"completed": completed, "elapsed_ms": Time.get_ticks_msec() - started, "entries": entries}
+
+
 ## 逐房各画一帧，把渲染管线的首次编译提前付掉。**加载页与验收探针共用这一份实现**，
 ## 免得探针里另写一份复制品、量到的不是正式路径。
 ##
@@ -3715,6 +3774,7 @@ func warm_room_materials(parent: Node, view_size: Vector2i, frames_per_room: int
 		if await _load_bootstrap_resource(path, "PackedScene") != null:
 			clutter_scenes += 1
 	report["clutter_scenes"] = clutter_scenes
+	report["box_enemy_resources"] = await _warm_box_enemy_resources(targets)
 	var viewport := SubViewport.new()
 	viewport.name = "RoomWarmViewport"
 	viewport.size = view_size
@@ -5509,17 +5569,20 @@ func _spawn_box_waves(room: DungeonRoom3D, floor: int, floor_level: int) -> Arra
 	# 种子 = run_seed ^ 房 id 派生 ⇒ 同局同房每次调用恒定、不同局/不同房不同。
 	var rng := RandomNumberGenerator.new()
 	rng.seed = run_seed ^ room.room_id.hash() ^ 0x424f5831
-	# 这里同步编译整房的盒子，循环期间没有实体入树或物理步进。
-	var geometry_prepared: bool = room.encounter.get("spawn_mode", "") == "preplaced" or float(room.encounter.get("min_player_distance_m", 0.0)) > 0.0
-	if geometry_prepared:
+	# 距离受限/预置整房保留原预检。普通盒在首个实际需要选点的盒才采集，
+	# 准备标记只活在这一次同步编排，不传给下一次正式出怪或延迟回调。
+	var guarded_placement: bool = room.encounter.get("spawn_mode", "") == "preplaced" or float(room.encounter.get("min_player_distance_m", 0.0)) > 0.0
+	if guarded_placement:
 		room._prepare_safe_spawn_selection()
+	var geometry_prepared := guarded_placement
 	var waves: Array = []
 	for stage_value in stages:
 		var entries: Array[Dictionary] = []
 		for instance_value in (stage_value as Array):
-			_collect_box_stage_entries(
+			var still_prepared := _collect_box_stage_entries(
 				room, placements, int(instance_value), floor, floor_level, rng, entries, geometry_prepared
 			)
+			geometry_prepared = guarded_placement or still_prepared
 		if entries.is_empty():
 			continue
 		# 每波至少一条**立刻**出怪：全员延迟时把第一条拉回 0。
@@ -5541,7 +5604,7 @@ func _spawn_box_waves(room: DungeonRoom3D, floor: int, floor_level: int) -> Arra
 	return waves
 
 
-## 把某个盒子实例的出怪清单展开为一批敌人配置，追加进 `entries`（跨条目共享落点池）。
+## 将盒内编成追加进 entries；返回后一个普通盒是否还可复用本次同步几何。
 func _collect_box_stage_entries(
 	room: DungeonRoom3D,
 	placements: Array,
@@ -5551,13 +5614,13 @@ func _collect_box_stage_entries(
 	rng: RandomNumberGenerator,
 	entries: Array[Dictionary],
 	geometry_prepared := false
-) -> void:
+) -> bool:
 	var placement := _box_placement_at(placements, instance_index)
 	if placement.is_empty():
 		if room.encounter.get("spawn_mode", "") == "preplaced":
 			_room_spawn_blocked[room.room_id] = true
 			push_error("[Dungeon3D] 预置盒解析失败，整房拒绝且不发奖励：%s:%d" % [room.room_id, instance_index])
-		return
+		return geometry_prepared
 	var box := SpawnBoxCatalog.resolve_placement_box(placement)
 	if box.is_empty():
 		if room.encounter.get("spawn_mode", "") == "preplaced":
@@ -5566,7 +5629,7 @@ func _collect_box_stage_entries(
 			"[Dungeon3D] 房间 %s 的触发盒实例 %d（%s）解析失败，已跳过"
 			% [room.room_id, instance_index, str(placement.get("box", ""))]
 		)
-		return
+		return geometry_prepared
 	var spec: Array[Dictionary] = []
 	var total := 0
 	# 逐实例出怪总量增量（`spawn_placements[].count_bonus`，设计 §3.2）：
@@ -5604,7 +5667,7 @@ func _collect_box_stage_entries(
 		})
 		total += count
 	if total <= 0:
-		return
+		return geometry_prepared
 	# 一次性取满 total 个盒内落点，再按条目切分 —— 让「同盒内的怪」彼此拉开，
 	# 而不是每条各自从最远点重新起算（那会让第二条压到第一条头上）。
 	var available: Array[Vector3] = []
@@ -5624,7 +5687,7 @@ func _collect_box_stage_entries(
 		if safe_candidates.is_empty():
 			_room_spawn_blocked[room.room_id] = true
 			push_error("[Dungeon3D] 授权盒没有合法候选，拒绝生成且不发奖励：%s:%d" % [room.room_id, instance_index])
-			return
+			return geometry_prepared
 		for index in total:
 			available.append(safe_candidates[index % safe_candidates.size()])
 	else:
@@ -5632,13 +5695,14 @@ func _collect_box_stage_entries(
 		var points := room.spawn_points_in_box(
 			placement["box_center"], placement["box_size"], total,
 			float(placement["box_rotation"]), float(box.get("min_spacing_m", 0.0)),
-			int(box.get("wall_recess_tiles", SpawnBoxCatalog.DEFAULT_WALL_RECESS_TILES))
+			int(box.get("wall_recess_tiles", SpawnBoxCatalog.DEFAULT_WALL_RECESS_TILES)), geometry_prepared
 		)
+		geometry_prepared = true
 		for point in points:
 			if point.is_finite():
 				available.append(point)
 	if available.is_empty():
-		return
+		return geometry_prepared
 	var cursor := 0
 	for spec_value in spec:
 		if cursor >= available.size():
@@ -5649,7 +5713,11 @@ func _collect_box_stage_entries(
 				break
 			var point := available[cursor]
 			cursor += 1
-			var config := _make_box_enemy(str(item["type"]), floor, floor_level, room)
+			var type_id := str(item["type"])
+			# 身份工厂可能预约精英并同步通知外部。下一普通盒不能跨过此边界复用。
+			if type_id == "elite" or type_id == "boss":
+				geometry_prepared = false
+			var config := _make_box_enemy(type_id, floor, floor_level, room)
 			if config.is_empty():
 				if preplaced:
 					_room_spawn_blocked[room.room_id] = true
@@ -5683,6 +5751,7 @@ func _collect_box_stage_entries(
 				config["spawn_preplaced_box"] = instance_index
 				config["spawn_box_min_spacing_m"] = float(box.get("min_spacing_m", 0.0))
 			entries.append(config)
+	return geometry_prepared
 
 
 ## 解析调用层：返回「每波 = 一组盒子实例下标」。空 = 本房没摆盒子（由调用方决定语义）。

@@ -1,3 +1,9 @@
+- 2026-11-25 · VFX-POOL / PLAYER-STATE · [赛博虚空可选物理开口](2026-11-25_cyber_void_collision.md)。FX03-04 升 v006，默认关闭物理开口。启用可裁切范围内静态墙地阻挡，合并重叠开口并在关闭后恢复。实际玩家下落、下层落地和安全回位专项 18 项通过，Forward+ 独立场景及混用验收通过。
+
+- 2026-11-25 · PERFORMANCE-RUNTIME / WORLD-ENTRY · [刷怪盒合批与表现资源预加载](2026-11-25_performance_phase2_phase3.md)。同批盒编排扫描 24→7；本局实际使用且公共预热未覆盖的表现资源在读取页准备。地图、出怪与存档规则不变。Forward+ 三关均复测，01/03 帧预算未过，02 受测路线帧预算通过；既有 ObjectDB 退出告警仍阻断总验收。
+
+- 2026-11-25 · PERFORMANCE-RUNTIME · [阶段 0：基线前置与工具自检](2026-11-25_performance_baseline_preflight.md)。事件帧验收拒绝错误后端、画质、分辨率、引擎及截断预热；新增 P50，帧预算不变。此前置批未改生产逻辑，实际基线和施工见上条。
+
 - 2026-11-25 · CHANNEL-MANAGER-NPC / VFX-ENVIRONMENT · [按 room_09 原有对象重接北墙裂隙门](../design/远征关卡01设计.md)。移除额外复制的 `ChannelManagerPortalVolumes` 三套范围盒，直接驱动作者已摆好的 `CyberSpaceBlueBox` 与 `VoidErosionBox`，保留原节点变换、`box_size` 和 Shader。频道管理者光束改从北向第 9 台 CRT socket（`screen_mounts.json` 数组索引 8、法线 `-Z`）发射；远征99专项通过原对象路径、尺寸、北墙受效网格与完整支线回归。未新增材质、门网格或传送系统。
 
 - 2026-11-24 · WEAPON-COMBAT / VFX-POOL · [持枪红外线暂缓启用](../14.6_特效系统与制作规范.md#35c-玩家持枪红外线2026-11-24)。仅注释玩家场景的资源声明和实例行；预制体、脚本、材质与登记保留。隔离无头验证正式持枪不生成红线（2 项），独立挂载后原表现仍通过（83 项）。准星、弹道和存档不变。

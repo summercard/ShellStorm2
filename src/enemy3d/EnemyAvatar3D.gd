@@ -130,6 +130,27 @@ const PROXY_ASSET_KIND := {
 static func resolve_asset_kind(kind: String) -> String:
 	return str(PROXY_ASSET_KIND.get(kind, kind))
 
+
+static func _base_kind_for_asset(asset_kind: String) -> String:
+	var base_kind := MonsterVariants.base_of(asset_kind)
+	if base_kind.is_empty():
+		base_kind = asset_kind
+	return base_kind if COLORS.has(base_kind) else "melee_chaser"
+
+
+## 读条与正式表现走同一资源路由；空路径表示程序化外壳。
+static func formal_normal_scene_path_for(kind: String) -> String:
+	return _formal_normal_path(kind, _base_kind_for_asset(resolve_asset_kind(kind)))
+
+
+static func _formal_normal_path(kind: String, base_kind: String) -> String:
+	# 复刻爆炸/冲撞怪仍走原有程序壳。三种借旧胖子的怪也保留原资产。
+	if base_kind == "exploder" and kind not in ["exploder", MonsterVariants.EXPLODER_STRONG]:
+		return ""
+	if kind in ["egt_mimic", "egt_gun_nut", "egt_chain_gunner"]:
+		return "res://assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/enm_normal_fat_zombie03_root_top3d.tscn"
+	return str(FORMAL_NORMAL_SCENES.get(base_kind, ""))
+
 # 与实际模块化模型的最大横向轮廓同源；Enemy3D 直接读取该表生成受击/物理体积。
 #
 # ⚠ 2026-10-15 业主：「胖子僵尸、小僵尸、警察僵尸的碰撞盒子，**高度不调整，
@@ -293,10 +314,7 @@ func configure(kind: String) -> void:
 	var asset_kind := resolve_asset_kind(kind)
 	var known := COLORS.has(asset_kind) or MonsterVariants.is_variant(asset_kind)
 	enemy_kind = kind if known else "melee_chaser"
-	var base_kind := MonsterVariants.base_of(asset_kind)
-	_base_kind = base_kind if not base_kind.is_empty() else asset_kind
-	if not COLORS.has(_base_kind):
-		_base_kind = "melee_chaser"
+	_base_kind = _base_kind_for_asset(asset_kind)
 	_rebuild()
 
 
@@ -551,8 +569,9 @@ func _rebuild() -> void:
 	_root.add_child(_tell_ring)
 	# 正式普通怪分支：非精英 melee_chaser 在程序化外壳之后挂载独立小僵尸包装，
 	# 隐藏壳/核/附肢、保留 tell ring；动画由包装自驱动，避免旧 bob/appendage 程序姿势叠加。
-	if _uses_formal_normal_model() and _root != null:
-		_load_formal_normal_model()
+	var scene_path := _formal_normal_path(enemy_kind, _base_kind)
+	if not scene_path.is_empty() and _root != null:
+		_load_formal_normal_model(scene_path)
 		# 按配方为普通与强化僵尸挂接红眼。
 		if monster_has_eye_glow():
 			_setup_eye_socket()
@@ -748,20 +767,7 @@ func _find_formal_normal_skeleton() -> Skeleton3D:
 	return null
 
 
-func _uses_formal_normal_model() -> bool:
-	# 七个借 exploder 的代理怪仍走旧程序壳；其它已正式化家族保留原路由。
-	return FORMAL_NORMAL_SCENES.has(_base_kind) and (
-		_base_kind != "exploder" or enemy_kind in ["exploder", MonsterVariants.EXPLODER_STRONG]
-	)
-
-
-func _load_formal_normal_model() -> void:
-	if not _uses_formal_normal_model():
-		return
-	var scene_path := str(FORMAL_NORMAL_SCENES.get(_base_kind, ""))
-	# 三种远征03借皮怪不属于本次胖子替换，保持原视觉和染色。
-	if enemy_kind in ["egt_mimic", "egt_gun_nut", "egt_chain_gunner"]:
-		scene_path = "res://assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/enm_normal_fat_zombie03_root_top3d.tscn"
+func _load_formal_normal_model(scene_path: String) -> void:
 	var scene := _cached_scene(scene_path)
 	assert(scene != null, "Formal normal scene missing for %s" % enemy_kind)
 	_formal_normal_root = scene.instantiate() as Node3D

@@ -4,18 +4,126 @@ const LEVEL := preload("res://scenes/ExpeditionLevel03_3D.tscn")
 var failures: Array[String] = []
 var checks := 0
 
+class CollisionProbeRoom extends DungeonRoom3D:
+	var scans := 0
+
+	func _collect_spawn_blockers() -> void:
+		scans += 1
+		super()
+
+
+class BoxCompilerProbe extends Dungeon3D:
+	var enable_on_elite: CollisionShape3D
+	var elite_calls := 0
+
+	func _make_box_enemy(kind: String, _floor: int, _level: int, _room: DungeonRoom3D, _encounter: String = "") -> Dictionary:
+		if kind == "elite" and is_instance_valid(enable_on_elite):
+			elite_calls += 1
+			enable_on_elite.disabled = false
+		return {"enemy_type": kind}
+
+
 func check(ok: bool, message: String) -> void:
 	checks += 1
 	if not ok:
 		failures.append(message)
 
 func _ready() -> void:
-	await _geometry()
-	await _runtime()
+	_verify_same_call_geometry_batch()
+	if "--batch-only" not in OS.get_cmdline_user_args():
+		await _geometry()
+		await _runtime()
 	for failure in failures:
 		push_error(failure)
 	print("ENEMY_SPAWN_BOUNDARY_%s checks=%d failures=%d" % ["OK" if failures.is_empty() else "FAILED", checks, failures.size()])
 	get_tree().quit(0 if failures.is_empty() else 1)
+
+func _make_batch_room(angle: float) -> CollisionProbeRoom:
+	var room := CollisionProbeRoom.new()
+	room.configure({"room_id": "box_batch", "room_type": "COMBAT", "seed": 701,
+		"custom_dimensions": Vector2(24, 24)})
+	room.rotation_degrees.y = angle
+	room.position = Vector3(36, 8, -21)
+	var scope := Node3D.new()
+	add_child(scope)
+	scope.add_child(room)
+	# Lightweight fixture: only directly attached collision members, no content spawners.
+	room._detail_built = true
+	room._spawn_reach_probe_frame = -1
+	return room
+
+
+func _add_batch_blocker(room: DungeonRoom3D, center: Vector3, size: Vector3) -> CollisionShape3D:
+	var body := StaticBody3D.new()
+	body.position = center
+	var collision := CollisionShape3D.new()
+	var geometry := BoxShape3D.new()
+	geometry.size = size
+	collision.shape = geometry
+	body.add_child(collision)
+	room.add_child(body)
+	return collision
+
+
+func _verify_same_call_geometry_batch() -> void:
+	var compiler := BoxCompilerProbe.new()
+	compiler.run_seed = 41021
+	for angle in [0.0, 90.0]:
+		var room := _make_batch_room(angle)
+		var reference := _make_batch_room(angle)
+		_add_batch_blocker(room, Vector3(0, 1, 0), Vector3(2, 2, 4))
+		_add_batch_blocker(reference, Vector3(0, 1, 0), Vector3(2, 2, 4))
+		room.spawn_placements = [
+			{"box": "box_wall_arc", "center_m": [-6, 0]},
+			{"box": "box_wall_arc", "center_m": [6, 0], "rotation_deg": 45, "delay_sec": 0.25},
+			{"box": "box_room_spread", "center_m": [5, 6], "size_m": [6, 5]},
+		]
+		room.encounter = {"stages": [{"boxes": [0, 1]}, {"boxes": [2]}]}
+		var observed := compiler._spawn_box_waves(room, 1, 0)
+		var rng := RandomNumberGenerator.new()
+		rng.seed = compiler.run_seed ^ reference.room_id.hash() ^ 0x424f5831
+		var expected: Array = []
+		for stage: Dictionary in room.encounter["stages"]:
+			var entries: Array[Dictionary] = []
+			for index: int in stage["boxes"]:
+				# Standalone calls still read live geometry; do not pass the reuse marker.
+				compiler._collect_box_stage_entries(reference, room.spawn_placements, index, 1, 0, rng, entries)
+			expected.append(entries)
+		check(expected.size() == 2 and not expected[0].is_empty() and not expected[1].is_empty(), "复用对照不能是空编成")
+		check(observed == expected, "批内复用改变盒顺序、稳定 ID、落点或延迟（角度 %s）" % angle)
+		check(room.scans == 1 and reference.scans == 3, "同批应只采集一次，独立三盒仍逐次采集：%d/%d" % [room.scans, reference.scans])
+		check(room._spawn_reach_evaluated and room._spawn_reach_active and room._spawn_candidates == reference._spawn_candidates,
+			"首次可达性闸门未正确生效，或重排了候选池")
+		var same_tick := Engine.get_physics_frames()
+		var cover := _add_batch_blocker(room, Vector3(0, 1, 0), Vector3(30, 2, 30))
+		check(compiler._spawn_box_waves(room, 1, 0).is_empty() and room.scans == 2,
+			"第二次编排沿用了上一批阻挡物，或重复采集")
+		cover.disabled = true
+		check(compiler._spawn_box_waves(room, 1, 0) == observed and room.scans == 3 and Engine.get_physics_frames() == same_tick,
+			"同物理帧禁用阻挡后仍使用旧几何，或编排意外让帧")
+		room.get_parent().free()
+		reference.get_parent().free()
+
+	var identity_room := _make_batch_room(0.0)
+	var cover := _add_batch_blocker(identity_room, Vector3(0, 1, 0), Vector3(30, 2, 30))
+	cover.disabled = true
+	identity_room.spawn_placements = [
+		{"box": "box_center_elite", "center_m": [-6, 0], "size_m": [6, 5]},
+		{"box": "box_wall_arc", "center_m": [6, 0]},
+	]
+	var before := compiler._spawn_box_waves(identity_room, 1, 0)
+	check(before.size() == 1 and before[0].any(func(entry: Dictionary) -> bool: return entry.persistent_id.begins_with("box_batch:box_1:")),
+		"身份回调对照未覆盖第二盒")
+	compiler.enable_on_elite = cover
+	identity_room.scans = 0
+	var after := compiler._spawn_box_waves(identity_room, 1, 0)
+	check(compiler.elite_calls == 1 and not cover.disabled, "身份工厂的几何改变未发生")
+	check(after.size() == 1 and not after[0].is_empty() and after[0].all(func(entry: Dictionary) -> bool: return entry.persistent_id.begins_with("box_batch:box_0:")),
+		"身份回调之后的盒没有使用当下碰撞")
+	check(identity_room.scans == 2, "身份工厂改变碰撞后，下一普通盒必须重新采集")
+	identity_room.get_parent().free()
+	compiler.free()
+
 
 func _geometry() -> void:
 	for degrees in [0, 90, 180, 270]:

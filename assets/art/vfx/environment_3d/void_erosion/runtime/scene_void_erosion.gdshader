@@ -3,6 +3,8 @@ render_mode unshaded, blend_mix, cull_disabled, depth_draw_never, shadows_disabl
 
 uniform mat4 world_to_volume;
 uniform bool strict_box_bounds = false;
+uniform bool collision_cut_mode = false;
+uniform vec3 collision_extent = vec3(0.0);
 uniform vec3 half_size = vec3(4.5, 2.5, 4.5);
 uniform float progress = 1.0;
 uniform float cell_size = 0.55;
@@ -53,6 +55,9 @@ float box_distance(vec3 p, vec3 extent) {
 }
 
 float erosion_distance(vec3 cell, vec3 extent) {
+	if (collision_cut_mode) {
+		return box_distance((cell + 0.5) * cell_size, extent);
+	}
 	vec3 block = floor((cell + vec3(1.0, 2.0, -1.0)) / vec3(3.0, 4.0, 3.0));
 	float coarse = hash_cell(block + vec3(29.0, 17.0, 5.0)) - 0.53;
 	float grain = hash_cell(cell) - 0.48;
@@ -409,17 +414,18 @@ void fragment() {
 	// Start the interior on the same ray plane even where the wall is recessed or beveled.
 	vec3 ray_start = p - ray * (dot(p, camera_forward) / max(dot(ray, camera_forward), 0.001));
 	float ray_pixel_size = max(length(dFdx(ray_start)), length(dFdy(ray_start)));
-	vec3 extent = half_size * progress;
+	vec3 extent = collision_cut_mode ? collision_extent : half_size * progress;
 	vec3 coordinates = p / cell_size;
 	vec3 aa = max(fwidth(coordinates) * 0.65, vec3(0.002));
 	float pixel_size = max(length(dFdx(p)), length(dFdy(p)));
 	float bounds_distance = box_distance(p, extent);
-	if (progress <= 0.0 || (strict_box_bounds && bounds_distance > 0.0) || bounds_distance > edge_width + cell_size * 2.1) {
+	if (progress <= 0.0 || (collision_cut_mode && any(lessThanEqual(extent, vec3(0.0)))) ||
+			(strict_box_bounds && bounds_distance > 0.0) || bounds_distance > edge_width + cell_size * 2.1) {
 		discard;
 	}
 
 	vec3 cell = floor(coordinates);
-	float signed_distance = erosion_distance(cell, extent);
+	float signed_distance = collision_cut_mode ? bounds_distance : erosion_distance(cell, extent);
 	float reveal = smoothstep(0.0, 0.075, progress);
 	if (fill_aperture_only) {
 		if (signed_distance >= 0.0) {

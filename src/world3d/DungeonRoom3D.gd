@@ -7734,33 +7734,34 @@ func _spawn_clearance() -> float:
 ## 代价与边界：这是**几何可达性**，不是导航网格。它只回答「玩家胶囊从门能不能走到」，
 ## 不回答「走过去好不好走」。家具的 AABB 是绕 Y 旋转后的保守盒 ⇒ 斜摆家具的阻挡会
 ## 略微偏大，宁可少刷一只，也不刷在打不到的地方。
-func _ensure_spawn_reach() -> void:
+# 返回本次调用是否已经采集碰撞，不代表可达性闸门已开启。
+func _ensure_spawn_reach() -> bool:
 	if _spawn_reach_evaluated:
-		return
+		return false
 	var frame := Engine.get_physics_frames()
 	if _spawn_reach_probe_frame == frame:
-		return
+		return false
 	_spawn_reach_probe_frame = frame
 	# 细节没建 ⇒ 家具碰撞体还没进物理空间，此时算出来的「可达」是假的。等下一次再算。
 	if not _detail_built:
-		return
+		return false
 	# 多级房不适用：Boss 深井的主通行面由 `walkable_navigation_polygons` 跨楼层表达
 	# （坑底 -12m），0.5 m 单层网格会把井口与井底糊成同一片；撤离房的门被信标结构占位。
 	# 这两类房的落点仍走既有口径（地砖 + 障碍），本闸门不介入 —— 实测强开会把
 	# Boss 盒心挤漂 20.8 m，那是副作用不是收益。
 	if room_type == "BOSS" or room_type == "EXTRACTION":
-		return
+		return false
 	_spawn_reach_active = false
 	_spawn_reach_cells.clear()
 	_collect_spawn_blockers()
 	# 一件障碍都没有（程序化空房 / 塔楼标准间）⇒ 不存在「围出来的空腔」，算也是全通。
 	if _spawn_blockers.is_empty():
-		return
+		return true
 	var dimensions := get_dimensions()
 	var columns := int(floor(dimensions.x / SPAWN_REACH_GRID_M))
 	var rows := int(floor(dimensions.y / SPAWN_REACH_GRID_M))
 	if columns <= 1 or rows <= 1:
-		return
+		return true
 	# ① 通行性：障碍 AABB 在 XZ 上膨胀玩家半径；头顶构件不算挡路。
 	# X 主序与旧 Dictionary 插入顺序一致；外围零哨兵避免洪泛跨行。
 	var stride := rows + 2
@@ -7784,7 +7785,7 @@ func _ensure_spawn_reach() -> void:
 				walkable_count -= walkable[index]
 				walkable[index] = 0
 	if walkable_count == 0:
-		return
+		return true
 	# ② 种子：每个连接门内侧 2 m。门洞格本身常被门扇占着，向内缩。
 	var queue := PackedInt32Array()
 	for value in connection_ports:
@@ -7807,7 +7808,7 @@ func _ensure_spawn_reach() -> void:
 	if reached.is_empty():
 		reached = _spawn_reach_largest_component_packed(walkable, columns, rows)
 	if reached.is_empty():
-		return
+		return true
 	var coverage := float(reached.size()) / float(walkable_count)
 	if coverage < SPAWN_REACH_MIN_COVERAGE:
 		# 判负也要落锁：否则每次刷怪都会重算一遍，白烧一次洪泛。
@@ -7816,7 +7817,7 @@ func _ensure_spawn_reach() -> void:
 			"DungeonRoom3D: 房间 %s 的可达性只覆盖 %.0f%% 的可站格（阈值 %.0f%%），闸门停用、退回旧行为"
 			% [room_id, coverage * 100.0, SPAWN_REACH_MIN_COVERAGE * 100.0]
 		)
-		return
+		return true
 	# 判定成立才落锁。`_spawn_blockers` 为空时**不锁**：那可能是家具细节刚建、
 	# 碰撞还没进树的一帧，下一次刷怪要能重算。
 	_spawn_reach_evaluated = true
@@ -7828,6 +7829,7 @@ func _ensure_spawn_reach() -> void:
 	# ④ 候选池是在 `_ready()` 生成的（当时家具细节还没建、闸门未启用）⇒ 重算一遍。
 	#    这里是唯一的重算入口：同一 `room_seed`，除被闸门剔掉的点外逐点不变。
 	_build_spawn_points()
+	return true
 
 
 func _spawn_reach_nearest_packed(walkable: PackedByteArray, key: Vector2i, max_steps: int, columns: int, rows: int) -> int:
@@ -8332,8 +8334,7 @@ func spawn_point_for_index(index: int) -> Vector3:
 	if safe_index == 0 or enemy_spawn_points.is_empty():
 		enemy_spawn_points.clear()
 		# 首次出怪时家具细节已建 ⇒ 这里才是可达性闸门真正生效的时机（见 `_ensure_spawn_reach`）。
-		_ensure_spawn_reach()
-		_collect_spawn_blockers()
+		_refresh_spawn_selection_geometry()
 		_spawn_available.clear()
 		for i in _spawn_candidates.size():
 			if _spawn_obstacle_free(_spawn_candidates[i]):
@@ -8422,8 +8423,13 @@ func is_safe_spawn_position_valid(
 func _prepare_safe_spawn_selection() -> void:
 	if _spawn_candidates.is_empty():
 		_build_spawn_points()
-	_ensure_spawn_reach()
-	_collect_spawn_blockers()
+	_refresh_spawn_selection_geometry()
+
+
+func _refresh_spawn_selection_geometry() -> void:
+	# 仅复用刚刚在同一个调用栈读取的几何；不能把可达性闸门的帧号当作碰撞版本。
+	if not _ensure_spawn_reach():
+		_collect_spawn_blockers()
 
 
 func _safe_spawn_geometry_valid(world_point: Vector3) -> bool:
@@ -8470,13 +8476,15 @@ func _spawn_candidate_score(distance: float, separation: float, edge: bool) -> f
 ## ⚠ 调用方必须**按有限点截断**（`Dungeon3D._collect_box_stage_entries` 就是这么做的）：
 ## 把 `Vector3.INF` 直接喂给 `_spawn_enemy_batch` 会让整批判「无合法落点」并把本房波次锁死。
 ## 本函数不替调用方决定降级策略，但绝不用非法坐标或房间中心糊弄过去。
+## geometry_prepared 仅允许同房、同一次未修改几何的同步盒编排使用。
 func spawn_points_in_box(
 	box_center_local: Vector2,
 	box_size: Vector2,
 	count: int,
 	box_rotation_deg: float = 0.0,
 	min_spacing_m: float = 0.0,
-	wall_recess_tiles: int = SPAWN_BOX_WALL_RECESS_TILES
+	wall_recess_tiles: int = SPAWN_BOX_WALL_RECESS_TILES,
+	geometry_prepared := false
 ) -> Array[Vector3]:
 	var result: Array[Vector3] = []
 	if count <= 0:
@@ -8484,8 +8492,8 @@ func spawn_points_in_box(
 	if _spawn_candidates.is_empty():
 		_build_spawn_points()
 	# 闸门首次生效时会重算候选池 ⇒ 必须赶在 `_spawn_candidates` 被读取之前。
-	_ensure_spawn_reach()
-	_collect_spawn_blockers()
+	if not geometry_prepared:
+		_refresh_spawn_selection_geometry()
 	box_center_local = snap_box_center_to_tile(box_center_local, wall_recess_tiles)
 	var size := Vector2(
 		maxf(SPAWN_BOX_MIN_SIZE_M, box_size.x), maxf(SPAWN_BOX_MIN_SIZE_M, box_size.y)

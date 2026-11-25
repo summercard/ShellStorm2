@@ -1,5 +1,8 @@
 - NARRATIVE-TRIGGER / BASE-NPC / WORLD-ENTRY · [主线3.1 99F灯光双分支](2026-11-24_main_story_031_light_branches.md)。主动开灯与摸黑深入两路均由绿苔主动会合并汇入同一主线；同步真实墙灯启动、演出手电、分支cue过滤和验收遗留。
 - WORLD-SECRET · [支线回退隐藏门与常开入口](2026-11-23_secret_branch_return_doors.md)。主线入口改无板常开门，首间新增回退门，末端返程门按真实地砖墙位选点。
+- PERFORMANCE-RUNTIME / WORLD-ENTRY · [刷怪盒合批与表现资源预加载](2026-11-25_performance_phase2_phase3.md)。三关 Forward+ 基线及联合复测；普通盒批内复用、已确认的旧胖子资源冷载补齐；帧预算和退出清理分开判定，整体未放行。
+- PERFORMANCE-RUNTIME · [性能阶段 0：基线前置与工具自检](2026-11-25_performance_baseline_preflight.md)。记录开工时的环境阻塞与验收工具修正；后续实测见上条。
+
 - PERF · [性能优化重做计划：合批与预加载](2026-11-24_performance_optimization_replan.md)。冻结阶段 0—6 的施工顺序、批次分类、预加载分层、验收门槛和停止条件；本事务未改生产代码、未新增性能采样。
 
 - PERF · [近期间歇性卡顿调查结论](../13_技术施工_性能优化与热管理.md)。进房调用链分段与候选贡献项，未改生产代码。
@@ -10,6 +13,8 @@
 - PLAYER-STATE / UI-HUD / WORLD-ENTRY · [游戏指针与战斗准星交接](2026-11-22_cursor_crosshair_handoff.md)。功能界面使用游戏箭头、玩法使用现有准星，专项与真实窗口验收见记录。
 
 - VFX-POOL · [赛博空间三色预设与交界](2026-11-21_cyber_space.md)。独立 Shader、三色 Prefab 与同模型混用验收。
+
+- VFX-POOL / PLAYER-STATE · [赛博虚空可选物理开口](2026-11-25_cyber_void_collision.md)。现有碰撞基线、局部裁切、玩家实际下落与恢复验收。
 
 - VFX-POOL · [赛博虚空场景组件覆盖](2026-11-21_cyber_void_component_scope.md)。同一范围覆盖栏杆等场景组件。
 
