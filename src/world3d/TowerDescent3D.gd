@@ -406,6 +406,13 @@ const FLOW_ROOM_WALL_THICKNESS_M := 0.28
 ## 幕墙**门洞的上沿就是这个高度**，理由见 `_build_flow_view_walls()`。
 ## 改墙高时这里必须同步。
 const FLOW_ROOM_WALL_HEIGHT_M := 2.8
+## 静态低墙房按房间元数据读取墙高；未声明时保持 flow 原值。
+func _room_view_wall_height_m(room: DungeonRoom3D) -> float:
+	if room == null:
+		return FLOW_ROOM_WALL_HEIGHT_M
+	var declared := float(room.get_meta("room_wall_height_m", 0.0))
+	return declared if declared > 0.0 else FLOW_ROOM_WALL_HEIGHT_M
+
 ## 幕墙与墙外表面之间留的空隙：贴太近会与墙面共面打架。
 const FLOW_VIEW_WALL_GAP_M := 0.02
 ## 幕墙的竖直范围。下沿沉到地面以下（俯角压低时看得到地平面边缘），
@@ -7636,7 +7643,7 @@ func _room_view_curtain_openings(
 		var from := maxf(u_start, axis_origin + lane - half_width)
 		var to := minf(u_end, axis_origin + lane + half_width)
 		var low := maxf(span.x, metrics.x + FLOW_VIEW_WALL_BOTTOM_M)
-		var high := minf(span.y, metrics.x + FLOW_ROOM_WALL_HEIGHT_M)
+		var high := minf(span.y, metrics.x + _room_view_wall_height_m(room))
 		if to - from > 0.01 and high > low:
 			openings.append(Rect2(from, low, to - from, high - low))
 	openings.sort_custom(func(a: Rect2, b: Rect2) -> bool: return a.position.x < b.position.x)

@@ -43,6 +43,8 @@ metadata:
 
 先按 `block_id / level_id` 定位：battle战局与expedition远征是独立分支，不互套拓扑、楼层、房间表或默认撤离房尺寸；跨分支只显式复用组件及稳定Prefab。50/3/5按02“预算适用范围与历史例外”只约束后续新资产，历史资产不追溯整改；既有布局调整不触发旧库归并，新房型/组件/变体或新几何定义不得借旧目录、升版或历史标签豁免。
 
+墙高是布局初始化前的硬路由条件：先读取 `docs/v0.1/design/远征墙高与场景资产路由规范.md` 和 `assets/registry/expedition_scene_height_contract.json`，并在房间/组件元数据中核对 `asset_family`。`expedition_01` 只接 `tower_h12`（逻辑12.0m、视觉11.9m）；`expedition_03` 只接 `manor_h28`（2.8m）。看到历史模板名或 `floor_height_m=12.0` 时不得直接推导房间墙高，契约不匹配就停止布局。
+
 先定位已登记正式 TSCN、房间变体资源及组件引用；没有正式场景时才选择初始化来源。核查以下约束/可选来源：
 
 1. 具体房间白模：`art_source/design/whitebox/tower_zones/<level>/...`，包含房间编号、尺寸、门方向、连接目标和可走面。

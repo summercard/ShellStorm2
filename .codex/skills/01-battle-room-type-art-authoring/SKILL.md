@@ -41,6 +41,7 @@ metadata:
 2. 读取房间种类对应的设计文档、参考图和既有房间源；不得从旧 Blender 场景猜尺寸。
 3. 读取项目资产规范与 `blender-game-prop-standard`，沿用公共色盘、四类材质、PaletteUV、坐标和版本规则。
 4. 确认 `block_id` 使用白盒与资产目标所属的真实区块（局内战局通常为 `battle`；远征白盒必须为 `expedition`），并确认 `design_scope=scene_art`、`asset_ledger`。这三项贯穿后续源、组件、导入和验收。
+5. 墙高必须按 `level_id` 和 `asset_family` 路由，不能从共享 `block_id` 或旧房型示例推导：`expedition_01` 使用 `tower_h12`（逻辑墙12.0m、视觉墙11.9m），`expedition_03` 使用 `manor_h28`（逻辑/视觉墙均2.8m）。制作前读取 `docs/v0.1/design/远征墙高与场景资产路由规范.md` 与 `assets/registry/expedition_scene_height_contract.json`；远征03不得按11.9m示例建模。
 
 ## 房间种类源的所有权
 

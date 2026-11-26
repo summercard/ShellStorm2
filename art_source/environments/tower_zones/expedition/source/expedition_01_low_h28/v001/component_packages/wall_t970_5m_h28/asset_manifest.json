@@ -1,0 +1,44 @@
+{
+  "asset_id": "ENV-EXPEDITION-L01-LOW-WALL-T970-5M",
+  "asset_version": "v001",
+  "slug": "wall_t970_5m_h28",
+  "level_id": "expedition_01",
+  "block_id": "expedition",
+  "asset_family": "expedition_01_low_h28",
+  "legacy_prefab": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t970_5m/wall_t970_5m_root_top3d.tscn",
+  "reference_glb": "assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_t970_5m/wall_t970_5m_visual_top3d.glb",
+  "reference_glb_sha256": "92390d0bdf4b9fd4a15990ac1b1f635e5e9ca958debbb9d4d4fbb4bb6c27d171",
+  "source_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_t970_5m_h28/wall_t970_5m_h28_source_v001.blend",
+  "source_sha256": "58f009d69472d1afc1ed286a39af001ffb7d8134c02dc3329c88860f22b9b9cb",
+  "optimized_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_t970_5m_h28/export/v001/wall_t970_5m_h28_optimized_v001.blend",
+  "optimized_sha256": "8f4ff6e92f7bf397271666f934a34749e8c99fba039f85f75128bd6a56b05aba",
+  "visual_glb": "assets/art/environments/tower_zones/expedition/components/expedition_01_low_h28/wall_t970_5m_h28/wall_t970_5m_h28_visual_top3d.glb",
+  "glb_sha256": "87691eef963112cc180ec0381aefedfda042fccc62e58a7e88eafe9d3c3c9a1e",
+  "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_t970_5m_h28/wall_t970_5m_h28_root_top3d.tscn",
+  "prefab_sha256": "757a276bfc082710bd38ff1bd6d9565cbc428bf0f16e3dce69021c9b581c521a",
+  "logical_wall_height_m": 2.8,
+  "visual_wall_height_m": 2.8,
+  "bounds_blender_m": [
+    [
+      -2.5,
+      -0.4850006103515625,
+      0.0
+    ],
+    [
+      2.5,
+      0.313140869140625,
+      2.8000001907348633
+    ]
+  ],
+  "source_triangles": 848,
+  "triangles_before": 348,
+  "triangles_after": 348,
+  "reduction_ratio": 0.0,
+  "operations": [
+    "Preserve native proportions below 2.8m; planar mesh section with palette cap",
+    "Remove degenerate and loose geometry; triangulate independently saved derivative"
+  ],
+  "cut_cap_faces": 9,
+  "door_opening": null,
+  "source_reference_retained": true
+}

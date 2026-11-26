@@ -8,7 +8,10 @@
   "grid_unit_m": 5.0,
   "wall_thickness_m": 0.3,
   "floor_height_m": 12.0,
-  "visible_wall_height_m": 11.9,
+  "floor_spacing_m": 12.0,
+  "logical_wall_height_m": 2.8,
+  "visible_wall_height_m": 2.8,
+  "asset_family": "expedition_01_low_h28",
   "site": {
     "size_m": [
       250.0,

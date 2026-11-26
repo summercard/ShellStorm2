@@ -1,0 +1,176 @@
+{
+  "schema": "shellstorm2.scene.expedition_height_contract",
+  "schema_version": 2,
+  "status": "current",
+  "source_documents": [
+    "docs/v0.1/design/远征墙高与场景资产路由规范.md",
+    "docs/v0.1/design/远征关卡01设计.md",
+    "docs/v0.1/design/远征关卡03设计.md",
+    "docs/v0.1/10_资产与内容规范.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "global_geometry": {
+    "grid_unit_m": 5.0,
+    "wall_thickness_m": 0.3,
+    "floor_spacing_m": 12.0,
+    "floor_spacing_note": "floor_spacing_m is the expedition vertical staging interval; it is not a universal room wall height."
+  },
+  "contracts": [
+    {
+      "contract_id": "expedition_01_low_h28",
+      "level_ids": ["expedition_01"],
+      "scope": "twelve_non_boss_formal_layouts_only",
+      "logical_wall_height_m": 2.8,
+      "visual_wall_height_m": 2.8,
+      "visual_top_clearance_m": 0.0,
+      "floor_spacing_m": 12.0,
+      "collision_policy": "full_room_wall_height",
+      "asset_family": "expedition_01_low_h28",
+      "runtime_wall_scene_prefix": "assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/",
+      "runtime_scene_suffix": "_h28_root_top3d.tscn",
+      "allowed_runtime_wall_families": [
+        "wall_standard_5m_h28",
+        "wall_door_5m_h28",
+        "wall_5m_a_h28",
+        "wall_5m_c_h28",
+        "wall_5m_d_h28",
+        "door_wall_h28",
+        "wall_t615_5m_h28",
+        "wall_t1110_5m_h28",
+        "wall_t970_5m_h28",
+        "wall_x780_h28",
+        "wall_corner_l_5m_h28"
+      ],
+      "source_roots": [
+        "art_source/design/whitebox/tower_zones/expedition_01/v001/data/",
+        "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/"
+      ],
+      "runtime_roots": [
+        "assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/"
+      ],
+      "asset_registration": {
+        "status": "pending_main_thread_asset_registry",
+        "source_catalog": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_catalog.json",
+        "asset_ids_are_not_checked_against_ledger": true
+      },
+      "door_contract": {
+        "width_m": 2.2,
+        "clear_height_m": 2.5,
+        "lintel_bottom_z_m": 2.8,
+        "door_leaves": "preserve_existing_formal_scene_door_leaves"
+      },
+      "formal_non_boss_layouts": {
+        "expected_count": 12,
+        "room_keys": [
+          "entry",
+          "room_01",
+          "room_02",
+          "room_03",
+          "room_04",
+          "room_05",
+          "room_06",
+          "room_07",
+          "room_08",
+          "room_09",
+          "room_10",
+          "extraction"
+        ],
+        "runtime_scene_prefix": "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/",
+        "runtime_scene_suffix": "_static_layout.tscn"
+      },
+      "room_view_curtain": {
+        "enabled": true,
+        "source_family": "expedition_03_flow_view_walls",
+        "collision": false,
+        "shadow": false,
+        "projection": false,
+        "route": "preserve_existing_main_path_and_connection_ports"
+      },
+      "preserved_exceptions": {
+        "boss_room_key": "boss",
+        "boss_template_id": "boss_deep_shaft_80x100",
+        "boss_deep_shaft_preserved": true,
+        "bridge_template_id": "bridge_60x50",
+        "bridge_pit_depth_m": 12.0,
+        "bridge_pit_preserved": true,
+        "room_08_internal_barrier_count": 15,
+        "room_08_internal_barrier_collision_preserved": true
+      }
+    },
+    {
+      "contract_id": "expedition_tower_h12_legacy",
+      "level_ids": ["expedition_02"],
+      "special_scopes": ["expedition_01_boss", "historical_tower"],
+      "logical_wall_height_m": 12.0,
+      "visual_wall_height_m": 11.9,
+      "visual_top_clearance_m": 0.1,
+      "floor_spacing_m": 12.0,
+      "collision_policy": "full_logical_height",
+      "asset_family": "tower_h12",
+      "family_scope": "historical_tower_and_expedition_02_usage; expedition_01_non_boss_layouts_must_not_use_this_family",
+      "allowed_runtime_wall_families": [
+        "wall_standard_5m_h12",
+        "wall_door_5m_h12",
+        "wall_collapse_5m_h12"
+      ],
+      "forbidden_for_level_ids": ["expedition_03", "expedition_01"]
+    },
+    {
+      "contract_id": "expedition_03_manor_h28",
+      "level_ids": ["expedition_03"],
+      "logical_wall_height_m": 2.8,
+      "visual_wall_height_m": 2.8,
+      "visual_top_clearance_m": 0.0,
+      "floor_spacing_m": 12.0,
+      "collision_policy": "component_or_manor_shell_2p8",
+      "asset_family": "manor_h28",
+      "runtime_wall_owner": "ManorShellPlan",
+      "allowed_runtime_wall_families": [
+        "manor_wall_standard",
+        "manor_wall_door",
+        "manor_wall_window",
+        "manor_wall_door_boss"
+      ],
+      "source_roots": [
+        "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/",
+        "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_door/",
+        "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_window/",
+        "art_source/environments/tower_zones/expedition/source/common_components/v019/component_packages/manor_door_double/",
+        "art_source/environments/tower_zones/expedition/source/common_components/v020/component_packages/manor_wall_door_boss/"
+      ],
+      "runtime_roots": [
+        "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_standard/",
+        "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_door/",
+        "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_window/",
+        "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_door_boss/"
+      ],
+      "asset_ids": [
+        "ENV-EXP03-MANOR-WALL-STANDARD",
+        "ENV-EXP03-MANOR-WALL-DOOR",
+        "ENV-EXP03-MANOR-WALL-WINDOW",
+        "ENV-EXP03-MANOR-WALL-DOOR-BOSS",
+        "ENV-EXP03-MANOR-DOOR-DOUBLE"
+      ],
+      "forbidden_for_level_ids": ["expedition_01"]
+    }
+  ],
+  "non_matching_families": [
+    {
+      "asset_family": "tower_h3",
+      "example_runtime_roots": [
+        "assets/art/environments/tower_zones/expedition/runtime/common_components/wall_standard_5m_h3/",
+        "assets/art/environments/tower_zones/expedition/runtime/common_components/wall_door_5m_h3/"
+      ],
+      "note": "远征02普通3m墙族；不属于远征01，也不属于远征03。"
+    },
+    {
+      "asset_family": "legacy_whitebox_template_ids",
+      "example_ids": [
+        "ENV-EXPEDITION-L01-ROOM-STD-25X25",
+        "ENV-EXPEDITION-L01-ROOM-DB-70X50",
+        "ENV-EXPEDITION-L01-ROOM-OFFICE-60X70"
+      ],
+      "note": "历史白盒模板ID不能据此选择运行时墙体Prefab；远征01非Boss运行时结构按 expedition_01_low_h28 路由。"
+    }
+  ]
+}

@@ -905,6 +905,13 @@ func get_dimensions() -> Vector2:
 	return ROOM_DIMENSIONS.get(size_class, ROOM_DIMENSIONS["medium"])
 
 
+func _room_wall_height_m() -> float:
+	if tower_module_shell:
+		return TOWER_GEOMETRY.FLOOR_HEIGHT_M
+	var declared := float(get_meta("room_wall_height_m", 0.0))
+	return declared if declared > 0.0 else 2.8
+
+
 func is_room_light_on() -> bool:
 	for light_switch in _all_room_light_switches():
 		if light_switch != null and is_instance_valid(light_switch):
@@ -1169,7 +1176,7 @@ func get_room_snapshot() -> Dictionary:
 		"wall_material_variant_b_count": _count_nodes_with_meta(self, "material_variant", "B"),
 		"tower_module_shell": tower_module_shell,
 		"open_wall_directions": open_wall_directions.duplicate(),
-		"wall_height": TOWER_GEOMETRY.FLOOR_HEIGHT_M if tower_module_shell else 2.8,
+		"wall_height": _room_wall_height_m(),
 		"support_collision_persistent": _has_enabled_support_collision(),
 		"service_station_count": _get_service_stations().size(),
 		"event_objective_ready": get_service_station("event") != null,
@@ -1533,6 +1540,42 @@ func _find_static_layout_meta(node: Node, key: String) -> Variant:
 		if found != null:
 			return found
 	return null
+
+
+func _static_layout_contains_low_wall_asset(node: Node) -> bool:
+	if node == null:
+		return false
+	if bool(node.get_meta("camera_only_door_wall", false)):
+		return false
+	for key in ["asset_family", "wall_asset_family"]:
+		if str(node.get_meta(key, "")) == "expedition_01_low_h28":
+			return true
+	for child in node.get_children():
+		if _static_layout_contains_low_wall_asset(child):
+			return true
+	return false
+
+
+func _declared_static_layout_wall_height_m(node: Node) -> float:
+	if room_type.to_upper().contains("BOSS"):
+		return -1.0
+	var declared: Variant = _find_static_layout_meta(node, "room_wall_height_m")
+	if declared == null:
+		declared = _find_static_layout_meta(node, "wall_height_m")
+	if declared != null:
+		var height := float(declared)
+		if height > 0.0:
+			return height
+	if _static_layout_contains_low_wall_asset(node):
+		return 2.8
+	var ancestor := get_parent()
+	while ancestor != null:
+		if ancestor.has_meta("room_wall_height_m"):
+			var height := float(ancestor.get_meta("room_wall_height_m"))
+			if height > 0.0:
+				return height
+		ancestor = ancestor.get_parent()
+	return -1.0
 
 
 ## 收集节点自身与全部后代里的墙面灯开关（前序、顺序稳定）。
@@ -2371,8 +2414,14 @@ func _backfill_rehomed_door_spot(static_layout: Node3D, previous_position: Vecto
 ## `CameraOnlyDoorWall_*` 这类**相机代理节点**名字里带 DoorWall、`scene_file_path`
 ## 却是空的（没有几何也没有碰撞），按名字认会把它当门墙件误补墙。
 static func _is_door_wall_piece(node: Node3D) -> bool:
-	var source := node.scene_file_path
-	return source.contains("wall_door") or source.contains("door_wall")
+	if node == null or bool(node.get_meta("camera_only_door_wall", false)):
+		return false
+	var source := node.scene_file_path.to_lower()
+	if source.contains("wall_door") or source.contains("door_wall"):
+		return true
+	if str(node.get_meta("slot_role", "")) == "door_wall":
+		return true
+	return str(node.get_meta("authored_component_id", "")).to_lower().contains("door_wall")
 
 
 func _raise_expedition_02_static_walls_to_ceiling(static_layout: Node3D) -> void:
@@ -3351,6 +3400,19 @@ func _relocate_art_into_components(root: Node3D) -> void:
 
 func _build_shell() -> void:
 	var expedition_static_path := _expedition_static_layout_path()
+	if (
+		not expedition_static_path.is_empty()
+		and not room_type.to_upper().contains("BOSS")
+		and not has_meta("room_wall_height_m")
+	):
+		var ancestor := get_parent()
+		while ancestor != null:
+			if ancestor.has_meta("room_wall_height_m"):
+				var inherited_height := float(ancestor.get_meta("room_wall_height_m"))
+				if inherited_height > 0.0:
+					set_meta("room_wall_height_m", inherited_height)
+				break
+			ancestor = ancestor.get_parent()
 	# 远征03：公馆结构件一律按本局门位重建，**不依赖上游是否下发开关**。
 	#
 	# 为什么在这里推导，而不是只信 `config["art_layer_keep_structure"]`：
@@ -3405,6 +3467,9 @@ func _build_shell() -> void:
 							(child as Node3D).visible = false
 					set_meta("static_layout_scene_path", expedition_static_path)
 					set_meta("static_layout_scene_loaded", true)
+					var static_wall_height_m := _declared_static_layout_wall_height_m(static_layout)
+					if static_wall_height_m > 0.0:
+						set_meta("room_wall_height_m", static_wall_height_m)
 					# 远征03：静态场景里的公馆结构件同样按**本局门位**重铺。
 					#
 					# 走这条分支的房间（`procedural_shell = false`，实测是安全房 start）
@@ -3432,6 +3497,7 @@ func _build_shell() -> void:
 						"authored_room_light_switch",
 						"walk_surface_owner",
 						"walk_surface_scene",
+						"room_wall_height_m",
 					]:
 						# 「根优先、命中即止」向下找一层，**不是**只读根：绑定壳
 						# （99 / 远征01 的 `f00_boss_static_layout.tscn`）里房间是
@@ -3559,7 +3625,7 @@ func _build_wall_with_multiple_openings(
 	direction: String, center: Vector3, length: float, axis: Vector3, lanes: Array
 ) -> void:
 	var thickness := 0.28
-	var height := 2.8
+	var height := _room_wall_height_m()
 	var opening := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M
 	var span := length - opening
 	var half := length * 0.5
@@ -5797,7 +5863,8 @@ func _add_camera_only_door_wall_proxy(
 	module_position: Vector3,
 	rotation_y: float,
 	module_index: int,
-	parent: Node = null
+	parent: Node = null,
+	height_m: float = TOWER_GEOMETRY.FLOOR_HEIGHT_M
 ) -> void:
 	# 门洞打开后不能放置世界层实体碰撞，否则会挡住角色与子弹。使用独立
 	# camera-only层覆盖完整5m门墙，仅供TowerDescent3D的镜头探针命中。
@@ -5816,10 +5883,10 @@ func _add_camera_only_door_wall_proxy(
 	(parent if parent != null else self).add_child(proxy)
 	_add_collision_shape(
 		proxy,
-		Vector3(0.0, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, 0.0),
+		Vector3(0.0, height_m * 0.5, 0.0),
 		Vector3(
 			TOWER_GEOMETRY.GRID_UNIT_M,
-			TOWER_GEOMETRY.FLOOR_HEIGHT_M,
+			height_m,
 			0.08
 		)
 	)
@@ -5911,7 +5978,7 @@ func _build_wall(
 ) -> void:
 	var has_door := doors.has(direction)
 	var thickness := 0.28
-	var height := 2.8
+	var height := _room_wall_height_m()
 	if not has_door:
 		var size := Vector3(length, height, thickness) if axis.x > 0.0 else Vector3(thickness, height, length)
 		var wall := _spawn_prefab(
@@ -6071,7 +6138,8 @@ func _sync_expedition_static_camera_door_proxies(static_layout: Node3D) -> void:
 		var door := get_door_node(direction)
 		var proxy := proxies.get(direction) as StaticBody3D
 		if proxy == null:
-			_add_camera_only_door_wall_proxy(direction, Vector3.ZERO, 0.0, 0, static_layout)
+			var height_m := float(get_meta("room_wall_height_m", TOWER_GEOMETRY.FLOOR_HEIGHT_M))
+			_add_camera_only_door_wall_proxy(direction, Vector3.ZERO, 0.0, 0, static_layout, height_m)
 			proxy = static_layout.get_node("CameraOnlyDoorWall_%s_I00" % direction.capitalize()) as StaticBody3D
 			proxy.set_meta("expedition_runtime_camera_door_proxy", true)
 		proxy.transform = static_layout.global_transform.affine_inverse() * door.global_transform

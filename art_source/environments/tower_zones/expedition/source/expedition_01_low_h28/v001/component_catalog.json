@@ -1,0 +1,492 @@
+[
+  {
+    "asset_id": "ENV-EXPEDITION-L01-LOW-WALL-STANDARD-5M",
+    "asset_version": "v001",
+    "slug": "wall_standard_5m_h28",
+    "level_id": "expedition_01",
+    "block_id": "expedition",
+    "asset_family": "expedition_01_low_h28",
+    "legacy_prefab": "assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d.tscn",
+    "reference_glb": "assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d.glb",
+    "reference_glb_sha256": "0bca134eef74148f0df444d72afff769974863cab6fec4ca885b773186649fb9",
+    "source_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_standard_5m_h28/wall_standard_5m_h28_source_v001.blend",
+    "source_sha256": "e0b8259f5554665a7442ccc17018e3606e21b7f9aa4ae7911adc6282d5e73710",
+    "optimized_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_standard_5m_h28/export/v001/wall_standard_5m_h28_optimized_v001.blend",
+    "optimized_sha256": "9dd9723430010203343013ecf174d16dc4f749805712cfcef57951e50e175a41",
+    "visual_glb": "assets/art/environments/tower_zones/expedition/components/expedition_01_low_h28/wall_standard_5m_h28/wall_standard_5m_h28_visual_top3d.glb",
+    "glb_sha256": "60a38ced53d25b98d7c69468966e31e50c9d11a408916a1a7b54624a70820e49",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_standard_5m_h28/wall_standard_5m_h28_root_top3d.tscn",
+    "prefab_sha256": "6511040af9463ea1cef19ec3809ef04b2d7b5d7cc1a3f21876e71df3183a8bc6",
+    "logical_wall_height_m": 2.8,
+    "visual_wall_height_m": 2.8,
+    "bounds_blender_m": [
+      [
+        -2.5,
+        -0.30214011669158936,
+        0.0
+      ],
+      [
+        2.5,
+        0.15000072121620178,
+        2.8000001907348633
+      ]
+    ],
+    "source_triangles": 5229,
+    "triangles_before": 1539,
+    "triangles_after": 1539,
+    "reduction_ratio": 0.0,
+    "operations": [
+      "Preserve native proportions below 2.8m; planar mesh section with palette cap",
+      "Remove degenerate and loose geometry; triangulate independently saved derivative"
+    ],
+    "cut_cap_faces": 9,
+    "door_opening": null,
+    "source_reference_retained": true
+  },
+  {
+    "asset_id": "ENV-EXPEDITION-L01-LOW-WALL-DOOR-5M",
+    "asset_version": "v001",
+    "slug": "wall_door_5m_h28",
+    "level_id": "expedition_01",
+    "block_id": "expedition",
+    "asset_family": "expedition_01_low_h28",
+    "legacy_prefab": "assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn",
+    "reference_glb": "assets/art/environments/tower_descent_3d/components/env_tower_wall_door_5m_top3d.glb",
+    "reference_glb_sha256": "473a2d18971202580e37823da026f53528774b527a307b05517a45aaf73cb8e0",
+    "source_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_door_5m_h28/wall_door_5m_h28_source_v001.blend",
+    "source_sha256": "cc0ef35c3ecafadd1f2ce79b9364eb24bdb81b0cbdc58b6a2046bc6fec6da5c1",
+    "optimized_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_door_5m_h28/export/v001/wall_door_5m_h28_optimized_v001.blend",
+    "optimized_sha256": "d63c00cebbc5c2b712c07efb22fc39ad835411f39f193025048417be4c36eab6",
+    "visual_glb": "assets/art/environments/tower_zones/expedition/components/expedition_01_low_h28/wall_door_5m_h28/wall_door_5m_h28_visual_top3d.glb",
+    "glb_sha256": "51c5467f23c241afb207c0a381fa71c38c2ef8f831f7b9df09b20b21832ec29c",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_door_5m_h28/wall_door_5m_h28_root_top3d.tscn",
+    "prefab_sha256": "c3214f93ff403c182e153637c5229fd058d320a27712893c380f1f62e0edc676",
+    "logical_wall_height_m": 2.8,
+    "visual_wall_height_m": 2.8,
+    "bounds_blender_m": [
+      [
+        -2.5,
+        -0.3410002589225769,
+        0.0
+      ],
+      [
+        2.5,
+        0.3410002589225769,
+        2.8000001907348633
+      ]
+    ],
+    "source_triangles": 15470,
+    "triangles_before": 5340,
+    "triangles_after": 5340,
+    "reduction_ratio": 0.0,
+    "operations": [
+      "Preserve native proportions below 2.8m; planar mesh section with palette cap",
+      "Remove degenerate and loose geometry; triangulate independently saved derivative"
+    ],
+    "cut_cap_faces": 36,
+    "door_opening": {
+      "clear_width_m": 2.2,
+      "lintel": false
+    },
+    "source_reference_retained": true
+  },
+  {
+    "asset_id": "ENV-EXPEDITION-L01-LOW-WALL-5M-A",
+    "asset_version": "v001",
+    "slug": "wall_5m_a_h28",
+    "level_id": "expedition_01",
+    "block_id": "expedition",
+    "asset_family": "expedition_01_low_h28",
+    "legacy_prefab": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_a/wall_5m_a_root_top3d.tscn",
+    "reference_glb": "assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/wall_5m_a/wall_5m_a_visual_top3d.glb",
+    "reference_glb_sha256": "e450d4e329e8c6c699f7c0dd766a1dc33d856fdbfc517d8a07aa5e95b2e8b136",
+    "source_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_5m_a_h28/wall_5m_a_h28_source_v001.blend",
+    "source_sha256": "7dc2a35acb165ffcdb779dc9708594dc093d8ba59932da569e24e5ce67ccfaf1",
+    "optimized_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_5m_a_h28/export/v001/wall_5m_a_h28_optimized_v001.blend",
+    "optimized_sha256": "06b362e5cd775a0bb5806a86f5d1914976600c1569b6d9741db1c7bbe4d27350",
+    "visual_glb": "assets/art/environments/tower_zones/expedition/components/expedition_01_low_h28/wall_5m_a_h28/wall_5m_a_h28_visual_top3d.glb",
+    "glb_sha256": "0c765c11dc61ec07b121a8269f80b843dc19dc6809865393d8038deb0f8f3d40",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_5m_a_h28/wall_5m_a_h28_root_top3d.tscn",
+    "prefab_sha256": "f1d3fef43f84d2d8658eabd2ae2b1532ce7d2a16ed9170508845fa8c723602cf",
+    "logical_wall_height_m": 2.8,
+    "visual_wall_height_m": 2.8,
+    "bounds_blender_m": [
+      [
+        -2.5,
+        -0.144500732421875,
+        0.0
+      ],
+      [
+        2.5,
+        0.25549888610839844,
+        2.8000001907348633
+      ]
+    ],
+    "source_triangles": 108,
+    "triangles_before": 72,
+    "triangles_after": 72,
+    "reduction_ratio": 0.0,
+    "operations": [
+      "Preserve native proportions below 2.8m; planar mesh section with palette cap",
+      "Remove degenerate and loose geometry; triangulate independently saved derivative"
+    ],
+    "cut_cap_faces": 3,
+    "door_opening": null,
+    "source_reference_retained": true
+  },
+  {
+    "asset_id": "ENV-EXPEDITION-L01-LOW-WALL-5M-C",
+    "asset_version": "v001",
+    "slug": "wall_5m_c_h28",
+    "level_id": "expedition_01",
+    "block_id": "expedition",
+    "asset_family": "expedition_01_low_h28",
+    "legacy_prefab": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_c/wall_5m_c_root_top3d.tscn",
+    "reference_glb": "assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/wall_5m_c/wall_5m_c_visual_top3d.glb",
+    "reference_glb_sha256": "fbf32d8399650efb2e4b74227565fb02745efb38bf9d2b9271ce527b2d1da9c9",
+    "source_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_5m_c_h28/wall_5m_c_h28_source_v001.blend",
+    "source_sha256": "61349a086e9a71361f6610413be3f4cebd776b5c5d22b57de371394c73e7a636",
+    "optimized_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_5m_c_h28/export/v001/wall_5m_c_h28_optimized_v001.blend",
+    "optimized_sha256": "d6eb5d078d27c5506385c5d10ba579529cdf2e29b48fa2dd8226bf7caf12659b",
+    "visual_glb": "assets/art/environments/tower_zones/expedition/components/expedition_01_low_h28/wall_5m_c_h28/wall_5m_c_h28_visual_top3d.glb",
+    "glb_sha256": "e4b3563e8baf6ac7ce14e57055b45c2df6a429256861b59f38de889561a4d9ee",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_5m_c_h28/wall_5m_c_h28_root_top3d.tscn",
+    "prefab_sha256": "2fa9679f095da8e8590f52c46abcce5c5133145512d64ee15cdd9b28785b462f",
+    "logical_wall_height_m": 2.8,
+    "visual_wall_height_m": 2.8,
+    "bounds_blender_m": [
+      [
+        -0.1269989013671875,
+        -2.5,
+        0.0
+      ],
+      [
+        0.26300048828125,
+        2.5,
+        2.8000001907348633
+      ]
+    ],
+    "source_triangles": 72,
+    "triangles_before": 32,
+    "triangles_after": 32,
+    "reduction_ratio": 0.0,
+    "operations": [
+      "Preserve native proportions below 2.8m; planar mesh section with palette cap",
+      "Remove degenerate and loose geometry; triangulate independently saved derivative"
+    ],
+    "cut_cap_faces": 1,
+    "door_opening": null,
+    "source_reference_retained": true
+  },
+  {
+    "asset_id": "ENV-EXPEDITION-L01-LOW-WALL-5M-D",
+    "asset_version": "v001",
+    "slug": "wall_5m_d_h28",
+    "level_id": "expedition_01",
+    "block_id": "expedition",
+    "asset_family": "expedition_01_low_h28",
+    "legacy_prefab": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_d/wall_5m_d_root_top3d.tscn",
+    "reference_glb": "assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/wall_5m_d/wall_5m_d_visual_top3d.glb",
+    "reference_glb_sha256": "a98b3ed07a10a40a17619f592bd47ec5ee45712b807537a77882a16ffa34290f",
+    "source_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_5m_d_h28/wall_5m_d_h28_source_v001.blend",
+    "source_sha256": "4e4fffca5eaf5d40fa9c0934fa32335ea959983df798d16529ec8c79c0972790",
+    "optimized_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_5m_d_h28/export/v001/wall_5m_d_h28_optimized_v001.blend",
+    "optimized_sha256": "bf3fb49488abb3f28f65b2b4fa89db03d4a74bf63e2372dc9f11c7c21e7bffa6",
+    "visual_glb": "assets/art/environments/tower_zones/expedition/components/expedition_01_low_h28/wall_5m_d_h28/wall_5m_d_h28_visual_top3d.glb",
+    "glb_sha256": "efc94a796226f4f209d174677f44ba78a9c341819e1244ace901a521fad064ed",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_5m_d_h28/wall_5m_d_h28_root_top3d.tscn",
+    "prefab_sha256": "3a235231ac65fda03693dbf1a0c39e3ff02678a9c19fbfd8814e4eb2ab000518",
+    "logical_wall_height_m": 2.8,
+    "visual_wall_height_m": 2.8,
+    "bounds_blender_m": [
+      [
+        -0.1269989013671875,
+        -2.5,
+        0.0
+      ],
+      [
+        0.26300048828125,
+        2.5,
+        2.8000001907348633
+      ]
+    ],
+    "source_triangles": 60,
+    "triangles_before": 32,
+    "triangles_after": 32,
+    "reduction_ratio": 0.0,
+    "operations": [
+      "Preserve native proportions below 2.8m; planar mesh section with palette cap",
+      "Remove degenerate and loose geometry; triangulate independently saved derivative"
+    ],
+    "cut_cap_faces": 1,
+    "door_opening": null,
+    "source_reference_retained": true
+  },
+  {
+    "asset_id": "ENV-EXPEDITION-L01-LOW-DOOR-WALL",
+    "asset_version": "v001",
+    "slug": "door_wall_h28",
+    "level_id": "expedition_01",
+    "block_id": "expedition",
+    "asset_family": "expedition_01_low_h28",
+    "legacy_prefab": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/door_wall/door_wall_root_top3d.tscn",
+    "reference_glb": "assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/door_wall/door_wall_visual_top3d.glb",
+    "reference_glb_sha256": "bedb10861af5ca0022531c3155147cc92327e0cb050c8d1d63a69bc0f6ad8637",
+    "source_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/door_wall_h28/door_wall_h28_source_v001.blend",
+    "source_sha256": "aa1243bc658d2ff4d625d8d31a7f033e285d9d6663323153fab08d78d70422ec",
+    "optimized_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/door_wall_h28/export/v001/door_wall_h28_optimized_v001.blend",
+    "optimized_sha256": "d13257268ced21910d51536d85105fbb820a37f42e66718ef4aca692bc1b5b93",
+    "visual_glb": "assets/art/environments/tower_zones/expedition/components/expedition_01_low_h28/door_wall_h28/door_wall_h28_visual_top3d.glb",
+    "glb_sha256": "82a7c7642c22f53c29733076aace1166631a2f2308e670f536ff81257e7fbfaf",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/door_wall_h28/door_wall_h28_root_top3d.tscn",
+    "prefab_sha256": "180a38ca60d2716ee154e4f1ce0ac967b0187ec501dedc4fced285233d95baff",
+    "logical_wall_height_m": 2.8,
+    "visual_wall_height_m": 2.8,
+    "bounds_blender_m": [
+      [
+        -2.5,
+        -0.30249786376953125,
+        0.0
+      ],
+      [
+        2.5,
+        0.30750083923339844,
+        2.8000001907348633
+      ]
+    ],
+    "source_triangles": 840,
+    "triangles_before": 474,
+    "triangles_after": 474,
+    "reduction_ratio": 0.0,
+    "operations": [
+      "Preserve native proportions below 2.8m; planar mesh section with palette cap",
+      "Remove degenerate and loose geometry; triangulate independently saved derivative"
+    ],
+    "cut_cap_faces": 25,
+    "door_opening": {
+      "clear_width_m": 2.2,
+      "lintel": false
+    },
+    "source_reference_retained": true
+  },
+  {
+    "asset_id": "ENV-EXPEDITION-L01-LOW-WALL-T615-5M",
+    "asset_version": "v001",
+    "slug": "wall_t615_5m_h28",
+    "level_id": "expedition_01",
+    "block_id": "expedition",
+    "asset_family": "expedition_01_low_h28",
+    "legacy_prefab": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t615_5m/wall_t615_5m_root_top3d.tscn",
+    "reference_glb": "assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_t615_5m/wall_t615_5m_visual_top3d.glb",
+    "reference_glb_sha256": "2f2095ba1fbdadd5214f81f7bad22e70e3174205100019c4be940bd99eba67d9",
+    "source_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_t615_5m_h28/wall_t615_5m_h28_source_v001.blend",
+    "source_sha256": "01b92884063781b85d2d1886cfdc45f63b3f9c25784c1dc6d4dfb1f272676480",
+    "optimized_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_t615_5m_h28/export/v001/wall_t615_5m_h28_optimized_v001.blend",
+    "optimized_sha256": "93c352bf61666c46838e696226350467e43af7b4cca7cce7cd32e7981c9d49e3",
+    "visual_glb": "assets/art/environments/tower_zones/expedition/components/expedition_01_low_h28/wall_t615_5m_h28/wall_t615_5m_h28_visual_top3d.glb",
+    "glb_sha256": "0f5b58252164fb6d506ba0c028865e33d485c693cc5b4c1389f9813e990e7b2c",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_t615_5m_h28/wall_t615_5m_h28_root_top3d.tscn",
+    "prefab_sha256": "d16a99811e56afafdb69a31ff1b235c7b41b57b362ae43cf3ee21fdfd595e738",
+    "logical_wall_height_m": 2.8,
+    "visual_wall_height_m": 2.8,
+    "bounds_blender_m": [
+      [
+        -0.30250072479248047,
+        -2.5,
+        0.0
+      ],
+      [
+        0.3074989318847656,
+        2.5,
+        2.8000001907348633
+      ]
+    ],
+    "source_triangles": 736,
+    "triangles_before": 284,
+    "triangles_after": 284,
+    "reduction_ratio": 0.0,
+    "operations": [
+      "Preserve native proportions below 2.8m; planar mesh section with palette cap",
+      "Remove degenerate and loose geometry; triangulate independently saved derivative"
+    ],
+    "cut_cap_faces": 7,
+    "door_opening": null,
+    "source_reference_retained": true
+  },
+  {
+    "asset_id": "ENV-EXPEDITION-L01-LOW-WALL-T1110-5M",
+    "asset_version": "v001",
+    "slug": "wall_t1110_5m_h28",
+    "level_id": "expedition_01",
+    "block_id": "expedition",
+    "asset_family": "expedition_01_low_h28",
+    "legacy_prefab": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t1110_5m/wall_t1110_5m_root_top3d.tscn",
+    "reference_glb": "assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_t1110_5m/wall_t1110_5m_visual_top3d.glb",
+    "reference_glb_sha256": "f436156376b586a8e27a36b7f3c218a928af096cb52e73e2a616c6c2d17afe25",
+    "source_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_t1110_5m_h28/wall_t1110_5m_h28_source_v001.blend",
+    "source_sha256": "9e614779afe2e5a52c977690003719637936cf4d12b7d3a2c938a2c94c518e95",
+    "optimized_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_t1110_5m_h28/export/v001/wall_t1110_5m_h28_optimized_v001.blend",
+    "optimized_sha256": "5c29122c774e7e1d894f99f6d5933aaa23f64d926a20cb234154b6dc90a3bf20",
+    "visual_glb": "assets/art/environments/tower_zones/expedition/components/expedition_01_low_h28/wall_t1110_5m_h28/wall_t1110_5m_h28_visual_top3d.glb",
+    "glb_sha256": "f4f2907814078f23ad45731e9116c47bedf1bfae9bd4a61052ffa9c2ae23c7f4",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_t1110_5m_h28/wall_t1110_5m_h28_root_top3d.tscn",
+    "prefab_sha256": "62219d53a687cf439d8e842301f5261fbcd70199750c4c6cd4bb11800d9ec001",
+    "logical_wall_height_m": 2.8,
+    "visual_wall_height_m": 2.8,
+    "bounds_blender_m": [
+      [
+        -2.5,
+        -0.5549983978271484,
+        0.0
+      ],
+      [
+        2.5,
+        0.5550003051757812,
+        2.8000001907348633
+      ]
+    ],
+    "source_triangles": 1220,
+    "triangles_before": 664,
+    "triangles_after": 664,
+    "reduction_ratio": 0.0,
+    "operations": [
+      "Preserve native proportions below 2.8m; planar mesh section with palette cap",
+      "Remove degenerate and loose geometry; triangulate independently saved derivative"
+    ],
+    "cut_cap_faces": 12,
+    "door_opening": null,
+    "source_reference_retained": true
+  },
+  {
+    "asset_id": "ENV-EXPEDITION-L01-LOW-WALL-T970-5M",
+    "asset_version": "v001",
+    "slug": "wall_t970_5m_h28",
+    "level_id": "expedition_01",
+    "block_id": "expedition",
+    "asset_family": "expedition_01_low_h28",
+    "legacy_prefab": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t970_5m/wall_t970_5m_root_top3d.tscn",
+    "reference_glb": "assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_t970_5m/wall_t970_5m_visual_top3d.glb",
+    "reference_glb_sha256": "92390d0bdf4b9fd4a15990ac1b1f635e5e9ca958debbb9d4d4fbb4bb6c27d171",
+    "source_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_t970_5m_h28/wall_t970_5m_h28_source_v001.blend",
+    "source_sha256": "58f009d69472d1afc1ed286a39af001ffb7d8134c02dc3329c88860f22b9b9cb",
+    "optimized_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_t970_5m_h28/export/v001/wall_t970_5m_h28_optimized_v001.blend",
+    "optimized_sha256": "8f4ff6e92f7bf397271666f934a34749e8c99fba039f85f75128bd6a56b05aba",
+    "visual_glb": "assets/art/environments/tower_zones/expedition/components/expedition_01_low_h28/wall_t970_5m_h28/wall_t970_5m_h28_visual_top3d.glb",
+    "glb_sha256": "87691eef963112cc180ec0381aefedfda042fccc62e58a7e88eafe9d3c3c9a1e",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_t970_5m_h28/wall_t970_5m_h28_root_top3d.tscn",
+    "prefab_sha256": "757a276bfc082710bd38ff1bd6d9565cbc428bf0f16e3dce69021c9b581c521a",
+    "logical_wall_height_m": 2.8,
+    "visual_wall_height_m": 2.8,
+    "bounds_blender_m": [
+      [
+        -2.5,
+        -0.4850006103515625,
+        0.0
+      ],
+      [
+        2.5,
+        0.313140869140625,
+        2.8000001907348633
+      ]
+    ],
+    "source_triangles": 848,
+    "triangles_before": 348,
+    "triangles_after": 348,
+    "reduction_ratio": 0.0,
+    "operations": [
+      "Preserve native proportions below 2.8m; planar mesh section with palette cap",
+      "Remove degenerate and loose geometry; triangulate independently saved derivative"
+    ],
+    "cut_cap_faces": 9,
+    "door_opening": null,
+    "source_reference_retained": true
+  },
+  {
+    "asset_id": "ENV-EXPEDITION-L01-LOW-WALL-X780",
+    "asset_version": "v001",
+    "slug": "wall_x780_h28",
+    "level_id": "expedition_01",
+    "block_id": "expedition",
+    "asset_family": "expedition_01_low_h28",
+    "legacy_prefab": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/wall_x780/wall_x780_root_top3d.tscn",
+    "reference_glb": "assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/wall_x780/wall_x780_visual_top3d.glb",
+    "reference_glb_sha256": "364ae3980cf7a5a6bf8a7e4afbd2d0980b5cb873306880beff877e1d14b05828",
+    "source_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_x780_h28/wall_x780_h28_source_v001.blend",
+    "source_sha256": "c9c1e11ec1ae85b2a06fb377f8a2555bde0263ea054df27f5b6ed7bad8601448",
+    "optimized_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_x780_h28/export/v001/wall_x780_h28_optimized_v001.blend",
+    "optimized_sha256": "772259d92d22cd6abd0744c0acb3d8b32cc471d8d52f578073bbcb77cd204ac1",
+    "visual_glb": "assets/art/environments/tower_zones/expedition/components/expedition_01_low_h28/wall_x780_h28/wall_x780_h28_visual_top3d.glb",
+    "glb_sha256": "563bf3579bda6953fd2e636a01d5404acc1462dfcc233ccf45435b535b2833df",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_x780_h28/wall_x780_h28_root_top3d.tscn",
+    "prefab_sha256": "be10fd086544ed7cc249cf81009923f73012f093185e3001538bf1a2b82a4079",
+    "logical_wall_height_m": 2.8,
+    "visual_wall_height_m": 2.8,
+    "bounds_blender_m": [
+      [
+        -0.24000072479248047,
+        -2.5,
+        0.0
+      ],
+      [
+        0.3899993896484375,
+        2.5,
+        2.8000001907348633
+      ]
+    ],
+    "source_triangles": 2952,
+    "triangles_before": 1024,
+    "triangles_after": 1024,
+    "reduction_ratio": 0.0,
+    "operations": [
+      "Preserve native proportions below 2.8m; planar mesh section with palette cap",
+      "Remove degenerate and loose geometry; triangulate independently saved derivative"
+    ],
+    "cut_cap_faces": 7,
+    "door_opening": null,
+    "source_reference_retained": true
+  },
+  {
+    "asset_id": "ENV-EXPEDITION-L01-LOW-WALL-CORNER-L-5M",
+    "asset_version": "v001",
+    "slug": "wall_corner_l_5m_h28",
+    "level_id": "expedition_01",
+    "block_id": "expedition",
+    "asset_family": "expedition_01_low_h28",
+    "legacy_prefab": "assets/art/props/dungeon_3d/prp_corner_l_5m.tscn",
+    "reference_glb": "assets/art/environments/tower_descent_3d/components/env_tower_corner_l_5m_top3d.glb",
+    "reference_glb_sha256": "451ba73e82aa38fa4bf91e8421496b09488cd202c453aee2c749619146031c71",
+    "source_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_corner_l_5m_h28/wall_corner_l_5m_h28_source_v001.blend",
+    "source_sha256": "cf4fe2c4b0e27c9d0ea9522a30887aaff579f25245c6d0a2ed7e128dc56f3d67",
+    "optimized_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_corner_l_5m_h28/export/v001/wall_corner_l_5m_h28_optimized_v001.blend",
+    "optimized_sha256": "4ec0d7c9e9a8abb8bc570c7b50a99c919ca7688f24acbfc8ad0c7775e05593fa",
+    "visual_glb": "assets/art/environments/tower_zones/expedition/components/expedition_01_low_h28/wall_corner_l_5m_h28/wall_corner_l_5m_h28_visual_top3d.glb",
+    "glb_sha256": "bc91f12522732790915f532fc5c27ab1ba72bcaf0a108434f448e8240f935297",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_corner_l_5m_h28/wall_corner_l_5m_h28_root_top3d.tscn",
+    "prefab_sha256": "c7bcc7dec7218b01c02ed26180d706267ddf5521393fc4957829459edaa4a417",
+    "logical_wall_height_m": 2.8,
+    "visual_wall_height_m": 2.8,
+    "bounds_blender_m": [
+      [
+        -0.15000121295452118,
+        -0.15000109374523163,
+        0.0
+      ],
+      [
+        5.0,
+        5.0,
+        2.8000001907348633
+      ]
+    ],
+    "source_triangles": 10458,
+    "triangles_before": 3078,
+    "triangles_after": 3078,
+    "reduction_ratio": 0.0,
+    "operations": [
+      "Preserve native proportions below 2.8m; planar mesh section with palette cap",
+      "Remove degenerate and loose geometry; triangulate independently saved derivative"
+    ],
+    "cut_cap_faces": 18,
+    "door_opening": null,
+    "source_reference_retained": true
+  }
+]

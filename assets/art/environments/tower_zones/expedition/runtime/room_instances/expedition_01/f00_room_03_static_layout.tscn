@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://dmtxvmctq6bim"]
 
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/door_wall/door_wall_root_top3d.tscn" id="1_5uvl0"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t615_5m/wall_t615_5m_root_top3d.tscn" id="2_bn7ba"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn" id="3_gb6f5"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t1110_5m/wall_t1110_5m_root_top3d.tscn" id="4_5yt7f"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t970_5m/wall_t970_5m_root_top3d.tscn" id="5_odlwr"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/door_wall_h28/door_wall_h28_root_top3d.tscn" id="1_5uvl0"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_t615_5m_h28/wall_t615_5m_h28_root_top3d.tscn" id="2_bn7ba"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_door_5m_h28/wall_door_5m_h28_root_top3d.tscn" id="3_gb6f5"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_t1110_5m_h28/wall_t1110_5m_h28_root_top3d.tscn" id="4_5yt7f"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_t970_5m_h28/wall_t970_5m_h28_root_top3d.tscn" id="5_odlwr"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/locker_bank/locker_bank_root_top3d.tscn" id="6_74fsd"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/planting_perimeter/planting_perimeter_root_top3d.tscn" id="7_if2ks"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/power_cabinet_bank/power_cabinet_bank_root_top3d.tscn" id="8_dvg3r"]
@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" uid="uid://240efj44ame1" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/secret_door/secret_door_root_top3d.tscn" id="31_35a3r"]
 
 [node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=2083919036]
+metadata/room_wall_height_m = 2.8
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-ROOM03-PORT-CLEARANCE-LAYOUT"
 metadata/asset_version = "v001"
 metadata/authored_room_id = "room_03"
@@ -57,7 +58,7 @@ metadata/authored_room_devices = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4999983, 0, -19.8425)
 metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-DOOR-WALL"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -65,7 +66,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8325, 0, 2.4999988)
 metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -73,7 +74,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.842501, 0, 7.4999986)
 metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -81,7 +82,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.832501, 0, 12.499999)
 metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -89,15 +90,14 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.835002, 0, 17.499998)
 metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="wall_east_0" parent="." unique_id=2091238589 instance=ExtResource("3_gb6f5")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 14.8425, 0, -2.5000012)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "east"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-DOOR-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-DOOR-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_door_wall_promoted = true
 metadata/shadow_policy = "cast_and_receive"
@@ -106,7 +106,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8324995, 0, -7.5000014)
 metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -114,7 +114,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.842499, 0, -12.500001)
 metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -122,7 +122,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.832499, 0, -17.500002)
 metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -130,7 +130,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5000017, 0, -19.8325)
 metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -138,7 +138,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.500002, 0, -19.8425)
 metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -146,7 +146,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.500002, 0, -19.832499)
 metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -154,7 +154,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.499998, 0, -19.8325)
 metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -162,7 +162,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 12.499998, 0, -19.832502)
 metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -170,7 +170,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2.4999983, 0, 19.8325)
 metadata/tower_wall_direction = "south"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -178,7 +178,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7.499998, 0, 19.8425)
 metadata/tower_wall_direction = "south"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -186,7 +186,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.499998, 0, 19.595001)
 metadata/tower_wall_direction = "south"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T1110_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T1110-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T1110_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -194,7 +194,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2.5000017, 0, 19.8425)
 metadata/tower_wall_direction = "south"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -202,7 +202,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 7.500002, 0, 19.8325)
 metadata/tower_wall_direction = "south"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -210,7 +210,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.500002, 0, 19.664999)
 metadata/tower_wall_direction = "south"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T970_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T970-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T970_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -218,7 +218,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.8325, 0, 2.5000012)
 metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -226,7 +226,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.842499, 0, 7.5000014)
 metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -234,7 +234,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.8324995, 0, 12.500001)
 metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -242,7 +242,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.842498, 0, 17.500002)
 metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -250,7 +250,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.832501, 0, -7.4999986)
 metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -258,7 +258,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.842501, 0, -12.499999)
 metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
@@ -266,7 +266,7 @@ metadata/shadow_policy = "cast_and_receive"
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.832502, 0, -17.499998)
 metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 

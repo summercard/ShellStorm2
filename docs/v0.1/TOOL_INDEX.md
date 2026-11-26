@@ -14,7 +14,7 @@
 
 | 工具 | FeatureID | 分类与Owner | 主设计与使用入口 | 开发记录 | 当前范围与状态 |
 |---|---|---|---|---|---|
-| Godot组件场景编辑器 | `TOOL-SCENE-EDITOR` | 工具类 / 场景美术制作；`ShellStormSceneBuilder EditorPlugin` | [独立设计](design/组件场景编辑器设计.md)、[使用说明](../../tools/scene_builder/README.md)；Godot右侧“场景工坊” | [初版](development/2026-10-29_component_scene_editor.md)、[r5工作台](development/2026-10-29_scene_builder_workbench.md)、[r6历史采集](development/2026-10-29_scene_builder_runtime_source.md)、[r7唯一房间列表](development/2026-11-01_scene_workshop_unique_rooms.md)、[r8固定陈设](development/2026-11-01_fixed_room_furnishing.md) | r7默认打开只读列出现行游戏绑定的正式房间TSCN，同路径唯一，不要求种子或Python；新建/关联白盒使用专用选择器。共享组件检索、预览、摆放、笔刷、灯光、撤销和原生保存沿用。工具状态保持 `partial`；r7统计与验收见原记录。r8冻结固定陈设归正式TSCN、全部合法门位制作净空；58份文本PackedScene格式统一，旧组/metadata兼容；r8陈设保持、全门位制作净空、编辑器保存负测与4房画面专项已通过；额外可玩回归失败/超时及守卫覆盖限制见r8记录，不升级整关验收。 |
+| Godot组件场景编辑器 | `TOOL-SCENE-EDITOR` | 工具类 / 场景美术制作；`ShellStormSceneBuilder EditorPlugin` | [独立设计](design/组件场景编辑器设计.md)、[使用说明](../../tools/scene_builder/README.md)；Godot右侧“场景工坊” | [初版](development/2026-10-29_component_scene_editor.md)、[r5工作台](development/2026-10-29_scene_builder_workbench.md)、[r6历史采集](development/2026-10-29_scene_builder_runtime_source.md)、[r7唯一房间列表](development/2026-11-01_scene_workshop_unique_rooms.md)、[r8固定陈设](development/2026-11-01_fixed_room_furnishing.md) | r7默认打开只读列出现行游戏绑定的正式房间TSCN，同路径唯一，不要求种子或Python；新建/关联白盒使用专用选择器。共享组件检索、预览、摆放、笔刷、灯光、撤销和原生保存沿用。工具状态保持 `partial`；r7统计与验收见原记录。r8冻结固定陈设归正式TSCN、全部合法门位制作净空；58份文本PackedScene格式统一，旧组/metadata兼容；r8陈设保持、全门位制作净空、编辑器保存负测与4房画面专项已通过；额外可玩回归失败/超时及守卫覆盖限制见r8记录，不升级整关验收。墙高路由先读[远征墙高与场景资产路由规范](design/远征墙高与场景资产路由规范.md)：远征03只消费`manor_h28`，远征01不进入本Skill。 |
 
 ## 3. 场景编辑器的事实所有者
 

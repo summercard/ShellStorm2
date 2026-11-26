@@ -8,6 +8,24 @@
   "level_id": "expedition_01",
   "block_id": "expedition",
   "design_scope": "scene_art",
+  "non_boss_wall_contract": {
+    "asset_family": "expedition_01_low_h28",
+    "runtime_wall_scene_prefix": "assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/",
+    "runtime_scene_suffix": "_h28_root_top3d.tscn",
+    "logical_wall_height_m": 2.8,
+    "visual_wall_height_m": 2.8,
+    "floor_spacing_m": 12.0,
+    "door_contract": {
+      "width_m": 2.2,
+      "clear_height_m": 2.5
+    },
+    "registration_status": "pending_main_thread_asset_registry"
+  },
+  "boss_exception": {
+    "preserve": true,
+    "room_template": "boss_deep_shaft_80x100",
+    "note": "Boss深井/平台坑不套用非Boss低墙包络。"
+  },
   "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::3D-场景通用",
   "source_blend": "source/art/whitebox/tower_zones/expedition_01/v001/blender/远征关卡01_白模_Boss竞技场_50x40m_v001.blend",
   "blender_collection": "远征关卡01 Boss竞技场 50×40m 白模_资产管理",

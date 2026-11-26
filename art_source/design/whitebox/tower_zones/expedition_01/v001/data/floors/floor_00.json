@@ -10,6 +10,32 @@
   "exit_side": "west",
   "reservations": [],
   "spawn_boxes_only": true,
+  "asset_family": "expedition_01_low_h28",
+  "wall_contract": {
+    "logical_wall_height_m": 2.8,
+    "visual_wall_height_m": 2.8,
+    "floor_spacing_m": 12.0,
+    "top_clearance_m": 0.0,
+    "collision_policy": "full_room_wall_height",
+    "door_width_m": 2.2,
+    "door_clear_height_m": 2.5,
+    "door_positions": "preserve_existing_connection_ports_and_door_leaves"
+  },
+  "room_view_curtain": {
+    "enabled": true,
+    "source_family": "expedition_03_flow_view_walls",
+    "collision": false,
+    "shadow": false,
+    "projection": false,
+    "route": "preserve_existing_main_path_and_connection_ports"
+  },
+  "preserved_exceptions": {
+    "boss_deep_shaft_preserved": true,
+    "bridge_pit_depth_m": 12.0,
+    "bridge_pit_preserved": true,
+    "room_08_internal_barrier_count": 15,
+    "room_08_internal_barrier_collision_preserved": true
+  },
   "rooms": [
     {
       "key": "entry",

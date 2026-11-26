@@ -21,10 +21,15 @@ def check(root, installed=False):
     if installed:
         copies = [Path.home() / ".workbuddy/skills" / NAME, *copies, Path.home() / ".codex/skills" / NAME]
     errors = []
-    expected = digest_tree(copies[0])
+    missing_dirs = [copy for copy in copies if not copy.is_dir()]
+    for copy in missing_dirs:
+        errors.append(f"missing skill mirror directory: {copy}")
+    existing = [copy for copy in copies if copy.is_dir()]
+    canonical = copies[0] if copies[0].is_dir() else (existing[0] if existing else None)
+    expected = digest_tree(canonical) if canonical is not None else {}
     if "SKILL.md" not in expected:
         errors.append(f"missing canonical SKILL.md: {copies[0]}")
-    for copy in copies:
+    for copy in existing:
         current = digest_tree(copy)
         if current != expected:
             errors.append({"path": str(copy), "missing": sorted(expected.keys() - current.keys()),

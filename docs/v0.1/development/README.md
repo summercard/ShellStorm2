@@ -1,3 +1,7 @@
+- TOOLING / WORLD-PLAN / ASSET-PIPELINE · [调试区报错修复：场景 UID 与项目配置](2026-11-27_debug_area_uid_and_project_config_repair.md)。修复4组重复场景UID，恢复完整项目配置；Godot编辑器诊断、场景UID、远征墙高与关卡解耦检查通过，文档既有11条断链和技能镜像空白未处理。
+
+- ASSET-PIPELINE / WORLD-PLAN · [远征01低墙与黑色幕墙](2026-11-26_expedition_wall_height_contract.md)。12 间非 Boss 房外围墙改为 2.8m，保留工业风与特殊高墙；桌面 Forward+ 专项及截图见记录。
+
 - NARRATIVE-TRIGGER / BASE-NPC / WORLD-ENTRY · [主线3.1 99F灯光双分支](2026-11-24_main_story_031_light_branches.md)。主动开灯与摸黑深入两路均由绿苔主动会合并汇入同一主线；同步真实墙灯启动、演出手电、分支cue过滤和验收遗留。
 - WORLD-SECRET · [支线回退隐藏门与常开入口](2026-11-23_secret_branch_return_doors.md)。主线入口改无板常开门，首间新增回退门，末端返程门按真实地砖墙位选点。
 - PERFORMANCE-RUNTIME / WORLD-ENTRY · [刷怪盒合批与表现资源预加载](2026-11-25_performance_phase2_phase3.md)。三关 Forward+ 基线及联合复测；普通盒批内复用、已确认的旧胖子资源冷载补齐；帧预算和退出清理分开判定，整体未放行。
@@ -15,6 +19,8 @@
 - VFX-POOL · [赛博空间三色预设与交界](2026-11-21_cyber_space.md)。独立 Shader、三色 Prefab 与同模型混用验收。
 
 - VFX-POOL / PLAYER-STATE · [赛博虚空可选物理开口](2026-11-25_cyber_void_collision.md)。现有碰撞基线、局部裁切、玩家实际下落与恢复验收。
+
+- VFX-POOL / PLAYER-STATE / RUN-SETTLE · [赛博虚空坠亡设计](2026-11-26_cyber_void_fatal_design.md)。记录致死判定、固定机位及原结算交接的目标。
 
 - VFX-POOL · [赛博虚空场景组件覆盖](2026-11-21_cyber_void_component_scope.md)。同一范围覆盖栏杆等场景组件。
 

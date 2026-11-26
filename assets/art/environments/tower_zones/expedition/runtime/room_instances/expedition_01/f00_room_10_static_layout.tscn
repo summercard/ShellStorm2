@@ -24,14 +24,15 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/shelving/shelving_root_top3d.tscn" id="28_usxnw"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/wall_screen/wall_screen_root_top3d.tscn" id="30_b1c43"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/workbench_b/workbench_b_root_top3d.tscn" id="34_p3a37"]
-[ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_corner_l_5m.tscn" id="35_vvf0i"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d.tscn" id="36_55c5w"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn" id="37_yr6ax"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_corner_l_5m_h28/wall_corner_l_5m_h28_root_top3d.tscn" id="35_vvf0i"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_standard_5m_h28/wall_standard_5m_h28_root_top3d.tscn" id="36_55c5w"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_door_5m_h28/wall_door_5m_h28_root_top3d.tscn" id="37_yr6ax"]
 [ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d.tscn" id="38_psljt"]
 [ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_room_light_switch_root_top3d.tscn" id="40_4clb4"]
 [ext_resource type="PackedScene" uid="uid://240efj44ame1" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/secret_door/secret_door_root_top3d.tscn" id="42_wsjrs"]
 
 [node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=1698526315]
+metadata/room_wall_height_m = 2.8
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-ROOM-TYPE-LAYOUT"
 metadata/asset_version = "v014"
 metadata/authored_room_id = "room_10"
@@ -509,97 +510,85 @@ metadata/material_variant = "A"
 
 [node name="GenericShell_WALL_west_xm65_m267_5" parent="." unique_id=2036231985 instance=ExtResource("36_55c5w")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 15, 0, -12.5)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "east"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="GenericShell_WALL_west_xm65_m262_5" parent="." unique_id=1179329062 instance=ExtResource("36_55c5w")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 15, 0, -7.5)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "east"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="GenericShell_WALL_west_xm65_m257_5" parent="." unique_id=330672652 instance=ExtResource("36_55c5w")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 15, 0, -2.5)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "east"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="GenericShell_WALL_west_xm65_m252_5" parent="." unique_id=5629294 instance=ExtResource("36_55c5w")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 15, 0, 2.5)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "east"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="GenericShell_WALL_west_xm65_m247_5" parent="." unique_id=1403240351 instance=ExtResource("36_55c5w")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 15, 0, 7.5)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "east"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="GenericShell_WALL_west_xm65_m247_5" parent="GenericShell_WALL_west_xm65_m247_5" unique_id=872783630 instance=ExtResource("36_55c5w")]
 transform = Transform3D(0.16243392, 0.98671114, -0.00401522, -0.9864099, 0.16248351, 0.024382912, 0.024711302, 4.2445205e-08, 0.9996946, -9.983765, 6.110969, -0.5748987)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "east"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="GenericShell_WALL_east_xm40_m267_5" parent="." unique_id=879302056 instance=ExtResource("36_55c5w")]
 transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -10, 0, -12.5)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "west"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="GenericShell_WALL_east_xm40_m262_5" parent="." unique_id=2051205076 instance=ExtResource("36_55c5w")]
 transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -10, 0, -7.5)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "west"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="GenericShell_WALL_east_xm40_m247_5" parent="." unique_id=1456055373 instance=ExtResource("36_55c5w")]
 transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -10, 0, 7.5)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "west"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="GenericShell_WALL_east_xm40_m242_5" parent="." unique_id=1990947991 instance=ExtResource("36_55c5w")]
 transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -10, 0, 12.5)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "west"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="GenericShell_WALL_south_ym275_m57_5" parent="." unique_id=1752484982 instance=ExtResource("36_55c5w")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.5, 0, -20)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "north"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="GenericShell_DOORWALL_south_ym275_m52_5" parent="." unique_id=1864540054 instance=ExtResource("37_yr6ax")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -20)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "north"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-DOOR-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-DOOR-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/authored_door_wall_promoted = true
 metadata/shadow_policy = "cast_and_receive"
@@ -615,33 +604,29 @@ metadata/tower_wall_direction = "north"
 
 [node name="GenericShell_WALL_south_ym275_m47_5" parent="." unique_id=1403347678 instance=ExtResource("36_55c5w")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5, 0, -20)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "north"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="GenericShell_WALL_north_ym235_m57_5" parent="." unique_id=179372439 instance=ExtResource("36_55c5w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, 20)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "south"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="GenericShell_WALL_north_ym235_m52_5" parent="." unique_id=1981608357 instance=ExtResource("36_55c5w")]
 transform = Transform3D(0.7065512, -0.7076619, 0, 0.7076619, 0.7065512, 0, 0, 0, 1, 7.7115684, 2.5909915, 19.60898)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "south"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="GenericShell_WALL_north_ym235_m47_5" parent="." unique_id=1871942088 instance=ExtResource("36_55c5w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 20)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "south"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-LOW-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 

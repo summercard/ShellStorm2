@@ -11,15 +11,18 @@ metadata:
 
 ## 从哪里开始
 
-读取 `docs/v0.1/11_远征03场景工坊布局与陈设流程.md`，它是此流程的项目文档；设计规则以 `docs/v0.1/design/远征关卡03设计.md` §7.5.2–7.5.4为准。另读项目AGENTS约定、`docs/README.md`、`docs/DOCUMENTATION_STANDARD.md` 与 `docs/ART_SOURCE_LAYOUT.md`。
+读取 `docs/v0.1/11_远征03场景工坊布局与陈设流程.md`，它是此流程的项目文档；设计规则以 `docs/v0.1/design/远征关卡03设计.md` §7.5.2–7.5.4为准；墙高与资产族以 `docs/v0.1/design/远征墙高与场景资产路由规范.md` 和 `assets/registry/expedition_scene_height_contract.json` 为准。另读项目AGENTS约定、`docs/README.md`、`docs/DOCUMENTATION_STANDARD.md` 与 `docs/ART_SOURCE_LAYOUT.md`。
 
 读取流程中的当前引用链、范围表和验收段。按实际任务选择房间；没有指定房间、但授权自行选房时可以选，向用户说明。不能把“18份资源”当单局房数，也不能把“上一轮已通过”当当前结果。
+
+远征03固定使用 `asset_family=manor_h28`：房间墙高/门墙上沿为2.8m，运行结构由 `ManorShellPlan` 按本局门位生成。禁止把远征01的 `tower_h12`（逻辑12.0m、视觉11.9m）墙族、门墙族或深井 `pit_wall` 规则带入03。`floor_height_m=12.0` 在03只表示垂直标高间隔，不是房间墙高。
 
 ## 必须保持的边界
 
 开工先读场景账本《房间运行登记》的“本轮制作状态、后续维护策略、保留登记日期”。已制作完成且标记默认保留的文件，自动选房、美化、批量布置、重烘焙一律跳过；仅用户本次明确指定该文件返修时才修改并更新记录。当前入口15×15、事件25×25、大堂45×40三份默认跳过。“继续任务/再选几间/全部美化”不视为返修授权。若保留快照与原验收SHA不同，保留两者并标注待核对，不覆盖当前文件或批量接受新哈希。未读到账本先只读核查，不猜测可覆盖范围。
 
 - 工坊列表与游戏加载的是同一正式TSCN。用 `tools/scene_builder/scene_index.gd` 的 `game_rooms()` 和 `RuntimeRoomArtSource` 反查当前路径，不复制种子房间，不改旧文件名中的历史指纹。
+- 进入布局前再运行 `python scripts/check_expedition_scene_height_contract.py`。若远征03模板、Prefab或数据层出现 `tower_h12` / `wall_*_h12` / 11.9m结构族，立即停止；不要用“视觉上只露一截”规避尺寸契约。
 - 编辑前运行本Skill的 `scripts/check_room_scope.py --project-root <root> <目标TSCN...>`。它只准远征03运行房间目录且metadata归属为03；其他关卡不能套用。不要修改远征01资源/配置或00–04通用Skill。
 - 作者保存组件实例、父子Transform、启用、灯光、碰撞；门位/门墙和当前底层地砖由既有装配器负责。地砖会重建，不能声称只改静态地砖就能改变游戏。需要改生产逻辑时先说明具体缺口、影响和独立范围，本Skill不授予这类代码修改权。
 - 复用已验收稳定PackedScene，默认单位缩放；原点/材质/碰撞定义归组件。缺组件或导入证据时按已有02b导入规范处理，不临时造几何、整屋GLB或复制共享资产。

@@ -1,0 +1,44 @@
+{
+  "asset_id": "ENV-EXPEDITION-L01-LOW-WALL-5M-A",
+  "asset_version": "v001",
+  "slug": "wall_5m_a_h28",
+  "level_id": "expedition_01",
+  "block_id": "expedition",
+  "asset_family": "expedition_01_low_h28",
+  "legacy_prefab": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_a/wall_5m_a_root_top3d.tscn",
+  "reference_glb": "assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/wall_5m_a/wall_5m_a_visual_top3d.glb",
+  "reference_glb_sha256": "e450d4e329e8c6c699f7c0dd766a1dc33d856fdbfc517d8a07aa5e95b2e8b136",
+  "source_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_5m_a_h28/wall_5m_a_h28_source_v001.blend",
+  "source_sha256": "7dc2a35acb165ffcdb779dc9708594dc093d8ba59932da569e24e5ce67ccfaf1",
+  "optimized_blend": "art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_5m_a_h28/export/v001/wall_5m_a_h28_optimized_v001.blend",
+  "optimized_sha256": "06b362e5cd775a0bb5806a86f5d1914976600c1569b6d9741db1c7bbe4d27350",
+  "visual_glb": "assets/art/environments/tower_zones/expedition/components/expedition_01_low_h28/wall_5m_a_h28/wall_5m_a_h28_visual_top3d.glb",
+  "glb_sha256": "0c765c11dc61ec07b121a8269f80b843dc19dc6809865393d8038deb0f8f3d40",
+  "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_5m_a_h28/wall_5m_a_h28_root_top3d.tscn",
+  "prefab_sha256": "f1d3fef43f84d2d8658eabd2ae2b1532ce7d2a16ed9170508845fa8c723602cf",
+  "logical_wall_height_m": 2.8,
+  "visual_wall_height_m": 2.8,
+  "bounds_blender_m": [
+    [
+      -2.5,
+      -0.144500732421875,
+      0.0
+    ],
+    [
+      2.5,
+      0.25549888610839844,
+      2.8000001907348633
+    ]
+  ],
+  "source_triangles": 108,
+  "triangles_before": 72,
+  "triangles_after": 72,
+  "reduction_ratio": 0.0,
+  "operations": [
+    "Preserve native proportions below 2.8m; planar mesh section with palette cap",
+    "Remove degenerate and loose geometry; triangulate independently saved derivative"
+  ],
+  "cut_cap_faces": 3,
+  "door_opening": null,
+  "source_reference_retained": true
+}

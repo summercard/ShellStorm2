@@ -1,3 +1,9 @@
+- 2026-11-27 · TOOLING / WORLD-PLAN / ASSET-PIPELINE · [调试区报错修复：场景 UID 与项目配置](2026-11-27_debug_area_uid_and_project_config_repair.md)。修复4组重复场景UID，恢复完整 `project.godot` 配置并撤销探针专用用户目录；Godot编辑器诊断、定向UID、远征墙高与关卡解耦检查通过。文档既有11条断链与技能镜像行尾空白保留，未提升远征01整关验收状态。
+
+- 2026-11-26 · ASSET-PIPELINE / WORLD-PLAN · [远征01低墙与黑色幕墙](2026-11-26_expedition_wall_height_contract.md)。12 间非 Boss 房的 304 个墙件引用改用 11 种独立 2.8m 工业墙；远征03同类幕墙保留真实门洞。专项通过，未提升整关完成度。
+
+- 2026-11-26 · VFX-POOL / PLAYER-STATE / RUN-SETTLE · [赛博虚空坠亡设计](2026-11-26_cyber_void_fatal_design.md)。设计 r7 定义越过洞口当帧死亡、2.2 秒固定坠落镜头与原结算交接。运行实现待完成。
+
 - 2026-11-25 · VFX-POOL / PLAYER-STATE · [赛博虚空可选物理开口](2026-11-25_cyber_void_collision.md)。FX03-04 升 v006，默认关闭物理开口。启用可裁切范围内静态墙地阻挡，合并重叠开口并在关闭后恢复。实际玩家下落、下层落地和安全回位专项 18 项通过，Forward+ 独立场景及混用验收通过。
 
 - 2026-11-25 · PERFORMANCE-RUNTIME / WORLD-ENTRY · [刷怪盒合批与表现资源预加载](2026-11-25_performance_phase2_phase3.md)。同批盒编排扫描 24→7；本局实际使用且公共预热未覆盖的表现资源在读取页准备。地图、出怪与存档规则不变。Forward+ 三关均复测，01/03 帧预算未过，02 受测路线帧预算通过；既有 ObjectDB 退出告警仍阻断总验收。

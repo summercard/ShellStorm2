@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://df8gbh67j2hy8"]
 
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d.tscn" id="1_2waf1"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn" id="2_3jakm"]
-[ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_corner_l_5m.tscn" id="3_hkbvk"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_standard_5m_h28/wall_standard_5m_h28_root_top3d.tscn" id="1_2waf1"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_door_5m_h28/wall_door_5m_h28_root_top3d.tscn" id="2_3jakm"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/expedition_01_low_h28/wall_corner_l_5m_h28/wall_corner_l_5m_h28_root_top3d.tscn" id="3_hkbvk"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/floor_tile_flush/floor_tile_flush_c01_root_top3d.tscn" id="4_yowur"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/floor_tile_flush/floor_tile_flush_c02_root_top3d.tscn" id="5_5o5se"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/entry_safe_room/floor_base/floor_base_root_top3d.tscn" id="6_jom57"]
@@ -24,6 +24,7 @@
 [ext_resource type="Script" uid="uid://dgieqgeh1moll" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
 
 [node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=1285477218]
+metadata/room_wall_height_m = 2.8
 transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 0, 0, 0)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/asset_version = "v007"
@@ -68,24 +69,18 @@ metadata/authored_room_device = "light_switch"
 
 [node name="SafeRoomWall_North_Solid" parent="." unique_id=773283510 instance=ExtResource("1_2waf1")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, -7.5)
-metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.303)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "east"
 metadata/stair_lobby_native_direction = "north"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="SafeRoomWall_South_Door" parent="." unique_id=1475731263 instance=ExtResource("2_3jakm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.5)
-metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.365)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "west"
 metadata/stair_lobby_native_direction = "south"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="SafeRoomWall_East_Door" parent="." unique_id=1479122162 instance=ExtResource("2_3jakm")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.5, 0, 0)
-metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.365)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "south"
 metadata/stair_lobby_native_direction = "east"
 metadata/shadow_policy = "cast_and_receive"
@@ -101,8 +96,6 @@ metadata/tower_wall_direction = "south"
 
 [node name="SafeRoomWall_West_Solid" parent="." unique_id=1392021891 instance=ExtResource("1_2waf1")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7.5, 0, 0)
-metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.303)
-metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "north"
 metadata/stair_lobby_native_direction = "west"
 metadata/shadow_policy = "cast_and_receive"

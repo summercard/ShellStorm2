@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/expedition_01_low_h28/wall_t615_5m_h28/wall_t615_5m_h28_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
+size = Vector3(0.615, 2.8, 5)
+
+[node name="RoomTypeComponentWallT6155M" type="Node3D"]
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-X"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "self"
+metadata/collision_policy = "structural_box_proxy"
+metadata/slot_role = "solid_wall"
+metadata/component_slug = "wall_t615_5m"
+metadata/asset_id = "ENV-EXPEDITION-L01-LOW-WALL-T615-5M"
+metadata/asset_version = "v001"
+metadata/display_name_zh = "远征01 2.8m工业墙 · wall_t615_5m_h28"
+metadata/asset_family = "expedition_01_low_h28"
+metadata/level_id = "expedition_01"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_t615_5m_h28/wall_t615_5m_h28_source_v001.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/expedition/source/expedition_01_low_h28/v001/component_packages/wall_t615_5m_h28/asset_manifest.json"
+metadata/source_wall_prefab = "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t615_5m/wall_t615_5m_root_top3d.tscn"
+metadata/bounds_size_m = Vector3(0.615, 2.8, 5)
+metadata/visual_bounds_size_m = Vector3(0.61, 2.8, 5)
+metadata/wall_visual_height_m = 2.8
+metadata/wall_logical_height_m = 2.8
+metadata/visual_height_m = 2.8
+metadata/logical_height_m = 2.8
+metadata/visual_top_clearance_m = 0.0
+metadata/preserve_authored_palette = true
+metadata/shadow_policy = "cast_and_receive"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/collision_shape_count = 1
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 1.4, 0)
+shape = SubResource("BoxShape3D_proxy")

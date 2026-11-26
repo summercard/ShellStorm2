@@ -1,5 +1,7 @@
 - REWARD-SERVICE / WORLD-LOOT / RUN-FORGE / FATE-RULES / SAVE-RUN / WORLD-PLAN · [蓝图碎片与普通房间钥匙退役（r10）](design/战斗奖励与物品流转设计.md)。2026-11-24：九种蓝图碎片和普通房间钥匙从全图掉落、搜索、箱子、商店、开局、清房与保底中移除，池余项按原权重归一；普通门改用非物品门闸；保留Boss/剧情专属权限、太阳钥印稳定ID兼容、两条近战定向、随机R1/R2/R3、金币工坊与原`bp_`装配ID。旧存量仅在合法读档边界过滤，不直接改用户存档；本轮未宣称已测试。
 
+- ASSET-PIPELINE / WORLD-PLAN · [远征01低墙与黑色幕墙](development/2026-11-26_expedition_wall_height_contract.md)。12 间非 Boss 房外围墙改为 2.8m，保留工业风与特殊高墙；沿用远征03同类纯视觉幕墙，见专项验收。
+
 - ASSET-PIPELINE / WORLD-PLAN · [远征01棋盘地砖补缝](development/2026-11-22_exp01_floor_flush.md)。C01/C02 底板覆盖 5m 网格，正式房间引用及场景账本已同步。
 
 - WORLD-PLAN · [远征01复用房间黑幕](development/2026-11-22_expedition01_room_curtain.md)。共享远征03幕墙机制，正式关卡专项与窗口验证见独立记录。
@@ -7,6 +9,8 @@
 - PLAYER-STATE / UI-HUD / WORLD-ENTRY · [游戏指针与战斗准星交接](development/2026-11-22_cursor_crosshair_handoff.md)。UiCursorMode 统一窗口指针和已登记世界准星的可见性，专项覆盖模态叠加、设备切换和读取交接。
 
 - VFX-POOL · [赛博空间](design/scene_cyber_space.md)提供独立 Shader 与紫绿蓝三色预制体，可和普通场景、赛博虚空同屏交替。[开发记录](development/2026-11-21_cyber_space.md)
+
+- VFX-POOL / PLAYER-STATE / RUN-SETTLE · [赛博虚空坠亡 r7](design/scene_void_erosion.md#玩家坠入赛博虚空死亡)已补齐玩法规则和独立固定机位。确认坠入即死亡，镜头结束后接原结算，运行实现待完成。[设计记录](development/2026-11-26_cyber_void_fatal_design.md)
 
 - VFX-POOL / PLAYER-STATE · [赛博虚空](design/scene_void_erosion.md)预制体 v006 提供可选物理开口。共享地板局部失去承重，角色走入后沿原重力下落，关闭恢复静态碰撞。[开发与验收记录](development/2026-11-25_cyber_void_collision.md)
 

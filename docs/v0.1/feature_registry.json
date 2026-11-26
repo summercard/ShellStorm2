@@ -9,9 +9,11 @@
       "feature_id": "PLAYER-STATE",
       "owner": "Player3D",
       "design_docs": [
-        "docs/v0.1/03_技术施工_玩家与操作.md"
+        "docs/v0.1/03_技术施工_玩家与操作.md",
+        "docs/v0.1/design/scene_void_erosion.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-26_cyber_void_fatal_design.md",
         "docs/v0.1/development/2026-11-22_cursor_crosshair_handoff.md",
         "docs/v0.1/development/history/03_玩家与操作_历史记录.md",
         "docs/v0.1/development/2026-11-02_camera_damage_defeat_feedback.md",
@@ -375,7 +377,8 @@
         "docs/v0.1/05.1_关卡区块设计.md",
         "docs/v0.1/design/远征03房间类型制作计划.md",
         "docs/v0.1/design/远征03房间动线重排.md",
-        "docs/v0.1/design/远征关卡03设计.md"
+        "docs/v0.1/design/远征关卡03设计.md",
+        "docs/v0.1/design/远征墙高与场景资产路由规范.md"
       ],
       "development_records": [
         "docs/v0.1/development/2026-11-22_expedition01_room_curtain.md",
@@ -392,7 +395,8 @@
         "docs/v0.1/development/2026-11-11_expedition01_flow.md",
         "docs/v0.1/development/2026-11-17_room07_08_layout_fix.md",
         "docs/v0.1/development/2026-11-17_room08_equipment_enclosures.md",
-        "docs/v0.1/development/2026-11-19_exp01_ceiling_room08.md"
+        "docs/v0.1/development/2026-11-19_exp01_ceiling_room08.md",
+        "docs/v0.1/development/2026-11-26_expedition_wall_height_contract.md"
       ],
       "verification": [
         {
@@ -1384,9 +1388,11 @@
       "owner": "BaseManager",
       "design_docs": [
         "docs/v0.1/design/基地经济与存档结算设计.md",
+        "docs/v0.1/design/scene_void_erosion.md",
         "docs/v0.1/09_技术施工_存档结算与复活.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-26_cyber_void_fatal_design.md",
         "docs/v0.1/development/2026-09-12_e05_e06_run_settlement_transaction.md",
         "docs/v0.1/development/2026-09-23_p1_architecture_and_transaction_repair.md",
         "docs/v0.1/development/2026-11-02_camera_damage_defeat_feedback.md",
@@ -1791,6 +1797,7 @@
         "docs/v0.1/design/scene_cyber_space.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-26_cyber_void_fatal_design.md",
         "docs/v0.1/development/2026-11-25_cyber_void_collision.md",
         "docs/v0.1/development/2026-11-21_cyber_space.md",
         "docs/v0.1/development/2026-11-21_cyber_void_component_scope.md",
@@ -2040,7 +2047,8 @@
         "docs/v0.1/design/rooftop_first_visit_guidance.md",
         "docs/v0.1/design/远征03房间类型制作计划.md",
         "docs/v0.1/design/远征03房间动线重排.md",
-        "docs/v0.1/design/远征03复古公馆组件制作规范.md"
+        "docs/v0.1/design/远征03复古公馆组件制作规范.md",
+        "docs/v0.1/design/远征墙高与场景资产路由规范.md"
       ],
       "development_records": [
         "docs/v0.1/development/2026-11-16_exploder_speed30.md",
@@ -2049,6 +2057,7 @@
         "docs/v0.1/development/2026-09-30_rooftop_cross_tower_route.md",
         "docs/v0.1/development/2026-10-03_cross_tower_landscape_foundation.md",
         "docs/v0.1/development/2026-09-17_3D资产正式制成链路总表.md",
+        "docs/v0.1/development/2026-11-26_expedition_wall_height_contract.md",
         "docs/v0.1/development/2026-09-23_p2_media_and_traceability_repair.md",
         "docs/v0.1/development/2026-10-03_fat_zombie03_rig_and_action_design.md",
         "docs/v0.1/development/2026-10-03_fat_zombie03_idle.md",
